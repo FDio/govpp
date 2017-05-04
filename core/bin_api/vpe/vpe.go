@@ -1,11 +1,11 @@
 // Package vpe represents the VPP binary API of the 'vpe' VPP module.
-// DO NOT EDIT. Generated from '/usr/share/vpp/api/vpe.api.json' on Thu, 27 Apr 2017 11:34:11 CEST.
+// DO NOT EDIT. Generated from '/usr/share/vpp/api/vpe.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package vpe
 
 import "gerrit.fd.io/r/govpp.git/api"
 
 // VlApiVersion contains version of the API.
-const VlAPIVersion = 0xd3bcc288
+const VlAPIVersion = 0x0a33c8f7
 
 // IP4FibCounter represents the VPP binary API data type 'ip4_fib_counter'.
 // Generated from '/usr/share/vpp/api/vpe.api.json', line 3:

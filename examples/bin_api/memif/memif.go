@@ -1,5 +1,5 @@
 // Package memif represents the VPP binary API of the 'memif' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/memif.api.json' on Fri, 21 Apr 2017 17:10:06 CEST.
+// DO NOT EDIT. Generated from 'bin_api/memif.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package memif
 
 import "gerrit.fd.io/r/govpp.git/api"

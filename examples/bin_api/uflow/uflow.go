@@ -1,5 +1,5 @@
 // Package uflow represents the VPP binary API of the 'uflow' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/uflow.api.json' on Fri, 21 Apr 2017 17:10:06 CEST.
+// DO NOT EDIT. Generated from 'bin_api/uflow.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package uflow
 
 import "gerrit.fd.io/r/govpp.git/api"

@@ -1,5 +1,5 @@
 // Package ip represents the VPP binary API of the 'ip' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/ip.api.json' on Fri, 21 Apr 2017 17:10:06 CEST.
+// DO NOT EDIT. Generated from 'bin_api/ip.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package ip
 
 import "gerrit.fd.io/r/govpp.git/api"
@@ -882,6 +882,7 @@ func NewIPAddressDump() api.Message {
 //
 type IPDetails struct {
 	SwIfIndex uint32
+	Context   uint32
 	IsIpv6    uint8
 }
 

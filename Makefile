@@ -12,4 +12,8 @@ install:
 clean:
 	@rm binapi_generator/binapi_generator
 
-.PHONY: build test install clean
+generate:
+	@cd core && go generate ./...
+	@cd examples && go generate ./...
+
+.PHONY: build test install clean generate
