@@ -2,7 +2,9 @@ build:
 	@cd binapi_generator && go build -v
 
 test:
-	@go test -cover $(glide novendor)
+	@cd binapi_generator && go test -cover ./...
+	@cd api && go test -cover ./...
+	@cd core && go test -cover ./...
 
 install:
 	@cd binapi_generator && go install -v
