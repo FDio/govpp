@@ -106,9 +106,10 @@ sudo dpkg -i vpp*.deb
 
 To build & install all govpp binaries into your `$GOPATH`:
 ```
-cd govpp
-go build ./...
-go install ./...
+go get git.fd.io/govpp.git
+cd $GOPATH/src/git.fd.io/govpp.git
+make
+make install
 ```
 
 
