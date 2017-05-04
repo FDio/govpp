@@ -43,7 +43,7 @@ const (
 )
 
 const (
-	apiImportPath = "gerrit.fd.io/r/govpp.git/api" // import path of the govpp API
+	apiImportPath = "git.fd.io/govpp.git/api" // import path of the govpp API
 	inputFileExt  = ".json"                                               // filename extension of files that should be processed as the input
 )
 

@@ -2,7 +2,7 @@
 // DO NOT EDIT. Generated from 'bin_api/interface.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package interfaces
 
-import "gerrit.fd.io/r/govpp.git/api"
+import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
 const VlAPIVersion = 0x6857f668

@@ -2,7 +2,7 @@
 // DO NOT EDIT. Generated from 'bin_api/af_packet.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package af_packet
 
-import "gerrit.fd.io/r/govpp.git/api"
+import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
 const VlAPIVersion = 0x4ca71f33

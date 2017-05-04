@@ -20,7 +20,7 @@ import (
 
 	logger "github.com/Sirupsen/logrus"
 
-	"gerrit.fd.io/r/govpp.git/api"
+	"git.fd.io/govpp.git/api"
 )
 
 // processNotifSubscribeRequest processes a notification subscribe request.

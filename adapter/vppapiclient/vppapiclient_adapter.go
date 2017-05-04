@@ -82,7 +82,7 @@ import (
 	"reflect"
 	"unsafe"
 
-	"gerrit.fd.io/r/govpp.git/adapter"
+	"git.fd.io/govpp.git/adapter"
 )
 
 // vppAPIClientAdapter is the opaque context of the adapter.

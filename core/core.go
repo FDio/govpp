@@ -25,9 +25,9 @@ import (
 
 	logger "github.com/Sirupsen/logrus"
 
-	"gerrit.fd.io/r/govpp.git/adapter"
-	"gerrit.fd.io/r/govpp.git/api"
-	"gerrit.fd.io/r/govpp.git/core/bin_api/vpe"
+	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/core/bin_api/vpe"
 )
 
 const (

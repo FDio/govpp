@@ -2,7 +2,7 @@
 // DO NOT EDIT. Generated from '/usr/share/vpp/api/vpe.api.json' on Thu, 04 May 2017 13:11:57 CEST.
 package vpe
 
-import "gerrit.fd.io/r/govpp.git/api"
+import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
 const VlAPIVersion = 0x0a33c8f7
