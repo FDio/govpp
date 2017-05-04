@@ -22,7 +22,7 @@
 package vppapiclient
 
 import (
-	"gerrit.fd.io/r/govpp/adapter"
+	"gerrit.fd.io/r/govpp.git/adapter"
 )
 
 type vppAPIClientAdapter struct{}

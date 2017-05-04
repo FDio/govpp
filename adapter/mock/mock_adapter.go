@@ -24,9 +24,9 @@ import (
 
 	"github.com/lunixbochs/struc"
 
-	"gerrit.fd.io/r/govpp/adapter"
-	"gerrit.fd.io/r/govpp/adapter/mock/binapi_reflect"
-	"gerrit.fd.io/r/govpp/api"
+	"gerrit.fd.io/r/govpp.git/adapter"
+	"gerrit.fd.io/r/govpp.git/adapter/mock/binapi_reflect"
+	"gerrit.fd.io/r/govpp.git/api"
 )
 
 // VppAdapter represents a mock VPP adapter that can be used for unit/integration testing instead of the vppapiclient adapter.

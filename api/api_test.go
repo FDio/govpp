@@ -18,14 +18,14 @@ import (
 	"testing"
 	"time"
 
-	"gerrit.fd.io/r/govpp"
-	"gerrit.fd.io/r/govpp/adapter/mock"
-	"gerrit.fd.io/r/govpp/api"
-	"gerrit.fd.io/r/govpp/core"
-	"gerrit.fd.io/r/govpp/core/bin_api/vpe"
-	"gerrit.fd.io/r/govpp/examples/bin_api/interfaces"
-	"gerrit.fd.io/r/govpp/examples/bin_api/memif"
-	"gerrit.fd.io/r/govpp/examples/bin_api/tap"
+	"gerrit.fd.io/r/govpp.git"
+	"gerrit.fd.io/r/govpp.git/adapter/mock"
+	"gerrit.fd.io/r/govpp.git/api"
+	"gerrit.fd.io/r/govpp.git/core"
+	"gerrit.fd.io/r/govpp.git/core/bin_api/vpe"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/interfaces"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/memif"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/tap"
 
 	. "github.com/onsi/gomega"
 )

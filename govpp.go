@@ -15,9 +15,9 @@
 package govpp
 
 import (
-	"gerrit.fd.io/r/govpp/adapter"
-	"gerrit.fd.io/r/govpp/adapter/vppapiclient"
-	"gerrit.fd.io/r/govpp/core"
+	"gerrit.fd.io/r/govpp.git/adapter"
+	"gerrit.fd.io/r/govpp.git/adapter/vppapiclient"
+	"gerrit.fd.io/r/govpp.git/core"
 )
 
 var vppAdapter adapter.VppAdapter // VPP Adapter that will be used in the subsequent Connect calls

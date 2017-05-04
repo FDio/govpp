@@ -24,13 +24,13 @@ import (
 	"os"
 	"os/signal"
 
-	"gerrit.fd.io/r/govpp"
-	"gerrit.fd.io/r/govpp/api"
-	"gerrit.fd.io/r/govpp/api/ifcounters"
-	"gerrit.fd.io/r/govpp/core/bin_api/vpe"
-	"gerrit.fd.io/r/govpp/examples/bin_api/acl"
-	"gerrit.fd.io/r/govpp/examples/bin_api/interfaces"
-	"gerrit.fd.io/r/govpp/examples/bin_api/tap"
+	"gerrit.fd.io/r/govpp.git"
+	"gerrit.fd.io/r/govpp.git/api"
+	"gerrit.fd.io/r/govpp.git/api/ifcounters"
+	"gerrit.fd.io/r/govpp.git/core/bin_api/vpe"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/acl"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/interfaces"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/tap"
 )
 
 func main() {

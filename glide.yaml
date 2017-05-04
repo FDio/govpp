@@ -1,4 +1,4 @@
-package: gerrit.fd.io/r/govpp
+package: gerrit.fd.io/r/govpp.git
 import:
 - package: github.com/Sirupsen/logrus
   version: v0.11.5

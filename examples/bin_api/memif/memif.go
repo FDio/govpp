@@ -2,7 +2,7 @@
 // DO NOT EDIT. Generated from 'bin_api/memif.api.json' on Fri, 21 Apr 2017 17:10:06 CEST.
 package memif
 
-import "gerrit.fd.io/r/govpp/api"
+import "gerrit.fd.io/r/govpp.git/api"
 
 // VlApiVersion contains version of the API.
 const VlAPIVersion = 0xadb63e82

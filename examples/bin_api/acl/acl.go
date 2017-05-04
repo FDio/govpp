@@ -2,7 +2,7 @@
 // DO NOT EDIT. Generated from 'bin_api/acl.api.json' on Fri, 21 Apr 2017 17:10:06 CEST.
 package acl
 
-import "gerrit.fd.io/r/govpp/api"
+import "gerrit.fd.io/r/govpp.git/api"
 
 // VlApiVersion contains version of the API.
 const VlAPIVersion = 0x3cd02d84

@@ -23,7 +23,7 @@ import (
 	logger "github.com/Sirupsen/logrus"
 	"github.com/lunixbochs/struc"
 
-	"gerrit.fd.io/r/govpp/api"
+	"gerrit.fd.io/r/govpp.git/api"
 )
 
 // MsgCodec provides encoding and decoding functionality of `api.Message` structs into/from

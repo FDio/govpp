@@ -17,10 +17,10 @@ package core
 import (
 	"testing"
 
-	"gerrit.fd.io/r/govpp/adapter/mock"
-	"gerrit.fd.io/r/govpp/api"
-	"gerrit.fd.io/r/govpp/core/bin_api/vpe"
-	"gerrit.fd.io/r/govpp/examples/bin_api/interfaces"
+	"gerrit.fd.io/r/govpp.git/adapter/mock"
+	"gerrit.fd.io/r/govpp.git/api"
+	"gerrit.fd.io/r/govpp.git/core/bin_api/vpe"
+	"gerrit.fd.io/r/govpp.git/examples/bin_api/interfaces"
 
 	. "github.com/onsi/gomega"
 )
