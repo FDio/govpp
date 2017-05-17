@@ -78,7 +78,8 @@ type MessageIdentifier interface {
 
 // Channel is the main communication interface with govpp core. It contains two Go channels, one for sending the requests
 // to VPP and one for receiving the replies from it. The user can access the Go channels directly, or use the helper
-// methods  provided inside of this package.
+// methods  provided inside of this package. Do not use the same channel from multiple goroutines concurrently,
+// otherwise the responses could mix! Use multiple channels instead.
 type Channel struct {
 	ReqChan   chan *VppRequest // channel for sending the requests to VPP, closing this channel releases all resources in the ChannelProvider
 	ReplyChan chan *VppReply   // channel where VPP replies are delivered to
@@ -230,7 +231,8 @@ func (ch *Channel) receiveReplyInternal(msg Message) (LastReplyReceived bool, er
 			return false, err
 		}
 		if vppReply.MessageID != expMsgID {
-			err = fmt.Errorf("invalid message ID %d, expected %d", vppReply.MessageID, expMsgID)
+			err = fmt.Errorf("invalid message ID %d, expected %d "+
+				"(also check if multiple goroutines are not sharing one GoVPP channel)", vppReply.MessageID, expMsgID)
 			return false, err
 		}
 		// decode the message

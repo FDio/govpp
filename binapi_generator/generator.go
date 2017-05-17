@@ -27,7 +27,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"time"
 	"unicode"
 
 	"github.com/bennyscetbun/jsongo"
@@ -44,7 +43,7 @@ const (
 
 const (
 	apiImportPath = "git.fd.io/govpp.git/api" // import path of the govpp API
-	inputFileExt  = ".json"                                               // filename extension of files that should be processed as the input
+	inputFileExt  = ".json"                   // filename extension of files that should be processed as the input
 )
 
 // context is a structure storing details of a particular code generation task
@@ -386,7 +385,7 @@ func processMessageField(ctx *context, fields *[]string, fld *jsongo.JSONNode) e
 // generatePackageHeader generates package header into provider writer
 func generatePackageHeader(ctx *context, w io.Writer, rootNode *jsongo.JSONNode) {
 	fmt.Fprintln(w, "// Package "+ctx.packageName+" represents the VPP binary API of the '"+ctx.packageName+"' VPP module.")
-	fmt.Fprintln(w, "// DO NOT EDIT. Generated from '"+ctx.inputFile+"' on "+time.Now().Format(time.RFC1123)+".")
+	fmt.Fprintln(w, "// DO NOT EDIT. Generated from '"+ctx.inputFile+"'")
 
 	fmt.Fprintln(w, "package "+ctx.packageName)
 

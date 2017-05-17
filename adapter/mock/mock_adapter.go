@@ -37,7 +37,7 @@ type VppAdapter struct {
 	msgIdsToName *map[uint16]string
 	msgIdSeq     uint16
 	binApiTypes  map[string]reflect.Type
-	//TODO lock
+	access       sync.RWMutex
 }
 
 // replyHeader represents a common header of each VPP request message.
@@ -104,8 +104,6 @@ func (a *VppAdapter) Disconnect() {
 }
 
 func (a *VppAdapter) GetMsgNameByID(msgId uint16) (string, bool) {
-	a.initMaps()
-
 	switch msgId {
 	case 100:
 		return "control_ping", true
@@ -117,12 +115,17 @@ func (a *VppAdapter) GetMsgNameByID(msgId uint16) (string, bool) {
 		return "sw_interface_details", true
 	}
 
+	a.access.Lock()
+	defer a.access.Unlock()
+	a.initMaps()
 	msgName, found := (*a.msgIdsToName)[msgId]
 
 	return msgName, found
 }
 
 func (a *VppAdapter) RegisterBinApiTypes(binApiTypes map[string]reflect.Type) {
+	a.access.Lock()
+	defer a.access.Unlock()
 	a.initMaps()
 	for _, v := range binApiTypes {
 		if msg, ok := reflect.New(v).Interface().(api.Message); ok {
@@ -187,6 +190,8 @@ func (a *VppAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 		return 201, nil
 	}
 
+	a.access.Lock()
+	defer a.access.Unlock()
 	a.initMaps()
 
 	if msgId, found := (*a.msgNameToIds)[msgName]; found {
@@ -219,6 +224,7 @@ func (a *VppAdapter) initMaps() {
 func (a *VppAdapter) SendMsg(clientID uint32, data []byte) error {
 	switch mode {
 	case useReplyHandlers:
+		a.initMaps()
 		for i := len(replyHandlers) - 1; i >= 0; i-- {
 			replyHandler := replyHandlers[i]
 
@@ -226,8 +232,9 @@ func (a *VppAdapter) SendMsg(clientID uint32, data []byte) error {
 			reqHeader := requestHeader{}
 			struc.Unpack(buf, &reqHeader)
 
-			a.initMaps()
+			a.access.Lock()
 			reqMsgName, _ := (*a.msgIdsToName)[reqHeader.VlMsgID]
+			a.access.Unlock()
 
 			reply, msgID, finished := replyHandler(MessageDTO{reqHeader.VlMsgID, reqMsgName,
 				clientID, data})

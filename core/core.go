@@ -207,13 +207,16 @@ func (c *Connection) processRequest(ch *api.Channel, chMeta *channelMetadata, re
 		"msg_size": len(data),
 	}).Debug("Sending a message to VPP.")
 
+	if req.Multipart {
+		// expect multipart response
+		atomic.StoreUint32(&chMeta.multipart, 1)
+	}
+
+	// send the request to VPP
 	c.vpp.SendMsg(chMeta.id, data)
 
 	if req.Multipart {
-		// multipart request
-		atomic.StoreUint32(&chMeta.multipart, 1)
-
-		// send a control ping
+		// send a control ping to determine end of the multipart response
 		ping := &vpe.ControlPing{}
 		pingData, _ := c.codec.EncodeMsg(ping, c.pingReqID)
 
