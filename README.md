@@ -6,7 +6,7 @@ This set of packages provide the API for communication with VPP from Go. It cons
 - [api](api/api.go): API for communication with govpp core using Go channels (without the need of importing the govpp core package itself),
 - [core](core/): main functionality of the govpp, sends and receives the messages to/from VPP using the adapter, marshalls/unmarshalls them and forwards them between the client Go channels and the VPP,
 - [adapter](adapter/): adapter between govpp core and the VPP, responsible for sending and receiving binary-encoded data via shared memory,
-- [binapi_generator](binapi_generator/generator.go): Generator of Go structs out of the VPP binary API definitions in JSON format,
+- [binapi-generator](cmd/binapi-generator/generator.go): Generator of Go structs out of the VPP binary API definitions in JSON format,
 - [examples](examples/): example VPP management application that exercises the govpp API on real-world use-cases.
 
 The design with separated govpp API package ([api](api/api.go)) and the govpp core package ([core](core/)) enables 
@@ -44,7 +44,7 @@ binary API |                    +------+  govpp API   |
 Generating Go bindings from the JSON files located in the `/usr/share/vpp/api/` directory 
 into the Go packages that will be created inside of the `bin_api` directory:
 ```
-go run binapi_generator/generator.go --input-dir=/usr/share/vpp/api/ --output-dir=bin_api
+binapi-generator --input-dir=/usr/share/vpp/api/ --output-dir=bin_api
 ```
 
 Usage of the generated bindings:
@@ -114,22 +114,22 @@ make install
 
 
 ## Building Go bindings from VPP binary APIs
-Once you have `binapi_generator` installed in your `$GOPATH`, you can use it to generate Go bindings from
+Once you have `binapi-generator` installed in your `$GOPATH`, you can use it to generate Go bindings from
 VPP APis in JSON format. The JSON input can be specified as a single file (`input-file` argument), or
 as a directory that will be scanned for all `.json` files (`input-dir`). The generated Go bindings will
 be placed into `output-dir` (by default current working directory), where each Go package will be placed into 
 a separated directory, e.g.:
 
 ```
-binapi_generator --input-file=examples/bin_api/acl.api.json --output-dir=examples/bin_api
-binapi_generator --input-dir=examples/bin_api --output-dir=examples/bin_api
+binapi-generator --input-file=examples/bin_api/acl.api.json --output-dir=examples/bin_api
+binapi-generator --input-dir=examples/bin_api --output-dir=examples/bin_api
 ```
 
 In Go, [go generate](https://blog.golang.org/generate) tool can be leveraged to ease the code generation
 process. It allows to specify generator instructions in any one of the regular (non-generated) `.go` files
 that are dependent on generated code using special comments, e.g. the one from [example_client](examples/example_client.go):
 ```go
-// go:generate binapi_generator --input-dir=bin_api --output-dir=bin_api
+// go:generate binapi-generator --input-dir=bin_api --output-dir=bin_api
 ```
 
 The comment must start at the beginning of the line and have no spaces between the `//` and the `go:generate`. 

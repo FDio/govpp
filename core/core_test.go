@@ -144,6 +144,20 @@ func TestNotifications(t *testing.T) {
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
+func TestNilConnection(t *testing.T) {
+	var conn *Connection
+
+	ch, err := conn.NewAPIChannel()
+	Expect(ch).Should(BeNil())
+	Expect(err).Should(HaveOccurred())
+	Expect(err.Error()).To(ContainSubstring("nil"))
+
+	ch, err = conn.NewAPIChannelBuffered(1, 1)
+	Expect(ch).Should(BeNil())
+	Expect(err).Should(HaveOccurred())
+	Expect(err.Error()).To(ContainSubstring("nil"))
+}
+
 func TestDoubleConnection(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()

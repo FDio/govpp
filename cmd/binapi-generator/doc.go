@@ -7,7 +7,7 @@
 // where each Go package will be placed into its own separate directory,
 // for example:
 //
-//    binapi_generator --input-file=examples/bin_api/acl.api.json --output-dir=examples/bin_api
-//    binapi_generator --input-dir=examples/bin_api --output-dir=examples/bin_api
+//    binapi-generator --input-file=examples/bin_api/acl.api.json --output-dir=examples/bin_api
+//    binapi-generator --input-dir=examples/bin_api --output-dir=examples/bin_api
 //
 package main

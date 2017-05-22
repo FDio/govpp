@@ -14,7 +14,7 @@
 
 package core
 
-//go:generate binapi_generator --input-file=/usr/share/vpp/api/vpe.api.json --output-dir=./bin_api
+//go:generate binapi-generator --input-file=/usr/share/vpp/api/vpe.api.json --output-dir=./bin_api
 
 import (
 	"errors"
@@ -40,7 +40,7 @@ type Connection struct {
 	vpp   adapter.VppAdapter // VPP adapter
 	codec *MsgCodec          // message codec
 
-	msgIDs     map[string]uint16 // map os message IDs indexed by message name + CRC
+	msgIDs     map[string]uint16 // map of message IDs indexed by message name + CRC
 	msgIDsLock sync.RWMutex      // lock for the message IDs map
 
 	channels     map[uint32]*api.Channel // map of all API channels indexed by the channel ID
@@ -112,6 +112,9 @@ func Connect(vppAdapter adapter.VppAdapter) (*Connection, error) {
 
 // Disconnect disconnects from VPP.
 func (c *Connection) Disconnect() {
+	if c == nil {
+		return
+	}
 	connLock.Lock()
 	defer connLock.Unlock()
 
@@ -124,12 +127,18 @@ func (c *Connection) Disconnect() {
 // NewAPIChannel returns a new API channel for communication with VPP via govpp core.
 // It uses default buffer sizes for the request and reply Go channels.
 func (c *Connection) NewAPIChannel() (*api.Channel, error) {
+	if c == nil {
+		return nil, errors.New("nil connection passed in")
+	}
 	return c.NewAPIChannelBuffered(requestChannelBufSize, replyChannelBufSize)
 }
 
 // NewAPIChannelBuffered returns a new API channel for communication with VPP via govpp core.
 // It allows to specify custom buffer sizes for the request and reply Go channels.
 func (c *Connection) NewAPIChannelBuffered(reqChanBufSize, replyChanBufSize int) (*api.Channel, error) {
+	if c == nil {
+		return nil, errors.New("nil connection passed in")
+	}
 	chID := atomic.AddUint32(&c.maxChannelID, 1)
 	chMeta := &channelMetadata{id: chID}
 
@@ -311,6 +320,9 @@ func sendReply(ch *api.Channel, reply *api.VppReply) {
 
 // GetMessageID returns message identifier of given API message.
 func (c *Connection) GetMessageID(msg api.Message) (uint16, error) {
+	if c == nil {
+		return 0, errors.New("nil connection passed in")
+	}
 	return c.messageNameToID(msg.GetMessageName(), msg.GetCrcString())
 }
 

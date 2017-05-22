@@ -16,7 +16,7 @@
 package main
 
 // Generates Go bindings for all VPP APIs located in the json directory.
-//go:generate binapi_generator --input-dir=bin_api --output-dir=bin_api
+//go:generate binapi-generator --input-dir=bin_api --output-dir=bin_api
 
 import (
 	"fmt"
@@ -36,11 +36,20 @@ import (
 func main() {
 	fmt.Println("Starting example VPP client...")
 
-	// connect to VPP and create an API channel that will be used in the examples
-	conn, _ := govpp.Connect()
+	// connect to VPP
+	conn, err := govpp.Connect()
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
 	defer conn.Disconnect()
 
-	ch, _ := conn.NewAPIChannel()
+	// create an API channel that will be used in the examples
+	ch, err := conn.NewAPIChannel()
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
 	defer ch.Close()
 
 	// check whether the VPP supports our version of some messages

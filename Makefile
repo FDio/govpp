@@ -1,16 +1,18 @@
 build:
-	@cd binapi_generator && go build -v
+	@cd cmd/binapi-generator && go build -v
+	@cd examples && go build -v
 
 test:
-	@cd binapi_generator && go test -cover .
+	@cd cmd/binapi-generator && go test -cover .
 	@cd api && go test -cover ./...
 	@cd core && go test -cover .
 
 install:
-	@cd binapi_generator && go install -v
+	@cd cmd/binapi-generator && go install -v
 
 clean:
-	@rm binapi_generator/binapi_generator
+	@rm cmd/binapi-generator/binapi-generator
+	@rm examples/examples
 
 generate:
 	@cd core && go generate ./...
