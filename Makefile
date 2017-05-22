@@ -17,6 +17,6 @@ generate:
 	@cd examples && go generate ./...
 
 lint:
-	@golint ./... | grep -v vendor | grep -v bin_api
+	@golint ./... | grep -v vendor | grep -v bin_api || true
 
 .PHONY: build test install clean generate

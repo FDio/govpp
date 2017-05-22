@@ -12,20 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package binapi_reflect is a helper package for generic handling of VPP binary API messages
-// in the mock adapter and integration tests.
-package binapi_reflect
+// Package util is a helper package for generic handling of VPP binary
+// API messages in the mock adapter and integration tests.
+package util
 
 import (
 	"reflect"
 )
 
-const SwIfIndex = "SwIfIndex"
-const Retval = "Retval"
-const Reply = "_reply"
+const swIfIndexName = "swIfIndex"
+const retvalName = "retval"
+const replySuffix = "_reply"
 
-// TODO comment
-func FindFieldOfType(reply reflect.Type, fieldName string) (reflect.StructField, bool) {
+// findFieldOfType finds the field specified by its name in provided message defined as reflect.Type data type.
+func findFieldOfType(reply reflect.Type, fieldName string) (reflect.StructField, bool) {
 	if reply.Kind() == reflect.Struct {
 		field, found := reply.FieldByName(fieldName)
 		return field, found
@@ -36,8 +36,8 @@ func FindFieldOfType(reply reflect.Type, fieldName string) (reflect.StructField,
 	return reflect.StructField{}, false
 }
 
-// TODO comment
-func FindFieldOfValue(reply reflect.Value, fieldName string) (reflect.Value, bool) {
+// findFieldOfValue finds the field specified by its name in provided message defined as reflect.Value data type.
+func findFieldOfValue(reply reflect.Value, fieldName string) (reflect.Value, bool) {
 	if reply.Kind() == reflect.Struct {
 		field := reply.FieldByName(fieldName)
 		return field, field.IsValid()
@@ -48,27 +48,27 @@ func FindFieldOfValue(reply reflect.Value, fieldName string) (reflect.Value, boo
 	return reflect.Value{}, false
 }
 
-// TODO comment
-func IsReplySwIfIdx(reply reflect.Type) bool {
-	_, found := FindFieldOfType(reply, SwIfIndex)
+// HasSwIfIdx checks whether provided message has the swIfIndex field.
+func HasSwIfIdx(msg reflect.Type) bool {
+	_, found := findFieldOfType(msg, swIfIndexName)
 	return found
 }
 
-// TODO comment
-func SetSwIfIdx(reply reflect.Value, swIfIndex uint32) {
-	if field, found := FindFieldOfValue(reply, SwIfIndex); found {
+// SetSwIfIdx sets the swIfIndex field of provided message to provided value.
+func SetSwIfIdx(msg reflect.Value, swIfIndex uint32) {
+	if field, found := findFieldOfValue(msg, swIfIndexName); found {
 		field.Set(reflect.ValueOf(swIfIndex))
 	}
 }
 
-// TODO comment
-func SetRetVal(reply reflect.Value, retVal int32) {
-	if field, found := FindFieldOfValue(reply, Retval); found {
+// SetRetval sets the retval field of provided message to provided value.
+func SetRetval(msg reflect.Value, retVal int32) {
+	if field, found := findFieldOfValue(msg, retvalName); found {
 		field.Set(reflect.ValueOf(retVal))
 	}
 }
 
-// TODO comment
-func ReplyNameFor(request string) (string, bool) {
-	return request + Reply, true
+// ReplyNameFor returns reply message name to the given request message name.
+func ReplyNameFor(requestName string) (string, bool) {
+	return requestName + replySuffix, true
 }

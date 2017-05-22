@@ -25,7 +25,7 @@ import (
 	"github.com/lunixbochs/struc"
 
 	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/mock/binapi_reflect"
+	"git.fd.io/govpp.git/adapter/mock/util"
 	"git.fd.io/govpp.git/api"
 )
 
@@ -34,9 +34,9 @@ type VppAdapter struct {
 	callback func(context uint32, msgId uint16, data []byte)
 
 	msgNameToIds *map[string]uint16
-	msgIdsToName *map[uint16]string
-	msgIdSeq     uint16
-	binApiTypes  map[string]reflect.Type
+	msgIDsToName *map[uint16]string
+	msgIDSeq     uint16
+	binAPITypes  map[string]reflect.Type
 	access       sync.RWMutex
 }
 
@@ -53,8 +53,8 @@ type replyHeader struct {
 	Context uint32
 }
 
-// replyHeader represents a common header of each VPP reply message.
-type vppOtherHeader struct {
+// otherHeader represents a common header of each VPP reply message.
+type otherHeader struct {
 	VlMsgID uint16
 }
 
@@ -63,7 +63,7 @@ type defaultReply struct {
 	Retval int32
 }
 
-// MessageDTO is a structure used for propageating informations to ReplyHandlers
+// MessageDTO is a structure used for propagating information to ReplyHandlers.
 type MessageDTO struct {
 	MsgID    uint16
 	MsgName  string
@@ -72,18 +72,17 @@ type MessageDTO struct {
 }
 
 // ReplyHandler is a type that allows to extend the behaviour of VPP mock.
-// Return value prepared is used to signalize that mock reply is calculated.
-type ReplyHandler func(request MessageDTO) (reply []byte, msgID uint16, prepared bool)
+// Return value ok is used to signalize that mock reply is calculated and ready to be used.
+type ReplyHandler func(request MessageDTO) (reply []byte, msgID uint16, ok bool)
 
 const (
-	//defaultMsgID      = 1 // default message ID to be returned from GetMsgId
-	defaultReplyMsgID = 2 // default message ID for the reply to be sent back via callback
+	defaultReplyMsgID = 1 // default message ID for the reply to be sent back via callback
 )
 
 var replies []api.Message        // FIFO queue of messages
 var replyHandlers []ReplyHandler // callbacks that are able to calculate mock responses
 var repliesLock sync.Mutex       // mutex for the queue
-var mode = 0
+var mode = 0                     // mode in which the mock operates
 
 const useRepliesQueue = 1  // use replies in the queue instead of the default one
 const useReplyHandlers = 2 //use ReplyHandler
@@ -103,8 +102,9 @@ func (a *VppAdapter) Disconnect() {
 	// no op
 }
 
-func (a *VppAdapter) GetMsgNameByID(msgId uint16) (string, bool) {
-	switch msgId {
+// GetMsgNameByID returns message name for specified message ID.
+func (a *VppAdapter) GetMsgNameByID(msgID uint16) (string, bool) {
+	switch msgID {
 	case 100:
 		return "control_ping", true
 	case 101:
@@ -118,26 +118,28 @@ func (a *VppAdapter) GetMsgNameByID(msgId uint16) (string, bool) {
 	a.access.Lock()
 	defer a.access.Unlock()
 	a.initMaps()
-	msgName, found := (*a.msgIdsToName)[msgId]
+	msgName, found := (*a.msgIDsToName)[msgID]
 
 	return msgName, found
 }
 
-func (a *VppAdapter) RegisterBinApiTypes(binApiTypes map[string]reflect.Type) {
+// RegisterBinAPITypes registers binary API message types in the mock adapter.
+func (a *VppAdapter) RegisterBinAPITypes(binAPITypes map[string]reflect.Type) {
 	a.access.Lock()
 	defer a.access.Unlock()
 	a.initMaps()
-	for _, v := range binApiTypes {
+	for _, v := range binAPITypes {
 		if msg, ok := reflect.New(v).Interface().(api.Message); ok {
-			a.binApiTypes[msg.GetMessageName()] = v
+			a.binAPITypes[msg.GetMessageName()] = v
 		}
 	}
 }
 
+// ReplyTypeFor returns reply message type for given request message name.
 func (a *VppAdapter) ReplyTypeFor(requestMsgName string) (reflect.Type, uint16, bool) {
-	replyName, foundName := binapi_reflect.ReplyNameFor(requestMsgName)
+	replyName, foundName := util.ReplyNameFor(requestMsgName)
 	if foundName {
-		if reply, found := a.binApiTypes[replyName]; found {
+		if reply, found := a.binAPITypes[replyName]; found {
 			msgID, err := a.GetMsgID(replyName, "")
 			if err == nil {
 				return reply, msgID, found
@@ -148,6 +150,7 @@ func (a *VppAdapter) ReplyTypeFor(requestMsgName string) (reflect.Type, uint16, 
 	return nil, 0, false
 }
 
+// ReplyFor returns reply message for given request message name.
 func (a *VppAdapter) ReplyFor(requestMsgName string) (api.Message, uint16, bool) {
 	replType, msgID, foundReplType := a.ReplyTypeFor(requestMsgName)
 	if foundReplType {
@@ -161,17 +164,18 @@ func (a *VppAdapter) ReplyFor(requestMsgName string) (api.Message, uint16, bool)
 	return nil, 0, false
 }
 
+// ReplyBytes encodes the mocked reply into binary format.
 func (a *VppAdapter) ReplyBytes(request MessageDTO, reply api.Message) ([]byte, error) {
-	replyMsgId, err := a.GetMsgID(reply.GetMessageName(), reply.GetCrcString())
+	replyMsgID, err := a.GetMsgID(reply.GetMessageName(), reply.GetCrcString())
 	if err != nil {
-		log.Println("ReplyBytesE ", replyMsgId, " ", reply.GetMessageName(), " clientId: ", request.ClientID,
+		log.Println("ReplyBytesE ", replyMsgID, " ", reply.GetMessageName(), " clientId: ", request.ClientID,
 			" ", err)
 		return nil, err
 	}
-	log.Println("ReplyBytes ", replyMsgId, " ", reply.GetMessageName(), " clientId: ", request.ClientID)
+	log.Println("ReplyBytes ", replyMsgID, " ", reply.GetMessageName(), " clientId: ", request.ClientID)
 
 	buf := new(bytes.Buffer)
-	struc.Pack(buf, &replyHeader{VlMsgID: replyMsgId, Context: request.ClientID})
+	struc.Pack(buf, &replyHeader{VlMsgID: replyMsgID, Context: request.ClientID})
 	struc.Pack(buf, reply)
 
 	return buf.Bytes(), nil
@@ -194,29 +198,31 @@ func (a *VppAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	defer a.access.Unlock()
 	a.initMaps()
 
-	if msgId, found := (*a.msgNameToIds)[msgName]; found {
-		return msgId, nil
-	} else {
-		a.msgIdSeq++
-		msgId = a.msgIdSeq
-		(*a.msgNameToIds)[msgName] = msgId
-		(*a.msgIdsToName)[msgId] = msgName
-
-		log.Println("VPP GetMessageId ", msgId, " name:", msgName, " crc:", msgCrc)
-
-		return msgId, nil
+	msgID, found := (*a.msgNameToIds)[msgName]
+	if found {
+		return msgID, nil
 	}
+
+	a.msgIDSeq++
+	msgID = a.msgIDSeq
+	(*a.msgNameToIds)[msgName] = msgID
+	(*a.msgIDsToName)[msgID] = msgName
+
+	log.Println("VPP GetMessageId ", msgID, " name:", msgName, " crc:", msgCrc)
+
+	return msgID, nil
 }
 
+// initMaps initializes internal maps (if not already initialized).
 func (a *VppAdapter) initMaps() {
-	if a.msgIdsToName == nil {
-		a.msgIdsToName = &map[uint16]string{}
+	if a.msgIDsToName == nil {
+		a.msgIDsToName = &map[uint16]string{}
 		a.msgNameToIds = &map[string]uint16{}
-		a.msgIdSeq = 1000
+		a.msgIDSeq = 1000
 	}
 
-	if a.binApiTypes == nil {
-		a.binApiTypes = map[string]reflect.Type{}
+	if a.binAPITypes == nil {
+		a.binAPITypes = map[string]reflect.Type{}
 	}
 }
 
@@ -233,7 +239,7 @@ func (a *VppAdapter) SendMsg(clientID uint32, data []byte) error {
 			struc.Unpack(buf, &reqHeader)
 
 			a.access.Lock()
-			reqMsgName, _ := (*a.msgIdsToName)[reqHeader.VlMsgID]
+			reqMsgName, _ := (*a.msgIDsToName)[reqHeader.VlMsgID]
 			a.access.Unlock()
 
 			reply, msgID, finished := replyHandler(MessageDTO{reqHeader.VlMsgID, reqMsgName,
@@ -290,8 +296,7 @@ func (a *VppAdapter) SetMsgCallback(cb func(context uint32, msgID uint16, data [
 
 // MockReply stores a message to be returned when the next request comes. It is a FIFO queue - multiple replies
 // can be pushed into it, the first one will be popped when some request comes.
-//
-// It is able to also receive callback that calculates the reply
+// Using of this method automatically switches the mock into th useRepliesQueue mode.
 func (a *VppAdapter) MockReply(msg api.Message) {
 	repliesLock.Lock()
 	defer repliesLock.Unlock()
@@ -300,6 +305,8 @@ func (a *VppAdapter) MockReply(msg api.Message) {
 	mode = useRepliesQueue
 }
 
+// MockReplyHandler registers a handler function that is supposed to generate mock responses to incoming requests.
+// Using of this method automatically switches the mock into th useReplyHandlers mode.
 func (a *VppAdapter) MockReplyHandler(replyHandler ReplyHandler) {
 	repliesLock.Lock()
 	defer repliesLock.Unlock()
