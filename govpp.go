@@ -24,11 +24,24 @@ var vppAdapter adapter.VppAdapter // VPP Adapter that will be used in the subseq
 
 // Connect connects the govpp core to VPP either using the default VPP Adapter, or using the adapter previously
 // set by SetAdapter (useful mostly just for unit/integration tests with mocked VPP adapter).
+// This call blocks until VPP is connected, or an error occurs. Only one connection attempt will be performed.
 func Connect() (*core.Connection, error) {
 	if vppAdapter == nil {
 		vppAdapter = vppapiclient.NewVppAdapter()
 	}
 	return core.Connect(vppAdapter)
+}
+
+// AsyncConnect asynchronously connects the govpp core to VPP either using the default VPP Adapter,
+// or using the adapter previously set by SetAdapter.
+// This call does not block until connection is established, it returns immediately. The caller is
+// supposed to watch the returned ConnectionState channel for Connected/Disconnected events.
+// In case of disconnect, the library will asynchronously try to reconnect.
+func AsyncConnect() (*core.Connection, chan core.ConnectionEvent, error) {
+	if vppAdapter == nil {
+		vppAdapter = vppapiclient.NewVppAdapter()
+	}
+	return core.AsyncConnect(vppAdapter)
 }
 
 // SetAdapter sets the adapter that will be used for connections to VPP in the subsequent `Connect` calls.

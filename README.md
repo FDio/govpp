@@ -84,7 +84,7 @@ func main() {
 }
 ```
 
-The example above uses simple wrapper API over underlying go channels, see [example_client](examples/example_client.go) 
+The example above uses simple wrapper API over underlying go channels, see [example client](examples/cmd/simple-client/simple_client.go) 
 for more examples, including the example on how to use the Go channels directly.
 
 
@@ -127,7 +127,8 @@ binapi-generator --input-dir=examples/bin_api --output-dir=examples/bin_api
 
 In Go, [go generate](https://blog.golang.org/generate) tool can be leveraged to ease the code generation
 process. It allows to specify generator instructions in any one of the regular (non-generated) `.go` files
-that are dependent on generated code using special comments, e.g. the one from [example_client](examples/example_client.go):
+that are dependent on generated code using special comments, e.g. the one from 
+[example client](examples/cmd/simple-client/simple_client.go):
 ```go
 // go:generate binapi-generator --input-dir=bin_api --output-dir=bin_api
 ```

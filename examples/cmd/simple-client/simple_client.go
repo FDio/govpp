@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Example VPP management application that exercises the govpp API on real-world use-cases.
+// Binary simple-client is an example VPP management application that exercises the
+// govpp API on real-world use-cases.
 package main
 
 // Generates Go bindings for all VPP APIs located in the json directory.
@@ -22,19 +23,16 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"os/signal"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/api/ifcounters"
-	"git.fd.io/govpp.git/core/bin_api/vpe"
 	"git.fd.io/govpp.git/examples/bin_api/acl"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
 	"git.fd.io/govpp.git/examples/bin_api/tap"
 )
 
 func main() {
-	fmt.Println("Starting example VPP client...")
+	fmt.Println("Starting simple VPP client...")
 
 	// connect to VPP
 	conn, err := govpp.Connect()
@@ -64,8 +62,6 @@ func main() {
 
 	interfaceDump(ch)
 	interfaceNotifications(ch)
-
-	//interfaceCounters(ch)
 }
 
 // compatibilityCheck shows how an management application can check whether generated API messages are
@@ -219,59 +215,6 @@ func interfaceNotifications(ch *api.Channel) {
 	// receive one notification
 	notif := (<-notifChan).(*interfaces.SwInterfaceSetFlags)
 	fmt.Printf("%+v\n", notif)
-
-	// unsubscribe from delivery of the notifications
-	ch.UnsubscribeNotification(subs)
-}
-
-// interfaceCounters is an example of using notification API to periodically retrieve interface statistics.
-// The ifcounters package contains the API that can be used to decode the strange VnetInterfaceCounters message.
-func interfaceCounters(ch *api.Channel) {
-	// subscribe for interface counters notifications
-	notifChan := make(chan api.Message, 100)
-	subs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceCounters)
-
-	// enable interface counters notifications from VPP
-	ch.SendRequest(&vpe.WantStats{
-		Pid:           uint32(os.Getpid()),
-		EnableDisable: 1,
-	}).ReceiveReply(&vpe.WantStatsReply{})
-
-	// create channel for Interrupt signal
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt)
-
-	// loop until Interrupt signal is received
-loop:
-	for {
-		select {
-		case <-sigChan:
-			// interrupt received
-			break loop
-		case notifMsg := <-notifChan:
-			notif := notifMsg.(*interfaces.VnetInterfaceCounters)
-			// notification received
-			fmt.Printf("%+v\n", notif)
-
-			if notif.IsCombined == 0 {
-				// simple counter
-				counters, err := ifcounters.DecodeCounters(ifcounters.VnetInterfaceCounters(*notif))
-				if err != nil {
-					fmt.Println("Error:", err)
-				} else {
-					fmt.Printf("%+v\n", counters)
-				}
-			} else {
-				// combined counter
-				counters, err := ifcounters.DecodeCombinedCounters(ifcounters.VnetInterfaceCounters(*notif))
-				if err != nil {
-					fmt.Println("Error:", err)
-				} else {
-					fmt.Printf("%+v\n", counters)
-				}
-			}
-		}
-	}
 
 	// unsubscribe from delivery of the notifications
 	ch.UnsubscribeNotification(subs)

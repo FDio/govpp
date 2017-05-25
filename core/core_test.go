@@ -145,6 +145,7 @@ func TestNotifications(t *testing.T) {
 }
 
 func TestNilConnection(t *testing.T) {
+	RegisterTestingT(t)
 	var conn *Connection
 
 	ch, err := conn.NewAPIChannel()
@@ -166,6 +167,21 @@ func TestDoubleConnection(t *testing.T) {
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("only one connection per process"))
 	Expect(conn).Should(BeNil())
+}
+
+func TestAsyncConnection(t *testing.T) {
+	ctx := setupTest(t)
+	defer ctx.teardownTest()
+
+	ctx.conn.Disconnect()
+	conn, ch, err := AsyncConnect(ctx.mockVpp)
+	ctx.conn = conn
+
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(conn).ShouldNot(BeNil())
+
+	ev := <-ch
+	Expect(ev.State).Should(BeEquivalentTo(Connected))
 }
 
 func TestFullBuffer(t *testing.T) {

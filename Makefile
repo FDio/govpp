@@ -1,6 +1,7 @@
 build:
 	@cd cmd/binapi-generator && go build -v
-	@cd examples && go build -v
+	@cd examples/cmd/simple-client && go build -v
+	@cd examples/cmd/stats-client && go build -v
 
 test:
 	@cd cmd/binapi-generator && go test -cover .
@@ -11,8 +12,9 @@ install:
 	@cd cmd/binapi-generator && go install -v
 
 clean:
-	@rm cmd/binapi-generator/binapi-generator
-	@rm examples/examples
+	@rm -f cmd/binapi-generator/binapi-generator
+	@rm -f examples/cmd/simple-client/simple-client
+	@rm -f examples/cmd/stats-client/stats-client
 
 generate:
 	@cd core && go generate ./...

@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package util is a helper package for generic handling of VPP binary
+// Package binapi is a helper package for generic handling of VPP binary
 // API messages in the mock adapter and integration tests.
-package util
+package binapi
 
 import (
 	"reflect"

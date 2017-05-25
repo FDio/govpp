@@ -25,7 +25,7 @@ import (
 	"github.com/lunixbochs/struc"
 
 	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/mock/util"
+	"git.fd.io/govpp.git/adapter/mock/binapi"
 	"git.fd.io/govpp.git/api"
 )
 
@@ -137,7 +137,7 @@ func (a *VppAdapter) RegisterBinAPITypes(binAPITypes map[string]reflect.Type) {
 
 // ReplyTypeFor returns reply message type for given request message name.
 func (a *VppAdapter) ReplyTypeFor(requestMsgName string) (reflect.Type, uint16, bool) {
-	replyName, foundName := util.ReplyNameFor(requestMsgName)
+	replyName, foundName := binapi.ReplyNameFor(requestMsgName)
 	if foundName {
 		if reply, found := a.binAPITypes[replyName]; found {
 			msgID, err := a.GetMsgID(replyName, "")
