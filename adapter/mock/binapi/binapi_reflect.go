@@ -20,17 +20,17 @@ import (
 	"reflect"
 )
 
-const swIfIndexName = "swIfIndex"
-const retvalName = "retval"
+const swIfIndexName = "SwIfIndex"
+const retvalName = "Retval"
 const replySuffix = "_reply"
 
 // findFieldOfType finds the field specified by its name in provided message defined as reflect.Type data type.
 func findFieldOfType(reply reflect.Type, fieldName string) (reflect.StructField, bool) {
+	for reply.Kind() == reflect.Ptr {
+		reply = reply.Elem()
+	}
 	if reply.Kind() == reflect.Struct {
 		field, found := reply.FieldByName(fieldName)
-		return field, found
-	} else if reply.Kind() == reflect.Ptr && reply.Elem().Kind() == reflect.Struct {
-		field, found := reply.Elem().FieldByName(fieldName)
 		return field, found
 	}
 	return reflect.StructField{}, false
