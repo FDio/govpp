@@ -40,6 +40,20 @@
             ["u32", "minor"],
             {"crc" : "0x43eb59a5"}
         ],
+        ["acl_plugin_control_ping",
+            ["u16", "_vl_msg_id"],
+            ["u32", "client_index"],
+            ["u32", "context"],
+            {"crc" : "0xfc22c86e"}
+        ],
+        ["acl_plugin_control_ping_reply",
+            ["u16", "_vl_msg_id"],
+            ["u32", "context"],
+            ["i32", "retval"],
+            ["u32", "client_index"],
+            ["u32", "vpe_pid"],
+            {"crc" : "0xe07e9231"}
+        ],
         ["acl_add_replace",
             ["u16", "_vl_msg_id"],
             ["u32", "client_index"],
@@ -208,5 +222,5 @@
             {"crc" : "0x6c86a56c"}
         ]
     ],
-"vl_api_version" :"0x3cd02d84"
+"vl_api_version" :"0x1fd77287"
 }

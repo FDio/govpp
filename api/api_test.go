@@ -144,7 +144,7 @@ func TestRequestReplyMemifCreate(t *testing.T) {
 	})
 	request := &memif.MemifCreate{
 		Role:       10,
-		Key:        12,
+		ID:         12,
 		RingSize:   8000,
 		BufferSize: 50,
 	}

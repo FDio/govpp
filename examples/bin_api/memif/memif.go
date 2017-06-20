@@ -1,11 +1,11 @@
 // Package memif represents the VPP binary API of the 'memif' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/memif.api.json' on Thu, 04 May 2017 13:11:57 CEST.
+// DO NOT EDIT. Generated from 'bin_api/memif.api.json'
 package memif
 
 import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
-const VlAPIVersion = 0xadb63e82
+const VlAPIVersion = 0xed3def5d
 
 // MemifCreate represents the VPP binary API message 'memif_create'.
 // Generated from 'bin_api/memif.api.json', line 6:
@@ -15,18 +15,26 @@ const VlAPIVersion = 0xadb63e82
 //            ["u32", "client_index"],
 //            ["u32", "context"],
 //            ["u8", "role"],
-//            ["u64", "key"],
+//            ["u8", "mode"],
+//            ["u8", "rx_queues"],
+//            ["u8", "tx_queues"],
+//            ["u32", "id"],
 //            ["u8", "socket_filename", 128],
+//            ["u8", "secret", 24],
 //            ["u32", "ring_size"],
 //            ["u16", "buffer_size"],
 //            ["u8", "hw_addr", 6],
-//            {"crc" : "0x23fe3309"}
+//            {"crc" : "0xc809c235"}
 //        ],
 //
 type MemifCreate struct {
 	Role           uint8
-	Key            uint64
+	Mode           uint8
+	RxQueues       uint8
+	TxQueues       uint8
+	ID             uint32
 	SocketFilename []byte `struc:"[128]byte"`
+	Secret         []byte `struc:"[24]byte"`
 	RingSize       uint32
 	BufferSize     uint16
 	HwAddr         []byte `struc:"[6]byte"`
@@ -39,14 +47,14 @@ func (*MemifCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 func (*MemifCreate) GetCrcString() string {
-	return "23fe3309"
+	return "c809c235"
 }
 func NewMemifCreate() api.Message {
 	return &MemifCreate{}
 }
 
 // MemifCreateReply represents the VPP binary API message 'memif_create_reply'.
-// Generated from 'bin_api/memif.api.json', line 18:
+// Generated from 'bin_api/memif.api.json', line 22:
 //
 //        ["memif_create_reply",
 //            ["u16", "_vl_msg_id"],
@@ -75,7 +83,7 @@ func NewMemifCreateReply() api.Message {
 }
 
 // MemifDelete represents the VPP binary API message 'memif_delete'.
-// Generated from 'bin_api/memif.api.json', line 25:
+// Generated from 'bin_api/memif.api.json', line 29:
 //
 //        ["memif_delete",
 //            ["u16", "_vl_msg_id"],
@@ -103,7 +111,7 @@ func NewMemifDelete() api.Message {
 }
 
 // MemifDeleteReply represents the VPP binary API message 'memif_delete_reply'.
-// Generated from 'bin_api/memif.api.json', line 32:
+// Generated from 'bin_api/memif.api.json', line 36:
 //
 //        ["memif_delete_reply",
 //            ["u16", "_vl_msg_id"],
@@ -130,7 +138,7 @@ func NewMemifDeleteReply() api.Message {
 }
 
 // MemifDetails represents the VPP binary API message 'memif_details'.
-// Generated from 'bin_api/memif.api.json', line 38:
+// Generated from 'bin_api/memif.api.json', line 42:
 //
 //        ["memif_details",
 //            ["u16", "_vl_msg_id"],
@@ -138,22 +146,24 @@ func NewMemifDeleteReply() api.Message {
 //            ["u32", "sw_if_index"],
 //            ["u8", "if_name", 64],
 //            ["u8", "hw_addr", 6],
-//            ["u64", "key"],
+//            ["u32", "id"],
 //            ["u8", "role"],
+//            ["u8", "mode"],
 //            ["u8", "socket_filename", 128],
 //            ["u32", "ring_size"],
 //            ["u16", "buffer_size"],
 //            ["u8", "admin_up_down"],
 //            ["u8", "link_up_down"],
-//            {"crc" : "0xcf105583"}
+//            {"crc" : "0x4d74fd96"}
 //        ],
 //
 type MemifDetails struct {
 	SwIfIndex      uint32
 	IfName         []byte `struc:"[64]byte"`
 	HwAddr         []byte `struc:"[6]byte"`
-	Key            uint64
+	ID             uint32
 	Role           uint8
+	Mode           uint8
 	SocketFilename []byte `struc:"[128]byte"`
 	RingSize       uint32
 	BufferSize     uint16
@@ -168,14 +178,14 @@ func (*MemifDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 func (*MemifDetails) GetCrcString() string {
-	return "cf105583"
+	return "4d74fd96"
 }
 func NewMemifDetails() api.Message {
 	return &MemifDetails{}
 }
 
 // MemifDump represents the VPP binary API message 'memif_dump'.
-// Generated from 'bin_api/memif.api.json', line 53:
+// Generated from 'bin_api/memif.api.json', line 58:
 //
 //        ["memif_dump",
 //            ["u16", "_vl_msg_id"],

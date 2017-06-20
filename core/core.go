@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:generate binapi-generator --input-dir=bin_api --output-dir=bin_api
+
 package core
 
 import (

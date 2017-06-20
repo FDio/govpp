@@ -1,11 +1,11 @@
 // Package af_packet represents the VPP binary API of the 'af_packet' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/af_packet.api.json' on Thu, 04 May 2017 13:11:57 CEST.
+// DO NOT EDIT. Generated from 'bin_api/af_packet.api.json'
 package af_packet
 
 import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
-const VlAPIVersion = 0x4ca71f33
+const VlAPIVersion = 0xd4ce9f85
 
 // AfPacketCreate represents the VPP binary API message 'af_packet_create'.
 // Generated from 'bin_api/af_packet.api.json', line 6:

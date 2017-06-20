@@ -1,11 +1,11 @@
 // Package ip represents the VPP binary API of the 'ip' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/ip.api.json' on Thu, 04 May 2017 13:11:57 CEST.
+// DO NOT EDIT. Generated from 'bin_api/ip.api.json'
 package ip
 
 import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
-const VlAPIVersion = 0x6a819870
+const VlAPIVersion = 0x50fe2434
 
 // FibPath represents the VPP binary API data type 'fib_path'.
 // Generated from 'bin_api/ip.api.json', line 3:
@@ -232,22 +232,22 @@ func NewIPNeighborDetails() api.Message {
 //            ["u16", "_vl_msg_id"],
 //            ["u32", "client_index"],
 //            ["u32", "context"],
-//            ["u32", "vrf_id"],
 //            ["u32", "sw_if_index"],
 //            ["u8", "is_add"],
 //            ["u8", "is_ipv6"],
 //            ["u8", "is_static"],
+//            ["u8", "is_no_adj_fib"],
 //            ["u8", "mac_address", 6],
 //            ["u8", "dst_address", 16],
-//            {"crc" : "0x66f2112c"}
+//            {"crc" : "0x5a0d070b"}
 //        ],
 //
 type IPNeighborAddDel struct {
-	VrfID      uint32
 	SwIfIndex  uint32
 	IsAdd      uint8
 	IsIpv6     uint8
 	IsStatic   uint8
+	IsNoAdjFib uint8
 	MacAddress []byte `struc:"[6]byte"`
 	DstAddress []byte `struc:"[16]byte"`
 }
@@ -259,7 +259,7 @@ func (*IPNeighborAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 func (*IPNeighborAddDel) GetCrcString() string {
-	return "66f2112c"
+	return "5a0d070b"
 }
 func NewIPNeighborAddDel() api.Message {
 	return &IPNeighborAddDel{}
@@ -517,8 +517,123 @@ func NewSwInterfaceIP6ndRaPrefixReply() api.Message {
 	return &SwInterfaceIP6ndRaPrefixReply{}
 }
 
-// SwInterfaceIP6EnableDisable represents the VPP binary API message 'sw_interface_ip6_enable_disable'.
+// IP6ndProxyAddDel represents the VPP binary API message 'ip6nd_proxy_add_del'.
 // Generated from 'bin_api/ip.api.json', line 153:
+//
+//        ["ip6nd_proxy_add_del",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "client_index"],
+//            ["u32", "context"],
+//            ["u32", "sw_if_index"],
+//            ["u8", "is_del"],
+//            ["u8", "address", 16],
+//            {"crc" : "0xc56f802d"}
+//        ],
+//
+type IP6ndProxyAddDel struct {
+	SwIfIndex uint32
+	IsDel     uint8
+	Address   []byte `struc:"[16]byte"`
+}
+
+func (*IP6ndProxyAddDel) GetMessageName() string {
+	return "ip6nd_proxy_add_del"
+}
+func (*IP6ndProxyAddDel) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+func (*IP6ndProxyAddDel) GetCrcString() string {
+	return "c56f802d"
+}
+func NewIP6ndProxyAddDel() api.Message {
+	return &IP6ndProxyAddDel{}
+}
+
+// IP6ndProxyAddDelReply represents the VPP binary API message 'ip6nd_proxy_add_del_reply'.
+// Generated from 'bin_api/ip.api.json', line 162:
+//
+//        ["ip6nd_proxy_add_del_reply",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "context"],
+//            ["i32", "retval"],
+//            {"crc" : "0x00ddc2d5"}
+//        ],
+//
+type IP6ndProxyAddDelReply struct {
+	Retval int32
+}
+
+func (*IP6ndProxyAddDelReply) GetMessageName() string {
+	return "ip6nd_proxy_add_del_reply"
+}
+func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+func (*IP6ndProxyAddDelReply) GetCrcString() string {
+	return "00ddc2d5"
+}
+func NewIP6ndProxyAddDelReply() api.Message {
+	return &IP6ndProxyAddDelReply{}
+}
+
+// IP6ndProxyDetails represents the VPP binary API message 'ip6nd_proxy_details'.
+// Generated from 'bin_api/ip.api.json', line 168:
+//
+//        ["ip6nd_proxy_details",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "client_index"],
+//            ["u32", "context"],
+//            ["u32", "sw_if_index"],
+//            ["u8", "address", 16],
+//            {"crc" : "0xf805ccc1"}
+//        ],
+//
+type IP6ndProxyDetails struct {
+	SwIfIndex uint32
+	Address   []byte `struc:"[16]byte"`
+}
+
+func (*IP6ndProxyDetails) GetMessageName() string {
+	return "ip6nd_proxy_details"
+}
+func (*IP6ndProxyDetails) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+func (*IP6ndProxyDetails) GetCrcString() string {
+	return "f805ccc1"
+}
+func NewIP6ndProxyDetails() api.Message {
+	return &IP6ndProxyDetails{}
+}
+
+// IP6ndProxyDump represents the VPP binary API message 'ip6nd_proxy_dump'.
+// Generated from 'bin_api/ip.api.json', line 176:
+//
+//        ["ip6nd_proxy_dump",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "client_index"],
+//            ["u32", "context"],
+//            {"crc" : "0x21597d88"}
+//        ],
+//
+type IP6ndProxyDump struct {
+}
+
+func (*IP6ndProxyDump) GetMessageName() string {
+	return "ip6nd_proxy_dump"
+}
+func (*IP6ndProxyDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+func (*IP6ndProxyDump) GetCrcString() string {
+	return "21597d88"
+}
+func NewIP6ndProxyDump() api.Message {
+	return &IP6ndProxyDump{}
+}
+
+// SwInterfaceIP6EnableDisable represents the VPP binary API message 'sw_interface_ip6_enable_disable'.
+// Generated from 'bin_api/ip.api.json', line 182:
 //
 //        ["sw_interface_ip6_enable_disable",
 //            ["u16", "_vl_msg_id"],
@@ -548,7 +663,7 @@ func NewSwInterfaceIP6EnableDisable() api.Message {
 }
 
 // SwInterfaceIP6EnableDisableReply represents the VPP binary API message 'sw_interface_ip6_enable_disable_reply'.
-// Generated from 'bin_api/ip.api.json', line 161:
+// Generated from 'bin_api/ip.api.json', line 190:
 //
 //        ["sw_interface_ip6_enable_disable_reply",
 //            ["u16", "_vl_msg_id"],
@@ -575,7 +690,7 @@ func NewSwInterfaceIP6EnableDisableReply() api.Message {
 }
 
 // SwInterfaceIP6SetLinkLocalAddress represents the VPP binary API message 'sw_interface_ip6_set_link_local_address'.
-// Generated from 'bin_api/ip.api.json', line 167:
+// Generated from 'bin_api/ip.api.json', line 196:
 //
 //        ["sw_interface_ip6_set_link_local_address",
 //            ["u16", "_vl_msg_id"],
@@ -605,7 +720,7 @@ func NewSwInterfaceIP6SetLinkLocalAddress() api.Message {
 }
 
 // SwInterfaceIP6SetLinkLocalAddressReply represents the VPP binary API message 'sw_interface_ip6_set_link_local_address_reply'.
-// Generated from 'bin_api/ip.api.json', line 175:
+// Generated from 'bin_api/ip.api.json', line 204:
 //
 //        ["sw_interface_ip6_set_link_local_address_reply",
 //            ["u16", "_vl_msg_id"],
@@ -632,7 +747,7 @@ func NewSwInterfaceIP6SetLinkLocalAddressReply() api.Message {
 }
 
 // IPAddDelRoute represents the VPP binary API message 'ip_add_del_route'.
-// Generated from 'bin_api/ip.api.json', line 181:
+// Generated from 'bin_api/ip.api.json', line 210:
 //
 //        ["ip_add_del_route",
 //            ["u16", "_vl_msg_id"],
@@ -704,7 +819,7 @@ func NewIPAddDelRoute() api.Message {
 }
 
 // IPAddDelRouteReply represents the VPP binary API message 'ip_add_del_route_reply'.
-// Generated from 'bin_api/ip.api.json', line 210:
+// Generated from 'bin_api/ip.api.json', line 239:
 //
 //        ["ip_add_del_route_reply",
 //            ["u16", "_vl_msg_id"],
@@ -731,7 +846,7 @@ func NewIPAddDelRouteReply() api.Message {
 }
 
 // IPMrouteAddDel represents the VPP binary API message 'ip_mroute_add_del'.
-// Generated from 'bin_api/ip.api.json', line 216:
+// Generated from 'bin_api/ip.api.json', line 245:
 //
 //        ["ip_mroute_add_del",
 //            ["u16", "_vl_msg_id"],
@@ -741,6 +856,7 @@ func NewIPAddDelRouteReply() api.Message {
 //            ["u32", "table_id"],
 //            ["u32", "entry_flags"],
 //            ["u32", "itf_flags"],
+//            ["u32", "rpf_id"],
 //            ["u16", "grp_address_length"],
 //            ["u8", "create_vrf_if_needed"],
 //            ["u8", "is_add"],
@@ -748,7 +864,7 @@ func NewIPAddDelRouteReply() api.Message {
 //            ["u8", "is_local"],
 //            ["u8", "grp_address", 16],
 //            ["u8", "src_address", 16],
-//            {"crc" : "0x8312830f"}
+//            {"crc" : "0x8f5f21a8"}
 //        ],
 //
 type IPMrouteAddDel struct {
@@ -756,6 +872,7 @@ type IPMrouteAddDel struct {
 	TableID           uint32
 	EntryFlags        uint32
 	ItfFlags          uint32
+	RpfID             uint32
 	GrpAddressLength  uint16
 	CreateVrfIfNeeded uint8
 	IsAdd             uint8
@@ -772,14 +889,14 @@ func (*IPMrouteAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 func (*IPMrouteAddDel) GetCrcString() string {
-	return "8312830f"
+	return "8f5f21a8"
 }
 func NewIPMrouteAddDel() api.Message {
 	return &IPMrouteAddDel{}
 }
 
 // IPMrouteAddDelReply represents the VPP binary API message 'ip_mroute_add_del_reply'.
-// Generated from 'bin_api/ip.api.json', line 233:
+// Generated from 'bin_api/ip.api.json', line 263:
 //
 //        ["ip_mroute_add_del_reply",
 //            ["u16", "_vl_msg_id"],
@@ -805,8 +922,138 @@ func NewIPMrouteAddDelReply() api.Message {
 	return &IPMrouteAddDelReply{}
 }
 
+// IPMfibDump represents the VPP binary API message 'ip_mfib_dump'.
+// Generated from 'bin_api/ip.api.json', line 269:
+//
+//        ["ip_mfib_dump",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "client_index"],
+//            ["u32", "context"],
+//            {"crc" : "0xee61390e"}
+//        ],
+//
+type IPMfibDump struct {
+}
+
+func (*IPMfibDump) GetMessageName() string {
+	return "ip_mfib_dump"
+}
+func (*IPMfibDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+func (*IPMfibDump) GetCrcString() string {
+	return "ee61390e"
+}
+func NewIPMfibDump() api.Message {
+	return &IPMfibDump{}
+}
+
+// IPMfibDetails represents the VPP binary API message 'ip_mfib_details'.
+// Generated from 'bin_api/ip.api.json', line 275:
+//
+//        ["ip_mfib_details",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "context"],
+//            ["u32", "table_id"],
+//            ["u32", "entry_flags"],
+//            ["u32", "rpf_id"],
+//            ["u8", "address_length"],
+//            ["u8", "grp_address", 4],
+//            ["u8", "src_address", 4],
+//            ["u32", "count"],
+//            ["vl_api_fib_path_t", "path", 0, "count"],
+//            {"crc" : "0x395e5699"}
+//        ],
+//
+type IPMfibDetails struct {
+	TableID       uint32
+	EntryFlags    uint32
+	RpfID         uint32
+	AddressLength uint8
+	GrpAddress    []byte `struc:"[4]byte"`
+	SrcAddress    []byte `struc:"[4]byte"`
+	Count         uint32 `struc:"sizeof=Path"`
+	Path          []FibPath
+}
+
+func (*IPMfibDetails) GetMessageName() string {
+	return "ip_mfib_details"
+}
+func (*IPMfibDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+func (*IPMfibDetails) GetCrcString() string {
+	return "395e5699"
+}
+func NewIPMfibDetails() api.Message {
+	return &IPMfibDetails{}
+}
+
+// IP6MfibDump represents the VPP binary API message 'ip6_mfib_dump'.
+// Generated from 'bin_api/ip.api.json', line 288:
+//
+//        ["ip6_mfib_dump",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "client_index"],
+//            ["u32", "context"],
+//            {"crc" : "0x0839e143"}
+//        ],
+//
+type IP6MfibDump struct {
+}
+
+func (*IP6MfibDump) GetMessageName() string {
+	return "ip6_mfib_dump"
+}
+func (*IP6MfibDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+func (*IP6MfibDump) GetCrcString() string {
+	return "0839e143"
+}
+func NewIP6MfibDump() api.Message {
+	return &IP6MfibDump{}
+}
+
+// IP6MfibDetails represents the VPP binary API message 'ip6_mfib_details'.
+// Generated from 'bin_api/ip.api.json', line 294:
+//
+//        ["ip6_mfib_details",
+//            ["u16", "_vl_msg_id"],
+//            ["u32", "context"],
+//            ["u32", "table_id"],
+//            ["u8", "address_length"],
+//            ["u8", "grp_address", 16],
+//            ["u8", "src_address", 16],
+//            ["u32", "count"],
+//            ["vl_api_fib_path_t", "path", 0, "count"],
+//            {"crc" : "0x921b153f"}
+//        ],
+//
+type IP6MfibDetails struct {
+	TableID       uint32
+	AddressLength uint8
+	GrpAddress    []byte `struc:"[16]byte"`
+	SrcAddress    []byte `struc:"[16]byte"`
+	Count         uint32 `struc:"sizeof=Path"`
+	Path          []FibPath
+}
+
+func (*IP6MfibDetails) GetMessageName() string {
+	return "ip6_mfib_details"
+}
+func (*IP6MfibDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+func (*IP6MfibDetails) GetCrcString() string {
+	return "921b153f"
+}
+func NewIP6MfibDetails() api.Message {
+	return &IP6MfibDetails{}
+}
+
 // IPAddressDetails represents the VPP binary API message 'ip_address_details'.
-// Generated from 'bin_api/ip.api.json', line 239:
+// Generated from 'bin_api/ip.api.json', line 305:
 //
 //        ["ip_address_details",
 //            ["u16", "_vl_msg_id"],
@@ -840,7 +1087,7 @@ func NewIPAddressDetails() api.Message {
 }
 
 // IPAddressDump represents the VPP binary API message 'ip_address_dump'.
-// Generated from 'bin_api/ip.api.json', line 249:
+// Generated from 'bin_api/ip.api.json', line 315:
 //
 //        ["ip_address_dump",
 //            ["u16", "_vl_msg_id"],
@@ -870,7 +1117,7 @@ func NewIPAddressDump() api.Message {
 }
 
 // IPDetails represents the VPP binary API message 'ip_details'.
-// Generated from 'bin_api/ip.api.json', line 257:
+// Generated from 'bin_api/ip.api.json', line 323:
 //
 //        ["ip_details",
 //            ["u16", "_vl_msg_id"],
@@ -900,7 +1147,7 @@ func NewIPDetails() api.Message {
 }
 
 // IPDump represents the VPP binary API message 'ip_dump'.
-// Generated from 'bin_api/ip.api.json', line 264:
+// Generated from 'bin_api/ip.api.json', line 330:
 //
 //        ["ip_dump",
 //            ["u16", "_vl_msg_id"],
@@ -928,7 +1175,7 @@ func NewIPDump() api.Message {
 }
 
 // MfibSignalDump represents the VPP binary API message 'mfib_signal_dump'.
-// Generated from 'bin_api/ip.api.json', line 271:
+// Generated from 'bin_api/ip.api.json', line 337:
 //
 //        ["mfib_signal_dump",
 //            ["u16", "_vl_msg_id"],
@@ -954,7 +1201,7 @@ func NewMfibSignalDump() api.Message {
 }
 
 // MfibSignalDetails represents the VPP binary API message 'mfib_signal_details'.
-// Generated from 'bin_api/ip.api.json', line 277:
+// Generated from 'bin_api/ip.api.json', line 343:
 //
 //        ["mfib_signal_details",
 //            ["u16", "_vl_msg_id"],

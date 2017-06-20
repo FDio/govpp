@@ -1,6 +1,10 @@
 {
     "types" : [
-
+        ["vlib_counter",
+            ["u64", "packets"],
+            ["u64", "bytes"],
+            {"crc" : "0x62db67f0"}
+        ]
     ],
     "messages" : [
         ["sw_interface_set_flags",
@@ -138,14 +142,21 @@
             ["u32", "vrf_id"],
             {"crc" : "0xab44111d"}
         ],
-        ["vnet_interface_counters",
+        ["vnet_interface_simple_counters",
             ["u16", "_vl_msg_id"],
             ["u8", "vnet_counter_type"],
-            ["u8", "is_combined"],
             ["u32", "first_sw_if_index"],
             ["u32", "count"],
-            ["u8", "data", 0, "count"],
-            {"crc" : "0x312082b4"}
+            ["u64", "data", 0, "count"],
+            {"crc" : "0x302f0983"}
+        ],
+        ["vnet_interface_combined_counters",
+            ["u16", "_vl_msg_id"],
+            ["u8", "vnet_counter_type"],
+            ["u32", "first_sw_if_index"],
+            ["u32", "count"],
+            ["vl_api_vlib_counter_t", "data", 0, "count"],
+            {"crc" : "0xd82426e3"}
         ],
         ["sw_interface_set_unnumbered",
             ["u16", "_vl_msg_id"],
@@ -189,7 +200,21 @@
             ["u32", "context"],
             ["i32", "retval"],
             {"crc" : "0x761cbcb0"}
+        ],
+        ["sw_interface_set_mac_address",
+            ["u16", "_vl_msg_id"],
+            ["u32", "client_index"],
+            ["u32", "context"],
+            ["u32", "sw_if_index"],
+            ["u8", "mac_address", 6],
+            {"crc" : "0xe4f22660"}
+        ],
+        ["sw_interface_set_mac_address_reply",
+            ["u16", "_vl_msg_id"],
+            ["u32", "context"],
+            ["i32", "retval"],
+            {"crc" : "0x9dc8a452"}
         ]
     ],
-"vl_api_version" :"0x6857f668"
+"vl_api_version" :"0xcdfdf626"
 }

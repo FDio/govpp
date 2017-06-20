@@ -8,12 +8,16 @@
             ["u32", "client_index"],
             ["u32", "context"],
             ["u8", "role"],
-            ["u64", "key"],
+            ["u8", "mode"],
+            ["u8", "rx_queues"],
+            ["u8", "tx_queues"],
+            ["u32", "id"],
             ["u8", "socket_filename", 128],
+            ["u8", "secret", 24],
             ["u32", "ring_size"],
             ["u16", "buffer_size"],
             ["u8", "hw_addr", 6],
-            {"crc" : "0x23fe3309"}
+            {"crc" : "0xc809c235"}
         ],
         ["memif_create_reply",
             ["u16", "_vl_msg_id"],
@@ -41,14 +45,15 @@
             ["u32", "sw_if_index"],
             ["u8", "if_name", 64],
             ["u8", "hw_addr", 6],
-            ["u64", "key"],
+            ["u32", "id"],
             ["u8", "role"],
+            ["u8", "mode"],
             ["u8", "socket_filename", 128],
             ["u32", "ring_size"],
             ["u16", "buffer_size"],
             ["u8", "admin_up_down"],
             ["u8", "link_up_down"],
-            {"crc" : "0xcf105583"}
+            {"crc" : "0x4d74fd96"}
         ],
         ["memif_dump",
             ["u16", "_vl_msg_id"],
@@ -57,5 +62,5 @@
             {"crc" : "0x68d39e95"}
         ]
     ],
-"vl_api_version" :"0xadb63e82"
+"vl_api_version" :"0xed3def5d"
 }

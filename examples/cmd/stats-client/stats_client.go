@@ -26,7 +26,6 @@ import (
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/api/ifcounters"
 	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/core/bin_api/vpe"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
@@ -55,7 +54,8 @@ func main() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
 
-	var subs *api.NotifSubscription
+	var simpleCountersSubs *api.NotifSubscription
+	var combinedCountersSubs *api.NotifSubscription
 	var notifChan chan api.Message
 
 	// loop until Interrupt signal is received
@@ -68,8 +68,8 @@ loop:
 			switch connEvent.State {
 			case core.Connected:
 				fmt.Println("VPP connected.")
-				if subs == nil {
-					subs, notifChan = subscribeNotification(ch)
+				if simpleCountersSubs == nil {
+					simpleCountersSubs, combinedCountersSubs, notifChan = subscribeNotifications(ch)
 				}
 				requestStatistics(ch)
 
@@ -77,9 +77,17 @@ loop:
 				fmt.Println("VPP disconnected.")
 			}
 
-		case notifMsg := <-notifChan:
-			// counter notification received
-			processCounters(notifMsg.(*interfaces.VnetInterfaceCounters))
+		case msg := <-notifChan:
+			switch notif := msg.(type) {
+			case *interfaces.VnetInterfaceSimpleCounters:
+				// simple counter notification received
+				processSimpleCounters(notif)
+			case *interfaces.VnetInterfaceCombinedCounters:
+				// combined counter notification received
+				processCombinedCounters(notif)
+			default:
+				fmt.Println("Ignoring unknown VPP notification")
+			}
 
 		case <-sigChan:
 			// interrupt received
@@ -88,16 +96,18 @@ loop:
 		}
 	}
 
-	ch.UnsubscribeNotification(subs)
+	ch.UnsubscribeNotification(simpleCountersSubs)
+	ch.UnsubscribeNotification(combinedCountersSubs)
 }
 
-// subscribeNotification subscribes for interface counters notifications.
-func subscribeNotification(ch *api.Channel) (*api.NotifSubscription, chan api.Message) {
+// subscribeNotifications subscribes for interface counters notifications.
+func subscribeNotifications(ch *api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
 
 	notifChan := make(chan api.Message, 100)
-	subs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceCounters)
+	simpleCountersSubs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceSimpleCounters)
+	combinedCountersSubs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceCombinedCounters)
 
-	return subs, notifChan
+	return simpleCountersSubs, combinedCountersSubs, notifChan
 }
 
 // requestStatistics requests interface counters notifications from VPP.
@@ -108,25 +118,27 @@ func requestStatistics(ch *api.Channel) {
 	}).ReceiveReply(&vpe.WantStatsReply{})
 }
 
-// processCounters processes a counter message received from VPP.
-func processCounters(msg *interfaces.VnetInterfaceCounters) {
-	fmt.Printf("%+v\n", msg)
+// processSimpleCounters processes simple counters received from VPP.
+func processSimpleCounters(counters *interfaces.VnetInterfaceSimpleCounters) {
+	fmt.Printf("%+v\n", counters)
 
-	if msg.IsCombined == 0 {
-		// simple counter
-		counters, err := ifcounters.DecodeCounters(ifcounters.VnetInterfaceCounters(*msg))
-		if err != nil {
-			fmt.Println("Error:", err)
-		} else {
-			fmt.Printf("%+v\n", counters)
-		}
-	} else {
-		// combined counter
-		counters, err := ifcounters.DecodeCombinedCounters(ifcounters.VnetInterfaceCounters(*msg))
-		if err != nil {
-			fmt.Println("Error:", err)
-		} else {
-			fmt.Printf("%+v\n", counters)
-		}
+	counterNames := []string{"Drop", "Punt", "IPv4", "IPv6", "RxNoBuf", "RxMiss", "RxError", "TxError", "MPLS"}
+
+	for i := uint32(0); i < counters.Count; i++ {
+		fmt.Printf("Interface '%d': %s = %d\n",
+			counters.FirstSwIfIndex+i, counterNames[counters.VnetCounterType], counters.Data[i])
+	}
+}
+
+// processCombinedCounters processes combined counters received from VPP.
+func processCombinedCounters(counters *interfaces.VnetInterfaceCombinedCounters) {
+	fmt.Printf("%+v\n", counters)
+
+	counterNames := []string{"Rx", "Tx"}
+
+	for i := uint32(0); i < counters.Count; i++ {
+		fmt.Printf("Interface '%d': %s packets = %d, %s bytes = %d\n",
+			counters.FirstSwIfIndex+i, counterNames[counters.VnetCounterType], counters.Data[i].Packets,
+			counterNames[counters.VnetCounterType], counters.Data[i].Bytes)
 	}
 }

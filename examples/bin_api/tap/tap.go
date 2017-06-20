@@ -1,11 +1,11 @@
 // Package tap represents the VPP binary API of the 'tap' VPP module.
-// DO NOT EDIT. Generated from 'bin_api/tap.api.json' on Thu, 04 May 2017 13:11:57 CEST.
+// DO NOT EDIT. Generated from 'bin_api/tap.api.json'
 package tap
 
 import "git.fd.io/govpp.git/api"
 
 // VlApiVersion contains version of the API.
-const VlAPIVersion = 0x1aedb9f2
+const VlAPIVersion = 0x4eaa2b5a
 
 // TapConnect represents the VPP binary API message 'tap_connect'.
 // Generated from 'bin_api/tap.api.json', line 6:
