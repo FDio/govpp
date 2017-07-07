@@ -2,3 +2,4 @@
 cmd/binapi-generator/binapi-generator
 examples/cmd/simple-client/simple-client
 examples/cmd/stats-client/stats-client
+examples/cmd/perf-bench/perf-bench

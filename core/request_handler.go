@@ -79,13 +79,15 @@ func (c *Connection) processRequest(ch *api.Channel, chMeta *channelMetadata, re
 		return error
 	}
 
-	// send the message
-	log.WithFields(logger.Fields{
-		"context":  chMeta.id,
-		"msg_id":   msgID,
-		"msg_size": len(data),
-	}).Debug("Sending a message to VPP.")
+	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
+		log.WithFields(logger.Fields{
+			"context":  chMeta.id,
+			"msg_id":   msgID,
+			"msg_size": len(data),
+		}).Debug("Sending a message to VPP.")
+	}
 
+	// send the message
 	if req.Multipart {
 		// expect multipart response
 		atomic.StoreUint32(&chMeta.multipart, 1)
@@ -121,11 +123,13 @@ func msgCallback(context uint32, msgID uint16, data []byte) {
 		return
 	}
 
-	log.WithFields(logger.Fields{
-		"context":  context,
-		"msg_id":   msgID,
-		"msg_size": len(data),
-	}).Debug("Received a message from VPP.")
+	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
+		log.WithFields(logger.Fields{
+			"context":  context,
+			"msg_id":   msgID,
+			"msg_size": len(data),
+		}).Debug("Received a message from VPP.")
+	}
 
 	if context == 0 || conn.isNotificationMessage(msgID) {
 		// process the message as a notification
