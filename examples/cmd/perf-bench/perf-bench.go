@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Sirupsen/logrus"
 	"github.com/pkg/profile"
-	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
