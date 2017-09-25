@@ -250,25 +250,32 @@ func generateMessage(ctx *context, w io.Writer, msg *jsongo.JSONNode, isType boo
 	// generate struct fields into the slice & determine message type
 	fields := make([]string, 0)
 	msgType := otherMessage
+	wasClientIndex := false
 	for j := 0; j < msg.Len(); j++ {
 		if jsongo.TypeArray == msg.At(j).GetType() {
 			fld := msg.At(j)
-			err := processMessageField(ctx, &fields, fld)
-			if err != nil {
-				return err
-			}
-			// determine whether ths is a request / reply / other message
-			if j == 2 {
+			if !isType {
+				// determine whether ths is a request / reply / other message
 				fieldName, ok := fld.At(1).Get().(string)
 				if ok {
-					if fieldName == "client_index" {
-						msgType = requestMessage
-					} else if fieldName == "context" {
-						msgType = replyMessage
-					} else {
-						msgType = otherMessage
+					if j == 2 {
+						if fieldName == "client_index" {
+							wasClientIndex = true
+						} else if fieldName == "context" {
+							// reply needs "context" as the second member
+							msgType = replyMessage
+						}
+					} else if j == 3 {
+						if wasClientIndex && fieldName == "context" {
+							// request needs "client_index" as the second member and "context" as the third member
+							msgType = requestMessage
+						}
 					}
 				}
+			}
+			err := processMessageField(ctx, &fields, fld, isType)
+			if err != nil {
+				return err
 			}
 		}
 	}
@@ -319,7 +326,7 @@ func generateMessage(ctx *context, w io.Writer, msg *jsongo.JSONNode, isType boo
 }
 
 // processMessageField process JSON describing one message field into Go code emitted into provided slice of message fields
-func processMessageField(ctx *context, fields *[]string, fld *jsongo.JSONNode) error {
+func processMessageField(ctx *context, fields *[]string, fld *jsongo.JSONNode, isType bool) error {
 	if fld.Len() < 2 || fld.At(0).GetType() != jsongo.TypeValue || fld.At(1).GetType() != jsongo.TypeValue {
 		return errors.New("invalid JSON for message field specified")
 	}
@@ -337,7 +344,7 @@ func processMessageField(ctx *context, fields *[]string, fld *jsongo.JSONNode) e
 	if fieldNameLower == "crc" || fieldNameLower == "_vl_msg_id" {
 		return nil
 	}
-	if len(*fields) == 0 && (fieldNameLower == "client_index" || fieldNameLower == "context") {
+	if !isType && len(*fields) == 0 && (fieldNameLower == "client_index" || fieldNameLower == "context") {
 		return nil
 	}
 
