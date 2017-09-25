@@ -38,6 +38,7 @@ type messageType int
 const (
 	requestMessage messageType = iota // VPP request message
 	replyMessage                      // VPP reply message
+	eventMessage                      // VPP event message
 	otherMessage                      // other VPP message
 )
 
@@ -260,6 +261,8 @@ func generateMessage(ctx *context, w io.Writer, msg *jsongo.JSONNode, isType boo
 				if ok {
 					if j == 2 {
 						if fieldName == "client_index" {
+							// "client_index" as the second member, this might be an event message or a request
+							msgType = eventMessage
 							wasClientIndex = true
 						} else if fieldName == "context" {
 							// reply needs "context" as the second member
@@ -465,6 +468,8 @@ func generateMessageTypeGetter(w io.Writer, structName string, msgType messageTy
 		fmt.Fprintln(w, "\treturn api.RequestMessage")
 	} else if msgType == replyMessage {
 		fmt.Fprintln(w, "\treturn api.ReplyMessage")
+	} else if msgType == eventMessage {
+		fmt.Fprintln(w, "\treturn api.EventMessage")
 	} else {
 		fmt.Fprintln(w, "\treturn api.OtherMessage")
 	}
