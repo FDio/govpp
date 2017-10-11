@@ -1,10 +1,14 @@
-hash: 92ccb280ef0daf6a46db82b2599b097abdb2eb1cd8f9de518def2c4f92d97fdc
-updated: 2017-09-12T09:54:16.30397759+02:00
+hash: 5367b16eb1343728b5cccd82f4f7c4ea2cb42c284d3ebf6b7c519ea1c35bd755
+updated: 2017-10-11T16:39:11.448357454+02:00
 imports:
 - name: github.com/bennyscetbun/jsongo
   version: 5240b3f82c6665fe3ccd96bdf5e6f38fe1e1399d
 - name: github.com/fsnotify/fsnotify
   version: 4da3e2cfbabc9f751898f250b49f2439785783a1
+- name: github.com/google/gopacket
+  version: 8e484f31b1237166f00e4896d27ddde259540632
+  subpackages:
+  - layers
 - name: github.com/lunixbochs/struc
   version: ef56447db6a068ad9e52bc54a1aff5fb9e1ed2dd
 - name: github.com/pkg/profile
@@ -12,7 +16,7 @@ imports:
 - name: github.com/Sirupsen/logrus
   version: 202f25545ea4cf9b191ff7f846df5d87c9382c2b
 - name: golang.org/x/sys
-  version: e48874b42435b4347fc52bdee0424a52abc974d7
+  version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
   subpackages:
   - unix
 testImports:
@@ -31,4 +35,4 @@ testImports:
   - matchers/support/goraph/util
   - types
 - name: gopkg.in/yaml.v2
-  version: eb3733d160e74a9c7e442f435eb3bea458e1d19f
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
