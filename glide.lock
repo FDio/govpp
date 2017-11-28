@@ -1,5 +1,5 @@
-hash: 5367b16eb1343728b5cccd82f4f7c4ea2cb42c284d3ebf6b7c519ea1c35bd755
-updated: 2017-10-11T16:39:11.448357454+02:00
+hash: 5144a3ebeee4fbfbd9e6d20fbb05f4e79f055848e74ca8911f49de3f673a11ab
+updated: 2017-11-28T16:14:28.354432026+01:00
 imports:
 - name: github.com/bennyscetbun/jsongo
   version: 5240b3f82c6665fe3ccd96bdf5e6f38fe1e1399d
@@ -13,7 +13,7 @@ imports:
   version: ef56447db6a068ad9e52bc54a1aff5fb9e1ed2dd
 - name: github.com/pkg/profile
   version: 5b67d428864e92711fcbd2f8629456121a56d91f
-- name: github.com/Sirupsen/logrus
+- name: github.com/sirupsen/logrus
   version: 202f25545ea4cf9b191ff7f846df5d87c9382c2b
 - name: golang.org/x/sys
   version: 9ccfe848b9db8435a24c424abbc07a921adf1df5
