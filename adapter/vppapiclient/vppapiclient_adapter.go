@@ -150,33 +150,31 @@ func (a *vppAPIClientAdapter) SetMsgCallback(cb func(context uint32, msgID uint1
 	a.callback = cb
 }
 
-// WaitReady returns func which blocks until shared memory
-// for sending bin api calls is present on the file system.
-func (a *vppAPIClientAdapter) WaitReady() func() error {
-	return func() error {
-		watcher, err := fsnotify.NewWatcher()
-		if err != nil {
-			return err
-		}
-		defer watcher.Close()
+// WaitReady blocks until shared memory for sending
+// binary api calls is present on the file system.
+func (a *vppAPIClientAdapter) WaitReady() error {
+	watcher, err := fsnotify.NewWatcher()
+	if err != nil {
+		return err
+	}
+	defer watcher.Close()
 
-		err = watcher.Add(watchedFolder)
-		if err != nil {
-			return err
-		}
+	err = watcher.Add(watchedFolder)
+	if err != nil {
+		return err
+	}
 
-		if fileExists(watchedFile) {
-			return nil
-		}
-
-		for {
-			ev := <-watcher.Events
-			if ev.Name == watchedFile && (ev.Op&fsnotify.Create) == fsnotify.Create {
-				break
-			}
-		}
+	if fileExists(watchedFile) {
 		return nil
 	}
+
+	for {
+		ev := <-watcher.Events
+		if ev.Name == watchedFile && (ev.Op&fsnotify.Create) == fsnotify.Create {
+			break
+		}
+	}
+	return nil
 }
 
 func fileExists(name string) bool {

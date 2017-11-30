@@ -232,9 +232,8 @@ func (c *Connection) disconnectVPP() {
 // Then it continues with healthCheckLoop.
 func (c *Connection) connectLoop(connChan chan ConnectionEvent) {
 	// loop until connected
-	waitForVpp := c.vpp.WaitReady()
 	for {
-		waitForVpp()
+		c.vpp.WaitReady()
 		if err := c.connectVPP(); err == nil {
 			// signal connected event
 			connChan <- ConnectionEvent{Timestamp: time.Now(), State: Connected}

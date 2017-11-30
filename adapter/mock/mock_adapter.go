@@ -295,8 +295,8 @@ func (a *VppAdapter) SetMsgCallback(cb func(context uint32, msgID uint16, data [
 }
 
 // WaitReady mocks waiting for VPP
-func (a *VppAdapter) WaitReady() func() error {
-	return func() error { return nil }
+func (a *VppAdapter) WaitReady() error {
+	return nil
 }
 
 // MockReply stores a message to be returned when the next request comes. It is a FIFO queue - multiple replies
