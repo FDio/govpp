@@ -207,9 +207,9 @@ func TestFullBuffer(t *testing.T) {
 	vppReply := <-ctx.ch.ReplyChan
 	Expect(vppReply).ShouldNot(BeNil())
 
-	received := false
+	var received bool
 	select {
-	case vppReply = <-ctx.ch.ReplyChan:
+	case <-ctx.ch.ReplyChan:
 		received = true // this should not happen
 	default:
 		received = false // no reply to be received
