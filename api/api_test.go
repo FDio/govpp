@@ -49,8 +49,6 @@ func setupTest(t *testing.T) *testCtx {
 	ctx.ch, err = ctx.conn.NewAPIChannel()
 	Expect(err).ShouldNot(HaveOccurred())
 
-	ctx.ch.SetReplyTimeout(time.Millisecond)
-
 	return ctx
 }
 
@@ -328,6 +326,8 @@ func TestSetReplyTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
+	ctx.ch.SetReplyTimeout(time.Millisecond)
+
 	// first one request should work
 	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
@@ -342,6 +342,8 @@ func TestSetReplyTimeout(t *testing.T) {
 func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
+
+	ctx.ch.SetReplyTimeout(time.Millisecond)
 
 	for i := 1; i <= 3; i++ {
 		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
@@ -424,7 +426,7 @@ func TestMultiRequestDouble(t *testing.T) {
 	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 
 	cnt := 0
-	sendMultiRequest := func() error {
+	var sendMultiRequest = func() error {
 		reqCtx := ctx.ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
 		for {
 			msg := &interfaces.SwInterfaceDetails{}
@@ -448,3 +450,98 @@ func TestMultiRequestDouble(t *testing.T) {
 
 	Expect(cnt).To(BeEquivalentTo(6))
 }
+
+func TestReceiveReplyAfterTimeout(t *testing.T) {
+	ctx := setupTest(t)
+	defer ctx.teardownTest()
+
+	ctx.ch.SetReplyTimeout(time.Millisecond)
+
+	// first one request should work
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
+	Expect(err).ShouldNot(HaveOccurred())
+
+	err = ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
+	Expect(err).Should(HaveOccurred())
+	Expect(err.Error()).To(ContainSubstring("timeout"))
+
+	// simulating late reply
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+
+	// normal reply for next request
+	ctx.mockVpp.MockReply(&tap.TapConnectReply{})
+
+	req := &tap.TapConnect{
+		TapName:      []byte("test-tap-name"),
+		UseRandomMac: 1,
+	}
+	reply := &tap.TapConnectReply{}
+
+	// should succeed
+	err = ctx.ch.SendRequest(req).ReceiveReply(reply)
+	Expect(err).ShouldNot(HaveOccurred())
+}
+
+/*
+	TODO: fix mock adapter
+	This test will fail because mock adapter will stop sending replies
+	when it encounters control_ping_reply from multi request,
+	thus never sending reply for next request
+
+func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
+	ctx := setupTest(t)
+	defer ctx.teardownTest()
+
+	ctx.ch.SetReplyTimeout(time.Millisecond * 100)
+
+	// first one request should work
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
+	Expect(err).ShouldNot(HaveOccurred())
+
+	cnt := 0
+	var sendMultiRequest = func() error {
+		reqCtx := ctx.ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
+		for {
+			msg := &interfaces.SwInterfaceDetails{}
+			stop, err := reqCtx.ReceiveReply(msg)
+			if stop {
+				break // break out of the loop
+			}
+			if err != nil {
+				return err
+			}
+			cnt++
+		}
+		return nil
+	}
+
+	err = sendMultiRequest()
+	Expect(err).Should(HaveOccurred())
+	Expect(err.Error()).To(ContainSubstring("timeout"))
+	Expect(cnt).To(BeEquivalentTo(0))
+
+	// simulating late replies
+	for i := 1; i <= 3; i++ {
+		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
+			SwIfIndex:     uint32(i),
+			InterfaceName: []byte("if-name-test"),
+		})
+	}
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+
+	// normal reply for next request
+	ctx.mockVpp.MockReply(&tap.TapConnectReply{})
+
+	req := &tap.TapConnect{
+		TapName:      []byte("test-tap-name"),
+		UseRandomMac: 1,
+	}
+	reply := &tap.TapConnectReply{}
+
+	// should succeed
+	err = ctx.ch.SendRequest(req).ReceiveReply(reply)
+	Expect(err).ShouldNot(HaveOccurred())
+}
+*/
