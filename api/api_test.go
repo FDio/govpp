@@ -321,7 +321,6 @@ func TestCheckMessageCompatibility(t *testing.T) {
 	err := ctx.ch.CheckMessageCompatibility(&interfaces.SwInterfaceSetFlags{})
 	Expect(err).ShouldNot(HaveOccurred())
 }
-
 func TestSetReplyTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
@@ -483,13 +482,15 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
-/*
-	TODO: fix mock adapter
-	This test will fail because mock adapter will stop sending replies
-	when it encounters control_ping_reply from multi request,
-	thus never sending reply for next request
-
 func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
+	/*
+		TODO: fix mock adapter
+		This test will fail because mock adapter will stop sending replies
+		when it encounters control_ping_reply from multi request,
+		thus never sending reply for next request
+	*/
+	t.Skip()
+
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
@@ -544,4 +545,19 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	err = ctx.ch.SendRequest(req).ReceiveReply(reply)
 	Expect(err).ShouldNot(HaveOccurred())
 }
-*/
+
+func TestInvalidMessageID(t *testing.T) {
+	ctx := setupTest(t)
+	defer ctx.teardownTest()
+
+	// first one request should work
+	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{})
+	err := ctx.ch.SendRequest(&vpe.ShowVersion{}).ReceiveReply(&vpe.ShowVersionReply{})
+	Expect(err).ShouldNot(HaveOccurred())
+
+	// second should fail with error invalid message ID
+	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{})
+	err = ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
+	Expect(err).Should(HaveOccurred())
+	Expect(err.Error()).To(ContainSubstring("invalid message ID"))
+}
