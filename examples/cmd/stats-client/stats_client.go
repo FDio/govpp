@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("Starting stats VPP client...")
 
 	// async connect to VPP
-	conn, statCh, err := govpp.AsyncConnect()
+	conn, statCh, err := govpp.AsyncConnect("")
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)

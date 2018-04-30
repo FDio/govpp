@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("Starting simple VPP client...")
 
 	// connect to VPP
-	conn, err := govpp.Connect()
+	conn, err := govpp.Connect("")
 	if err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
