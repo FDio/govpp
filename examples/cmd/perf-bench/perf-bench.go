@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"github.com/pkg/profile"
+	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
@@ -64,7 +64,7 @@ func main() {
 	core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
 
 	// connect to VPP
-	conn, err := govpp.Connect()
+	conn, err := govpp.Connect("")
 	if err != nil {
 		log.Println("Error:", err)
 		os.Exit(1)
