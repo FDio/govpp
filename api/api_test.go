@@ -64,7 +64,7 @@ func TestRequestReplyTapConnect(t *testing.T) {
 	ctx.mockVpp.MockReply(&tap.TapConnectReply{
 		Retval:    10,
 		SwIfIndex: 1,
-	})
+	}, false)
 	request := &tap.TapConnect{
 		TapName:      []byte("test-tap-name"),
 		UseRandomMac: 1,
@@ -84,7 +84,7 @@ func TestRequestReplyTapModify(t *testing.T) {
 	ctx.mockVpp.MockReply(&tap.TapModifyReply{
 		Retval:    15,
 		SwIfIndex: 2,
-	})
+	}, false)
 	request := &tap.TapModify{
 		TapName:           []byte("test-tap-modify"),
 		UseRandomMac:      1,
@@ -104,7 +104,7 @@ func TestRequestReplyTapDelete(t *testing.T) {
 
 	ctx.mockVpp.MockReply(&tap.TapDeleteReply{
 		Retval: 20,
-	})
+	}, false)
 	request := &tap.TapDelete{
 		SwIfIndex: 3,
 	}
@@ -123,7 +123,7 @@ func TestRequestReplySwInterfaceTapDump(t *testing.T) {
 	ctx.mockVpp.MockReply(&tap.SwInterfaceTapDetails{
 		SwIfIndex: 25,
 		DevName:   byteName,
-	})
+	}, false)
 	request := &tap.SwInterfaceTapDump{}
 	reply := &tap.SwInterfaceTapDetails{}
 
@@ -140,7 +140,7 @@ func TestRequestReplyMemifCreate(t *testing.T) {
 	ctx.mockVpp.MockReply(&memif.MemifCreateReply{
 		Retval:    22,
 		SwIfIndex: 4,
-	})
+	}, false)
 	request := &memif.MemifCreate{
 		Role:       10,
 		ID:         12,
@@ -161,7 +161,7 @@ func TestRequestReplyMemifDelete(t *testing.T) {
 
 	ctx.mockVpp.MockReply(&memif.MemifDeleteReply{
 		Retval: 24,
-	})
+	}, false)
 	request := &memif.MemifDelete{
 		SwIfIndex: 15,
 	}
@@ -180,7 +180,7 @@ func TestRequestReplyMemifDetails(t *testing.T) {
 		SwIfIndex: 25,
 		IfName:    []byte("memif-name"),
 		Role:      0,
-	})
+	}, false)
 	request := &memif.MemifDump{}
 	reply := &memif.MemifDetails{}
 
@@ -200,9 +200,9 @@ func TestMultiRequestReplySwInterfaceTapDump(t *testing.T) {
 		ctx.mockVpp.MockReply(&tap.SwInterfaceTapDetails{
 			SwIfIndex: uint32(i),
 			DevName:   []byte("dev-name-test"),
-		})
+		}, true)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, true)
 
 	reqCtx := ctx.ch.SendMultiRequest(&tap.SwInterfaceTapDump{})
 	cnt := 0
@@ -226,9 +226,9 @@ func TestMultiRequestReplySwInterfaceMemifDump(t *testing.T) {
 	for i := 1; i <= 10; i++ {
 		ctx.mockVpp.MockReply(&memif.MemifDetails{
 			SwIfIndex: uint32(i),
-		})
+		}, true)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, true)
 
 	reqCtx := ctx.ch.SendMultiRequest(&memif.MemifDump{})
 	cnt := 0
@@ -257,7 +257,7 @@ func TestNotifications(t *testing.T) {
 	ctx.mockVpp.MockReply(&interfaces.SwInterfaceSetFlags{
 		SwIfIndex:   3,
 		AdminUpDown: 1,
-	})
+	}, false)
 	ctx.mockVpp.SendMsg(0, []byte(""))
 
 	// receive the notification
@@ -292,7 +292,7 @@ func TestNotificationEvent(t *testing.T) {
 	ctx.mockVpp.MockReply(&interfaces.SwInterfaceEvent{
 		SwIfIndex:  2,
 		LinkUpDown: 1,
-	})
+	}, false)
 	ctx.mockVpp.SendMsg(0, []byte(""))
 
 	// receive the notification
@@ -328,7 +328,7 @@ func TestSetReplyTimeout(t *testing.T) {
 	ctx.ch.SetReplyTimeout(time.Millisecond)
 
 	// first one request should work
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, false)
 	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
 
@@ -348,9 +348,9 @@ func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
 			SwIfIndex:     uint32(i),
 			InterfaceName: []byte("if-name-test"),
-		})
+		}, true)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, true)
 
 	cnt := 0
 	sendMultiRequest := func() error {
@@ -410,19 +410,19 @@ func TestMultiRequestDouble(t *testing.T) {
 
 	// mock reply
 	for i := 1; i <= 3; i++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
+		ctx.mockVpp.MockReplyWithSeqNum(&interfaces.SwInterfaceDetails{
 			SwIfIndex:     uint32(i),
 			InterfaceName: []byte("if-name-test"),
-		})
+		}, true, 1)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, true, 1)
 	for i := 1; i <= 3; i++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
+		ctx.mockVpp.MockReplyWithSeqNum(&interfaces.SwInterfaceDetails{
 			SwIfIndex:     uint32(i),
 			InterfaceName: []byte("if-name-test"),
-		})
+		}, true, 2)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, true,2)
 
 	cnt := 0
 	var sendMultiRequest = func() error {
@@ -457,7 +457,7 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	ctx.ch.SetReplyTimeout(time.Millisecond)
 
 	// first one request should work
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, false,1)
 	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
 
@@ -466,10 +466,10 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	Expect(err.Error()).To(ContainSubstring("timeout"))
 
 	// simulating late reply
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, false,2)
 
 	// normal reply for next request
-	ctx.mockVpp.MockReply(&tap.TapConnectReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&tap.TapConnectReply{}, false,3)
 
 	req := &tap.TapConnect{
 		TapName:      []byte("test-tap-name"),
@@ -497,7 +497,7 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	ctx.ch.SetReplyTimeout(time.Millisecond * 100)
 
 	// first one request should work
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, false, 1)
 	err := ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
 
@@ -525,15 +525,15 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 
 	// simulating late replies
 	for i := 1; i <= 3; i++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{
+		ctx.mockVpp.MockReplyWithSeqNum(&interfaces.SwInterfaceDetails{
 			SwIfIndex:     uint32(i),
 			InterfaceName: []byte("if-name-test"),
-		})
+		}, true, 2)
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{}, true, 2)
 
 	// normal reply for next request
-	ctx.mockVpp.MockReply(&tap.TapConnectReply{})
+	ctx.mockVpp.MockReplyWithSeqNum(&tap.TapConnectReply{}, false, 3)
 
 	req := &tap.TapConnect{
 		TapName:      []byte("test-tap-name"),
@@ -551,12 +551,12 @@ func TestInvalidMessageID(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// first one request should work
-	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{})
+	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{}, false)
 	err := ctx.ch.SendRequest(&vpe.ShowVersion{}).ReceiveReply(&vpe.ShowVersionReply{})
 	Expect(err).ShouldNot(HaveOccurred())
 
 	// second should fail with error invalid message ID
-	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{})
+	ctx.mockVpp.MockReply(&vpe.ShowVersionReply{}, false)
 	err = ctx.ch.SendRequest(&vpe.ControlPing{}).ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid message ID"))
