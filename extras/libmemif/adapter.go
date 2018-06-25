@@ -55,11 +55,10 @@ typedef struct
 	uint8_t num_s2m_rings;
 	uint8_t num_m2s_rings;
 	uint16_t buffer_size;
-	memif_log2_ring_size_t log2_ring_size;
+	uint8_t log2_ring_size;
 	uint8_t is_master;
-	memif_interface_id_t interface_id;
+	uint32_t interface_id;
 	char *interface_name;
-	char *instance_name;
 	memif_interface_mode_t mode;
 } govpp_memif_conn_args_t;
 
@@ -123,11 +122,6 @@ govpp_memif_create (memif_conn_handle_t *conn, govpp_memif_conn_args_t *go_args,
 	{
 		strncpy ((char *)args.interface_name, go_args->interface_name,
 				 sizeof(args.interface_name) - 1);
-	}
-	if (go_args->instance_name != NULL)
-	{
-		strncpy ((char *)args.instance_name, go_args->instance_name,
-				 sizeof (args.instance_name) - 1);
 	}
 	args.mode = go_args->mode;
 
@@ -202,10 +196,10 @@ govpp_get_tx_queue_details (govpp_memif_details_t *md, int index)
 
 // Copy packet data into the selected buffer.
 static void
-govpp_copy_packet_data(memif_buffer_t *buffers, int index, void *data, uint32_t size)
+govpp_copy_packet_data(memif_buffer_t *buffers, int index, void *data, uint16_t size)
 {
-	buffers[index].data_len = (size > buffers[index].buffer_len ? buffers[index].buffer_len : size);
-	memcpy(buffers[index].data, data, (size_t)buffers[index].data_len);
+	buffers[index].len = (size > buffers[index].len ? buffers[index].len : size);
+	memcpy(buffers[index].data, data, (size_t)buffers[index].len);
 }
 
 // Get packet data from the selected buffer.
@@ -213,7 +207,7 @@ govpp_copy_packet_data(memif_buffer_t *buffers, int index, void *data, uint32_t 
 static void *
 govpp_get_packet_data(memif_buffer_t *buffers, int index, int *size)
 {
-	*size = (int)buffers[index].data_len;
+	*size = (int)buffers[index].len;
 	return buffers[index].data;
 }
 
@@ -350,6 +344,7 @@ type Memif struct {
 	queueIntCh []chan struct{} // per RX queue interrupt channel
 
 	// Rx/Tx queues
+	ringSize    int              // number of items in each ring
 	stopQPollFd int              // event file descriptor used to stop pollRxQueue-s
 	wg          sync.WaitGroup   // wait group for all pollRxQueue-s
 	rxQueueBufs []CPacketBuffers // an array of C-libmemif packet buffers for each RX queue
@@ -444,11 +439,11 @@ func Init(appName string) error {
 	// Initialize C-libmemif.
 	var errCode int
 	if appName == "" {
-		errCode = int(C.memif_init(nil, nil))
+		errCode = int(C.memif_init(nil, nil, nil, nil))
 	} else {
 		appName := C.CString(appName)
 		defer C.free(unsafe.Pointer(appName))
-		errCode = int(C.memif_init(nil, appName))
+		errCode = int(C.memif_init(nil, appName, nil, nil))
 	}
 	err := getMemifError(errCode)
 	if err != nil {
@@ -517,11 +512,17 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 
 	log.WithField("ifName", config.IfName).Debug("Creating a new memif interface")
 
+	log2RingSize := config.Log2RingSize
+	if log2RingSize == 0 {
+		log2RingSize = 10
+	}
+
 	// Create memif-wrapper for Go-libmemif.
 	memif = &Memif{
 		MemifMeta: config.MemifMeta,
 		callbacks: &MemifCallbacks{},
 		ifIndex:   context.nextMemifIndex,
+		ringSize:  1 << log2RingSize,
 	}
 
 	// Initialize memif callbacks.
@@ -547,16 +548,11 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 		defer C.free(unsafe.Pointer(args.socket_filename))
 	}
 	// - interface ID
-	args.interface_id = C.memif_interface_id_t(config.ConnID)
+	args.interface_id = C.uint32_t(config.ConnID)
 	// - interface name
 	if config.IfName != "" {
 		args.interface_name = C.CString(config.IfName)
 		defer C.free(unsafe.Pointer(args.interface_name))
-	}
-	// - instance name
-	if config.InstanceName != "" {
-		args.instance_name = C.CString(config.InstanceName)
-		defer C.free(unsafe.Pointer(args.instance_name))
 	}
 	// - mode
 	switch config.Mode {
@@ -587,7 +583,7 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 	// - buffer size
 	args.buffer_size = C.uint16_t(config.BufferSize)
 	// - log_2(ring size)
-	args.log2_ring_size = C.memif_log2_ring_size_t(config.Log2RingSize)
+	args.log2_ring_size = C.uint8_t(config.Log2RingSize)
 
 	// Create memif in C-libmemif.
 	errCode := C.govpp_memif_create(&memif.cHandle, args, unsafe.Pointer(uintptr(memif.ifIndex)))
@@ -757,7 +753,7 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 	// Allocate ring slots.
 	cQueueID := C.uint16_t(queueID)
 	errCode := C.memif_buffer_alloc(memif.cHandle, cQueueID, pb.buffers, C.uint16_t(bufCount),
-		&allocated, C.uint16_t(bufSize))
+		&allocated, C.uint32_t(bufSize))
 	err = getMemifError(int(errCode))
 	if err == ErrNoBufRing {
 		// Not enough ring slots, <count> will be less than bufCount.
@@ -770,7 +766,7 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 	// Copy packet data into the buffers.
 	for i := 0; i < int(allocated); i++ {
 		packetData := unsafe.Pointer(&packets[i][0])
-		C.govpp_copy_packet_data(pb.buffers, C.int(i), packetData, C.uint32_t(len(packets[i])))
+		C.govpp_copy_packet_data(pb.buffers, C.int(i), packetData, C.uint16_t(len(packets[i])))
 	}
 
 	errCode = C.memif_tx_burst(memif.cHandle, cQueueID, pb.buffers, allocated, &sentCount)
@@ -793,7 +789,6 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 // Rx queue.
 func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketData, err error) {
 	var recvCount C.uint16_t
-	var freed C.uint16_t
 
 	if count == 0 {
 		return packets, nil
@@ -836,7 +831,9 @@ func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketDat
 		packets = append(packets, C.GoBytes(packetData, packetSize))
 	}
 
-	errCode = C.memif_buffer_free(memif.cHandle, cQueueID, pb.buffers, recvCount, &freed)
+	if recvCount > 0 {
+		errCode = C.memif_refill_queue(memif.cHandle, cQueueID, recvCount, 0)
+	}
 	err = getMemifError(int(errCode))
 	if err != nil {
 		// Throw away packets to avoid duplicities.
@@ -895,6 +892,13 @@ func (memif *Memif) initQueues() error {
 	// Initialize Rx/Tx packet buffers.
 	for i = 0; i < len(details.RxQueues); i++ {
 		memif.rxQueueBufs = append(memif.rxQueueBufs, CPacketBuffers{})
+		if !memif.IsMaster {
+			errCode := C.memif_refill_queue(memif.cHandle, C.uint16_t(i), C.uint16_t(memif.ringSize-1), 0)
+			err = getMemifError(int(errCode))
+			if err != nil {
+				log.Warn(err.Error())
+			}
+		}
 	}
 	for i = 0; i < len(details.TxQueues); i++ {
 		memif.txQueueBufs = append(memif.txQueueBufs, CPacketBuffers{})
