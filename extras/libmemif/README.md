@@ -146,6 +146,12 @@ through each of the 3 queues. The received packets are printed to stdout.
 
 Stop an instance of *raw-data* with an interrupt signal (^C).
 
+#### Jumbo Frames Raw data (libmemif <-> libmemif)
+
+*jumbo-frames* is simple example how to send larger and larger jumbo
+packets with libmemif adapter. This is simple copy of *raw-data* but with
+sending larger packets, so for more information read its code and documentation.
+
 #### ICMP Responder
 
 *icmp-responder* is a simple example showing how to answer APR and ICMP
