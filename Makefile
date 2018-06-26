@@ -14,6 +14,7 @@ install:
 
 extras:
 	@cd extras/libmemif/examples/raw-data && go build -v
+	@cd extras/libmemif/examples/jumbo-frames && go build -v
 	@cd extras/libmemif/examples/icmp-responder && go build -v
 	@cd extras/libmemif/examples/gopacket && go build -v
 
