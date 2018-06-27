@@ -62,7 +62,7 @@ func TestSimpleRequest(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: -5}, false)
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: -5})
 
 	req := &vpe.ControlPing{}
 	reply := &vpe.ControlPingReply{}
@@ -85,10 +85,12 @@ func TestMultiRequest(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
+	msgs := []api.Message{}
 	for m := 0; m < 10; m++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{}, true)
+		msgs = append(msgs, &interfaces.SwInterfaceDetails{})
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, true)
+	ctx.mockVpp.MockReply(msgs...)
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 
 	// send multipart request
 	ctx.ch.ReqChan <- &api.VppRequest{Message: &interfaces.SwInterfaceDump{}, Multipart: true}
@@ -133,7 +135,7 @@ func TestNotifications(t *testing.T) {
 	ctx.mockVpp.MockReply(&interfaces.SwInterfaceSetFlags{
 		SwIfIndex:   3,
 		AdminUpDown: 1,
-	}, false)
+	})
 	ctx.mockVpp.SendMsg(0, []byte{0})
 
 	// receive the notification
@@ -204,7 +206,7 @@ func TestFullBuffer(t *testing.T) {
 
 	// send multiple requests, only one reply should be read
 	for i := 0; i < 20; i++ {
-		ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, false)
+		ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 		ctx.ch.ReqChan <- &api.VppRequest{Message: &vpe.ControlPing{}}
 	}
 
@@ -285,7 +287,7 @@ func TestSimpleRequestsWithSequenceNumbers(t *testing.T) {
 
 	var reqCtx []*api.RequestCtx
 	for i := 0; i < 10; i++ {
-		ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: int32(i)}, false)
+		ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: int32(i)})
 		req := &vpe.ControlPing{}
 		reqCtx = append(reqCtx, ctx.ch.SendRequest(req))
 	}
@@ -302,10 +304,12 @@ func TestMultiRequestsWithSequenceNumbers(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
+	msgs := []api.Message{}
 	for i := 0; i < 10; i++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{SwIfIndex: uint32(i)}, true)
+		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: uint32(i)})
 	}
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{}, true)
+	ctx.mockVpp.MockReply(msgs...)
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 
 	// send multipart request
 	reqCtx := ctx.ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
@@ -336,7 +340,10 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// reply for a previous timeouted requests to be ignored
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 1}, false,0)
+	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{
+		Msg:    &vpe.ControlPingReply{Retval: 1},
+		SeqNum: 0,
+	})
 
 	// send reply later
 	req1 := &vpe.ControlPing{}
@@ -347,11 +354,19 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
 
-	// reply for the previous request
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 1}, false,1)
+	ctx.mockVpp.MockReplyWithContext(
+		// reply for the previous request
+		mock.MsgWithContext{
+			Msg:    &vpe.ControlPingReply{Retval: 1},
+			SeqNum: 1,
+		},
+		// reply for the next request
+		mock.MsgWithContext{
+			Msg:    &vpe.ControlPingReply{Retval: 2},
+			SeqNum: 2,
+		})
 
 	// next request
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: 2}, false)
 	req2 := &vpe.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
@@ -375,7 +390,10 @@ func TestSimpleRequestsWithMissingReply(t *testing.T) {
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
 	// third request with reply
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 3}, false, 3)
+	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{
+		Msg:    &vpe.ControlPingReply{Retval: 3},
+		SeqNum: 3,
+	})
 	req3 := &vpe.ControlPing{}
 	reqCtx3 := ctx.ch.SendRequest(req3)
 
@@ -401,18 +419,42 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	// reply for a previous timeouted requests to be ignored
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 1}, false,0xffff - 1)
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 1}, false,0xffff)
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 1}, false,0)
+	// replies for a previous timeouted requests to be ignored
+	msgs := []mock.MsgWithContext{}
+	msgs = append(msgs,
+		mock.MsgWithContext{
+			Msg:    &vpe.ControlPingReply{Retval: 1},
+			SeqNum: 0xffff - 1,
+		},
+		mock.MsgWithContext{
+			Msg:    &vpe.ControlPingReply{Retval: 1},
+			SeqNum: 0xffff,
+		},
+		mock.MsgWithContext{
+			Msg:    &vpe.ControlPingReply{Retval: 1},
+			SeqNum: 0,
+		})
 
 	for i := 0; i < 10; i++ {
-		ctx.mockVpp.MockReply(&interfaces.SwInterfaceDetails{SwIfIndex: uint32(i)}, true)
+		msgs = append(msgs,
+			mock.MsgWithContext{
+				Msg:       &interfaces.SwInterfaceDetails{SwIfIndex: uint32(i)},
+				SeqNum:    1,
+				Multipart: true,
+			})
 	}
 	// missing finalizing control ping
 
 	// reply for a next request
-	ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: 2}, false,2)
+	msgs = append(msgs,
+		mock.MsgWithContext{
+			Msg:       &vpe.ControlPingReply{Retval: 2},
+			SeqNum:    2,
+			Multipart: false,
+		})
+
+	// queue replies
+	ctx.mockVpp.MockReplyWithContext(msgs...)
 
 	// send multipart request
 	reqCtx := ctx.ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
@@ -454,12 +496,12 @@ func TestRequestsOrdering(t *testing.T) {
 	// some replies will get thrown away
 
 	// first request
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: 1}, false)
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: 1})
 	req1 := &vpe.ControlPing{}
 	reqCtx1 := ctx.ch.SendRequest(req1)
 
 	// second request
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: 2}, false)
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: 2})
 	req2 := &vpe.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
@@ -484,11 +526,9 @@ func TestCycleOverSetOfSequenceNumbers(t *testing.T) {
 	numIters := 0xffff + 100
 	reqCtx := make(map[int]*api.RequestCtx)
 
-	var seqNum uint16 = 0
-	for i := 0; i < numIters + 30 /* receiver is 30 reqs behind */; i++ {
-		seqNum++
+	for i := 0; i < numIters+30; /* receiver is 30 reqs behind */ i++ {
 		if i < numIters {
-			ctx.mockVpp.MockReplyWithSeqNum(&vpe.ControlPingReply{Retval: int32(i)}, false, seqNum)
+			ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: int32(i)})
 			req := &vpe.ControlPing{}
 			reqCtx[i] = ctx.ch.SendRequest(req)
 		}
@@ -496,7 +536,7 @@ func TestCycleOverSetOfSequenceNumbers(t *testing.T) {
 			reply := &vpe.ControlPingReply{}
 			err := reqCtx[i-30].ReceiveReply(reply)
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(reply.Retval).To(BeEquivalentTo(i-30))
+			Expect(reply.Retval).To(BeEquivalentTo(i - 30))
 		}
 	}
 }
