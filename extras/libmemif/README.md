@@ -103,6 +103,14 @@ Do not touch memif after it was closed, let garbage collector to remove
 the `Memif` instance. In the end, `Cleanup()` will also ensure that all
 active memif interfaces are closed before the cleanup finalizes.
 
+To use libmemif with `google/gopacket`, simply call `Memif.NewPacketHandle()`
+to create `google/gopacket/PacketDataSource` from memif queue. After this you
+can use gopacket API to read from `MemifPacketHandle` as normal. You can pass
+optional `rxCount` when creating the packet handle and then when reading data,
+handle will try to read more packets at once and cache them for next iteration.
+Handle also includes convenience method `MemifPacketHandle.WritePacketData()`
+that is simply calling 1 `Memif.TxBurst()` for provided data.
+
 ### Examples
 
 **Go-libmemif** ships with two simple examples demonstrating the usage
@@ -181,6 +189,57 @@ vpp$ sh ip arp
     Time           IP4       Flags      Ethernet              Interface
     68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
 ```
+*Note*: it is expected that the first ping is shown as lost.
+        It was actually converted to an ARP request. This is a VPP
+        specific feature common to all interface types.
+
+Stop the example with an interrupt signal (^C).
+
+#### GoPacket ICMP Responder
+
+*gopacket* is a simple example showing how to answer APR and ICMP echo
+requests through a memif interface. This example is mostly identical
+to icmp-responder example, but it is using MemifPacketHandle API to
+read and write packets using gopacket API.
+
+The appropriate VPP configuration for the opposite memif is:
+```
+vpp$ create memif socket id 1 filename /tmp/gopacket-example
+vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
+vpp$ set int state memif1/1 up
+vpp$ set int ip address memif1/1 192.168.1.2/24
+```
+
+To start the example, simply type:
+```
+root$ ./gopacket
+```
+
+gopacket needs to be run as root so that it can access the socket
+created by VPP.
+
+Normally, the memif interface is in the master mode. Pass CLI flag "--slave"
+to create memif in the slave mode:
+```
+root$ ./gopacket --slave
+```
+
+Don't forget to put the opposite memif into the master mode in that case.
+
+To verify the connection, run:
+```
+vpp$ ping 192.168.1.1
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=255 time=.6974 ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=255 time=.6310 ms
+64 bytes from 192.168.1.1: icmp_seq=4 ttl=255 time=1.0350 ms
+64 bytes from 192.168.1.1: icmp_seq=5 ttl=255 time=.5359 ms
+
+Statistics: 5 sent, 4 received, 20% packet loss
+vpp$ sh ip arp
+Time           IP4       Flags      Ethernet              Interface
+68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
+```
+
 *Note*: it is expected that the first ping is shown as lost.
         It was actually converted to an ARP request. This is a VPP
         specific feature common to all interface types.
