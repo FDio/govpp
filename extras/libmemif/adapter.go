@@ -55,11 +55,10 @@ typedef struct
 	uint8_t num_s2m_rings;
 	uint8_t num_m2s_rings;
 	uint16_t buffer_size;
-	memif_log2_ring_size_t log2_ring_size;
+	uint8_t log2_ring_size;
 	uint8_t is_master;
-	memif_interface_id_t interface_id;
+	uint32_t interface_id;
 	char *interface_name;
-	char *instance_name;
 	memif_interface_mode_t mode;
 } govpp_memif_conn_args_t;
 
@@ -123,11 +122,6 @@ govpp_memif_create (memif_conn_handle_t *conn, govpp_memif_conn_args_t *go_args,
 	{
 		strncpy ((char *)args.interface_name, go_args->interface_name,
 				 sizeof(args.interface_name) - 1);
-	}
-	if (go_args->instance_name != NULL)
-	{
-		strncpy ((char *)args.instance_name, go_args->instance_name,
-				 sizeof (args.instance_name) - 1);
 	}
 	args.mode = go_args->mode;
 
@@ -204,17 +198,29 @@ govpp_get_tx_queue_details (govpp_memif_details_t *md, int index)
 static void
 govpp_copy_packet_data(memif_buffer_t *buffers, int index, void *data, uint32_t size)
 {
-	buffers[index].data_len = (size > buffers[index].buffer_len ? buffers[index].buffer_len : size);
-	memcpy(buffers[index].data, data, (size_t)buffers[index].data_len);
+	buffers[index].len = (size > buffers[index].len ? buffers[index].len : size);
+	memcpy(buffers[index].data, data, (size_t)buffers[index].len);
 }
 
 // Get packet data from the selected buffer.
 // Used to avoid an ugly unsafe.Pointer() + unsafe.Sizeof().
 static void *
-govpp_get_packet_data(memif_buffer_t *buffers, int index, int *size)
+govpp_get_packet_data(memif_buffer_t *buffers, int index, uint32_t *size)
 {
-	*size = (int)buffers[index].data_len;
+	*size = (int)buffers[index].len;
 	return buffers[index].data;
+}
+
+static int
+govpp_is_buffer_chained(memif_buffer_t *buffers, int index)
+{
+    return buffers[index].flags & MEMIF_BUFFER_FLAG_NEXT;
+}
+
+static memif_buffer_t *
+govpp_move_buffers_by(memif_buffer_t *buffers, int offset)
+{
+    return (buffers + offset);
 }
 
 */
@@ -350,6 +356,8 @@ type Memif struct {
 	queueIntCh []chan struct{} // per RX queue interrupt channel
 
 	// Rx/Tx queues
+	ringSize    int              // number of items in each ring
+	bufferSize  int              // max buffer size
 	stopQPollFd int              // event file descriptor used to stop pollRxQueue-s
 	wg          sync.WaitGroup   // wait group for all pollRxQueue-s
 	rxQueueBufs []CPacketBuffers // an array of C-libmemif packet buffers for each RX queue
@@ -393,6 +401,7 @@ type MemifQueueDetails struct {
 type CPacketBuffers struct {
 	buffers *C.memif_buffer_t
 	count   int
+	chained bool
 }
 
 // Context is a global Go-libmemif runtime context.
@@ -403,6 +412,12 @@ type Context struct {
 	nextMemifIndex int
 
 	wg sync.WaitGroup /* wait-group for pollEvents() */
+}
+
+type txPacketBuffer struct {
+	packets []RawPacketData
+	size    int
+	length  int
 }
 
 var (
@@ -444,11 +459,11 @@ func Init(appName string) error {
 	// Initialize C-libmemif.
 	var errCode int
 	if appName == "" {
-		errCode = int(C.memif_init(nil, nil))
+		errCode = int(C.memif_init(nil, nil, nil, nil))
 	} else {
 		appName := C.CString(appName)
 		defer C.free(unsafe.Pointer(appName))
-		errCode = int(C.memif_init(nil, appName))
+		errCode = int(C.memif_init(nil, appName, nil, nil))
 	}
 	err := getMemifError(errCode)
 	if err != nil {
@@ -517,11 +532,23 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 
 	log.WithField("ifName", config.IfName).Debug("Creating a new memif interface")
 
+	log2RingSize := config.Log2RingSize
+	if log2RingSize == 0 {
+		log2RingSize = 10
+	}
+
+	bufferSize := config.BufferSize
+	if bufferSize == 0 {
+		bufferSize = 2048
+	}
+
 	// Create memif-wrapper for Go-libmemif.
 	memif = &Memif{
-		MemifMeta: config.MemifMeta,
-		callbacks: &MemifCallbacks{},
-		ifIndex:   context.nextMemifIndex,
+		MemifMeta:  config.MemifMeta,
+		callbacks:  &MemifCallbacks{},
+		ifIndex:    context.nextMemifIndex,
+		ringSize:   1 << log2RingSize,
+		bufferSize: int(bufferSize),
 	}
 
 	// Initialize memif callbacks.
@@ -547,16 +574,11 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 		defer C.free(unsafe.Pointer(args.socket_filename))
 	}
 	// - interface ID
-	args.interface_id = C.memif_interface_id_t(config.ConnID)
+	args.interface_id = C.uint32_t(config.ConnID)
 	// - interface name
 	if config.IfName != "" {
 		args.interface_name = C.CString(config.IfName)
 		defer C.free(unsafe.Pointer(args.interface_name))
-	}
-	// - instance name
-	if config.InstanceName != "" {
-		args.instance_name = C.CString(config.InstanceName)
-		defer C.free(unsafe.Pointer(args.instance_name))
 	}
 	// - mode
 	switch config.Mode {
@@ -587,7 +609,7 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 	// - buffer size
 	args.buffer_size = C.uint16_t(config.BufferSize)
 	// - log_2(ring size)
-	args.log2_ring_size = C.memif_log2_ring_size_t(config.Log2RingSize)
+	args.log2_ring_size = C.uint8_t(config.Log2RingSize)
 
 	// Create memif in C-libmemif.
 	errCode := C.govpp_memif_create(&memif.cHandle, args, unsafe.Pointer(uintptr(memif.ifIndex)))
@@ -721,10 +743,6 @@ func (memif *Memif) GetDetails() (details *MemifDetails, err error) {
 // Multiple TxBurst-s can run concurrently provided that each targets a different
 // TX queue.
 func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint16, err error) {
-	var sentCount C.uint16_t
-	var allocated C.uint16_t
-	var bufSize int
-
 	if len(packets) == 0 {
 		return 0, nil
 	}
@@ -733,16 +751,89 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 		return 0, ErrQueueID
 	}
 
-	// The largest packet in the set determines the packet buffer size.
+	var buffers []*txPacketBuffer
+	var bufCount int
+
+	cQueueID := C.uint16_t(queueID)
+
 	for _, packet := range packets {
-		if len(packet) > int(bufSize) {
-			bufSize = len(packet)
+		packetLen := len(packet)
+		log.Debugf("%v - preparing packet with len %v", cQueueID, packetLen)
+
+		if packetLen > memif.bufferSize {
+			var newPackets []RawPacketData
+
+			// Define current packet start that will be increased until it reaches end of packet
+			packetStart := 0
+
+			// Start splitting until nothing is left
+			for {
+				// Limit packet end to be size of packet or packet start + max len
+				packetEnd := packetStart + memif.bufferSize
+
+				if packetEnd > packetLen {
+					packetEnd = packetLen
+				}
+
+				// If this is not empty part, process it
+				if packetStart != packetEnd {
+					// Prepare data for next packet part
+					packetPart := packet[packetStart:packetEnd]
+
+					// Append packet part to packets
+					newPackets = append(newPackets, packetPart)
+					bufCount += 1
+				}
+
+				// No more data, quit
+				if packetEnd == packetLen {
+					break
+				}
+
+				// Increase packet start to next split
+				packetStart += memif.bufferSize
+			}
+
+			// Create pseudo-buffer
+			buffer := &txPacketBuffer{
+				size:    packetLen,
+				packets: newPackets,
+				length:  1,
+			}
+
+			buffers = append(buffers, buffer)
+		} else {
+			buffersLen := len(buffers)
+
+			// This is very first buffer so there is no data to append to, prepare empty one
+			if buffersLen == 0 {
+				buffers = []*txPacketBuffer{{}}
+				buffersLen = 1
+			}
+
+			lastBuffer := buffers[buffersLen-1]
+
+			// Last buffer is jumbo buffer, create new buffer
+			if lastBuffer.size > memif.bufferSize {
+				lastBuffer = &txPacketBuffer{}
+				buffers = append(buffers, lastBuffer)
+			}
+
+			// Determine buffer size by max packet size in buffer
+			if packetLen > lastBuffer.size {
+				lastBuffer.size = packetLen
+			}
+
+			lastBuffer.packets = append(lastBuffer.packets, packet)
+			lastBuffer.length = len(lastBuffer.packets)
+			bufCount += 1
 		}
 	}
 
+	log.Debugf("%v - total buffer to allocate count %v", cQueueID, bufCount)
+
 	// Reallocate Tx buffers if needed to fit the input packets.
-	pb := memif.txQueueBufs[queueID]
-	bufCount := len(packets)
+	pb := &memif.txQueueBufs[queueID]
 	if pb.count < bufCount {
 		newBuffers := C.realloc(unsafe.Pointer(pb.buffers), C.size_t(bufCount*int(C.sizeof_memif_buffer_t)))
 		if newBuffers == nil {
@@ -755,32 +846,57 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 	}
 
 	// Allocate ring slots.
-	cQueueID := C.uint16_t(queueID)
-	errCode := C.memif_buffer_alloc(memif.cHandle, cQueueID, pb.buffers, C.uint16_t(bufCount),
-		&allocated, C.uint16_t(bufSize))
-	err = getMemifError(int(errCode))
-	if err == ErrNoBufRing {
-		// Not enough ring slots, <count> will be less than bufCount.
-		err = nil
+	var totalAllocated C.uint16_t
+	var subCount int
+	for _, buffer := range buffers {
+		log.Debugf("%v - trying to send max buff size %v, packets len %v, buffer len %v", cQueueID, buffer.size, len(buffer.packets), buffer.length)
+
+		// Move buffer pointer to start after last allocated buffer
+		fromCurBuffers := C.govpp_move_buffers_by(pb.buffers, C.int(totalAllocated))
+
+		var allocated C.uint16_t
+		errCode := C.memif_buffer_alloc(memif.cHandle, cQueueID, fromCurBuffers, C.uint16_t(buffer.length),
+			&allocated, C.uint32_t(buffer.size))
+
+		err = getMemifError(int(errCode))
+		endNow := false
+		if err == ErrNoBufRing {
+			// Not enough ring slots, <count> will be less than bufCount.
+			endNow = true
+			err = nil
+		}
+		if err != nil {
+			return 0, err
+		}
+
+		totalAllocated += allocated
+
+		// Copy packet data into the buffers.
+		for i := 0; i < int(allocated); i++ {
+			packetData := unsafe.Pointer(&buffer.packets[i][0])
+			C.govpp_copy_packet_data(fromCurBuffers, C.int(i), packetData, C.uint32_t(len(buffer.packets[i])))
+		}
+
+		if buffer.size > memif.bufferSize {
+			if int(allocated) == len(buffer.packets) {
+				subCount += len(buffer.packets) - 1
+			}
+		}
+
+		if endNow {
+			break
+		}
 	}
+
+	var sentCount C.uint16_t
+	errCode := C.memif_tx_burst(memif.cHandle, cQueueID, pb.buffers, totalAllocated, &sentCount)
+	err = getMemifError(int(errCode))
 	if err != nil {
 		return 0, err
 	}
 
-	// Copy packet data into the buffers.
-	for i := 0; i < int(allocated); i++ {
-		packetData := unsafe.Pointer(&packets[i][0])
-		C.govpp_copy_packet_data(pb.buffers, C.int(i), packetData, C.uint32_t(len(packets[i])))
-	}
-
-	errCode = C.memif_tx_burst(memif.cHandle, cQueueID, pb.buffers, allocated, &sentCount)
-	err = getMemifError(int(errCode))
-	if err != nil {
-		return 0, err
-	}
-	count = uint16(sentCount)
-
-	return count, nil
+	log.Debugf("%v - sent %v sub %v total allocated buffs %v", cQueueID, sentCount, subCount, totalAllocated)
+	return uint16(sentCount) - uint16(subCount), nil
 }
 
 // RxBurst is used to receive multiple packets in one call from a selected queue.
@@ -793,7 +909,6 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 // Rx queue.
 func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketData, err error) {
 	var recvCount C.uint16_t
-	var freed C.uint16_t
 
 	if count == 0 {
 		return packets, nil
@@ -804,7 +919,7 @@ func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketDat
 	}
 
 	// Reallocate Rx buffers if needed to fit the output packets.
-	pb := memif.rxQueueBufs[queueID]
+	pb := &memif.rxQueueBufs[queueID]
 	bufCount := int(count)
 	if pb.count < bufCount {
 		newBuffers := C.realloc(unsafe.Pointer(pb.buffers), C.size_t(bufCount*int(C.sizeof_memif_buffer_t)))
@@ -831,12 +946,29 @@ func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketDat
 
 	// Copy packet data into the instances of RawPacketData.
 	for i := 0; i < int(recvCount); i++ {
-		var packetSize C.int
+		var packetSize C.uint32_t
 		packetData := C.govpp_get_packet_data(pb.buffers, C.int(i), &packetSize)
-		packets = append(packets, C.GoBytes(packetData, packetSize))
+		packetBytes := C.GoBytes(packetData, C.int(packetSize))
+
+		// TODO: Current API do not supports chaining after we run out of buffers and proceed to next burst
+		if pb.chained && len(packets) == 0 {
+			log.Warn("Previous buffer was chained but there was not enough buffers left so packet got split anyway.")
+			pb.chained = false
+		}
+
+		if pb.chained {
+			prevPacket := packets[len(packets)-1]
+			packets[len(packets)-1] = append(prevPacket, packetBytes...)
+		} else {
+			packets = append(packets, packetBytes)
+		}
+
+		pb.chained = C.govpp_is_buffer_chained(pb.buffers, C.int(i)) > 0
 	}
 
-	errCode = C.memif_buffer_free(memif.cHandle, cQueueID, pb.buffers, recvCount, &freed)
+	if recvCount > 0 {
+		errCode = C.memif_refill_queue(memif.cHandle, cQueueID, recvCount, 0)
+	}
 	err = getMemifError(int(errCode))
 	if err != nil {
 		// Throw away packets to avoid duplicities.
@@ -895,6 +1027,13 @@ func (memif *Memif) initQueues() error {
 	// Initialize Rx/Tx packet buffers.
 	for i = 0; i < len(details.RxQueues); i++ {
 		memif.rxQueueBufs = append(memif.rxQueueBufs, CPacketBuffers{})
+		if !memif.IsMaster {
+			errCode := C.memif_refill_queue(memif.cHandle, C.uint16_t(i), C.uint16_t(memif.ringSize-1), 0)
+			err = getMemifError(int(errCode))
+			if err != nil {
+				log.Warn(err.Error())
+			}
+		}
 	}
 	for i = 0; i < len(details.TxQueues); i++ {
 		memif.txQueueBufs = append(memif.txQueueBufs, CPacketBuffers{})
