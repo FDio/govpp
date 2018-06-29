@@ -144,9 +144,10 @@ used to decode and construct packets.
 
 The appropriate VPP configuration for the opposite memif is:
 ```
-vpp$ create memif id 1 socket /tmp/icmp-responder-example slave secret secret
-vpp$ set int state memif0/1 up
-vpp$ set int ip address memif0/1 192.168.1.2/24
+vpp$ create memif socket id 1 filename /tmp/icmp-responder-example
+vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
+vpp$ set int state memif1/1 up
+vpp$ set int ip address memif1/1 192.168.1.2/24
 ```
 
 To start the example, simply type:
