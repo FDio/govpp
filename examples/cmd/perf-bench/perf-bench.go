@@ -95,7 +95,7 @@ func main() {
 	fmt.Printf("Requests per second: %.0f\n", float64(cnt)/elapsed.Seconds())
 }
 
-func syncTest(ch *api.Channel, cnt int) {
+func syncTest(ch api.Channel, cnt int) {
 	fmt.Printf("Running synchronous perf test with %d requests...\n", cnt)
 
 	for i := 0; i < cnt; i++ {
@@ -110,7 +110,7 @@ func syncTest(ch *api.Channel, cnt int) {
 	}
 }
 
-func asyncTest(ch *api.Channel, cnt int) {
+func asyncTest(ch api.Channel, cnt int) {
 	fmt.Printf("Running asynchronous perf test with %d requests...\n", cnt)
 
 	// start a new go routine that reads the replies
@@ -125,20 +125,20 @@ func asyncTest(ch *api.Channel, cnt int) {
 	wg.Wait()
 }
 
-func sendAsyncRequests(ch *api.Channel, cnt int) {
+func sendAsyncRequests(ch api.Channel, cnt int) {
 	for i := 0; i < cnt; i++ {
-		ch.ReqChan <- &api.VppRequest{
+		ch.GetRequestChannel() <- &api.VppRequest{
 			Message: &vpe.ControlPing{},
 		}
 	}
 }
 
-func readAsyncReplies(ch *api.Channel, expectedCnt int, wg *sync.WaitGroup) {
+func readAsyncReplies(ch api.Channel, expectedCnt int, wg *sync.WaitGroup) {
 	cnt := 0
 
 	for {
 		// receive a reply
-		reply := <-ch.ReplyChan
+		reply := <-ch.GetReplyChannel()
 		if reply.Error != nil {
 			log.Println("Error in reply:", reply.Error)
 			os.Exit(1)
@@ -146,7 +146,7 @@ func readAsyncReplies(ch *api.Channel, expectedCnt int, wg *sync.WaitGroup) {
 
 		// decode the message
 		msg := &vpe.ControlPingReply{}
-		err := ch.MsgDecoder.DecodeMsg(reply.Data, msg)
+		err := ch.GetMessageDecoder().DecodeMsg(reply.Data, msg)
 		if reply.Error != nil {
 			log.Println("Error by decoding:", err)
 			os.Exit(1)

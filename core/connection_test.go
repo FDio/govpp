@@ -24,13 +24,14 @@ import (
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
 	"git.fd.io/govpp.git/examples/bin_api/stats"
 
+	"git.fd.io/govpp.git/codec"
 	. "github.com/onsi/gomega"
 )
 
 type testCtx struct {
 	mockVpp *mock.VppAdapter
 	conn    *core.Connection
-	ch      *api.Channel
+	ch      api.Channel
 }
 
 func setupTest(t *testing.T, bufferedChan bool) *testCtx {
@@ -68,14 +69,14 @@ func TestSimpleRequest(t *testing.T) {
 	reply := &vpe.ControlPingReply{}
 
 	// send the request and receive a reply
-	ctx.ch.ReqChan <- &api.VppRequest{Message: req}
-	vppReply := <-ctx.ch.ReplyChan
+	ctx.ch.GetRequestChannel() <- &api.VppRequest{Message: req}
+	vppReply := <-ctx.ch.GetReplyChannel()
 
 	Expect(vppReply).ShouldNot(BeNil())
 	Expect(vppReply.Error).ShouldNot(HaveOccurred())
 
 	// decode the message
-	err := ctx.ch.MsgDecoder.DecodeMsg(vppReply.Data, reply)
+	err := ctx.ch.GetMessageDecoder().DecodeMsg(vppReply.Data, reply)
 	Expect(err).ShouldNot(HaveOccurred())
 
 	Expect(reply.Retval).To(BeEquivalentTo(-5))
@@ -93,12 +94,12 @@ func TestMultiRequest(t *testing.T) {
 	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
 
 	// send multipart request
-	ctx.ch.ReqChan <- &api.VppRequest{Message: &interfaces.SwInterfaceDump{}, Multipart: true}
+	ctx.ch.GetRequestChannel() <- &api.VppRequest{Message: &interfaces.SwInterfaceDump{}, Multipart: true}
 
 	cnt := 0
 	for {
 		// receive a reply
-		vppReply := <-ctx.ch.ReplyChan
+		vppReply := <-ctx.ch.GetReplyChannel()
 		if vppReply.LastReplyReceived {
 			break // break out of the loop
 		}
@@ -106,7 +107,7 @@ func TestMultiRequest(t *testing.T) {
 
 		// decode the message
 		reply := &interfaces.SwInterfaceDetails{}
-		err := ctx.ch.MsgDecoder.DecodeMsg(vppReply.Data, reply)
+		err := ctx.ch.GetMessageDecoder().DecodeMsg(vppReply.Data, reply)
 		Expect(err).ShouldNot(HaveOccurred())
 		cnt++
 	}
@@ -124,11 +125,11 @@ func TestNotifications(t *testing.T) {
 		NotifChan:  notifChan,
 		MsgFactory: interfaces.NewSwInterfaceSetFlags,
 	}
-	ctx.ch.NotifSubsChan <- &api.NotifSubscribeRequest{
+	ctx.ch.GetNotificationChannel() <- &api.NotifSubscribeRequest{
 		Subscription: subscription,
 		Subscribe:    true,
 	}
-	err := <-ctx.ch.NotifSubsReplyChan
+	err := <-ctx.ch.GetNotificationReplyChannel()
 	Expect(err).ShouldNot(HaveOccurred())
 
 	// mock the notification and force its delivery
@@ -144,11 +145,11 @@ func TestNotifications(t *testing.T) {
 	Expect(notif.SwIfIndex).To(BeEquivalentTo(3))
 
 	// unsubscribe notification
-	ctx.ch.NotifSubsChan <- &api.NotifSubscribeRequest{
+	ctx.ch.GetNotificationChannel() <- &api.NotifSubscribeRequest{
 		Subscription: subscription,
 		Subscribe:    false,
 	}
-	err = <-ctx.ch.NotifSubsReplyChan
+	err = <-ctx.ch.GetNotificationReplyChannel()
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
@@ -207,15 +208,15 @@ func TestFullBuffer(t *testing.T) {
 	// send multiple requests, only one reply should be read
 	for i := 0; i < 20; i++ {
 		ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
-		ctx.ch.ReqChan <- &api.VppRequest{Message: &vpe.ControlPing{}}
+		ctx.ch.GetRequestChannel() <- &api.VppRequest{Message: &vpe.ControlPing{}}
 	}
 
-	vppReply := <-ctx.ch.ReplyChan
+	vppReply := <-ctx.ch.GetReplyChannel()
 	Expect(vppReply).ShouldNot(BeNil())
 
 	var received bool
 	select {
-	case <-ctx.ch.ReplyChan:
+	case <-ctx.ch.GetReplyChannel():
 		received = true // this should not happen
 	default:
 		received = false // no reply to be received
@@ -226,35 +227,35 @@ func TestFullBuffer(t *testing.T) {
 func TestCodec(t *testing.T) {
 	RegisterTestingT(t)
 
-	codec := &core.MsgCodec{}
+	msgCodec := &codec.MsgCodec{}
 
 	// request
-	data, err := codec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: []byte{1, 2, 3, 4, 5, 6}}, 11)
+	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: []byte{1, 2, 3, 4, 5, 6}}, 11)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
 	msg1 := &interfaces.CreateLoopback{}
-	err = codec.DecodeMsg(data, msg1)
+	err = msgCodec.DecodeMsg(data, msg1)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(msg1.MacAddress).To(BeEquivalentTo([]byte{1, 2, 3, 4, 5, 6}))
 
 	// reply
-	data, err = codec.EncodeMsg(&vpe.ControlPingReply{Retval: 55}, 22)
+	data, err = msgCodec.EncodeMsg(&vpe.ControlPingReply{Retval: 55}, 22)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
 	msg2 := &vpe.ControlPingReply{}
-	err = codec.DecodeMsg(data, msg2)
+	err = msgCodec.DecodeMsg(data, msg2)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(msg2.Retval).To(BeEquivalentTo(55))
 
 	// other
-	data, err = codec.EncodeMsg(&stats.VnetIP4FibCounters{VrfID: 77}, 33)
+	data, err = msgCodec.EncodeMsg(&stats.VnetIP4FibCounters{VrfID: 77}, 33)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
 	msg3 := &stats.VnetIP4FibCounters{}
-	err = codec.DecodeMsg(data, msg3)
+	err = msgCodec.DecodeMsg(data, msg3)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(msg3.VrfID).To(BeEquivalentTo(77))
 }
@@ -262,21 +263,21 @@ func TestCodec(t *testing.T) {
 func TestCodecNegative(t *testing.T) {
 	RegisterTestingT(t)
 
-	codec := &core.MsgCodec{}
+	msgCodec := &codec.MsgCodec{}
 
 	// nil message for encoding
-	data, err := codec.EncodeMsg(nil, 15)
+	data, err := msgCodec.EncodeMsg(nil, 15)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("nil message"))
 	Expect(data).Should(BeNil())
 
 	// nil message for decoding
-	err = codec.DecodeMsg(data, nil)
+	err = msgCodec.DecodeMsg(data, nil)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("nil message"))
 
 	// nil data for decoding
-	err = codec.DecodeMsg(nil, &vpe.ControlPingReply{})
+	err = msgCodec.DecodeMsg(nil, &vpe.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("EOF"))
 }
@@ -285,7 +286,7 @@ func TestSimpleRequestsWithSequenceNumbers(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	var reqCtx []*api.RequestCtx
+	var reqCtx []api.RequestCtx
 	for i := 0; i < 10; i++ {
 		ctx.mockVpp.MockReply(&vpe.ControlPingReply{Retval: int32(i)})
 		req := &vpe.ControlPing{}
@@ -524,7 +525,7 @@ func TestCycleOverSetOfSequenceNumbers(t *testing.T) {
 	defer ctx.teardownTest()
 
 	numIters := 0xffff + 100
-	reqCtx := make(map[int]*api.RequestCtx)
+	reqCtx := make(map[int]api.RequestCtx)
 
 	for i := 0; i < numIters+30; /* receiver is 30 reqs behind */ i++ {
 		if i < numIters {

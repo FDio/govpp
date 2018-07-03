@@ -101,7 +101,7 @@ loop:
 }
 
 // subscribeNotifications subscribes for interface counters notifications.
-func subscribeNotifications(ch *api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
+func subscribeNotifications(ch api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
 
 	notifChan := make(chan api.Message, 100)
 	simpleCountersSubs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceSimpleCounters)
@@ -111,7 +111,7 @@ func subscribeNotifications(ch *api.Channel) (*api.NotifSubscription, *api.Notif
 }
 
 // requestStatistics requests interface counters notifications from VPP.
-func requestStatistics(ch *api.Channel) {
+func requestStatistics(ch api.Channel) {
 	ch.SendRequest(&stats.WantStats{
 		Pid:           uint32(os.Getpid()),
 		EnableDisable: 1,

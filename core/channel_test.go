@@ -12,27 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package api_test
+package core
 
 import (
 	"testing"
 	"time"
 
 	"git.fd.io/govpp.git/adapter/mock"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/core/bin_api/vpe"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
 	"git.fd.io/govpp.git/examples/bin_api/memif"
 	"git.fd.io/govpp.git/examples/bin_api/tap"
 
+	"git.fd.io/govpp.git/api"
 	. "github.com/onsi/gomega"
 )
 
 type testCtx struct {
 	mockVpp *mock.VppAdapter
-	conn    *core.Connection
-	ch      *api.Channel
+	conn    *Connection
+	ch      api.Channel
 }
 
 func setupTest(t *testing.T) *testCtx {
@@ -43,7 +42,7 @@ func setupTest(t *testing.T) *testCtx {
 	}
 
 	var err error
-	ctx.conn, err = core.Connect(ctx.mockVpp)
+	ctx.conn, err = Connect(ctx.mockVpp)
 	Expect(err).ShouldNot(HaveOccurred())
 
 	ctx.ch, err = ctx.conn.NewAPIChannel()
@@ -196,7 +195,7 @@ func TestMultiRequestReplySwInterfaceTapDump(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// mock reply
-	msgs := []api.Message{}
+	var msgs []api.Message
 	for i := 1; i <= 10; i++ {
 		msgs = append(msgs, &tap.SwInterfaceTapDetails{
 			SwIfIndex: uint32(i),
@@ -225,7 +224,7 @@ func TestMultiRequestReplySwInterfaceMemifDump(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// mock reply
-	msgs := []api.Message{}
+	var msgs []api.Message
 	for i := 1; i <= 10; i++ {
 		msgs = append(msgs, &memif.MemifDetails{
 			SwIfIndex: uint32(i),
@@ -348,7 +347,7 @@ func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 
 	ctx.ch.SetReplyTimeout(time.Millisecond)
 
-	msgs := []api.Message{}
+	var msgs []api.Message
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, &interfaces.SwInterfaceDetails{
 			SwIfIndex:     uint32(i),
@@ -392,19 +391,19 @@ func TestReceiveReplyNegative(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// invalid context 1
-	reqCtx1 := &api.RequestCtx{}
+	reqCtx1 := &requestCtxData{}
 	err := reqCtx1.ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid request context"))
 
 	// invalid context 2
-	reqCtx2 := &api.MultiRequestCtx{}
+	reqCtx2 := &multiRequestCtxData{}
 	_, err = reqCtx2.ReceiveReply(&vpe.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid request context"))
 
 	// NU
-	reqCtx3 := &api.RequestCtx{}
+	reqCtx3 := &requestCtxData{}
 	err = reqCtx3.ReceiveReply(nil)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid request context"))
@@ -415,7 +414,7 @@ func TestMultiRequestDouble(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// mock reply
-	msgs := []mock.MsgWithContext{}
+	var msgs []mock.MsgWithContext
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
@@ -543,7 +542,7 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	Expect(cnt).To(BeEquivalentTo(0))
 
 	// simulating late replies
-	msgs := []mock.MsgWithContext{}
+	var msgs []mock.MsgWithContext
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
