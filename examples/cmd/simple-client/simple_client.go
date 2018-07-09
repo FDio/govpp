@@ -66,7 +66,7 @@ func main() {
 
 // compatibilityCheck shows how an management application can check whether generated API messages are
 // compatible with the version of VPP which the library is connected to.
-func compatibilityCheck(ch *api.Channel) {
+func compatibilityCheck(ch api.Channel) {
 	err := ch.CheckMessageCompatibility(
 		&interfaces.SwInterfaceDump{},
 		&interfaces.SwInterfaceDetails{},
@@ -78,7 +78,7 @@ func compatibilityCheck(ch *api.Channel) {
 }
 
 // aclVersion is the simplest API example - one empty request message and one reply message.
-func aclVersion(ch *api.Channel) {
+func aclVersion(ch api.Channel) {
 	req := &acl.ACLPluginGetVersion{}
 	reply := &acl.ACLPluginGetVersionReply{}
 
@@ -92,7 +92,7 @@ func aclVersion(ch *api.Channel) {
 }
 
 // aclConfig is another simple API example - in this case, the request contains structured data.
-func aclConfig(ch *api.Channel) {
+func aclConfig(ch api.Channel) {
 	req := &acl.ACLAddReplace{
 		ACLIndex: ^uint32(0),
 		Tag:      []byte("access list 1"),
@@ -127,7 +127,7 @@ func aclConfig(ch *api.Channel) {
 }
 
 // aclDump shows an example where SendRequest and ReceiveReply are not chained together.
-func aclDump(ch *api.Channel) {
+func aclDump(ch api.Channel) {
 	req := &acl.ACLDump{}
 	reply := &acl.ACLDetails{}
 
@@ -143,17 +143,17 @@ func aclDump(ch *api.Channel) {
 
 // tapConnect example shows how the Go channels in the API channel can be accessed directly instead
 // of using SendRequest and ReceiveReply wrappers.
-func tapConnect(ch *api.Channel) {
+func tapConnect(ch api.Channel) {
 	req := &tap.TapConnect{
 		TapName:      []byte("testtap"),
 		UseRandomMac: 1,
 	}
 
 	// send the request to the request go channel
-	ch.ReqChan <- &api.VppRequest{Message: req}
+	ch.GetRequestChannel() <- &api.VppRequest{Message: req}
 
 	// receive a reply from the reply go channel
-	vppReply := <-ch.ReplyChan
+	vppReply := <-ch.GetReplyChannel()
 	if vppReply.Error != nil {
 		fmt.Println("Error:", vppReply.Error)
 		return
@@ -161,7 +161,7 @@ func tapConnect(ch *api.Channel) {
 
 	// decode the message
 	reply := &tap.TapConnectReply{}
-	err := ch.MsgDecoder.DecodeMsg(vppReply.Data, reply)
+	err := ch.GetMessageDecoder().DecodeMsg(vppReply.Data, reply)
 
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -171,7 +171,7 @@ func tapConnect(ch *api.Channel) {
 }
 
 // interfaceDump shows an example of multipart request (multiple replies are expected).
-func interfaceDump(ch *api.Channel) {
+func interfaceDump(ch api.Channel) {
 	req := &interfaces.SwInterfaceDump{}
 	reqCtx := ch.SendMultiRequest(req)
 
@@ -191,7 +191,7 @@ func interfaceDump(ch *api.Channel) {
 // interfaceNotifications shows the usage of notification API. Note that for notifications,
 // you are supposed to create your own Go channel with your preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
-func interfaceNotifications(ch *api.Channel) {
+func interfaceNotifications(ch api.Channel) {
 	// subscribe for specific notification message
 	notifChan := make(chan api.Message, 100)
 	subs, _ := ch.SubscribeNotification(notifChan, interfaces.NewSwInterfaceSetFlags)

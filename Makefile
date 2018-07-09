@@ -6,7 +6,6 @@ build:
 
 test:
 	@cd cmd/binapi-generator && go test -cover .
-	@cd api && go test -cover ./...
 	@cd core && go test -cover .
 
 install:
