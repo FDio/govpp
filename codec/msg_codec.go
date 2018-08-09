@@ -19,6 +19,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strings"
 
 	"git.fd.io/govpp.git/api"
 	"github.com/lunixbochs/struc"
@@ -135,6 +136,16 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) error {
 	err = struc.Unpack(buf, msg)
 	if err != nil {
 		return fmt.Errorf("unable to decode message data: %+v, error %v", data, err)
+	}
+
+	// translate Retval into VnetError error
+	if strings.HasSuffix(msg.GetMessageName(), "_reply") {
+		// TODO: use categories for messages to avoid checking message name
+		if f := reflect.Indirect(reflect.ValueOf(msg)).FieldByName("Retval"); f.IsValid() {
+			if retval := f.Int(); retval != 0 {
+				return api.VnetError(retval)
+			}
+		}
 	}
 
 	return nil
