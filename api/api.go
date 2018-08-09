@@ -15,6 +15,8 @@
 package api
 
 import (
+	"log"
+	"reflect"
 	"time"
 )
 
@@ -157,4 +159,48 @@ type NotifSubscribeRequest struct {
 type NotifSubscription struct {
 	NotifChan  chan Message   // channel where notification messages will be delivered to
 	MsgFactory func() Message // function that returns a new instance of the specific message that is expected as a notification
+}
+
+var messageType = reflect.TypeOf((*Message)(nil)).Elem()
+
+var (
+	messageTypedNils = make(map[string]Message)
+	//messageCrcs      = make(map[string]string)
+	revMessageTypes = make(map[reflect.Type]string)
+)
+
+func getMessageNameCrc(x Message) string {
+	return x.GetMessageName() + "_" + x.GetCrcString()
+}
+
+func RegisterMessage(x Message /*, name, crc string*/) {
+	key := getMessageNameCrc(x)
+	if _, ok := messageTypedNils[key]; ok {
+		log.Printf("govpp: duplicate message registered: %s (%s)", x.GetMessageName(), x.GetCrcString())
+		return
+	}
+	t := reflect.TypeOf(x)
+	if v := reflect.ValueOf(x); v.Kind() == reflect.Ptr && v.Pointer() == 0 {
+		// Generated code always calls RegisterMessage with nil x.
+		// This check is just for extra safety.
+		messageTypedNils[key] = x
+	} else {
+		messageTypedNils[key] = reflect.Zero(t).Interface().(Message)
+	}
+	//messageCrcs[name] = crc
+	revMessageTypes[t] = key
+}
+
+func MessageReflectType(name string) reflect.Type {
+	if t, ok := messageTypedNils[name]; ok {
+		return reflect.TypeOf(t)
+	}
+	return nil
+}
+
+func RegisteredMessages() (list []Message) {
+	for _, msg := range messageTypedNils {
+		list = append(list, msg)
+	}
+	return
 }
