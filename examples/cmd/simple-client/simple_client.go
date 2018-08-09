@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
@@ -121,9 +122,15 @@ func aclConfig(ch api.Channel) {
 
 	if err != nil {
 		fmt.Println("Error:", err)
-	} else {
-		fmt.Printf("%+v\n", reply)
+		return
 	}
+	if reply.Retval != 0 {
+		fmt.Println("Retval:", reply.Retval)
+		return
+	}
+
+	fmt.Printf("%+v\n", reply)
+
 }
 
 // aclDump shows an example where SendRequest and ReceiveReply are not chained together.
@@ -182,9 +189,12 @@ func interfaceDump(ch api.Channel) {
 			break // break out of the loop
 		}
 		if err != nil {
-			fmt.Println("Error:", err)
+			fmt.Println("ERROR:", err)
 		}
-		fmt.Printf("%+v\n", msg)
+		ifaceName := strings.TrimFunc(string(msg.InterfaceName), func(r rune) bool {
+			return r == 0x00
+		})
+		fmt.Printf("Interface: %q %+v\n", ifaceName, msg)
 	}
 }
 
@@ -194,28 +204,43 @@ func interfaceDump(ch api.Channel) {
 func interfaceNotifications(ch api.Channel) {
 	// subscribe for specific notification message
 	notifChan := make(chan api.Message, 100)
-	subs, _ := ch.SubscribeNotification(notifChan, interfaces.NewSwInterfaceSetFlags)
+	subs, err := ch.SubscribeNotification(notifChan, interfaces.NewSwInterfaceEvent)
+	if err != nil {
+		panic(err)
+	}
 
 	// enable interface events in VPP
-	ch.SendRequest(&interfaces.WantInterfaceEvents{
+	err = ch.SendRequest(&interfaces.WantInterfaceEvents{
 		Pid:           uint32(os.Getpid()),
 		EnableDisable: 1,
 	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
+	if err != nil {
+		panic(err)
+	}
 
 	// generate some events in VPP
-	ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
 		SwIfIndex:   0,
 		AdminUpDown: 0,
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
-	ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+	if err != nil {
+		panic(err)
+	}
+	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
 		SwIfIndex:   0,
 		AdminUpDown: 1,
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
+	if err != nil {
+		panic(err)
+	}
 
 	// receive one notification
-	notif := (<-notifChan).(*interfaces.SwInterfaceSetFlags)
-	fmt.Printf("%+v\n", notif)
+	notif := (<-notifChan).(*interfaces.SwInterfaceEvent)
+	fmt.Printf("NOTIF: %+v\n", notif)
 
 	// unsubscribe from delivery of the notifications
-	ch.UnsubscribeNotification(subs)
+	err = ch.UnsubscribeNotification(subs)
+	if err != nil {
+		panic(err)
+	}
 }

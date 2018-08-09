@@ -27,7 +27,6 @@ import (
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/bin_api/interfaces"
 	"git.fd.io/govpp.git/examples/bin_api/stats"
 )
 
@@ -48,6 +47,7 @@ func main() {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
+	defer fmt.Println("calling close")
 	defer ch.Close()
 
 	// create channel for Interrupt signal
@@ -79,10 +79,10 @@ loop:
 
 		case msg := <-notifChan:
 			switch notif := msg.(type) {
-			case *interfaces.VnetInterfaceSimpleCounters:
+			case *stats.VnetInterfaceSimpleCounters:
 				// simple counter notification received
 				processSimpleCounters(notif)
-			case *interfaces.VnetInterfaceCombinedCounters:
+			case *stats.VnetInterfaceCombinedCounters:
 				// combined counter notification received
 				processCombinedCounters(notif)
 			default:
@@ -104,25 +104,39 @@ loop:
 func subscribeNotifications(ch api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
 
 	notifChan := make(chan api.Message, 100)
-	simpleCountersSubs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceSimpleCounters)
-	combinedCountersSubs, _ := ch.SubscribeNotification(notifChan, interfaces.NewVnetInterfaceCombinedCounters)
+	simpleCountersSubs, err := ch.SubscribeNotification(notifChan, stats.NewVnetInterfaceSimpleCounters)
+	if err != nil {
+		panic(err)
+	}
+	combinedCountersSubs, err := ch.SubscribeNotification(notifChan, stats.NewVnetInterfaceCombinedCounters)
+	if err != nil {
+		panic(err)
+	}
 
 	return simpleCountersSubs, combinedCountersSubs, notifChan
 }
 
 // requestStatistics requests interface counters notifications from VPP.
 func requestStatistics(ch api.Channel) {
-	ch.SendRequest(&stats.WantStats{
+	if err := ch.SendRequest(&stats.WantStats{
 		Pid:           uint32(os.Getpid()),
 		EnableDisable: 1,
-	}).ReceiveReply(&stats.WantStatsReply{})
+	}).ReceiveReply(&stats.WantStatsReply{}); err != nil {
+		panic(err)
+	}
 }
 
 // processSimpleCounters processes simple counters received from VPP.
-func processSimpleCounters(counters *interfaces.VnetInterfaceSimpleCounters) {
-	fmt.Printf("%+v\n", counters)
+func processSimpleCounters(counters *stats.VnetInterfaceSimpleCounters) {
+	fmt.Printf("SimpleCounters: %+v\n", counters)
 
-	counterNames := []string{"Drop", "Punt", "IPv4", "IPv6", "RxNoBuf", "RxMiss", "RxError", "TxError", "MPLS"}
+	counterNames := []string{
+		"Drop", "Punt",
+		"IPv4", "IPv6",
+		"RxNoBuf", "RxMiss",
+		"RxError", "TxError",
+		"MPLS",
+	}
 
 	for i := uint32(0); i < counters.Count; i++ {
 		fmt.Printf("Interface '%d': %s = %d\n",
@@ -131,14 +145,18 @@ func processSimpleCounters(counters *interfaces.VnetInterfaceSimpleCounters) {
 }
 
 // processCombinedCounters processes combined counters received from VPP.
-func processCombinedCounters(counters *interfaces.VnetInterfaceCombinedCounters) {
-	fmt.Printf("%+v\n", counters)
+func processCombinedCounters(counters *stats.VnetInterfaceCombinedCounters) {
+	fmt.Printf("CombinedCounters: %+v\n", counters)
 
 	counterNames := []string{"Rx", "Tx"}
 
 	for i := uint32(0); i < counters.Count; i++ {
+		if len(counterNames) <= int(counters.VnetCounterType) {
+			continue
+		}
 		fmt.Printf("Interface '%d': %s packets = %d, %s bytes = %d\n",
-			counters.FirstSwIfIndex+i, counterNames[counters.VnetCounterType], counters.Data[i].Packets,
+			counters.FirstSwIfIndex+i,
+			counterNames[counters.VnetCounterType], counters.Data[i].Packets,
 			counterNames[counters.VnetCounterType], counters.Data[i].Bytes)
 	}
 }

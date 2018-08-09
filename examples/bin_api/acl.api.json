@@ -1,87 +1,4 @@
 {
-    "services": [
-        {
-            "acl_interface_add_del": {
-                "reply": "acl_interface_add_del_reply"
-            }
-        },
-        {
-            "acl_del": {
-                "reply": "acl_del_reply"
-            }
-        },
-        {
-            "macip_acl_del": {
-                "reply": "macip_acl_del_reply"
-            }
-        },
-        {
-            "acl_plugin_get_version": {
-                "reply": "acl_plugin_get_version_reply"
-            }
-        },
-        {
-            "macip_acl_interface_add_del": {
-                "reply": "macip_acl_interface_add_del_reply"
-            }
-        },
-        {
-            "acl_interface_set_acl_list": {
-                "reply": "acl_interface_set_acl_list_reply"
-            }
-        },
-        {
-            "acl_dump": {
-                "reply": "acl_details",
-                "stream": true
-            }
-        },
-        {
-            "acl_interface_list_dump": {
-                "reply": "acl_interface_list_details",
-                "stream": true
-            }
-        },
-        {
-            "macip_acl_interface_list_dump": {
-                "reply": "macip_acl_interface_list_details",
-                "stream": true
-            }
-        },
-        {
-            "acl_add_replace": {
-                "reply": "acl_add_replace_reply"
-            }
-        },
-        {
-            "acl_plugin_control_ping": {
-                "reply": "acl_plugin_control_ping_reply"
-            }
-        },
-        {
-            "macip_acl_interface_get": {
-                "reply": "macip_acl_interface_get_reply"
-            }
-        },
-        {
-            "macip_acl_add": {
-                "reply": "macip_acl_add_reply"
-            }
-        },
-        {
-            "macip_acl_add_replace": {
-                "reply": "macip_acl_add_replace_reply"
-            }
-        },
-        {
-            "macip_acl_dump": {
-                "reply": "macip_acl_details",
-                "stream": true
-            }
-        }
-    ],
-    "vl_api_version": "0x1db2ece9",
-    "enums": [],
     "messages": [
         [
             "acl_plugin_get_version",
@@ -829,8 +746,177 @@
             {
                 "crc": "0x29783fa0"
             }
+        ],
+        [
+            "acl_interface_set_etype_whitelist",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "count"
+            ],
+            [
+                "u8",
+                "n_input"
+            ],
+            [
+                "u16",
+                "whitelist",
+                0,
+                "count"
+            ],
+            {
+                "crc": "0xf515efc5"
+            }
+        ],
+        [
+            "acl_interface_set_etype_whitelist_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "acl_interface_etype_whitelist_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            {
+                "crc": "0x529cb13f"
+            }
+        ],
+        [
+            "acl_interface_etype_whitelist_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "count"
+            ],
+            [
+                "u8",
+                "n_input"
+            ],
+            [
+                "u16",
+                "whitelist",
+                0,
+                "count"
+            ],
+            {
+                "crc": "0x6a5d4e81"
+            }
         ]
     ],
+    "vl_api_version": "0x25a6e1e9",
+    "unions": [],
+    "services": {
+        "acl_plugin_get_version": {
+            "reply": "acl_plugin_get_version_reply"
+        },
+        "acl_dump": {
+            "reply": "acl_details",
+            "stream": true
+        },
+        "acl_interface_add_del": {
+            "reply": "acl_interface_add_del_reply"
+        },
+        "acl_del": {
+            "reply": "acl_del_reply"
+        },
+        "acl_plugin_control_ping": {
+            "reply": "acl_plugin_control_ping_reply"
+        },
+        "macip_acl_interface_get": {
+            "reply": "macip_acl_interface_get_reply"
+        },
+        "acl_interface_etype_whitelist_dump": {
+            "reply": "acl_interface_etype_whitelist_details",
+            "stream": true
+        },
+        "macip_acl_interface_add_del": {
+            "reply": "macip_acl_interface_add_del_reply"
+        },
+        "macip_acl_del": {
+            "reply": "macip_acl_del_reply"
+        },
+        "macip_acl_add": {
+            "reply": "macip_acl_add_reply"
+        },
+        "acl_interface_list_dump": {
+            "reply": "acl_interface_list_details",
+            "stream": true
+        },
+        "acl_interface_set_acl_list": {
+            "reply": "acl_interface_set_acl_list_reply"
+        },
+        "acl_add_replace": {
+            "reply": "acl_add_replace_reply"
+        },
+        "acl_interface_set_etype_whitelist": {
+            "reply": "acl_interface_set_etype_whitelist_reply"
+        },
+        "macip_acl_add_replace": {
+            "reply": "macip_acl_add_replace_reply"
+        },
+        "macip_acl_dump": {
+            "reply": "macip_acl_details",
+            "stream": true
+        },
+        "macip_acl_interface_list_dump": {
+            "reply": "macip_acl_interface_list_details",
+            "stream": true
+        }
+    },
+    "enums": [],
     "types": [
         [
             "acl_rule",
