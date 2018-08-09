@@ -70,8 +70,12 @@ type Union struct {
 type Field struct {
 	Name     string
 	Type     string
-	Length   float64
+	Length   int
 	SizeFrom string
+}
+
+func (f *Field) IsArray() bool {
+	return f.Length > 0 || f.SizeFrom != ""
 }
 
 // Enum represents VPP binary API enum
@@ -85,6 +89,39 @@ type Enum struct {
 type EnumEntry struct {
 	Name  string
 	Value interface{}
+}
+
+func getSizeOfType(typ *Type) (size int) {
+	for _, field := range typ.Fields {
+		if n := getBinapiTypeSize(field.Type); n > 0 {
+			if field.Length > 0 {
+				size += n * field.Length
+			} else {
+				size += n
+			}
+		}
+	}
+	return size
+}
+
+func getTypeByRef(ctx *context, ref string) *Type {
+	for _, typ := range ctx.packageData.Types {
+		if ref == toApiType(typ.Name) {
+			return &typ
+		}
+	}
+	return nil
+}
+
+func getUnionSize(ctx *context, union *Union) (maxSize int) {
+	for _, field := range union.Fields {
+		if typ := getTypeByRef(ctx, field.Type); typ != nil {
+			if size := getSizeOfType(typ); size > maxSize {
+				maxSize = size
+			}
+		}
+	}
+	return
 }
 
 // toApiType returns name that is used as type reference in VPP binary API
@@ -123,20 +160,6 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.RefMap[toApiType(enum.Name)] = enum.Name
 	}
 
-	// load unions
-	unions := jsonRoot.Map("unions")
-	pkg.Unions = make([]Union, unions.Len())
-	for i := 0; i < unions.Len(); i++ {
-		unionNode := unions.At(i)
-
-		union, err := parseUnion(ctx, unionNode)
-		if err != nil {
-			return nil, err
-		}
-		pkg.Unions[i] = *union
-		pkg.RefMap[toApiType(union.Name)] = union.Name
-	}
-
 	// load types
 	types := jsonRoot.Map("types")
 	pkg.Types = make([]Type, types.Len())
@@ -149,6 +172,20 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		}
 		pkg.Types[i] = *typ
 		pkg.RefMap[toApiType(typ.Name)] = typ.Name
+	}
+
+	// load unions
+	unions := jsonRoot.Map("unions")
+	pkg.Unions = make([]Union, unions.Len())
+	for i := 0; i < unions.Len(); i++ {
+		unionNode := unions.At(i)
+
+		union, err := parseUnion(ctx, unionNode)
+		if err != nil {
+			return nil, err
+		}
+		pkg.Unions[i] = *union
+		pkg.RefMap[toApiType(union.Name)] = union.Name
 	}
 
 	// load messages
@@ -387,18 +424,13 @@ func parseField(ctx *context, field *jsongo.JSONNode) (*Field, error) {
 	return &Field{
 		Name:     fieldName,
 		Type:     fieldType,
-		Length:   fieldLength,
+		Length:   int(fieldLength),
 		SizeFrom: fieldLengthFrom,
 	}, nil
 }
 
 // convertToGoType translates the VPP binary API type into Go type
-func convertToGoType(ctx *context, binapiType string, isArray bool) (typ string) {
-	// byte array type
-	if isArray && binapiType == "u8" {
-		return "byte"
-	}
-
+func convertToGoType(ctx *context, binapiType string) (typ string) {
 	if t, ok := binapiTypes[binapiType]; ok {
 		// basic types
 		typ = t

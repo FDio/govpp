@@ -14,6 +14,21 @@
 
 package main
 
+import (
+	"strconv"
+	"strings"
+)
+
+func getBinapiTypeSize(binapiType string) int {
+	if _, ok := binapiTypes[binapiType]; ok {
+		b, err := strconv.Atoi(strings.TrimLeft(binapiType, "uif"))
+		if err == nil {
+			return b / 8
+		}
+	}
+	return -1
+}
+
 // binapiTypes is a set of types used VPP binary API for translation to Go types
 var binapiTypes = map[string]string{
 	"u8":  "uint8",

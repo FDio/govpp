@@ -24,9 +24,9 @@ import (
 )
 
 const (
-	apiImportPath = "git.fd.io/govpp.git/api" // import path of the govpp API package
-	inputFileExt  = ".api.json"               // file extension of the VPP binary API files
-	outputFileExt = ".ba.go"                  // file extension of the Go generated files
+	govppApiImportPath = "git.fd.io/govpp.git/api" // import path of the govpp API package
+	inputFileExt       = ".api.json"               // file extension of the VPP binary API files
+	outputFileExt      = ".ba.go"                  // file extension of the Go generated files
 )
 
 // context is a structure storing data for code generation
@@ -82,29 +82,58 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 
 	// generate file header
 	generateHeader(ctx, w)
+	generateImports(ctx, w)
+
+	if *includeAPIVer {
+		const APIVerConstName = "VlAPIVersion"
+		fmt.Fprintf(w, "// %s represents version of the API.\n", APIVerConstName)
+		fmt.Fprintf(w, "const %s = %v\n", APIVerConstName, ctx.packageData.APIVersion)
+		fmt.Fprintln(w)
+	}
 
 	// generate enums
-	ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
-	ctx.inputLine = 0
-	for _, enum := range ctx.packageData.Enums {
-		generateEnum(ctx, w, &enum)
+	if len(ctx.packageData.Enums) > 0 {
+		fmt.Fprintf(w, "/* Enums */\n\n")
+
+		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
+		ctx.inputLine = 0
+		for _, enum := range ctx.packageData.Enums {
+			generateEnum(ctx, w, &enum)
+		}
 	}
 
 	// generate types
-	ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
-	ctx.inputLine = 0
-	for _, typ := range ctx.packageData.Types {
-		generateType(ctx, w, &typ)
+	if len(ctx.packageData.Types) > 0 {
+		fmt.Fprintf(w, "/* Types */\n\n")
+
+		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
+		ctx.inputLine = 0
+		for _, typ := range ctx.packageData.Types {
+			generateType(ctx, w, &typ)
+		}
+	}
+
+	// generate unions
+	if len(ctx.packageData.Unions) > 0 {
+		fmt.Fprintf(w, "/* Unions */\n\n")
+
+		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
+		ctx.inputLine = 0
+		for _, union := range ctx.packageData.Unions {
+			generateUnion(ctx, w, &union)
+		}
 	}
 
 	// generate messages
-	ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
-	ctx.inputLine = 0
-	for _, msg := range ctx.packageData.Messages {
-		generateMessage(ctx, w, &msg)
-	}
+	if len(ctx.packageData.Messages) > 0 {
+		fmt.Fprintf(w, "/* Messages */\n\n")
 
-	// TODO: generate unions
+		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
+		ctx.inputLine = 0
+		for _, msg := range ctx.packageData.Messages {
+			generateMessage(ctx, w, &msg)
+		}
+	}
 
 	// flush the data:
 	if err := w.Flush(); err != nil {
@@ -142,16 +171,19 @@ func generateHeader(ctx *context, w io.Writer) {
 	fmt.Fprintln(w, "*/")
 	fmt.Fprintf(w, "package %s\n", ctx.packageName)
 	fmt.Fprintln(w)
+}
 
-	fmt.Fprintf(w, "import \"%s\"", apiImportPath)
+// generateImports writes generated package imports into w
+func generateImports(ctx *context, w io.Writer) {
+	fmt.Fprintf(w, "import \"%s\"\n", govppApiImportPath)
+	fmt.Fprintf(w, "import \"%s\"\n", "github.com/lunixbochs/struc")
+	fmt.Fprintf(w, "import \"%s\"\n", "bytes")
 	fmt.Fprintln(w)
 
-	if *includeAPIVer {
-		const APIVerConstName = "VlAPIVersion"
-		fmt.Fprintf(w, "// %s represents version of the API.", APIVerConstName)
-		fmt.Fprintf(w, "const %s = %v\n", APIVerConstName, ctx.packageData.APIVersion)
-		fmt.Fprintln(w)
-	}
+	fmt.Fprintf(w, "// Reference imports to suppress errors if they are not otherwise used.\n")
+	fmt.Fprintf(w, "var _ = struc.Pack\n")
+	fmt.Fprintf(w, "var _ = bytes.NewBuffer\n")
+	fmt.Fprintln(w)
 }
 
 // generateComment writes generated comment for the object into w
@@ -225,17 +257,17 @@ func generateType(ctx *context, w io.Writer, typ *Type) {
 	generateComment(ctx, w, name, typ.Name, "type")
 
 	// generate struct definition
-	fmt.Fprintln(w, "type", name, "struct {")
+	fmt.Fprintf(w, "type %s struct {\n", name)
 
 	// generate struct fields
-	for _, field := range typ.Fields {
+	for i, field := range typ.Fields {
 		// skip internal fields
 		switch strings.ToLower(field.Name) {
 		case "crc", "_vl_msg_id":
 			continue
 		}
 
-		generateField(ctx, w, &field)
+		generateField(ctx, w, typ.Fields, i)
 	}
 
 	// generate end of the struct
@@ -250,6 +282,90 @@ func generateType(ctx *context, w io.Writer, typ *Type) {
 	fmt.Fprintln(w)
 }
 
+// generateUnion writes generated code for the union into w
+func generateUnion(ctx *context, w io.Writer, union *Union) {
+	name := camelCaseName(strings.Title(union.Name))
+
+	logf(" writing union %q (%s) with %d fields", union.Name, name, len(union.Fields))
+
+	// generate struct comment
+	generateComment(ctx, w, name, union.Name, "union")
+
+	// generate struct definition
+	fmt.Fprintln(w, "type", name, "struct {")
+
+	// maximum size for union
+	maxSize := getUnionSize(ctx, union)
+
+	// generate data field
+	fieldName := "Union_data"
+	fmt.Fprintf(w, "\t%s [%d]byte\n", fieldName, maxSize)
+
+	// generate end of the struct
+	fmt.Fprintln(w, "}")
+
+	// generate name getter
+	generateTypeNameGetter(w, name, union.Name)
+
+	// generate CRC getter
+	generateCrcGetter(w, name, union.CRC)
+
+	// generate getters for fields
+	for _, field := range union.Fields {
+		fieldName := camelCaseName(strings.Title(field.Name))
+		fieldType := convertToGoType(ctx, field.Type)
+		generateUnionGetterSetter(w, name, fieldName, fieldType)
+	}
+
+	// generate union methods
+	//generateUnionMethods(w, name)
+
+	fmt.Fprintln(w)
+}
+
+// generateUnionMethods generates methods that implement struc.Custom
+// interface to allow having Union_data field unexported
+// TODO: do more testing when unions are actually used in some messages
+func generateUnionMethods(w io.Writer, structName string) {
+	// generate struc.Custom implementation for union
+	fmt.Fprintf(w, `
+func (u *%[1]s) Pack(p []byte, opt *struc.Options) (int, error) {
+	var b = new(bytes.Buffer)
+	if err := struc.PackWithOptions(b, u.union_data, opt); err != nil {
+		return 0, err
+	}
+	copy(p, b.Bytes())
+	return b.Len(), nil
+}
+func (u *%[1]s) Unpack(r io.Reader, length int, opt *struc.Options) error {
+	return struc.UnpackWithOptions(r, u.union_data[:], opt)
+}
+func (u *%[1]s) Size(opt *struc.Options) int {
+	return len(u.union_data)
+}
+func (u *%[1]s) String() string {
+	return string(u.union_data[:])
+}
+`, structName)
+}
+
+func generateUnionGetterSetter(w io.Writer, structName string, getterField, getterStruct string) {
+	fmt.Fprintf(w, `
+func (u *%[1]s) Set%[2]s(a %[3]s) {
+	var b = new(bytes.Buffer)
+	if err := struc.Pack(b, &a); err != nil {
+		return
+	}
+	copy(u.Union_data[:], b.Bytes())
+}
+func (u *%[1]s) Get%[2]s() (a %[3]s) {
+	var b = bytes.NewReader(u.Union_data[:])
+	struc.Unpack(b, &a)
+	return
+}
+`, structName, getterField, getterStruct)
+}
+
 // generateMessage writes generated code for the message into w
 func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	name := camelCaseName(strings.Title(msg.Name))
@@ -260,7 +376,9 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	generateComment(ctx, w, name, msg.Name, "message")
 
 	// generate struct definition
-	fmt.Fprintln(w, "type", name, "struct {")
+	fmt.Fprintf(w, "type %s struct {", name)
+
+	//var buf = new(bytes.Buffer)
 
 	msgType := otherMessage
 	wasClientIndex := false
@@ -268,7 +386,8 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	// generate struct fields
 	n := 0
 	for i, field := range msg.Fields {
-		if i == 2 {
+		logf("msg.Name: %s, field.Name: %s, i: %d", msg.Name, field.Name, i)
+		if i == 1 {
 			if field.Name == "client_index" {
 				// "client_index" as the second member, this might be an event message or a request
 				msgType = eventMessage
@@ -277,7 +396,7 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 				// reply needs "context" as the second member
 				msgType = replyMessage
 			}
-		} else if i == 3 {
+		} else if i == 2 {
 			if wasClientIndex && field.Name == "context" {
 				// request needs "client_index" as the second member and "context" as the third member
 				msgType = requestMessage
@@ -294,8 +413,11 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 			}
 		}
 		n++
+		if n == 1 {
+			fmt.Fprintln(w)
+		}
 
-		generateField(ctx, w, &field)
+		generateField(ctx, w, msg.Fields, i)
 	}
 
 	// generate end of the struct
@@ -315,26 +437,34 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 }
 
 // generateField writes generated code for the field into w
-func generateField(ctx *context, w io.Writer, field *Field) {
+func generateField(ctx *context, w io.Writer, fields []Field, i int) {
+	field := fields[i]
+
 	fieldName := strings.TrimPrefix(field.Name, "_")
 	fieldName = camelCaseName(strings.Title(fieldName))
 
-	isArray := field.Length > 0 || field.SizeFrom != ""
-	dataType := convertToGoType(ctx, field.Type, isArray)
+	dataType := convertToGoType(ctx, field.Type)
 
 	fieldType := dataType
-	if isArray {
+	if field.IsArray() {
+		if dataType == "uint8" {
+			dataType = "byte"
+		}
 		fieldType = "[]" + dataType
 	}
 	fmt.Fprintf(w, "\t%s %s", fieldName, fieldType)
 
 	if field.Length > 0 {
 		// fixed size array
-		fmt.Fprintf(w, "\t`struc:\"[%d]%s\"`", uint64(field.Length), dataType)
-	} else if field.SizeFrom != "" {
-		// variable sized array
-		sizeFromName := camelCaseName(strings.Title(field.SizeFrom))
-		fmt.Fprintf(w, "\t`struc:\"sizefrom=%s\"`", sizeFromName)
+		fmt.Fprintf(w, "\t`struc:\"[%d]%s\"`", field.Length, dataType)
+	} else {
+		for _, f := range fields {
+			if f.SizeFrom == field.Name {
+				// variable sized array
+				sizeOfName := camelCaseName(strings.Title(f.Name))
+				fmt.Fprintf(w, "\t`struc:\"sizeof=%s\"`", sizeOfName)
+			}
+		}
 	}
 
 	fmt.Fprintln(w)
@@ -354,6 +484,14 @@ func generateTypeNameGetter(w io.Writer, structName string, msgName string) {
 	fmt.Fprintln(w, "}")
 }
 
+// generateCrcGetter generates getter for CRC checksum of the message definition into the provider writer
+func generateCrcGetter(w io.Writer, structName string, crc string) {
+	crc = strings.TrimPrefix(crc, "0x")
+	fmt.Fprintln(w, "func (*"+structName+") GetCrcString() string {")
+	fmt.Fprintln(w, "\treturn \""+crc+"\"")
+	fmt.Fprintln(w, "}")
+}
+
 // generateMessageTypeGetter generates message factory for the generated message into the provider writer
 func generateMessageTypeGetter(w io.Writer, structName string, msgType MessageType) {
 	fmt.Fprintln(w, "func (*"+structName+") GetMessageType() api.MessageType {")
@@ -366,14 +504,6 @@ func generateMessageTypeGetter(w io.Writer, structName string, msgType MessageTy
 	} else {
 		fmt.Fprintln(w, "\treturn api.OtherMessage")
 	}
-	fmt.Fprintln(w, "}")
-}
-
-// generateCrcGetter generates getter for CRC checksum of the message definition into the provider writer
-func generateCrcGetter(w io.Writer, structName string, crc string) {
-	crc = strings.TrimPrefix(crc, "0x")
-	fmt.Fprintln(w, "func (*"+structName+") GetCrcString() string {")
-	fmt.Fprintln(w, "\treturn \""+crc+"\"")
 	fmt.Fprintln(w, "}")
 }
 
