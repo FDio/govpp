@@ -78,26 +78,30 @@ func (c *Connection) processRequest(ch *channel, req *api.VppRequest) error {
 	if err != nil {
 		err = fmt.Errorf("unable to encode the messge: %v", err)
 		log.WithFields(logger.Fields{
-			"channel": ch.id,
-			"msg_id":  msgID,
-			"seq_num": req.SeqNum,
+			"channel":  ch.id,
+			"msg_id":   msgID,
+			"msg_name": req.Message.GetMessageName(),
+			"seq_num":  req.SeqNum,
 		}).Error(err)
 		sendReply(ch, &api.VppReply{SeqNum: req.SeqNum, Error: err})
 		return err
 	}
 
+	// get context
+	context := packRequestContext(ch.id, req.Multipart, req.SeqNum)
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		log.WithFields(logger.Fields{
 			"channel":  ch.id,
+			"context":  context,
+			"is_multi": req.Multipart,
 			"msg_id":   msgID,
 			"msg_size": len(data),
 			"msg_name": req.Message.GetMessageName(),
 			"seq_num":  req.SeqNum,
-		}).Debug("Sending a message to VPP.")
+		}).Debug(" -> Sending a message to VPP.")
 	}
 
 	// send the request to VPP
-	context := packRequestContext(ch.id, req.Multipart, req.SeqNum)
 	err = c.vpp.SendMsg(context, data)
 	if err != nil {
 		err = fmt.Errorf("unable to send the message: %v", err)
@@ -115,11 +119,12 @@ func (c *Connection) processRequest(ch *channel, req *api.VppRequest) error {
 		pingData, _ := c.codec.EncodeMsg(msgControlPing, c.pingReqID)
 
 		log.WithFields(logger.Fields{
+			"channel":  ch.id,
 			"context":  context,
 			"msg_id":   c.pingReqID,
 			"msg_size": len(pingData),
 			"seq_num":  req.SeqNum,
-		}).Debug("Sending a control ping to VPP.")
+		}).Debug(" -> Sending a control ping to VPP.")
 
 		c.vpp.SendMsg(context, pingData)
 	}
@@ -137,15 +142,19 @@ func msgCallback(context uint32, msgID uint16, data []byte) {
 		return
 	}
 
+	msgName, _ := conn.LookupByID(msgID)
+
 	chanID, isMultipart, seqNum := unpackRequestContext(context)
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		log.WithFields(logger.Fields{
-			"msg_id":       msgID,
-			"msg_size":     len(data),
-			"channel_id":   chanID,
-			"is_multipart": isMultipart,
-			"seq_num":      seqNum,
-		}).Debug("Received a message from VPP.")
+			"context":  context,
+			"msg_id":   msgID,
+			"msg_name": msgName,
+			"msg_size": len(data),
+			"channel":  chanID,
+			"is_multi": isMultipart,
+			"seq_num":  seqNum,
+		}).Debug(" <- Received a message from VPP.")
 	}
 
 	if context == 0 || conn.isNotificationMessage(msgID) {
@@ -161,8 +170,8 @@ func msgCallback(context uint32, msgID uint16, data []byte) {
 
 	if !ok {
 		log.WithFields(logger.Fields{
-			"channel_id": chanID,
-			"msg_id":     msgID,
+			"channel": chanID,
+			"msg_id":  msgID,
 		}).Error("Channel ID not known, ignoring the message.")
 		return
 	}

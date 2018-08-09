@@ -1,23 +1,4 @@
 {
-    "services": [
-        {
-            "af_packet_delete": {
-                "reply": "af_packet_delete_reply"
-            }
-        },
-        {
-            "af_packet_create": {
-                "reply": "af_packet_create_reply"
-            }
-        },
-        {
-            "af_packet_set_l4_cksum_offload": {
-                "reply": "af_packet_set_l4_cksum_offload_reply"
-            }
-        }
-    ],
-    "vl_api_version": "0x8957ca8b",
-    "enums": [],
     "messages": [
         [
             "af_packet_create",
@@ -157,7 +138,66 @@
             {
                 "crc": "0xe8d4e804"
             }
+        ],
+        [
+            "af_packet_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "af_packet_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "host_if_name",
+                64
+            ],
+            {
+                "crc": "0x057205fa"
+            }
         ]
     ],
+    "vl_api_version": "0x206563c",
+    "unions": [],
+    "services": {
+        "af_packet_dump": {
+            "reply": "af_packet_details",
+            "stream": true
+        },
+        "af_packet_set_l4_cksum_offload": {
+            "reply": "af_packet_set_l4_cksum_offload_reply"
+        },
+        "af_packet_delete": {
+            "reply": "af_packet_delete_reply"
+        },
+        "af_packet_create": {
+            "reply": "af_packet_create_reply"
+        }
+    },
+    "enums": [],
     "types": []
 }

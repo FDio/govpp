@@ -172,6 +172,9 @@ func (ch *channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 		return false, errors.New("nil message passed in")
 	}
 
+	// update msg id
+	ch.msgIdentifier.GetMessageID(msg)
+
 	if ch.delayedReply != nil {
 		// try the delayed reply
 		vppReply := ch.delayedReply

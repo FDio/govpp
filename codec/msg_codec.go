@@ -80,14 +80,14 @@ func (*MsgCodec) EncodeMsg(msg api.Message, msgID uint16) ([]byte, error) {
 	}
 	err := struc.Pack(buf, header)
 	if err != nil {
-		return nil, fmt.Errorf("unable to encode message: header: %v, error %v", header, err)
+		return nil, fmt.Errorf("unable to encode message header: %v, error %v", header, err)
 	}
 
 	// encode message content
 	if reflect.Indirect(reflect.ValueOf(msg)).NumField() > 0 {
 		err := struc.Pack(buf, msg)
 		if err != nil {
-			return nil, fmt.Errorf("unable to encode message: header %v, error %v", header, err)
+			return nil, fmt.Errorf("unable to encode message data: %v, error %v", header, err)
 		}
 	}
 
@@ -117,7 +117,7 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) error {
 	// decode message header
 	err := struc.Unpack(buf, header)
 	if err != nil {
-		return fmt.Errorf("unable to decode message: data %v, error %v", data, err)
+		return fmt.Errorf("unable to decode message header: %+v, error %v", data, err)
 	}
 
 	// get rid of the message header
@@ -134,7 +134,7 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) error {
 	// decode message content
 	err = struc.Unpack(buf, msg)
 	if err != nil {
-		return fmt.Errorf("unable to decode message: data %v, error %v", data, err)
+		return fmt.Errorf("unable to decode message data: %+v, error %v", data, err)
 	}
 
 	return nil

@@ -50,14 +50,14 @@ func (c *Connection) processNotifSubscribeRequest(ch *channel, req *api.NotifSub
 // addNotifSubscription adds the notification subscription into the subscriptions map of the connection.
 func (c *Connection) addNotifSubscription(subs *api.NotifSubscription) error {
 	// get message ID of the notification message
-	msgID, err := c.getSubscriptionMessageID(subs)
+	msgID, msgName, err := c.getSubscriptionMessageID(subs)
 	if err != nil {
 		return err
 	}
 
 	log.WithFields(logger.Fields{
-		"msg_id":       msgID,
-		"subscription": subs,
+		"msg_name": msgName,
+		"msg_id":   msgID,
 	}).Debug("Adding new notification subscription.")
 
 	// add the subscription into map
@@ -72,14 +72,14 @@ func (c *Connection) addNotifSubscription(subs *api.NotifSubscription) error {
 // removeNotifSubscription removes the notification subscription from the subscriptions map of the connection.
 func (c *Connection) removeNotifSubscription(subs *api.NotifSubscription) error {
 	// get message ID of the notification message
-	msgID, err := c.getSubscriptionMessageID(subs)
+	msgID, msgName, err := c.getSubscriptionMessageID(subs)
 	if err != nil {
 		return err
 	}
 
 	log.WithFields(logger.Fields{
-		"msg_id":       msgID,
-		"subscription": subs,
+		"msg_name": msgName,
+		"msg_id":   msgID,
 	}).Debug("Removing notification subscription.")
 
 	// remove the subscription from the map
@@ -116,18 +116,16 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 	// send to notification to each subscriber
 	for _, subs := range c.notifSubscriptions[msgID] {
 		log.WithFields(logger.Fields{
-			"msg_id":       msgID,
-			"msg_size":     len(data),
-			"subscription": subs,
+			"msg_id":   msgID,
+			"msg_size": len(data),
 		}).Debug("Sending a notification to the subscription channel.")
 
 		msg := subs.MsgFactory()
 		err := c.codec.DecodeMsg(data, msg)
 		if err != nil {
 			log.WithFields(logger.Fields{
-				"msg_id":       msgID,
-				"msg_size":     len(data),
-				"subscription": subs,
+				"msg_id":   msgID,
+				"msg_size": len(data),
 			}).Error("Unable to decode the notification message.")
 			continue
 		}
@@ -147,9 +145,8 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 		default:
 			// unable to write into the channel without blocking
 			log.WithFields(logger.Fields{
-				"msg_id":       msgID,
-				"msg_size":     len(data),
-				"subscription": subs,
+				"msg_id":   msgID,
+				"msg_size": len(data),
 			}).Warn("Unable to deliver the notification, reciever end not ready.")
 		}
 
@@ -165,7 +162,7 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 }
 
 // getSubscriptionMessageID returns ID of the message the subscription is tied to.
-func (c *Connection) getSubscriptionMessageID(subs *api.NotifSubscription) (uint16, error) {
+func (c *Connection) getSubscriptionMessageID(subs *api.NotifSubscription) (uint16, string, error) {
 	msg := subs.MsgFactory()
 	msgID, err := c.GetMessageID(msg)
 
@@ -174,8 +171,8 @@ func (c *Connection) getSubscriptionMessageID(subs *api.NotifSubscription) (uint
 			"msg_name": msg.GetMessageName(),
 			"msg_crc":  msg.GetCrcString(),
 		}).Errorf("unable to retrieve message ID: %v", err)
-		return 0, fmt.Errorf("unable to retrieve message ID: %v", err)
+		return 0, "", fmt.Errorf("unable to retrieve message ID: %v", err)
 	}
 
-	return msgID, nil
+	return msgID, msg.GetMessageName(), nil
 }

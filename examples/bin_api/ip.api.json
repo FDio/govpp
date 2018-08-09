@@ -1,187 +1,4 @@
 {
-    "services": [
-        {
-            "ip_source_and_port_range_check_add_del": {
-                "reply": "ip_source_and_port_range_check_add_del_reply"
-            }
-        },
-        {
-            "ip6_fib_dump": {
-                "reply": "ip6_fib_details",
-                "stream": true
-            }
-        },
-        {
-            "want_ip6_nd_events": {
-                "reply": "want_ip6_nd_events_reply"
-            }
-        },
-        {
-            "ip_punt_police": {
-                "reply": "ip_punt_police_reply"
-            }
-        },
-        {
-            "set_arp_neighbor_limit": {
-                "reply": "set_arp_neighbor_limit_reply"
-            }
-        },
-        {
-            "ip6nd_proxy_add_del": {
-                "reply": "ip6nd_proxy_add_del_reply"
-            }
-        },
-        {
-            "ioam_disable": {
-                "reply": "ioam_disable_reply"
-            }
-        },
-        {
-            "ip_table_add_del": {
-                "reply": "ip_table_add_del_reply"
-            }
-        },
-        {
-            "ip_neighbor_dump": {
-                "reply": "ip_neighbor_details",
-                "stream": true
-            }
-        },
-        {
-            "ip4_arp_event": {
-                "reply": null
-            }
-        },
-        {
-            "ip_punt_redirect": {
-                "reply": "ip_punt_redirect_reply"
-            }
-        },
-        {
-            "sw_interface_ip6nd_ra_prefix": {
-                "reply": "sw_interface_ip6nd_ra_prefix_reply"
-            }
-        },
-        {
-            "reset_fib": {
-                "reply": "reset_fib_reply"
-            }
-        },
-        {
-            "ip6_mfib_dump": {
-                "reply": "ip6_mfib_details",
-                "stream": true
-            }
-        },
-        {
-            "sw_interface_ip6nd_ra_config": {
-                "reply": "sw_interface_ip6nd_ra_config_reply"
-            }
-        },
-        {
-            "sw_interface_ip6_enable_disable": {
-                "reply": "sw_interface_ip6_enable_disable_reply"
-            }
-        },
-        {
-            "sw_interface_ip6_set_link_local_address": {
-                "reply": "sw_interface_ip6_set_link_local_address_reply"
-            }
-        },
-        {
-            "mfib_signal_dump": {
-                "reply": "mfib_signal_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_container_proxy_add_del": {
-                "reply": "ip_container_proxy_add_del_reply"
-            }
-        },
-        {
-            "ip_mfib_dump": {
-                "reply": "ip_mfib_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_address_dump": {
-                "reply": "ip_address_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_dump": {
-                "reply": "ip_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_neighbor_add_del": {
-                "reply": "ip_neighbor_add_del_reply"
-            }
-        },
-        {
-            "proxy_arp_intfc_enable_disable": {
-                "reply": "proxy_arp_intfc_enable_disable_reply"
-            }
-        },
-        {
-            "proxy_arp_add_del": {
-                "reply": "proxy_arp_add_del_reply"
-            }
-        },
-        {
-            "ip_add_del_route": {
-                "reply": "ip_add_del_route_reply"
-            }
-        },
-        {
-            "ip6nd_proxy_dump": {
-                "reply": "ip6nd_proxy_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_fib_dump": {
-                "reply": "ip_fib_details",
-                "stream": true
-            }
-        },
-        {
-            "want_ip4_arp_events": {
-                "reply": "want_ip4_arp_events_reply"
-            }
-        },
-        {
-            "ioam_enable": {
-                "reply": "ioam_enable_reply"
-            }
-        },
-        {
-            "ip6_nd_event": {
-                "reply": null
-            }
-        },
-        {
-            "ip_mroute_add_del": {
-                "reply": "ip_mroute_add_del_reply"
-            }
-        },
-        {
-            "ip_source_and_port_range_check_interface_add_del": {
-                "reply": "ip_source_and_port_range_check_interface_add_del_reply"
-            }
-        },
-        {
-            "set_ip_flow_hash": {
-                "reply": "set_ip_flow_hash_reply"
-            }
-        }
-    ],
-    "vl_api_version": "0xb395c625",
-    "enums": [],
     "messages": [
         [
             "ip_table_add_del",
@@ -820,6 +637,66 @@
             }
         ],
         [
+            "ip6nd_send_router_solicitation",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "irt"
+            ],
+            [
+                "u32",
+                "mrt"
+            ],
+            [
+                "u32",
+                "mrc"
+            ],
+            [
+                "u32",
+                "mrd"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "stop"
+            ],
+            {
+                "crc": "0xbd968917"
+            }
+        ],
+        [
+            "ip6nd_send_router_solicitation_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
             "sw_interface_ip6_enable_disable",
             [
                 "u16",
@@ -1029,13 +906,13 @@
                 "next_hop_via_label"
             ],
             [
-                "u32",
+                "vl_api_fib_mpls_label_t",
                 "next_hop_out_label_stack",
                 0,
                 "next_hop_n_out_labels"
             ],
             {
-                "crc": "0xc85f8290"
+                "crc": "0x4219d62d"
             }
         ],
         [
@@ -1124,8 +1001,13 @@
                 "src_address",
                 16
             ],
+            [
+                "u8",
+                "nh_address",
+                16
+            ],
             {
-                "crc": "0xc37112f7"
+                "crc": "0xf44c17b1"
             }
         ],
         [
@@ -1333,6 +1215,54 @@
             ],
             {
                 "crc": "0x6b7bcd0a"
+            }
+        ],
+        [
+            "ip_unnumbered_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "ip_sw_if_index"
+            ],
+            {
+                "crc": "0x05b717ca"
+            }
+        ],
+        [
+            "ip_unnumbered_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            {
+                "crc": "0x529cb13f"
             }
         ],
         [
@@ -1740,6 +1670,115 @@
             }
         ],
         [
+            "ip_scan_neighbor_enable_disable",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u8",
+                "mode"
+            ],
+            [
+                "u8",
+                "scan_interval"
+            ],
+            [
+                "u8",
+                "max_proc_time"
+            ],
+            [
+                "u8",
+                "max_update"
+            ],
+            [
+                "u8",
+                "scan_int_delay"
+            ],
+            [
+                "u8",
+                "stale_threshold"
+            ],
+            {
+                "crc": "0x0a6bf57a"
+            }
+        ],
+        [
+            "ip_scan_neighbor_enable_disable_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_probe_neighbor",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "dst_address",
+                16
+            ],
+            [
+                "u8",
+                "is_ipv6"
+            ],
+            {
+                "crc": "0x1e44bfd7"
+            }
+        ],
+        [
+            "ip_probe_neighbor_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
             "want_ip4_arp_events",
             [
                 "u16",
@@ -1908,6 +1947,107 @@
             }
         ],
         [
+            "want_ip6_ra_events",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u8",
+                "enable_disable"
+            ],
+            [
+                "u32",
+                "pid"
+            ],
+            {
+                "crc": "0x05b454b5"
+            }
+        ],
+        [
+            "want_ip6_ra_events_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip6_ra_event",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "pid"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "router_address",
+                16
+            ],
+            [
+                "u8",
+                "current_hop_limit"
+            ],
+            [
+                "u8",
+                "flags"
+            ],
+            [
+                "u16",
+                "router_lifetime_in_sec"
+            ],
+            [
+                "u32",
+                "neighbor_reachable_time_in_msec"
+            ],
+            [
+                "u32",
+                "time_in_msec_between_retransmitted_neighbor_solicitations"
+            ],
+            [
+                "u32",
+                "n_prefixes"
+            ],
+            [
+                "vl_api_ip6_ra_prefix_info_t",
+                "prefixes",
+                0,
+                "n_prefixes"
+            ],
+            {
+                "crc": "0xc5e54257"
+            }
+        ],
+        [
             "proxy_arp_add_del",
             [
                 "u16",
@@ -1922,25 +2062,15 @@
                 "context"
             ],
             [
-                "u32",
-                "vrf_id"
-            ],
-            [
                 "u8",
                 "is_add"
             ],
             [
-                "u8",
-                "low_address",
-                4
-            ],
-            [
-                "u8",
-                "hi_address",
-                4
+                "vl_api_proxy_arp_t",
+                "proxy"
             ],
             {
-                "crc": "0xc2442918"
+                "crc": "0x227988d9"
             }
         ],
         [
@@ -1959,6 +2089,42 @@
             ],
             {
                 "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "proxy_arp_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "proxy_arp_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_proxy_arp_t",
+                "proxy"
+            ],
+            {
+                "crc": "0x9b707c77"
             }
         ],
         [
@@ -2003,6 +2169,42 @@
             ],
             {
                 "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "proxy_arp_intfc_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "proxy_arp_intfc_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            {
+                "crc": "0xf6458e5f"
             }
         ],
         [
@@ -2192,9 +2394,343 @@
             {
                 "crc": "0xe8d4e804"
             }
+        ],
+        [
+            "ip_reassembly_set",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "timeout_ms"
+            ],
+            [
+                "u32",
+                "max_reassemblies"
+            ],
+            [
+                "u32",
+                "expire_walk_interval_ms"
+            ],
+            [
+                "u8",
+                "is_ip6"
+            ],
+            {
+                "crc": "0x1db184de"
+            }
+        ],
+        [
+            "ip_reassembly_set_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_reassembly_get",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u8",
+                "is_ip6"
+            ],
+            {
+                "crc": "0x6fe91190"
+            }
+        ],
+        [
+            "ip_reassembly_get_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "u32",
+                "timeout_ms"
+            ],
+            [
+                "u32",
+                "max_reassemblies"
+            ],
+            [
+                "u32",
+                "expire_walk_interval_ms"
+            ],
+            [
+                "u8",
+                "is_ip6"
+            ],
+            {
+                "crc": "0xd746fc57"
+            }
+        ],
+        [
+            "ip_reassembly_enable_disable",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "enable_ip4"
+            ],
+            [
+                "u8",
+                "enable_ip6"
+            ],
+            {
+                "crc": "0xbb8dc5d0"
+            }
+        ],
+        [
+            "ip_reassembly_enable_disable_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
         ]
     ],
+    "vl_api_version": "0xc80dc75",
+    "unions": [],
+    "services": {
+        "ip_address_dump": {
+            "reply": "ip_address_details",
+            "stream": true
+        },
+        "ip_source_and_port_range_check_add_del": {
+            "reply": "ip_source_and_port_range_check_add_del_reply"
+        },
+        "reset_fib": {
+            "reply": "reset_fib_reply"
+        },
+        "ip_probe_neighbor": {
+            "reply": "ip_probe_neighbor_reply"
+        },
+        "want_ip6_nd_events": {
+            "reply": "want_ip6_nd_events_reply",
+            "events": [
+                "ip6_nd_event"
+            ]
+        },
+        "ip_punt_police": {
+            "reply": "ip_punt_police_reply"
+        },
+        "ip6nd_proxy_add_del": {
+            "reply": "ip6nd_proxy_add_del_reply"
+        },
+        "set_arp_neighbor_limit": {
+            "reply": "set_arp_neighbor_limit_reply"
+        },
+        "ip_reassembly_enable_disable": {
+            "reply": "ip_reassembly_enable_disable_reply"
+        },
+        "ip6_fib_dump": {
+            "reply": "ip6_fib_details",
+            "stream": true
+        },
+        "ip6nd_send_router_solicitation": {
+            "reply": "ip6nd_send_router_solicitation_reply"
+        },
+        "ip_table_add_del": {
+            "reply": "ip_table_add_del_reply"
+        },
+        "ip_neighbor_dump": {
+            "reply": "ip_neighbor_details",
+            "stream": true
+        },
+        "ip_punt_redirect": {
+            "reply": "ip_punt_redirect_reply"
+        },
+        "sw_interface_ip6nd_ra_prefix": {
+            "reply": "sw_interface_ip6nd_ra_prefix_reply"
+        },
+        "ip_reassembly_set": {
+            "reply": "ip_reassembly_set_reply"
+        },
+        "ip6_mfib_dump": {
+            "reply": "ip6_mfib_details",
+            "stream": true
+        },
+        "sw_interface_ip6nd_ra_config": {
+            "reply": "sw_interface_ip6nd_ra_config_reply"
+        },
+        "proxy_arp_dump": {
+            "reply": "proxy_arp_details",
+            "stream": true
+        },
+        "sw_interface_ip6_enable_disable": {
+            "reply": "sw_interface_ip6_enable_disable_reply"
+        },
+        "ip_source_and_port_range_check_interface_add_del": {
+            "reply": "ip_source_and_port_range_check_interface_add_del_reply"
+        },
+        "sw_interface_ip6_set_link_local_address": {
+            "reply": "sw_interface_ip6_set_link_local_address_reply"
+        },
+        "mfib_signal_dump": {
+            "reply": "mfib_signal_details",
+            "stream": true
+        },
+        "ip_container_proxy_add_del": {
+            "reply": "ip_container_proxy_add_del_reply"
+        },
+        "ip_mfib_dump": {
+            "reply": "ip_mfib_details",
+            "stream": true
+        },
+        "ip_unnumbered_dump": {
+            "reply": "ip_unnumbered_details",
+            "stream": true
+        },
+        "ip_dump": {
+            "reply": "ip_details",
+            "stream": true
+        },
+        "ip_neighbor_add_del": {
+            "reply": "ip_neighbor_add_del_reply"
+        },
+        "proxy_arp_intfc_enable_disable": {
+            "reply": "proxy_arp_intfc_enable_disable_reply"
+        },
+        "proxy_arp_add_del": {
+            "reply": "proxy_arp_add_del_reply"
+        },
+        "ip_add_del_route": {
+            "reply": "ip_add_del_route_reply"
+        },
+        "ip6nd_proxy_dump": {
+            "reply": "ip6nd_proxy_details",
+            "stream": true
+        },
+        "want_ip6_ra_events": {
+            "reply": "want_ip6_ra_events_reply",
+            "events": [
+                "ip6_ra_event"
+            ]
+        },
+        "ip_fib_dump": {
+            "reply": "ip_fib_details",
+            "stream": true
+        },
+        "ip_scan_neighbor_enable_disable": {
+            "reply": "ip_scan_neighbor_enable_disable_reply"
+        },
+        "ioam_enable": {
+            "reply": "ioam_enable_reply"
+        },
+        "ip_mroute_add_del": {
+            "reply": "ip_mroute_add_del_reply"
+        },
+        "proxy_arp_intfc_dump": {
+            "reply": "proxy_arp_intfc_details",
+            "stream": true
+        },
+        "want_ip4_arp_events": {
+            "reply": "want_ip4_arp_events_reply",
+            "events": [
+                "ip4_arp_event"
+            ]
+        },
+        "ip_reassembly_get": {
+            "reply": "ip_reassembly_get_reply"
+        },
+        "set_ip_flow_hash": {
+            "reply": "set_ip_flow_hash_reply"
+        },
+        "ioam_disable": {
+            "reply": "ioam_disable_reply"
+        }
+    },
+    "enums": [],
     "types": [
+        [
+            "fib_mpls_label",
+            [
+                "u8",
+                "is_uniform"
+            ],
+            [
+                "u32",
+                "label"
+            ],
+            [
+                "u8",
+                "ttl"
+            ],
+            [
+                "u8",
+                "exp"
+            ],
+            {
+                "crc": "0xc93bf35c"
+            }
+        ],
         [
             "fib_path",
             [
@@ -2223,11 +2759,31 @@
             ],
             [
                 "u8",
+                "is_udp_encap"
+            ],
+            [
+                "u8",
                 "is_unreach"
             ],
             [
                 "u8",
                 "is_prohibit"
+            ],
+            [
+                "u8",
+                "is_resolve_host"
+            ],
+            [
+                "u8",
+                "is_resolve_attached"
+            ],
+            [
+                "u8",
+                "is_dvr"
+            ],
+            [
+                "u8",
+                "is_source_lookup"
             ],
             [
                 "u8",
@@ -2238,8 +2794,76 @@
                 "next_hop",
                 16
             ],
+            [
+                "u32",
+                "next_hop_id"
+            ],
+            [
+                "u32",
+                "rpf_id"
+            ],
+            [
+                "u32",
+                "via_label"
+            ],
+            [
+                "u8",
+                "n_labels"
+            ],
+            [
+                "vl_api_fib_mpls_label_t",
+                "label_stack",
+                16
+            ],
             {
-                "crc": "0xcd899e0a"
+                "crc": "0xabe483ef"
+            }
+        ],
+        [
+            "ip6_ra_prefix_info",
+            [
+                "u8",
+                "dst_address",
+                16
+            ],
+            [
+                "u8",
+                "dst_address_length"
+            ],
+            [
+                "u8",
+                "flags"
+            ],
+            [
+                "u32",
+                "valid_time"
+            ],
+            [
+                "u32",
+                "preferred_time"
+            ],
+            {
+                "crc": "0x83d7c6e5"
+            }
+        ],
+        [
+            "proxy_arp",
+            [
+                "u32",
+                "vrf_id"
+            ],
+            [
+                "u8",
+                "low_address",
+                4
+            ],
+            [
+                "u8",
+                "hi_address",
+                4
+            ],
+            {
+                "crc": "0x6d88106e"
             }
         ]
     ]
