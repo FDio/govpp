@@ -720,3 +720,22 @@ func (*GetNextIndexReply) GetMessageType() api.MessageType {
 func NewGetNextIndexReply() api.Message {
 	return &GetNextIndexReply{}
 }
+
+func init() {
+	api.RegisterMessage((*ControlPing)(nil))
+	api.RegisterMessage((*ControlPingReply)(nil))
+	api.RegisterMessage((*Cli)(nil))
+	api.RegisterMessage((*CliInband)(nil))
+	api.RegisterMessage((*CliReply)(nil))
+	api.RegisterMessage((*CliInbandReply)(nil))
+	api.RegisterMessage((*GetNodeIndex)(nil))
+	api.RegisterMessage((*GetNodeIndexReply)(nil))
+	api.RegisterMessage((*AddNodeNext)(nil))
+	api.RegisterMessage((*AddNodeNextReply)(nil))
+	api.RegisterMessage((*ShowVersion)(nil))
+	api.RegisterMessage((*ShowVersionReply)(nil))
+	api.RegisterMessage((*GetNodeGraph)(nil))
+	api.RegisterMessage((*GetNodeGraphReply)(nil))
+	api.RegisterMessage((*GetNextIndex)(nil))
+	api.RegisterMessage((*GetNextIndexReply)(nil))
+}
