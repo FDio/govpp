@@ -32,7 +32,7 @@ func NewVppAdapter(string) adapter.VppAdapter {
 }
 
 func (a *vppAPIClientAdapter) Connect() error {
-	return nil
+	return adapter.ErrNotImplemented
 }
 
 func (a *vppAPIClientAdapter) Disconnect() {

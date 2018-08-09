@@ -14,6 +14,13 @@
 
 package adapter
 
+import (
+	"errors"
+)
+
+// ErrNotImplemented is an error returned when missing implementation.
+var ErrNotImplemented = errors.New("not implemented for this OS")
+
 // VppAdapter provides connection to VPP. It is responsible for sending and receiving of binary-encoded messages to/from VPP.
 type VppAdapter interface {
 	// Connect connects the process to VPP.
