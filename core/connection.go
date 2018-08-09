@@ -210,14 +210,27 @@ func newConnection(vppAdapter adapter.VppAdapter) (*Connection, error) {
 
 // connectVPP performs one blocking attempt to connect to VPP.
 func (c *Connection) connectVPP() error {
-	log.Debug("Connecting to VPP...")
+	log.Debug("Connecting to VPP..")
 
 	// blocking connect
 	err := c.vpp.Connect()
 	if err != nil {
-		log.Warn(err)
 		return err
 	}
+
+	log.Debugf("Connected to VPP.")
+
+	t := time.Now()
+	msgs := api.RegisteredMessages()
+	for id, msg := range msgs {
+		_, err := c.messageNameToID(msg.GetMessageName(), msg.GetCrcString())
+		if err != nil {
+			c.vpp.Disconnect()
+			return err
+		}
+		log.Debugf("message ID for %q (%s) is %d", msg.GetMessageName(), msg.GetCrcString(), id)
+	}
+	log.Debugf("checking %d msg IDs took %s", len(msgs), time.Since(t))
 
 	// store control ping IDs
 	if c.pingReqID, err = c.GetMessageID(msgControlPing); err != nil {
@@ -232,7 +245,6 @@ func (c *Connection) connectVPP() error {
 	// store connected state
 	atomic.StoreUint32(&c.connected, 1)
 
-	log.Info("Connected to VPP.")
 	return nil
 }
 

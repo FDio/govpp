@@ -135,6 +135,15 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 		}
 	}
 
+	// generate message registrations
+	fmt.Fprintln(w)
+	fmt.Fprintln(w, "func init() {")
+	for _, msg := range ctx.packageData.Messages {
+		name := camelCaseName(strings.Title(msg.Name))
+		fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil))\n", name)
+	}
+	fmt.Fprintln(w, "}")
+
 	// flush the data:
 	if err := w.Flush(); err != nil {
 		return fmt.Errorf("flushing data to %s failed: %v", ctx.outputFile, err)
