@@ -30,11 +30,12 @@ import (
 )
 
 var (
-	inputFile     = flag.String("input-file", "", "Input JSON file.")
-	inputDir      = flag.String("input-dir", ".", "Input directory with JSON files.")
-	outputDir     = flag.String("output-dir", ".", "Output directory where package folders will be generated.")
-	includeAPIVer = flag.Bool("include-apiver", false, "Wether to include VlAPIVersion in generated file.")
-	debug         = flag.Bool("debug", false, "Turn on debug mode.")
+	inputFile       = flag.String("input-file", "", "Input JSON file.")
+	inputDir        = flag.String("input-dir", ".", "Input directory with JSON files.")
+	outputDir       = flag.String("output-dir", ".", "Output directory where package folders will be generated.")
+	includeAPIVer   = flag.Bool("include-apiver", false, "Whether to include VlAPIVersion in generated file.")
+	debug           = flag.Bool("debug", false, "Turn on debug mode.")
+	continueOnError = flag.Bool("continue-onerror", false, "Wheter to continue with next file on error.")
 )
 
 func logf(f string, v ...interface{}) {
@@ -51,30 +52,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	var err, tmpErr error
 	if *inputFile != "" {
 		// process one input file
-		err = generateFromFile(*inputFile, *outputDir)
-		if err != nil {
+		if err := generateFromFile(*inputFile, *outputDir); err != nil {
 			fmt.Fprintf(os.Stderr, "ERROR: code generation from %s failed: %v\n", *inputFile, err)
+			os.Exit(1)
 		}
 	} else {
 		// process all files in specified directory
 		files, err := getInputFiles(*inputDir)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "ERROR: code generation failed: %v\n", err)
+			os.Exit(1)
 		}
 		for _, file := range files {
-			tmpErr = generateFromFile(file, *outputDir)
-			if tmpErr != nil {
+			if err := generateFromFile(file, *outputDir); err != nil {
 				fmt.Fprintf(os.Stderr, "ERROR: code generation from %s failed: %v\n", file, err)
-				err = tmpErr // remember that the error occurred
+				if *continueOnError {
+					continue
+				}
+				os.Exit(1)
 			}
 		}
-	}
-
-	if err != nil {
-		os.Exit(1)
 	}
 }
 

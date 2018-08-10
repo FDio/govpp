@@ -15,10 +15,9 @@
 package core
 
 import (
+	"errors"
 	"fmt"
 	"time"
-
-	"errors"
 
 	"git.fd.io/govpp.git/api"
 	"github.com/sirupsen/logrus"
