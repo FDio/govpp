@@ -18,8 +18,8 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"sort"
 	"strings"
-	"unicode"
 
 	"github.com/bennyscetbun/jsongo"
 )
@@ -31,6 +31,7 @@ type Package struct {
 	Unions     []Union
 	Types      []Type
 	Messages   []Message
+	Services   []Service
 	RefMap     map[string]string
 }
 
@@ -62,7 +63,6 @@ type Type struct {
 type Union struct {
 	Name   string
 	CRC    string
-	Size   int
 	Fields []Field
 }
 
@@ -89,6 +89,14 @@ type Enum struct {
 type EnumEntry struct {
 	Name  string
 	Value interface{}
+}
+
+// Service represents VPP binary API service
+type Service struct {
+	RequestType string
+	ReplyType   string
+	Stream      bool
+	Events      []string
 }
 
 func getSizeOfType(typ *Type) (size int) {
@@ -146,7 +154,7 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		RefMap:     make(map[string]string),
 	}
 
-	// load enums
+	// parse enums
 	enums := jsonRoot.Map("enums")
 	pkg.Enums = make([]Enum, enums.Len())
 	for i := 0; i < enums.Len(); i++ {
@@ -160,7 +168,7 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.RefMap[toApiType(enum.Name)] = enum.Name
 	}
 
-	// load types
+	// parse types
 	types := jsonRoot.Map("types")
 	pkg.Types = make([]Type, types.Len())
 	for i := 0; i < types.Len(); i++ {
@@ -174,7 +182,7 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.RefMap[toApiType(typ.Name)] = typ.Name
 	}
 
-	// load unions
+	// parse unions
 	unions := jsonRoot.Map("unions")
 	pkg.Unions = make([]Union, unions.Len())
 	for i := 0; i < unions.Len(); i++ {
@@ -188,7 +196,7 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.RefMap[toApiType(union.Name)] = union.Name
 	}
 
-	// load messages
+	// parse messages
 	messages := jsonRoot.Map("messages")
 	pkg.Messages = make([]Message, messages.Len())
 	for i := 0; i < messages.Len(); i++ {
@@ -201,7 +209,29 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.Messages[i] = *msg
 	}
 
-	// TODO: load services
+	// parse services
+	services := jsonRoot.Map("services")
+	if services.GetType() == jsongo.TypeMap {
+		pkg.Services = make([]Service, services.Len())
+		for i, key := range services.GetKeys() {
+			svcNode := services.At(key)
+
+			svc, err := parseService(ctx, key.(string), svcNode)
+			if err != nil {
+				return nil, err
+			}
+			pkg.Services[i] = *svc
+		}
+
+		// sort services
+		sort.Slice(pkg.Services, func(i, j int) bool {
+			// dumps first
+			if pkg.Services[i].Stream != pkg.Services[j].Stream {
+				return pkg.Services[i].Stream
+			}
+			return pkg.Services[i].RequestType < pkg.Services[j].RequestType
+		})
+	}
 
 	printPackage(&pkg)
 
@@ -232,6 +262,18 @@ func printPackage(pkg *Package) {
 		logf("loaded %d messages:", len(pkg.Messages))
 		for _, msg := range pkg.Messages {
 			logf(" - message: %q (%d fields)", msg.Name, len(msg.Fields))
+		}
+	}
+	if len(pkg.Services) > 0 {
+		logf("loaded %d services:", len(pkg.Services))
+		for _, svc := range pkg.Services {
+			var info string
+			if svc.Stream {
+				info = "(STREAM)"
+			} else if len(svc.Events) > 0 {
+				info = fmt.Sprintf("(EVENTS: %v)", svc.Events)
+			}
+			logf(" - service: %q -> %q %s", svc.RequestType, svc.ReplyType, info)
 		}
 	}
 }
@@ -429,6 +471,65 @@ func parseField(ctx *context, field *jsongo.JSONNode) (*Field, error) {
 	}, nil
 }
 
+// parseService parses VPP binary API service object from JSON node
+func parseService(ctx *context, svcName string, svcNode *jsongo.JSONNode) (*Service, error) {
+	if svcNode.Len() == 0 || svcNode.At("reply").GetType() != jsongo.TypeValue {
+		return nil, errors.New("invalid JSON for service specified")
+	}
+
+	svc := Service{
+		RequestType: svcName,
+	}
+
+	if replyNode := svcNode.At("reply"); replyNode.GetType() == jsongo.TypeValue {
+		reply, ok := replyNode.Get().(string)
+		if !ok {
+			return nil, fmt.Errorf("service reply is %T, not a string", replyNode.Get())
+		}
+		// some binapi messages might have `null` reply (for example: memclnt)
+		if reply != "null" {
+			svc.ReplyType = reply
+		}
+	}
+
+	// stream service (dumps)
+	if streamNode := svcNode.At("stream"); streamNode.GetType() == jsongo.TypeValue {
+		var ok bool
+		svc.Stream, ok = streamNode.Get().(bool)
+		if !ok {
+			return nil, fmt.Errorf("service stream is %T, not a string", streamNode.Get())
+		}
+	}
+
+	// events service (event subscription)
+	if eventsNode := svcNode.At("events"); eventsNode.GetType() == jsongo.TypeArray {
+		for j := 0; j < eventsNode.Len(); j++ {
+			event := eventsNode.At(j).Get().(string)
+			svc.Events = append(svc.Events, event)
+		}
+	}
+
+	// validate service
+	if svc.Stream {
+		if !strings.HasSuffix(svc.RequestType, "_dump") ||
+			!strings.HasSuffix(svc.ReplyType, "_details") {
+			fmt.Printf("Invalid STREAM SERVICE: %+v\n", svc)
+		}
+	} else if len(svc.Events) > 0 {
+		if (!strings.HasSuffix(svc.RequestType, "_events") &&
+			!strings.HasSuffix(svc.RequestType, "_stats")) ||
+			!strings.HasSuffix(svc.ReplyType, "_reply") {
+			fmt.Printf("Invalid EVENTS SERVICE: %+v\n", svc)
+		}
+	} else if svc.ReplyType != "" {
+		if !strings.HasSuffix(svc.ReplyType, "_reply") {
+			fmt.Printf("Invalid SERVICE: %+v\n", svc)
+		}
+	}
+
+	return &svc, nil
+}
+
 // convertToGoType translates the VPP binary API type into Go type
 func convertToGoType(ctx *context, binapiType string) (typ string) {
 	if t, ok := binapiTypes[binapiType]; ok {
@@ -436,85 +537,11 @@ func convertToGoType(ctx *context, binapiType string) (typ string) {
 		typ = t
 	} else if r, ok := ctx.packageData.RefMap[binapiType]; ok {
 		// specific types (enums/types/unions)
-		typ = camelCaseName(strings.Title(r))
+		typ = camelCaseName(r)
 	} else {
 		// fallback type
 		log.Printf("found unknown VPP binary API type %q, using byte", binapiType)
 		typ = "byte"
 	}
-
 	return typ
-}
-
-// isNotSpace returns true if the rune is NOT a whitespace character.
-func isNotSpace(r rune) bool {
-	return !unicode.IsSpace(r)
-}
-
-// camelCaseName returns correct name identifier (camelCase).
-func camelCaseName(name string) (should string) {
-	// Fast path for simple cases: "_" and all lowercase.
-	if name == "_" {
-		return name
-	}
-	allLower := true
-	for _, r := range name {
-		if !unicode.IsLower(r) {
-			allLower = false
-			break
-		}
-	}
-	if allLower {
-		return name
-	}
-
-	// Split camelCase at any lower->upper transition, and split on underscores.
-	// Check each word for common initialisms.
-	runes := []rune(name)
-	w, i := 0, 0 // index of start of word, scan
-	for i+1 <= len(runes) {
-		eow := false // whether we hit the end of a word
-		if i+1 == len(runes) {
-			eow = true
-		} else if runes[i+1] == '_' {
-			// underscore; shift the remainder forward over any run of underscores
-			eow = true
-			n := 1
-			for i+n+1 < len(runes) && runes[i+n+1] == '_' {
-				n++
-			}
-
-			// Leave at most one underscore if the underscore is between two digits
-			if i+n+1 < len(runes) && unicode.IsDigit(runes[i]) && unicode.IsDigit(runes[i+n+1]) {
-				n--
-			}
-
-			copy(runes[i+1:], runes[i+n+1:])
-			runes = runes[:len(runes)-n]
-		} else if unicode.IsLower(runes[i]) && !unicode.IsLower(runes[i+1]) {
-			// lower->non-lower
-			eow = true
-		}
-		i++
-		if !eow {
-			continue
-		}
-
-		// [w,i) is a word.
-		word := string(runes[w:i])
-		if u := strings.ToUpper(word); commonInitialisms[u] {
-			// Keep consistent case, which is lowercase only at the start.
-			if w == 0 && unicode.IsLower(runes[w]) {
-				u = strings.ToLower(u)
-			}
-			// All the common initialisms are ASCII,
-			// so we can replace the bytes exactly.
-			copy(runes[w:], []rune(u))
-		} else if w > 0 && strings.ToLower(word) == word {
-			// already all lowercase, and not the first word, so uppercase the first character.
-			runes[w] = unicode.ToUpper(runes[w])
-		}
-		w = i
-	}
-	return string(runes)
 }

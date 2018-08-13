@@ -21,6 +21,7 @@ import (
 	"io"
 	"path/filepath"
 	"strings"
+	"unicode"
 )
 
 const (
@@ -135,11 +136,24 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 		}
 	}
 
+	// generate services
+	if len(ctx.packageData.Services) > 0 {
+		fmt.Fprintf(w, "/* Services */\n\n")
+
+		fmt.Fprintf(w, "type %s interface {\n", "Services")
+		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
+		ctx.inputLine = 0
+		for _, svc := range ctx.packageData.Services {
+			generateService(ctx, w, &svc)
+		}
+		fmt.Fprintln(w, "}")
+	}
+
 	// generate message registrations
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "func init() {")
 	for _, msg := range ctx.packageData.Messages {
-		name := camelCaseName(strings.Title(msg.Name))
+		name := camelCaseName(msg.Name)
 		fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil))\n", name)
 	}
 	fmt.Fprintln(w, "}")
@@ -177,6 +191,7 @@ func generateHeader(ctx *context, w io.Writer) {
 	printObjNum("type", len(ctx.packageData.Types))
 	printObjNum("enum", len(ctx.packageData.Enums))
 	printObjNum("union", len(ctx.packageData.Unions))
+	printObjNum("services", len(ctx.packageData.Services))
 	fmt.Fprintln(w, "*/")
 	fmt.Fprintf(w, "package %s\n", ctx.packageName)
 	fmt.Fprintln(w)
@@ -198,6 +213,10 @@ func generateImports(ctx *context, w io.Writer) {
 // generateComment writes generated comment for the object into w
 func generateComment(ctx *context, w io.Writer, goName string, vppName string, objKind string) {
 	fmt.Fprintf(w, "// %s represents the VPP binary API %s '%s'.\n", goName, objKind, vppName)
+
+	var isNotSpace = func(r rune) bool {
+		return !unicode.IsSpace(r)
+	}
 
 	// print out the source of the generated object
 	objFound := false
@@ -234,8 +253,10 @@ func generateComment(ctx *context, w io.Writer, goName string, vppName string, o
 
 // generateEnum writes generated code for the enum into w
 func generateEnum(ctx *context, w io.Writer, enum *Enum) {
-	name := camelCaseName(strings.Title(enum.Name))
+	name := camelCaseName(enum.Name)
 	typ := binapiTypes[enum.Type]
+
+	logf(" writing enum %q (%s) with %d entries", enum.Name, name, len(enum.Entries))
 
 	// generate enum comment
 	generateComment(ctx, w, name, enum.Name, "enum")
@@ -258,7 +279,7 @@ func generateEnum(ctx *context, w io.Writer, enum *Enum) {
 
 // generateType writes generated code for the type into w
 func generateType(ctx *context, w io.Writer, typ *Type) {
-	name := camelCaseName(strings.Title(typ.Name))
+	name := camelCaseName(typ.Name)
 
 	logf(" writing type %q (%s) with %d fields", typ.Name, name, len(typ.Fields))
 
@@ -293,7 +314,7 @@ func generateType(ctx *context, w io.Writer, typ *Type) {
 
 // generateUnion writes generated code for the union into w
 func generateUnion(ctx *context, w io.Writer, union *Union) {
-	name := camelCaseName(strings.Title(union.Name))
+	name := camelCaseName(union.Name)
 
 	logf(" writing union %q (%s) with %d fields", union.Name, name, len(union.Fields))
 
@@ -321,7 +342,7 @@ func generateUnion(ctx *context, w io.Writer, union *Union) {
 
 	// generate getters for fields
 	for _, field := range union.Fields {
-		fieldName := camelCaseName(strings.Title(field.Name))
+		fieldName := camelCaseName(field.Name)
 		fieldType := convertToGoType(ctx, field.Type)
 		generateUnionGetterSetter(w, name, fieldName, fieldType)
 	}
@@ -377,7 +398,7 @@ func (u *%[1]s) Get%[2]s() (a %[3]s) {
 
 // generateMessage writes generated code for the message into w
 func generateMessage(ctx *context, w io.Writer, msg *Message) {
-	name := camelCaseName(strings.Title(msg.Name))
+	name := camelCaseName(msg.Name)
 
 	logf(" writing message %q (%s) with %d fields", msg.Name, name, len(msg.Fields))
 
@@ -387,15 +408,12 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	// generate struct definition
 	fmt.Fprintf(w, "type %s struct {", name)
 
-	//var buf = new(bytes.Buffer)
-
 	msgType := otherMessage
 	wasClientIndex := false
 
 	// generate struct fields
 	n := 0
 	for i, field := range msg.Fields {
-		logf("msg.Name: %s, field.Name: %s, i: %d", msg.Name, field.Name, i)
 		if i == 1 {
 			if field.Name == "client_index" {
 				// "client_index" as the second member, this might be an event message or a request
@@ -450,7 +468,7 @@ func generateField(ctx *context, w io.Writer, fields []Field, i int) {
 	field := fields[i]
 
 	fieldName := strings.TrimPrefix(field.Name, "_")
-	fieldName = camelCaseName(strings.Title(fieldName))
+	fieldName = camelCaseName(fieldName)
 
 	dataType := convertToGoType(ctx, field.Type)
 
@@ -470,13 +488,34 @@ func generateField(ctx *context, w io.Writer, fields []Field, i int) {
 		for _, f := range fields {
 			if f.SizeFrom == field.Name {
 				// variable sized array
-				sizeOfName := camelCaseName(strings.Title(f.Name))
+				sizeOfName := camelCaseName(f.Name)
 				fmt.Fprintf(w, "\t`struc:\"sizeof=%s\"`", sizeOfName)
 			}
 		}
 	}
 
 	fmt.Fprintln(w)
+}
+
+// generateService writes generated code for the service into w
+func generateService(ctx *context, w io.Writer, svc *Service) {
+	reqTyp := camelCaseName(svc.RequestType)
+
+	// method name is same as parameter type name by default
+	method := reqTyp
+	if svc.Stream {
+		// use Dump as prefix instead of suffix for stream services
+		if m := strings.TrimSuffix(method, "Dump"); method != m {
+			method = "Dump" + m
+		}
+	}
+	params := fmt.Sprintf("*%s", reqTyp)
+	returns := "error"
+	if replyTyp := camelCaseName(svc.ReplyType); replyTyp != "" {
+		returns = fmt.Sprintf("(*%s, error)", replyTyp)
+	}
+
+	fmt.Fprintf(w, "\t%s(%s) %s\n", method, params, returns)
 }
 
 // generateMessageNameGetter generates getter for original VPP message name into the provider writer
