@@ -16,9 +16,6 @@
 // govpp API for interface counters together with asynchronous connection to VPP.
 package main
 
-// Generates Go bindings for all VPP APIs located in the json directory.
-//go:generate binapi-generator --input-dir=../../bin_api --output-dir=../../bin_api
-
 import (
 	"fmt"
 	"os"
@@ -102,8 +99,8 @@ loop:
 
 // subscribeNotifications subscribes for interface counters notifications.
 func subscribeNotifications(ch api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
-
 	notifChan := make(chan api.Message, 100)
+
 	simpleCountersSubs, err := ch.SubscribeNotification(notifChan, stats.NewVnetInterfaceSimpleCounters)
 	if err != nil {
 		panic(err)
@@ -119,7 +116,7 @@ func subscribeNotifications(ch api.Channel) (*api.NotifSubscription, *api.NotifS
 // requestStatistics requests interface counters notifications from VPP.
 func requestStatistics(ch api.Channel) {
 	if err := ch.SendRequest(&stats.WantStats{
-		Pid:           uint32(os.Getpid()),
+		PID:           uint32(os.Getpid()),
 		EnableDisable: 1,
 	}).ReceiveReply(&stats.WantStatsReply{}); err != nil {
 		panic(err)

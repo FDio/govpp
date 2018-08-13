@@ -88,7 +88,7 @@ func NewControlPing() api.Message {
 type ControlPingReply struct {
 	Retval      int32
 	ClientIndex uint32
-	VpePid      uint32
+	VpePID      uint32
 }
 
 func (*ControlPingReply) GetMessageName() string {

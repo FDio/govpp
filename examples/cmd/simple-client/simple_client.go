@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Binary simple-client is an example VPP management application that exercises the
+// simple-client is an example VPP management application that exercises the
 // govpp API on real-world use-cases.
 package main
-
-// Generates Go bindings for all VPP APIs located in the json directory.
-//go:generate binapi-generator --input-dir=../../bin_api --output-dir=../../bin_api
 
 import (
 	"fmt"
@@ -211,7 +208,7 @@ func interfaceNotifications(ch api.Channel) {
 
 	// enable interface events in VPP
 	err = ch.SendRequest(&interfaces.WantInterfaceEvents{
-		Pid:           uint32(os.Getpid()),
+		PID:           uint32(os.Getpid()),
 		EnableDisable: 1,
 	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
 	if err != nil {

@@ -2556,8 +2556,23 @@
             }
         ]
     ],
-    "vl_api_version": "0xc80dc75",
-    "unions": [],
+    "vl_api_version": "0xff691c00",
+    "unions": [
+        [
+            "address_union",
+            [
+                "vl_api_ip4_address_t",
+                "ip4"
+            ],
+            [
+                "vl_api_ip6_address_t",
+                "ip6"
+            ],
+            {
+                "crc": "0xd68a2fb4"
+            }
+        ]
+    ],
     "services": {
         "ip_address_dump": {
             "reply": "ip_address_details",
@@ -2707,8 +2722,73 @@
             "reply": "ioam_disable_reply"
         }
     },
-    "enums": [],
+    "enums": [
+        [
+            "address_family",
+            [
+                "ADDRESS_IP4",
+                0
+            ],
+            [
+                "ADDRESS_IP6",
+                1
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ]
+    ],
     "types": [
+        [
+            "ip4_address",
+            [
+                "u8",
+                "address",
+                4
+            ],
+            {
+                "crc": "0xfc4baa28"
+            }
+        ],
+        [
+            "ip6_address",
+            [
+                "u8",
+                "address",
+                16
+            ],
+            {
+                "crc": "0xad99ccc2"
+            }
+        ],
+        [
+            "address",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "vl_api_address_union_t",
+                "un"
+            ],
+            {
+                "crc": "0x09f11671"
+            }
+        ],
+        [
+            "prefix",
+            [
+                "vl_api_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "address_length"
+            ],
+            {
+                "crc": "0x0403aebc"
+            }
+        ],
         [
             "fib_mpls_label",
             [
