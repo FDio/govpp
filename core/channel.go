@@ -17,6 +17,8 @@ package core
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"strings"
 	"time"
 
 	"git.fd.io/govpp.git/api"
@@ -252,7 +254,20 @@ func (ch *channel) processReply(reply *api.VppReply, expSeqNum uint16, msg api.M
 	}
 
 	// decode the message
-	err = ch.msgDecoder.DecodeMsg(reply.Data, msg)
+	if err = ch.msgDecoder.DecodeMsg(reply.Data, msg); err != nil {
+		return
+	}
+
+	// check Retval and convert it into VnetAPIError error
+	if strings.HasSuffix(msg.GetMessageName(), "_reply") {
+		// TODO: use categories for messages to avoid checking message name
+		if f := reflect.Indirect(reflect.ValueOf(msg)).FieldByName("Retval"); f.IsValid() {
+			if retval := f.Int(); retval != 0 {
+				err = api.VPPApiError(retval)
+			}
+		}
+	}
+
 	return
 }
 
