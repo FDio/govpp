@@ -149,12 +149,14 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 		fmt.Fprintln(w, "}")
 	}
 
+	// TODO: generate implementation for Services interface
+
 	// generate message registrations
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "func init() {")
 	for _, msg := range ctx.packageData.Messages {
 		name := camelCaseName(msg.Name)
-		fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil))\n", name)
+		fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil), \"%s\")\n", name, ctx.moduleName+"."+name)
 	}
 	fmt.Fprintln(w, "}")
 

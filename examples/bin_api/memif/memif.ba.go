@@ -533,14 +533,14 @@ type Services interface {
 }
 
 func init() {
-	api.RegisterMessage((*MemifSocketFilenameAddDel)(nil))
-	api.RegisterMessage((*MemifSocketFilenameAddDelReply)(nil))
-	api.RegisterMessage((*MemifCreate)(nil))
-	api.RegisterMessage((*MemifCreateReply)(nil))
-	api.RegisterMessage((*MemifDelete)(nil))
-	api.RegisterMessage((*MemifDeleteReply)(nil))
-	api.RegisterMessage((*MemifSocketFilenameDetails)(nil))
-	api.RegisterMessage((*MemifSocketFilenameDump)(nil))
-	api.RegisterMessage((*MemifDetails)(nil))
-	api.RegisterMessage((*MemifDump)(nil))
+	api.RegisterMessage((*MemifSocketFilenameAddDel)(nil), "memif.MemifSocketFilenameAddDel")
+	api.RegisterMessage((*MemifSocketFilenameAddDelReply)(nil), "memif.MemifSocketFilenameAddDelReply")
+	api.RegisterMessage((*MemifCreate)(nil), "memif.MemifCreate")
+	api.RegisterMessage((*MemifCreateReply)(nil), "memif.MemifCreateReply")
+	api.RegisterMessage((*MemifDelete)(nil), "memif.MemifDelete")
+	api.RegisterMessage((*MemifDeleteReply)(nil), "memif.MemifDeleteReply")
+	api.RegisterMessage((*MemifSocketFilenameDetails)(nil), "memif.MemifSocketFilenameDetails")
+	api.RegisterMessage((*MemifSocketFilenameDump)(nil), "memif.MemifSocketFilenameDump")
+	api.RegisterMessage((*MemifDetails)(nil), "memif.MemifDetails")
+	api.RegisterMessage((*MemifDump)(nil), "memif.MemifDump")
 }

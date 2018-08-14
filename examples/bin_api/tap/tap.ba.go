@@ -442,12 +442,12 @@ type Services interface {
 }
 
 func init() {
-	api.RegisterMessage((*TapConnect)(nil))
-	api.RegisterMessage((*TapConnectReply)(nil))
-	api.RegisterMessage((*TapModify)(nil))
-	api.RegisterMessage((*TapModifyReply)(nil))
-	api.RegisterMessage((*TapDelete)(nil))
-	api.RegisterMessage((*TapDeleteReply)(nil))
-	api.RegisterMessage((*SwInterfaceTapDump)(nil))
-	api.RegisterMessage((*SwInterfaceTapDetails)(nil))
+	api.RegisterMessage((*TapConnect)(nil), "tap.TapConnect")
+	api.RegisterMessage((*TapConnectReply)(nil), "tap.TapConnectReply")
+	api.RegisterMessage((*TapModify)(nil), "tap.TapModify")
+	api.RegisterMessage((*TapModifyReply)(nil), "tap.TapModifyReply")
+	api.RegisterMessage((*TapDelete)(nil), "tap.TapDelete")
+	api.RegisterMessage((*TapDeleteReply)(nil), "tap.TapDeleteReply")
+	api.RegisterMessage((*SwInterfaceTapDump)(nil), "tap.SwInterfaceTapDump")
+	api.RegisterMessage((*SwInterfaceTapDetails)(nil), "tap.SwInterfaceTapDetails")
 }

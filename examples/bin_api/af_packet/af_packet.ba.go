@@ -368,12 +368,12 @@ type Services interface {
 }
 
 func init() {
-	api.RegisterMessage((*AfPacketCreate)(nil))
-	api.RegisterMessage((*AfPacketCreateReply)(nil))
-	api.RegisterMessage((*AfPacketDelete)(nil))
-	api.RegisterMessage((*AfPacketDeleteReply)(nil))
-	api.RegisterMessage((*AfPacketSetL4CksumOffload)(nil))
-	api.RegisterMessage((*AfPacketSetL4CksumOffloadReply)(nil))
-	api.RegisterMessage((*AfPacketDump)(nil))
-	api.RegisterMessage((*AfPacketDetails)(nil))
+	api.RegisterMessage((*AfPacketCreate)(nil), "af_packet.AfPacketCreate")
+	api.RegisterMessage((*AfPacketCreateReply)(nil), "af_packet.AfPacketCreateReply")
+	api.RegisterMessage((*AfPacketDelete)(nil), "af_packet.AfPacketDelete")
+	api.RegisterMessage((*AfPacketDeleteReply)(nil), "af_packet.AfPacketDeleteReply")
+	api.RegisterMessage((*AfPacketSetL4CksumOffload)(nil), "af_packet.AfPacketSetL4CksumOffload")
+	api.RegisterMessage((*AfPacketSetL4CksumOffloadReply)(nil), "af_packet.AfPacketSetL4CksumOffloadReply")
+	api.RegisterMessage((*AfPacketDump)(nil), "af_packet.AfPacketDump")
+	api.RegisterMessage((*AfPacketDetails)(nil), "af_packet.AfPacketDetails")
 }

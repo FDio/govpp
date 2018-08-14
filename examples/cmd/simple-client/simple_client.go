@@ -26,7 +26,7 @@ import (
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/examples/bin_api/acl"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
-	"git.fd.io/govpp.git/examples/bin_api/tap"
+	"git.fd.io/govpp.git/examples/bin_api/ip"
 )
 
 func main() {
@@ -48,31 +48,18 @@ func main() {
 	}
 	defer ch.Close()
 
-	// check whether the VPP supports our version of some messages
-	compatibilityCheck(ch)
-
 	// individual examples
 	aclVersion(ch)
 	aclConfig(ch)
 	aclDump(ch)
 
-	tapConnect(ch)
-
 	interfaceDump(ch)
-	interfaceNotifications(ch)
-}
+	ipAddressDump(ch)
 
-// compatibilityCheck shows how an management application can check whether generated API messages are
-// compatible with the version of VPP which the library is connected to.
-func compatibilityCheck(ch api.Channel) {
-	err := ch.CheckMessageCompatibility(
-		&interfaces.SwInterfaceDump{},
-		&interfaces.SwInterfaceDetails{},
-	)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	setIpUnnumbered(ch)
+	ipUnnumberedDump(ch)
+
+	interfaceNotifications(ch)
 }
 
 // aclVersion is the simplest API example - one empty request message and one reply message.
@@ -135,39 +122,7 @@ func aclDump(ch api.Channel) {
 	req := &acl.ACLDump{}
 	reply := &acl.ACLDetails{}
 
-	reqCtx := ch.SendRequest(req)
-	err := reqCtx.ReceiveReply(reply)
-
-	if err != nil {
-		fmt.Println("Error:", err)
-	} else {
-		fmt.Printf("%+v\n", reply)
-	}
-}
-
-// tapConnect example shows how the Go channels in the API channel can be accessed directly instead
-// of using SendRequest and ReceiveReply wrappers.
-func tapConnect(ch api.Channel) {
-	req := &tap.TapConnect{
-		TapName:      []byte("testtap"),
-		UseRandomMac: 1,
-	}
-
-	// send the request to the request go channel
-	ch.GetRequestChannel() <- &api.VppRequest{Message: req}
-
-	// receive a reply from the reply go channel
-	vppReply := <-ch.GetReplyChannel()
-	if vppReply.Error != nil {
-		fmt.Println("Error:", vppReply.Error)
-		return
-	}
-
-	// decode the message
-	reply := &tap.TapConnectReply{}
-	err := ch.GetMessageDecoder().DecodeMsg(vppReply.Data, reply)
-
-	if err != nil {
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
 		fmt.Println("Error:", err)
 	} else {
 		fmt.Printf("%+v\n", reply)
@@ -176,6 +131,8 @@ func tapConnect(ch api.Channel) {
 
 // interfaceDump shows an example of multipart request (multiple replies are expected).
 func interfaceDump(ch api.Channel) {
+	fmt.Println("Dumping interfaces")
+
 	req := &interfaces.SwInterfaceDump{}
 	reqCtx := ch.SendMultiRequest(req)
 
@@ -192,6 +149,64 @@ func interfaceDump(ch api.Channel) {
 			return r == 0x00
 		})
 		fmt.Printf("Interface: %q %+v\n", ifaceName, msg)
+	}
+}
+
+func ipAddressDump(ch api.Channel) {
+	fmt.Println("Dumping IP addresses")
+
+	req := &ip.IPAddressDump{
+		SwIfIndex: 1, //^uint32(0),
+	}
+	reqCtx := ch.SendMultiRequest(req)
+
+	for {
+		msg := &ip.IPAddressDetails{}
+		stop, err := reqCtx.ReceiveReply(msg)
+		if stop {
+			break // break out of the loop
+		}
+		if err != nil {
+			fmt.Println("ERROR:", err)
+		}
+		fmt.Printf("ip address: %d %+v\n", msg.SwIfIndex, msg)
+	}
+}
+
+// aclDump shows an example where SendRequest and ReceiveReply are not chained together.
+func setIpUnnumbered(ch api.Channel) {
+	req := &interfaces.SwInterfaceSetUnnumbered{
+		SwIfIndex:           1,
+		UnnumberedSwIfIndex: 2,
+		IsAdd:               1,
+	}
+	reply := &interfaces.SwInterfaceSetUnnumberedReply{}
+
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Printf("%+v\n", reply)
+	}
+}
+
+func ipUnnumberedDump(ch api.Channel) {
+	fmt.Println("Dumping IP unnumbered")
+
+	req := &ip.IPUnnumberedDump{
+		SwIfIndex: ^uint32(0),
+	}
+	reqCtx := ch.SendMultiRequest(req)
+
+	for {
+		msg := &ip.IPUnnumberedDetails{}
+		stop, err := reqCtx.ReceiveReply(msg)
+		if stop {
+			break // break out of the loop
+		}
+		if err != nil {
+			fmt.Println("ERROR:", err)
+		}
+		fmt.Printf("ip unnumbered: %+v\n", msg)
 	}
 }
 
@@ -234,6 +249,15 @@ func interfaceNotifications(ch api.Channel) {
 	// receive one notification
 	notif := (<-notifChan).(*interfaces.SwInterfaceEvent)
 	fmt.Printf("NOTIF: %+v\n", notif)
+
+	// disable interface events in VPP
+	err = ch.SendRequest(&interfaces.WantInterfaceEvents{
+		PID:           uint32(os.Getpid()),
+		EnableDisable: 0,
+	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
+	if err != nil {
+		panic(err)
+	}
 
 	// unsubscribe from delivery of the notifications
 	err = ch.UnsubscribeNotification(subs)
