@@ -210,8 +210,6 @@ func (a *VppAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	a.msgNameToIds[msgName] = msgID
 	a.msgIDsToName[msgID] = msgName
 
-	log.Println("VPP GetMessageId ", msgID, " name:", msgName, " crc:", msgCrc)
-
 	return msgID, nil
 }
 

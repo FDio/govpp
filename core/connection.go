@@ -242,7 +242,9 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 			msgControlPingReply = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 		}
 
-		log.Debugf("message %q (%s) has ID: %d", name, getMsgNameWithCrc(msg), msgID)
+		if debugMsgIDs {
+			log.Debugf("message %q (%s) has ID: %d", name, getMsgNameWithCrc(msg), msgID)
+		}
 	}
 
 	log.Debugf("retrieving %d message IDs took %s", len(msgs), time.Since(t))

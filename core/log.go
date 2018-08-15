@@ -7,13 +7,18 @@ import (
 )
 
 var (
+	debug       = os.Getenv("DEBUG_GOVPP") != ""
+	debugMsgIDs = os.Getenv("DEBUG_GOVPP_MSGIDS") != ""
+
 	log = logger.New() // global logger
 )
 
 // init initializes global logger, which logs debug level messages to stdout.
 func init() {
 	log.Out = os.Stdout
-	log.Level = logger.DebugLevel
+	if debug {
+		log.Level = logger.DebugLevel
+	}
 }
 
 // SetLogger sets global logger to l.
