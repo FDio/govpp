@@ -1,6 +1,9 @@
 package api
 
-import "fmt"
+import (
+	"fmt"
+	"strconv"
+)
 
 // VPPApiError represents VPP's vnet API error that is usually
 // returned as Retval field in replies from VPP binary API.
@@ -11,7 +14,7 @@ func (e VPPApiError) Error() string {
 	if s, ok := vppApiErrors[e]; ok {
 		errstr = s
 	} else {
-		errstr = fmt.Sprint(e)
+		errstr = strconv.Itoa(int(e))
 	}
 	return fmt.Sprintf("VPPApiError: %s", errstr)
 }
