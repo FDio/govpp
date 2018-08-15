@@ -1,29 +1,4 @@
 {
-    "services": [
-        {
-            "sw_interface_tap_dump": {
-                "reply": "sw_interface_tap_details",
-                "stream": true
-            }
-        },
-        {
-            "tap_connect": {
-                "reply": "tap_connect_reply"
-            }
-        },
-        {
-            "tap_modify": {
-                "reply": "tap_modify_reply"
-            }
-        },
-        {
-            "tap_delete": {
-                "reply": "tap_delete_reply"
-            }
-        }
-    ],
-    "vl_api_version": "0x3a0725de",
-    "enums": [],
     "messages": [
         [
             "tap_connect",
@@ -266,5 +241,23 @@
             }
         ]
     ],
+    "vl_api_version": "0xacec1ba1",
+    "unions": [],
+    "services": {
+        "tap_delete": {
+            "reply": "tap_delete_reply"
+        },
+        "sw_interface_tap_dump": {
+            "reply": "sw_interface_tap_details",
+            "stream": true
+        },
+        "tap_modify": {
+            "reply": "tap_modify_reply"
+        },
+        "tap_connect": {
+            "reply": "tap_connect_reply"
+        }
+    },
+    "enums": [],
     "types": []
 }

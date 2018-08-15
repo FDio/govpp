@@ -1,109 +1,4 @@
 {
-    "services": [
-        {
-            "create_subif": {
-                "reply": "create_subif_reply"
-            }
-        },
-        {
-            "delete_subif": {
-                "reply": "delete_subif_reply"
-            }
-        },
-        {
-            "sw_interface_tag_add_del": {
-                "reply": "sw_interface_tag_add_del_reply"
-            }
-        },
-        {
-            "sw_interface_event": {
-                "reply": null
-            }
-        },
-        {
-            "sw_interface_set_rx_mode": {
-                "reply": "sw_interface_set_rx_mode_reply"
-            }
-        },
-        {
-            "sw_interface_dump": {
-                "reply": "sw_interface_details",
-                "stream": true
-            }
-        },
-        {
-            "sw_interface_get_table": {
-                "reply": "sw_interface_get_table_reply"
-            }
-        },
-        {
-            "sw_interface_add_del_address": {
-                "reply": "sw_interface_add_del_address_reply"
-            }
-        },
-        {
-            "interface_name_renumber": {
-                "reply": "interface_name_renumber_reply"
-            }
-        },
-        {
-            "create_loopback_instance": {
-                "reply": "create_loopback_instance_reply"
-            }
-        },
-        {
-            "sw_interface_set_mtu": {
-                "reply": "sw_interface_set_mtu_reply"
-            }
-        },
-        {
-            "create_loopback": {
-                "reply": "create_loopback_reply"
-            }
-        },
-        {
-            "sw_interface_clear_stats": {
-                "reply": "sw_interface_clear_stats_reply"
-            }
-        },
-        {
-            "create_vlan_subif": {
-                "reply": "create_vlan_subif_reply"
-            }
-        },
-        {
-            "sw_interface_set_mac_address": {
-                "reply": "sw_interface_set_mac_address_reply"
-            }
-        },
-        {
-            "sw_interface_set_table": {
-                "reply": "sw_interface_set_table_reply"
-            }
-        },
-        {
-            "sw_interface_set_flags": {
-                "reply": "sw_interface_set_flags_reply"
-            }
-        },
-        {
-            "delete_loopback": {
-                "reply": "delete_loopback_reply"
-            }
-        },
-        {
-            "want_interface_events": {
-                "reply": "want_interface_events_reply"
-            }
-        },
-        {
-            "sw_interface_set_unnumbered": {
-                "reply": "sw_interface_set_unnumbered_reply"
-            }
-        }
-    ],
-    "vl_api_version": "0xa9b5d13",
-    "enums": [],
     "messages": [
         [
             "sw_interface_set_flags",
@@ -150,7 +45,7 @@
             }
         ],
         [
-            "sw_interface_set_mtu",
+            "hw_interface_set_mtu",
             [
                 "u16",
                 "_vl_msg_id"
@@ -173,6 +68,51 @@
             ],
             {
                 "crc": "0x132da1e7"
+            }
+        ],
+        [
+            "hw_interface_set_mtu_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "sw_interface_set_mtu",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "mtu",
+                4
+            ],
+            {
+                "crc": "0xd0008db8"
             }
         ],
         [
@@ -325,6 +265,11 @@
             ],
             [
                 "u32",
+                "mtu",
+                4
+            ],
+            [
+                "u32",
                 "sub_id"
             ],
             [
@@ -407,7 +352,7 @@
                 "i_sid"
             ],
             {
-                "crc": "0x23dee0ff"
+                "crc": "0x09b4b510"
             }
         ],
         [
@@ -595,110 +540,6 @@
             }
         ],
         [
-            "vnet_interface_simple_counters",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u8",
-                "vnet_counter_type"
-            ],
-            [
-                "u32",
-                "first_sw_if_index"
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "u64",
-                "data",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0x9bc4a808"
-            }
-        ],
-        [
-            "vnet_interface_combined_counters",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u8",
-                "vnet_counter_type"
-            ],
-            [
-                "u32",
-                "first_sw_if_index"
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "vl_api_vlib_counter_t",
-                "data",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0x2c595002"
-            }
-        ],
-        [
-            "vnet_per_interface_simple_counters",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "u32",
-                "timestamp"
-            ],
-            [
-                "vl_api_vnet_simple_counter_t",
-                "data",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0xd1fba9ba"
-            }
-        ],
-        [
-            "vnet_per_interface_combined_counters",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "u32",
-                "timestamp"
-            ],
-            [
-                "vl_api_vnet_combined_counter_t",
-                "data",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0xdc578375"
-            }
-        ],
-        [
             "sw_interface_set_unnumbered",
             [
                 "u16",
@@ -878,6 +719,51 @@
             ],
             {
                 "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "sw_interface_get_mac_address",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            {
+                "crc": "0x529cb13f"
+            }
+        ],
+        [
+            "sw_interface_get_mac_address_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "u8",
+                "mac_address",
+                6
+            ],
+            {
+                "crc": "0x8ea538d3"
             }
         ],
         [
@@ -1289,8 +1175,127 @@
             {
                 "crc": "0xe8d4e804"
             }
+        ],
+        [
+            "collect_detailed_interface_stats",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "enable_disable"
+            ],
+            {
+                "crc": "0x69d24598"
+            }
+        ],
+        [
+            "collect_detailed_interface_stats_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
         ]
     ],
+    "vl_api_version": "0x6a38a271",
+    "unions": [],
+    "services": {
+        "create_subif": {
+            "reply": "create_subif_reply"
+        },
+        "delete_subif": {
+            "reply": "delete_subif_reply"
+        },
+        "sw_interface_tag_add_del": {
+            "reply": "sw_interface_tag_add_del_reply"
+        },
+        "collect_detailed_interface_stats": {
+            "reply": "collect_detailed_interface_stats_reply"
+        },
+        "sw_interface_dump": {
+            "reply": "sw_interface_details",
+            "stream": true
+        },
+        "sw_interface_add_del_address": {
+            "reply": "sw_interface_add_del_address_reply"
+        },
+        "sw_interface_get_table": {
+            "reply": "sw_interface_get_table_reply"
+        },
+        "interface_name_renumber": {
+            "reply": "interface_name_renumber_reply"
+        },
+        "create_loopback_instance": {
+            "reply": "create_loopback_instance_reply"
+        },
+        "sw_interface_get_mac_address": {
+            "reply": "sw_interface_get_mac_address_reply"
+        },
+        "want_interface_events": {
+            "reply": "want_interface_events_reply",
+            "events": [
+                "sw_interface_event"
+            ]
+        },
+        "create_loopback": {
+            "reply": "create_loopback_reply"
+        },
+        "sw_interface_clear_stats": {
+            "reply": "sw_interface_clear_stats_reply"
+        },
+        "hw_interface_set_mtu": {
+            "reply": "hw_interface_set_mtu_reply"
+        },
+        "sw_interface_set_mac_address": {
+            "reply": "sw_interface_set_mac_address_reply"
+        },
+        "sw_interface_set_table": {
+            "reply": "sw_interface_set_table_reply"
+        },
+        "sw_interface_set_mtu": {
+            "reply": "sw_interface_set_mtu_reply"
+        },
+        "sw_interface_set_flags": {
+            "reply": "sw_interface_set_flags_reply"
+        },
+        "delete_loopback": {
+            "reply": "delete_loopback_reply"
+        },
+        "sw_interface_set_rx_mode": {
+            "reply": "sw_interface_set_rx_mode_reply"
+        },
+        "create_vlan_subif": {
+            "reply": "create_vlan_subif_reply"
+        },
+        "sw_interface_set_unnumbered": {
+            "reply": "sw_interface_set_unnumbered_reply"
+        }
+    },
+    "enums": [],
     "types": [
         [
             "vlib_counter",
@@ -1322,14 +1327,62 @@
             ],
             [
                 "u64",
+                "rx_unicast_packets"
+            ],
+            [
+                "u64",
+                "rx_unicast_bytes"
+            ],
+            [
+                "u64",
+                "rx_multicast_packets"
+            ],
+            [
+                "u64",
+                "rx_multicast_bytes"
+            ],
+            [
+                "u64",
+                "rx_broadcast_packets"
+            ],
+            [
+                "u64",
+                "rx_broadcast_bytes"
+            ],
+            [
+                "u64",
                 "tx_packets"
             ],
             [
                 "u64",
                 "tx_bytes"
             ],
+            [
+                "u64",
+                "tx_unicast_packets"
+            ],
+            [
+                "u64",
+                "tx_unicast_bytes"
+            ],
+            [
+                "u64",
+                "tx_multicast_packets"
+            ],
+            [
+                "u64",
+                "tx_multicast_bytes"
+            ],
+            [
+                "u64",
+                "tx_broadcast_packets"
+            ],
+            [
+                "u64",
+                "tx_broadcast_bytes"
+            ],
             {
-                "crc": "0x3217ba8e"
+                "crc": "0x20905ca4"
             }
         ],
         [
