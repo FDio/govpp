@@ -160,7 +160,7 @@ func (c *Connection) msgCallback(msgID uint16, context uint32, data []byte) {
 	msgContext, err := c.codec.DecodeMsgContext(data, msg)
 	if err == nil {
 		if context != msgContext {
-			log.Warnf("different context was decoded from message (%d -> %d)", context, msgContext)
+			log.Debugf("different context was decoded from message (%d -> %d)", context, msgContext)
 			context = msgContext
 		}
 	} else {
