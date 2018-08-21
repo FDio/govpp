@@ -504,13 +504,7 @@ func generateService(ctx *context, w io.Writer, svc *Service) {
 	reqTyp := camelCaseName(svc.RequestType)
 
 	// method name is same as parameter type name by default
-	method := reqTyp
-	if svc.Stream {
-		// use Dump as prefix instead of suffix for stream services
-		if m := strings.TrimSuffix(method, "Dump"); method != m {
-			method = "Dump" + m
-		}
-	}
+	method := svc.MethodName()
 	params := fmt.Sprintf("*%s", reqTyp)
 	returns := "error"
 	if replyTyp := camelCaseName(svc.ReplyType); replyTyp != "" {
@@ -521,25 +515,28 @@ func generateService(ctx *context, w io.Writer, svc *Service) {
 }
 
 // generateMessageNameGetter generates getter for original VPP message name into the provider writer
-func generateMessageNameGetter(w io.Writer, structName string, msgName string) {
-	fmt.Fprintln(w, "func (*"+structName+") GetMessageName() string {")
-	fmt.Fprintln(w, "\treturn \""+msgName+"\"")
-	fmt.Fprintln(w, "}")
+func generateMessageNameGetter(w io.Writer, structName, msgName string) {
+	fmt.Fprintf(w, `func (*%s) GetMessageName() string {
+	return %q
+}
+`, structName, msgName)
 }
 
 // generateTypeNameGetter generates getter for original VPP type name into the provider writer
-func generateTypeNameGetter(w io.Writer, structName string, msgName string) {
-	fmt.Fprintln(w, "func (*"+structName+") GetTypeName() string {")
-	fmt.Fprintln(w, "\treturn \""+msgName+"\"")
-	fmt.Fprintln(w, "}")
+func generateTypeNameGetter(w io.Writer, structName, msgName string) {
+	fmt.Fprintf(w, `func (*%s) GetTypeName() string {
+	return %q
+}
+`, structName, msgName)
 }
 
 // generateCrcGetter generates getter for CRC checksum of the message definition into the provider writer
-func generateCrcGetter(w io.Writer, structName string, crc string) {
+func generateCrcGetter(w io.Writer, structName, crc string) {
 	crc = strings.TrimPrefix(crc, "0x")
-	fmt.Fprintln(w, "func (*"+structName+") GetCrcString() string {")
-	fmt.Fprintln(w, "\treturn \""+crc+"\"")
-	fmt.Fprintln(w, "}")
+	fmt.Fprintf(w, `func (*%s) GetCrcString() string {
+	return %q
+}
+`, structName, crc)
 }
 
 // generateMessageTypeGetter generates message factory for the generated message into the provider writer
