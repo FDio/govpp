@@ -181,6 +181,7 @@ func generateHeader(ctx *context, w io.Writer) {
 	fmt.Fprintf(w, "\t%s\n", filepath.Base(ctx.inputFile))
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "It contains these VPP binary API objects:")
+
 	var printObjNum = func(obj string, num int) {
 		if num > 0 {
 			if num > 1 {
@@ -194,6 +195,7 @@ func generateHeader(ctx *context, w io.Writer) {
 	printObjNum("enum", len(ctx.packageData.Enums))
 	printObjNum("union", len(ctx.packageData.Unions))
 	printObjNum("service", len(ctx.packageData.Services))
+
 	fmt.Fprintln(w, "*/")
 	fmt.Fprintf(w, "package %s\n", ctx.packageName)
 	fmt.Fprintln(w)

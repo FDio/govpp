@@ -37,7 +37,7 @@ func setupTest(t *testing.T) *testCtx {
 	RegisterTestingT(t)
 
 	ctx := &testCtx{
-		mockVpp: &mock.VppAdapter{},
+		mockVpp: mock.NewVppAdapter(),
 	}
 
 	var err error

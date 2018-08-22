@@ -15,6 +15,8 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"os"
 	"testing"
 
@@ -25,7 +27,7 @@ func TestGetInputFiles(t *testing.T) {
 	RegisterTestingT(t)
 	result, err := getInputFiles("testdata")
 	Expect(err).ShouldNot(HaveOccurred())
-	Expect(result).To(HaveLen(5))
+	Expect(result).To(HaveLen(3))
 	for _, file := range result {
 		Expect(file).To(BeAnExistingFile())
 	}
@@ -45,10 +47,10 @@ func TestGenerateFromFile(t *testing.T) {
 	defer os.RemoveAll(outDir)
 	err := generateFromFile("testdata/acl.api.json", outDir)
 	Expect(err).ShouldNot(HaveOccurred())
-	fileInfo, err := os.Stat(outDir + "/acl/acl.go")
+	fileInfo, err := os.Stat(outDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(fileInfo.IsDir()).To(BeFalse())
-	Expect(fileInfo.Name()).To(BeEquivalentTo("acl.go"))
+	Expect(fileInfo.Name()).To(BeEquivalentTo("acl.ba.go"))
 }
 
 func TestGenerateFromFileInputError(t *testing.T) {
@@ -56,7 +58,7 @@ func TestGenerateFromFileInputError(t *testing.T) {
 	outDir := "test_output_directory"
 	err := generateFromFile("testdata/nonexisting.json", outDir)
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("reading data from file failed"))
+	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
 
 func TestGenerateFromFileReadJsonError(t *testing.T) {
@@ -64,7 +66,7 @@ func TestGenerateFromFileReadJsonError(t *testing.T) {
 	outDir := "test_output_directory"
 	err := generateFromFile("testdata/input-read-json-error.json", outDir)
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("JSON unmarshall failed"))
+	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
 
 func TestGenerateFromFileGeneratePackageError(t *testing.T) {
@@ -87,7 +89,7 @@ func TestGetContext(t *testing.T) {
 	result, err := getContext("testdata/af_packet.api.json", outDir)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
-	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/af_packet/af_packet.go"))
+	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/af_packet/af_packet.ba.go"))
 }
 
 func TestGetContextNoJsonFile(t *testing.T) {
@@ -102,12 +104,11 @@ func TestGetContextNoJsonFile(t *testing.T) {
 func TestGetContextInterfaceJson(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	result, err := getContext("testdata/interface.json", outDir)
+	result, err := getContext("testdata/ip.api.json", outDir)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
 	Expect(result.outputFile)
-	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/interfaces/interfaces.go"))
-
+	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/ip/ip.ba.go"))
 }
 
 func TestReadJson(t *testing.T) {
@@ -129,7 +130,6 @@ func TestReadJsonError(t *testing.T) {
 	Expect(result).To(BeNil())
 }
 
-/*
 func TestGeneratePackage(t *testing.T) {
 	RegisterTestingT(t)
 	// prepare context
@@ -140,9 +140,13 @@ func TestGeneratePackage(t *testing.T) {
 	inputData, err := readFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	testCtx.inputBuff = bytes.NewBuffer(inputData)
-	inFile, _ := parseJSON(inputData)
+	jsonRoot, err := parseJSON(inputData)
+	Expect(err).ShouldNot(HaveOccurred())
+	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
+	Expect(err).ShouldNot(HaveOccurred())
 	outDir := "test_output_directory"
-	outFile, _ := os.Create(outDir)
+	outFile, err := os.Create(outDir)
+	Expect(err).ShouldNot(HaveOccurred())
 	defer os.RemoveAll(outDir)
 
 	// prepare writer
@@ -151,7 +155,6 @@ func TestGeneratePackage(t *testing.T) {
 	err = generatePackage(testCtx, writer)
 	Expect(err).ShouldNot(HaveOccurred())
 }
-
 
 func TestGenerateMessageType(t *testing.T) {
 	RegisterTestingT(t)
@@ -163,31 +166,25 @@ func TestGenerateMessageType(t *testing.T) {
 	inputData, err := readFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	testCtx.inputBuff = bytes.NewBuffer(inputData)
-	inFile, _ := parseJSON(inputData)
+	jsonRoot, err := parseJSON(inputData)
+	Expect(err).ShouldNot(HaveOccurred())
 	outDir := "test_output_directory"
-	outFile, _ := os.Create(outDir)
+	outFile, err := os.Create(outDir)
+	Expect(err).ShouldNot(HaveOccurred())
+	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
+	Expect(err).ShouldNot(HaveOccurred())
 	defer os.RemoveAll(outDir)
 
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 
-	types := inFile.Map("types")
-	testCtx.types = map[string]string{
-		"u32": "sw_if_index",
-		"u8":  "weight",
-	}
-	Expect(types.Len()).To(BeEquivalentTo(1))
-	for i := 0; i < types.Len(); i++ {
-		typ := types.At(i)
-		Expect(writer.Buffered()).To(BeZero())
-		err := generateMessage(testCtx, writer, typ, true)
-		Expect(err).ShouldNot(HaveOccurred())
+	for _, msg := range testCtx.packageData.Messages {
+		generateMessage(testCtx, writer, &msg)
 		Expect(writer.Buffered()).ToNot(BeZero())
-
 	}
 }
 
-func TestGenerateMessageName(t *testing.T) {
+/*func TestGenerateMessageName(t *testing.T) {
 	RegisterTestingT(t)
 	// prepare context
 	testCtx := new(context)
