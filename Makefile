@@ -26,7 +26,6 @@ clean:
 	@rm -f extras/libmemif/examples/icmp-responder/icmp-responder
 
 generate:
-	@cd core && go generate ./...
 	@cd examples && go generate ./...
 
 lint:

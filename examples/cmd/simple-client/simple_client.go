@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -35,16 +36,14 @@ func main() {
 	// connect to VPP
 	conn, err := govpp.Connect("")
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("ERROR:", err)
 	}
 	defer conn.Disconnect()
 
 	// create an API channel that will be used in the examples
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("ERROR:", err)
 	}
 	defer ch.Close()
 
@@ -64,20 +63,22 @@ func main() {
 
 // aclVersion is the simplest API example - one empty request message and one reply message.
 func aclVersion(ch api.Channel) {
+	fmt.Println("ACL getting version")
+
 	req := &acl.ACLPluginGetVersion{}
 	reply := &acl.ACLPluginGetVersionReply{}
 
-	err := ch.SendRequest(req).ReceiveReply(reply)
-
-	if err != nil {
-		fmt.Println("Error:", err)
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		fmt.Println("ERROR:", err)
 	} else {
-		fmt.Printf("%+v\n", reply)
+		fmt.Printf("ACL version reply: %+v\n", reply)
 	}
 }
 
 // aclConfig is another simple API example - in this case, the request contains structured data.
 func aclConfig(ch api.Channel) {
+	fmt.Println("ACL adding replace")
+
 	req := &acl.ACLAddReplace{
 		ACLIndex: ^uint32(0),
 		Tag:      []byte("access list 1"),
@@ -102,10 +103,8 @@ func aclConfig(ch api.Channel) {
 	}
 	reply := &acl.ACLAddReplaceReply{}
 
-	err := ch.SendRequest(req).ReceiveReply(reply)
-
-	if err != nil {
-		fmt.Println("Error:", err)
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		fmt.Println("ERROR:", err)
 		return
 	}
 	if reply.Retval != 0 {
@@ -113,19 +112,23 @@ func aclConfig(ch api.Channel) {
 		return
 	}
 
-	fmt.Printf("%+v\n", reply)
+	fmt.Printf("ACL add replace reply: %+v\n", reply)
 
 }
 
 // aclDump shows an example where SendRequest and ReceiveReply are not chained together.
 func aclDump(ch api.Channel) {
+	fmt.Println("Dumping ACL")
+
 	req := &acl.ACLDump{}
 	reply := &acl.ACLDetails{}
 
-	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-		fmt.Println("Error:", err)
+	reqCtx := ch.SendRequest(req)
+
+	if err := reqCtx.ReceiveReply(reply); err != nil {
+		fmt.Println("ERROR:", err)
 	} else {
-		fmt.Printf("%+v\n", reply)
+		fmt.Printf("ACL details: %+v\n", reply)
 	}
 }
 
@@ -133,14 +136,13 @@ func aclDump(ch api.Channel) {
 func interfaceDump(ch api.Channel) {
 	fmt.Println("Dumping interfaces")
 
-	req := &interfaces.SwInterfaceDump{}
-	reqCtx := ch.SendMultiRequest(req)
+	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
 
 	for {
 		msg := &interfaces.SwInterfaceDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
 		if stop {
-			break // break out of the loop
+			break
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
@@ -148,7 +150,7 @@ func interfaceDump(ch api.Channel) {
 		ifaceName := strings.TrimFunc(string(msg.InterfaceName), func(r rune) bool {
 			return r == 0x00
 		})
-		fmt.Printf("Interface: %q %+v\n", ifaceName, msg)
+		fmt.Printf("Interface %q: %+v\n", ifaceName, msg)
 	}
 }
 
@@ -164,12 +166,12 @@ func ipAddressDump(ch api.Channel) {
 		msg := &ip.IPAddressDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
 		if stop {
-			break // break out of the loop
+			break
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
 		}
-		fmt.Printf("ip address: %d %+v\n", msg.SwIfIndex, msg)
+		fmt.Printf("ip address details: %d %+v\n", msg.SwIfIndex, msg)
 	}
 }
 
@@ -183,7 +185,7 @@ func setIpUnnumbered(ch api.Channel) {
 	reply := &interfaces.SwInterfaceSetUnnumberedReply{}
 
 	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-		fmt.Println("Error:", err)
+		fmt.Println("ERROR:", err)
 	} else {
 		fmt.Printf("%+v\n", reply)
 	}
@@ -192,21 +194,20 @@ func setIpUnnumbered(ch api.Channel) {
 func ipUnnumberedDump(ch api.Channel) {
 	fmt.Println("Dumping IP unnumbered")
 
-	req := &ip.IPUnnumberedDump{
+	reqCtx := ch.SendMultiRequest(&ip.IPUnnumberedDump{
 		SwIfIndex: ^uint32(0),
-	}
-	reqCtx := ch.SendMultiRequest(req)
+	})
 
 	for {
 		msg := &ip.IPUnnumberedDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
 		if stop {
-			break // break out of the loop
+			break
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
 		}
-		fmt.Printf("ip unnumbered: %+v\n", msg)
+		fmt.Printf("IP unnumbered details: %+v\n", msg)
 	}
 }
 
@@ -214,9 +215,12 @@ func ipUnnumberedDump(ch api.Channel) {
 // you are supposed to create your own Go channel with your preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
 func interfaceNotifications(ch api.Channel) {
-	// subscribe for specific notification message
+	fmt.Println("Subscribing to notificaiton events")
+
 	notifChan := make(chan api.Message, 100)
-	subs, err := ch.SubscribeNotification(notifChan, interfaces.NewSwInterfaceEvent)
+
+	// subscribe for specific notification message
+	sub, err := ch.SubscribeNotification(notifChan, &interfaces.SwInterfaceEvent{})
 	if err != nil {
 		panic(err)
 	}
@@ -248,7 +252,7 @@ func interfaceNotifications(ch api.Channel) {
 
 	// receive one notification
 	notif := (<-notifChan).(*interfaces.SwInterfaceEvent)
-	fmt.Printf("NOTIF: %+v\n", notif)
+	fmt.Printf("incoming event: %+v\n", notif)
 
 	// disable interface events in VPP
 	err = ch.SendRequest(&interfaces.WantInterfaceEvents{
@@ -260,7 +264,7 @@ func interfaceNotifications(ch api.Channel) {
 	}
 
 	// unsubscribe from delivery of the notifications
-	err = ch.UnsubscribeNotification(subs)
+	err = sub.Unsubscribe()
 	if err != nil {
 		panic(err)
 	}

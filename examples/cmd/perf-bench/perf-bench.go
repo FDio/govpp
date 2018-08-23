@@ -20,7 +20,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/pkg/profile"
@@ -65,16 +64,14 @@ func main() {
 	// connect to VPP
 	conn, err := govpp.Connect("")
 	if err != nil {
-		log.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("Error:", err)
 	}
 	defer conn.Disconnect()
 
 	// create an API channel
 	ch, err := conn.NewAPIChannelBuffered(cnt, cnt)
 	if err != nil {
-		log.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("Error:", err)
 	}
 	defer ch.Close()
 
@@ -101,10 +98,8 @@ func syncTest(ch api.Channel, cnt int) {
 		req := &vpe.ControlPing{}
 		reply := &vpe.ControlPingReply{}
 
-		err := ch.SendRequest(req).ReceiveReply(reply)
-		if err != nil {
-			log.Println("Error in reply:", err)
-			os.Exit(1)
+		if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+			log.Fatalln("Error in reply:", err)
 		}
 	}
 }
@@ -125,8 +120,7 @@ func asyncTest(ch api.Channel, cnt int) {
 	for ctx := range ctxChan {
 		reply := &vpe.ControlPingReply{}
 		if err := ctx.ReceiveReply(reply); err != nil {
-			log.Println("Error in reply:", err)
-			os.Exit(1)
+			log.Fatalln("Error in reply:", err)
 		}
 	}
 }

@@ -140,9 +140,9 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 	if len(ctx.packageData.Services) > 0 {
 		fmt.Fprintf(w, "/* Services */\n\n")
 
-		fmt.Fprintf(w, "type %s interface {\n", "Services")
 		ctx.inputBuff = bytes.NewBuffer(ctx.inputData)
 		ctx.inputLine = 0
+		fmt.Fprintf(w, "type %s interface {\n", "Services")
 		for _, svc := range ctx.packageData.Services {
 			generateService(ctx, w, &svc)
 		}
@@ -209,6 +209,7 @@ func generateImports(ctx *context, w io.Writer) {
 	fmt.Fprintln(w)
 
 	fmt.Fprintf(w, "// Reference imports to suppress errors if they are not otherwise used.\n")
+	fmt.Fprintf(w, "var _ = api.RegisterMessage\n")
 	fmt.Fprintf(w, "var _ = struc.Pack\n")
 	fmt.Fprintf(w, "var _ = bytes.NewBuffer\n")
 	fmt.Fprintln(w)

@@ -18,6 +18,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 
@@ -28,45 +29,41 @@ import (
 )
 
 func main() {
-	fmt.Println("Starting stats VPP client...")
+	fmt.Println("Starting stats VPP client..")
 
 	// async connect to VPP
 	conn, statCh, err := govpp.AsyncConnect("")
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("Error:", err)
 	}
 	defer conn.Disconnect()
 
 	// create an API channel that will be used in the examples
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
-		fmt.Println("Error:", err)
-		os.Exit(1)
+		log.Fatalln("Error:", err)
 	}
-	defer fmt.Println("calling close")
 	defer ch.Close()
 
 	// create channel for Interrupt signal
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
 
-	var simpleCountersSubs *api.NotifSubscription
-	var combinedCountersSubs *api.NotifSubscription
 	var notifChan chan api.Message
+	var simpleSub api.SubscriptionCtx
+	var combinedSub api.SubscriptionCtx
 
 	// loop until Interrupt signal is received
 loop:
 	for {
 		select {
-
 		case connEvent := <-statCh:
 			// VPP connection state change
 			switch connEvent.State {
 			case core.Connected:
 				fmt.Println("VPP connected.")
-				if simpleCountersSubs == nil {
-					simpleCountersSubs, combinedCountersSubs, notifChan = subscribeNotifications(ch)
+				if notifChan == nil {
+					simpleSub, combinedSub, notifChan = subscribeNotifications(ch)
 				}
 				requestStatistics(ch)
 
@@ -93,24 +90,24 @@ loop:
 		}
 	}
 
-	ch.UnsubscribeNotification(simpleCountersSubs)
-	ch.UnsubscribeNotification(combinedCountersSubs)
+	simpleSub.Unsubscribe()
+	combinedSub.Unsubscribe()
 }
 
 // subscribeNotifications subscribes for interface counters notifications.
-func subscribeNotifications(ch api.Channel) (*api.NotifSubscription, *api.NotifSubscription, chan api.Message) {
+func subscribeNotifications(ch api.Channel) (api.SubscriptionCtx, api.SubscriptionCtx, chan api.Message) {
 	notifChan := make(chan api.Message, 100)
 
-	simpleCountersSubs, err := ch.SubscribeNotification(notifChan, stats.NewVnetInterfaceSimpleCounters)
+	simpleSub, err := ch.SubscribeNotification(notifChan, &stats.VnetInterfaceSimpleCounters{})
 	if err != nil {
 		panic(err)
 	}
-	combinedCountersSubs, err := ch.SubscribeNotification(notifChan, stats.NewVnetInterfaceCombinedCounters)
+	combinedSub, err := ch.SubscribeNotification(notifChan, &stats.VnetInterfaceCombinedCounters{})
 	if err != nil {
 		panic(err)
 	}
 
-	return simpleCountersSubs, combinedCountersSubs, notifChan
+	return simpleSub, combinedSub, notifChan
 }
 
 // requestStatistics requests interface counters notifications from VPP.
