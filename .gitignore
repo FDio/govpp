@@ -1,5 +1,15 @@
 .idea
+
+# cmds
 cmd/binapi-generator/binapi-generator
+
+# examples
+examples/cmd/perf-bench/perf-bench
 examples/cmd/simple-client/simple-client
 examples/cmd/stats-client/stats-client
-examples/cmd/perf-bench/perf-bench
+
+# extras
+extras/libmemif/examples/gopacket/gopacket
+extras/libmemif/examples/icmp-responder/icmp-responder
+extras/libmemif/examples/jumbo-frames/jumbo-frames
+extras/libmemif/examples/raw-data/raw-data

@@ -22,8 +22,8 @@ import (
 	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/stats"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
+	"git.fd.io/govpp.git/examples/bin_api/stats"
+	"git.fd.io/govpp.git/examples/bin_api/vpe"
 	. "github.com/onsi/gomega"
 )
 
