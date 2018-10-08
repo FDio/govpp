@@ -19,7 +19,7 @@
 package vppapiclient
 
 /*
-#cgo CFLAGS: -DPNG_DEBUG=1
+#cgo CFLAGS: -DPNG_DEBUG=1 -I /opt/vpp-agent/dev/vpp/src
 #cgo LDFLAGS: -lvppapiclient
 
 #include <stdlib.h>
@@ -27,6 +27,7 @@ package vppapiclient
 #include <stdint.h>
 #include <arpa/inet.h>
 #include <vpp-api/client/vppapiclient.h>
+#include <vpp-api/client/stat_client.h>
 
 extern void go_msg_callback(uint16_t msg_id, void* data, size_t size);
 
@@ -41,7 +42,7 @@ typedef struct __attribute__((__packed__)) _reply_header {
 } reply_header_t;
 
 static void
-govpp_msg_callback (unsigned char *data, int size)
+govpp_msg_callback(unsigned char *data, int size)
 {
     reply_header_t *header = ((reply_header_t *)data);
     go_msg_callback(ntohs(header->msg_id), data, size);
@@ -56,13 +57,13 @@ govpp_send(uint32_t context, void *data, size_t size)
 }
 
 static int
-govpp_connect (char *shm)
+govpp_connect(char *shm)
 {
     return vac_connect("govpp", shm, govpp_msg_callback, 32);
 }
 
 static int
-govvp_disconnect()
+govpp_disconnect()
 {
     return vac_disconnect();
 }
@@ -71,6 +72,42 @@ static uint32_t
 govpp_get_msg_index(char *name_and_crc)
 {
     return vac_get_msg_index(name_and_crc);
+}
+
+static int
+govpp_stat_connect(char *socket_name)
+{
+	return stat_segment_connect(socket_name);
+}
+
+static void
+govpp_stat_disconnect()
+{
+    stat_segment_disconnect();
+}
+
+static uint32_t*
+govpp_stat_segment_ls(uint8_t ** pattern)
+{
+	return stat_segment_ls(pattern);
+}
+
+static int
+govpp_stat_segment_vec_len(void *vec)
+{
+	return stat_segment_vec_len(vec);
+}
+
+static char*
+govpp_stat_segment_dir_idx_to_name(uint32_t *dir, uint64_t idx)
+{
+	return stat_segment_index_to_name(dir[idx]);
+}
+
+static char*
+govpp_stat_segment_index_to_name(uint32_t index)
+{
+	return stat_segment_index_to_name(index);
 }
 */
 import "C"
@@ -123,12 +160,37 @@ func (a *vppAPIClientAdapter) Connect() error {
 	if rc != 0 {
 		return fmt.Errorf("unable to connect to VPP (error=%d)", rc)
 	}
+
+	statSocket := "/run/vpp/stats.sock"
+	fmt.Printf("CONNECTING TO STAT SOCKET: %v\n", statSocket)
+	ss := C.CString(statSocket)
+	rc = C.govpp_stat_connect(ss)
+	if rc != 0 {
+		return fmt.Errorf("unable to connect to STAT (error=%d)", rc)
+	}
+	fmt.Printf("CONNECTED TO STAT SOCKET\n")
+
+	dir := C.govpp_stat_segment_ls(nil)
+	fmt.Printf("DIR: %+v\n", dir)
+
+	l := C.govpp_stat_segment_vec_len(unsafe.Pointer(dir))
+	for i := 0; i < int(l); i++ {
+		nameChar := C.govpp_stat_segment_dir_idx_to_name(dir, C.uint64_t(i))
+		name := C.GoString(nameChar)
+		C.free(unsafe.Pointer(nameChar))
+		fmt.Printf(" - %+v\n", name)
+	}
+	fmt.Printf("LEN: %+v\n", l)
+
+	//C.govpp_stat_segment_index_to_name()
+
 	return nil
 }
 
 // Disconnect disconnects the process from VPP.
 func (a *vppAPIClientAdapter) Disconnect() {
-	C.govvp_disconnect()
+	C.govpp_stat_disconnect()
+	C.govpp_disconnect()
 }
 
 // GetMsgID returns a runtime message ID for the given message name and CRC.
