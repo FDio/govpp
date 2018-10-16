@@ -474,11 +474,11 @@ func Init(appName string) error {
 	// Initialize C-libmemif.
 	var errCode int
 	if appName == "" {
-		errCode = int(C.memif_init(nil, nil, nil, nil))
+		errCode = int(C.memif_init(nil, nil, nil, nil, nil))
 	} else {
 		appName := C.CString(appName)
 		defer C.free(unsafe.Pointer(appName))
-		errCode = int(C.memif_init(nil, appName, nil, nil))
+		errCode = int(C.memif_init(nil, appName, nil, nil, nil))
 	}
 	err := getMemifError(errCode)
 	if err != nil {
