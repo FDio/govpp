@@ -155,19 +155,19 @@ var (
 	DefaultStatSocket = "/run/vpp/stats.sock"
 )
 
-// StatsAdapter is the implementation of StatsAdapter.
-type StatsAdapter struct {
+// StatsClient is the implementation of StatsClient.
+type StatsClient struct {
 	socketName string
 }
 
-// NewStatsAdapter returns new VPP stats API client adapter.
-func NewStatsAdapter(socketName string) *StatsAdapter {
-	return &StatsAdapter{
+// NewStatsClient returns new VPP stats API client adapter.
+func NewStatsClient(socketName string) *StatsClient {
+	return &StatsClient{
 		socketName: socketName,
 	}
 }
 
-func (c *StatsAdapter) Connect() error {
+func (c *StatsClient) Connect() error {
 	var sockName string
 
 	if c.socketName == "" {
@@ -184,7 +184,7 @@ func (c *StatsAdapter) Connect() error {
 	return nil
 }
 
-func (c *StatsAdapter) Disconnect() error {
+func (c *StatsClient) Disconnect() error {
 	C.govpp_stat_disconnect()
 	return nil
 }
@@ -197,7 +197,7 @@ func convertStringSlice(strs []string) **C.uint8_t {
 	return arr
 }
 
-func (c *StatsAdapter) ListStats(patterns ...string) (stats []string, err error) {
+func (c *StatsClient) ListStats(patterns ...string) (stats []string, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 
 	l := C.govpp_stat_segment_vec_len(unsafe.Pointer(dir))
@@ -210,7 +210,7 @@ func (c *StatsAdapter) ListStats(patterns ...string) (stats []string, err error)
 	return stats, nil
 }
 
-func (c *StatsAdapter) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
+func (c *StatsClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 
 	dump := C.govpp_stat_segment_dump(dir)
