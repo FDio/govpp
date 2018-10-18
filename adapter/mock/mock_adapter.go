@@ -107,8 +107,8 @@ func (a *VppAdapter) Connect() error {
 }
 
 // Disconnect emulates disconnecting the process from VPP.
-func (a *VppAdapter) Disconnect() {
-	// no op
+func (a *VppAdapter) Disconnect() error {
+	return nil
 }
 
 // GetMsgNameByID returns message name for specified message ID.

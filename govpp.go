@@ -20,16 +20,28 @@ import (
 	"git.fd.io/govpp.git/core"
 )
 
-var vppAdapter adapter.VppAdapter // VPP Adapter that will be used in the subsequent Connect calls
+var (
+	// VPP binary API adapter that will be used in the subsequent Connect calls
+	binapiAdapter adapter.BinapiAdapter
+)
+
+func getBinapiAdapter(shm string) adapter.BinapiAdapter {
+	if binapiAdapter == nil {
+		binapiAdapter = vppapiclient.NewBinapiClient(shm)
+	}
+	return binapiAdapter
+}
+
+// SetBinapiAdapter sets the adapter that will be used for connections to VPP in the subsequent `Connect` calls.
+func SetBinapiAdapter(a adapter.BinapiAdapter) {
+	binapiAdapter = a
+}
 
 // Connect connects the govpp core to VPP either using the default VPP Adapter, or using the adapter previously
 // set by SetAdapter (useful mostly just for unit/integration tests with mocked VPP adapter).
 // This call blocks until VPP is connected, or an error occurs. Only one connection attempt will be performed.
 func Connect(shm string) (*core.Connection, error) {
-	if vppAdapter == nil {
-		vppAdapter = vppapiclient.NewVppAdapter(shm)
-	}
-	return core.Connect(vppAdapter)
+	return core.Connect(getBinapiAdapter(shm))
 }
 
 // AsyncConnect asynchronously connects the govpp core to VPP either using the default VPP Adapter,
@@ -38,13 +50,5 @@ func Connect(shm string) (*core.Connection, error) {
 // supposed to watch the returned ConnectionState channel for Connected/Disconnected events.
 // In case of disconnect, the library will asynchronously try to reconnect.
 func AsyncConnect(shm string) (*core.Connection, chan core.ConnectionEvent, error) {
-	if vppAdapter == nil {
-		vppAdapter = vppapiclient.NewVppAdapter(shm)
-	}
-	return core.AsyncConnect(vppAdapter)
-}
-
-// SetAdapter sets the adapter that will be used for connections to VPP in the subsequent `Connect` calls.
-func SetAdapter(ad adapter.VppAdapter) {
-	vppAdapter = ad
+	return core.AsyncConnect(getBinapiAdapter(shm))
 }
