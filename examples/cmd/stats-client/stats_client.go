@@ -28,6 +28,15 @@ import (
 	"git.fd.io/govpp.git/examples/bin_api/stats"
 )
 
+/*
+
+	IMPORTANT NOTICE!
+
+	The binary API module stats used in this example will be deprecated in VPP 19.01.
+	VPP's new stats API should be used, you can find basic usage of new stats API in example stats-api.
+
+*/
+
 func main() {
 	fmt.Println("Starting stats VPP client..")
 

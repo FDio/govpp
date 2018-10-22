@@ -14,43 +14,40 @@
 
 // +build windows darwin
 
-/*
-	This is just an empty adapter that does nothing. It builds only on Windows and OSX, where the real
-	VPP API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
-*/
-
 package vppapiclient
 
 import (
 	"git.fd.io/govpp.git/adapter"
 )
 
-type vppAPIClientAdapter struct{}
+// VppClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
+// VPP binary API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
+type VppClient struct{}
 
-func NewVppAdapter(string) adapter.VppAdapter {
-	return &vppAPIClientAdapter{}
+func NewVppAdapter(string) *VppClient {
+	return &VppClient{}
 }
 
-func (a *vppAPIClientAdapter) Connect() error {
+func (a *VppClient) Connect() error {
 	return adapter.ErrNotImplemented
 }
 
-func (a *vppAPIClientAdapter) Disconnect() {
-	// no op
+func (a *VppClient) Disconnect() error {
+	return nil
 }
 
-func (a *vppAPIClientAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+func (a *VppClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	return 0, nil
 }
 
-func (a *vppAPIClientAdapter) SendMsg(clientID uint32, data []byte) error {
+func (a *VppClient) SendMsg(clientID uint32, data []byte) error {
 	return nil
 }
 
-func (a *vppAPIClientAdapter) SetMsgCallback(cb adapter.MsgCallback) {
+func (a *VppClient) SetMsgCallback(cb adapter.MsgCallback) {
 	// no op
 }
 
-func (a *vppAPIClientAdapter) WaitReady() error {
-	return nil
+func (a *VppClient) WaitReady() error {
+	return adapter.ErrNotImplemented
 }
