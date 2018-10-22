@@ -7,6 +7,7 @@ cmd/binapi-generator/binapi-generator
 examples/cmd/perf-bench/perf-bench
 examples/cmd/simple-client/simple-client
 examples/cmd/stats-client/stats-client
+examples/cmd/stats-api/stats-api
 
 # extras
 extras/libmemif/examples/gopacket/gopacket
