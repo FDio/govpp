@@ -72,8 +72,8 @@ var (
 
 // Connection represents a shared memory connection to VPP via vppAdapter.
 type Connection struct {
-	binapiClient adapter.BinapiAdapter // VPP binary API client adapter
-	statsClient  adapter.StatsAdapter  // VPP stats API client adapter
+	binapiClient adapter.VppAPI   // VPP binary API client adapter
+	statsClient  adapter.StatsAPI // VPP stats API client adapter
 
 	binapiConnected uint32 // non-zero if the adapter is connected to VPP
 
@@ -95,7 +95,7 @@ type Connection struct {
 	lastReply     time.Time  // time of the last received reply from VPP
 }
 
-func newConnection(binapi adapter.BinapiAdapter) *Connection {
+func newConnection(binapi adapter.VppAPI) *Connection {
 	c := &Connection{
 		binapiClient:  binapi,
 		codec:         &codec.MsgCodec{},
@@ -110,7 +110,7 @@ func newConnection(binapi adapter.BinapiAdapter) *Connection {
 
 // Connect connects to VPP using specified VPP adapter and returns the connection handle.
 // This call blocks until VPP is connected, or an error occurs. Only one connection attempt will be performed.
-func Connect(binapi adapter.BinapiAdapter) (*Connection, error) {
+func Connect(binapi adapter.VppAPI) (*Connection, error) {
 	// create new connection handle
 	c, err := createConnection(binapi)
 	if err != nil {
@@ -129,7 +129,7 @@ func Connect(binapi adapter.BinapiAdapter) (*Connection, error) {
 // and ConnectionState channel. This call does not block until connection is established, it
 // returns immediately. The caller is supposed to watch the returned ConnectionState channel for
 // Connected/Disconnected events. In case of disconnect, the library will asynchronously try to reconnect.
-func AsyncConnect(binapi adapter.BinapiAdapter) (*Connection, chan ConnectionEvent, error) {
+func AsyncConnect(binapi adapter.VppAPI) (*Connection, chan ConnectionEvent, error) {
 	// create new connection handle
 	c, err := createConnection(binapi)
 	if err != nil {
@@ -159,7 +159,7 @@ func (c *Connection) Disconnect() {
 }
 
 // newConnection returns new connection handle.
-func createConnection(binapi adapter.BinapiAdapter) (*Connection, error) {
+func createConnection(binapi adapter.VppAPI) (*Connection, error) {
 	connLock.Lock()
 	defer connLock.Unlock()
 

@@ -24,9 +24,9 @@ var ErrNotImplemented = errors.New("not implemented for this OS")
 // MsgCallback defines func signature for message callback.
 type MsgCallback func(msgID uint16, data []byte)
 
-// BinapiAdapter provides connection to VPP binary API.
+// VppAPI provides connection to VPP binary API.
 // It is responsible for sending and receiving of binary-encoded messages to/from VPP.
-type BinapiAdapter interface {
+type VppAPI interface {
 	// Connect connects the process to VPP.
 	Connect() error
 

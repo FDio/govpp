@@ -14,7 +14,7 @@
 
 // +build !windows,!darwin
 
-package statclient
+package vppapiclient
 
 /*
 #cgo CFLAGS: -DPNG_DEBUG=1
@@ -51,10 +51,16 @@ govpp_stat_segment_vec_len(void *vec)
 	return stat_segment_vec_len(vec);
 }
 
-static char*
-govpp_stat_segment_index_to_name(uint32_t index)
+static void
+govpp_stat_segment_vec_free(void *vec)
 {
-	return stat_segment_index_to_name(index);
+	stat_segment_vec_free(vec);
+}
+
+static char*
+govpp_stat_segment_dir_index_to_name(uint32_t *dir, uint32_t index)
+{
+	return stat_segment_index_to_name(dir[index]);
 }
 
 static stat_segment_data_t*
@@ -155,19 +161,19 @@ var (
 	DefaultStatSocket = "/run/vpp/stats.sock"
 )
 
-// StatsClient is the implementation of StatsClient.
-type StatsClient struct {
+// StatClient is the default implementation of StatsAPI.
+type StatClient struct {
 	socketName string
 }
 
 // NewStatsClient returns new VPP stats API client adapter.
-func NewStatsClient(socketName string) *StatsClient {
-	return &StatsClient{
+func NewStatClient(socketName string) *StatClient {
+	return &StatClient{
 		socketName: socketName,
 	}
 }
 
-func (c *StatsClient) Connect() error {
+func (c *StatClient) Connect() error {
 	var sockName string
 
 	if c.socketName == "" {
@@ -184,25 +190,18 @@ func (c *StatsClient) Connect() error {
 	return nil
 }
 
-func (c *StatsClient) Disconnect() error {
+func (c *StatClient) Disconnect() error {
 	C.govpp_stat_disconnect()
 	return nil
 }
 
-func convertStringSlice(strs []string) **C.uint8_t {
-	var arr **C.uint8_t
-	for _, str := range strs {
-		arr = C.govpp_stat_segment_string_vector(arr, C.CString(str))
-	}
-	return arr
-}
-
-func (c *StatsClient) ListStats(patterns ...string) (stats []string, err error) {
+func (c *StatClient) ListStats(patterns ...string) (stats []string, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
+	defer C.govpp_stat_segment_vec_free(unsafe.Pointer(dir))
 
 	l := C.govpp_stat_segment_vec_len(unsafe.Pointer(dir))
 	for i := 0; i < int(l); i++ {
-		nameChar := C.govpp_stat_segment_index_to_name(C.uint32_t(i))
+		nameChar := C.govpp_stat_segment_dir_index_to_name(dir, C.uint32_t(i))
 		stats = append(stats, C.GoString(nameChar))
 		C.free(unsafe.Pointer(nameChar))
 	}
@@ -210,8 +209,9 @@ func (c *StatsClient) ListStats(patterns ...string) (stats []string, err error) 
 	return stats, nil
 }
 
-func (c *StatsClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
+func (c *StatClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
+	defer C.govpp_stat_segment_vec_free(unsafe.Pointer(dir))
 
 	dump := C.govpp_stat_segment_dump(dir)
 	defer C.govpp_stat_segment_data_free(dump)
@@ -268,4 +268,12 @@ func (c *StatsClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry,
 	}
 
 	return stats, nil
+}
+
+func convertStringSlice(strs []string) **C.uint8_t {
+	var arr **C.uint8_t
+	for _, str := range strs {
+		arr = C.govpp_stat_segment_string_vector(arr, C.CString(str))
+	}
+	return arr
 }

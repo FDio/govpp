@@ -20,34 +20,34 @@ import (
 	"git.fd.io/govpp.git/adapter"
 )
 
-// emptyAdapter is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
-// VPP API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
-type emptyAdapter struct{}
+// VppClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
+// VPP binary API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
+type BinapiClient struct{}
 
-func NewVppAdapter(string) adapter.BinapiAdapter {
-	return &emptyAdapter{}
+func NewVppAdapter(string) *BinapiClient {
+	return &BinapiClient{}
 }
 
-func (a *emptyAdapter) Connect() error {
+func (a *BinapiClient) Connect() error {
 	return adapter.ErrNotImplemented
 }
 
-func (a *emptyAdapter) Disconnect() error {
+func (a *BinapiClient) Disconnect() error {
 	return nil
 }
 
-func (a *emptyAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+func (a *BinapiClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	return 0, nil
 }
 
-func (a *emptyAdapter) SendMsg(clientID uint32, data []byte) error {
+func (a *BinapiClient) SendMsg(clientID uint32, data []byte) error {
 	return nil
 }
 
-func (a *emptyAdapter) SetMsgCallback(cb adapter.MsgCallback) {
+func (a *BinapiClient) SetMsgCallback(cb adapter.MsgCallback) {
 	// no op
 }
 
-func (a *emptyAdapter) WaitReady() error {
-	return nil
+func (a *BinapiClient) WaitReady() error {
+	return adapter.ErrNotImplemented
 }

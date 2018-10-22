@@ -92,24 +92,24 @@ const (
 )
 
 // global VPP binary API client adapter context
-var binapiClient *BinapiClient
+var client *VppClient
 
-// BinapiClient is the opaque context of the adapter.
-type BinapiClient struct {
+// VppClient is the default implementation of the VppAPI.
+type VppClient struct {
 	shmPrefix   string
 	msgCallback adapter.MsgCallback
 }
 
 // NewVppAdapter returns a new VPP binary API client adapter.
-func NewBinapiClient(shmPrefix string) *BinapiClient {
-	return &BinapiClient{
+func NewBinapiClient(shmPrefix string) *VppClient {
+	return &VppClient{
 		shmPrefix: shmPrefix,
 	}
 }
 
 // Connect connects the process to VPP.
-func (a *BinapiClient) Connect() error {
-	if binapiClient != nil {
+func (a *VppClient) Connect() error {
+	if client != nil {
 		return fmt.Errorf("already connected to binary API, disconnect first")
 	}
 
@@ -124,13 +124,13 @@ func (a *BinapiClient) Connect() error {
 		return fmt.Errorf("connecting to VPP binary API failed (rc=%v)", rc)
 	}
 
-	binapiClient = a
+	client = a
 	return nil
 }
 
 // Disconnect disconnects the process from VPP.
-func (a *BinapiClient) Disconnect() error {
-	binapiClient = nil
+func (a *VppClient) Disconnect() error {
+	client = nil
 
 	rc := C.govpp_disconnect()
 	if rc != 0 {
@@ -141,7 +141,7 @@ func (a *BinapiClient) Disconnect() error {
 }
 
 // GetMsgID returns a runtime message ID for the given message name and CRC.
-func (a *BinapiClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+func (a *VppClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	nameAndCrc := C.CString(msgName + "_" + msgCrc)
 	defer C.free(unsafe.Pointer(nameAndCrc))
 
@@ -155,7 +155,7 @@ func (a *BinapiClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 }
 
 // SendMsg sends a binary-encoded message to VPP.
-func (a *BinapiClient) SendMsg(context uint32, data []byte) error {
+func (a *VppClient) SendMsg(context uint32, data []byte) error {
 	rc := C.govpp_send(C.uint32_t(context), unsafe.Pointer(&data[0]), C.size_t(len(data)))
 	if rc != 0 {
 		return fmt.Errorf("unable to send the message (rc=%v)", rc)
@@ -165,13 +165,13 @@ func (a *BinapiClient) SendMsg(context uint32, data []byte) error {
 
 // SetMsgCallback sets a callback function that will be called by the adapter
 // whenever a message comes from VPP.
-func (a *BinapiClient) SetMsgCallback(cb adapter.MsgCallback) {
+func (a *VppClient) SetMsgCallback(cb adapter.MsgCallback) {
 	a.msgCallback = cb
 }
 
 // WaitReady blocks until shared memory for sending
 // binary api calls is present on the file system.
-func (a *BinapiClient) WaitReady() error {
+func (a *VppClient) WaitReady() error {
 	var path string
 
 	// join the path to the shared memory segment
@@ -219,5 +219,5 @@ func go_msg_callback(msgID C.uint16_t, data unsafe.Pointer, size C.size_t) {
 	sliceHeader := &reflect.SliceHeader{Data: uintptr(data), Len: int(size), Cap: int(size)}
 	byteSlice := *(*[]byte)(unsafe.Pointer(sliceHeader))
 
-	binapiClient.msgCallback(uint16(msgID), byteSlice)
+	client.msgCallback(uint16(msgID), byteSlice)
 }

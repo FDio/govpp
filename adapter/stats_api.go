@@ -1,7 +1,7 @@
 package adapter
 
-// StatsAdapter provides connection to VPP stats API.
-type StatsAdapter interface {
+// StatsAPI provides connection to VPP stats API.
+type StatsAPI interface {
 	// Connect establishes client connection to the stats API.
 	Connect() error
 

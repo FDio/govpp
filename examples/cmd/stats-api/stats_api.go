@@ -18,36 +18,49 @@ import (
 	"fmt"
 	"log"
 
-	"git.fd.io/govpp.git/adapter/statclient"
+	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/adapter/vppapiclient"
 )
 
-func main() {
-	fmt.Println("Starting example for VPP stats API...")
+// This example shows how to work with VPP's new stats API.
 
-	client := statclient.NewStatsClient(statclient.DefaultStatSocket)
+func main() {
+	fmt.Println("Starting VPP stats API example..")
+
+	client := vppapiclient.NewStatClient(vppapiclient.DefaultStatSocket)
 
 	// connect to stats API
 	if err := client.Connect(); err != nil {
-		log.Fatalln("Stats client connect failed:", err)
+		log.Fatalln("connecting client failed:", err)
 	}
 	defer client.Disconnect()
 
+	// list stats by patterns
+	// you can omit parameters to list all stats
 	list, err := client.ListStats("/if", "/sys")
 	if err != nil {
-		log.Fatalln("LisStats failed:", err)
+		log.Fatalln("listing stats failed:", err)
 	}
 
 	for _, stat := range list {
 		fmt.Printf(" - %v\n", stat)
 	}
-	fmt.Printf("%d stats\n", len(list))
+	fmt.Printf("listed %d stats\n", len(list))
 
-	stats, err := client.DumpStats("/if", "/sys")
+	// dump stats by patterns to retrieve stats with the stats data
+	stats, err := client.DumpStats()
 	if err != nil {
-		log.Fatalln("DumpStats failed:", err)
+		log.Fatalln("dumping stats failed:", err)
 	}
 
 	for _, stat := range stats {
+		switch data := stat.Data.(type) {
+		case adapter.ErrorStat:
+			if data == 0 {
+				// skip printing errors with 0 value
+				continue
+			}
+		}
 		fmt.Printf(" - %-25s %25v %+v\n", stat.Name, stat.Type, stat.Data)
 	}
 }

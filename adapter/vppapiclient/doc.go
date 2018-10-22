@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Package statclient is the default VPP adapter being used for
-// the connection to VPP binary API via shared memory.
+// Package vppapiclient is the default VPP adapter being used for
+// the connection to VPP binary & stats API via shared memory.
 // It is essentially Go wrapper for the VPP vppapiclient library written in C.
 package vppapiclient

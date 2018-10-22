@@ -22,19 +22,19 @@ import (
 
 var (
 	// VPP binary API adapter that will be used in the subsequent Connect calls
-	binapiAdapter adapter.BinapiAdapter
+	vppAdapter adapter.VppAPI
 )
 
-func getBinapiAdapter(shm string) adapter.BinapiAdapter {
-	if binapiAdapter == nil {
-		binapiAdapter = vppapiclient.NewBinapiClient(shm)
+func getBinapiAdapter(shm string) adapter.VppAPI {
+	if vppAdapter == nil {
+		vppAdapter = vppapiclient.NewBinapiClient(shm)
 	}
-	return binapiAdapter
+	return vppAdapter
 }
 
 // SetBinapiAdapter sets the adapter that will be used for connections to VPP in the subsequent `Connect` calls.
-func SetBinapiAdapter(a adapter.BinapiAdapter) {
-	binapiAdapter = a
+func SetBinapiAdapter(a adapter.VppAPI) {
+	vppAdapter = a
 }
 
 // Connect connects the govpp core to VPP either using the default VPP Adapter, or using the adapter previously

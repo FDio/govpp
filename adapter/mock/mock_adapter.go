@@ -37,7 +37,7 @@ const (
 	useReplyHandlers           // use reply handler
 )
 
-// VppAdapter represents a mock VPP adapter that can be used for unit/integration testing instead of the vppapiclient adapter.
+// VppAPI represents a mock VPP adapter that can be used for unit/integration testing instead of the vppapiclient adapter.
 type VppAdapter struct {
 	callback adapter.MsgCallback
 
