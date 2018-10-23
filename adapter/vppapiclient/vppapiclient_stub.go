@@ -20,34 +20,34 @@ import (
 	"git.fd.io/govpp.git/adapter"
 )
 
-// VppClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
+// stubVppClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
 // VPP binary API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
-type VppClient struct{}
+type stubVppClient struct{}
 
-func NewVppAdapter(string) *VppClient {
-	return &VppClient{}
+func NewVppClient(string) adapter.VppAPI {
+	return &stubVppClient{}
 }
 
-func (a *VppClient) Connect() error {
+func (a *stubVppClient) Connect() error {
 	return adapter.ErrNotImplemented
 }
 
-func (a *VppClient) Disconnect() error {
+func (a *stubVppClient) Disconnect() error {
 	return nil
 }
 
-func (a *VppClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+func (a *stubVppClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	return 0, nil
 }
 
-func (a *VppClient) SendMsg(clientID uint32, data []byte) error {
+func (a *stubVppClient) SendMsg(clientID uint32, data []byte) error {
 	return nil
 }
 
-func (a *VppClient) SetMsgCallback(cb adapter.MsgCallback) {
+func (a *stubVppClient) SetMsgCallback(cb adapter.MsgCallback) {
 	// no op
 }
 
-func (a *VppClient) WaitReady() error {
+func (a *stubVppClient) WaitReady() error {
 	return adapter.ErrNotImplemented
 }

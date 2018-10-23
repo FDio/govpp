@@ -161,21 +161,28 @@ var (
 	DefaultStatSocket = "/run/vpp/stats.sock"
 )
 
-// StatClient is the default implementation of StatsAPI.
-type StatClient struct {
+// global VPP stats API client, library vppapiclient only supports
+// single connection at a time
+var globalStatClient *statClient
+
+// stubStatClient is the default implementation of StatsAPI.
+type statClient struct {
 	socketName string
 }
 
 // NewStatClient returns new VPP stats API client.
-func NewStatClient(socketName string) *StatClient {
-	return &StatClient{
+func NewStatClient(socketName string) adapter.StatsAPI {
+	return &statClient{
 		socketName: socketName,
 	}
 }
 
-func (c *StatClient) Connect() error {
-	var sockName string
+func (c *statClient) Connect() error {
+	if globalStatClient != nil {
+		return fmt.Errorf("already connected to stats API, disconnect first")
+	}
 
+	var sockName string
 	if c.socketName == "" {
 		sockName = DefaultStatSocket
 	} else {
@@ -187,15 +194,18 @@ func (c *StatClient) Connect() error {
 		return fmt.Errorf("connecting to VPP stats API failed (rc=%v)", rc)
 	}
 
+	globalStatClient = c
 	return nil
 }
 
-func (c *StatClient) Disconnect() error {
+func (c *statClient) Disconnect() error {
+	globalStatClient = nil
+
 	C.govpp_stat_disconnect()
 	return nil
 }
 
-func (c *StatClient) ListStats(patterns ...string) (stats []string, err error) {
+func (c *statClient) ListStats(patterns ...string) (stats []string, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 	defer C.govpp_stat_segment_vec_free(unsafe.Pointer(dir))
 
@@ -209,7 +219,7 @@ func (c *StatClient) ListStats(patterns ...string) (stats []string, err error) {
 	return stats, nil
 }
 
-func (c *StatClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
+func (c *statClient) DumpStats(patterns ...string) (stats []*adapter.StatEntry, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 	defer C.govpp_stat_segment_vec_free(unsafe.Pointer(dir))
 

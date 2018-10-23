@@ -20,26 +20,26 @@ import (
 	"git.fd.io/govpp.git/adapter"
 )
 
-// StatClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
+// stubStatClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real
 // VPP stats API client adapter does not build. Its sole purpose is to make the compiler happy on Windows and OSX.
-type StatClient struct{}
+type stubStatClient struct{}
 
-func NewStatClient(socketName string) *StatClient {
-	return new(StatClient)
+func NewStatClient(socketName string) adapter.StatsAPI {
+	return new(stubStatClient)
 }
 
-func (*StatClient) Connect() error {
+func (*stubStatClient) Connect() error {
 	return adapter.ErrNotImplemented
 }
 
-func (*StatClient) Disconnect() error {
+func (*stubStatClient) Disconnect() error {
 	return nil
 }
 
-func (*StatClient) ListStats(patterns ...string) (statNames []string, err error) {
+func (*stubStatClient) ListStats(patterns ...string) (statNames []string, err error) {
 	return nil, adapter.ErrNotImplemented
 }
 
-func (*StatClient) DumpStats(patterns ...string) ([]*adapter.StatEntry, error) {
+func (*stubStatClient) DumpStats(patterns ...string) ([]*adapter.StatEntry, error) {
 	return nil, adapter.ErrNotImplemented
 }
