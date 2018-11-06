@@ -75,6 +75,8 @@ typedef struct
 	uint8_t role;
 	uint8_t mode;
 	char *socket_filename;
+	uint8_t regions_num;
+	memif_region_details_t *regions;
 	uint8_t rx_queues_num;
 	uint8_t tx_queues_num;
 	memif_queue_details_t *rx_queues;
@@ -167,6 +169,8 @@ govpp_memif_get_details (memif_conn_handle_t conn, govpp_memif_details_t *govpp_
 		govpp_md->role = md.role;
 		govpp_md->mode = md.mode;
 		govpp_md->socket_filename = (char *)md.socket_filename;
+		govpp_md->regions_num = md.regions_num;
+		govpp_md->regions = md.regions;
 		govpp_md->rx_queues_num = md.rx_queues_num;
 		govpp_md->tx_queues_num = md.tx_queues_num;
 		govpp_md->rx_queues = md.rx_queues;
@@ -415,8 +419,8 @@ type MemifQueueDetails struct {
 
 // CPacketBuffers stores an array of memif buffers for use with TxBurst or RxBurst.
 type CPacketBuffers struct {
-	buffers *C.memif_buffer_t
-	count   int
+	buffers    *C.memif_buffer_t
+	count      int
 	rxChainBuf []RawPacketData
 }
 
