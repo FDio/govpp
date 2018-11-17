@@ -15,29 +15,73 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
+	"os"
+	"strings"
 
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/vppapiclient"
 )
 
-// This example shows how to work with VPP's new stats API.
+// ------------------------------------------------------------------
+// Example - Stats API
+// ------------------------------------------------------------------
+// The example stats_api demonstrates how to retrieve stats
+// from the VPP using the new stats API.
+// ------------------------------------------------------------------
+
+var (
+	statsSocket = flag.String("socket", vppapiclient.DefaultStatSocket, "VPP stats segment socket")
+	skipZeros   = flag.Bool("skipzero", true, "Skip stats with zero values")
+)
+
+func init() {
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump] <patterns>...\n", os.Args[0])
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
+}
 
 func main() {
-	fmt.Println("Starting VPP stats API example..")
+	flag.Parse()
 
-	client := vppapiclient.NewStatClient(vppapiclient.DefaultStatSocket)
+	cmd := flag.Arg(0)
 
-	// connect to stats API
+	switch cmd {
+	case "", "ls", "dump":
+	default:
+		flag.Usage()
+	}
+
+	var patterns []string
+	if flag.NArg() > 0 {
+		patterns = flag.Args()[1:]
+	}
+
+	client := vppapiclient.NewStatClient(*statsSocket)
+
+	fmt.Printf("Connecting to stats socket: %s\n", *statsSocket)
+
 	if err := client.Connect(); err != nil {
-		log.Fatalln("connecting client failed:", err)
+		log.Fatalln("Connecting failed:", err)
 	}
 	defer client.Disconnect()
 
-	// list stats by patterns
-	// you can omit parameters to list all stats
-	list, err := client.ListStats("/if", "/sys")
+	switch cmd {
+	case "dump":
+		dumpStats(client, patterns)
+	default:
+		listStats(client, patterns)
+	}
+}
+
+func listStats(client adapter.StatsAPI, patterns []string) {
+	fmt.Printf("Listing stats.. %s\n", strings.Join(patterns, " "))
+
+	list, err := client.ListStats(patterns...)
 	if err != nil {
 		log.Fatalln("listing stats failed:", err)
 	}
@@ -45,22 +89,52 @@ func main() {
 	for _, stat := range list {
 		fmt.Printf(" - %v\n", stat)
 	}
-	fmt.Printf("listed %d stats\n", len(list))
 
-	// dump stats by patterns to retrieve stats with the stats data
-	stats, err := client.DumpStats()
+	fmt.Printf("Listed %d stats\n", len(list))
+}
+
+func dumpStats(client adapter.StatsAPI, patterns []string) {
+	fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))
+
+	stats, err := client.DumpStats(patterns...)
 	if err != nil {
 		log.Fatalln("dumping stats failed:", err)
 	}
 
+	n := 0
 	for _, stat := range stats {
-		switch data := stat.Data.(type) {
-		case adapter.ErrorStat:
-			if data == 0 {
-				// skip printing errors with 0 value
-				continue
-			}
+		if isZero(stat.Data) && *skipZeros {
+			continue
 		}
 		fmt.Printf(" - %-25s %25v %+v\n", stat.Name, stat.Type, stat.Data)
+		n++
 	}
+
+	fmt.Printf("Dumped %d (%d) stats\n", n, len(stats))
+}
+
+func isZero(stat adapter.Stat) bool {
+	switch s := stat.(type) {
+	case adapter.ScalarStat:
+		return s == 0
+	case adapter.ErrorStat:
+		return s == 0
+	case adapter.SimpleCounterStat:
+		for _, ss := range s {
+			for _, sss := range ss {
+				if sss != 0 {
+					return false
+				}
+			}
+		}
+	case adapter.CombinedCounterStat:
+		for _, ss := range s {
+			for _, sss := range ss {
+				if sss.Bytes != 0 || sss.Packets != 0 {
+					return false
+				}
+			}
+		}
+	}
+	return true
 }
