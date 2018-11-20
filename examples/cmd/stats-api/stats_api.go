@@ -34,7 +34,7 @@ import (
 
 var (
 	statsSocket = flag.String("socket", vppapiclient.DefaultStatSocket, "VPP stats segment socket")
-	skipZeros   = flag.Bool("skipzero", true, "Skip stats with zero values")
+	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
 )
 
 func init() {
@@ -72,7 +72,7 @@ func main() {
 
 	switch cmd {
 	case "dump":
-		dumpStats(client, patterns)
+		dumpStats(client, patterns, !*dumpAll)
 	default:
 		listStats(client, patterns)
 	}
@@ -93,7 +93,7 @@ func listStats(client adapter.StatsAPI, patterns []string) {
 	fmt.Printf("Listed %d stats\n", len(list))
 }
 
-func dumpStats(client adapter.StatsAPI, patterns []string) {
+func dumpStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
 	fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))
 
 	stats, err := client.DumpStats(patterns...)
@@ -103,7 +103,7 @@ func dumpStats(client adapter.StatsAPI, patterns []string) {
 
 	n := 0
 	for _, stat := range stats {
-		if isZero(stat.Data) && *skipZeros {
+		if isZero(stat.Data) && skipZeros {
 			continue
 		}
 		fmt.Printf(" - %-25s %25v %+v\n", stat.Name, stat.Type, stat.Data)
