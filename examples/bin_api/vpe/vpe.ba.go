@@ -5,8 +5,9 @@
  Package vpe is a generated from VPP binary API module 'vpe'.
 
  It contains following objects:
-	 16 messages
-	  8 services
+	 18 messages
+	  1 type
+	  9 services
 
 */
 package vpe
@@ -20,26 +21,95 @@ var _ = api.RegisterMessage
 var _ = struc.Pack
 var _ = bytes.NewBuffer
 
+// Services represents VPP binary API services:
+//
+//	"services": {
+//	    "cli_inband": {
+//	        "reply": "cli_inband_reply"
+//	    },
+//	    "get_node_index": {
+//	        "reply": "get_node_index_reply"
+//	    },
+//	    "cli": {
+//	        "reply": "cli_reply"
+//	    },
+//	    "show_version": {
+//	        "reply": "show_version_reply"
+//	    },
+//	    "get_node_graph": {
+//	        "reply": "get_node_graph_reply"
+//	    },
+//	    "get_next_index": {
+//	        "reply": "get_next_index_reply"
+//	    },
+//	    "show_threads": {
+//	        "reply": "show_threads_reply"
+//	    },
+//	    "add_node_next": {
+//	        "reply": "add_node_next_reply"
+//	    },
+//	    "control_ping": {
+//	        "reply": "control_ping_reply"
+//	    }
+//	},
+//
+type Services interface {
+	AddNodeNext(*AddNodeNext) (*AddNodeNextReply, error)
+	Cli(*Cli) (*CliReply, error)
+	CliInband(*CliInband) (*CliInbandReply, error)
+	ControlPing(*ControlPing) (*ControlPingReply, error)
+	GetNextIndex(*GetNextIndex) (*GetNextIndexReply, error)
+	GetNodeGraph(*GetNodeGraph) (*GetNodeGraphReply, error)
+	GetNodeIndex(*GetNodeIndex) (*GetNodeIndexReply, error)
+	ShowThreads(*ShowThreads) (*ShowThreadsReply, error)
+	ShowVersion(*ShowVersion) (*ShowVersionReply, error)
+}
+
+/* Types */
+
+// ThreadData represents VPP binary API type 'thread_data':
+//
+//	"thread_data",
+//	0,
+//	"count"
+//
+type ThreadData struct {
+	ID        uint32
+	Name      []byte `struc:"[64]byte"`
+	Type      []byte `struc:"[64]byte"`
+	PID       uint32
+	CPUID     uint32
+	Core      uint32
+	CPUSocket uint32
+}
+
+func (*ThreadData) GetTypeName() string {
+	return "thread_data"
+}
+func (*ThreadData) GetCrcString() string {
+	return "0f57094e"
+}
+
 /* Messages */
 
-// ControlPing represents the VPP binary API message 'control_ping'.
+// ControlPing represents VPP binary API message 'control_ping':
 //
-//            "control_ping",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            {
-//                "crc": "0x51077d14"
-//            }
+//	"control_ping",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
 //
 type ControlPing struct{}
 
@@ -53,32 +123,32 @@ func (*ControlPing) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// ControlPingReply represents the VPP binary API message 'control_ping_reply'.
+// ControlPingReply represents VPP binary API message 'control_ping_reply':
 //
-//            "control_ping_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "vpe_pid"
-//            ],
-//            {
-//                "crc": "0xf6b0b8ca"
-//            }
+//	"control_ping_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "vpe_pid"
+//	],
+//	{
+//	    "crc": "0xf6b0b8ca"
+//	}
 //
 type ControlPingReply struct {
 	Retval      int32
@@ -96,28 +166,28 @@ func (*ControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// Cli represents the VPP binary API message 'cli'.
+// Cli represents VPP binary API message 'cli':
 //
-//            "cli",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u64",
-//                "cmd_in_shmem"
-//            ],
-//            {
-//                "crc": "0x23bfbfff"
-//            }
+//	"cli",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u64",
+//	    "cmd_in_shmem"
+//	],
+//	{
+//	    "crc": "0x23bfbfff"
+//	}
 //
 type Cli struct {
 	CmdInShmem uint64
@@ -133,34 +203,34 @@ func (*Cli) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// CliInband represents the VPP binary API message 'cli_inband'.
+// CliInband represents VPP binary API message 'cli_inband':
 //
-//            "cli_inband",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "length"
-//            ],
-//            [
-//                "u8",
-//                "cmd",
-//                0,
-//                "length"
-//            ],
-//            {
-//                "crc": "0x74e00a49"
-//            }
+//	"cli_inband",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "length"
+//	],
+//	[
+//	    "u8",
+//	    "cmd",
+//	    0,
+//	    "length"
+//	],
+//	{
+//	    "crc": "0x74e00a49"
+//	}
 //
 type CliInband struct {
 	Length uint32 `struc:"sizeof=Cmd"`
@@ -177,28 +247,28 @@ func (*CliInband) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// CliReply represents the VPP binary API message 'cli_reply'.
+// CliReply represents VPP binary API message 'cli_reply':
 //
-//            "cli_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u64",
-//                "reply_in_shmem"
-//            ],
-//            {
-//                "crc": "0x06d68297"
-//            }
+//	"cli_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u64",
+//	    "reply_in_shmem"
+//	],
+//	{
+//	    "crc": "0x06d68297"
+//	}
 //
 type CliReply struct {
 	Retval       int32
@@ -215,34 +285,34 @@ func (*CliReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// CliInbandReply represents the VPP binary API message 'cli_inband_reply'.
+// CliInbandReply represents VPP binary API message 'cli_inband_reply':
 //
-//            "cli_inband_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "length"
-//            ],
-//            [
-//                "u8",
-//                "reply",
-//                0,
-//                "length"
-//            ],
-//            {
-//                "crc": "0x1f22bbb8"
-//            }
+//	"cli_inband_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "length"
+//	],
+//	[
+//	    "u8",
+//	    "reply",
+//	    0,
+//	    "length"
+//	],
+//	{
+//	    "crc": "0x1f22bbb8"
+//	}
 //
 type CliInbandReply struct {
 	Retval int32
@@ -260,29 +330,29 @@ func (*CliInbandReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// GetNodeIndex represents the VPP binary API message 'get_node_index'.
+// GetNodeIndex represents VPP binary API message 'get_node_index':
 //
-//            "get_node_index",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u8",
-//                "node_name",
-//                64
-//            ],
-//            {
-//                "crc": "0x6c9a495d"
-//            }
+//	"get_node_index",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u8",
+//	    "node_name",
+//	    64
+//	],
+//	{
+//	    "crc": "0x6c9a495d"
+//	}
 //
 type GetNodeIndex struct {
 	NodeName []byte `struc:"[64]byte"`
@@ -298,28 +368,28 @@ func (*GetNodeIndex) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// GetNodeIndexReply represents the VPP binary API message 'get_node_index_reply'.
+// GetNodeIndexReply represents VPP binary API message 'get_node_index_reply':
 //
-//            "get_node_index_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "node_index"
-//            ],
-//            {
-//                "crc": "0xa8600b89"
-//            }
+//	"get_node_index_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "node_index"
+//	],
+//	{
+//	    "crc": "0xa8600b89"
+//	}
 //
 type GetNodeIndexReply struct {
 	Retval    int32
@@ -336,34 +406,34 @@ func (*GetNodeIndexReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// AddNodeNext represents the VPP binary API message 'add_node_next'.
+// AddNodeNext represents VPP binary API message 'add_node_next':
 //
-//            "add_node_next",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u8",
-//                "node_name",
-//                64
-//            ],
-//            [
-//                "u8",
-//                "next_name",
-//                64
-//            ],
-//            {
-//                "crc": "0x9ab92f7a"
-//            }
+//	"add_node_next",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u8",
+//	    "node_name",
+//	    64
+//	],
+//	[
+//	    "u8",
+//	    "next_name",
+//	    64
+//	],
+//	{
+//	    "crc": "0x9ab92f7a"
+//	}
 //
 type AddNodeNext struct {
 	NodeName []byte `struc:"[64]byte"`
@@ -380,28 +450,28 @@ func (*AddNodeNext) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// AddNodeNextReply represents the VPP binary API message 'add_node_next_reply'.
+// AddNodeNextReply represents VPP binary API message 'add_node_next_reply':
 //
-//            "add_node_next_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "next_index"
-//            ],
-//            {
-//                "crc": "0x2ed75f32"
-//            }
+//	"add_node_next_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "next_index"
+//	],
+//	{
+//	    "crc": "0x2ed75f32"
+//	}
 //
 type AddNodeNextReply struct {
 	Retval    int32
@@ -418,24 +488,24 @@ func (*AddNodeNextReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// ShowVersion represents the VPP binary API message 'show_version'.
+// ShowVersion represents VPP binary API message 'show_version':
 //
-//            "show_version",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            {
-//                "crc": "0x51077d14"
-//            }
+//	"show_version",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
 //
 type ShowVersion struct{}
 
@@ -449,44 +519,44 @@ func (*ShowVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// ShowVersionReply represents the VPP binary API message 'show_version_reply'.
+// ShowVersionReply represents VPP binary API message 'show_version_reply':
 //
-//            "show_version_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u8",
-//                "program",
-//                32
-//            ],
-//            [
-//                "u8",
-//                "version",
-//                32
-//            ],
-//            [
-//                "u8",
-//                "build_date",
-//                32
-//            ],
-//            [
-//                "u8",
-//                "build_directory",
-//                256
-//            ],
-//            {
-//                "crc": "0x8b5a13b4"
-//            }
+//	"show_version_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u8",
+//	    "program",
+//	    32
+//	],
+//	[
+//	    "u8",
+//	    "version",
+//	    32
+//	],
+//	[
+//	    "u8",
+//	    "build_date",
+//	    32
+//	],
+//	[
+//	    "u8",
+//	    "build_directory",
+//	    256
+//	],
+//	{
+//	    "crc": "0x8b5a13b4"
+//	}
 //
 type ShowVersionReply struct {
 	Retval         int32
@@ -506,24 +576,100 @@ func (*ShowVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// GetNodeGraph represents the VPP binary API message 'get_node_graph'.
+// ShowThreads represents VPP binary API message 'show_threads':
 //
-//            "get_node_graph",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            {
-//                "crc": "0x51077d14"
-//            }
+//	"show_threads",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type ShowThreads struct{}
+
+func (*ShowThreads) GetMessageName() string {
+	return "show_threads"
+}
+func (*ShowThreads) GetCrcString() string {
+	return "51077d14"
+}
+func (*ShowThreads) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ShowThreadsReply represents VPP binary API message 'show_threads_reply':
+//
+//	"show_threads_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_thread_data_t",
+//	    "thread_data",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x6942fb35"
+//	}
+//
+type ShowThreadsReply struct {
+	Retval     int32
+	Count      uint32 `struc:"sizeof=ThreadData"`
+	ThreadData []ThreadData
+}
+
+func (*ShowThreadsReply) GetMessageName() string {
+	return "show_threads_reply"
+}
+func (*ShowThreadsReply) GetCrcString() string {
+	return "6942fb35"
+}
+func (*ShowThreadsReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// GetNodeGraph represents VPP binary API message 'get_node_graph':
+//
+//	"get_node_graph",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
 //
 type GetNodeGraph struct{}
 
@@ -537,28 +683,28 @@ func (*GetNodeGraph) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// GetNodeGraphReply represents the VPP binary API message 'get_node_graph_reply'.
+// GetNodeGraphReply represents VPP binary API message 'get_node_graph_reply':
 //
-//            "get_node_graph_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u64",
-//                "reply_in_shmem"
-//            ],
-//            {
-//                "crc": "0x06d68297"
-//            }
+//	"get_node_graph_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u64",
+//	    "reply_in_shmem"
+//	],
+//	{
+//	    "crc": "0x06d68297"
+//	}
 //
 type GetNodeGraphReply struct {
 	Retval       int32
@@ -575,34 +721,34 @@ func (*GetNodeGraphReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// GetNextIndex represents the VPP binary API message 'get_next_index'.
+// GetNextIndex represents VPP binary API message 'get_next_index':
 //
-//            "get_next_index",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u8",
-//                "node_name",
-//                64
-//            ],
-//            [
-//                "u8",
-//                "next_name",
-//                64
-//            ],
-//            {
-//                "crc": "0x9ab92f7a"
-//            }
+//	"get_next_index",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u8",
+//	    "node_name",
+//	    64
+//	],
+//	[
+//	    "u8",
+//	    "next_name",
+//	    64
+//	],
+//	{
+//	    "crc": "0x9ab92f7a"
+//	}
 //
 type GetNextIndex struct {
 	NodeName []byte `struc:"[64]byte"`
@@ -619,28 +765,28 @@ func (*GetNextIndex) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// GetNextIndexReply represents the VPP binary API message 'get_next_index_reply'.
+// GetNextIndexReply represents VPP binary API message 'get_next_index_reply':
 //
-//            "get_next_index_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "next_index"
-//            ],
-//            {
-//                "crc": "0x2ed75f32"
-//            }
+//	"get_next_index_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "next_index"
+//	],
+//	{
+//	    "crc": "0x2ed75f32"
+//	}
 //
 type GetNextIndexReply struct {
 	Retval    int32
@@ -657,19 +803,6 @@ func (*GetNextIndexReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-/* Services */
-
-type Services interface {
-	AddNodeNext(*AddNodeNext) (*AddNodeNextReply, error)
-	Cli(*Cli) (*CliReply, error)
-	CliInband(*CliInband) (*CliInbandReply, error)
-	ControlPing(*ControlPing) (*ControlPingReply, error)
-	GetNextIndex(*GetNextIndex) (*GetNextIndexReply, error)
-	GetNodeGraph(*GetNodeGraph) (*GetNodeGraphReply, error)
-	GetNodeIndex(*GetNodeIndex) (*GetNodeIndexReply, error)
-	ShowVersion(*ShowVersion) (*ShowVersionReply, error)
-}
-
 func init() {
 	api.RegisterMessage((*ControlPing)(nil), "vpe.ControlPing")
 	api.RegisterMessage((*ControlPingReply)(nil), "vpe.ControlPingReply")
@@ -683,6 +816,8 @@ func init() {
 	api.RegisterMessage((*AddNodeNextReply)(nil), "vpe.AddNodeNextReply")
 	api.RegisterMessage((*ShowVersion)(nil), "vpe.ShowVersion")
 	api.RegisterMessage((*ShowVersionReply)(nil), "vpe.ShowVersionReply")
+	api.RegisterMessage((*ShowThreads)(nil), "vpe.ShowThreads")
+	api.RegisterMessage((*ShowThreadsReply)(nil), "vpe.ShowThreadsReply")
 	api.RegisterMessage((*GetNodeGraph)(nil), "vpe.GetNodeGraph")
 	api.RegisterMessage((*GetNodeGraphReply)(nil), "vpe.GetNodeGraphReply")
 	api.RegisterMessage((*GetNextIndex)(nil), "vpe.GetNextIndex")

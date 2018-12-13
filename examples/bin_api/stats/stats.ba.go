@@ -5,9 +5,10 @@
  Package stats is a generated from VPP binary API module 'stats'.
 
  It contains following objects:
-	 39 messages
-	 10 types
-	 14 services
+	 42 messages
+	 14 types
+	  1 alias
+	 15 services
 
 */
 package stats
@@ -21,22 +22,136 @@ var _ = api.RegisterMessage
 var _ = struc.Pack
 var _ = bytes.NewBuffer
 
+// Services represents VPP binary API services:
+//
+//	"services": {
+//	    "want_ip4_fib_stats": {
+//	        "reply": "want_ip4_fib_stats_reply",
+//	        "events": [
+//	            "vnet_ip4_fib_counters"
+//	        ]
+//	    },
+//	    "want_ip6_fib_stats": {
+//	        "reply": "want_ip6_fib_stats_reply",
+//	        "events": [
+//	            "vnet_ip6_fib_counters"
+//	        ]
+//	    },
+//	    "want_stats": {
+//	        "reply": "want_stats_reply"
+//	    },
+//	    "want_interface_simple_stats": {
+//	        "reply": "want_interface_simple_stats_reply",
+//	        "events": [
+//	            "vnet_interface_simple_counters"
+//	        ]
+//	    },
+//	    "stats_get_poller_delay": {
+//	        "reply": "stats_get_poller_delay_reply"
+//	    },
+//	    "want_per_interface_combined_stats": {
+//	        "reply": "want_per_interface_combined_stats_reply",
+//	        "events": [
+//	            "vnet_per_interface_combined_counters"
+//	        ]
+//	    },
+//	    "vnet_get_summary_stats": {
+//	        "reply": "vnet_get_summary_stats_reply"
+//	    },
+//	    "want_bier_neighbor_stats": {
+//	        "reply": "want_bier_neighbor_stats_reply",
+//	        "events": [
+//	            "vnet_bier_neighbor_counters"
+//	        ]
+//	    },
+//	    "want_udp_encap_stats": {
+//	        "reply": "want_udp_encap_stats_reply",
+//	        "events": [
+//	            "vnet_udp_encap_counters"
+//	        ]
+//	    },
+//	    "want_ip6_nbr_stats": {
+//	        "reply": "want_ip6_nbr_stats_reply",
+//	        "events": [
+//	            "vnet_ip6_nbr_counters"
+//	        ]
+//	    },
+//	    "want_ip4_mfib_stats": {
+//	        "reply": "want_ip4_mfib_stats_reply",
+//	        "events": [
+//	            "vnet_ip4_mfib_counters"
+//	        ]
+//	    },
+//	    "want_ip6_mfib_stats": {
+//	        "reply": "want_ip6_mfib_stats_reply",
+//	        "events": [
+//	            "vnet_ip6_mfib_counters"
+//	        ]
+//	    },
+//	    "want_per_interface_simple_stats": {
+//	        "reply": "want_per_interface_simple_stats_reply",
+//	        "events": [
+//	            "vnet_per_interface_simple_counters"
+//	        ]
+//	    },
+//	    "want_interface_combined_stats": {
+//	        "reply": "want_interface_combined_stats_reply",
+//	        "events": [
+//	            "vnet_interface_combined_counters"
+//	        ]
+//	    },
+//	    "want_ip4_nbr_stats": {
+//	        "reply": "want_ip4_nbr_stats_reply",
+//	        "events": [
+//	            "vnet_ip4_nbr_counters"
+//	        ]
+//	    }
+//	},
+//
+type Services interface {
+	StatsGetPollerDelay(*StatsGetPollerDelay) (*StatsGetPollerDelayReply, error)
+	VnetGetSummaryStats(*VnetGetSummaryStats) (*VnetGetSummaryStatsReply, error)
+	WantBierNeighborStats(*WantBierNeighborStats) (*WantBierNeighborStatsReply, error)
+	WantInterfaceCombinedStats(*WantInterfaceCombinedStats) (*WantInterfaceCombinedStatsReply, error)
+	WantInterfaceSimpleStats(*WantInterfaceSimpleStats) (*WantInterfaceSimpleStatsReply, error)
+	WantIP4FibStats(*WantIP4FibStats) (*WantIP4FibStatsReply, error)
+	WantIP4MfibStats(*WantIP4MfibStats) (*WantIP4MfibStatsReply, error)
+	WantIP4NbrStats(*WantIP4NbrStats) (*WantIP4NbrStatsReply, error)
+	WantIP6FibStats(*WantIP6FibStats) (*WantIP6FibStatsReply, error)
+	WantIP6MfibStats(*WantIP6MfibStats) (*WantIP6MfibStatsReply, error)
+	WantIP6NbrStats(*WantIP6NbrStats) (*WantIP6NbrStatsReply, error)
+	WantPerInterfaceCombinedStats(*WantPerInterfaceCombinedStats) (*WantPerInterfaceCombinedStatsReply, error)
+	WantPerInterfaceSimpleStats(*WantPerInterfaceSimpleStats) (*WantPerInterfaceSimpleStatsReply, error)
+	WantStats(*WantStats) (*WantStatsReply, error)
+	WantUDPEncapStats(*WantUDPEncapStats) (*WantUDPEncapStatsReply, error)
+}
+
+/* Aliases */
+
+// InterfaceIndex represents VPP binary API alias 'interface_index':
+//
+//	"interface_index": {
+//	    "type": "u32"
+//	}
+//
+type InterfaceIndex uint32
+
 /* Types */
 
-// VlibCounter represents the VPP binary API type 'vlib_counter'.
+// VlibCounter represents VPP binary API type 'vlib_counter':
 //
-//            "vlib_counter",
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0xce2325a2"
-//            }
+//	"vlib_counter",
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0xce2325a2"
+//	}
 //
 type VlibCounter struct {
 	Packets uint64
@@ -50,80 +165,80 @@ func (*VlibCounter) GetCrcString() string {
 	return "ce2325a2"
 }
 
-// VnetCombinedCounter represents the VPP binary API type 'vnet_combined_counter'.
+// VnetCombinedCounter represents VPP binary API type 'vnet_combined_counter':
 //
-//            "vnet_combined_counter",
-//            [
-//                "u32",
-//                "sw_if_index"
-//            ],
-//            [
-//                "u64",
-//                "rx_packets"
-//            ],
-//            [
-//                "u64",
-//                "rx_bytes"
-//            ],
-//            [
-//                "u64",
-//                "rx_unicast_packets"
-//            ],
-//            [
-//                "u64",
-//                "rx_unicast_bytes"
-//            ],
-//            [
-//                "u64",
-//                "rx_multicast_packets"
-//            ],
-//            [
-//                "u64",
-//                "rx_multicast_bytes"
-//            ],
-//            [
-//                "u64",
-//                "rx_broadcast_packets"
-//            ],
-//            [
-//                "u64",
-//                "rx_broadcast_bytes"
-//            ],
-//            [
-//                "u64",
-//                "tx_packets"
-//            ],
-//            [
-//                "u64",
-//                "tx_bytes"
-//            ],
-//            [
-//                "u64",
-//                "tx_unicast_packets"
-//            ],
-//            [
-//                "u64",
-//                "tx_unicast_bytes"
-//            ],
-//            [
-//                "u64",
-//                "tx_multicast_packets"
-//            ],
-//            [
-//                "u64",
-//                "tx_multicast_bytes"
-//            ],
-//            [
-//                "u64",
-//                "tx_broadcast_packets"
-//            ],
-//            [
-//                "u64",
-//                "tx_broadcast_bytes"
-//            ],
-//            {
-//                "crc": "0x20905ca4"
-//            }
+//	"vnet_combined_counter",
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u64",
+//	    "rx_packets"
+//	],
+//	[
+//	    "u64",
+//	    "rx_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "rx_unicast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "rx_unicast_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "rx_multicast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "rx_multicast_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "rx_broadcast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "rx_broadcast_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "tx_packets"
+//	],
+//	[
+//	    "u64",
+//	    "tx_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "tx_unicast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "tx_unicast_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "tx_multicast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "tx_multicast_bytes"
+//	],
+//	[
+//	    "u64",
+//	    "tx_broadcast_packets"
+//	],
+//	[
+//	    "u64",
+//	    "tx_broadcast_bytes"
+//	],
+//	{
+//	    "crc": "0x20905ca4"
+//	}
 //
 type VnetCombinedCounter struct {
 	SwIfIndex          uint32
@@ -152,52 +267,52 @@ func (*VnetCombinedCounter) GetCrcString() string {
 	return "20905ca4"
 }
 
-// VnetSimpleCounter represents the VPP binary API type 'vnet_simple_counter'.
+// VnetSimpleCounter represents VPP binary API type 'vnet_simple_counter':
 //
-//            "vnet_simple_counter",
-//            [
-//                "u32",
-//                "sw_if_index"
-//            ],
-//            [
-//                "u64",
-//                "drop"
-//            ],
-//            [
-//                "u64",
-//                "punt"
-//            ],
-//            [
-//                "u64",
-//                "rx_ip4"
-//            ],
-//            [
-//                "u64",
-//                "rx_ip6"
-//            ],
-//            [
-//                "u64",
-//                "rx_no_buffer"
-//            ],
-//            [
-//                "u64",
-//                "rx_miss"
-//            ],
-//            [
-//                "u64",
-//                "rx_error"
-//            ],
-//            [
-//                "u64",
-//                "tx_error"
-//            ],
-//            [
-//                "u64",
-//                "rx_mpls"
-//            ],
-//            {
-//                "crc": "0x8bd65e2d"
-//            }
+//	"vnet_simple_counter",
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u64",
+//	    "drop"
+//	],
+//	[
+//	    "u64",
+//	    "punt"
+//	],
+//	[
+//	    "u64",
+//	    "rx_ip4"
+//	],
+//	[
+//	    "u64",
+//	    "rx_ip6"
+//	],
+//	[
+//	    "u64",
+//	    "rx_no_buffer"
+//	],
+//	[
+//	    "u64",
+//	    "rx_miss"
+//	],
+//	[
+//	    "u64",
+//	    "rx_error"
+//	],
+//	[
+//	    "u64",
+//	    "tx_error"
+//	],
+//	[
+//	    "u64",
+//	    "rx_mpls"
+//	],
+//	{
+//	    "crc": "0x8bd65e2d"
+//	}
 //
 type VnetSimpleCounter struct {
 	SwIfIndex  uint32
@@ -219,28 +334,216 @@ func (*VnetSimpleCounter) GetCrcString() string {
 	return "8bd65e2d"
 }
 
-// IP4FibCounter represents the VPP binary API type 'ip4_fib_counter'.
+// FibMplsLabel represents VPP binary API type 'fib_mpls_label':
 //
-//            "ip4_fib_counter",
-//            [
-//                "u32",
-//                "address"
-//            ],
-//            [
-//                "u8",
-//                "address_length"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0xa6ceb0c9"
-//            }
+//	"fib_mpls_label",
+//	[
+//	    "u8",
+//	    "is_uniform"
+//	],
+//	[
+//	    "u32",
+//	    "label"
+//	],
+//	[
+//	    "u8",
+//	    "ttl"
+//	],
+//	[
+//	    "u8",
+//	    "exp"
+//	],
+//	{
+//	    "crc": "0xc93bf35c"
+//	}
+//
+type FibMplsLabel struct {
+	IsUniform uint8
+	Label     uint32
+	TTL       uint8
+	Exp       uint8
+}
+
+func (*FibMplsLabel) GetTypeName() string {
+	return "fib_mpls_label"
+}
+func (*FibMplsLabel) GetCrcString() string {
+	return "c93bf35c"
+}
+
+// FibPath represents VPP binary API type 'fib_path':
+//
+//	"fib_path",
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u32",
+//	    "table_id"
+//	],
+//	[
+//	    "u8",
+//	    "weight"
+//	],
+//	[
+//	    "u8",
+//	    "preference"
+//	],
+//	[
+//	    "u8",
+//	    "is_local"
+//	],
+//	[
+//	    "u8",
+//	    "is_drop"
+//	],
+//	[
+//	    "u8",
+//	    "is_udp_encap"
+//	],
+//	[
+//	    "u8",
+//	    "is_unreach"
+//	],
+//	[
+//	    "u8",
+//	    "is_prohibit"
+//	],
+//	[
+//	    "u8",
+//	    "is_resolve_host"
+//	],
+//	[
+//	    "u8",
+//	    "is_resolve_attached"
+//	],
+//	[
+//	    "u8",
+//	    "is_dvr"
+//	],
+//	[
+//	    "u8",
+//	    "is_source_lookup"
+//	],
+//	[
+//	    "u8",
+//	    "afi"
+//	],
+//	[
+//	    "u8",
+//	    "next_hop",
+//	    16
+//	],
+//	[
+//	    "u32",
+//	    "next_hop_id"
+//	],
+//	[
+//	    "u32",
+//	    "rpf_id"
+//	],
+//	[
+//	    "u32",
+//	    "via_label"
+//	],
+//	[
+//	    "u8",
+//	    "n_labels"
+//	],
+//	[
+//	    "vl_api_fib_mpls_label_t",
+//	    "label_stack",
+//	    16
+//	],
+//	{
+//	    "crc": "0xabe483ef"
+//	}
+//
+type FibPath struct {
+	SwIfIndex         uint32
+	TableID           uint32
+	Weight            uint8
+	Preference        uint8
+	IsLocal           uint8
+	IsDrop            uint8
+	IsUDPEncap        uint8
+	IsUnreach         uint8
+	IsProhibit        uint8
+	IsResolveHost     uint8
+	IsResolveAttached uint8
+	IsDvr             uint8
+	IsSourceLookup    uint8
+	Afi               uint8
+	NextHop           []byte `struc:"[16]byte"`
+	NextHopID         uint32
+	RpfID             uint32
+	ViaLabel          uint32
+	NLabels           uint8
+	LabelStack        []FibMplsLabel `struc:"[16]FibMplsLabel"`
+}
+
+func (*FibPath) GetTypeName() string {
+	return "fib_path"
+}
+func (*FibPath) GetCrcString() string {
+	return "abe483ef"
+}
+
+// BierTableID represents VPP binary API type 'bier_table_id':
+//
+//	"bier_table_id",
+//	[
+//	    "u8",
+//	    "bt_set"
+//	],
+//	[
+//	    "u8",
+//	    "bt_sub_domain"
+//	],
+//	[
+//	    "u8",
+//	    "bt_hdr_len_id"
+//	],
+//	{
+//	    "crc": "0x435c691d"
+//	}
+//
+type BierTableID struct {
+	BtSet       uint8
+	BtSubDomain uint8
+	BtHdrLenID  uint8
+}
+
+func (*BierTableID) GetTypeName() string {
+	return "bier_table_id"
+}
+func (*BierTableID) GetCrcString() string {
+	return "435c691d"
+}
+
+// IP4FibCounter represents VPP binary API type 'ip4_fib_counter':
+//
+//	"ip4_fib_counter",
+//	[
+//	    "u32",
+//	    "address"
+//	],
+//	[
+//	    "u8",
+//	    "address_length"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0xa6ceb0c9"
+//	}
 //
 type IP4FibCounter struct {
 	Address       uint32
@@ -256,34 +559,34 @@ func (*IP4FibCounter) GetCrcString() string {
 	return "a6ceb0c9"
 }
 
-// IP4MfibCounter represents the VPP binary API type 'ip4_mfib_counter'.
+// IP4MfibCounter represents VPP binary API type 'ip4_mfib_counter':
 //
-//            "ip4_mfib_counter",
-//            [
-//                "u8",
-//                "source",
-//                4
-//            ],
-//            [
-//                "u8",
-//                "group",
-//                4
-//            ],
-//            [
-//                "u8",
-//                "group_length"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0x2cee4721"
-//            }
+//	"ip4_mfib_counter",
+//	[
+//	    "u8",
+//	    "source",
+//	    4
+//	],
+//	[
+//	    "u8",
+//	    "group",
+//	    4
+//	],
+//	[
+//	    "u8",
+//	    "group_length"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0x2cee4721"
+//	}
 //
 type IP4MfibCounter struct {
 	Source      []byte `struc:"[4]byte"`
@@ -300,28 +603,28 @@ func (*IP4MfibCounter) GetCrcString() string {
 	return "2cee4721"
 }
 
-// IP4NbrCounter represents the VPP binary API type 'ip4_nbr_counter'.
+// IP4NbrCounter represents VPP binary API type 'ip4_nbr_counter':
 //
-//            "ip4_nbr_counter",
-//            [
-//                "u32",
-//                "address"
-//            ],
-//            [
-//                "u8",
-//                "link_type"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0xb9f974d6"
-//            }
+//	"ip4_nbr_counter",
+//	[
+//	    "u32",
+//	    "address"
+//	],
+//	[
+//	    "u8",
+//	    "link_type"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0xb9f974d6"
+//	}
 //
 type IP4NbrCounter struct {
 	Address  uint32
@@ -337,29 +640,29 @@ func (*IP4NbrCounter) GetCrcString() string {
 	return "b9f974d6"
 }
 
-// IP6FibCounter represents the VPP binary API type 'ip6_fib_counter'.
+// IP6FibCounter represents VPP binary API type 'ip6_fib_counter':
 //
-//            "ip6_fib_counter",
-//            [
-//                "u64",
-//                "address",
-//                2
-//            ],
-//            [
-//                "u8",
-//                "address_length"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0xf1197efb"
-//            }
+//	"ip6_fib_counter",
+//	[
+//	    "u64",
+//	    "address",
+//	    2
+//	],
+//	[
+//	    "u8",
+//	    "address_length"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0xf1197efb"
+//	}
 //
 type IP6FibCounter struct {
 	Address       []uint64 `struc:"[2]uint64"`
@@ -375,34 +678,34 @@ func (*IP6FibCounter) GetCrcString() string {
 	return "f1197efb"
 }
 
-// IP6MfibCounter represents the VPP binary API type 'ip6_mfib_counter'.
+// IP6MfibCounter represents VPP binary API type 'ip6_mfib_counter':
 //
-//            "ip6_mfib_counter",
-//            [
-//                "u8",
-//                "source",
-//                16
-//            ],
-//            [
-//                "u8",
-//                "group",
-//                16
-//            ],
-//            [
-//                "u8",
-//                "group_length"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0x90a9590e"
-//            }
+//	"ip6_mfib_counter",
+//	[
+//	    "u8",
+//	    "source",
+//	    16
+//	],
+//	[
+//	    "u8",
+//	    "group",
+//	    16
+//	],
+//	[
+//	    "u8",
+//	    "group_length"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0x90a9590e"
+//	}
 //
 type IP6MfibCounter struct {
 	Source      []byte `struc:"[16]byte"`
@@ -419,29 +722,29 @@ func (*IP6MfibCounter) GetCrcString() string {
 	return "90a9590e"
 }
 
-// IP6NbrCounter represents the VPP binary API type 'ip6_nbr_counter'.
+// IP6NbrCounter represents VPP binary API type 'ip6_nbr_counter':
 //
-//            "ip6_nbr_counter",
-//            [
-//                "u64",
-//                "address",
-//                2
-//            ],
-//            [
-//                "u8",
-//                "link_type"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0x2d755474"
-//            }
+//	"ip6_nbr_counter",
+//	[
+//	    "u64",
+//	    "address",
+//	    2
+//	],
+//	[
+//	    "u8",
+//	    "link_type"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0x2d755474"
+//	}
 //
 type IP6NbrCounter struct {
 	Address  []uint64 `struc:"[2]uint64"`
@@ -457,24 +760,24 @@ func (*IP6NbrCounter) GetCrcString() string {
 	return "2d755474"
 }
 
-// UDPEncapCounter represents the VPP binary API type 'udp_encap_counter'.
+// UDPEncapCounter represents VPP binary API type 'udp_encap_counter':
 //
-//            "udp_encap_counter",
-//            [
-//                "u32",
-//                "id"
-//            ],
-//            [
-//                "u64",
-//                "packets"
-//            ],
-//            [
-//                "u64",
-//                "bytes"
-//            ],
-//            {
-//                "crc": "0x7107035f"
-//            }
+//	"udp_encap_counter",
+//	[
+//	    "u32",
+//	    "id"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0x7107035f"
+//	}
 //
 type UDPEncapCounter struct {
 	ID      uint32
@@ -489,34 +792,71 @@ func (*UDPEncapCounter) GetCrcString() string {
 	return "7107035f"
 }
 
+// BierNeighborCounter represents VPP binary API type 'bier_neighbor_counter':
+//
+//	"bier_neighbor_counter",
+//	[
+//	    "vl_api_bier_table_id_t",
+//	    "tbl_id"
+//	],
+//	[
+//	    "vl_api_fib_path_t",
+//	    "path"
+//	],
+//	[
+//	    "u64",
+//	    "packets"
+//	],
+//	[
+//	    "u64",
+//	    "bytes"
+//	],
+//	{
+//	    "crc": "0x91fe1748"
+//	}
+//
+type BierNeighborCounter struct {
+	TblID   BierTableID
+	Path    FibPath
+	Packets uint64
+	Bytes   uint64
+}
+
+func (*BierNeighborCounter) GetTypeName() string {
+	return "bier_neighbor_counter"
+}
+func (*BierNeighborCounter) GetCrcString() string {
+	return "91fe1748"
+}
+
 /* Messages */
 
-// WantStats represents the VPP binary API message 'want_stats'.
+// WantStats represents VPP binary API message 'want_stats':
 //
-//            "want_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantStats struct {
 	EnableDisable uint32
@@ -533,24 +873,24 @@ func (*WantStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantStatsReply represents the VPP binary API message 'want_stats_reply'.
+// WantStatsReply represents VPP binary API message 'want_stats_reply':
 //
-//            "want_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantStatsReply struct {
 	Retval int32
@@ -566,32 +906,32 @@ func (*WantStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantInterfaceSimpleStats represents the VPP binary API message 'want_interface_simple_stats'.
+// WantInterfaceSimpleStats represents VPP binary API message 'want_interface_simple_stats':
 //
-//            "want_interface_simple_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_interface_simple_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantInterfaceSimpleStats struct {
 	EnableDisable uint32
@@ -608,24 +948,24 @@ func (*WantInterfaceSimpleStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantInterfaceSimpleStatsReply represents the VPP binary API message 'want_interface_simple_stats_reply'.
+// WantInterfaceSimpleStatsReply represents VPP binary API message 'want_interface_simple_stats_reply':
 //
-//            "want_interface_simple_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_interface_simple_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantInterfaceSimpleStatsReply struct {
 	Retval int32
@@ -641,42 +981,42 @@ func (*WantInterfaceSimpleStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantPerInterfaceSimpleStats represents the VPP binary API message 'want_per_interface_simple_stats'.
+// WantPerInterfaceSimpleStats represents VPP binary API message 'want_per_interface_simple_stats':
 //
-//            "want_per_interface_simple_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            [
-//                "u32",
-//                "num"
-//            ],
-//            [
-//                "u32",
-//                "sw_ifs",
-//                0,
-//                "num"
-//            ],
-//            {
-//                "crc": "0x729d04f1"
-//            }
+//	"want_per_interface_simple_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	[
+//	    "u32",
+//	    "num"
+//	],
+//	[
+//	    "u32",
+//	    "sw_ifs",
+//	    0,
+//	    "num"
+//	],
+//	{
+//	    "crc": "0x729d04f1"
+//	}
 //
 type WantPerInterfaceSimpleStats struct {
 	EnableDisable uint32
@@ -695,24 +1035,24 @@ func (*WantPerInterfaceSimpleStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantPerInterfaceSimpleStatsReply represents the VPP binary API message 'want_per_interface_simple_stats_reply'.
+// WantPerInterfaceSimpleStatsReply represents VPP binary API message 'want_per_interface_simple_stats_reply':
 //
-//            "want_per_interface_simple_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_per_interface_simple_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantPerInterfaceSimpleStatsReply struct {
 	Retval int32
@@ -728,32 +1068,32 @@ func (*WantPerInterfaceSimpleStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantInterfaceCombinedStats represents the VPP binary API message 'want_interface_combined_stats'.
+// WantInterfaceCombinedStats represents VPP binary API message 'want_interface_combined_stats':
 //
-//            "want_interface_combined_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_interface_combined_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantInterfaceCombinedStats struct {
 	EnableDisable uint32
@@ -770,24 +1110,24 @@ func (*WantInterfaceCombinedStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantInterfaceCombinedStatsReply represents the VPP binary API message 'want_interface_combined_stats_reply'.
+// WantInterfaceCombinedStatsReply represents VPP binary API message 'want_interface_combined_stats_reply':
 //
-//            "want_interface_combined_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_interface_combined_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantInterfaceCombinedStatsReply struct {
 	Retval int32
@@ -803,42 +1143,42 @@ func (*WantInterfaceCombinedStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantPerInterfaceCombinedStats represents the VPP binary API message 'want_per_interface_combined_stats'.
+// WantPerInterfaceCombinedStats represents VPP binary API message 'want_per_interface_combined_stats':
 //
-//            "want_per_interface_combined_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            [
-//                "u32",
-//                "num"
-//            ],
-//            [
-//                "u32",
-//                "sw_ifs",
-//                0,
-//                "num"
-//            ],
-//            {
-//                "crc": "0x729d04f1"
-//            }
+//	"want_per_interface_combined_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	[
+//	    "u32",
+//	    "num"
+//	],
+//	[
+//	    "u32",
+//	    "sw_ifs",
+//	    0,
+//	    "num"
+//	],
+//	{
+//	    "crc": "0x729d04f1"
+//	}
 //
 type WantPerInterfaceCombinedStats struct {
 	EnableDisable uint32
@@ -857,24 +1197,24 @@ func (*WantPerInterfaceCombinedStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantPerInterfaceCombinedStatsReply represents the VPP binary API message 'want_per_interface_combined_stats_reply'.
+// WantPerInterfaceCombinedStatsReply represents VPP binary API message 'want_per_interface_combined_stats_reply':
 //
-//            "want_per_interface_combined_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_per_interface_combined_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantPerInterfaceCombinedStatsReply struct {
 	Retval int32
@@ -890,32 +1230,32 @@ func (*WantPerInterfaceCombinedStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP4FibStats represents the VPP binary API message 'want_ip4_fib_stats'.
+// WantIP4FibStats represents VPP binary API message 'want_ip4_fib_stats':
 //
-//            "want_ip4_fib_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip4_fib_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP4FibStats struct {
 	EnableDisable uint32
@@ -932,24 +1272,24 @@ func (*WantIP4FibStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP4FibStatsReply represents the VPP binary API message 'want_ip4_fib_stats_reply'.
+// WantIP4FibStatsReply represents VPP binary API message 'want_ip4_fib_stats_reply':
 //
-//            "want_ip4_fib_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip4_fib_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP4FibStatsReply struct {
 	Retval int32
@@ -965,32 +1305,32 @@ func (*WantIP4FibStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP6FibStats represents the VPP binary API message 'want_ip6_fib_stats'.
+// WantIP6FibStats represents VPP binary API message 'want_ip6_fib_stats':
 //
-//            "want_ip6_fib_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip6_fib_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP6FibStats struct {
 	EnableDisable uint32
@@ -1007,24 +1347,24 @@ func (*WantIP6FibStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP6FibStatsReply represents the VPP binary API message 'want_ip6_fib_stats_reply'.
+// WantIP6FibStatsReply represents VPP binary API message 'want_ip6_fib_stats_reply':
 //
-//            "want_ip6_fib_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip6_fib_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP6FibStatsReply struct {
 	Retval int32
@@ -1040,32 +1380,32 @@ func (*WantIP6FibStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP4MfibStats represents the VPP binary API message 'want_ip4_mfib_stats'.
+// WantIP4MfibStats represents VPP binary API message 'want_ip4_mfib_stats':
 //
-//            "want_ip4_mfib_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip4_mfib_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP4MfibStats struct {
 	EnableDisable uint32
@@ -1082,24 +1422,24 @@ func (*WantIP4MfibStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP4MfibStatsReply represents the VPP binary API message 'want_ip4_mfib_stats_reply'.
+// WantIP4MfibStatsReply represents VPP binary API message 'want_ip4_mfib_stats_reply':
 //
-//            "want_ip4_mfib_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip4_mfib_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP4MfibStatsReply struct {
 	Retval int32
@@ -1115,32 +1455,32 @@ func (*WantIP4MfibStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP6MfibStats represents the VPP binary API message 'want_ip6_mfib_stats'.
+// WantIP6MfibStats represents VPP binary API message 'want_ip6_mfib_stats':
 //
-//            "want_ip6_mfib_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip6_mfib_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP6MfibStats struct {
 	EnableDisable uint32
@@ -1157,24 +1497,24 @@ func (*WantIP6MfibStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP6MfibStatsReply represents the VPP binary API message 'want_ip6_mfib_stats_reply'.
+// WantIP6MfibStatsReply represents VPP binary API message 'want_ip6_mfib_stats_reply':
 //
-//            "want_ip6_mfib_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip6_mfib_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP6MfibStatsReply struct {
 	Retval int32
@@ -1190,32 +1530,32 @@ func (*WantIP6MfibStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP4NbrStats represents the VPP binary API message 'want_ip4_nbr_stats'.
+// WantIP4NbrStats represents VPP binary API message 'want_ip4_nbr_stats':
 //
-//            "want_ip4_nbr_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip4_nbr_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP4NbrStats struct {
 	EnableDisable uint32
@@ -1232,24 +1572,24 @@ func (*WantIP4NbrStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP4NbrStatsReply represents the VPP binary API message 'want_ip4_nbr_stats_reply'.
+// WantIP4NbrStatsReply represents VPP binary API message 'want_ip4_nbr_stats_reply':
 //
-//            "want_ip4_nbr_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip4_nbr_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP4NbrStatsReply struct {
 	Retval int32
@@ -1265,32 +1605,32 @@ func (*WantIP4NbrStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantIP6NbrStats represents the VPP binary API message 'want_ip6_nbr_stats'.
+// WantIP6NbrStats represents VPP binary API message 'want_ip6_nbr_stats':
 //
-//            "want_ip6_nbr_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable_disable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0x476f5a08"
-//            }
+//	"want_ip6_nbr_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable_disable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0x476f5a08"
+//	}
 //
 type WantIP6NbrStats struct {
 	EnableDisable uint32
@@ -1307,24 +1647,24 @@ func (*WantIP6NbrStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantIP6NbrStatsReply represents the VPP binary API message 'want_ip6_nbr_stats_reply'.
+// WantIP6NbrStatsReply represents VPP binary API message 'want_ip6_nbr_stats_reply':
 //
-//            "want_ip6_nbr_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_ip6_nbr_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantIP6NbrStatsReply struct {
 	Retval int32
@@ -1340,30 +1680,30 @@ func (*WantIP6NbrStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// VnetIP4FibCounters represents the VPP binary API message 'vnet_ip4_fib_counters'.
+// VnetIP4FibCounters represents VPP binary API message 'vnet_ip4_fib_counters':
 //
-//            "vnet_ip4_fib_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "vrf_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_ip4_fib_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x57e3feec"
-//            }
+//	"vnet_ip4_fib_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "vrf_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_ip4_fib_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x57e3feec"
+//	}
 //
 type VnetIP4FibCounters struct {
 	VrfID uint32
@@ -1381,30 +1721,30 @@ func (*VnetIP4FibCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetIP4MfibCounters represents the VPP binary API message 'vnet_ip4_mfib_counters'.
+// VnetIP4MfibCounters represents VPP binary API message 'vnet_ip4_mfib_counters':
 //
-//            "vnet_ip4_mfib_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "vrf_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_ip4_mfib_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x946eb588"
-//            }
+//	"vnet_ip4_mfib_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "vrf_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_ip4_mfib_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x946eb588"
+//	}
 //
 type VnetIP4MfibCounters struct {
 	VrfID uint32
@@ -1422,34 +1762,34 @@ func (*VnetIP4MfibCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetIP4NbrCounters represents the VPP binary API message 'vnet_ip4_nbr_counters'.
+// VnetIP4NbrCounters represents VPP binary API message 'vnet_ip4_nbr_counters':
 //
-//            "vnet_ip4_nbr_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "u32",
-//                "sw_if_index"
-//            ],
-//            [
-//                "u8",
-//                "begin"
-//            ],
-//            [
-//                "vl_api_ip4_nbr_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x214c4811"
-//            }
+//	"vnet_ip4_nbr_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "begin"
+//	],
+//	[
+//	    "vl_api_ip4_nbr_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x214c4811"
+//	}
 //
 type VnetIP4NbrCounters struct {
 	Count     uint32 `struc:"sizeof=C"`
@@ -1468,30 +1808,30 @@ func (*VnetIP4NbrCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetIP6FibCounters represents the VPP binary API message 'vnet_ip6_fib_counters'.
+// VnetIP6FibCounters represents VPP binary API message 'vnet_ip6_fib_counters':
 //
-//            "vnet_ip6_fib_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "vrf_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_ip6_fib_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x13aed73d"
-//            }
+//	"vnet_ip6_fib_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "vrf_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_ip6_fib_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x13aed73d"
+//	}
 //
 type VnetIP6FibCounters struct {
 	VrfID uint32
@@ -1509,30 +1849,30 @@ func (*VnetIP6FibCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetIP6MfibCounters represents the VPP binary API message 'vnet_ip6_mfib_counters'.
+// VnetIP6MfibCounters represents VPP binary API message 'vnet_ip6_mfib_counters':
 //
-//            "vnet_ip6_mfib_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "vrf_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_ip6_mfib_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x65fe1ae3"
-//            }
+//	"vnet_ip6_mfib_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "vrf_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_ip6_mfib_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x65fe1ae3"
+//	}
 //
 type VnetIP6MfibCounters struct {
 	VrfID uint32
@@ -1550,34 +1890,34 @@ func (*VnetIP6MfibCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetIP6NbrCounters represents the VPP binary API message 'vnet_ip6_nbr_counters'.
+// VnetIP6NbrCounters represents VPP binary API message 'vnet_ip6_nbr_counters':
 //
-//            "vnet_ip6_nbr_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "u32",
-//                "sw_if_index"
-//            ],
-//            [
-//                "u8",
-//                "begin"
-//            ],
-//            [
-//                "vl_api_ip6_nbr_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x650161c0"
-//            }
+//	"vnet_ip6_nbr_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "begin"
+//	],
+//	[
+//	    "vl_api_ip6_nbr_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x650161c0"
+//	}
 //
 type VnetIP6NbrCounters struct {
 	Count     uint32 `struc:"sizeof=C"`
@@ -1596,34 +1936,34 @@ func (*VnetIP6NbrCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetInterfaceSimpleCounters represents the VPP binary API message 'vnet_interface_simple_counters'.
+// VnetInterfaceSimpleCounters represents VPP binary API message 'vnet_interface_simple_counters':
 //
-//            "vnet_interface_simple_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u8",
-//                "vnet_counter_type"
-//            ],
-//            [
-//                "u32",
-//                "first_sw_if_index"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "u64",
-//                "data",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x9bc4a808"
-//            }
+//	"vnet_interface_simple_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u8",
+//	    "vnet_counter_type"
+//	],
+//	[
+//	    "u32",
+//	    "first_sw_if_index"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "u64",
+//	    "data",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x9bc4a808"
+//	}
 //
 type VnetInterfaceSimpleCounters struct {
 	VnetCounterType uint8
@@ -1642,34 +1982,34 @@ func (*VnetInterfaceSimpleCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetInterfaceCombinedCounters represents the VPP binary API message 'vnet_interface_combined_counters'.
+// VnetInterfaceCombinedCounters represents VPP binary API message 'vnet_interface_combined_counters':
 //
-//            "vnet_interface_combined_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u8",
-//                "vnet_counter_type"
-//            ],
-//            [
-//                "u32",
-//                "first_sw_if_index"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_vlib_counter_t",
-//                "data",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x2c595002"
-//            }
+//	"vnet_interface_combined_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u8",
+//	    "vnet_counter_type"
+//	],
+//	[
+//	    "u32",
+//	    "first_sw_if_index"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_vlib_counter_t",
+//	    "data",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x2c595002"
+//	}
 //
 type VnetInterfaceCombinedCounters struct {
 	VnetCounterType uint8
@@ -1688,30 +2028,30 @@ func (*VnetInterfaceCombinedCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetPerInterfaceSimpleCounters represents the VPP binary API message 'vnet_per_interface_simple_counters'.
+// VnetPerInterfaceSimpleCounters represents VPP binary API message 'vnet_per_interface_simple_counters':
 //
-//            "vnet_per_interface_simple_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "u32",
-//                "timestamp"
-//            ],
-//            [
-//                "vl_api_vnet_simple_counter_t",
-//                "data",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0xd1fba9ba"
-//            }
+//	"vnet_per_interface_simple_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "u32",
+//	    "timestamp"
+//	],
+//	[
+//	    "vl_api_vnet_simple_counter_t",
+//	    "data",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0xd1fba9ba"
+//	}
 //
 type VnetPerInterfaceSimpleCounters struct {
 	Count     uint32 `struc:"sizeof=Data"`
@@ -1729,30 +2069,30 @@ func (*VnetPerInterfaceSimpleCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetPerInterfaceCombinedCounters represents the VPP binary API message 'vnet_per_interface_combined_counters'.
+// VnetPerInterfaceCombinedCounters represents VPP binary API message 'vnet_per_interface_combined_counters':
 //
-//            "vnet_per_interface_combined_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "u32",
-//                "timestamp"
-//            ],
-//            [
-//                "vl_api_vnet_combined_counter_t",
-//                "data",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0xdc578375"
-//            }
+//	"vnet_per_interface_combined_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "u32",
+//	    "timestamp"
+//	],
+//	[
+//	    "vl_api_vnet_combined_counter_t",
+//	    "data",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0xdc578375"
+//	}
 //
 type VnetPerInterfaceCombinedCounters struct {
 	Count     uint32 `struc:"sizeof=Data"`
@@ -1770,24 +2110,24 @@ func (*VnetPerInterfaceCombinedCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-// VnetGetSummaryStats represents the VPP binary API message 'vnet_get_summary_stats'.
+// VnetGetSummaryStats represents VPP binary API message 'vnet_get_summary_stats':
 //
-//            "vnet_get_summary_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            {
-//                "crc": "0x51077d14"
-//            }
+//	"vnet_get_summary_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
 //
 type VnetGetSummaryStats struct{}
 
@@ -1801,43 +2141,43 @@ func (*VnetGetSummaryStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// VnetGetSummaryStatsReply represents the VPP binary API message 'vnet_get_summary_stats_reply'.
+// VnetGetSummaryStatsReply represents VPP binary API message 'vnet_get_summary_stats_reply':
 //
-//            "vnet_get_summary_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u64",
-//                "total_pkts",
-//                2
-//            ],
-//            [
-//                "u64",
-//                "total_bytes",
-//                2
-//            ],
-//            [
-//                "f64",
-//                "vector_rate"
-//            ],
-//            {
-//                "crc": "0x32b87c56"
-//            }
+//	"vnet_get_summary_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u64",
+//	    "total_pkts",
+//	    8
+//	],
+//	[
+//	    "u64",
+//	    "total_bytes",
+//	    8
+//	],
+//	[
+//	    "f64",
+//	    "vector_rate"
+//	],
+//	{
+//	    "crc": "0x82b5e46c"
+//	}
 //
 type VnetGetSummaryStatsReply struct {
 	Retval     int32
-	TotalPkts  []uint64 `struc:"[2]uint64"`
-	TotalBytes []uint64 `struc:"[2]uint64"`
+	TotalPkts  []uint64 `struc:"[8]uint64"`
+	TotalBytes []uint64 `struc:"[8]uint64"`
 	VectorRate float64
 }
 
@@ -1845,30 +2185,30 @@ func (*VnetGetSummaryStatsReply) GetMessageName() string {
 	return "vnet_get_summary_stats_reply"
 }
 func (*VnetGetSummaryStatsReply) GetCrcString() string {
-	return "32b87c56"
+	return "82b5e46c"
 }
 func (*VnetGetSummaryStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// StatsGetPollerDelay represents the VPP binary API message 'stats_get_poller_delay'.
+// StatsGetPollerDelay represents VPP binary API message 'stats_get_poller_delay':
 //
-//            "stats_get_poller_delay",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            {
-//                "crc": "0x51077d14"
-//            }
+//	"stats_get_poller_delay",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
 //
 type StatsGetPollerDelay struct{}
 
@@ -1882,28 +2222,28 @@ func (*StatsGetPollerDelay) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// StatsGetPollerDelayReply represents the VPP binary API message 'stats_get_poller_delay_reply'.
+// StatsGetPollerDelayReply represents VPP binary API message 'stats_get_poller_delay_reply':
 //
-//            "stats_get_poller_delay_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            [
-//                "u32",
-//                "delay"
-//            ],
-//            {
-//                "crc": "0x8c445a33"
-//            }
+//	"stats_get_poller_delay_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "delay"
+//	],
+//	{
+//	    "crc": "0x8c445a33"
+//	}
 //
 type StatsGetPollerDelayReply struct {
 	Retval int32
@@ -1920,32 +2260,32 @@ func (*StatsGetPollerDelayReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// WantUDPEncapStats represents the VPP binary API message 'want_udp_encap_stats'.
+// WantUDPEncapStats represents VPP binary API message 'want_udp_encap_stats':
 //
-//            "want_udp_encap_stats",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "client_index"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "u32",
-//                "enable"
-//            ],
-//            [
-//                "u32",
-//                "pid"
-//            ],
-//            {
-//                "crc": "0xcfaccc1f"
-//            }
+//	"want_udp_encap_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0xcfaccc1f"
+//	}
 //
 type WantUDPEncapStats struct {
 	Enable uint32
@@ -1962,24 +2302,24 @@ func (*WantUDPEncapStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantUDPEncapStatsReply represents the VPP binary API message 'want_udp_encap_stats_reply'.
+// WantUDPEncapStatsReply represents VPP binary API message 'want_udp_encap_stats_reply':
 //
-//            "want_udp_encap_stats_reply",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "context"
-//            ],
-//            [
-//                "i32",
-//                "retval"
-//            ],
-//            {
-//                "crc": "0xe8d4e804"
-//            }
+//	"want_udp_encap_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
 //
 type WantUDPEncapStatsReply struct {
 	Retval int32
@@ -1995,30 +2335,30 @@ func (*WantUDPEncapStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// VnetUDPEncapCounters represents the VPP binary API message 'vnet_udp_encap_counters'.
+// VnetUDPEncapCounters represents VPP binary API message 'vnet_udp_encap_counters':
 //
-//            "vnet_udp_encap_counters",
-//            [
-//                "u16",
-//                "_vl_msg_id"
-//            ],
-//            [
-//                "u32",
-//                "timestamp"
-//            ],
-//            [
-//                "u32",
-//                "count"
-//            ],
-//            [
-//                "vl_api_udp_encap_counter_t",
-//                "c",
-//                0,
-//                "count"
-//            ],
-//            {
-//                "crc": "0x1ab5e649"
-//            }
+//	"vnet_udp_encap_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "timestamp"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_udp_encap_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x1ab5e649"
+//	}
 //
 type VnetUDPEncapCounters struct {
 	Timestamp uint32
@@ -2036,23 +2376,120 @@ func (*VnetUDPEncapCounters) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-/* Services */
+// WantBierNeighborStats represents VPP binary API message 'want_bier_neighbor_stats':
+//
+//	"want_bier_neighbor_stats",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "enable"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	{
+//	    "crc": "0xcfaccc1f"
+//	}
+//
+type WantBierNeighborStats struct {
+	Enable uint32
+	PID    uint32
+}
 
-type Services interface {
-	StatsGetPollerDelay(*StatsGetPollerDelay) (*StatsGetPollerDelayReply, error)
-	VnetGetSummaryStats(*VnetGetSummaryStats) (*VnetGetSummaryStatsReply, error)
-	WantInterfaceCombinedStats(*WantInterfaceCombinedStats) (*WantInterfaceCombinedStatsReply, error)
-	WantInterfaceSimpleStats(*WantInterfaceSimpleStats) (*WantInterfaceSimpleStatsReply, error)
-	WantIP4FibStats(*WantIP4FibStats) (*WantIP4FibStatsReply, error)
-	WantIP4MfibStats(*WantIP4MfibStats) (*WantIP4MfibStatsReply, error)
-	WantIP4NbrStats(*WantIP4NbrStats) (*WantIP4NbrStatsReply, error)
-	WantIP6FibStats(*WantIP6FibStats) (*WantIP6FibStatsReply, error)
-	WantIP6MfibStats(*WantIP6MfibStats) (*WantIP6MfibStatsReply, error)
-	WantIP6NbrStats(*WantIP6NbrStats) (*WantIP6NbrStatsReply, error)
-	WantPerInterfaceCombinedStats(*WantPerInterfaceCombinedStats) (*WantPerInterfaceCombinedStatsReply, error)
-	WantPerInterfaceSimpleStats(*WantPerInterfaceSimpleStats) (*WantPerInterfaceSimpleStatsReply, error)
-	WantStats(*WantStats) (*WantStatsReply, error)
-	WantUDPEncapStats(*WantUDPEncapStats) (*WantUDPEncapStatsReply, error)
+func (*WantBierNeighborStats) GetMessageName() string {
+	return "want_bier_neighbor_stats"
+}
+func (*WantBierNeighborStats) GetCrcString() string {
+	return "cfaccc1f"
+}
+func (*WantBierNeighborStats) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// WantBierNeighborStatsReply represents VPP binary API message 'want_bier_neighbor_stats_reply':
+//
+//	"want_bier_neighbor_stats_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type WantBierNeighborStatsReply struct {
+	Retval int32
+}
+
+func (*WantBierNeighborStatsReply) GetMessageName() string {
+	return "want_bier_neighbor_stats_reply"
+}
+func (*WantBierNeighborStatsReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*WantBierNeighborStatsReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// VnetBierNeighborCounters represents VPP binary API message 'vnet_bier_neighbor_counters':
+//
+//	"vnet_bier_neighbor_counters",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "timestamp"
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_bier_neighbor_counter_t",
+//	    "c",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0xee0481ce"
+//	}
+//
+type VnetBierNeighborCounters struct {
+	Timestamp uint32
+	Count     uint32 `struc:"sizeof=C"`
+	C         []BierNeighborCounter
+}
+
+func (*VnetBierNeighborCounters) GetMessageName() string {
+	return "vnet_bier_neighbor_counters"
+}
+func (*VnetBierNeighborCounters) GetCrcString() string {
+	return "ee0481ce"
+}
+func (*VnetBierNeighborCounters) GetMessageType() api.MessageType {
+	return api.OtherMessage
 }
 
 func init() {
@@ -2095,4 +2532,7 @@ func init() {
 	api.RegisterMessage((*WantUDPEncapStats)(nil), "stats.WantUDPEncapStats")
 	api.RegisterMessage((*WantUDPEncapStatsReply)(nil), "stats.WantUDPEncapStatsReply")
 	api.RegisterMessage((*VnetUDPEncapCounters)(nil), "stats.VnetUDPEncapCounters")
+	api.RegisterMessage((*WantBierNeighborStats)(nil), "stats.WantBierNeighborStats")
+	api.RegisterMessage((*WantBierNeighborStatsReply)(nil), "stats.WantBierNeighborStatsReply")
+	api.RegisterMessage((*VnetBierNeighborCounters)(nil), "stats.VnetBierNeighborCounters")
 }
