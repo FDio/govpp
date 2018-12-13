@@ -199,5 +199,6 @@
         }
     },
     "enums": [],
-    "types": []
+    "types": [],
+    "aliases": {}
 }

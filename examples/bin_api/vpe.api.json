@@ -296,6 +296,52 @@
             }
         ],
         [
+            "show_threads",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "show_threads_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "u32",
+                "count"
+            ],
+            [
+                "vl_api_thread_data_t",
+                "thread_data",
+                0,
+                "count"
+            ],
+            {
+                "crc": "0x6942fb35"
+            }
+        ],
+        [
             "get_node_graph",
             [
                 "u16",
@@ -386,7 +432,7 @@
             }
         ]
     ],
-    "vl_api_version": "0x9a1baa50",
+    "vl_api_version": "0x3ce489e",
     "unions": [],
     "services": {
         "cli_inband": {
@@ -407,6 +453,9 @@
         "get_next_index": {
             "reply": "get_next_index_reply"
         },
+        "show_threads": {
+            "reply": "show_threads_reply"
+        },
         "add_node_next": {
             "reply": "add_node_next_reply"
         },
@@ -415,5 +464,43 @@
         }
     },
     "enums": [],
-    "types": []
+    "types": [
+        [
+            "thread_data",
+            [
+                "u32",
+                "id"
+            ],
+            [
+                "u8",
+                "name",
+                64
+            ],
+            [
+                "u8",
+                "type",
+                64
+            ],
+            [
+                "u32",
+                "pid"
+            ],
+            [
+                "u32",
+                "cpu_id"
+            ],
+            [
+                "u32",
+                "core"
+            ],
+            [
+                "u32",
+                "cpu_socket"
+            ],
+            {
+                "crc": "0x0f57094e"
+            }
+        ]
+    ],
+    "aliases": {}
 }

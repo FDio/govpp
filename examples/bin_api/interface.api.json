@@ -134,6 +134,50 @@
             }
         ],
         [
+            "sw_interface_set_ip_directed_broadcast",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u8",
+                "enable"
+            ],
+            {
+                "crc": "0xa36fadc0"
+            }
+        ],
+        [
+            "sw_interface_set_ip_directed_broadcast_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
             "sw_interface_event",
             [
                 "u16",
@@ -256,7 +300,7 @@
                 "link_duplex"
             ],
             [
-                "u8",
+                "u32",
                 "link_speed"
             ],
             [
@@ -352,7 +396,7 @@
                 "i_sid"
             ],
             {
-                "crc": "0x09b4b510"
+                "crc": "0xe4ee7eb6"
             }
         ],
         [
@@ -819,6 +863,114 @@
             }
         ],
         [
+            "sw_interface_set_rx_placement",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "queue_id"
+            ],
+            [
+                "u32",
+                "worker_id"
+            ],
+            [
+                "u8",
+                "is_main"
+            ],
+            {
+                "crc": "0x4ef4377d"
+            }
+        ],
+        [
+            "sw_interface_set_rx_placement_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "sw_interface_rx_placement_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            {
+                "crc": "0x529cb13f"
+            }
+        ],
+        [
+            "sw_interface_rx_placement_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "queue_id"
+            ],
+            [
+                "u32",
+                "worker_id"
+            ],
+            [
+                "u8",
+                "mode"
+            ],
+            {
+                "crc": "0x0e9e33f4"
+            }
+        ],
+        [
             "interface_name_renumber",
             [
                 "u16",
@@ -1221,14 +1373,20 @@
             }
         ]
     ],
-    "vl_api_version": "0x6a38a271",
+    "vl_api_version": "0x1ec8c073",
     "unions": [],
     "services": {
         "create_subif": {
             "reply": "create_subif_reply"
         },
+        "sw_interface_set_ip_directed_broadcast": {
+            "reply": "sw_interface_set_ip_directed_broadcast_reply"
+        },
         "delete_subif": {
             "reply": "delete_subif_reply"
+        },
+        "sw_interface_get_mac_address": {
+            "reply": "sw_interface_get_mac_address_reply"
         },
         "sw_interface_tag_add_del": {
             "reply": "sw_interface_tag_add_del_reply"
@@ -1239,6 +1397,9 @@
         "sw_interface_dump": {
             "reply": "sw_interface_details",
             "stream": true
+        },
+        "sw_interface_set_rx_placement": {
+            "reply": "sw_interface_set_rx_placement_reply"
         },
         "sw_interface_add_del_address": {
             "reply": "sw_interface_add_del_address_reply"
@@ -1252,8 +1413,8 @@
         "create_loopback_instance": {
             "reply": "create_loopback_instance_reply"
         },
-        "sw_interface_get_mac_address": {
-            "reply": "sw_interface_get_mac_address_reply"
+        "sw_interface_set_mtu": {
+            "reply": "sw_interface_set_mtu_reply"
         },
         "want_interface_events": {
             "reply": "want_interface_events_reply",
@@ -1273,11 +1434,12 @@
         "sw_interface_set_mac_address": {
             "reply": "sw_interface_set_mac_address_reply"
         },
-        "sw_interface_set_table": {
-            "reply": "sw_interface_set_table_reply"
+        "sw_interface_set_unnumbered": {
+            "reply": "sw_interface_set_unnumbered_reply"
         },
-        "sw_interface_set_mtu": {
-            "reply": "sw_interface_set_mtu_reply"
+        "sw_interface_rx_placement_dump": {
+            "reply": "sw_interface_rx_placement_details",
+            "stream": true
         },
         "sw_interface_set_flags": {
             "reply": "sw_interface_set_flags_reply"
@@ -1291,8 +1453,8 @@
         "create_vlan_subif": {
             "reply": "create_vlan_subif_reply"
         },
-        "sw_interface_set_unnumbered": {
-            "reply": "sw_interface_set_unnumbered_reply"
+        "sw_interface_set_table": {
+            "reply": "sw_interface_set_table_reply"
         }
     },
     "enums": [],
@@ -1431,5 +1593,10 @@
                 "crc": "0x8bd65e2d"
             }
         ]
-    ]
+    ],
+    "aliases": {
+        "interface_index": {
+            "type": "u32"
+        }
+    }
 }

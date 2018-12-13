@@ -26,7 +26,7 @@ import (
 func main() {
 	// create union with IPv4 address
 	var unionIP4 ip.AddressUnion
-	unionIP4.SetIP4(ip.IP4Address{Address: []byte{192, 168, 1, 10}})
+	unionIP4.SetIP4(ip.IP4Address{192, 168, 1, 10})
 
 	// use it in the Address type
 	addr := &ip.Address{
