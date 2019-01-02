@@ -16,7 +16,6 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"os"
 	"testing"
 
@@ -139,7 +138,6 @@ func TestGeneratePackage(t *testing.T) {
 	// prepare input/output output files
 	inputData, err := readFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	testCtx.inputBuff = bytes.NewBuffer(inputData)
 	jsonRoot, err := parseJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
@@ -165,7 +163,6 @@ func TestGenerateMessageType(t *testing.T) {
 	// prepare input/output output files
 	inputData, err := readFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	testCtx.inputBuff = bytes.NewBuffer(inputData)
 	jsonRoot, err := parseJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	outDir := "test_output_directory"
