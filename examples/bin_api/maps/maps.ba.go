@@ -5,12 +5,12 @@
  Package maps is a generated from VPP binary API module 'map'.
 
  It contains following objects:
-	 28 messages
+	 32 messages
 	  5 types
 	  2 aliases
 	  1 enum
 	  1 union
-	 14 services
+	 16 services
 
 */
 package maps
@@ -33,9 +33,15 @@ var _ = bytes.NewBuffer
 //	    "map_param_add_del_pre_resolve": {
 //	        "reply": "map_param_add_del_pre_resolve_reply"
 //	    },
+//	    "map_param_set_tcp": {
+//	        "reply": "map_param_set_tcp_reply"
+//	    },
 //	    "map_rule_dump": {
 //	        "reply": "map_rule_details",
 //	        "stream": true
+//	    },
+//	    "map_if_enable_disable": {
+//	        "reply": "map_if_enable_disable_reply"
 //	    },
 //	    "map_param_set_icmp6": {
 //	        "reply": "map_param_set_icmp6_reply"
@@ -79,6 +85,7 @@ type Services interface {
 	MapAddDelRule(*MapAddDelRule) (*MapAddDelRuleReply, error)
 	MapAddDomain(*MapAddDomain) (*MapAddDomainReply, error)
 	MapDelDomain(*MapDelDomain) (*MapDelDomainReply, error)
+	MapIfEnableDisable(*MapIfEnableDisable) (*MapIfEnableDisableReply, error)
 	MapParamAddDelPreResolve(*MapParamAddDelPreResolve) (*MapParamAddDelPreResolveReply, error)
 	MapParamGet(*MapParamGet) (*MapParamGetReply, error)
 	MapParamSetFragmentation(*MapParamSetFragmentation) (*MapParamSetFragmentationReply, error)
@@ -86,6 +93,7 @@ type Services interface {
 	MapParamSetICMP6(*MapParamSetICMP6) (*MapParamSetICMP6Reply, error)
 	MapParamSetReassembly(*MapParamSetReassembly) (*MapParamSetReassemblyReply, error)
 	MapParamSetSecurityCheck(*MapParamSetSecurityCheck) (*MapParamSetSecurityCheckReply, error)
+	MapParamSetTCP(*MapParamSetTCP) (*MapParamSetTCPReply, error)
 	MapParamSetTrafficClass(*MapParamSetTrafficClass) (*MapParamSetTrafficClassReply, error)
 	MapSummaryStats(*MapSummaryStats) (*MapSummaryStatsReply, error)
 }
@@ -377,38 +385,28 @@ func (u *AddressUnion) GetIP6() (a IP6Address) {
 //	    "psid_length"
 //	],
 //	[
-//	    "bool",
-//	    "is_translation"
-//	],
-//	[
-//	    "bool",
-//	    "is_rfc6052"
-//	],
-//	[
 //	    "u16",
 //	    "mtu"
 //	],
 //	{
-//	    "crc": "0x7a64714e"
+//	    "crc": "0xa9358068"
 //	}
 //
 type MapAddDomain struct {
-	IP6Prefix     IP6Prefix
-	IP4Prefix     IP4Prefix
-	IP6Src        IP6Prefix
-	EaBitsLen     uint8
-	PsidOffset    uint8
-	PsidLength    uint8
-	IsTranslation bool
-	IsRfc6052     bool
-	Mtu           uint16
+	IP6Prefix  IP6Prefix
+	IP4Prefix  IP4Prefix
+	IP6Src     IP6Prefix
+	EaBitsLen  uint8
+	PsidOffset uint8
+	PsidLength uint8
+	Mtu        uint16
 }
 
 func (*MapAddDomain) GetMessageName() string {
 	return "map_add_domain"
 }
 func (*MapAddDomain) GetCrcString() string {
-	return "7a64714e"
+	return "a9358068"
 }
 func (*MapAddDomain) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -685,32 +683,27 @@ func (*MapDomainDump) GetMessageType() api.MessageType {
 //	    "u16",
 //	    "mtu"
 //	],
-//	[
-//	    "bool",
-//	    "is_translation"
-//	],
 //	{
-//	    "crc": "0x7a986fe6"
+//	    "crc": "0x2a17dcb8"
 //	}
 //
 type MapDomainDetails struct {
-	DomainIndex   uint32
-	IP6Prefix     IP6Prefix
-	IP4Prefix     IP4Prefix
-	IP6Src        IP6Prefix
-	EaBitsLen     uint8
-	PsidOffset    uint8
-	PsidLength    uint8
-	Flags         uint8
-	Mtu           uint16
-	IsTranslation bool
+	DomainIndex uint32
+	IP6Prefix   IP6Prefix
+	IP4Prefix   IP4Prefix
+	IP6Src      IP6Prefix
+	EaBitsLen   uint8
+	PsidOffset  uint8
+	PsidLength  uint8
+	Flags       uint8
+	Mtu         uint16
 }
 
 func (*MapDomainDetails) GetMessageName() string {
 	return "map_domain_details"
 }
 func (*MapDomainDetails) GetCrcString() string {
-	return "7a986fe6"
+	return "2a17dcb8"
 }
 func (*MapDomainDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -788,6 +781,86 @@ func (*MapRuleDetails) GetCrcString() string {
 	return "4f932665"
 }
 func (*MapRuleDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// MapIfEnableDisable represents VPP binary API message 'map_if_enable_disable':
+//
+//	"map_if_enable_disable",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "bool",
+//	    "is_enable"
+//	],
+//	[
+//	    "bool",
+//	    "is_translation"
+//	],
+//	{
+//	    "crc": "0x61a30cd9"
+//	}
+//
+type MapIfEnableDisable struct {
+	SwIfIndex     uint32
+	IsEnable      bool
+	IsTranslation bool
+}
+
+func (*MapIfEnableDisable) GetMessageName() string {
+	return "map_if_enable_disable"
+}
+func (*MapIfEnableDisable) GetCrcString() string {
+	return "61a30cd9"
+}
+func (*MapIfEnableDisable) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// MapIfEnableDisableReply represents VPP binary API message 'map_if_enable_disable_reply':
+//
+//	"map_if_enable_disable_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type MapIfEnableDisableReply struct {
+	Retval int32
+}
+
+func (*MapIfEnableDisableReply) GetMessageName() string {
+	return "map_if_enable_disable_reply"
+}
+func (*MapIfEnableDisableReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -1418,6 +1491,76 @@ func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// MapParamSetTCP represents VPP binary API message 'map_param_set_tcp':
+//
+//	"map_param_set_tcp",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u16",
+//	    "tcp_mss"
+//	],
+//	{
+//	    "crc": "0x87a825d9"
+//	}
+//
+type MapParamSetTCP struct {
+	TCPMss uint16
+}
+
+func (*MapParamSetTCP) GetMessageName() string {
+	return "map_param_set_tcp"
+}
+func (*MapParamSetTCP) GetCrcString() string {
+	return "87a825d9"
+}
+func (*MapParamSetTCP) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// MapParamSetTCPReply represents VPP binary API message 'map_param_set_tcp_reply':
+//
+//	"map_param_set_tcp_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type MapParamSetTCPReply struct {
+	Retval int32
+}
+
+func (*MapParamSetTCPReply) GetMessageName() string {
+	return "map_param_set_tcp_reply"
+}
+func (*MapParamSetTCPReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 // MapParamGet represents VPP binary API message 'map_param_get':
 //
 //	"map_param_get",
@@ -1583,6 +1726,8 @@ func init() {
 	api.RegisterMessage((*MapDomainDetails)(nil), "map.MapDomainDetails")
 	api.RegisterMessage((*MapRuleDump)(nil), "map.MapRuleDump")
 	api.RegisterMessage((*MapRuleDetails)(nil), "map.MapRuleDetails")
+	api.RegisterMessage((*MapIfEnableDisable)(nil), "map.MapIfEnableDisable")
+	api.RegisterMessage((*MapIfEnableDisableReply)(nil), "map.MapIfEnableDisableReply")
 	api.RegisterMessage((*MapSummaryStats)(nil), "map.MapSummaryStats")
 	api.RegisterMessage((*MapSummaryStatsReply)(nil), "map.MapSummaryStatsReply")
 	api.RegisterMessage((*MapParamSetFragmentation)(nil), "map.MapParamSetFragmentation")
@@ -1599,6 +1744,8 @@ func init() {
 	api.RegisterMessage((*MapParamSetSecurityCheckReply)(nil), "map.MapParamSetSecurityCheckReply")
 	api.RegisterMessage((*MapParamSetTrafficClass)(nil), "map.MapParamSetTrafficClass")
 	api.RegisterMessage((*MapParamSetTrafficClassReply)(nil), "map.MapParamSetTrafficClassReply")
+	api.RegisterMessage((*MapParamSetTCP)(nil), "map.MapParamSetTCP")
+	api.RegisterMessage((*MapParamSetTCPReply)(nil), "map.MapParamSetTCPReply")
 	api.RegisterMessage((*MapParamGet)(nil), "map.MapParamGet")
 	api.RegisterMessage((*MapParamGetReply)(nil), "map.MapParamGetReply")
 }

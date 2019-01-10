@@ -7,7 +7,7 @@
  It contains following objects:
 	 91 messages
 	 11 types
-	  2 aliases
+	  3 aliases
 	  1 enum
 	  1 union
 	 44 services
@@ -262,7 +262,7 @@ const (
 //	"ip4_address": {
 //	    "length": 4,
 //	    "type": "u8"
-//	}
+//	},
 //
 type IP4Address [4]uint8
 
@@ -274,6 +274,15 @@ type IP4Address [4]uint8
 //	},
 //
 type IP6Address [16]uint8
+
+// MacAddress represents VPP binary API alias 'mac_address':
+//
+//	"mac_address": {
+//	    "length": 6,
+//	    "type": "u8"
+//	}
+//
+type MacAddress [6]uint8
 
 /* Types */
 
@@ -506,6 +515,10 @@ func (*FibMplsLabel) GetCrcString() string {
 //	],
 //	[
 //	    "u8",
+//	    "is_interface_rx"
+//	],
+//	[
+//	    "u8",
 //	    "afi"
 //	],
 //	[
@@ -535,7 +548,7 @@ func (*FibMplsLabel) GetCrcString() string {
 //	    16
 //	],
 //	{
-//	    "crc": "0xabe483ef"
+//	    "crc": "0xba7a81f0"
 //	}
 //
 type FibPath struct {
@@ -552,6 +565,7 @@ type FibPath struct {
 	IsResolveAttached uint8
 	IsDvr             uint8
 	IsSourceLookup    uint8
+	IsInterfaceRx     uint8
 	Afi               uint8
 	NextHop           []byte `struc:"[16]byte"`
 	NextHopID         uint32
@@ -565,23 +579,34 @@ func (*FibPath) GetTypeName() string {
 	return "fib_path"
 }
 func (*FibPath) GetCrcString() string {
-	return "abe483ef"
+	return "ba7a81f0"
 }
 
-// MacAddress represents VPP binary API type 'mac_address':
+// MfibPath represents VPP binary API type 'mfib_path':
 //
-//	"mac_address",
-//	6
+//	"mfib_path",
+//	[
+//	    "vl_api_fib_path_t",
+//	    "path"
+//	],
+//	[
+//	    "u32",
+//	    "itf_flags"
+//	],
+//	{
+//	    "crc": "0x4ba77d32"
+//	}
 //
-type MacAddress struct {
-	Bytes []byte `struc:"[6]byte"`
+type MfibPath struct {
+	Path     FibPath
+	ItfFlags uint32
 }
 
-func (*MacAddress) GetTypeName() string {
-	return "mac_address"
+func (*MfibPath) GetTypeName() string {
+	return "mfib_path"
 }
-func (*MacAddress) GetCrcString() string {
-	return "efdbdddc"
+func (*MfibPath) GetCrcString() string {
+	return "4ba77d32"
 }
 
 // PuntRedirect represents VPP binary API type 'punt_redirect':
@@ -2356,13 +2381,13 @@ func (*IPMfibDump) GetMessageType() api.MessageType {
 //	    "stats_index"
 //	],
 //	[
-//	    "vl_api_fib_path_t",
+//	    "vl_api_mfib_path_t",
 //	    "path",
 //	    0,
 //	    "count"
 //	],
 //	{
-//	    "crc": "0x21329a12"
+//	    "crc": "0x61faa26f"
 //	}
 //
 type IPMfibDetails struct {
@@ -2374,14 +2399,14 @@ type IPMfibDetails struct {
 	SrcAddress    []byte `struc:"[4]byte"`
 	Count         uint32 `struc:"sizeof=Path"`
 	StatsIndex    uint32
-	Path          []FibPath
+	Path          []MfibPath
 }
 
 func (*IPMfibDetails) GetMessageName() string {
 	return "ip_mfib_details"
 }
 func (*IPMfibDetails) GetCrcString() string {
-	return "21329a12"
+	return "61faa26f"
 }
 func (*IPMfibDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -2452,13 +2477,13 @@ func (*IP6MfibDump) GetMessageType() api.MessageType {
 //	    "count"
 //	],
 //	[
-//	    "vl_api_fib_path_t",
+//	    "vl_api_mfib_path_t",
 //	    "path",
 //	    0,
 //	    "count"
 //	],
 //	{
-//	    "crc": "0xe02dcb4b"
+//	    "crc": "0x738c546e"
 //	}
 //
 type IP6MfibDetails struct {
@@ -2467,14 +2492,14 @@ type IP6MfibDetails struct {
 	GrpAddress    []byte `struc:"[16]byte"`
 	SrcAddress    []byte `struc:"[16]byte"`
 	Count         uint32 `struc:"sizeof=Path"`
-	Path          []FibPath
+	Path          []MfibPath
 }
 
 func (*IP6MfibDetails) GetMessageName() string {
 	return "ip6_mfib_details"
 }
 func (*IP6MfibDetails) GetCrcString() string {
-	return "e02dcb4b"
+	return "738c546e"
 }
 func (*IP6MfibDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage

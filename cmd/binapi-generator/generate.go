@@ -347,41 +347,6 @@ func generateAlias(ctx *context, w io.Writer, alias *Alias) {
 	fmt.Fprintln(w)
 }
 
-// generateType writes generated code for the type into w
-func generateType(ctx *context, w io.Writer, typ *Type) {
-	name := camelCaseName(typ.Name)
-
-	logf(" writing type %q (%s) with %d fields", typ.Name, name, len(typ.Fields))
-
-	// generate struct comment
-	generateComment(ctx, w, name, typ.Name, "type")
-
-	// generate struct definition
-	fmt.Fprintf(w, "type %s struct {\n", name)
-
-	// generate struct fields
-	for i, field := range typ.Fields {
-		// skip internal fields
-		switch strings.ToLower(field.Name) {
-		case "crc", "_vl_msg_id":
-			continue
-		}
-
-		generateField(ctx, w, typ.Fields, i)
-	}
-
-	// generate end of the struct
-	fmt.Fprintln(w, "}")
-
-	// generate name getter
-	generateTypeNameGetter(w, name, typ.Name)
-
-	// generate CRC getter
-	generateCrcGetter(w, name, typ.CRC)
-
-	fmt.Fprintln(w)
-}
-
 // generateUnion writes generated code for the union into w
 func generateUnion(ctx *context, w io.Writer, union *Union) {
 	name := camelCaseName(union.Name)
@@ -466,6 +431,41 @@ func (u *%[1]s) Get%[2]s() (a %[3]s) {
 `, structName, getterField, getterStruct)
 }
 
+// generateType writes generated code for the type into w
+func generateType(ctx *context, w io.Writer, typ *Type) {
+	name := camelCaseName(typ.Name)
+
+	logf(" writing type %q (%s) with %d fields", typ.Name, name, len(typ.Fields))
+
+	// generate struct comment
+	generateComment(ctx, w, name, typ.Name, "type")
+
+	// generate struct definition
+	fmt.Fprintf(w, "type %s struct {\n", name)
+
+	// generate struct fields
+	for i, field := range typ.Fields {
+		// skip internal fields
+		switch strings.ToLower(field.Name) {
+		case "crc", "_vl_msg_id":
+			continue
+		}
+
+		generateField(ctx, w, typ.Fields, i)
+	}
+
+	// generate end of the struct
+	fmt.Fprintln(w, "}")
+
+	// generate name getter
+	generateTypeNameGetter(w, name, typ.Name)
+
+	// generate CRC getter
+	generateCrcGetter(w, name, typ.CRC)
+
+	fmt.Fprintln(w)
+}
+
 // generateMessage writes generated code for the message into w
 func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	name := camelCaseName(msg.Name)
@@ -486,7 +486,8 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	for i, field := range msg.Fields {
 		if i == 1 {
 			if field.Name == "client_index" {
-				// "client_index" as the second member, this might be an event message or a request
+				// "client_index" as the second member,
+				// this might be an event message or a request
 				msgType = eventMessage
 				wasClientIndex = true
 			} else if field.Name == "context" {
@@ -495,7 +496,8 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 			}
 		} else if i == 2 {
 			if wasClientIndex && field.Name == "context" {
-				// request needs "client_index" as the second member and "context" as the third member
+				// request needs "client_index" as the second member
+				// and "context" as the third member
 				msgType = requestMessage
 			}
 		}
@@ -536,6 +538,11 @@ func generateField(ctx *context, w io.Writer, fields []Field, i int) {
 
 	fieldName := strings.TrimPrefix(field.Name, "_")
 	fieldName = camelCaseName(fieldName)
+
+	// generate length field for strings
+	if field.Type == "string" {
+		fmt.Fprintf(w, "\tXXX_%sLen uint32 `struc:\"sizeof=%s\"`\n", fieldName, fieldName)
+	}
 
 	dataType := convertToGoType(ctx, field.Type)
 

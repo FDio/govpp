@@ -23,11 +23,6 @@ import (
 	"github.com/bennyscetbun/jsongo"
 )
 
-// toApiType returns name that is used as type reference in VPP binary API
-func toApiType(name string) string {
-	return fmt.Sprintf("vl_api_%s_t", name)
-}
-
 // parsePackage parses provided JSON data into objects prepared for code generation
 func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 	logf(" %s contains: %d services, %d messages, %d types, %d enums, %d unions, %d aliases (version: %s)",
@@ -75,6 +70,10 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 			pkg.RefMap[toApiType(alias.Name)] = alias.Name
 		}
 	}
+	// sort aliases to ensure consistent order
+	sort.Slice(pkg.Aliases, func(i, j int) bool {
+		return pkg.Aliases[i].Name < pkg.Aliases[j].Name
+	})
 
 	// parse types
 	types := jsonRoot.Map("types")
@@ -479,6 +478,11 @@ func parseService(ctx *context, svcName string, svcNode *jsongo.JSONNode) (*Serv
 	return &svc, nil
 }
 
+// toApiType returns name that is used as type reference in VPP binary API
+func toApiType(name string) string {
+	return fmt.Sprintf("vl_api_%s_t", name)
+}
+
 // convertToGoType translates the VPP binary API type into Go type
 func convertToGoType(ctx *context, binapiType string) (typ string) {
 	if t, ok := binapiTypes[binapiType]; ok {
@@ -488,9 +492,14 @@ func convertToGoType(ctx *context, binapiType string) (typ string) {
 		// specific types (enums/types/unions)
 		typ = camelCaseName(r)
 	} else {
-		// fallback type
-		log.Warnf("found unknown VPP binary API type %q, using byte", binapiType)
-		typ = "byte"
+		switch binapiType {
+		case "bool", "string":
+			typ = binapiType
+		default:
+			// fallback type
+			log.Warnf("found unknown VPP binary API type %q, using byte", binapiType)
+			typ = "byte"
+		}
 	}
 	return typ
 }

@@ -81,17 +81,11 @@
                 "context"
             ],
             [
-                "u32",
-                "length"
-            ],
-            [
-                "u8",
-                "cmd",
-                0,
-                "length"
+                "string",
+                "cmd"
             ],
             {
-                "crc": "0x74e00a49"
+                "crc": "0xb1ad59b3"
             }
         ],
         [
@@ -131,17 +125,11 @@
                 "retval"
             ],
             [
-                "u32",
-                "length"
-            ],
-            [
-                "u8",
-                "reply",
-                0,
-                "length"
+                "string",
+                "reply"
             ],
             {
-                "crc": "0x1f22bbb8"
+                "crc": "0x6d3c80a4"
             }
         ],
         [
@@ -272,27 +260,23 @@
                 "retval"
             ],
             [
-                "u8",
-                "program",
-                32
+                "string",
+                "program"
             ],
             [
-                "u8",
-                "version",
-                32
+                "string",
+                "version"
             ],
             [
-                "u8",
-                "build_date",
-                32
+                "string",
+                "build_date"
             ],
             [
-                "u8",
-                "build_directory",
-                256
+                "string",
+                "build_directory"
             ],
             {
-                "crc": "0x8b5a13b4"
+                "crc": "0xb9bcf6df"
             }
         ],
         [
@@ -432,7 +416,7 @@
             }
         ]
     ],
-    "vl_api_version": "0x3ce489e",
+    "vl_api_version": "0x2cc8d629",
     "unions": [],
     "services": {
         "cli_inband": {

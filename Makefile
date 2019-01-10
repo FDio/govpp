@@ -1,5 +1,8 @@
 VERSION ?= $(shell git describe --always --tags --dirty)
 
+BINAPI_DIR ?= $(shell cd examples/bin_api && pwd)
+VPP_VERSION := $(shell apt-cache show vpp | grep Version: | cut -d' ' -f2-)
+
 all: test build examples
 
 install:
@@ -39,9 +42,18 @@ clean:
 	rm -f extras/libmemif/examples/jumbo-frames/jumbo-frames
 	rm -f extras/libmemif/examples/raw-data/raw-data
 
+generate-binapi:
+	@echo "=> generating binapi"
+	@go generate "${BINAPI_DIR}"
+
 generate: install
 	@echo "=> generating code"
 	cd examples && go generate ./...
+
+update-vppapi:
+	@echo "=> updating API JSON files using installed VPP (${VPP_VERSION})"
+	@cd ${BINAPI_DIR} && find . -type f -name '*.api.json' -exec cp /usr/share/vpp/api/'{}' '{}' \;
+	@echo ${VPP_VERSION} > ${BINAPI_DIR}/VPP_VERSION
 
 lint:
 	@echo "=> running linter"

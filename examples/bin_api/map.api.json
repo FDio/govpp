@@ -39,19 +39,11 @@
                 "psid_length"
             ],
             [
-                "bool",
-                "is_translation"
-            ],
-            [
-                "bool",
-                "is_rfc6052"
-            ],
-            [
                 "u16",
                 "mtu"
             ],
             {
-                "crc": "0x7a64714e"
+                "crc": "0xa9358068"
             }
         ],
         [
@@ -232,12 +224,8 @@
                 "u16",
                 "mtu"
             ],
-            [
-                "bool",
-                "is_translation"
-            ],
             {
-                "crc": "0x7a986fe6"
+                "crc": "0x2a17dcb8"
             }
         ],
         [
@@ -282,6 +270,54 @@
             ],
             {
                 "crc": "0x4f932665"
+            }
+        ],
+        [
+            "map_if_enable_disable",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "bool",
+                "is_enable"
+            ],
+            [
+                "bool",
+                "is_translation"
+            ],
+            {
+                "crc": "0x61a30cd9"
+            }
+        ],
+        [
+            "map_if_enable_disable_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
             }
         ],
         [
@@ -660,6 +696,46 @@
             }
         ],
         [
+            "map_param_set_tcp",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u16",
+                "tcp_mss"
+            ],
+            {
+                "crc": "0x87a825d9"
+            }
+        ],
+        [
+            "map_param_set_tcp_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
             "map_param_get",
             [
                 "u16",
@@ -768,7 +844,7 @@
             }
         ]
     ],
-    "vl_api_version": "0x14b499d0",
+    "vl_api_version": "0x75de78c3",
     "unions": [
         [
             "address_union",
@@ -792,9 +868,15 @@
         "map_param_add_del_pre_resolve": {
             "reply": "map_param_add_del_pre_resolve_reply"
         },
+        "map_param_set_tcp": {
+            "reply": "map_param_set_tcp_reply"
+        },
         "map_rule_dump": {
             "reply": "map_rule_details",
             "stream": true
+        },
+        "map_if_enable_disable": {
+            "reply": "map_if_enable_disable_reply"
         },
         "map_param_set_icmp6": {
             "reply": "map_param_set_icmp6_reply"
