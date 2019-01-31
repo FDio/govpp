@@ -5,9 +5,8 @@
  Package tap is a generated from VPP binary API module 'tap'.
 
  It contains following objects:
-	  8 messages
 	  4 services
-
+	  8 messages
 */
 package tap
 
@@ -46,6 +45,76 @@ type Services interface {
 }
 
 /* Messages */
+
+// SwInterfaceTapDetails represents VPP binary API message 'sw_interface_tap_details':
+//
+//	"sw_interface_tap_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "dev_name",
+//	    64
+//	],
+//	{
+//	    "crc": "0x76229a57"
+//	}
+//
+type SwInterfaceTapDetails struct {
+	SwIfIndex uint32
+	DevName   []byte `struc:"[64]byte"`
+}
+
+func (*SwInterfaceTapDetails) GetMessageName() string {
+	return "sw_interface_tap_details"
+}
+func (*SwInterfaceTapDetails) GetCrcString() string {
+	return "76229a57"
+}
+func (*SwInterfaceTapDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// SwInterfaceTapDump represents VPP binary API message 'sw_interface_tap_dump':
+//
+//	"sw_interface_tap_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type SwInterfaceTapDump struct{}
+
+func (*SwInterfaceTapDump) GetMessageName() string {
+	return "sw_interface_tap_dump"
+}
+func (*SwInterfaceTapDump) GetCrcString() string {
+	return "51077d14"
+}
+func (*SwInterfaceTapDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
 
 // TapConnect represents VPP binary API message 'tap_connect':
 //
@@ -182,6 +251,76 @@ func (*TapConnectReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// TapDelete represents VPP binary API message 'tap_delete':
+//
+//	"tap_delete",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0x529cb13f"
+//	}
+//
+type TapDelete struct {
+	SwIfIndex uint32
+}
+
+func (*TapDelete) GetMessageName() string {
+	return "tap_delete"
+}
+func (*TapDelete) GetCrcString() string {
+	return "529cb13f"
+}
+func (*TapDelete) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// TapDeleteReply represents VPP binary API message 'tap_delete_reply':
+//
+//	"tap_delete_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type TapDeleteReply struct {
+	Retval int32
+}
+
+func (*TapDeleteReply) GetMessageName() string {
+	return "tap_delete_reply"
+}
+func (*TapDeleteReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*TapDeleteReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 // TapModify represents VPP binary API message 'tap_modify':
 //
 //	"tap_modify",
@@ -284,153 +423,13 @@ func (*TapModifyReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// TapDelete represents VPP binary API message 'tap_delete':
-//
-//	"tap_delete",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type TapDelete struct {
-	SwIfIndex uint32
-}
-
-func (*TapDelete) GetMessageName() string {
-	return "tap_delete"
-}
-func (*TapDelete) GetCrcString() string {
-	return "529cb13f"
-}
-func (*TapDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// TapDeleteReply represents VPP binary API message 'tap_delete_reply':
-//
-//	"tap_delete_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
-type TapDeleteReply struct {
-	Retval int32
-}
-
-func (*TapDeleteReply) GetMessageName() string {
-	return "tap_delete_reply"
-}
-func (*TapDeleteReply) GetCrcString() string {
-	return "e8d4e804"
-}
-func (*TapDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// SwInterfaceTapDump represents VPP binary API message 'sw_interface_tap_dump':
-//
-//	"sw_interface_tap_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
-type SwInterfaceTapDump struct{}
-
-func (*SwInterfaceTapDump) GetMessageName() string {
-	return "sw_interface_tap_dump"
-}
-func (*SwInterfaceTapDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*SwInterfaceTapDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// SwInterfaceTapDetails represents VPP binary API message 'sw_interface_tap_details':
-//
-//	"sw_interface_tap_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "dev_name",
-//	    64
-//	],
-//	{
-//	    "crc": "0x76229a57"
-//	}
-//
-type SwInterfaceTapDetails struct {
-	SwIfIndex uint32
-	DevName   []byte `struc:"[64]byte"`
-}
-
-func (*SwInterfaceTapDetails) GetMessageName() string {
-	return "sw_interface_tap_details"
-}
-func (*SwInterfaceTapDetails) GetCrcString() string {
-	return "76229a57"
-}
-func (*SwInterfaceTapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 func init() {
+	api.RegisterMessage((*SwInterfaceTapDetails)(nil), "tap.SwInterfaceTapDetails")
+	api.RegisterMessage((*SwInterfaceTapDump)(nil), "tap.SwInterfaceTapDump")
 	api.RegisterMessage((*TapConnect)(nil), "tap.TapConnect")
 	api.RegisterMessage((*TapConnectReply)(nil), "tap.TapConnectReply")
-	api.RegisterMessage((*TapModify)(nil), "tap.TapModify")
-	api.RegisterMessage((*TapModifyReply)(nil), "tap.TapModifyReply")
 	api.RegisterMessage((*TapDelete)(nil), "tap.TapDelete")
 	api.RegisterMessage((*TapDeleteReply)(nil), "tap.TapDeleteReply")
-	api.RegisterMessage((*SwInterfaceTapDump)(nil), "tap.SwInterfaceTapDump")
-	api.RegisterMessage((*SwInterfaceTapDetails)(nil), "tap.SwInterfaceTapDetails")
+	api.RegisterMessage((*TapModify)(nil), "tap.TapModify")
+	api.RegisterMessage((*TapModifyReply)(nil), "tap.TapModifyReply")
 }

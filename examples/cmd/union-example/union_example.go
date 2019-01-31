@@ -17,13 +17,20 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"log"
+	"net"
 
 	"git.fd.io/govpp.git/examples/bin_api/ip"
 	"github.com/lunixbochs/struc"
 )
 
 func main() {
+	encodingExample()
+	usageExample()
+}
+
+func encodingExample() {
 	// create union with IPv4 address
 	var unionIP4 ip.AddressUnion
 	unionIP4.SetIP4(ip.IP4Address{192, 168, 1, 10})
@@ -31,7 +38,7 @@ func main() {
 	// use it in the Address type
 	addr := &ip.Address{
 		Af: ip.ADDRESS_IP4,
-		Un: unionIP4,
+		Un: ip.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
 	}
 	log.Printf("encoding union IPv4: %v", addr.Un.GetIP4())
 
@@ -60,4 +67,37 @@ func decode(data []byte) *ip.Address {
 	}
 	log.Printf("decoded address: %#v", addr)
 	return addr
+}
+
+func usageExample() {
+	var convAddr = func(ip string) {
+		addr, err := ipToAddress(ip)
+		if err != nil {
+			log.Printf("converting ip %q failed: %v", ip, err)
+		}
+		fmt.Printf("% 0X\n", addr)
+	}
+
+	convAddr("10.10.10.10")
+	convAddr("::1")
+	convAddr("")
+}
+
+func ipToAddress(ipstr string) (addr ip.Address, err error) {
+	netIP := net.ParseIP(ipstr)
+	if netIP == nil {
+		return ip.Address{}, fmt.Errorf("invalid IP: %q", ipstr)
+	}
+	if ip4 := netIP.To4(); ip4 == nil {
+		addr.Af = ip.ADDRESS_IP6
+		var ip6addr ip.IP6Address
+		copy(ip6addr[:], netIP.To16())
+		addr.Un.SetIP6(ip6addr)
+	} else {
+		addr.Af = ip.ADDRESS_IP4
+		var ip4addr ip.IP4Address
+		copy(ip4addr[:], ip4)
+		addr.Un.SetIP4(ip4addr)
+	}
+	return
 }

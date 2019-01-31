@@ -5,10 +5,9 @@
  Package acl is a generated from VPP binary API module 'acl'.
 
  It contains following objects:
-	 36 messages
-	  2 types
 	 18 services
-
+	  2 types
+	 36 messages
 */
 package acl
 
@@ -244,213 +243,6 @@ func (*MacipACLRule) GetCrcString() string {
 
 /* Messages */
 
-// ACLPluginGetVersion represents VPP binary API message 'acl_plugin_get_version':
-//
-//	"acl_plugin_get_version",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
-type ACLPluginGetVersion struct{}
-
-func (*ACLPluginGetVersion) GetMessageName() string {
-	return "acl_plugin_get_version"
-}
-func (*ACLPluginGetVersion) GetCrcString() string {
-	return "51077d14"
-}
-func (*ACLPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLPluginGetVersionReply represents VPP binary API message 'acl_plugin_get_version_reply':
-//
-//	"acl_plugin_get_version_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "major"
-//	],
-//	[
-//	    "u32",
-//	    "minor"
-//	],
-//	{
-//	    "crc": "0x9b32cf86"
-//	}
-//
-type ACLPluginGetVersionReply struct {
-	Major uint32
-	Minor uint32
-}
-
-func (*ACLPluginGetVersionReply) GetMessageName() string {
-	return "acl_plugin_get_version_reply"
-}
-func (*ACLPluginGetVersionReply) GetCrcString() string {
-	return "9b32cf86"
-}
-func (*ACLPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// ACLPluginControlPing represents VPP binary API message 'acl_plugin_control_ping':
-//
-//	"acl_plugin_control_ping",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
-type ACLPluginControlPing struct{}
-
-func (*ACLPluginControlPing) GetMessageName() string {
-	return "acl_plugin_control_ping"
-}
-func (*ACLPluginControlPing) GetCrcString() string {
-	return "51077d14"
-}
-func (*ACLPluginControlPing) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLPluginControlPingReply represents VPP binary API message 'acl_plugin_control_ping_reply':
-//
-//	"acl_plugin_control_ping_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "vpe_pid"
-//	],
-//	{
-//	    "crc": "0xf6b0b8ca"
-//	}
-//
-type ACLPluginControlPingReply struct {
-	Retval      int32
-	ClientIndex uint32
-	VpePID      uint32
-}
-
-func (*ACLPluginControlPingReply) GetMessageName() string {
-	return "acl_plugin_control_ping_reply"
-}
-func (*ACLPluginControlPingReply) GetCrcString() string {
-	return "f6b0b8ca"
-}
-func (*ACLPluginControlPingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// ACLPluginGetConnTableMaxEntries represents VPP binary API message 'acl_plugin_get_conn_table_max_entries':
-//
-//	"acl_plugin_get_conn_table_max_entries",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
-type ACLPluginGetConnTableMaxEntries struct{}
-
-func (*ACLPluginGetConnTableMaxEntries) GetMessageName() string {
-	return "acl_plugin_get_conn_table_max_entries"
-}
-func (*ACLPluginGetConnTableMaxEntries) GetCrcString() string {
-	return "51077d14"
-}
-func (*ACLPluginGetConnTableMaxEntries) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLPluginGetConnTableMaxEntriesReply represents VPP binary API message 'acl_plugin_get_conn_table_max_entries_reply':
-//
-//	"acl_plugin_get_conn_table_max_entries_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u64",
-//	    "conn_table_max_entries"
-//	],
-//	{
-//	    "crc": "0x7a096d3d"
-//	}
-//
-type ACLPluginGetConnTableMaxEntriesReply struct {
-	ConnTableMaxEntries uint64
-}
-
-func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageName() string {
-	return "acl_plugin_get_conn_table_max_entries_reply"
-}
-func (*ACLPluginGetConnTableMaxEntriesReply) GetCrcString() string {
-	return "7a096d3d"
-}
-func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 // ACLAddReplace represents VPP binary API message 'acl_add_replace':
 //
 //	"acl_add_replace",
@@ -614,6 +406,94 @@ func (*ACLDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// ACLDetails represents VPP binary API message 'acl_details':
+//
+//	"acl_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "acl_index"
+//	],
+//	[
+//	    "u8",
+//	    "tag",
+//	    64
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_acl_rule_t",
+//	    "r",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x5bd895be"
+//	}
+//
+type ACLDetails struct {
+	ACLIndex uint32
+	Tag      []byte `struc:"[64]byte"`
+	Count    uint32 `struc:"sizeof=R"`
+	R        []ACLRule
+}
+
+func (*ACLDetails) GetMessageName() string {
+	return "acl_details"
+}
+func (*ACLDetails) GetCrcString() string {
+	return "5bd895be"
+}
+func (*ACLDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLDump represents VPP binary API message 'acl_dump':
+//
+//	"acl_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "acl_index"
+//	],
+//	{
+//	    "crc": "0xef34fea4"
+//	}
+//
+type ACLDump struct {
+	ACLIndex uint32
+}
+
+func (*ACLDump) GetMessageName() string {
+	return "acl_dump"
+}
+func (*ACLDump) GetCrcString() string {
+	return "ef34fea4"
+}
+func (*ACLDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
 // ACLInterfaceAddDel represents VPP binary API message 'acl_interface_add_del':
 //
 //	"acl_interface_add_del",
@@ -697,6 +577,180 @@ func (*ACLInterfaceAddDelReply) GetCrcString() string {
 }
 func (*ACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+
+// ACLInterfaceEtypeWhitelistDetails represents VPP binary API message 'acl_interface_etype_whitelist_details':
+//
+//	"acl_interface_etype_whitelist_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "count"
+//	],
+//	[
+//	    "u8",
+//	    "n_input"
+//	],
+//	[
+//	    "u16",
+//	    "whitelist",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0x6a5d4e81"
+//	}
+//
+type ACLInterfaceEtypeWhitelistDetails struct {
+	SwIfIndex uint32
+	Count     uint8 `struc:"sizeof=Whitelist"`
+	NInput    uint8
+	Whitelist []uint16
+}
+
+func (*ACLInterfaceEtypeWhitelistDetails) GetMessageName() string {
+	return "acl_interface_etype_whitelist_details"
+}
+func (*ACLInterfaceEtypeWhitelistDetails) GetCrcString() string {
+	return "6a5d4e81"
+}
+func (*ACLInterfaceEtypeWhitelistDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLInterfaceEtypeWhitelistDump represents VPP binary API message 'acl_interface_etype_whitelist_dump':
+//
+//	"acl_interface_etype_whitelist_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0x529cb13f"
+//	}
+//
+type ACLInterfaceEtypeWhitelistDump struct {
+	SwIfIndex uint32
+}
+
+func (*ACLInterfaceEtypeWhitelistDump) GetMessageName() string {
+	return "acl_interface_etype_whitelist_dump"
+}
+func (*ACLInterfaceEtypeWhitelistDump) GetCrcString() string {
+	return "529cb13f"
+}
+func (*ACLInterfaceEtypeWhitelistDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ACLInterfaceListDetails represents VPP binary API message 'acl_interface_list_details':
+//
+//	"acl_interface_list_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "count"
+//	],
+//	[
+//	    "u8",
+//	    "n_input"
+//	],
+//	[
+//	    "u32",
+//	    "acls",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0xd5e80809"
+//	}
+//
+type ACLInterfaceListDetails struct {
+	SwIfIndex uint32
+	Count     uint8 `struc:"sizeof=Acls"`
+	NInput    uint8
+	Acls      []uint32
+}
+
+func (*ACLInterfaceListDetails) GetMessageName() string {
+	return "acl_interface_list_details"
+}
+func (*ACLInterfaceListDetails) GetCrcString() string {
+	return "d5e80809"
+}
+func (*ACLInterfaceListDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLInterfaceListDump represents VPP binary API message 'acl_interface_list_dump':
+//
+//	"acl_interface_list_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0x529cb13f"
+//	}
+//
+type ACLInterfaceListDump struct {
+	SwIfIndex uint32
+}
+
+func (*ACLInterfaceListDump) GetMessageName() string {
+	return "acl_interface_list_dump"
+}
+func (*ACLInterfaceListDump) GetCrcString() string {
+	return "529cb13f"
+}
+func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
 }
 
 // ACLInterfaceSetACLList represents VPP binary API message 'acl_interface_set_acl_list':
@@ -786,9 +840,9 @@ func (*ACLInterfaceSetACLListReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// ACLDump represents VPP binary API message 'acl_dump':
+// ACLInterfaceSetEtypeWhitelist represents VPP binary API message 'acl_interface_set_etype_whitelist':
 //
-//	"acl_dump",
+//	"acl_interface_set_etype_whitelist",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -796,127 +850,6 @@ func (*ACLInterfaceSetACLListReply) GetMessageType() api.MessageType {
 //	[
 //	    "u32",
 //	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
-type ACLDump struct {
-	ACLIndex uint32
-}
-
-func (*ACLDump) GetMessageName() string {
-	return "acl_dump"
-}
-func (*ACLDump) GetCrcString() string {
-	return "ef34fea4"
-}
-func (*ACLDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLDetails represents VPP binary API message 'acl_details':
-//
-//	"acl_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x5bd895be"
-//	}
-//
-type ACLDetails struct {
-	ACLIndex uint32
-	Tag      []byte `struc:"[64]byte"`
-	Count    uint32 `struc:"sizeof=R"`
-	R        []ACLRule
-}
-
-func (*ACLDetails) GetMessageName() string {
-	return "acl_details"
-}
-func (*ACLDetails) GetCrcString() string {
-	return "5bd895be"
-}
-func (*ACLDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// ACLInterfaceListDump represents VPP binary API message 'acl_interface_list_dump':
-//
-//	"acl_interface_list_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type ACLInterfaceListDump struct {
-	SwIfIndex uint32
-}
-
-func (*ACLInterfaceListDump) GetMessageName() string {
-	return "acl_interface_list_dump"
-}
-func (*ACLInterfaceListDump) GetCrcString() string {
-	return "529cb13f"
-}
-func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLInterfaceListDetails represents VPP binary API message 'acl_interface_list_details':
-//
-//	"acl_interface_list_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
 //	],
 //	[
 //	    "u32",
@@ -935,29 +868,269 @@ func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
 //	    "n_input"
 //	],
 //	[
-//	    "u32",
-//	    "acls",
+//	    "u16",
+//	    "whitelist",
 //	    0,
 //	    "count"
 //	],
 //	{
-//	    "crc": "0xd5e80809"
+//	    "crc": "0xf515efc5"
 //	}
 //
-type ACLInterfaceListDetails struct {
+type ACLInterfaceSetEtypeWhitelist struct {
 	SwIfIndex uint32
-	Count     uint8 `struc:"sizeof=Acls"`
+	Count     uint8 `struc:"sizeof=Whitelist"`
 	NInput    uint8
-	Acls      []uint32
+	Whitelist []uint16
 }
 
-func (*ACLInterfaceListDetails) GetMessageName() string {
-	return "acl_interface_list_details"
+func (*ACLInterfaceSetEtypeWhitelist) GetMessageName() string {
+	return "acl_interface_set_etype_whitelist"
 }
-func (*ACLInterfaceListDetails) GetCrcString() string {
-	return "d5e80809"
+func (*ACLInterfaceSetEtypeWhitelist) GetCrcString() string {
+	return "f515efc5"
 }
-func (*ACLInterfaceListDetails) GetMessageType() api.MessageType {
+func (*ACLInterfaceSetEtypeWhitelist) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ACLInterfaceSetEtypeWhitelistReply represents VPP binary API message 'acl_interface_set_etype_whitelist_reply':
+//
+//	"acl_interface_set_etype_whitelist_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type ACLInterfaceSetEtypeWhitelistReply struct {
+	Retval int32
+}
+
+func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageName() string {
+	return "acl_interface_set_etype_whitelist_reply"
+}
+func (*ACLInterfaceSetEtypeWhitelistReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLPluginControlPing represents VPP binary API message 'acl_plugin_control_ping':
+//
+//	"acl_plugin_control_ping",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type ACLPluginControlPing struct{}
+
+func (*ACLPluginControlPing) GetMessageName() string {
+	return "acl_plugin_control_ping"
+}
+func (*ACLPluginControlPing) GetCrcString() string {
+	return "51077d14"
+}
+func (*ACLPluginControlPing) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ACLPluginControlPingReply represents VPP binary API message 'acl_plugin_control_ping_reply':
+//
+//	"acl_plugin_control_ping_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "vpe_pid"
+//	],
+//	{
+//	    "crc": "0xf6b0b8ca"
+//	}
+//
+type ACLPluginControlPingReply struct {
+	Retval      int32
+	ClientIndex uint32
+	VpePID      uint32
+}
+
+func (*ACLPluginControlPingReply) GetMessageName() string {
+	return "acl_plugin_control_ping_reply"
+}
+func (*ACLPluginControlPingReply) GetCrcString() string {
+	return "f6b0b8ca"
+}
+func (*ACLPluginControlPingReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLPluginGetConnTableMaxEntries represents VPP binary API message 'acl_plugin_get_conn_table_max_entries':
+//
+//	"acl_plugin_get_conn_table_max_entries",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type ACLPluginGetConnTableMaxEntries struct{}
+
+func (*ACLPluginGetConnTableMaxEntries) GetMessageName() string {
+	return "acl_plugin_get_conn_table_max_entries"
+}
+func (*ACLPluginGetConnTableMaxEntries) GetCrcString() string {
+	return "51077d14"
+}
+func (*ACLPluginGetConnTableMaxEntries) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ACLPluginGetConnTableMaxEntriesReply represents VPP binary API message 'acl_plugin_get_conn_table_max_entries_reply':
+//
+//	"acl_plugin_get_conn_table_max_entries_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u64",
+//	    "conn_table_max_entries"
+//	],
+//	{
+//	    "crc": "0x7a096d3d"
+//	}
+//
+type ACLPluginGetConnTableMaxEntriesReply struct {
+	ConnTableMaxEntries uint64
+}
+
+func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageName() string {
+	return "acl_plugin_get_conn_table_max_entries_reply"
+}
+func (*ACLPluginGetConnTableMaxEntriesReply) GetCrcString() string {
+	return "7a096d3d"
+}
+func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// ACLPluginGetVersion represents VPP binary API message 'acl_plugin_get_version':
+//
+//	"acl_plugin_get_version",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type ACLPluginGetVersion struct{}
+
+func (*ACLPluginGetVersion) GetMessageName() string {
+	return "acl_plugin_get_version"
+}
+func (*ACLPluginGetVersion) GetCrcString() string {
+	return "51077d14"
+}
+func (*ACLPluginGetVersion) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ACLPluginGetVersionReply represents VPP binary API message 'acl_plugin_get_version_reply':
+//
+//	"acl_plugin_get_version_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "major"
+//	],
+//	[
+//	    "u32",
+//	    "minor"
+//	],
+//	{
+//	    "crc": "0x9b32cf86"
+//	}
+//
+type ACLPluginGetVersionReply struct {
+	Major uint32
+	Minor uint32
+}
+
+func (*ACLPluginGetVersionReply) GetMessageName() string {
+	return "acl_plugin_get_version_reply"
+}
+func (*ACLPluginGetVersionReply) GetCrcString() string {
+	return "9b32cf86"
+}
+func (*ACLPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -1009,44 +1182,6 @@ func (*MacipACLAdd) GetCrcString() string {
 }
 func (*MacipACLAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
-}
-
-// MacipACLAddReply represents VPP binary API message 'macip_acl_add_reply':
-//
-//	"macip_acl_add_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xac407b0c"
-//	}
-//
-type MacipACLAddReply struct {
-	ACLIndex uint32
-	Retval   int32
-}
-
-func (*MacipACLAddReply) GetMessageName() string {
-	return "macip_acl_add_reply"
-}
-func (*MacipACLAddReply) GetCrcString() string {
-	return "ac407b0c"
-}
-func (*MacipACLAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
 }
 
 // MacipACLAddReplace represents VPP binary API message 'macip_acl_add_replace':
@@ -1142,6 +1277,44 @@ func (*MacipACLAddReplaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// MacipACLAddReply represents VPP binary API message 'macip_acl_add_reply':
+//
+//	"macip_acl_add_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "acl_index"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xac407b0c"
+//	}
+//
+type MacipACLAddReply struct {
+	ACLIndex uint32
+	Retval   int32
+}
+
+func (*MacipACLAddReply) GetMessageName() string {
+	return "macip_acl_add_reply"
+}
+func (*MacipACLAddReply) GetCrcString() string {
+	return "ac407b0c"
+}
+func (*MacipACLAddReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 // MacipACLDel represents VPP binary API message 'macip_acl_del':
 //
 //	"macip_acl_del",
@@ -1210,6 +1383,94 @@ func (*MacipACLDelReply) GetCrcString() string {
 }
 func (*MacipACLDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+
+// MacipACLDetails represents VPP binary API message 'macip_acl_details':
+//
+//	"macip_acl_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "acl_index"
+//	],
+//	[
+//	    "u8",
+//	    "tag",
+//	    64
+//	],
+//	[
+//	    "u32",
+//	    "count"
+//	],
+//	[
+//	    "vl_api_macip_acl_rule_t",
+//	    "r",
+//	    0,
+//	    "count"
+//	],
+//	{
+//	    "crc": "0xdd2b55ba"
+//	}
+//
+type MacipACLDetails struct {
+	ACLIndex uint32
+	Tag      []byte `struc:"[64]byte"`
+	Count    uint32 `struc:"sizeof=R"`
+	R        []MacipACLRule
+}
+
+func (*MacipACLDetails) GetMessageName() string {
+	return "macip_acl_details"
+}
+func (*MacipACLDetails) GetCrcString() string {
+	return "dd2b55ba"
+}
+func (*MacipACLDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// MacipACLDump represents VPP binary API message 'macip_acl_dump':
+//
+//	"macip_acl_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "acl_index"
+//	],
+//	{
+//	    "crc": "0xef34fea4"
+//	}
+//
+type MacipACLDump struct {
+	ACLIndex uint32
+}
+
+func (*MacipACLDump) GetMessageName() string {
+	return "macip_acl_dump"
+}
+func (*MacipACLDump) GetCrcString() string {
+	return "ef34fea4"
+}
+func (*MacipACLDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
 }
 
 // MacipACLInterfaceAddDel represents VPP binary API message 'macip_acl_interface_add_del':
@@ -1292,94 +1553,6 @@ func (*MacipACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// MacipACLDump represents VPP binary API message 'macip_acl_dump':
-//
-//	"macip_acl_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
-type MacipACLDump struct {
-	ACLIndex uint32
-}
-
-func (*MacipACLDump) GetMessageName() string {
-	return "macip_acl_dump"
-}
-func (*MacipACLDump) GetCrcString() string {
-	return "ef34fea4"
-}
-func (*MacipACLDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// MacipACLDetails represents VPP binary API message 'macip_acl_details':
-//
-//	"macip_acl_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_macip_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xdd2b55ba"
-//	}
-//
-type MacipACLDetails struct {
-	ACLIndex uint32
-	Tag      []byte `struc:"[64]byte"`
-	Count    uint32 `struc:"sizeof=R"`
-	R        []MacipACLRule
-}
-
-func (*MacipACLDetails) GetMessageName() string {
-	return "macip_acl_details"
-}
-func (*MacipACLDetails) GetCrcString() string {
-	return "dd2b55ba"
-}
-func (*MacipACLDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 // MacipACLInterfaceGet represents VPP binary API message 'macip_acl_interface_get':
 //
 //	"macip_acl_interface_get",
@@ -1451,43 +1624,6 @@ func (*MacipACLInterfaceGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// MacipACLInterfaceListDump represents VPP binary API message 'macip_acl_interface_list_dump':
-//
-//	"macip_acl_interface_list_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type MacipACLInterfaceListDump struct {
-	SwIfIndex uint32
-}
-
-func (*MacipACLInterfaceListDump) GetMessageName() string {
-	return "macip_acl_interface_list_dump"
-}
-func (*MacipACLInterfaceListDump) GetCrcString() string {
-	return "529cb13f"
-}
-func (*MacipACLInterfaceListDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
 // MacipACLInterfaceListDetails represents VPP binary API message 'macip_acl_interface_list_details':
 //
 //	"macip_acl_interface_list_details",
@@ -1533,96 +1669,9 @@ func (*MacipACLInterfaceListDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// ACLInterfaceSetEtypeWhitelist represents VPP binary API message 'acl_interface_set_etype_whitelist':
+// MacipACLInterfaceListDump represents VPP binary API message 'macip_acl_interface_list_dump':
 //
-//	"acl_interface_set_etype_whitelist",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u16",
-//	    "whitelist",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xf515efc5"
-//	}
-//
-type ACLInterfaceSetEtypeWhitelist struct {
-	SwIfIndex uint32
-	Count     uint8 `struc:"sizeof=Whitelist"`
-	NInput    uint8
-	Whitelist []uint16
-}
-
-func (*ACLInterfaceSetEtypeWhitelist) GetMessageName() string {
-	return "acl_interface_set_etype_whitelist"
-}
-func (*ACLInterfaceSetEtypeWhitelist) GetCrcString() string {
-	return "f515efc5"
-}
-func (*ACLInterfaceSetEtypeWhitelist) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// ACLInterfaceSetEtypeWhitelistReply represents VPP binary API message 'acl_interface_set_etype_whitelist_reply':
-//
-//	"acl_interface_set_etype_whitelist_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
-type ACLInterfaceSetEtypeWhitelistReply struct {
-	Retval int32
-}
-
-func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageName() string {
-	return "acl_interface_set_etype_whitelist_reply"
-}
-func (*ACLInterfaceSetEtypeWhitelistReply) GetCrcString() string {
-	return "e8d4e804"
-}
-func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// ACLInterfaceEtypeWhitelistDump represents VPP binary API message 'acl_interface_etype_whitelist_dump':
-//
-//	"acl_interface_etype_whitelist_dump",
+//	"macip_acl_interface_list_dump",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1643,105 +1692,55 @@ func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
 //	    "crc": "0x529cb13f"
 //	}
 //
-type ACLInterfaceEtypeWhitelistDump struct {
+type MacipACLInterfaceListDump struct {
 	SwIfIndex uint32
 }
 
-func (*ACLInterfaceEtypeWhitelistDump) GetMessageName() string {
-	return "acl_interface_etype_whitelist_dump"
+func (*MacipACLInterfaceListDump) GetMessageName() string {
+	return "macip_acl_interface_list_dump"
 }
-func (*ACLInterfaceEtypeWhitelistDump) GetCrcString() string {
+func (*MacipACLInterfaceListDump) GetCrcString() string {
 	return "529cb13f"
 }
-func (*ACLInterfaceEtypeWhitelistDump) GetMessageType() api.MessageType {
+func (*MacipACLInterfaceListDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// ACLInterfaceEtypeWhitelistDetails represents VPP binary API message 'acl_interface_etype_whitelist_details':
-//
-//	"acl_interface_etype_whitelist_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u16",
-//	    "whitelist",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x6a5d4e81"
-//	}
-//
-type ACLInterfaceEtypeWhitelistDetails struct {
-	SwIfIndex uint32
-	Count     uint8 `struc:"sizeof=Whitelist"`
-	NInput    uint8
-	Whitelist []uint16
-}
-
-func (*ACLInterfaceEtypeWhitelistDetails) GetMessageName() string {
-	return "acl_interface_etype_whitelist_details"
-}
-func (*ACLInterfaceEtypeWhitelistDetails) GetCrcString() string {
-	return "6a5d4e81"
-}
-func (*ACLInterfaceEtypeWhitelistDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 func init() {
-	api.RegisterMessage((*ACLPluginGetVersion)(nil), "acl.ACLPluginGetVersion")
-	api.RegisterMessage((*ACLPluginGetVersionReply)(nil), "acl.ACLPluginGetVersionReply")
-	api.RegisterMessage((*ACLPluginControlPing)(nil), "acl.ACLPluginControlPing")
-	api.RegisterMessage((*ACLPluginControlPingReply)(nil), "acl.ACLPluginControlPingReply")
-	api.RegisterMessage((*ACLPluginGetConnTableMaxEntries)(nil), "acl.ACLPluginGetConnTableMaxEntries")
-	api.RegisterMessage((*ACLPluginGetConnTableMaxEntriesReply)(nil), "acl.ACLPluginGetConnTableMaxEntriesReply")
 	api.RegisterMessage((*ACLAddReplace)(nil), "acl.ACLAddReplace")
 	api.RegisterMessage((*ACLAddReplaceReply)(nil), "acl.ACLAddReplaceReply")
 	api.RegisterMessage((*ACLDel)(nil), "acl.ACLDel")
 	api.RegisterMessage((*ACLDelReply)(nil), "acl.ACLDelReply")
+	api.RegisterMessage((*ACLDetails)(nil), "acl.ACLDetails")
+	api.RegisterMessage((*ACLDump)(nil), "acl.ACLDump")
 	api.RegisterMessage((*ACLInterfaceAddDel)(nil), "acl.ACLInterfaceAddDel")
 	api.RegisterMessage((*ACLInterfaceAddDelReply)(nil), "acl.ACLInterfaceAddDelReply")
+	api.RegisterMessage((*ACLInterfaceEtypeWhitelistDetails)(nil), "acl.ACLInterfaceEtypeWhitelistDetails")
+	api.RegisterMessage((*ACLInterfaceEtypeWhitelistDump)(nil), "acl.ACLInterfaceEtypeWhitelistDump")
+	api.RegisterMessage((*ACLInterfaceListDetails)(nil), "acl.ACLInterfaceListDetails")
+	api.RegisterMessage((*ACLInterfaceListDump)(nil), "acl.ACLInterfaceListDump")
 	api.RegisterMessage((*ACLInterfaceSetACLList)(nil), "acl.ACLInterfaceSetACLList")
 	api.RegisterMessage((*ACLInterfaceSetACLListReply)(nil), "acl.ACLInterfaceSetACLListReply")
-	api.RegisterMessage((*ACLDump)(nil), "acl.ACLDump")
-	api.RegisterMessage((*ACLDetails)(nil), "acl.ACLDetails")
-	api.RegisterMessage((*ACLInterfaceListDump)(nil), "acl.ACLInterfaceListDump")
-	api.RegisterMessage((*ACLInterfaceListDetails)(nil), "acl.ACLInterfaceListDetails")
-	api.RegisterMessage((*MacipACLAdd)(nil), "acl.MacipACLAdd")
-	api.RegisterMessage((*MacipACLAddReply)(nil), "acl.MacipACLAddReply")
-	api.RegisterMessage((*MacipACLAddReplace)(nil), "acl.MacipACLAddReplace")
-	api.RegisterMessage((*MacipACLAddReplaceReply)(nil), "acl.MacipACLAddReplaceReply")
-	api.RegisterMessage((*MacipACLDel)(nil), "acl.MacipACLDel")
-	api.RegisterMessage((*MacipACLDelReply)(nil), "acl.MacipACLDelReply")
-	api.RegisterMessage((*MacipACLInterfaceAddDel)(nil), "acl.MacipACLInterfaceAddDel")
-	api.RegisterMessage((*MacipACLInterfaceAddDelReply)(nil), "acl.MacipACLInterfaceAddDelReply")
-	api.RegisterMessage((*MacipACLDump)(nil), "acl.MacipACLDump")
-	api.RegisterMessage((*MacipACLDetails)(nil), "acl.MacipACLDetails")
-	api.RegisterMessage((*MacipACLInterfaceGet)(nil), "acl.MacipACLInterfaceGet")
-	api.RegisterMessage((*MacipACLInterfaceGetReply)(nil), "acl.MacipACLInterfaceGetReply")
-	api.RegisterMessage((*MacipACLInterfaceListDump)(nil), "acl.MacipACLInterfaceListDump")
-	api.RegisterMessage((*MacipACLInterfaceListDetails)(nil), "acl.MacipACLInterfaceListDetails")
 	api.RegisterMessage((*ACLInterfaceSetEtypeWhitelist)(nil), "acl.ACLInterfaceSetEtypeWhitelist")
 	api.RegisterMessage((*ACLInterfaceSetEtypeWhitelistReply)(nil), "acl.ACLInterfaceSetEtypeWhitelistReply")
-	api.RegisterMessage((*ACLInterfaceEtypeWhitelistDump)(nil), "acl.ACLInterfaceEtypeWhitelistDump")
-	api.RegisterMessage((*ACLInterfaceEtypeWhitelistDetails)(nil), "acl.ACLInterfaceEtypeWhitelistDetails")
+	api.RegisterMessage((*ACLPluginControlPing)(nil), "acl.ACLPluginControlPing")
+	api.RegisterMessage((*ACLPluginControlPingReply)(nil), "acl.ACLPluginControlPingReply")
+	api.RegisterMessage((*ACLPluginGetConnTableMaxEntries)(nil), "acl.ACLPluginGetConnTableMaxEntries")
+	api.RegisterMessage((*ACLPluginGetConnTableMaxEntriesReply)(nil), "acl.ACLPluginGetConnTableMaxEntriesReply")
+	api.RegisterMessage((*ACLPluginGetVersion)(nil), "acl.ACLPluginGetVersion")
+	api.RegisterMessage((*ACLPluginGetVersionReply)(nil), "acl.ACLPluginGetVersionReply")
+	api.RegisterMessage((*MacipACLAdd)(nil), "acl.MacipACLAdd")
+	api.RegisterMessage((*MacipACLAddReplace)(nil), "acl.MacipACLAddReplace")
+	api.RegisterMessage((*MacipACLAddReplaceReply)(nil), "acl.MacipACLAddReplaceReply")
+	api.RegisterMessage((*MacipACLAddReply)(nil), "acl.MacipACLAddReply")
+	api.RegisterMessage((*MacipACLDel)(nil), "acl.MacipACLDel")
+	api.RegisterMessage((*MacipACLDelReply)(nil), "acl.MacipACLDelReply")
+	api.RegisterMessage((*MacipACLDetails)(nil), "acl.MacipACLDetails")
+	api.RegisterMessage((*MacipACLDump)(nil), "acl.MacipACLDump")
+	api.RegisterMessage((*MacipACLInterfaceAddDel)(nil), "acl.MacipACLInterfaceAddDel")
+	api.RegisterMessage((*MacipACLInterfaceAddDelReply)(nil), "acl.MacipACLInterfaceAddDelReply")
+	api.RegisterMessage((*MacipACLInterfaceGet)(nil), "acl.MacipACLInterfaceGet")
+	api.RegisterMessage((*MacipACLInterfaceGetReply)(nil), "acl.MacipACLInterfaceGetReply")
+	api.RegisterMessage((*MacipACLInterfaceListDetails)(nil), "acl.MacipACLInterfaceListDetails")
+	api.RegisterMessage((*MacipACLInterfaceListDump)(nil), "acl.MacipACLInterfaceListDump")
 }

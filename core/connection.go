@@ -248,7 +248,7 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 		c.msgMap[msgID] = msg
 	}
 
-	msgs := api.GetAllMessages()
+	msgs := api.GetRegisteredMessages()
 
 	for name, msg := range msgs {
 		msgID, err := c.vppClient.GetMsgID(msg.GetMessageName(), msg.GetCrcString())

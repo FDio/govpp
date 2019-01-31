@@ -93,9 +93,9 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 	// generate services
 	if len(ctx.packageData.Services) > 0 {
 		generateServices(ctx, w, ctx.packageData.Services)
-	}
 
-	// TODO: generate implementation for Services interface
+		// TODO: generate implementation for Services interface
+	}
 
 	// generate enums
 	if len(ctx.packageData.Enums) > 0 {
@@ -140,16 +140,15 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 		for _, msg := range ctx.packageData.Messages {
 			generateMessage(ctx, w, &msg)
 		}
-	}
 
-	// generate message registrations
-	fmt.Fprintln(w)
-	fmt.Fprintln(w, "func init() {")
-	for _, msg := range ctx.packageData.Messages {
-		name := camelCaseName(msg.Name)
-		fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil), \"%s\")\n", name, ctx.moduleName+"."+name)
+		// generate message registrations
+		fmt.Fprintln(w, "func init() {")
+		for _, msg := range ctx.packageData.Messages {
+			name := camelCaseName(msg.Name)
+			fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil), \"%s\")\n", name, ctx.moduleName+"."+name)
+		}
+		fmt.Fprintln(w, "}")
 	}
-	fmt.Fprintln(w, "}")
 
 	// flush the data:
 	if err := w.Flush(); err != nil {
@@ -181,13 +180,13 @@ func generateHeader(ctx *context, w io.Writer) {
 			fmt.Fprintf(w, "\t%3d %s\n", num, obj)
 		}
 	}
-	printObjNum("message", len(ctx.packageData.Messages))
-	printObjNum("type", len(ctx.packageData.Types))
-	printObjNum("alias", len(ctx.packageData.Aliases))
-	printObjNum("enum", len(ctx.packageData.Enums))
-	printObjNum("union", len(ctx.packageData.Unions))
+
 	printObjNum("service", len(ctx.packageData.Services))
-	fmt.Fprintln(w)
+	printObjNum("enum", len(ctx.packageData.Enums))
+	printObjNum("alias", len(ctx.packageData.Aliases))
+	printObjNum("type", len(ctx.packageData.Types))
+	printObjNum("union", len(ctx.packageData.Unions))
+	printObjNum("message", len(ctx.packageData.Messages))
 	fmt.Fprintln(w, "*/")
 	fmt.Fprintf(w, "package %s\n", ctx.packageName)
 	fmt.Fprintln(w)
@@ -416,6 +415,10 @@ func (u *%[1]s) String() string {
 
 func generateUnionGetterSetter(w io.Writer, structName string, getterField, getterStruct string) {
 	fmt.Fprintf(w, `
+func %[1]s%[2]s(a %[3]s) (u %[1]s) {
+	u.Set%[2]s(a)
+	return
+}
 func (u *%[1]s) Set%[2]s(a %[3]s) {
 	var b = new(bytes.Buffer)
 	if err := struc.Pack(b, &a); err != nil {
@@ -530,6 +533,8 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 
 	// generate message type getter method
 	generateMessageTypeGetter(w, name, msgType)
+
+	fmt.Fprintln(w)
 }
 
 // generateField writes generated code for the field into w

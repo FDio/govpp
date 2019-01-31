@@ -31,7 +31,7 @@ var (
 
 // MessageCodec provides functionality for decoding binary data to generated API messages.
 type MessageCodec interface {
-	//EncodeMsg encodes message into binary data.
+	// EncodeMsg encodes message into binary data.
 	EncodeMsg(msg api.Message, msgID uint16) ([]byte, error)
 	// DecodeMsg decodes binary-encoded data of a message into provided Message structure.
 	DecodeMsg(data []byte, msg api.Message) error

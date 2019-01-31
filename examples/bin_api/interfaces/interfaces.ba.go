@@ -5,10 +5,9 @@
  Package interfaces is a generated from VPP binary API module 'interface'.
 
  It contains following objects:
-	 51 messages
-	  1 alias
 	 25 services
-
+	  1 alias
+	 51 messages
 */
 package interfaces
 
@@ -146,9 +145,9 @@ type InterfaceIndex uint32
 
 /* Messages */
 
-// SwInterfaceSetFlags represents VPP binary API message 'sw_interface_set_flags':
+// CollectDetailedInterfaceStats represents VPP binary API message 'collect_detailed_interface_stats':
 //
-//	"sw_interface_set_flags",
+//	"collect_detailed_interface_stats",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -167,30 +166,30 @@ type InterfaceIndex uint32
 //	],
 //	[
 //	    "u8",
-//	    "admin_up_down"
+//	    "enable_disable"
 //	],
 //	{
-//	    "crc": "0x555485f5"
+//	    "crc": "0x69d24598"
 //	}
 //
-type SwInterfaceSetFlags struct {
-	SwIfIndex   uint32
-	AdminUpDown uint8
+type CollectDetailedInterfaceStats struct {
+	SwIfIndex     uint32
+	EnableDisable uint8
 }
 
-func (*SwInterfaceSetFlags) GetMessageName() string {
-	return "sw_interface_set_flags"
+func (*CollectDetailedInterfaceStats) GetMessageName() string {
+	return "collect_detailed_interface_stats"
 }
-func (*SwInterfaceSetFlags) GetCrcString() string {
-	return "555485f5"
+func (*CollectDetailedInterfaceStats) GetCrcString() string {
+	return "69d24598"
 }
-func (*SwInterfaceSetFlags) GetMessageType() api.MessageType {
+func (*CollectDetailedInterfaceStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceSetFlagsReply represents VPP binary API message 'sw_interface_set_flags_reply':
+// CollectDetailedInterfaceStatsReply represents VPP binary API message 'collect_detailed_interface_stats_reply':
 //
-//	"sw_interface_set_flags_reply",
+//	"collect_detailed_interface_stats_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -207,17 +206,529 @@ func (*SwInterfaceSetFlags) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type SwInterfaceSetFlagsReply struct {
+type CollectDetailedInterfaceStatsReply struct {
 	Retval int32
 }
 
-func (*SwInterfaceSetFlagsReply) GetMessageName() string {
-	return "sw_interface_set_flags_reply"
+func (*CollectDetailedInterfaceStatsReply) GetMessageName() string {
+	return "collect_detailed_interface_stats_reply"
 }
-func (*SwInterfaceSetFlagsReply) GetCrcString() string {
+func (*CollectDetailedInterfaceStatsReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*SwInterfaceSetFlagsReply) GetMessageType() api.MessageType {
+func (*CollectDetailedInterfaceStatsReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// CreateLoopback represents VPP binary API message 'create_loopback':
+//
+//	"create_loopback",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u8",
+//	    "mac_address",
+//	    6
+//	],
+//	{
+//	    "crc": "0x3b54129c"
+//	}
+//
+type CreateLoopback struct {
+	MacAddress []byte `struc:"[6]byte"`
+}
+
+func (*CreateLoopback) GetMessageName() string {
+	return "create_loopback"
+}
+func (*CreateLoopback) GetCrcString() string {
+	return "3b54129c"
+}
+func (*CreateLoopback) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// CreateLoopbackInstance represents VPP binary API message 'create_loopback_instance':
+//
+//	"create_loopback_instance",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u8",
+//	    "mac_address",
+//	    6
+//	],
+//	[
+//	    "u8",
+//	    "is_specified"
+//	],
+//	[
+//	    "u32",
+//	    "user_instance"
+//	],
+//	{
+//	    "crc": "0x7bbd53b6"
+//	}
+//
+type CreateLoopbackInstance struct {
+	MacAddress   []byte `struc:"[6]byte"`
+	IsSpecified  uint8
+	UserInstance uint32
+}
+
+func (*CreateLoopbackInstance) GetMessageName() string {
+	return "create_loopback_instance"
+}
+func (*CreateLoopbackInstance) GetCrcString() string {
+	return "7bbd53b6"
+}
+func (*CreateLoopbackInstance) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// CreateLoopbackInstanceReply represents VPP binary API message 'create_loopback_instance_reply':
+//
+//	"create_loopback_instance_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0xfda5941f"
+//	}
+//
+type CreateLoopbackInstanceReply struct {
+	Retval    int32
+	SwIfIndex uint32
+}
+
+func (*CreateLoopbackInstanceReply) GetMessageName() string {
+	return "create_loopback_instance_reply"
+}
+func (*CreateLoopbackInstanceReply) GetCrcString() string {
+	return "fda5941f"
+}
+func (*CreateLoopbackInstanceReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// CreateLoopbackReply represents VPP binary API message 'create_loopback_reply':
+//
+//	"create_loopback_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0xfda5941f"
+//	}
+//
+type CreateLoopbackReply struct {
+	Retval    int32
+	SwIfIndex uint32
+}
+
+func (*CreateLoopbackReply) GetMessageName() string {
+	return "create_loopback_reply"
+}
+func (*CreateLoopbackReply) GetCrcString() string {
+	return "fda5941f"
+}
+func (*CreateLoopbackReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// CreateSubif represents VPP binary API message 'create_subif':
+//
+//	"create_subif",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u32",
+//	    "sub_id"
+//	],
+//	[
+//	    "u8",
+//	    "no_tags"
+//	],
+//	[
+//	    "u8",
+//	    "one_tag"
+//	],
+//	[
+//	    "u8",
+//	    "two_tags"
+//	],
+//	[
+//	    "u8",
+//	    "dot1ad"
+//	],
+//	[
+//	    "u8",
+//	    "exact_match"
+//	],
+//	[
+//	    "u8",
+//	    "default_sub"
+//	],
+//	[
+//	    "u8",
+//	    "outer_vlan_id_any"
+//	],
+//	[
+//	    "u8",
+//	    "inner_vlan_id_any"
+//	],
+//	[
+//	    "u16",
+//	    "outer_vlan_id"
+//	],
+//	[
+//	    "u16",
+//	    "inner_vlan_id"
+//	],
+//	{
+//	    "crc": "0x86cfe408"
+//	}
+//
+type CreateSubif struct {
+	SwIfIndex      uint32
+	SubID          uint32
+	NoTags         uint8
+	OneTag         uint8
+	TwoTags        uint8
+	Dot1ad         uint8
+	ExactMatch     uint8
+	DefaultSub     uint8
+	OuterVlanIDAny uint8
+	InnerVlanIDAny uint8
+	OuterVlanID    uint16
+	InnerVlanID    uint16
+}
+
+func (*CreateSubif) GetMessageName() string {
+	return "create_subif"
+}
+func (*CreateSubif) GetCrcString() string {
+	return "86cfe408"
+}
+func (*CreateSubif) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// CreateSubifReply represents VPP binary API message 'create_subif_reply':
+//
+//	"create_subif_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0xfda5941f"
+//	}
+//
+type CreateSubifReply struct {
+	Retval    int32
+	SwIfIndex uint32
+}
+
+func (*CreateSubifReply) GetMessageName() string {
+	return "create_subif_reply"
+}
+func (*CreateSubifReply) GetCrcString() string {
+	return "fda5941f"
+}
+func (*CreateSubifReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// CreateVlanSubif represents VPP binary API message 'create_vlan_subif':
+//
+//	"create_vlan_subif",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u32",
+//	    "vlan_id"
+//	],
+//	{
+//	    "crc": "0x70cadeda"
+//	}
+//
+type CreateVlanSubif struct {
+	SwIfIndex uint32
+	VlanID    uint32
+}
+
+func (*CreateVlanSubif) GetMessageName() string {
+	return "create_vlan_subif"
+}
+func (*CreateVlanSubif) GetCrcString() string {
+	return "70cadeda"
+}
+func (*CreateVlanSubif) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// CreateVlanSubifReply represents VPP binary API message 'create_vlan_subif_reply':
+//
+//	"create_vlan_subif_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0xfda5941f"
+//	}
+//
+type CreateVlanSubifReply struct {
+	Retval    int32
+	SwIfIndex uint32
+}
+
+func (*CreateVlanSubifReply) GetMessageName() string {
+	return "create_vlan_subif_reply"
+}
+func (*CreateVlanSubifReply) GetCrcString() string {
+	return "fda5941f"
+}
+func (*CreateVlanSubifReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// DeleteLoopback represents VPP binary API message 'delete_loopback':
+//
+//	"delete_loopback",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0x529cb13f"
+//	}
+//
+type DeleteLoopback struct {
+	SwIfIndex uint32
+}
+
+func (*DeleteLoopback) GetMessageName() string {
+	return "delete_loopback"
+}
+func (*DeleteLoopback) GetCrcString() string {
+	return "529cb13f"
+}
+func (*DeleteLoopback) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// DeleteLoopbackReply represents VPP binary API message 'delete_loopback_reply':
+//
+//	"delete_loopback_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type DeleteLoopbackReply struct {
+	Retval int32
+}
+
+func (*DeleteLoopbackReply) GetMessageName() string {
+	return "delete_loopback_reply"
+}
+func (*DeleteLoopbackReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*DeleteLoopbackReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// DeleteSubif represents VPP binary API message 'delete_subif':
+//
+//	"delete_subif",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	{
+//	    "crc": "0x529cb13f"
+//	}
+//
+type DeleteSubif struct {
+	SwIfIndex uint32
+}
+
+func (*DeleteSubif) GetMessageName() string {
+	return "delete_subif"
+}
+func (*DeleteSubif) GetCrcString() string {
+	return "529cb13f"
+}
+func (*DeleteSubif) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// DeleteSubifReply represents VPP binary API message 'delete_subif_reply':
+//
+//	"delete_subif_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type DeleteSubifReply struct {
+	Retval int32
+}
+
+func (*DeleteSubifReply) GetMessageName() string {
+	return "delete_subif_reply"
+}
+func (*DeleteSubifReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*DeleteSubifReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -296,9 +807,9 @@ func (*HwInterfaceSetMtuReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceSetMtu represents VPP binary API message 'sw_interface_set_mtu':
+// InterfaceNameRenumber represents VPP binary API message 'interface_name_renumber':
 //
-//	"sw_interface_set_mtu",
+//	"interface_name_renumber",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -317,31 +828,30 @@ func (*HwInterfaceSetMtuReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u32",
-//	    "mtu",
-//	    4
+//	    "new_show_dev_instance"
 //	],
 //	{
-//	    "crc": "0xd0008db8"
+//	    "crc": "0x39194269"
 //	}
 //
-type SwInterfaceSetMtu struct {
-	SwIfIndex uint32
-	Mtu       []uint32 `struc:"[4]uint32"`
+type InterfaceNameRenumber struct {
+	SwIfIndex          uint32
+	NewShowDevInstance uint32
 }
 
-func (*SwInterfaceSetMtu) GetMessageName() string {
-	return "sw_interface_set_mtu"
+func (*InterfaceNameRenumber) GetMessageName() string {
+	return "interface_name_renumber"
 }
-func (*SwInterfaceSetMtu) GetCrcString() string {
-	return "d0008db8"
+func (*InterfaceNameRenumber) GetCrcString() string {
+	return "39194269"
 }
-func (*SwInterfaceSetMtu) GetMessageType() api.MessageType {
+func (*InterfaceNameRenumber) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceSetMtuReply represents VPP binary API message 'sw_interface_set_mtu_reply':
+// InterfaceNameRenumberReply represents VPP binary API message 'interface_name_renumber_reply':
 //
-//	"sw_interface_set_mtu_reply",
+//	"interface_name_renumber_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -358,23 +868,23 @@ func (*SwInterfaceSetMtu) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type SwInterfaceSetMtuReply struct {
+type InterfaceNameRenumberReply struct {
 	Retval int32
 }
 
-func (*SwInterfaceSetMtuReply) GetMessageName() string {
-	return "sw_interface_set_mtu_reply"
+func (*InterfaceNameRenumberReply) GetMessageName() string {
+	return "interface_name_renumber_reply"
 }
-func (*SwInterfaceSetMtuReply) GetCrcString() string {
+func (*InterfaceNameRenumberReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*SwInterfaceSetMtuReply) GetMessageType() api.MessageType {
+func (*InterfaceNameRenumberReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceSetIPDirectedBroadcast represents VPP binary API message 'sw_interface_set_ip_directed_broadcast':
+// SwInterfaceAddDelAddress represents VPP binary API message 'sw_interface_add_del_address':
 //
-//	"sw_interface_set_ip_directed_broadcast",
+//	"sw_interface_add_del_address",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -393,30 +903,51 @@ func (*SwInterfaceSetMtuReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u8",
-//	    "enable"
+//	    "is_add"
+//	],
+//	[
+//	    "u8",
+//	    "is_ipv6"
+//	],
+//	[
+//	    "u8",
+//	    "del_all"
+//	],
+//	[
+//	    "u8",
+//	    "address_length"
+//	],
+//	[
+//	    "u8",
+//	    "address",
+//	    16
 //	],
 //	{
-//	    "crc": "0xa36fadc0"
+//	    "crc": "0x7b583179"
 //	}
 //
-type SwInterfaceSetIPDirectedBroadcast struct {
-	SwIfIndex uint32
-	Enable    uint8
+type SwInterfaceAddDelAddress struct {
+	SwIfIndex     uint32
+	IsAdd         uint8
+	IsIPv6        uint8
+	DelAll        uint8
+	AddressLength uint8
+	Address       []byte `struc:"[16]byte"`
 }
 
-func (*SwInterfaceSetIPDirectedBroadcast) GetMessageName() string {
-	return "sw_interface_set_ip_directed_broadcast"
+func (*SwInterfaceAddDelAddress) GetMessageName() string {
+	return "sw_interface_add_del_address"
 }
-func (*SwInterfaceSetIPDirectedBroadcast) GetCrcString() string {
-	return "a36fadc0"
+func (*SwInterfaceAddDelAddress) GetCrcString() string {
+	return "7b583179"
 }
-func (*SwInterfaceSetIPDirectedBroadcast) GetMessageType() api.MessageType {
+func (*SwInterfaceAddDelAddress) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceSetIPDirectedBroadcastReply represents VPP binary API message 'sw_interface_set_ip_directed_broadcast_reply':
+// SwInterfaceAddDelAddressReply represents VPP binary API message 'sw_interface_add_del_address_reply':
 //
-//	"sw_interface_set_ip_directed_broadcast_reply",
+//	"sw_interface_add_del_address_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -433,76 +964,23 @@ func (*SwInterfaceSetIPDirectedBroadcast) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type SwInterfaceSetIPDirectedBroadcastReply struct {
+type SwInterfaceAddDelAddressReply struct {
 	Retval int32
 }
 
-func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageName() string {
-	return "sw_interface_set_ip_directed_broadcast_reply"
+func (*SwInterfaceAddDelAddressReply) GetMessageName() string {
+	return "sw_interface_add_del_address_reply"
 }
-func (*SwInterfaceSetIPDirectedBroadcastReply) GetCrcString() string {
+func (*SwInterfaceAddDelAddressReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageType() api.MessageType {
+func (*SwInterfaceAddDelAddressReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceEvent represents VPP binary API message 'sw_interface_event':
+// SwInterfaceClearStats represents VPP binary API message 'sw_interface_clear_stats':
 //
-//	"sw_interface_event",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "pid"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "admin_up_down"
-//	],
-//	[
-//	    "u8",
-//	    "link_up_down"
-//	],
-//	[
-//	    "u8",
-//	    "deleted"
-//	],
-//	{
-//	    "crc": "0xbf9938e4"
-//	}
-//
-type SwInterfaceEvent struct {
-	PID         uint32
-	SwIfIndex   uint32
-	AdminUpDown uint8
-	LinkUpDown  uint8
-	Deleted     uint8
-}
-
-func (*SwInterfaceEvent) GetMessageName() string {
-	return "sw_interface_event"
-}
-func (*SwInterfaceEvent) GetCrcString() string {
-	return "bf9938e4"
-}
-func (*SwInterfaceEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
-}
-
-// WantInterfaceEvents represents VPP binary API message 'want_interface_events':
-//
-//	"want_interface_events",
+//	"sw_interface_clear_stats",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -517,34 +995,29 @@ func (*SwInterfaceEvent) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u32",
-//	    "enable_disable"
-//	],
-//	[
-//	    "u32",
-//	    "pid"
+//	    "sw_if_index"
 //	],
 //	{
-//	    "crc": "0x476f5a08"
+//	    "crc": "0x529cb13f"
 //	}
 //
-type WantInterfaceEvents struct {
-	EnableDisable uint32
-	PID           uint32
+type SwInterfaceClearStats struct {
+	SwIfIndex uint32
 }
 
-func (*WantInterfaceEvents) GetMessageName() string {
-	return "want_interface_events"
+func (*SwInterfaceClearStats) GetMessageName() string {
+	return "sw_interface_clear_stats"
 }
-func (*WantInterfaceEvents) GetCrcString() string {
-	return "476f5a08"
+func (*SwInterfaceClearStats) GetCrcString() string {
+	return "529cb13f"
 }
-func (*WantInterfaceEvents) GetMessageType() api.MessageType {
+func (*SwInterfaceClearStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// WantInterfaceEventsReply represents VPP binary API message 'want_interface_events_reply':
+// SwInterfaceClearStatsReply represents VPP binary API message 'sw_interface_clear_stats_reply':
 //
-//	"want_interface_events_reply",
+//	"sw_interface_clear_stats_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -561,17 +1034,17 @@ func (*WantInterfaceEvents) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type WantInterfaceEventsReply struct {
+type SwInterfaceClearStatsReply struct {
 	Retval int32
 }
 
-func (*WantInterfaceEventsReply) GetMessageName() string {
-	return "want_interface_events_reply"
+func (*SwInterfaceClearStatsReply) GetMessageName() string {
+	return "sw_interface_clear_stats_reply"
 }
-func (*WantInterfaceEventsReply) GetCrcString() string {
+func (*SwInterfaceClearStatsReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*WantInterfaceEventsReply) GetMessageType() api.MessageType {
+func (*SwInterfaceClearStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -807,9 +1280,62 @@ func (*SwInterfaceDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceAddDelAddress represents VPP binary API message 'sw_interface_add_del_address':
+// SwInterfaceEvent represents VPP binary API message 'sw_interface_event':
 //
-//	"sw_interface_add_del_address",
+//	"sw_interface_event",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "admin_up_down"
+//	],
+//	[
+//	    "u8",
+//	    "link_up_down"
+//	],
+//	[
+//	    "u8",
+//	    "deleted"
+//	],
+//	{
+//	    "crc": "0xbf9938e4"
+//	}
+//
+type SwInterfaceEvent struct {
+	PID         uint32
+	SwIfIndex   uint32
+	AdminUpDown uint8
+	LinkUpDown  uint8
+	Deleted     uint8
+}
+
+func (*SwInterfaceEvent) GetMessageName() string {
+	return "sw_interface_event"
+}
+func (*SwInterfaceEvent) GetCrcString() string {
+	return "bf9938e4"
+}
+func (*SwInterfaceEvent) GetMessageType() api.MessageType {
+	return api.EventMessage
+}
+
+// SwInterfaceGetMacAddress represents VPP binary API message 'sw_interface_get_mac_address':
+//
+//	"sw_interface_get_mac_address",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -826,133 +1352,27 @@ func (*SwInterfaceDump) GetMessageType() api.MessageType {
 //	    "u32",
 //	    "sw_if_index"
 //	],
-//	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	[
-//	    "u8",
-//	    "is_ipv6"
-//	],
-//	[
-//	    "u8",
-//	    "del_all"
-//	],
-//	[
-//	    "u8",
-//	    "address_length"
-//	],
-//	[
-//	    "u8",
-//	    "address",
-//	    16
-//	],
 //	{
-//	    "crc": "0x7b583179"
+//	    "crc": "0x529cb13f"
 //	}
 //
-type SwInterfaceAddDelAddress struct {
-	SwIfIndex     uint32
-	IsAdd         uint8
-	IsIPv6        uint8
-	DelAll        uint8
-	AddressLength uint8
-	Address       []byte `struc:"[16]byte"`
-}
-
-func (*SwInterfaceAddDelAddress) GetMessageName() string {
-	return "sw_interface_add_del_address"
-}
-func (*SwInterfaceAddDelAddress) GetCrcString() string {
-	return "7b583179"
-}
-func (*SwInterfaceAddDelAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// SwInterfaceAddDelAddressReply represents VPP binary API message 'sw_interface_add_del_address_reply':
-//
-//	"sw_interface_add_del_address_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
-type SwInterfaceAddDelAddressReply struct {
-	Retval int32
-}
-
-func (*SwInterfaceAddDelAddressReply) GetMessageName() string {
-	return "sw_interface_add_del_address_reply"
-}
-func (*SwInterfaceAddDelAddressReply) GetCrcString() string {
-	return "e8d4e804"
-}
-func (*SwInterfaceAddDelAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// SwInterfaceSetTable represents VPP binary API message 'sw_interface_set_table':
-//
-//	"sw_interface_set_table",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "is_ipv6"
-//	],
-//	[
-//	    "u32",
-//	    "vrf_id"
-//	],
-//	{
-//	    "crc": "0xacb25d89"
-//	}
-//
-type SwInterfaceSetTable struct {
+type SwInterfaceGetMacAddress struct {
 	SwIfIndex uint32
-	IsIPv6    uint8
-	VrfID     uint32
 }
 
-func (*SwInterfaceSetTable) GetMessageName() string {
-	return "sw_interface_set_table"
+func (*SwInterfaceGetMacAddress) GetMessageName() string {
+	return "sw_interface_get_mac_address"
 }
-func (*SwInterfaceSetTable) GetCrcString() string {
-	return "acb25d89"
+func (*SwInterfaceGetMacAddress) GetCrcString() string {
+	return "529cb13f"
 }
-func (*SwInterfaceSetTable) GetMessageType() api.MessageType {
+func (*SwInterfaceGetMacAddress) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceSetTableReply represents VPP binary API message 'sw_interface_set_table_reply':
+// SwInterfaceGetMacAddressReply represents VPP binary API message 'sw_interface_get_mac_address_reply':
 //
-//	"sw_interface_set_table_reply",
+//	"sw_interface_get_mac_address_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -965,21 +1385,27 @@ func (*SwInterfaceSetTable) GetMessageType() api.MessageType {
 //	    "i32",
 //	    "retval"
 //	],
+//	[
+//	    "u8",
+//	    "mac_address",
+//	    6
+//	],
 //	{
-//	    "crc": "0xe8d4e804"
+//	    "crc": "0x8ea538d3"
 //	}
 //
-type SwInterfaceSetTableReply struct {
-	Retval int32
+type SwInterfaceGetMacAddressReply struct {
+	Retval     int32
+	MacAddress []byte `struc:"[6]byte"`
 }
 
-func (*SwInterfaceSetTableReply) GetMessageName() string {
-	return "sw_interface_set_table_reply"
+func (*SwInterfaceGetMacAddressReply) GetMessageName() string {
+	return "sw_interface_get_mac_address_reply"
 }
-func (*SwInterfaceSetTableReply) GetCrcString() string {
-	return "e8d4e804"
+func (*SwInterfaceGetMacAddressReply) GetCrcString() string {
+	return "8ea538d3"
 }
-func (*SwInterfaceSetTableReply) GetMessageType() api.MessageType {
+func (*SwInterfaceGetMacAddressReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -1063,9 +1489,9 @@ func (*SwInterfaceGetTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceSetUnnumbered represents VPP binary API message 'sw_interface_set_unnumbered':
+// SwInterfaceRxPlacementDetails represents VPP binary API message 'sw_interface_rx_placement_details':
 //
-//	"sw_interface_set_unnumbered",
+//	"sw_interface_rx_placement_details",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1084,68 +1510,40 @@ func (*SwInterfaceGetTableReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u32",
-//	    "unnumbered_sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	{
-//	    "crc": "0xa2c1bbda"
-//	}
-//
-type SwInterfaceSetUnnumbered struct {
-	SwIfIndex           uint32
-	UnnumberedSwIfIndex uint32
-	IsAdd               uint8
-}
-
-func (*SwInterfaceSetUnnumbered) GetMessageName() string {
-	return "sw_interface_set_unnumbered"
-}
-func (*SwInterfaceSetUnnumbered) GetCrcString() string {
-	return "a2c1bbda"
-}
-func (*SwInterfaceSetUnnumbered) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// SwInterfaceSetUnnumberedReply represents VPP binary API message 'sw_interface_set_unnumbered_reply':
-//
-//	"sw_interface_set_unnumbered_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
+//	    "queue_id"
 //	],
 //	[
 //	    "u32",
-//	    "context"
+//	    "worker_id"
 //	],
 //	[
-//	    "i32",
-//	    "retval"
+//	    "u8",
+//	    "mode"
 //	],
 //	{
-//	    "crc": "0xe8d4e804"
+//	    "crc": "0x0e9e33f4"
 //	}
 //
-type SwInterfaceSetUnnumberedReply struct {
-	Retval int32
+type SwInterfaceRxPlacementDetails struct {
+	SwIfIndex uint32
+	QueueID   uint32
+	WorkerID  uint32
+	Mode      uint8
 }
 
-func (*SwInterfaceSetUnnumberedReply) GetMessageName() string {
-	return "sw_interface_set_unnumbered_reply"
+func (*SwInterfaceRxPlacementDetails) GetMessageName() string {
+	return "sw_interface_rx_placement_details"
 }
-func (*SwInterfaceSetUnnumberedReply) GetCrcString() string {
-	return "e8d4e804"
+func (*SwInterfaceRxPlacementDetails) GetCrcString() string {
+	return "0e9e33f4"
 }
-func (*SwInterfaceSetUnnumberedReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*SwInterfaceRxPlacementDetails) GetMessageType() api.MessageType {
+	return api.RequestMessage
 }
 
-// SwInterfaceClearStats represents VPP binary API message 'sw_interface_clear_stats':
+// SwInterfaceRxPlacementDump represents VPP binary API message 'sw_interface_rx_placement_dump':
 //
-//	"sw_interface_clear_stats",
+//	"sw_interface_rx_placement_dump",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1166,56 +1564,23 @@ func (*SwInterfaceSetUnnumberedReply) GetMessageType() api.MessageType {
 //	    "crc": "0x529cb13f"
 //	}
 //
-type SwInterfaceClearStats struct {
+type SwInterfaceRxPlacementDump struct {
 	SwIfIndex uint32
 }
 
-func (*SwInterfaceClearStats) GetMessageName() string {
-	return "sw_interface_clear_stats"
+func (*SwInterfaceRxPlacementDump) GetMessageName() string {
+	return "sw_interface_rx_placement_dump"
 }
-func (*SwInterfaceClearStats) GetCrcString() string {
+func (*SwInterfaceRxPlacementDump) GetCrcString() string {
 	return "529cb13f"
 }
-func (*SwInterfaceClearStats) GetMessageType() api.MessageType {
+func (*SwInterfaceRxPlacementDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceClearStatsReply represents VPP binary API message 'sw_interface_clear_stats_reply':
+// SwInterfaceSetFlags represents VPP binary API message 'sw_interface_set_flags':
 //
-//	"sw_interface_clear_stats_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
-type SwInterfaceClearStatsReply struct {
-	Retval int32
-}
-
-func (*SwInterfaceClearStatsReply) GetMessageName() string {
-	return "sw_interface_clear_stats_reply"
-}
-func (*SwInterfaceClearStatsReply) GetCrcString() string {
-	return "e8d4e804"
-}
-func (*SwInterfaceClearStatsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// SwInterfaceTagAddDel represents VPP binary API message 'sw_interface_tag_add_del':
-//
-//	"sw_interface_tag_add_del",
+//	"sw_interface_set_flags",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1229,41 +1594,35 @@ func (*SwInterfaceClearStatsReply) GetMessageType() api.MessageType {
 //	    "context"
 //	],
 //	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	[
 //	    "u32",
 //	    "sw_if_index"
 //	],
 //	[
 //	    "u8",
-//	    "tag",
-//	    64
+//	    "admin_up_down"
 //	],
 //	{
-//	    "crc": "0x14cc636c"
+//	    "crc": "0x555485f5"
 //	}
 //
-type SwInterfaceTagAddDel struct {
-	IsAdd     uint8
-	SwIfIndex uint32
-	Tag       []byte `struc:"[64]byte"`
+type SwInterfaceSetFlags struct {
+	SwIfIndex   uint32
+	AdminUpDown uint8
 }
 
-func (*SwInterfaceTagAddDel) GetMessageName() string {
-	return "sw_interface_tag_add_del"
+func (*SwInterfaceSetFlags) GetMessageName() string {
+	return "sw_interface_set_flags"
 }
-func (*SwInterfaceTagAddDel) GetCrcString() string {
-	return "14cc636c"
+func (*SwInterfaceSetFlags) GetCrcString() string {
+	return "555485f5"
 }
-func (*SwInterfaceTagAddDel) GetMessageType() api.MessageType {
+func (*SwInterfaceSetFlags) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceTagAddDelReply represents VPP binary API message 'sw_interface_tag_add_del_reply':
+// SwInterfaceSetFlagsReply represents VPP binary API message 'sw_interface_set_flags_reply':
 //
-//	"sw_interface_tag_add_del_reply",
+//	"sw_interface_set_flags_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1280,17 +1639,92 @@ func (*SwInterfaceTagAddDel) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type SwInterfaceTagAddDelReply struct {
+type SwInterfaceSetFlagsReply struct {
 	Retval int32
 }
 
-func (*SwInterfaceTagAddDelReply) GetMessageName() string {
-	return "sw_interface_tag_add_del_reply"
+func (*SwInterfaceSetFlagsReply) GetMessageName() string {
+	return "sw_interface_set_flags_reply"
 }
-func (*SwInterfaceTagAddDelReply) GetCrcString() string {
+func (*SwInterfaceSetFlagsReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*SwInterfaceTagAddDelReply) GetMessageType() api.MessageType {
+func (*SwInterfaceSetFlagsReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// SwInterfaceSetIPDirectedBroadcast represents VPP binary API message 'sw_interface_set_ip_directed_broadcast':
+//
+//	"sw_interface_set_ip_directed_broadcast",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "enable"
+//	],
+//	{
+//	    "crc": "0xa36fadc0"
+//	}
+//
+type SwInterfaceSetIPDirectedBroadcast struct {
+	SwIfIndex uint32
+	Enable    uint8
+}
+
+func (*SwInterfaceSetIPDirectedBroadcast) GetMessageName() string {
+	return "sw_interface_set_ip_directed_broadcast"
+}
+func (*SwInterfaceSetIPDirectedBroadcast) GetCrcString() string {
+	return "a36fadc0"
+}
+func (*SwInterfaceSetIPDirectedBroadcast) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// SwInterfaceSetIPDirectedBroadcastReply represents VPP binary API message 'sw_interface_set_ip_directed_broadcast_reply':
+//
+//	"sw_interface_set_ip_directed_broadcast_reply",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "i32",
+//	    "retval"
+//	],
+//	{
+//	    "crc": "0xe8d4e804"
+//	}
+//
+type SwInterfaceSetIPDirectedBroadcastReply struct {
+	Retval int32
+}
+
+func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageName() string {
+	return "sw_interface_set_ip_directed_broadcast_reply"
+}
+func (*SwInterfaceSetIPDirectedBroadcastReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -1370,9 +1804,9 @@ func (*SwInterfaceSetMacAddressReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceGetMacAddress represents VPP binary API message 'sw_interface_get_mac_address':
+// SwInterfaceSetMtu represents VPP binary API message 'sw_interface_set_mtu':
 //
-//	"sw_interface_get_mac_address",
+//	"sw_interface_set_mtu",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1389,27 +1823,33 @@ func (*SwInterfaceSetMacAddressReply) GetMessageType() api.MessageType {
 //	    "u32",
 //	    "sw_if_index"
 //	],
+//	[
+//	    "u32",
+//	    "mtu",
+//	    4
+//	],
 //	{
-//	    "crc": "0x529cb13f"
+//	    "crc": "0xd0008db8"
 //	}
 //
-type SwInterfaceGetMacAddress struct {
+type SwInterfaceSetMtu struct {
 	SwIfIndex uint32
+	Mtu       []uint32 `struc:"[4]uint32"`
 }
 
-func (*SwInterfaceGetMacAddress) GetMessageName() string {
-	return "sw_interface_get_mac_address"
+func (*SwInterfaceSetMtu) GetMessageName() string {
+	return "sw_interface_set_mtu"
 }
-func (*SwInterfaceGetMacAddress) GetCrcString() string {
-	return "529cb13f"
+func (*SwInterfaceSetMtu) GetCrcString() string {
+	return "d0008db8"
 }
-func (*SwInterfaceGetMacAddress) GetMessageType() api.MessageType {
+func (*SwInterfaceSetMtu) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// SwInterfaceGetMacAddressReply represents VPP binary API message 'sw_interface_get_mac_address_reply':
+// SwInterfaceSetMtuReply represents VPP binary API message 'sw_interface_set_mtu_reply':
 //
-//	"sw_interface_get_mac_address_reply",
+//	"sw_interface_set_mtu_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1422,27 +1862,21 @@ func (*SwInterfaceGetMacAddress) GetMessageType() api.MessageType {
 //	    "i32",
 //	    "retval"
 //	],
-//	[
-//	    "u8",
-//	    "mac_address",
-//	    6
-//	],
 //	{
-//	    "crc": "0x8ea538d3"
+//	    "crc": "0xe8d4e804"
 //	}
 //
-type SwInterfaceGetMacAddressReply struct {
-	Retval     int32
-	MacAddress []byte `struc:"[6]byte"`
+type SwInterfaceSetMtuReply struct {
+	Retval int32
 }
 
-func (*SwInterfaceGetMacAddressReply) GetMessageName() string {
-	return "sw_interface_get_mac_address_reply"
+func (*SwInterfaceSetMtuReply) GetMessageName() string {
+	return "sw_interface_set_mtu_reply"
 }
-func (*SwInterfaceGetMacAddressReply) GetCrcString() string {
-	return "8ea538d3"
+func (*SwInterfaceSetMtuReply) GetCrcString() string {
+	return "e8d4e804"
 }
-func (*SwInterfaceGetMacAddressReply) GetMessageType() api.MessageType {
+func (*SwInterfaceSetMtuReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
@@ -1616,9 +2050,9 @@ func (*SwInterfaceSetRxPlacementReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// SwInterfaceRxPlacementDump represents VPP binary API message 'sw_interface_rx_placement_dump':
+// SwInterfaceSetTable represents VPP binary API message 'sw_interface_set_table':
 //
-//	"sw_interface_rx_placement_dump",
+//	"sw_interface_set_table",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1634,122 +2068,38 @@ func (*SwInterfaceSetRxPlacementReply) GetMessageType() api.MessageType {
 //	[
 //	    "u32",
 //	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type SwInterfaceRxPlacementDump struct {
-	SwIfIndex uint32
-}
-
-func (*SwInterfaceRxPlacementDump) GetMessageName() string {
-	return "sw_interface_rx_placement_dump"
-}
-func (*SwInterfaceRxPlacementDump) GetCrcString() string {
-	return "529cb13f"
-}
-func (*SwInterfaceRxPlacementDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// SwInterfaceRxPlacementDetails represents VPP binary API message 'sw_interface_rx_placement_details':
-//
-//	"sw_interface_rx_placement_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u32",
-//	    "queue_id"
-//	],
-//	[
-//	    "u32",
-//	    "worker_id"
 //	],
 //	[
 //	    "u8",
-//	    "mode"
+//	    "is_ipv6"
+//	],
+//	[
+//	    "u32",
+//	    "vrf_id"
 //	],
 //	{
-//	    "crc": "0x0e9e33f4"
+//	    "crc": "0xacb25d89"
 //	}
 //
-type SwInterfaceRxPlacementDetails struct {
+type SwInterfaceSetTable struct {
 	SwIfIndex uint32
-	QueueID   uint32
-	WorkerID  uint32
-	Mode      uint8
+	IsIPv6    uint8
+	VrfID     uint32
 }
 
-func (*SwInterfaceRxPlacementDetails) GetMessageName() string {
-	return "sw_interface_rx_placement_details"
+func (*SwInterfaceSetTable) GetMessageName() string {
+	return "sw_interface_set_table"
 }
-func (*SwInterfaceRxPlacementDetails) GetCrcString() string {
-	return "0e9e33f4"
+func (*SwInterfaceSetTable) GetCrcString() string {
+	return "acb25d89"
 }
-func (*SwInterfaceRxPlacementDetails) GetMessageType() api.MessageType {
+func (*SwInterfaceSetTable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// InterfaceNameRenumber represents VPP binary API message 'interface_name_renumber':
+// SwInterfaceSetTableReply represents VPP binary API message 'sw_interface_set_table_reply':
 //
-//	"interface_name_renumber",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u32",
-//	    "new_show_dev_instance"
-//	],
-//	{
-//	    "crc": "0x39194269"
-//	}
-//
-type InterfaceNameRenumber struct {
-	SwIfIndex          uint32
-	NewShowDevInstance uint32
-}
-
-func (*InterfaceNameRenumber) GetMessageName() string {
-	return "interface_name_renumber"
-}
-func (*InterfaceNameRenumber) GetCrcString() string {
-	return "39194269"
-}
-func (*InterfaceNameRenumber) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// InterfaceNameRenumberReply represents VPP binary API message 'interface_name_renumber_reply':
-//
-//	"interface_name_renumber_reply",
+//	"sw_interface_set_table_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1766,23 +2116,23 @@ func (*InterfaceNameRenumber) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type InterfaceNameRenumberReply struct {
+type SwInterfaceSetTableReply struct {
 	Retval int32
 }
 
-func (*InterfaceNameRenumberReply) GetMessageName() string {
-	return "interface_name_renumber_reply"
+func (*SwInterfaceSetTableReply) GetMessageName() string {
+	return "sw_interface_set_table_reply"
 }
-func (*InterfaceNameRenumberReply) GetCrcString() string {
+func (*SwInterfaceSetTableReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*InterfaceNameRenumberReply) GetMessageType() api.MessageType {
+func (*SwInterfaceSetTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// CreateSubif represents VPP binary API message 'create_subif':
+// SwInterfaceSetUnnumbered represents VPP binary API message 'sw_interface_set_unnumbered':
 //
-//	"create_subif",
+//	"sw_interface_set_unnumbered",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -1801,235 +2151,35 @@ func (*InterfaceNameRenumberReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u32",
-//	    "sub_id"
+//	    "unnumbered_sw_if_index"
 //	],
 //	[
 //	    "u8",
-//	    "no_tags"
-//	],
-//	[
-//	    "u8",
-//	    "one_tag"
-//	],
-//	[
-//	    "u8",
-//	    "two_tags"
-//	],
-//	[
-//	    "u8",
-//	    "dot1ad"
-//	],
-//	[
-//	    "u8",
-//	    "exact_match"
-//	],
-//	[
-//	    "u8",
-//	    "default_sub"
-//	],
-//	[
-//	    "u8",
-//	    "outer_vlan_id_any"
-//	],
-//	[
-//	    "u8",
-//	    "inner_vlan_id_any"
-//	],
-//	[
-//	    "u16",
-//	    "outer_vlan_id"
-//	],
-//	[
-//	    "u16",
-//	    "inner_vlan_id"
+//	    "is_add"
 //	],
 //	{
-//	    "crc": "0x86cfe408"
+//	    "crc": "0xa2c1bbda"
 //	}
 //
-type CreateSubif struct {
-	SwIfIndex      uint32
-	SubID          uint32
-	NoTags         uint8
-	OneTag         uint8
-	TwoTags        uint8
-	Dot1ad         uint8
-	ExactMatch     uint8
-	DefaultSub     uint8
-	OuterVlanIDAny uint8
-	InnerVlanIDAny uint8
-	OuterVlanID    uint16
-	InnerVlanID    uint16
+type SwInterfaceSetUnnumbered struct {
+	SwIfIndex           uint32
+	UnnumberedSwIfIndex uint32
+	IsAdd               uint8
 }
 
-func (*CreateSubif) GetMessageName() string {
-	return "create_subif"
+func (*SwInterfaceSetUnnumbered) GetMessageName() string {
+	return "sw_interface_set_unnumbered"
 }
-func (*CreateSubif) GetCrcString() string {
-	return "86cfe408"
+func (*SwInterfaceSetUnnumbered) GetCrcString() string {
+	return "a2c1bbda"
 }
-func (*CreateSubif) GetMessageType() api.MessageType {
+func (*SwInterfaceSetUnnumbered) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// CreateSubifReply represents VPP binary API message 'create_subif_reply':
+// SwInterfaceSetUnnumberedReply represents VPP binary API message 'sw_interface_set_unnumbered_reply':
 //
-//	"create_subif_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0xfda5941f"
-//	}
-//
-type CreateSubifReply struct {
-	Retval    int32
-	SwIfIndex uint32
-}
-
-func (*CreateSubifReply) GetMessageName() string {
-	return "create_subif_reply"
-}
-func (*CreateSubifReply) GetCrcString() string {
-	return "fda5941f"
-}
-func (*CreateSubifReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// CreateVlanSubif represents VPP binary API message 'create_vlan_subif':
-//
-//	"create_vlan_subif",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u32",
-//	    "vlan_id"
-//	],
-//	{
-//	    "crc": "0x70cadeda"
-//	}
-//
-type CreateVlanSubif struct {
-	SwIfIndex uint32
-	VlanID    uint32
-}
-
-func (*CreateVlanSubif) GetMessageName() string {
-	return "create_vlan_subif"
-}
-func (*CreateVlanSubif) GetCrcString() string {
-	return "70cadeda"
-}
-func (*CreateVlanSubif) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// CreateVlanSubifReply represents VPP binary API message 'create_vlan_subif_reply':
-//
-//	"create_vlan_subif_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0xfda5941f"
-//	}
-//
-type CreateVlanSubifReply struct {
-	Retval    int32
-	SwIfIndex uint32
-}
-
-func (*CreateVlanSubifReply) GetMessageName() string {
-	return "create_vlan_subif_reply"
-}
-func (*CreateVlanSubifReply) GetCrcString() string {
-	return "fda5941f"
-}
-func (*CreateVlanSubifReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// DeleteSubif represents VPP binary API message 'delete_subif':
-//
-//	"delete_subif",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type DeleteSubif struct {
-	SwIfIndex uint32
-}
-
-func (*DeleteSubif) GetMessageName() string {
-	return "delete_subif"
-}
-func (*DeleteSubif) GetCrcString() string {
-	return "529cb13f"
-}
-func (*DeleteSubif) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// DeleteSubifReply represents VPP binary API message 'delete_subif_reply':
-//
-//	"delete_subif_reply",
+//	"sw_interface_set_unnumbered_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -2046,23 +2196,23 @@ func (*DeleteSubif) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type DeleteSubifReply struct {
+type SwInterfaceSetUnnumberedReply struct {
 	Retval int32
 }
 
-func (*DeleteSubifReply) GetMessageName() string {
-	return "delete_subif_reply"
+func (*SwInterfaceSetUnnumberedReply) GetMessageName() string {
+	return "sw_interface_set_unnumbered_reply"
 }
-func (*DeleteSubifReply) GetCrcString() string {
+func (*SwInterfaceSetUnnumberedReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*DeleteSubifReply) GetMessageType() api.MessageType {
+func (*SwInterfaceSetUnnumberedReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// CreateLoopback represents VPP binary API message 'create_loopback':
+// SwInterfaceTagAddDel represents VPP binary API message 'sw_interface_tag_add_del':
 //
-//	"create_loopback",
+//	"sw_interface_tag_add_del",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -2077,191 +2227,40 @@ func (*DeleteSubifReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u8",
-//	    "mac_address",
-//	    6
-//	],
-//	{
-//	    "crc": "0x3b54129c"
-//	}
-//
-type CreateLoopback struct {
-	MacAddress []byte `struc:"[6]byte"`
-}
-
-func (*CreateLoopback) GetMessageName() string {
-	return "create_loopback"
-}
-func (*CreateLoopback) GetCrcString() string {
-	return "3b54129c"
-}
-func (*CreateLoopback) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// CreateLoopbackReply represents VPP binary API message 'create_loopback_reply':
-//
-//	"create_loopback_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
+//	    "is_add"
 //	],
 //	[
 //	    "u32",
 //	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0xfda5941f"
-//	}
-//
-type CreateLoopbackReply struct {
-	Retval    int32
-	SwIfIndex uint32
-}
-
-func (*CreateLoopbackReply) GetMessageName() string {
-	return "create_loopback_reply"
-}
-func (*CreateLoopbackReply) GetCrcString() string {
-	return "fda5941f"
-}
-func (*CreateLoopbackReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// CreateLoopbackInstance represents VPP binary API message 'create_loopback_instance':
-//
-//	"create_loopback_instance",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
 //	],
 //	[
 //	    "u8",
-//	    "mac_address",
-//	    6
-//	],
-//	[
-//	    "u8",
-//	    "is_specified"
-//	],
-//	[
-//	    "u32",
-//	    "user_instance"
+//	    "tag",
+//	    64
 //	],
 //	{
-//	    "crc": "0x7bbd53b6"
+//	    "crc": "0x14cc636c"
 //	}
 //
-type CreateLoopbackInstance struct {
-	MacAddress   []byte `struc:"[6]byte"`
-	IsSpecified  uint8
-	UserInstance uint32
+type SwInterfaceTagAddDel struct {
+	IsAdd     uint8
+	SwIfIndex uint32
+	Tag       []byte `struc:"[64]byte"`
 }
 
-func (*CreateLoopbackInstance) GetMessageName() string {
-	return "create_loopback_instance"
+func (*SwInterfaceTagAddDel) GetMessageName() string {
+	return "sw_interface_tag_add_del"
 }
-func (*CreateLoopbackInstance) GetCrcString() string {
-	return "7bbd53b6"
+func (*SwInterfaceTagAddDel) GetCrcString() string {
+	return "14cc636c"
 }
-func (*CreateLoopbackInstance) GetMessageType() api.MessageType {
+func (*SwInterfaceTagAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// CreateLoopbackInstanceReply represents VPP binary API message 'create_loopback_instance_reply':
+// SwInterfaceTagAddDelReply represents VPP binary API message 'sw_interface_tag_add_del_reply':
 //
-//	"create_loopback_instance_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0xfda5941f"
-//	}
-//
-type CreateLoopbackInstanceReply struct {
-	Retval    int32
-	SwIfIndex uint32
-}
-
-func (*CreateLoopbackInstanceReply) GetMessageName() string {
-	return "create_loopback_instance_reply"
-}
-func (*CreateLoopbackInstanceReply) GetCrcString() string {
-	return "fda5941f"
-}
-func (*CreateLoopbackInstanceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// DeleteLoopback represents VPP binary API message 'delete_loopback':
-//
-//	"delete_loopback",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
-type DeleteLoopback struct {
-	SwIfIndex uint32
-}
-
-func (*DeleteLoopback) GetMessageName() string {
-	return "delete_loopback"
-}
-func (*DeleteLoopback) GetCrcString() string {
-	return "529cb13f"
-}
-func (*DeleteLoopback) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// DeleteLoopbackReply represents VPP binary API message 'delete_loopback_reply':
-//
-//	"delete_loopback_reply",
+//	"sw_interface_tag_add_del_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -2278,23 +2277,23 @@ func (*DeleteLoopback) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type DeleteLoopbackReply struct {
+type SwInterfaceTagAddDelReply struct {
 	Retval int32
 }
 
-func (*DeleteLoopbackReply) GetMessageName() string {
-	return "delete_loopback_reply"
+func (*SwInterfaceTagAddDelReply) GetMessageName() string {
+	return "sw_interface_tag_add_del_reply"
 }
-func (*DeleteLoopbackReply) GetCrcString() string {
+func (*SwInterfaceTagAddDelReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*DeleteLoopbackReply) GetMessageType() api.MessageType {
+func (*SwInterfaceTagAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// CollectDetailedInterfaceStats represents VPP binary API message 'collect_detailed_interface_stats':
+// WantInterfaceEvents represents VPP binary API message 'want_interface_events':
 //
-//	"collect_detailed_interface_stats",
+//	"want_interface_events",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -2309,34 +2308,34 @@ func (*DeleteLoopbackReply) GetMessageType() api.MessageType {
 //	],
 //	[
 //	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
 //	    "enable_disable"
 //	],
+//	[
+//	    "u32",
+//	    "pid"
+//	],
 //	{
-//	    "crc": "0x69d24598"
+//	    "crc": "0x476f5a08"
 //	}
 //
-type CollectDetailedInterfaceStats struct {
-	SwIfIndex     uint32
-	EnableDisable uint8
+type WantInterfaceEvents struct {
+	EnableDisable uint32
+	PID           uint32
 }
 
-func (*CollectDetailedInterfaceStats) GetMessageName() string {
-	return "collect_detailed_interface_stats"
+func (*WantInterfaceEvents) GetMessageName() string {
+	return "want_interface_events"
 }
-func (*CollectDetailedInterfaceStats) GetCrcString() string {
-	return "69d24598"
+func (*WantInterfaceEvents) GetCrcString() string {
+	return "476f5a08"
 }
-func (*CollectDetailedInterfaceStats) GetMessageType() api.MessageType {
+func (*WantInterfaceEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// CollectDetailedInterfaceStatsReply represents VPP binary API message 'collect_detailed_interface_stats_reply':
+// WantInterfaceEventsReply represents VPP binary API message 'want_interface_events_reply':
 //
-//	"collect_detailed_interface_stats_reply",
+//	"want_interface_events_reply",
 //	[
 //	    "u16",
 //	    "_vl_msg_id"
@@ -2353,70 +2352,70 @@ func (*CollectDetailedInterfaceStats) GetMessageType() api.MessageType {
 //	    "crc": "0xe8d4e804"
 //	}
 //
-type CollectDetailedInterfaceStatsReply struct {
+type WantInterfaceEventsReply struct {
 	Retval int32
 }
 
-func (*CollectDetailedInterfaceStatsReply) GetMessageName() string {
-	return "collect_detailed_interface_stats_reply"
+func (*WantInterfaceEventsReply) GetMessageName() string {
+	return "want_interface_events_reply"
 }
-func (*CollectDetailedInterfaceStatsReply) GetCrcString() string {
+func (*WantInterfaceEventsReply) GetCrcString() string {
 	return "e8d4e804"
 }
-func (*CollectDetailedInterfaceStatsReply) GetMessageType() api.MessageType {
+func (*WantInterfaceEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
 func init() {
-	api.RegisterMessage((*SwInterfaceSetFlags)(nil), "interface.SwInterfaceSetFlags")
-	api.RegisterMessage((*SwInterfaceSetFlagsReply)(nil), "interface.SwInterfaceSetFlagsReply")
-	api.RegisterMessage((*HwInterfaceSetMtu)(nil), "interface.HwInterfaceSetMtu")
-	api.RegisterMessage((*HwInterfaceSetMtuReply)(nil), "interface.HwInterfaceSetMtuReply")
-	api.RegisterMessage((*SwInterfaceSetMtu)(nil), "interface.SwInterfaceSetMtu")
-	api.RegisterMessage((*SwInterfaceSetMtuReply)(nil), "interface.SwInterfaceSetMtuReply")
-	api.RegisterMessage((*SwInterfaceSetIPDirectedBroadcast)(nil), "interface.SwInterfaceSetIPDirectedBroadcast")
-	api.RegisterMessage((*SwInterfaceSetIPDirectedBroadcastReply)(nil), "interface.SwInterfaceSetIPDirectedBroadcastReply")
-	api.RegisterMessage((*SwInterfaceEvent)(nil), "interface.SwInterfaceEvent")
-	api.RegisterMessage((*WantInterfaceEvents)(nil), "interface.WantInterfaceEvents")
-	api.RegisterMessage((*WantInterfaceEventsReply)(nil), "interface.WantInterfaceEventsReply")
-	api.RegisterMessage((*SwInterfaceDetails)(nil), "interface.SwInterfaceDetails")
-	api.RegisterMessage((*SwInterfaceDump)(nil), "interface.SwInterfaceDump")
-	api.RegisterMessage((*SwInterfaceAddDelAddress)(nil), "interface.SwInterfaceAddDelAddress")
-	api.RegisterMessage((*SwInterfaceAddDelAddressReply)(nil), "interface.SwInterfaceAddDelAddressReply")
-	api.RegisterMessage((*SwInterfaceSetTable)(nil), "interface.SwInterfaceSetTable")
-	api.RegisterMessage((*SwInterfaceSetTableReply)(nil), "interface.SwInterfaceSetTableReply")
-	api.RegisterMessage((*SwInterfaceGetTable)(nil), "interface.SwInterfaceGetTable")
-	api.RegisterMessage((*SwInterfaceGetTableReply)(nil), "interface.SwInterfaceGetTableReply")
-	api.RegisterMessage((*SwInterfaceSetUnnumbered)(nil), "interface.SwInterfaceSetUnnumbered")
-	api.RegisterMessage((*SwInterfaceSetUnnumberedReply)(nil), "interface.SwInterfaceSetUnnumberedReply")
-	api.RegisterMessage((*SwInterfaceClearStats)(nil), "interface.SwInterfaceClearStats")
-	api.RegisterMessage((*SwInterfaceClearStatsReply)(nil), "interface.SwInterfaceClearStatsReply")
-	api.RegisterMessage((*SwInterfaceTagAddDel)(nil), "interface.SwInterfaceTagAddDel")
-	api.RegisterMessage((*SwInterfaceTagAddDelReply)(nil), "interface.SwInterfaceTagAddDelReply")
-	api.RegisterMessage((*SwInterfaceSetMacAddress)(nil), "interface.SwInterfaceSetMacAddress")
-	api.RegisterMessage((*SwInterfaceSetMacAddressReply)(nil), "interface.SwInterfaceSetMacAddressReply")
-	api.RegisterMessage((*SwInterfaceGetMacAddress)(nil), "interface.SwInterfaceGetMacAddress")
-	api.RegisterMessage((*SwInterfaceGetMacAddressReply)(nil), "interface.SwInterfaceGetMacAddressReply")
-	api.RegisterMessage((*SwInterfaceSetRxMode)(nil), "interface.SwInterfaceSetRxMode")
-	api.RegisterMessage((*SwInterfaceSetRxModeReply)(nil), "interface.SwInterfaceSetRxModeReply")
-	api.RegisterMessage((*SwInterfaceSetRxPlacement)(nil), "interface.SwInterfaceSetRxPlacement")
-	api.RegisterMessage((*SwInterfaceSetRxPlacementReply)(nil), "interface.SwInterfaceSetRxPlacementReply")
-	api.RegisterMessage((*SwInterfaceRxPlacementDump)(nil), "interface.SwInterfaceRxPlacementDump")
-	api.RegisterMessage((*SwInterfaceRxPlacementDetails)(nil), "interface.SwInterfaceRxPlacementDetails")
-	api.RegisterMessage((*InterfaceNameRenumber)(nil), "interface.InterfaceNameRenumber")
-	api.RegisterMessage((*InterfaceNameRenumberReply)(nil), "interface.InterfaceNameRenumberReply")
+	api.RegisterMessage((*CollectDetailedInterfaceStats)(nil), "interface.CollectDetailedInterfaceStats")
+	api.RegisterMessage((*CollectDetailedInterfaceStatsReply)(nil), "interface.CollectDetailedInterfaceStatsReply")
+	api.RegisterMessage((*CreateLoopback)(nil), "interface.CreateLoopback")
+	api.RegisterMessage((*CreateLoopbackInstance)(nil), "interface.CreateLoopbackInstance")
+	api.RegisterMessage((*CreateLoopbackInstanceReply)(nil), "interface.CreateLoopbackInstanceReply")
+	api.RegisterMessage((*CreateLoopbackReply)(nil), "interface.CreateLoopbackReply")
 	api.RegisterMessage((*CreateSubif)(nil), "interface.CreateSubif")
 	api.RegisterMessage((*CreateSubifReply)(nil), "interface.CreateSubifReply")
 	api.RegisterMessage((*CreateVlanSubif)(nil), "interface.CreateVlanSubif")
 	api.RegisterMessage((*CreateVlanSubifReply)(nil), "interface.CreateVlanSubifReply")
-	api.RegisterMessage((*DeleteSubif)(nil), "interface.DeleteSubif")
-	api.RegisterMessage((*DeleteSubifReply)(nil), "interface.DeleteSubifReply")
-	api.RegisterMessage((*CreateLoopback)(nil), "interface.CreateLoopback")
-	api.RegisterMessage((*CreateLoopbackReply)(nil), "interface.CreateLoopbackReply")
-	api.RegisterMessage((*CreateLoopbackInstance)(nil), "interface.CreateLoopbackInstance")
-	api.RegisterMessage((*CreateLoopbackInstanceReply)(nil), "interface.CreateLoopbackInstanceReply")
 	api.RegisterMessage((*DeleteLoopback)(nil), "interface.DeleteLoopback")
 	api.RegisterMessage((*DeleteLoopbackReply)(nil), "interface.DeleteLoopbackReply")
-	api.RegisterMessage((*CollectDetailedInterfaceStats)(nil), "interface.CollectDetailedInterfaceStats")
-	api.RegisterMessage((*CollectDetailedInterfaceStatsReply)(nil), "interface.CollectDetailedInterfaceStatsReply")
+	api.RegisterMessage((*DeleteSubif)(nil), "interface.DeleteSubif")
+	api.RegisterMessage((*DeleteSubifReply)(nil), "interface.DeleteSubifReply")
+	api.RegisterMessage((*HwInterfaceSetMtu)(nil), "interface.HwInterfaceSetMtu")
+	api.RegisterMessage((*HwInterfaceSetMtuReply)(nil), "interface.HwInterfaceSetMtuReply")
+	api.RegisterMessage((*InterfaceNameRenumber)(nil), "interface.InterfaceNameRenumber")
+	api.RegisterMessage((*InterfaceNameRenumberReply)(nil), "interface.InterfaceNameRenumberReply")
+	api.RegisterMessage((*SwInterfaceAddDelAddress)(nil), "interface.SwInterfaceAddDelAddress")
+	api.RegisterMessage((*SwInterfaceAddDelAddressReply)(nil), "interface.SwInterfaceAddDelAddressReply")
+	api.RegisterMessage((*SwInterfaceClearStats)(nil), "interface.SwInterfaceClearStats")
+	api.RegisterMessage((*SwInterfaceClearStatsReply)(nil), "interface.SwInterfaceClearStatsReply")
+	api.RegisterMessage((*SwInterfaceDetails)(nil), "interface.SwInterfaceDetails")
+	api.RegisterMessage((*SwInterfaceDump)(nil), "interface.SwInterfaceDump")
+	api.RegisterMessage((*SwInterfaceEvent)(nil), "interface.SwInterfaceEvent")
+	api.RegisterMessage((*SwInterfaceGetMacAddress)(nil), "interface.SwInterfaceGetMacAddress")
+	api.RegisterMessage((*SwInterfaceGetMacAddressReply)(nil), "interface.SwInterfaceGetMacAddressReply")
+	api.RegisterMessage((*SwInterfaceGetTable)(nil), "interface.SwInterfaceGetTable")
+	api.RegisterMessage((*SwInterfaceGetTableReply)(nil), "interface.SwInterfaceGetTableReply")
+	api.RegisterMessage((*SwInterfaceRxPlacementDetails)(nil), "interface.SwInterfaceRxPlacementDetails")
+	api.RegisterMessage((*SwInterfaceRxPlacementDump)(nil), "interface.SwInterfaceRxPlacementDump")
+	api.RegisterMessage((*SwInterfaceSetFlags)(nil), "interface.SwInterfaceSetFlags")
+	api.RegisterMessage((*SwInterfaceSetFlagsReply)(nil), "interface.SwInterfaceSetFlagsReply")
+	api.RegisterMessage((*SwInterfaceSetIPDirectedBroadcast)(nil), "interface.SwInterfaceSetIPDirectedBroadcast")
+	api.RegisterMessage((*SwInterfaceSetIPDirectedBroadcastReply)(nil), "interface.SwInterfaceSetIPDirectedBroadcastReply")
+	api.RegisterMessage((*SwInterfaceSetMacAddress)(nil), "interface.SwInterfaceSetMacAddress")
+	api.RegisterMessage((*SwInterfaceSetMacAddressReply)(nil), "interface.SwInterfaceSetMacAddressReply")
+	api.RegisterMessage((*SwInterfaceSetMtu)(nil), "interface.SwInterfaceSetMtu")
+	api.RegisterMessage((*SwInterfaceSetMtuReply)(nil), "interface.SwInterfaceSetMtuReply")
+	api.RegisterMessage((*SwInterfaceSetRxMode)(nil), "interface.SwInterfaceSetRxMode")
+	api.RegisterMessage((*SwInterfaceSetRxModeReply)(nil), "interface.SwInterfaceSetRxModeReply")
+	api.RegisterMessage((*SwInterfaceSetRxPlacement)(nil), "interface.SwInterfaceSetRxPlacement")
+	api.RegisterMessage((*SwInterfaceSetRxPlacementReply)(nil), "interface.SwInterfaceSetRxPlacementReply")
+	api.RegisterMessage((*SwInterfaceSetTable)(nil), "interface.SwInterfaceSetTable")
+	api.RegisterMessage((*SwInterfaceSetTableReply)(nil), "interface.SwInterfaceSetTableReply")
+	api.RegisterMessage((*SwInterfaceSetUnnumbered)(nil), "interface.SwInterfaceSetUnnumbered")
+	api.RegisterMessage((*SwInterfaceSetUnnumberedReply)(nil), "interface.SwInterfaceSetUnnumberedReply")
+	api.RegisterMessage((*SwInterfaceTagAddDel)(nil), "interface.SwInterfaceTagAddDel")
+	api.RegisterMessage((*SwInterfaceTagAddDelReply)(nil), "interface.SwInterfaceTagAddDelReply")
+	api.RegisterMessage((*WantInterfaceEvents)(nil), "interface.WantInterfaceEvents")
+	api.RegisterMessage((*WantInterfaceEventsReply)(nil), "interface.WantInterfaceEventsReply")
 }
