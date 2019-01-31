@@ -126,7 +126,7 @@ func RegisterMessage(x Message, name string) {
 	registeredMessages[name] = x
 }
 
-// GetAllMessages returns list of all registered messages.
-func GetAllMessages() map[string]Message {
+// GetRegisteredMessages returns list of all registered messages.
+func GetRegisteredMessages() map[string]Message {
 	return registeredMessages
 }

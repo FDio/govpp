@@ -54,6 +54,10 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.Enums[i] = *enum
 		pkg.RefMap[toApiType(enum.Name)] = enum.Name
 	}
+	// sort enums
+	sort.SliceStable(pkg.Enums, func(i, j int) bool {
+		return pkg.Enums[i].Name < pkg.Enums[j].Name
+	})
 
 	// parse aliases
 	aliases := jsonRoot.Map("aliases")
@@ -88,6 +92,10 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.Types[i] = *typ
 		pkg.RefMap[toApiType(typ.Name)] = typ.Name
 	}
+	// sort types
+	sort.SliceStable(pkg.Types, func(i, j int) bool {
+		return pkg.Types[i].Name < pkg.Types[j].Name
+	})
 
 	// parse unions
 	unions := jsonRoot.Map("unions")
@@ -102,6 +110,10 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		pkg.Unions[i] = *union
 		pkg.RefMap[toApiType(union.Name)] = union.Name
 	}
+	// sort unions
+	sort.SliceStable(pkg.Unions, func(i, j int) bool {
+		return pkg.Unions[i].Name < pkg.Unions[j].Name
+	})
 
 	// parse messages
 	messages := jsonRoot.Map("messages")
@@ -115,6 +127,10 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 		}
 		pkg.Messages[i] = *msg
 	}
+	// sort messages
+	sort.SliceStable(pkg.Messages, func(i, j int) bool {
+		return pkg.Messages[i].Name < pkg.Messages[j].Name
+	})
 
 	// parse services
 	services := jsonRoot.Map("services")
@@ -129,16 +145,15 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 			}
 			pkg.Services[i] = *svc
 		}
-
-		// sort services
-		sort.Slice(pkg.Services, func(i, j int) bool {
-			// dumps first
-			if pkg.Services[i].Stream != pkg.Services[j].Stream {
-				return pkg.Services[i].Stream
-			}
-			return pkg.Services[i].RequestType < pkg.Services[j].RequestType
-		})
 	}
+	// sort services
+	sort.Slice(pkg.Services, func(i, j int) bool {
+		// dumps first
+		if pkg.Services[i].Stream != pkg.Services[j].Stream {
+			return pkg.Services[i].Stream
+		}
+		return pkg.Services[i].RequestType < pkg.Services[j].RequestType
+	})
 
 	printPackage(&pkg)
 
@@ -456,20 +471,20 @@ func parseService(ctx *context, svcName string, svcNode *jsongo.JSONNode) (*Serv
 	// validate service
 	if svc.IsEventService() {
 		if !strings.HasPrefix(svc.RequestType, "want_") {
-			log.Warnf("Unusual EVENTS SERVICE: %+v\n"+
+			log.Debugf("Unusual EVENTS SERVICE: %+v\n"+
 				"- events service %q does not have 'want_' prefix in request.",
 				svc, svc.Name)
 		}
 	} else if svc.IsDumpService() {
 		if !strings.HasSuffix(svc.RequestType, "_dump") ||
 			!strings.HasSuffix(svc.ReplyType, "_details") {
-			log.Warnf("Unusual STREAM SERVICE: %+v\n"+
+			log.Debugf("Unusual STREAM SERVICE: %+v\n"+
 				"- stream service %q does not have '_dump' suffix in request or reply does not have '_details' suffix.",
 				svc, svc.Name)
 		}
 	} else if svc.IsRequestService() {
 		if !strings.HasSuffix(svc.ReplyType, "_reply") {
-			log.Warnf("Unusual REQUEST SERVICE: %+v\n"+
+			log.Debugf("Unusual REQUEST SERVICE: %+v\n"+
 				"- service %q does not have '_reply' suffix in reply.",
 				svc, svc.Name)
 		}

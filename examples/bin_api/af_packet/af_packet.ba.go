@@ -5,9 +5,8 @@
  Package af_packet is a generated from VPP binary API module 'af_packet'.
 
  It contains following objects:
-	  8 messages
 	  4 services
-
+	  8 messages
 */
 package af_packet
 
@@ -205,6 +204,76 @@ func (*AfPacketDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// AfPacketDetails represents VPP binary API message 'af_packet_details':
+//
+//	"af_packet_details",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	[
+//	    "u32",
+//	    "sw_if_index"
+//	],
+//	[
+//	    "u8",
+//	    "host_if_name",
+//	    64
+//	],
+//	{
+//	    "crc": "0x057205fa"
+//	}
+//
+type AfPacketDetails struct {
+	SwIfIndex  uint32
+	HostIfName []byte `struc:"[64]byte"`
+}
+
+func (*AfPacketDetails) GetMessageName() string {
+	return "af_packet_details"
+}
+func (*AfPacketDetails) GetCrcString() string {
+	return "057205fa"
+}
+func (*AfPacketDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// AfPacketDump represents VPP binary API message 'af_packet_dump':
+//
+//	"af_packet_dump",
+//	[
+//	    "u16",
+//	    "_vl_msg_id"
+//	],
+//	[
+//	    "u32",
+//	    "client_index"
+//	],
+//	[
+//	    "u32",
+//	    "context"
+//	],
+//	{
+//	    "crc": "0x51077d14"
+//	}
+//
+type AfPacketDump struct{}
+
+func (*AfPacketDump) GetMessageName() string {
+	return "af_packet_dump"
+}
+func (*AfPacketDump) GetCrcString() string {
+	return "51077d14"
+}
+func (*AfPacketDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
 // AfPacketSetL4CksumOffload represents VPP binary API message 'af_packet_set_l4_cksum_offload':
 //
 //	"af_packet_set_l4_cksum_offload",
@@ -280,83 +349,13 @@ func (*AfPacketSetL4CksumOffloadReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// AfPacketDump represents VPP binary API message 'af_packet_dump':
-//
-//	"af_packet_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
-type AfPacketDump struct{}
-
-func (*AfPacketDump) GetMessageName() string {
-	return "af_packet_dump"
-}
-func (*AfPacketDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*AfPacketDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// AfPacketDetails represents VPP binary API message 'af_packet_details':
-//
-//	"af_packet_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "host_if_name",
-//	    64
-//	],
-//	{
-//	    "crc": "0x057205fa"
-//	}
-//
-type AfPacketDetails struct {
-	SwIfIndex  uint32
-	HostIfName []byte `struc:"[64]byte"`
-}
-
-func (*AfPacketDetails) GetMessageName() string {
-	return "af_packet_details"
-}
-func (*AfPacketDetails) GetCrcString() string {
-	return "057205fa"
-}
-func (*AfPacketDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 func init() {
 	api.RegisterMessage((*AfPacketCreate)(nil), "af_packet.AfPacketCreate")
 	api.RegisterMessage((*AfPacketCreateReply)(nil), "af_packet.AfPacketCreateReply")
 	api.RegisterMessage((*AfPacketDelete)(nil), "af_packet.AfPacketDelete")
 	api.RegisterMessage((*AfPacketDeleteReply)(nil), "af_packet.AfPacketDeleteReply")
+	api.RegisterMessage((*AfPacketDetails)(nil), "af_packet.AfPacketDetails")
+	api.RegisterMessage((*AfPacketDump)(nil), "af_packet.AfPacketDump")
 	api.RegisterMessage((*AfPacketSetL4CksumOffload)(nil), "af_packet.AfPacketSetL4CksumOffload")
 	api.RegisterMessage((*AfPacketSetL4CksumOffloadReply)(nil), "af_packet.AfPacketSetL4CksumOffloadReply")
-	api.RegisterMessage((*AfPacketDump)(nil), "af_packet.AfPacketDump")
-	api.RegisterMessage((*AfPacketDetails)(nil), "af_packet.AfPacketDetails")
 }
