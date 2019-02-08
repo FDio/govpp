@@ -142,10 +142,14 @@ func (ch *Channel) SendMultiRequest(msg api.Message) api.MultiRequestCtx {
 	return &multiRequestCtx{ch: ch, seqNum: seqNum}
 }
 
-func getMsgFactory(msg api.Message) func() api.Message {
-	return func() api.Message {
-		return reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
+	for _, msg := range msgs {
+		_, err := ch.msgIdentifier.GetMessageID(msg)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {

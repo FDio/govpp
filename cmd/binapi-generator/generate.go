@@ -152,6 +152,14 @@ func generatePackage(ctx *context, w *bufio.Writer) error {
 			fmt.Fprintf(w, "\tapi.RegisterMessage((*%s)(nil), \"%s\")\n", name, ctx.moduleName+"."+name)
 		}
 		fmt.Fprintln(w, "}")
+		fmt.Fprintln(w)
+
+		fmt.Fprintln(w, "var Messages = []api.Message{")
+		for _, msg := range ctx.packageData.Messages {
+			name := camelCaseName(msg.Name)
+			fmt.Fprintf(w, "\t(*%s)(nil),\n", name)
+		}
+		fmt.Fprintln(w, "}")
 	}
 
 	// flush the data:

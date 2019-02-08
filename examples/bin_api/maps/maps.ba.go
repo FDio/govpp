@@ -741,3 +741,38 @@ func init() {
 	api.RegisterMessage((*MapSummaryStats)(nil), "map.MapSummaryStats")
 	api.RegisterMessage((*MapSummaryStatsReply)(nil), "map.MapSummaryStatsReply")
 }
+
+var Messages = []api.Message{
+	(*MapAddDelRule)(nil),
+	(*MapAddDelRuleReply)(nil),
+	(*MapAddDomain)(nil),
+	(*MapAddDomainReply)(nil),
+	(*MapDelDomain)(nil),
+	(*MapDelDomainReply)(nil),
+	(*MapDomainDetails)(nil),
+	(*MapDomainDump)(nil),
+	(*MapIfEnableDisable)(nil),
+	(*MapIfEnableDisableReply)(nil),
+	(*MapParamAddDelPreResolve)(nil),
+	(*MapParamAddDelPreResolveReply)(nil),
+	(*MapParamGet)(nil),
+	(*MapParamGetReply)(nil),
+	(*MapParamSetFragmentation)(nil),
+	(*MapParamSetFragmentationReply)(nil),
+	(*MapParamSetICMP)(nil),
+	(*MapParamSetICMP6)(nil),
+	(*MapParamSetICMP6Reply)(nil),
+	(*MapParamSetICMPReply)(nil),
+	(*MapParamSetReassembly)(nil),
+	(*MapParamSetReassemblyReply)(nil),
+	(*MapParamSetSecurityCheck)(nil),
+	(*MapParamSetSecurityCheckReply)(nil),
+	(*MapParamSetTCP)(nil),
+	(*MapParamSetTCPReply)(nil),
+	(*MapParamSetTrafficClass)(nil),
+	(*MapParamSetTrafficClassReply)(nil),
+	(*MapRuleDetails)(nil),
+	(*MapRuleDump)(nil),
+	(*MapSummaryStats)(nil),
+	(*MapSummaryStatsReply)(nil),
+}

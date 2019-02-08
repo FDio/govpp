@@ -359,3 +359,24 @@ func init() {
 	api.RegisterMessage((*ShowVersion)(nil), "vpe.ShowVersion")
 	api.RegisterMessage((*ShowVersionReply)(nil), "vpe.ShowVersionReply")
 }
+
+var Messages = []api.Message{
+	(*AddNodeNext)(nil),
+	(*AddNodeNextReply)(nil),
+	(*Cli)(nil),
+	(*CliInband)(nil),
+	(*CliInbandReply)(nil),
+	(*CliReply)(nil),
+	(*ControlPing)(nil),
+	(*ControlPingReply)(nil),
+	(*GetNextIndex)(nil),
+	(*GetNextIndexReply)(nil),
+	(*GetNodeGraph)(nil),
+	(*GetNodeGraphReply)(nil),
+	(*GetNodeIndex)(nil),
+	(*GetNodeIndexReply)(nil),
+	(*ShowThreads)(nil),
+	(*ShowThreadsReply)(nil),
+	(*ShowVersion)(nil),
+	(*ShowVersionReply)(nil),
+}

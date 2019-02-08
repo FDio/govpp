@@ -176,3 +176,14 @@ func init() {
 	api.RegisterMessage((*TapModify)(nil), "tap.TapModify")
 	api.RegisterMessage((*TapModifyReply)(nil), "tap.TapModifyReply")
 }
+
+var Messages = []api.Message{
+	(*SwInterfaceTapDetails)(nil),
+	(*SwInterfaceTapDump)(nil),
+	(*TapConnect)(nil),
+	(*TapConnectReply)(nil),
+	(*TapDelete)(nil),
+	(*TapDeleteReply)(nil),
+	(*TapModify)(nil),
+	(*TapModifyReply)(nil),
+}

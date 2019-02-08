@@ -25,6 +25,7 @@ import (
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/bin_api/acl"
 	"git.fd.io/govpp.git/examples/bin_api/interfaces"
 	"git.fd.io/govpp.git/examples/bin_api/ip"
@@ -34,11 +35,18 @@ func main() {
 	fmt.Println("Starting simple VPP client...")
 
 	// connect to VPP
-	conn, err := govpp.Connect("")
+	conn, conev, err := govpp.AsyncConnect("")
 	if err != nil {
 		log.Fatalln("ERROR:", err)
 	}
 	defer conn.Disconnect()
+
+	select {
+	case e := <-conev:
+		if e.State != core.Connected {
+			log.Fatalf("failed to connect: %v", e.Error)
+		}
+	}
 
 	// create an API channel that will be used in the examples
 	ch, err := conn.NewAPIChannel()

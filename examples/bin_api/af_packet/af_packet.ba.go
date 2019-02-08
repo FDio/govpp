@@ -162,3 +162,14 @@ func init() {
 	api.RegisterMessage((*AfPacketSetL4CksumOffload)(nil), "af_packet.AfPacketSetL4CksumOffload")
 	api.RegisterMessage((*AfPacketSetL4CksumOffloadReply)(nil), "af_packet.AfPacketSetL4CksumOffloadReply")
 }
+
+var Messages = []api.Message{
+	(*AfPacketCreate)(nil),
+	(*AfPacketCreateReply)(nil),
+	(*AfPacketDelete)(nil),
+	(*AfPacketDeleteReply)(nil),
+	(*AfPacketDetails)(nil),
+	(*AfPacketDump)(nil),
+	(*AfPacketSetL4CksumOffload)(nil),
+	(*AfPacketSetL4CksumOffloadReply)(nil),
+}

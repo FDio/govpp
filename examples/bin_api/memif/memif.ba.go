@@ -211,3 +211,16 @@ func init() {
 	api.RegisterMessage((*MemifSocketFilenameDetails)(nil), "memif.MemifSocketFilenameDetails")
 	api.RegisterMessage((*MemifSocketFilenameDump)(nil), "memif.MemifSocketFilenameDump")
 }
+
+var Messages = []api.Message{
+	(*MemifCreate)(nil),
+	(*MemifCreateReply)(nil),
+	(*MemifDelete)(nil),
+	(*MemifDeleteReply)(nil),
+	(*MemifDetails)(nil),
+	(*MemifDump)(nil),
+	(*MemifSocketFilenameAddDel)(nil),
+	(*MemifSocketFilenameAddDelReply)(nil),
+	(*MemifSocketFilenameDetails)(nil),
+	(*MemifSocketFilenameDump)(nil),
+}

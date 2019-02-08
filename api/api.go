@@ -15,7 +15,6 @@
 package api
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -89,6 +88,10 @@ type Channel interface {
 	// from VPP before returning an error.
 	SetReplyTimeout(timeout time.Duration)
 
+	// CheckCompatibility checks the compatiblity for the given messages.
+	// It will return an error if any of the given messages are not compatible.
+	CheckCompatiblity(msgs ...Message) error
+
 	// Close closes the API channel and releases all API channel-related resources in the ChannelProvider.
 	Close()
 }
@@ -119,9 +122,10 @@ var registeredMessages = make(map[string]Message)
 
 // RegisterMessage is called from generated code to register message.
 func RegisterMessage(x Message, name string) {
-	if _, ok := registeredMessages[name]; ok {
+	name = x.GetMessageName() + "_" + x.GetCrcString()
+	/*if _, ok := registeredMessages[name]; ok {
 		panic(fmt.Errorf("govpp: duplicate message registered: %s (%s)", name, x.GetCrcString()))
-	}
+	}*/
 	registeredMessages[name] = x
 }
 
