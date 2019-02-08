@@ -14,9 +14,9 @@
 */
 package maps
 
-import "git.fd.io/govpp.git/api"
-import "github.com/lunixbochs/struc"
-import "bytes"
+import api "git.fd.io/govpp.git/api"
+import struc "github.com/lunixbochs/struc"
+import bytes "bytes"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = api.RegisterMessage
@@ -24,60 +24,6 @@ var _ = struc.Pack
 var _ = bytes.NewBuffer
 
 // Services represents VPP binary API services:
-//
-//	"services": {
-//	    "map_param_set_fragmentation": {
-//	        "reply": "map_param_set_fragmentation_reply"
-//	    },
-//	    "map_param_add_del_pre_resolve": {
-//	        "reply": "map_param_add_del_pre_resolve_reply"
-//	    },
-//	    "map_param_set_tcp": {
-//	        "reply": "map_param_set_tcp_reply"
-//	    },
-//	    "map_rule_dump": {
-//	        "reply": "map_rule_details",
-//	        "stream": true
-//	    },
-//	    "map_if_enable_disable": {
-//	        "reply": "map_if_enable_disable_reply"
-//	    },
-//	    "map_param_set_icmp6": {
-//	        "reply": "map_param_set_icmp6_reply"
-//	    },
-//	    "map_add_del_rule": {
-//	        "reply": "map_add_del_rule_reply"
-//	    },
-//	    "map_domain_dump": {
-//	        "reply": "map_domain_details",
-//	        "stream": true
-//	    },
-//	    "map_param_get": {
-//	        "reply": "map_param_get_reply"
-//	    },
-//	    "map_param_set_icmp": {
-//	        "reply": "map_param_set_icmp_reply"
-//	    },
-//	    "map_add_domain": {
-//	        "reply": "map_add_domain_reply"
-//	    },
-//	    "map_summary_stats": {
-//	        "reply": "map_summary_stats_reply"
-//	    },
-//	    "map_param_set_traffic_class": {
-//	        "reply": "map_param_set_traffic_class_reply"
-//	    },
-//	    "map_del_domain": {
-//	        "reply": "map_del_domain_reply"
-//	    },
-//	    "map_param_set_reassembly": {
-//	        "reply": "map_param_set_reassembly_reply"
-//	    },
-//	    "map_param_set_security_check": {
-//	        "reply": "map_param_set_security_check_reply"
-//	    }
-//	},
-//
 type Services interface {
 	DumpMapDomain(*MapDomainDump) ([]*MapDomainDetails, error)
 	DumpMapRule(*MapRuleDump) ([]*MapRuleDetails, error)
@@ -100,20 +46,6 @@ type Services interface {
 /* Enums */
 
 // AddressFamily represents VPP binary API enum 'address_family':
-//
-//	"address_family",
-//	[
-//	    "ADDRESS_IP4",
-//	    0
-//	],
-//	[
-//	    "ADDRESS_IP6",
-//	    1
-//	],
-//	{
-//	    "enumtype": "u32"
-//	}
-//
 type AddressFamily uint32
 
 const (
@@ -124,40 +56,14 @@ const (
 /* Aliases */
 
 // IP4Address represents VPP binary API alias 'ip4_address':
-//
-//	"ip4_address": {
-//	    "length": 4,
-//	    "type": "u8"
-//	}
-//
 type IP4Address [4]uint8
 
 // IP6Address represents VPP binary API alias 'ip6_address':
-//
-//	"ip6_address": {
-//	    "length": 16,
-//	    "type": "u8"
-//	},
-//
 type IP6Address [16]uint8
 
 /* Types */
 
 // Address represents VPP binary API type 'address':
-//
-//	"address",
-//	[
-//	    "vl_api_address_family_t",
-//	    "af"
-//	],
-//	[
-//	    "vl_api_address_union_t",
-//	    "un"
-//	],
-//	{
-//	    "crc": "0x09f11671"
-//	}
-//
 type Address struct {
 	Af AddressFamily
 	Un AddressUnion
@@ -171,20 +77,6 @@ func (*Address) GetCrcString() string {
 }
 
 // IP4Prefix represents VPP binary API type 'ip4_prefix':
-//
-//	"ip4_prefix",
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "prefix"
-//	],
-//	[
-//	    "u8",
-//	    "len"
-//	],
-//	{
-//	    "crc": "0xea8dc11d"
-//	}
-//
 type IP4Prefix struct {
 	Prefix IP4Address
 	Len    uint8
@@ -198,20 +90,6 @@ func (*IP4Prefix) GetCrcString() string {
 }
 
 // IP6Prefix represents VPP binary API type 'ip6_prefix':
-//
-//	"ip6_prefix",
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "prefix"
-//	],
-//	[
-//	    "u8",
-//	    "len"
-//	],
-//	{
-//	    "crc": "0x779fd64f"
-//	}
-//
 type IP6Prefix struct {
 	Prefix IP6Address
 	Len    uint8
@@ -225,28 +103,6 @@ func (*IP6Prefix) GetCrcString() string {
 }
 
 // Mprefix represents VPP binary API type 'mprefix':
-//
-//	"mprefix",
-//	[
-//	    "vl_api_address_family_t",
-//	    "af"
-//	],
-//	[
-//	    "u16",
-//	    "grp_address_length"
-//	],
-//	[
-//	    "vl_api_address_union_t",
-//	    "grp_address"
-//	],
-//	[
-//	    "vl_api_address_union_t",
-//	    "src_address"
-//	],
-//	{
-//	    "crc": "0x1c4cba05"
-//	}
-//
 type Mprefix struct {
 	Af               AddressFamily
 	GrpAddressLength uint16
@@ -262,20 +118,6 @@ func (*Mprefix) GetCrcString() string {
 }
 
 // Prefix represents VPP binary API type 'prefix':
-//
-//	"prefix",
-//	[
-//	    "vl_api_address_t",
-//	    "address"
-//	],
-//	[
-//	    "u8",
-//	    "address_length"
-//	],
-//	{
-//	    "crc": "0x0403aebc"
-//	}
-//
 type Prefix struct {
 	Address       Address
 	AddressLength uint8
@@ -291,20 +133,6 @@ func (*Prefix) GetCrcString() string {
 /* Unions */
 
 // AddressUnion represents VPP binary API union 'address_union':
-//
-//	"address_union",
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "ip4"
-//	],
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "ip6"
-//	],
-//	{
-//	    "crc": "0xd68a2fb4"
-//	}
-//
 type AddressUnion struct {
 	Union_data [16]byte
 }
@@ -353,40 +181,6 @@ func (u *AddressUnion) GetIP6() (a IP6Address) {
 /* Messages */
 
 // MapAddDelRule represents VPP binary API message 'map_add_del_rule':
-//
-//	"map_add_del_rule",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "index"
-//	],
-//	[
-//	    "bool",
-//	    "is_add"
-//	],
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "ip6_dst"
-//	],
-//	[
-//	    "u16",
-//	    "psid"
-//	],
-//	{
-//	    "crc": "0xe6132040"
-//	}
-//
 type MapAddDelRule struct {
 	Index  uint32
 	IsAdd  bool
@@ -405,24 +199,6 @@ func (*MapAddDelRule) GetMessageType() api.MessageType {
 }
 
 // MapAddDelRuleReply represents VPP binary API message 'map_add_del_rule_reply':
-//
-//	"map_add_del_rule_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapAddDelRuleReply struct {
 	Retval int32
 }
@@ -438,52 +214,6 @@ func (*MapAddDelRuleReply) GetMessageType() api.MessageType {
 }
 
 // MapAddDomain represents VPP binary API message 'map_add_domain':
-//
-//	"map_add_domain",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "vl_api_ip6_prefix_t",
-//	    "ip6_prefix"
-//	],
-//	[
-//	    "vl_api_ip4_prefix_t",
-//	    "ip4_prefix"
-//	],
-//	[
-//	    "vl_api_ip6_prefix_t",
-//	    "ip6_src"
-//	],
-//	[
-//	    "u8",
-//	    "ea_bits_len"
-//	],
-//	[
-//	    "u8",
-//	    "psid_offset"
-//	],
-//	[
-//	    "u8",
-//	    "psid_length"
-//	],
-//	[
-//	    "u16",
-//	    "mtu"
-//	],
-//	{
-//	    "crc": "0xa9358068"
-//	}
-//
 type MapAddDomain struct {
 	IP6Prefix  IP6Prefix
 	IP4Prefix  IP4Prefix
@@ -505,28 +235,6 @@ func (*MapAddDomain) GetMessageType() api.MessageType {
 }
 
 // MapAddDomainReply represents VPP binary API message 'map_add_domain_reply':
-//
-//	"map_add_domain_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "index"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0x3e6d4e2c"
-//	}
-//
 type MapAddDomainReply struct {
 	Index  uint32
 	Retval int32
@@ -543,28 +251,6 @@ func (*MapAddDomainReply) GetMessageType() api.MessageType {
 }
 
 // MapDelDomain represents VPP binary API message 'map_del_domain':
-//
-//	"map_del_domain",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "index"
-//	],
-//	{
-//	    "crc": "0x8ac76db6"
-//	}
-//
 type MapDelDomain struct {
 	Index uint32
 }
@@ -580,24 +266,6 @@ func (*MapDelDomain) GetMessageType() api.MessageType {
 }
 
 // MapDelDomainReply represents VPP binary API message 'map_del_domain_reply':
-//
-//	"map_del_domain_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapDelDomainReply struct {
 	Retval int32
 }
@@ -613,56 +281,6 @@ func (*MapDelDomainReply) GetMessageType() api.MessageType {
 }
 
 // MapDomainDetails represents VPP binary API message 'map_domain_details':
-//
-//	"map_domain_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "domain_index"
-//	],
-//	[
-//	    "vl_api_ip6_prefix_t",
-//	    "ip6_prefix"
-//	],
-//	[
-//	    "vl_api_ip4_prefix_t",
-//	    "ip4_prefix"
-//	],
-//	[
-//	    "vl_api_ip6_prefix_t",
-//	    "ip6_src"
-//	],
-//	[
-//	    "u8",
-//	    "ea_bits_len"
-//	],
-//	[
-//	    "u8",
-//	    "psid_offset"
-//	],
-//	[
-//	    "u8",
-//	    "psid_length"
-//	],
-//	[
-//	    "u8",
-//	    "flags"
-//	],
-//	[
-//	    "u16",
-//	    "mtu"
-//	],
-//	{
-//	    "crc": "0x2a17dcb8"
-//	}
-//
 type MapDomainDetails struct {
 	DomainIndex uint32
 	IP6Prefix   IP6Prefix
@@ -686,24 +304,6 @@ func (*MapDomainDetails) GetMessageType() api.MessageType {
 }
 
 // MapDomainDump represents VPP binary API message 'map_domain_dump':
-//
-//	"map_domain_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MapDomainDump struct{}
 
 func (*MapDomainDump) GetMessageName() string {
@@ -717,36 +317,6 @@ func (*MapDomainDump) GetMessageType() api.MessageType {
 }
 
 // MapIfEnableDisable represents VPP binary API message 'map_if_enable_disable':
-//
-//	"map_if_enable_disable",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "bool",
-//	    "is_enable"
-//	],
-//	[
-//	    "bool",
-//	    "is_translation"
-//	],
-//	{
-//	    "crc": "0x61a30cd9"
-//	}
-//
 type MapIfEnableDisable struct {
 	SwIfIndex     uint32
 	IsEnable      bool
@@ -764,24 +334,6 @@ func (*MapIfEnableDisable) GetMessageType() api.MessageType {
 }
 
 // MapIfEnableDisableReply represents VPP binary API message 'map_if_enable_disable_reply':
-//
-//	"map_if_enable_disable_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapIfEnableDisableReply struct {
 	Retval int32
 }
@@ -797,36 +349,6 @@ func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
 }
 
 // MapParamAddDelPreResolve represents VPP binary API message 'map_param_add_del_pre_resolve':
-//
-//	"map_param_add_del_pre_resolve",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "is_add"
-//	],
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "ip4_nh_address"
-//	],
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "ip6_nh_address"
-//	],
-//	{
-//	    "crc": "0xea9a9a4a"
-//	}
-//
 type MapParamAddDelPreResolve struct {
 	IsAdd        bool
 	IP4NhAddress IP4Address
@@ -844,24 +366,6 @@ func (*MapParamAddDelPreResolve) GetMessageType() api.MessageType {
 }
 
 // MapParamAddDelPreResolveReply represents VPP binary API message 'map_param_add_del_pre_resolve_reply':
-//
-//	"map_param_add_del_pre_resolve_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamAddDelPreResolveReply struct {
 	Retval int32
 }
@@ -877,24 +381,6 @@ func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType {
 }
 
 // MapParamGet represents VPP binary API message 'map_param_get':
-//
-//	"map_param_get",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MapParamGet struct{}
 
 func (*MapParamGet) GetMessageName() string {
@@ -908,96 +394,6 @@ func (*MapParamGet) GetMessageType() api.MessageType {
 }
 
 // MapParamGetReply represents VPP binary API message 'map_param_get_reply':
-//
-//	"map_param_get_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u8",
-//	    "frag_inner"
-//	],
-//	[
-//	    "u8",
-//	    "frag_ignore_df"
-//	],
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "icmp_ip4_err_relay_src"
-//	],
-//	[
-//	    "bool",
-//	    "icmp6_enable_unreachable"
-//	],
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "ip4_nh_address"
-//	],
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "ip6_nh_address"
-//	],
-//	[
-//	    "u16",
-//	    "ip4_lifetime_ms"
-//	],
-//	[
-//	    "u16",
-//	    "ip4_pool_size"
-//	],
-//	[
-//	    "u32",
-//	    "ip4_buffers"
-//	],
-//	[
-//	    "f64",
-//	    "ip4_ht_ratio"
-//	],
-//	[
-//	    "u16",
-//	    "ip6_lifetime_ms"
-//	],
-//	[
-//	    "u16",
-//	    "ip6_pool_size"
-//	],
-//	[
-//	    "u32",
-//	    "ip6_buffers"
-//	],
-//	[
-//	    "f64",
-//	    "ip6_ht_ratio"
-//	],
-//	[
-//	    "bool",
-//	    "sec_check_enable"
-//	],
-//	[
-//	    "bool",
-//	    "sec_check_fragments"
-//	],
-//	[
-//	    "bool",
-//	    "tc_copy"
-//	],
-//	[
-//	    "u8",
-//	    "tc_class"
-//	],
-//	{
-//	    "crc": "0xb40e9226"
-//	}
-//
 type MapParamGetReply struct {
 	Retval                 int32
 	FragInner              uint8
@@ -1031,32 +427,6 @@ func (*MapParamGetReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetFragmentation represents VPP binary API message 'map_param_set_fragmentation':
-//
-//	"map_param_set_fragmentation",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "inner"
-//	],
-//	[
-//	    "bool",
-//	    "ignore_df"
-//	],
-//	{
-//	    "crc": "0x9ff54d90"
-//	}
-//
 type MapParamSetFragmentation struct {
 	Inner    bool
 	IgnoreDf bool
@@ -1073,24 +443,6 @@ func (*MapParamSetFragmentation) GetMessageType() api.MessageType {
 }
 
 // MapParamSetFragmentationReply represents VPP binary API message 'map_param_set_fragmentation_reply':
-//
-//	"map_param_set_fragmentation_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetFragmentationReply struct {
 	Retval int32
 }
@@ -1106,28 +458,6 @@ func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetICMP represents VPP binary API message 'map_param_set_icmp':
-//
-//	"map_param_set_icmp",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "vl_api_ip4_address_t",
-//	    "ip4_err_relay_src"
-//	],
-//	{
-//	    "crc": "0x4c0a4fd2"
-//	}
-//
 type MapParamSetICMP struct {
 	IP4ErrRelaySrc IP4Address
 }
@@ -1143,28 +473,6 @@ func (*MapParamSetICMP) GetMessageType() api.MessageType {
 }
 
 // MapParamSetICMP6 represents VPP binary API message 'map_param_set_icmp6':
-//
-//	"map_param_set_icmp6",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "enable_unreachable"
-//	],
-//	{
-//	    "crc": "0x5d01f8c1"
-//	}
-//
 type MapParamSetICMP6 struct {
 	EnableUnreachable bool
 }
@@ -1180,24 +488,6 @@ func (*MapParamSetICMP6) GetMessageType() api.MessageType {
 }
 
 // MapParamSetICMP6Reply represents VPP binary API message 'map_param_set_icmp6_reply':
-//
-//	"map_param_set_icmp6_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetICMP6Reply struct {
 	Retval int32
 }
@@ -1213,24 +503,6 @@ func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetICMPReply represents VPP binary API message 'map_param_set_icmp_reply':
-//
-//	"map_param_set_icmp_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetICMPReply struct {
 	Retval int32
 }
@@ -1246,44 +518,6 @@ func (*MapParamSetICMPReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetReassembly represents VPP binary API message 'map_param_set_reassembly':
-//
-//	"map_param_set_reassembly",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "is_ip6"
-//	],
-//	[
-//	    "u16",
-//	    "lifetime_ms"
-//	],
-//	[
-//	    "u16",
-//	    "pool_size"
-//	],
-//	[
-//	    "u32",
-//	    "buffers"
-//	],
-//	[
-//	    "f64",
-//	    "ht_ratio"
-//	],
-//	{
-//	    "crc": "0x54172b10"
-//	}
-//
 type MapParamSetReassembly struct {
 	IsIP6      bool
 	LifetimeMs uint16
@@ -1303,24 +537,6 @@ func (*MapParamSetReassembly) GetMessageType() api.MessageType {
 }
 
 // MapParamSetReassemblyReply represents VPP binary API message 'map_param_set_reassembly_reply':
-//
-//	"map_param_set_reassembly_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetReassemblyReply struct {
 	Retval int32
 }
@@ -1336,32 +552,6 @@ func (*MapParamSetReassemblyReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetSecurityCheck represents VPP binary API message 'map_param_set_security_check':
-//
-//	"map_param_set_security_check",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "enable"
-//	],
-//	[
-//	    "bool",
-//	    "fragments"
-//	],
-//	{
-//	    "crc": "0x6abe9836"
-//	}
-//
 type MapParamSetSecurityCheck struct {
 	Enable    bool
 	Fragments bool
@@ -1378,24 +568,6 @@ func (*MapParamSetSecurityCheck) GetMessageType() api.MessageType {
 }
 
 // MapParamSetSecurityCheckReply represents VPP binary API message 'map_param_set_security_check_reply':
-//
-//	"map_param_set_security_check_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetSecurityCheckReply struct {
 	Retval int32
 }
@@ -1411,28 +583,6 @@ func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetTCP represents VPP binary API message 'map_param_set_tcp':
-//
-//	"map_param_set_tcp",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u16",
-//	    "tcp_mss"
-//	],
-//	{
-//	    "crc": "0x87a825d9"
-//	}
-//
 type MapParamSetTCP struct {
 	TCPMss uint16
 }
@@ -1448,24 +598,6 @@ func (*MapParamSetTCP) GetMessageType() api.MessageType {
 }
 
 // MapParamSetTCPReply represents VPP binary API message 'map_param_set_tcp_reply':
-//
-//	"map_param_set_tcp_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetTCPReply struct {
 	Retval int32
 }
@@ -1481,32 +613,6 @@ func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
 }
 
 // MapParamSetTrafficClass represents VPP binary API message 'map_param_set_traffic_class':
-//
-//	"map_param_set_traffic_class",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "bool",
-//	    "copy"
-//	],
-//	[
-//	    "u8",
-//	    "class"
-//	],
-//	{
-//	    "crc": "0x007ee563"
-//	}
-//
 type MapParamSetTrafficClass struct {
 	Copy  bool
 	Class uint8
@@ -1523,24 +629,6 @@ func (*MapParamSetTrafficClass) GetMessageType() api.MessageType {
 }
 
 // MapParamSetTrafficClassReply represents VPP binary API message 'map_param_set_traffic_class_reply':
-//
-//	"map_param_set_traffic_class_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MapParamSetTrafficClassReply struct {
 	Retval int32
 }
@@ -1556,28 +644,6 @@ func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
 }
 
 // MapRuleDetails represents VPP binary API message 'map_rule_details':
-//
-//	"map_rule_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "vl_api_ip6_address_t",
-//	    "ip6_dst"
-//	],
-//	[
-//	    "u16",
-//	    "psid"
-//	],
-//	{
-//	    "crc": "0x4f932665"
-//	}
-//
 type MapRuleDetails struct {
 	IP6Dst IP6Address
 	Psid   uint16
@@ -1594,28 +660,6 @@ func (*MapRuleDetails) GetMessageType() api.MessageType {
 }
 
 // MapRuleDump represents VPP binary API message 'map_rule_dump':
-//
-//	"map_rule_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "domain_index"
-//	],
-//	{
-//	    "crc": "0xe43e6ff6"
-//	}
-//
 type MapRuleDump struct {
 	DomainIndex uint32
 }
@@ -1631,24 +675,6 @@ func (*MapRuleDump) GetMessageType() api.MessageType {
 }
 
 // MapSummaryStats represents VPP binary API message 'map_summary_stats':
-//
-//	"map_summary_stats",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MapSummaryStats struct{}
 
 func (*MapSummaryStats) GetMessageName() string {
@@ -1662,47 +688,6 @@ func (*MapSummaryStats) GetMessageType() api.MessageType {
 }
 
 // MapSummaryStatsReply represents VPP binary API message 'map_summary_stats_reply':
-//
-//	"map_summary_stats_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u64",
-//	    "total_bindings"
-//	],
-//	[
-//	    "u64",
-//	    "total_pkts",
-//	    2
-//	],
-//	[
-//	    "u64",
-//	    "total_bytes",
-//	    2
-//	],
-//	[
-//	    "u64",
-//	    "total_ip4_fragments"
-//	],
-//	[
-//	    "u64",
-//	    "total_security_check",
-//	    2
-//	],
-//	{
-//	    "crc": "0x0e4ace0e"
-//	}
-//
 type MapSummaryStatsReply struct {
 	Retval             int32
 	TotalBindings      uint64

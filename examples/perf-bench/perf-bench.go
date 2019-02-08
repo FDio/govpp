@@ -58,9 +58,6 @@ func main() {
 		defer profile.Start().Stop()
 	}
 
-	// log only errors
-	core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
-
 	// connect to VPP
 	conn, err := govpp.Connect("")
 	if err != nil {
@@ -74,6 +71,9 @@ func main() {
 		log.Fatalln("Error:", err)
 	}
 	defer ch.Close()
+
+	// log only errors
+	core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
 
 	// run the test & measure the time
 	start := time.Now()

@@ -1,9 +1,5 @@
 package main
 
-import (
-	"strings"
-)
-
 // Package represents collection of objects parsed from VPP binary API JSON data
 type Package struct {
 	APIVersion string
@@ -52,6 +48,14 @@ type Type struct {
 	Fields []Field
 }
 
+// Field represents VPP binary API object field
+type Field struct {
+	Name     string
+	Type     string
+	Length   int
+	SizeFrom string
+}
+
 // Union represents VPP binary API union
 type Union struct {
 	Name   string
@@ -75,43 +79,3 @@ const (
 	eventMessage                      // VPP event message
 	otherMessage                      // other VPP message
 )
-
-// Field represents VPP binary API object field
-type Field struct {
-	Name     string
-	Type     string
-	Length   int
-	SizeFrom string
-}
-
-func (f *Field) IsArray() bool {
-	return f.Length > 0 || f.SizeFrom != ""
-}
-
-func (s Service) MethodName() string {
-	reqTyp := camelCaseName(s.RequestType)
-
-	// method name is same as parameter type name by default
-	method := reqTyp
-	if s.Stream {
-		// use Dump as prefix instead of suffix for stream services
-		if m := strings.TrimSuffix(method, "Dump"); method != m {
-			method = "Dump" + m
-		}
-	}
-
-	return method
-}
-
-func (s Service) IsDumpService() bool {
-	return s.Stream
-}
-
-func (s Service) IsEventService() bool {
-	return len(s.Events) > 0
-}
-
-func (s Service) IsRequestService() bool {
-	// some binapi messages might have `null` reply (for example: memclnt)
-	return s.ReplyType != "" && s.ReplyType != "null" // not null
-}

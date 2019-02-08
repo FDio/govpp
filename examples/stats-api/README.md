@@ -19,7 +19,7 @@ The following requirements are required to run this example:
 
 ## Running example
 
-First build the example: `go build git.fd.io/govpp.git/examples/cmd/stats-api`. 
+First build the example: `go build git.fd.io/govpp.git/examples/stats-api`. 
 
 Use commands `ls` and `dump` to list and dump statistics. Optionally, patterns can be used to filter the results.
 

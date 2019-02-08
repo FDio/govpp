@@ -10,9 +10,9 @@
 */
 package memif
 
-import "git.fd.io/govpp.git/api"
-import "github.com/lunixbochs/struc"
-import "bytes"
+import api "git.fd.io/govpp.git/api"
+import struc "github.com/lunixbochs/struc"
+import bytes "bytes"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = api.RegisterMessage
@@ -20,27 +20,6 @@ var _ = struc.Pack
 var _ = bytes.NewBuffer
 
 // Services represents VPP binary API services:
-//
-//	"services": {
-//	    "memif_delete": {
-//	        "reply": "memif_delete_reply"
-//	    },
-//	    "memif_socket_filename_add_del": {
-//	        "reply": "memif_socket_filename_add_del_reply"
-//	    },
-//	    "memif_create": {
-//	        "reply": "memif_create_reply"
-//	    },
-//	    "memif_socket_filename_dump": {
-//	        "reply": "memif_socket_filename_details",
-//	        "stream": true
-//	    },
-//	    "memif_dump": {
-//	        "reply": "memif_details",
-//	        "stream": true
-//	    }
-//	},
-//
 type Services interface {
 	DumpMemif(*MemifDump) ([]*MemifDetails, error)
 	DumpMemifSocketFilename(*MemifSocketFilenameDump) ([]*MemifSocketFilenameDetails, error)
@@ -52,66 +31,6 @@ type Services interface {
 /* Messages */
 
 // MemifCreate represents VPP binary API message 'memif_create':
-//
-//	"memif_create",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u8",
-//	    "role"
-//	],
-//	[
-//	    "u8",
-//	    "mode"
-//	],
-//	[
-//	    "u8",
-//	    "rx_queues"
-//	],
-//	[
-//	    "u8",
-//	    "tx_queues"
-//	],
-//	[
-//	    "u32",
-//	    "id"
-//	],
-//	[
-//	    "u32",
-//	    "socket_id"
-//	],
-//	[
-//	    "u8",
-//	    "secret",
-//	    24
-//	],
-//	[
-//	    "u32",
-//	    "ring_size"
-//	],
-//	[
-//	    "u16",
-//	    "buffer_size"
-//	],
-//	[
-//	    "u8",
-//	    "hw_addr",
-//	    6
-//	],
-//	{
-//	    "crc": "0x6597cdb2"
-//	}
-//
 type MemifCreate struct {
 	Role       uint8
 	Mode       uint8
@@ -136,28 +55,6 @@ func (*MemifCreate) GetMessageType() api.MessageType {
 }
 
 // MemifCreateReply represents VPP binary API message 'memif_create_reply':
-//
-//	"memif_create_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0xfda5941f"
-//	}
-//
 type MemifCreateReply struct {
 	Retval    int32
 	SwIfIndex uint32
@@ -174,28 +71,6 @@ func (*MemifCreateReply) GetMessageType() api.MessageType {
 }
 
 // MemifDelete represents VPP binary API message 'memif_delete':
-//
-//	"memif_delete",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
 type MemifDelete struct {
 	SwIfIndex uint32
 }
@@ -211,24 +86,6 @@ func (*MemifDelete) GetMessageType() api.MessageType {
 }
 
 // MemifDeleteReply represents VPP binary API message 'memif_delete_reply':
-//
-//	"memif_delete_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MemifDeleteReply struct {
 	Retval int32
 }
@@ -244,66 +101,6 @@ func (*MemifDeleteReply) GetMessageType() api.MessageType {
 }
 
 // MemifDetails represents VPP binary API message 'memif_details':
-//
-//	"memif_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "if_name",
-//	    64
-//	],
-//	[
-//	    "u8",
-//	    "hw_addr",
-//	    6
-//	],
-//	[
-//	    "u32",
-//	    "id"
-//	],
-//	[
-//	    "u8",
-//	    "role"
-//	],
-//	[
-//	    "u8",
-//	    "mode"
-//	],
-//	[
-//	    "u32",
-//	    "socket_id"
-//	],
-//	[
-//	    "u32",
-//	    "ring_size"
-//	],
-//	[
-//	    "u16",
-//	    "buffer_size"
-//	],
-//	[
-//	    "u8",
-//	    "admin_up_down"
-//	],
-//	[
-//	    "u8",
-//	    "link_up_down"
-//	],
-//	{
-//	    "crc": "0x4f5a3397"
-//	}
-//
 type MemifDetails struct {
 	SwIfIndex   uint32
 	IfName      []byte `struc:"[64]byte"`
@@ -329,24 +126,6 @@ func (*MemifDetails) GetMessageType() api.MessageType {
 }
 
 // MemifDump represents VPP binary API message 'memif_dump':
-//
-//	"memif_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MemifDump struct{}
 
 func (*MemifDump) GetMessageName() string {
@@ -360,37 +139,6 @@ func (*MemifDump) GetMessageType() api.MessageType {
 }
 
 // MemifSocketFilenameAddDel represents VPP binary API message 'memif_socket_filename_add_del':
-//
-//	"memif_socket_filename_add_del",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	[
-//	    "u32",
-//	    "socket_id"
-//	],
-//	[
-//	    "u8",
-//	    "socket_filename",
-//	    128
-//	],
-//	{
-//	    "crc": "0x30e3929d"
-//	}
-//
 type MemifSocketFilenameAddDel struct {
 	IsAdd          uint8
 	SocketID       uint32
@@ -408,24 +156,6 @@ func (*MemifSocketFilenameAddDel) GetMessageType() api.MessageType {
 }
 
 // MemifSocketFilenameAddDelReply represents VPP binary API message 'memif_socket_filename_add_del_reply':
-//
-//	"memif_socket_filename_add_del_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MemifSocketFilenameAddDelReply struct {
 	Retval int32
 }
@@ -441,29 +171,6 @@ func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType {
 }
 
 // MemifSocketFilenameDetails represents VPP binary API message 'memif_socket_filename_details':
-//
-//	"memif_socket_filename_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "socket_id"
-//	],
-//	[
-//	    "u8",
-//	    "socket_filename",
-//	    128
-//	],
-//	{
-//	    "crc": "0xe347e32f"
-//	}
-//
 type MemifSocketFilenameDetails struct {
 	SocketID       uint32
 	SocketFilename []byte `struc:"[128]byte"`
@@ -480,24 +187,6 @@ func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType {
 }
 
 // MemifSocketFilenameDump represents VPP binary API message 'memif_socket_filename_dump':
-//
-//	"memif_socket_filename_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MemifSocketFilenameDump struct{}
 
 func (*MemifSocketFilenameDump) GetMessageName() string {

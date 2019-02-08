@@ -115,7 +115,6 @@ type SubscriptionCtx interface {
 	Unsubscribe() error
 }
 
-// map of registered messages
 var registeredMessages = make(map[string]Message)
 
 // RegisterMessage is called from generated code to register message.
@@ -130,3 +129,7 @@ func RegisterMessage(x Message, name string) {
 func GetRegisteredMessages() map[string]Message {
 	return registeredMessages
 }
+
+// GoVppAPIPackageIsVersion1 is referenced from generated binapi files
+// to assert that that code is compatible with this version of the GoVPP api package.
+const GoVppAPIPackageIsVersion1 = true

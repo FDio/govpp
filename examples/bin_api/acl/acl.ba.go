@@ -11,9 +11,9 @@
 */
 package acl
 
-import "git.fd.io/govpp.git/api"
-import "github.com/lunixbochs/struc"
-import "bytes"
+import api "git.fd.io/govpp.git/api"
+import struc "github.com/lunixbochs/struc"
+import bytes "bytes"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = api.RegisterMessage
@@ -21,69 +21,6 @@ var _ = struc.Pack
 var _ = bytes.NewBuffer
 
 // Services represents VPP binary API services:
-//
-//	"services": {
-//	    "acl_plugin_get_version": {
-//	        "reply": "acl_plugin_get_version_reply"
-//	    },
-//	    "acl_dump": {
-//	        "reply": "acl_details",
-//	        "stream": true
-//	    },
-//	    "acl_interface_add_del": {
-//	        "reply": "acl_interface_add_del_reply"
-//	    },
-//	    "acl_del": {
-//	        "reply": "acl_del_reply"
-//	    },
-//	    "macip_acl_del": {
-//	        "reply": "macip_acl_del_reply"
-//	    },
-//	    "acl_plugin_control_ping": {
-//	        "reply": "acl_plugin_control_ping_reply"
-//	    },
-//	    "macip_acl_interface_get": {
-//	        "reply": "macip_acl_interface_get_reply"
-//	    },
-//	    "acl_interface_etype_whitelist_dump": {
-//	        "reply": "acl_interface_etype_whitelist_details",
-//	        "stream": true
-//	    },
-//	    "macip_acl_interface_add_del": {
-//	        "reply": "macip_acl_interface_add_del_reply"
-//	    },
-//	    "acl_add_replace": {
-//	        "reply": "acl_add_replace_reply"
-//	    },
-//	    "acl_plugin_get_conn_table_max_entries": {
-//	        "reply": "acl_plugin_get_conn_table_max_entries_reply"
-//	    },
-//	    "acl_interface_list_dump": {
-//	        "reply": "acl_interface_list_details",
-//	        "stream": true
-//	    },
-//	    "acl_interface_set_acl_list": {
-//	        "reply": "acl_interface_set_acl_list_reply"
-//	    },
-//	    "macip_acl_add": {
-//	        "reply": "macip_acl_add_reply"
-//	    },
-//	    "acl_interface_set_etype_whitelist": {
-//	        "reply": "acl_interface_set_etype_whitelist_reply"
-//	    },
-//	    "macip_acl_add_replace": {
-//	        "reply": "macip_acl_add_replace_reply"
-//	    },
-//	    "macip_acl_dump": {
-//	        "reply": "macip_acl_details",
-//	        "stream": true
-//	    },
-//	    "macip_acl_interface_list_dump": {
-//	        "reply": "macip_acl_interface_list_details",
-//	        "stream": true
-//	    }
-//	},
-//
 type Services interface {
 	DumpACL(*ACLDump) ([]*ACLDetails, error)
 	DumpACLInterfaceEtypeWhitelist(*ACLInterfaceEtypeWhitelistDump) ([]*ACLInterfaceEtypeWhitelistDetails, error)
@@ -108,66 +45,6 @@ type Services interface {
 /* Types */
 
 // ACLRule represents VPP binary API type 'acl_rule':
-//
-//	"acl_rule",
-//	[
-//	    "u8",
-//	    "is_permit"
-//	],
-//	[
-//	    "u8",
-//	    "is_ipv6"
-//	],
-//	[
-//	    "u8",
-//	    "src_ip_addr",
-//	    16
-//	],
-//	[
-//	    "u8",
-//	    "src_ip_prefix_len"
-//	],
-//	[
-//	    "u8",
-//	    "dst_ip_addr",
-//	    16
-//	],
-//	[
-//	    "u8",
-//	    "dst_ip_prefix_len"
-//	],
-//	[
-//	    "u8",
-//	    "proto"
-//	],
-//	[
-//	    "u16",
-//	    "srcport_or_icmptype_first"
-//	],
-//	[
-//	    "u16",
-//	    "srcport_or_icmptype_last"
-//	],
-//	[
-//	    "u16",
-//	    "dstport_or_icmpcode_first"
-//	],
-//	[
-//	    "u16",
-//	    "dstport_or_icmpcode_last"
-//	],
-//	[
-//	    "u8",
-//	    "tcp_flags_mask"
-//	],
-//	[
-//	    "u8",
-//	    "tcp_flags_value"
-//	],
-//	{
-//	    "crc": "0x6f99bf4d"
-//	}
-//
 type ACLRule struct {
 	IsPermit               uint8
 	IsIPv6                 uint8
@@ -192,39 +69,6 @@ func (*ACLRule) GetCrcString() string {
 }
 
 // MacipACLRule represents VPP binary API type 'macip_acl_rule':
-//
-//	"macip_acl_rule",
-//	[
-//	    "u8",
-//	    "is_permit"
-//	],
-//	[
-//	    "u8",
-//	    "is_ipv6"
-//	],
-//	[
-//	    "u8",
-//	    "src_mac",
-//	    6
-//	],
-//	[
-//	    "u8",
-//	    "src_mac_mask",
-//	    6
-//	],
-//	[
-//	    "u8",
-//	    "src_ip_addr",
-//	    16
-//	],
-//	[
-//	    "u8",
-//	    "src_ip_prefix_len"
-//	],
-//	{
-//	    "crc": "0x70589f1e"
-//	}
-//
 type MacipACLRule struct {
 	IsPermit       uint8
 	IsIPv6         uint8
@@ -244,43 +88,6 @@ func (*MacipACLRule) GetCrcString() string {
 /* Messages */
 
 // ACLAddReplace represents VPP binary API message 'acl_add_replace':
-//
-//	"acl_add_replace",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xe839997e"
-//	}
-//
 type ACLAddReplace struct {
 	ACLIndex uint32
 	Tag      []byte `struc:"[64]byte"`
@@ -299,28 +106,6 @@ func (*ACLAddReplace) GetMessageType() api.MessageType {
 }
 
 // ACLAddReplaceReply represents VPP binary API message 'acl_add_replace_reply':
-//
-//	"acl_add_replace_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xac407b0c"
-//	}
-//
 type ACLAddReplaceReply struct {
 	ACLIndex uint32
 	Retval   int32
@@ -337,28 +122,6 @@ func (*ACLAddReplaceReply) GetMessageType() api.MessageType {
 }
 
 // ACLDel represents VPP binary API message 'acl_del':
-//
-//	"acl_del",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
 type ACLDel struct {
 	ACLIndex uint32
 }
@@ -374,24 +137,6 @@ func (*ACLDel) GetMessageType() api.MessageType {
 }
 
 // ACLDelReply represents VPP binary API message 'acl_del_reply':
-//
-//	"acl_del_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type ACLDelReply struct {
 	Retval int32
 }
@@ -407,39 +152,6 @@ func (*ACLDelReply) GetMessageType() api.MessageType {
 }
 
 // ACLDetails represents VPP binary API message 'acl_details':
-//
-//	"acl_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x5bd895be"
-//	}
-//
 type ACLDetails struct {
 	ACLIndex uint32
 	Tag      []byte `struc:"[64]byte"`
@@ -458,28 +170,6 @@ func (*ACLDetails) GetMessageType() api.MessageType {
 }
 
 // ACLDump represents VPP binary API message 'acl_dump':
-//
-//	"acl_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
 type ACLDump struct {
 	ACLIndex uint32
 }
@@ -495,40 +185,6 @@ func (*ACLDump) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceAddDel represents VPP binary API message 'acl_interface_add_del':
-//
-//	"acl_interface_add_del",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	[
-//	    "u8",
-//	    "is_input"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0x0b2aedd1"
-//	}
-//
 type ACLInterfaceAddDel struct {
 	IsAdd     uint8
 	IsInput   uint8
@@ -547,24 +203,6 @@ func (*ACLInterfaceAddDel) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceAddDelReply represents VPP binary API message 'acl_interface_add_del_reply':
-//
-//	"acl_interface_add_del_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type ACLInterfaceAddDelReply struct {
 	Retval int32
 }
@@ -580,38 +218,6 @@ func (*ACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceEtypeWhitelistDetails represents VPP binary API message 'acl_interface_etype_whitelist_details':
-//
-//	"acl_interface_etype_whitelist_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u16",
-//	    "whitelist",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x6a5d4e81"
-//	}
-//
 type ACLInterfaceEtypeWhitelistDetails struct {
 	SwIfIndex uint32
 	Count     uint8 `struc:"sizeof=Whitelist"`
@@ -630,28 +236,6 @@ func (*ACLInterfaceEtypeWhitelistDetails) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceEtypeWhitelistDump represents VPP binary API message 'acl_interface_etype_whitelist_dump':
-//
-//	"acl_interface_etype_whitelist_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
 type ACLInterfaceEtypeWhitelistDump struct {
 	SwIfIndex uint32
 }
@@ -667,38 +251,6 @@ func (*ACLInterfaceEtypeWhitelistDump) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceListDetails represents VPP binary API message 'acl_interface_list_details':
-//
-//	"acl_interface_list_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u32",
-//	    "acls",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xd5e80809"
-//	}
-//
 type ACLInterfaceListDetails struct {
 	SwIfIndex uint32
 	Count     uint8 `struc:"sizeof=Acls"`
@@ -717,28 +269,6 @@ func (*ACLInterfaceListDetails) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceListDump represents VPP binary API message 'acl_interface_list_dump':
-//
-//	"acl_interface_list_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
 type ACLInterfaceListDump struct {
 	SwIfIndex uint32
 }
@@ -754,42 +284,6 @@ func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceSetACLList represents VPP binary API message 'acl_interface_set_acl_list':
-//
-//	"acl_interface_set_acl_list",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u32",
-//	    "acls",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x8baece38"
-//	}
-//
 type ACLInterfaceSetACLList struct {
 	SwIfIndex uint32
 	Count     uint8 `struc:"sizeof=Acls"`
@@ -808,24 +302,6 @@ func (*ACLInterfaceSetACLList) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceSetACLListReply represents VPP binary API message 'acl_interface_set_acl_list_reply':
-//
-//	"acl_interface_set_acl_list_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type ACLInterfaceSetACLListReply struct {
 	Retval int32
 }
@@ -841,42 +317,6 @@ func (*ACLInterfaceSetACLListReply) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceSetEtypeWhitelist represents VPP binary API message 'acl_interface_set_etype_whitelist':
-//
-//	"acl_interface_set_etype_whitelist",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u8",
-//	    "n_input"
-//	],
-//	[
-//	    "u16",
-//	    "whitelist",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xf515efc5"
-//	}
-//
 type ACLInterfaceSetEtypeWhitelist struct {
 	SwIfIndex uint32
 	Count     uint8 `struc:"sizeof=Whitelist"`
@@ -895,24 +335,6 @@ func (*ACLInterfaceSetEtypeWhitelist) GetMessageType() api.MessageType {
 }
 
 // ACLInterfaceSetEtypeWhitelistReply represents VPP binary API message 'acl_interface_set_etype_whitelist_reply':
-//
-//	"acl_interface_set_etype_whitelist_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type ACLInterfaceSetEtypeWhitelistReply struct {
 	Retval int32
 }
@@ -928,24 +350,6 @@ func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
 }
 
 // ACLPluginControlPing represents VPP binary API message 'acl_plugin_control_ping':
-//
-//	"acl_plugin_control_ping",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type ACLPluginControlPing struct{}
 
 func (*ACLPluginControlPing) GetMessageName() string {
@@ -959,32 +363,6 @@ func (*ACLPluginControlPing) GetMessageType() api.MessageType {
 }
 
 // ACLPluginControlPingReply represents VPP binary API message 'acl_plugin_control_ping_reply':
-//
-//	"acl_plugin_control_ping_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "vpe_pid"
-//	],
-//	{
-//	    "crc": "0xf6b0b8ca"
-//	}
-//
 type ACLPluginControlPingReply struct {
 	Retval      int32
 	ClientIndex uint32
@@ -1002,24 +380,6 @@ func (*ACLPluginControlPingReply) GetMessageType() api.MessageType {
 }
 
 // ACLPluginGetConnTableMaxEntries represents VPP binary API message 'acl_plugin_get_conn_table_max_entries':
-//
-//	"acl_plugin_get_conn_table_max_entries",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type ACLPluginGetConnTableMaxEntries struct{}
 
 func (*ACLPluginGetConnTableMaxEntries) GetMessageName() string {
@@ -1033,24 +393,6 @@ func (*ACLPluginGetConnTableMaxEntries) GetMessageType() api.MessageType {
 }
 
 // ACLPluginGetConnTableMaxEntriesReply represents VPP binary API message 'acl_plugin_get_conn_table_max_entries_reply':
-//
-//	"acl_plugin_get_conn_table_max_entries_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u64",
-//	    "conn_table_max_entries"
-//	],
-//	{
-//	    "crc": "0x7a096d3d"
-//	}
-//
 type ACLPluginGetConnTableMaxEntriesReply struct {
 	ConnTableMaxEntries uint64
 }
@@ -1066,24 +408,6 @@ func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageType() api.MessageType {
 }
 
 // ACLPluginGetVersion represents VPP binary API message 'acl_plugin_get_version':
-//
-//	"acl_plugin_get_version",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type ACLPluginGetVersion struct{}
 
 func (*ACLPluginGetVersion) GetMessageName() string {
@@ -1097,28 +421,6 @@ func (*ACLPluginGetVersion) GetMessageType() api.MessageType {
 }
 
 // ACLPluginGetVersionReply represents VPP binary API message 'acl_plugin_get_version_reply':
-//
-//	"acl_plugin_get_version_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "major"
-//	],
-//	[
-//	    "u32",
-//	    "minor"
-//	],
-//	{
-//	    "crc": "0x9b32cf86"
-//	}
-//
 type ACLPluginGetVersionReply struct {
 	Major uint32
 	Minor uint32
@@ -1135,39 +437,6 @@ func (*ACLPluginGetVersionReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLAdd represents VPP binary API message 'macip_acl_add':
-//
-//	"macip_acl_add",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_macip_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xb3d3d65a"
-//	}
-//
 type MacipACLAdd struct {
 	Tag   []byte `struc:"[64]byte"`
 	Count uint32 `struc:"sizeof=R"`
@@ -1185,43 +454,6 @@ func (*MacipACLAdd) GetMessageType() api.MessageType {
 }
 
 // MacipACLAddReplace represents VPP binary API message 'macip_acl_add_replace':
-//
-//	"macip_acl_add_replace",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_macip_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xa0e8c01b"
-//	}
-//
 type MacipACLAddReplace struct {
 	ACLIndex uint32
 	Tag      []byte `struc:"[64]byte"`
@@ -1240,28 +472,6 @@ func (*MacipACLAddReplace) GetMessageType() api.MessageType {
 }
 
 // MacipACLAddReplaceReply represents VPP binary API message 'macip_acl_add_replace_reply':
-//
-//	"macip_acl_add_replace_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xac407b0c"
-//	}
-//
 type MacipACLAddReplaceReply struct {
 	ACLIndex uint32
 	Retval   int32
@@ -1278,28 +488,6 @@ func (*MacipACLAddReplaceReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLAddReply represents VPP binary API message 'macip_acl_add_reply':
-//
-//	"macip_acl_add_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xac407b0c"
-//	}
-//
 type MacipACLAddReply struct {
 	ACLIndex uint32
 	Retval   int32
@@ -1316,28 +504,6 @@ func (*MacipACLAddReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLDel represents VPP binary API message 'macip_acl_del':
-//
-//	"macip_acl_del",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
 type MacipACLDel struct {
 	ACLIndex uint32
 }
@@ -1353,24 +519,6 @@ func (*MacipACLDel) GetMessageType() api.MessageType {
 }
 
 // MacipACLDelReply represents VPP binary API message 'macip_acl_del_reply':
-//
-//	"macip_acl_del_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MacipACLDelReply struct {
 	Retval int32
 }
@@ -1386,39 +534,6 @@ func (*MacipACLDelReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLDetails represents VPP binary API message 'macip_acl_details':
-//
-//	"macip_acl_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	[
-//	    "u8",
-//	    "tag",
-//	    64
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "vl_api_macip_acl_rule_t",
-//	    "r",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xdd2b55ba"
-//	}
-//
 type MacipACLDetails struct {
 	ACLIndex uint32
 	Tag      []byte `struc:"[64]byte"`
@@ -1437,28 +552,6 @@ func (*MacipACLDetails) GetMessageType() api.MessageType {
 }
 
 // MacipACLDump represents VPP binary API message 'macip_acl_dump':
-//
-//	"macip_acl_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0xef34fea4"
-//	}
-//
 type MacipACLDump struct {
 	ACLIndex uint32
 }
@@ -1474,36 +567,6 @@ func (*MacipACLDump) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceAddDel represents VPP binary API message 'macip_acl_interface_add_del':
-//
-//	"macip_acl_interface_add_del",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u8",
-//	    "is_add"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u32",
-//	    "acl_index"
-//	],
-//	{
-//	    "crc": "0x6a6be97c"
-//	}
-//
 type MacipACLInterfaceAddDel struct {
 	IsAdd     uint8
 	SwIfIndex uint32
@@ -1521,24 +584,6 @@ func (*MacipACLInterfaceAddDel) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceAddDelReply represents VPP binary API message 'macip_acl_interface_add_del_reply':
-//
-//	"macip_acl_interface_add_del_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "i32",
-//	    "retval"
-//	],
-//	{
-//	    "crc": "0xe8d4e804"
-//	}
-//
 type MacipACLInterfaceAddDelReply struct {
 	Retval int32
 }
@@ -1554,24 +599,6 @@ func (*MacipACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceGet represents VPP binary API message 'macip_acl_interface_get':
-//
-//	"macip_acl_interface_get",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	{
-//	    "crc": "0x51077d14"
-//	}
-//
 type MacipACLInterfaceGet struct{}
 
 func (*MacipACLInterfaceGet) GetMessageName() string {
@@ -1585,30 +612,6 @@ func (*MacipACLInterfaceGet) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceGetReply represents VPP binary API message 'macip_acl_interface_get_reply':
-//
-//	"macip_acl_interface_get_reply",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "count"
-//	],
-//	[
-//	    "u32",
-//	    "acls",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0xaccf9b05"
-//	}
-//
 type MacipACLInterfaceGetReply struct {
 	Count uint32 `struc:"sizeof=Acls"`
 	Acls  []uint32
@@ -1625,34 +628,6 @@ func (*MacipACLInterfaceGetReply) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceListDetails represents VPP binary API message 'macip_acl_interface_list_details':
-//
-//	"macip_acl_interface_list_details",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	[
-//	    "u8",
-//	    "count"
-//	],
-//	[
-//	    "u32",
-//	    "acls",
-//	    0,
-//	    "count"
-//	],
-//	{
-//	    "crc": "0x29783fa0"
-//	}
-//
 type MacipACLInterfaceListDetails struct {
 	SwIfIndex uint32
 	Count     uint8 `struc:"sizeof=Acls"`
@@ -1670,28 +645,6 @@ func (*MacipACLInterfaceListDetails) GetMessageType() api.MessageType {
 }
 
 // MacipACLInterfaceListDump represents VPP binary API message 'macip_acl_interface_list_dump':
-//
-//	"macip_acl_interface_list_dump",
-//	[
-//	    "u16",
-//	    "_vl_msg_id"
-//	],
-//	[
-//	    "u32",
-//	    "client_index"
-//	],
-//	[
-//	    "u32",
-//	    "context"
-//	],
-//	[
-//	    "u32",
-//	    "sw_if_index"
-//	],
-//	{
-//	    "crc": "0x529cb13f"
-//	}
-//
 type MacipACLInterfaceListDump struct {
 	SwIfIndex uint32
 }

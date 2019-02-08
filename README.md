@@ -3,9 +3,9 @@
 This set of packages provide the API for communication with VPP from Go. 
 
 It consists of the following packages:
-- [adapter](adapter/): adapter between GoVPP core and the VPP
+- [adapter](adapter/): adapter between GoVPP core and the VPP binary API
 - [api](api/api.go): API for communication with GoVPP core
-- [binapi-generator](cmd/binapi-generator/): Generator for the VPP binary API definitions in JSON format to Go code
+- [binapi-generator](cmd/binapi-generator/): generator for the VPP binary API definitions in JSON format to Go code
 - [codec](codec/): handles encoding/decoding of generated messages into binary form
 - [core](core/): main functionality of the GoVPP
 - [examples](examples/): examples that use the GoVPP API in real use-cases of VPP management application
@@ -92,12 +92,14 @@ func main() {
 }
 ```
 
-The example above uses simple wrapper API over underlying go channels, see [example client](examples/cmd/simple-client/simple_client.go) 
+The example above uses simple wrapper API over underlying go channels, 
+see [example client](examples/simple-client/simple_client.go) 
 for more examples, including the example on how to use the Go channels directly.
 
 ## Build & Installation Procedure
 
-Govpp uses `vppapiclient` library from VPP codebase to communicate with VPP. To build GoVPP, vpp-dev package must be installed,
+GoVPP uses `vppapiclient` library from VPP codebase to communicate with VPP. 
+To build GoVPP, vpp-dev package must be installed,
 either [from packages](https://wiki.fd.io/view/VPP/Installing_VPP_binaries_from_packages) or 
 [from sources](https://wiki.fd.io/view/VPP/Build,_install,_and_test_images#Build_A_VPP_Package).
 
@@ -138,7 +140,7 @@ binapi-generator --input-dir=examples/bin_api --output-dir=examples/bin_api
 In Go, [go generate](https://blog.golang.org/generate) tool can be leveraged to ease the code generation
 process. It allows to specify generator instructions in any one of the regular (non-generated) `.go` files
 that are dependent on generated code using special comments, e.g. the one from 
-[example client](examples/cmd/simple-client/simple_client.go):
+[example client](examples/simple-client/simple_client.go):
 
 ```go
 //go:generate binapi-generator --input-dir=bin_api --output-dir=bin_api
