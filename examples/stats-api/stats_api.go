@@ -23,6 +23,7 @@ import (
 
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/vppapiclient"
+	"git.fd.io/govpp.git/core"
 )
 
 // ------------------------------------------------------------------
@@ -39,7 +40,7 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump] <patterns>...\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|errors|interfaces|nodes|system] <patterns>...\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -47,11 +48,11 @@ func init() {
 
 func main() {
 	flag.Parse()
+	skipZeros := !*dumpAll
 
 	cmd := flag.Arg(0)
-
 	switch cmd {
-	case "", "ls", "dump":
+	case "", "ls", "dump", "errors", "interfaces", "nodes", "system":
 	default:
 		flag.Usage()
 	}
@@ -65,14 +66,56 @@ func main() {
 
 	fmt.Printf("Connecting to stats socket: %s\n", *statsSocket)
 
-	if err := client.Connect(); err != nil {
+	c, err := core.ConnectStats(client)
+	if err != nil {
 		log.Fatalln("Connecting failed:", err)
 	}
-	defer client.Disconnect()
+	defer c.Disconnect()
 
 	switch cmd {
+	case "system":
+		stats, err := c.GetSystemStats()
+		if err != nil {
+			log.Fatalln("getting system stats failed:", err)
+		}
+		fmt.Printf("System stats: %+v\n", stats)
+	case "nodes":
+		fmt.Println("Listing node stats..")
+		stats, err := c.GetNodeStats()
+		if err != nil {
+			log.Fatalln("getting node stats failed:", err)
+		}
+		for _, iface := range stats.Nodes {
+			fmt.Printf(" - %+v\n", iface)
+		}
+		fmt.Printf("Listed %d node counters\n", len(stats.Nodes))
+	case "interfaces":
+		fmt.Println("Listing interface stats..")
+		stats, err := c.GetInterfaceStats()
+		if err != nil {
+			log.Fatalln("getting interface stats failed:", err)
+		}
+		for _, iface := range stats.Interfaces {
+			fmt.Printf(" - %+v\n", iface)
+		}
+		fmt.Printf("Listed %d interface counters\n", len(stats.Interfaces))
+	case "errors":
+		fmt.Printf("Listing error stats.. %s\n", strings.Join(patterns, " "))
+		stats, err := c.GetErrorStats(patterns...)
+		if err != nil {
+			log.Fatalln("getting error stats failed:", err)
+		}
+		n := 0
+		for _, counter := range stats.Errors {
+			if counter.Value == 0 && skipZeros {
+				continue
+			}
+			fmt.Printf(" - %v\n", counter)
+			n++
+		}
+		fmt.Printf("Listed %d (%d) error counters\n", n, len(stats.Errors))
 	case "dump":
-		dumpStats(client, patterns, !*dumpAll)
+		dumpStats(client, patterns, skipZeros)
 	default:
 		listStats(client, patterns)
 	}
