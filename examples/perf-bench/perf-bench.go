@@ -25,7 +25,9 @@ import (
 	"github.com/pkg/profile"
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git"
+	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/adapter/socketclient"
+	"git.fd.io/govpp.git/adapter/vppapiclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/bin_api/vpe"
@@ -38,9 +40,10 @@ const (
 
 func main() {
 	// parse optional flags
-	var sync, prof bool
+	var sync, prof, sock bool
 	var cnt int
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
+	flag.BoolVar(&sock, "sock", false, "use socket client for VPP API")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
 	flag.BoolVar(&prof, "prof", false, "generate profile data")
 	flag.Parse()
@@ -58,8 +61,15 @@ func main() {
 		defer profile.Start().Stop()
 	}
 
+	var a adapter.VppAPI
+	if sock {
+		a = socketclient.NewVppClient("/run/vpp-api.sock")
+	} else {
+		a = vppapiclient.NewVppClient("")
+	}
+
 	// connect to VPP
-	conn, err := govpp.Connect("")
+	conn, err := core.Connect(a)
 	if err != nil {
 		log.Fatalln("Error:", err)
 	}
@@ -71,6 +81,8 @@ func main() {
 		log.Fatalln("Error:", err)
 	}
 	defer ch.Close()
+
+	ch.SetReplyTimeout(time.Second * 2)
 
 	// log only errors
 	core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
@@ -89,6 +101,8 @@ func main() {
 	elapsed := time.Since(start)
 	fmt.Println("Test took:", elapsed)
 	fmt.Printf("Requests per second: %.0f\n", float64(cnt)/elapsed.Seconds())
+
+	time.Sleep(time.Second)
 }
 
 func syncTest(ch api.Channel, cnt int) {
