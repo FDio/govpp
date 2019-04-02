@@ -54,9 +54,9 @@ govpp_send(uint32_t context, void *data, size_t size)
 }
 
 static int
-govpp_connect(char *shm)
+govpp_connect(char *shm, int rx_qlen)
 {
-    return vac_connect("govpp", shm, govpp_msg_callback, 32);
+    return vac_connect("govpp", shm, govpp_msg_callback, rx_qlen);
 }
 
 static int
@@ -97,14 +97,21 @@ var globalVppClient *vppClient
 
 // stubVppClient is the default implementation of the VppAPI.
 type vppClient struct {
-	shmPrefix   string
-	msgCallback adapter.MsgCallback
+	shmPrefix      string
+	msgCallback    adapter.MsgCallback
+	inputQueueSize uint16
 }
 
 // NewVppClient returns a new VPP binary API client.
 func NewVppClient(shmPrefix string) adapter.VppAPI {
+	return NewVppClientWithInputQueueSize(shmPrefix, 32)
+}
+
+// NewVppClientWithInputQueueSize returns a new VPP binary API client with a custom input queue size.
+func NewVppClientWithInputQueueSize(shmPrefix string, inputQueueSize uint16) adapter.VppAPI {
 	return &vppClient{
-		shmPrefix: shmPrefix,
+		shmPrefix:      shmPrefix,
+		inputQueueSize: inputQueueSize,
 	}
 }
 
@@ -114,12 +121,13 @@ func (a *vppClient) Connect() error {
 		return fmt.Errorf("already connected to binary API, disconnect first")
 	}
 
+	rxQlen := C.int(a.inputQueueSize)
 	var rc C.int
 	if a.shmPrefix == "" {
-		rc = C.govpp_connect(nil)
+		rc = C.govpp_connect(nil, rxQlen)
 	} else {
 		shm := C.CString(a.shmPrefix)
-		rc = C.govpp_connect(shm)
+		rc = C.govpp_connect(shm, rxQlen)
 	}
 	if rc != 0 {
 		return fmt.Errorf("connecting to VPP binary API failed (rc=%v)", rc)
