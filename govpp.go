@@ -18,6 +18,7 @@ import (
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/vppapiclient"
 	"git.fd.io/govpp.git/core"
+	"time"
 )
 
 var (
@@ -49,6 +50,6 @@ func Connect(shm string) (*core.Connection, error) {
 // This call does not block until connection is established, it returns immediately. The caller is
 // supposed to watch the returned ConnectionState channel for Connected/Disconnected events.
 // In case of disconnect, the library will asynchronously try to reconnect.
-func AsyncConnect(shm string) (*core.Connection, chan core.ConnectionEvent, error) {
-	return core.AsyncConnect(getVppAdapter(shm))
+func AsyncConnect(shm string, attempts int, interval time.Duration) (*core.Connection, chan core.ConnectionEvent, error) {
+	return core.AsyncConnect(getVppAdapter(shm), attempts, interval)
 }

@@ -23,7 +23,7 @@ examples:
 test:
 	@echo "=> running tests"
 	go test -cover ./cmd/...
-	go test -cover ./core ./api ./codec
+	go test -cover ./ ./adapter ./core ./api ./codec
 
 extras:
 	@echo "=> building extras"

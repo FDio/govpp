@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("Starting simple VPP client...")
 
 	// connect to VPP
-	conn, conev, err := govpp.AsyncConnect("")
+	conn, conev, err := govpp.AsyncConnect("", core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	if err != nil {
 		log.Fatalln("ERROR:", err)
 	}
