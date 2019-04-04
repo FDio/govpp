@@ -78,7 +78,7 @@ func TestAsyncConnection(t *testing.T) {
 	defer ctx.teardownTest()
 
 	ctx.conn.Disconnect()
-	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp)
+	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	ctx.conn = conn
 
 	Expect(err).ShouldNot(HaveOccurred())
