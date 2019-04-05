@@ -78,10 +78,17 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"time"
 	"unsafe"
 
 	"git.fd.io/govpp.git/adapter"
 	"github.com/fsnotify/fsnotify"
+)
+
+var (
+	// MaxWaitReady defines maximum duration before waiting for shared memory
+	// segment times out
+	MaxWaitReady = time.Second * 15
 )
 
 const (
@@ -173,16 +180,15 @@ func (a *vppClient) SetMsgCallback(cb adapter.MsgCallback) {
 // WaitReady blocks until shared memory for sending
 // binary api calls is present on the file system.
 func (a *vppClient) WaitReady() error {
-	var path string
-
 	// join the path to the shared memory segment
+	var path string
 	if a.shmPrefix == "" {
 		path = filepath.Join(shmDir, vppShmFile)
 	} else {
 		path = filepath.Join(shmDir, a.shmPrefix+"-"+vppShmFile)
 	}
 
-	// check if file at the path exists
+	// check if file at the path already exists
 	if _, err := os.Stat(path); err == nil {
 		// file exists, we are ready
 		return nil
@@ -197,21 +203,26 @@ func (a *vppClient) WaitReady() error {
 	}
 	defer watcher.Close()
 
+	// start watching directory
 	if err := watcher.Add(shmDir); err != nil {
 		return err
 	}
 
 	for {
-		ev := <-watcher.Events
-		if ev.Name == path {
-			if (ev.Op & fsnotify.Create) == fsnotify.Create {
-				// file was created, we are ready
-				break
+		select {
+		case <-time.After(MaxWaitReady):
+			return fmt.Errorf("waiting for shared memory segment timed out (%s)", MaxWaitReady)
+		case e := <-watcher.Errors:
+			return e
+		case ev := <-watcher.Events:
+			if ev.Name == path {
+				if (ev.Op & fsnotify.Create) == fsnotify.Create {
+					// file was created, we are ready
+					return nil
+				}
 			}
 		}
 	}
-
-	return nil
 }
 
 //export go_msg_callback
