@@ -170,6 +170,7 @@ func isZero(stat adapter.Stat) bool {
 				}
 			}
 		}
+		return true
 	case adapter.CombinedCounterStat:
 		for _, ss := range s {
 			for _, sss := range ss {
@@ -178,6 +179,7 @@ func isZero(stat adapter.Stat) bool {
 				}
 			}
 		}
+		return true
 	}
-	return true
+	return false
 }
