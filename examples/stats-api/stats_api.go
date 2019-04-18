@@ -40,7 +40,7 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|errors|interfaces|nodes|system] <patterns>...\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|errors|interfaces|nodes|system|buffers] <patterns>...\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -52,7 +52,7 @@ func main() {
 
 	cmd := flag.Arg(0)
 	switch cmd {
-	case "", "ls", "dump", "errors", "interfaces", "nodes", "system":
+	case "", "ls", "dump", "errors", "interfaces", "nodes", "system", "buffers":
 	default:
 		flag.Usage()
 	}
@@ -79,16 +79,21 @@ func main() {
 			log.Fatalln("getting system stats failed:", err)
 		}
 		fmt.Printf("System stats: %+v\n", stats)
+
 	case "nodes":
 		fmt.Println("Listing node stats..")
 		stats, err := c.GetNodeStats()
 		if err != nil {
 			log.Fatalln("getting node stats failed:", err)
 		}
-		for _, iface := range stats.Nodes {
-			fmt.Printf(" - %+v\n", iface)
+		for _, node := range stats.Nodes {
+			if node.Calls == 0 && node.Suspends == 0 && node.Clocks == 0 && node.Vectors == 0 && skipZeros {
+				continue
+			}
+			fmt.Printf(" - %+v\n", node)
 		}
 		fmt.Printf("Listed %d node counters\n", len(stats.Nodes))
+
 	case "interfaces":
 		fmt.Println("Listing interface stats..")
 		stats, err := c.GetInterfaceStats()
@@ -99,6 +104,7 @@ func main() {
 			fmt.Printf(" - %+v\n", iface)
 		}
 		fmt.Printf("Listed %d interface counters\n", len(stats.Interfaces))
+
 	case "errors":
 		fmt.Printf("Listing error stats.. %s\n", strings.Join(patterns, " "))
 		stats, err := c.GetErrorStats(patterns...)
@@ -114,6 +120,14 @@ func main() {
 			n++
 		}
 		fmt.Printf("Listed %d (%d) error counters\n", n, len(stats.Errors))
+
+	case "buffers":
+		stats, err := c.GetBufferStats()
+		if err != nil {
+			log.Fatalln("getting buffer stats failed:", err)
+		}
+		fmt.Printf("Buffer stats: %+v\n", stats)
+
 	case "dump":
 		dumpStats(client, patterns, skipZeros)
 	default:
