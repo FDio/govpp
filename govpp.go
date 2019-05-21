@@ -15,10 +15,11 @@
 package govpp
 
 import (
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/vppapiclient"
-	"git.fd.io/govpp.git/core"
 	"time"
+
+	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/adapter/socketclient"
+	"git.fd.io/govpp.git/core"
 )
 
 var (
@@ -26,9 +27,9 @@ var (
 	vppAdapter adapter.VppAPI
 )
 
-func getVppAdapter(shm string) adapter.VppAPI {
+func getVppAdapter(addr string) adapter.VppAPI {
 	if vppAdapter == nil {
-		vppAdapter = vppapiclient.NewVppClient(shm)
+		vppAdapter = socketclient.NewVppClient(addr)
 	}
 	return vppAdapter
 }
