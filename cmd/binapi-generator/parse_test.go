@@ -32,34 +32,63 @@ func TestSizeOfType(t *testing.T) {
 		input   Type
 		expsize int
 	}{
-		{name: "basic1",
-			input: Type{Fields: []Field{
-				{Type: "u8"},
-			}},
+		{
+			name: "basic1",
+			input: Type{
+				Fields: []Field{
+					{Type: "u8"},
+				},
+			},
 			expsize: 1,
 		},
-		{name: "basic2",
-			input: Type{Fields: []Field{
-				{Type: "u8", Length: 4},
-			}},
+		{
+			name: "basic2",
+			input: Type{
+				Fields: []Field{
+					{Type: "u8", Length: 4},
+				},
+			},
 			expsize: 4,
 		},
-		{name: "basic3",
-			input: Type{Fields: []Field{
-				{Type: "u8", Length: 16},
-			}},
+		{
+			name: "basic3",
+			input: Type{
+				Fields: []Field{
+					{Type: "u8", Length: 16},
+				},
+			},
 			expsize: 16,
 		},
-		{name: "invalid1",
-			input: Type{Fields: []Field{
-				{Type: "x", Length: 16},
-			}},
+		{
+			name: "withEnum",
+			input: Type{
+				Fields: []Field{
+					{Type: "u16"},
+					{Type: "vl_api_myenum_t"},
+				},
+			},
+			expsize: 6,
+		},
+		{
+			name: "invalid1",
+			input: Type{
+				Fields: []Field{
+					{Type: "x", Length: 16},
+				},
+			},
 			expsize: 0,
 		},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			size := getSizeOfType(&test.input)
+			ctx := &context{
+				packageData: &Package{
+					Enums: []Enum{
+						{Name: "myenum", Type: "u32"},
+					},
+				},
+			}
+			size := getSizeOfType(ctx, &test.input)
 			if size != test.expsize {
 				t.Errorf("expected %d, got %d", test.expsize, size)
 			}
