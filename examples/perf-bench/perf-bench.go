@@ -30,7 +30,7 @@ import (
 	"git.fd.io/govpp.git/adapter/vppapiclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/bin_api/vpe"
+	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 const (

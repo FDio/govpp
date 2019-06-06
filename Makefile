@@ -50,7 +50,7 @@ generate-binapi:
 
 generate: install
 	@echo "=> generating code"
-	cd examples && go generate ./...
+	cd examples && go generate -x ./...
 
 update-vppapi:
 	@echo "=> updating API JSON files using installed VPP ${VPP_VERSION}"

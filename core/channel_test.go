@@ -19,10 +19,10 @@ import (
 	"time"
 
 	"git.fd.io/govpp.git/adapter/mock"
-	"git.fd.io/govpp.git/examples/bin_api/interfaces"
-	"git.fd.io/govpp.git/examples/bin_api/memif"
-	"git.fd.io/govpp.git/examples/bin_api/tap"
-	"git.fd.io/govpp.git/examples/bin_api/vpe"
+	"git.fd.io/govpp.git/examples/binapi/interfaces"
+	"git.fd.io/govpp.git/examples/binapi/memif"
+	"git.fd.io/govpp.git/examples/binapi/tap"
+	"git.fd.io/govpp.git/examples/binapi/vpe"
 
 	"git.fd.io/govpp.git/api"
 	. "github.com/onsi/gomega"

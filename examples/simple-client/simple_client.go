@@ -26,9 +26,9 @@ import (
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/bin_api/acl"
-	"git.fd.io/govpp.git/examples/bin_api/interfaces"
-	"git.fd.io/govpp.git/examples/bin_api/ip"
+	"git.fd.io/govpp.git/examples/binapi/acl"
+	"git.fd.io/govpp.git/examples/binapi/interfaces"
+	"git.fd.io/govpp.git/examples/binapi/ip"
 )
 
 func main() {

@@ -21,7 +21,7 @@ import (
 	"log"
 	"net"
 
-	"git.fd.io/govpp.git/examples/bin_api/ip"
+	"git.fd.io/govpp.git/examples/binapi/ip"
 	"github.com/lunixbochs/struc"
 )
 
