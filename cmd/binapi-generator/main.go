@@ -62,9 +62,17 @@ func main() {
 		}
 	} else {
 		// process all files in specified directory
+		dir, err := filepath.Abs(*inputDir)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "ERROR: invalid input directory: %v\n", err)
+			os.Exit(1)
+		}
 		files, err := getInputFiles(*inputDir)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "ERROR: code generation failed: %v\n", err)
+			fmt.Fprintf(os.Stderr, "ERROR: problem getting files from input directory: %v\n", err)
+			os.Exit(1)
+		} else if len(files) == 0 {
+			fmt.Fprintf(os.Stderr, "ERROR: no input files found in input directory: %v\n", dir)
 			os.Exit(1)
 		}
 		for _, file := range files {
@@ -134,7 +142,7 @@ func generateFromFile(inputFile, outputDir string) error {
 
 	// create output directory
 	packageDir := filepath.Dir(ctx.outputFile)
-	if err := os.MkdirAll(packageDir, 06); err != nil {
+	if err := os.MkdirAll(packageDir, 0775); err != nil {
 		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
 	}
 	// write generated code to output file

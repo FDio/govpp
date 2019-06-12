@@ -1006,7 +1006,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in interface module.
 type Service interface {
 	DumpSwInterface(ctx context.Context, in *SwInterfaceDump) ([]*SwInterfaceDetails, error)
 	DumpSwInterfaceRxPlacement(ctx context.Context, in *SwInterfaceRxPlacementDump) ([]*SwInterfaceRxPlacementDetails, error)

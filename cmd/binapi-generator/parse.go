@@ -274,9 +274,9 @@ func parseUnion(ctx *context, unionNode *jsongo.JSONNode) (*Union, error) {
 	if !ok {
 		return nil, fmt.Errorf("union name is %T, not a string", unionNode.At(0).Get())
 	}
-	unionCRC, ok := unionNode.At(unionNode.Len() - 1).At(crcField).Get().(string)
-	if !ok {
-		return nil, fmt.Errorf("union crc invalid or missing")
+	var unionCRC string
+	if unionNode.At(unionNode.Len()-1).GetType() == jsongo.TypeMap {
+		unionCRC = unionNode.At(unionNode.Len() - 1).At(crcField).Get().(string)
 	}
 
 	union := Union{
@@ -284,8 +284,8 @@ func parseUnion(ctx *context, unionNode *jsongo.JSONNode) (*Union, error) {
 		CRC:  unionCRC,
 	}
 
-	// loop through union fields, skip first (name) and last (crc)
-	for j := 1; j < unionNode.Len()-1; j++ {
+	// loop through union fields, skip first (name)
+	for j := 1; j < unionNode.Len(); j++ {
 		if unionNode.At(j).GetType() == jsongo.TypeArray {
 			fieldNode := unionNode.At(j)
 
@@ -311,9 +311,9 @@ func parseType(ctx *context, typeNode *jsongo.JSONNode) (*Type, error) {
 	if !ok {
 		return nil, fmt.Errorf("type name is %T, not a string", typeNode.At(0).Get())
 	}
-	typeCRC, ok := typeNode.At(typeNode.Len() - 1).At(crcField).Get().(string)
-	if !ok {
-		return nil, fmt.Errorf("type crc invalid or missing")
+	var typeCRC string
+	if lastField := typeNode.At(typeNode.Len() - 1); lastField.GetType() == jsongo.TypeMap {
+		typeCRC = lastField.At(crcField).Get().(string)
 	}
 
 	typ := Type{
@@ -321,8 +321,8 @@ func parseType(ctx *context, typeNode *jsongo.JSONNode) (*Type, error) {
 		CRC:  typeCRC,
 	}
 
-	// loop through type fields, skip first (name) and last (crc)
-	for j := 1; j < typeNode.Len()-1; j++ {
+	// loop through type fields, skip first (name)
+	for j := 1; j < typeNode.Len(); j++ {
 		if typeNode.At(j).GetType() == jsongo.TypeArray {
 			fieldNode := typeNode.At(j)
 

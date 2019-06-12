@@ -390,7 +390,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in vpe module.
 type Service interface {
 	AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error)
 	Cli(ctx context.Context, in *Cli) (*CliReply, error)

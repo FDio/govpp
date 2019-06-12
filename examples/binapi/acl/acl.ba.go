@@ -737,7 +737,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in acl module.
 type Service interface {
 	DumpACL(ctx context.Context, in *ACLDump) ([]*ACLDetails, error)
 	DumpACLInterfaceEtypeWhitelist(ctx context.Context, in *ACLInterfaceEtypeWhitelistDump) ([]*ACLInterfaceEtypeWhitelistDetails, error)

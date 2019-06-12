@@ -188,7 +188,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in af_packet module.
 type Service interface {
 	DumpAfPacket(ctx context.Context, in *AfPacketDump) ([]*AfPacketDetails, error)
 	AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error)

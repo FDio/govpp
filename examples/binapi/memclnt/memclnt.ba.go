@@ -474,7 +474,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in memclnt module.
 type Service interface {
 	APIVersions(ctx context.Context, in *APIVersions) (*APIVersionsReply, error)
 	GetFirstMsgID(ctx context.Context, in *GetFirstMsgID) (*GetFirstMsgIDReply, error)

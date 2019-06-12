@@ -2073,7 +2073,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in ip module.
 type Service interface {
 	DumpIP6Fib(ctx context.Context, in *IP6FibDump) ([]*IP6FibDetails, error)
 	DumpIP6Mfib(ctx context.Context, in *IP6MfibDump) ([]*IP6MfibDetails, error)

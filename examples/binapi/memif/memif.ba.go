@@ -238,7 +238,7 @@ func AllMessages() []api.Message {
 	}
 }
 
-// Service represents services in VPP binary API.
+// Service represents VPP binary API services in memif module.
 type Service interface {
 	DumpMemif(ctx context.Context, in *MemifDump) ([]*MemifDetails, error)
 	DumpMemifSocketFilename(ctx context.Context, in *MemifSocketFilenameDump) ([]*MemifSocketFilenameDetails, error)

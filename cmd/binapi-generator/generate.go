@@ -256,7 +256,7 @@ func generateImports(ctx *context, w io.Writer) {
 // generateComment writes generated comment for the object into w
 func generateComment(ctx *context, w io.Writer, goName string, vppName string, objKind string) {
 	if objKind == "service" {
-		fmt.Fprintf(w, "// %s represents VPP binary API services in %s module.\n", ctx.moduleName, goName)
+		fmt.Fprintf(w, "// %s represents VPP binary API services in %s module.\n", goName, ctx.moduleName)
 	} else {
 		fmt.Fprintf(w, "// %s represents VPP binary API %s '%s':\n", goName, objKind, vppName)
 	}
@@ -497,7 +497,9 @@ func generateUnion(ctx *context, w io.Writer, union *Union) {
 	generateTypeNameGetter(w, name, union.Name)
 
 	// generate CRC getter
-	generateCrcGetter(w, name, union.CRC)
+	if union.CRC != "" {
+		generateCrcGetter(w, name, union.CRC)
+	}
 
 	// generate getters for fields
 	for _, field := range union.Fields {
@@ -589,7 +591,9 @@ func generateType(ctx *context, w io.Writer, typ *Type) {
 	generateTypeNameGetter(w, name, typ.Name)
 
 	// generate CRC getter
-	generateCrcGetter(w, name, typ.CRC)
+	if typ.CRC != "" {
+		generateCrcGetter(w, name, typ.CRC)
+	}
 
 	fmt.Fprintln(w)
 }
