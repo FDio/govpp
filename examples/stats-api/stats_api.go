@@ -22,6 +22,7 @@ import (
 	"strings"
 
 	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/adapter/vppapiclient"
 	"git.fd.io/govpp.git/core"
 )
@@ -34,7 +35,8 @@ import (
 // ------------------------------------------------------------------
 
 var (
-	statsSocket = flag.String("socket", vppapiclient.DefaultStatSocket, "VPP stats segment socket")
+	statsSocket = flag.String("socket", adapter.DefaultStatsSocket, "Path to VPP stats socket")
+	goclient    = flag.Bool("goclient", true, "Use pure Go client for stats API")
 	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
 )
 
@@ -62,7 +64,12 @@ func main() {
 		patterns = flag.Args()[1:]
 	}
 
-	client := vppapiclient.NewStatClient(*statsSocket)
+	var client adapter.StatsAPI
+	if *goclient {
+		client = statsclient.NewStatsClient(*statsSocket)
+	} else {
+		client = vppapiclient.NewStatClient(*statsSocket)
+	}
 
 	fmt.Printf("Connecting to stats socket: %s\n", *statsSocket)
 

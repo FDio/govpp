@@ -16,6 +16,14 @@
   revision = "4da3e2cfbabc9f751898f250b49f2439785783a1"
 
 [[projects]]
+  branch = "master"
+  digest = "1:ea797b536b154f62d2e1c49b61d5a1088782111563eb59837ff2b83fd2a65184"
+  name = "github.com/ftrvxmtrx/fd"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "c6d800382fff6dc1412f34269f71b7f83bd059ad"
+
+[[projects]]
   digest = "1:81259d6c2b9aa336c627a31074078d5473788c1f54a373e4392d4e722716d74d"
   name = "github.com/google/gopacket"
   packages = [
@@ -90,6 +98,7 @@
   input-imports = [
     "github.com/bennyscetbun/jsongo",
     "github.com/fsnotify/fsnotify",
+    "github.com/ftrvxmtrx/fd",
     "github.com/google/gopacket",
     "github.com/google/gopacket/layers",
     "github.com/lunixbochs/struc",
