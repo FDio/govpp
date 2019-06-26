@@ -17,6 +17,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -24,6 +25,7 @@ import (
 	"strings"
 
 	"git.fd.io/govpp.git"
+	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/binapi/acl"
@@ -31,11 +33,17 @@ import (
 	"git.fd.io/govpp.git/examples/binapi/ip"
 )
 
+var (
+	sockAddr = flag.String("sock", socketclient.DefaultSocketName, "Path to VPP binary API socket file")
+)
+
 func main() {
-	fmt.Println("Starting simple VPP client...")
+	flag.Parse()
+
+	fmt.Println("Starting simple client example")
 
 	// connect to VPP
-	conn, conev, err := govpp.AsyncConnect("", core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
+	conn, conev, err := govpp.AsyncConnect(*sockAddr, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	if err != nil {
 		log.Fatalln("ERROR:", err)
 	}
@@ -44,14 +52,14 @@ func main() {
 	select {
 	case e := <-conev:
 		if e.State != core.Connected {
-			log.Fatalf("failed to connect: %v", e.Error)
+			log.Fatalln("ERROR: connecting to VPP failed:", err)
 		}
 	}
 
 	// create an API channel that will be used in the examples
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
-		log.Fatalln("ERROR:", err)
+		log.Fatalln("ERROR: creating channel failed:", err)
 	}
 	defer ch.Close()
 
@@ -115,10 +123,6 @@ func aclConfig(ch api.Channel) {
 		fmt.Println("ERROR:", err)
 		return
 	}
-	if reply.Retval != 0 {
-		fmt.Println("Retval:", reply.Retval)
-		return
-	}
 
 	fmt.Printf("ACL add replace reply: %+v\n", reply)
 
@@ -154,6 +158,7 @@ func interfaceDump(ch api.Channel) {
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
+			return
 		}
 		ifaceName := strings.TrimFunc(string(msg.InterfaceName), func(r rune) bool {
 			return r == 0x00
@@ -178,6 +183,7 @@ func ipAddressDump(ch api.Channel) {
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
+			return
 		}
 		fmt.Printf("ip address details: %d %+v\n", msg.SwIfIndex, msg)
 	}
@@ -214,6 +220,7 @@ func ipUnnumberedDump(ch api.Channel) {
 		}
 		if err != nil {
 			fmt.Println("ERROR:", err)
+			return
 		}
 		fmt.Printf("IP unnumbered details: %+v\n", msg)
 	}

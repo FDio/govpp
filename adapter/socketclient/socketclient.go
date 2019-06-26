@@ -44,7 +44,7 @@ var (
 	// DefaultConnectTimeout is default timeout for connecting
 	DefaultConnectTimeout = time.Second * 3
 	// DefaultDisconnectTimeout is default timeout for discconnecting
-	DefaultDisconnectTimeout = time.Second
+	DefaultDisconnectTimeout = time.Millisecond * 100
 	// MaxWaitReady defines maximum duration before waiting for socket file
 	// times out
 	MaxWaitReady = time.Second * 15

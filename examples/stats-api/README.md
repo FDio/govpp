@@ -6,8 +6,10 @@ This example demonstrates how to retrieve statistics from VPP using [the new Sta
 
 The following requirements are required to run this example:
 
-- install **VPP 18.10+**
-- enable stats in VPP:
+- install **VPP 18.10+** (VPP 19.04+ for goclient)
+- enable stats in VPP
+
+To enable stats add following section to you VPP config:
 
   ```sh
   statseg {
@@ -16,7 +18,6 @@ The following requirements are required to run this example:
   }
   ```
   > The [default socket](https://wiki.fd.io/view/VPP/Command-line_Arguments#.22statseg.22_parameters) is located at `/run/vpp/stats.sock`.
-- run the VPP (ideally with some traffic)
 
 ## Running example
 

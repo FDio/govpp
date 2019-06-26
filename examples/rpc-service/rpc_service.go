@@ -19,29 +19,38 @@ package main
 import (
 	"bytes"
 	"context"
+	"flag"
 	"fmt"
+	"io"
 	"log"
 
 	"git.fd.io/govpp.git"
+	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
+var (
+	sockAddr = flag.String("sock", socketclient.DefaultSocketName, "Path to VPP binary API socket file")
+)
+
 func main() {
-	fmt.Println("Starting VPP service client...")
+	flag.Parse()
+
+	fmt.Println("Starting RPC service example")
 
 	// connect to VPP
-	conn, err := govpp.Connect("")
+	conn, err := govpp.Connect(*sockAddr)
 	if err != nil {
-		log.Fatalln("failed to connect:", err)
+		log.Fatalln("ERROR: connecting to VPP failed:", err)
 	}
 	defer conn.Disconnect()
 
-	// create an API channel
+	// create a channel
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
-		log.Fatalln("failed to create channel:", err)
+		log.Fatalln("ERROR: creating channel failed:", err)
 	}
 	defer ch.Close()
 
@@ -51,11 +60,11 @@ func main() {
 
 // showVersion shows an example of simple request with services.
 func showVersion(ch api.Channel) {
-	c := vpe.NewService(ch)
+	c := vpe.NewServiceClient(ch)
 
 	version, err := c.ShowVersion(context.Background(), &vpe.ShowVersion{})
 	if err != nil {
-		log.Fatalln("ShowVersion failed:", err)
+		log.Fatalln("ERROR: ShowVersion failed:", err)
 	}
 
 	fmt.Printf("Version: %v\n", version.Version)
@@ -63,15 +72,22 @@ func showVersion(ch api.Channel) {
 
 // interfaceDump shows an example of multi request with services.
 func interfaceDump(ch api.Channel) {
-	c := interfaces.NewService(ch)
+	c := interfaces.NewServiceClient(ch)
 
-	ifaces, err := c.DumpSwInterface(context.Background(), &interfaces.SwInterfaceDump{})
+	stream, err := c.DumpSwInterface(context.Background(), &interfaces.SwInterfaceDump{})
 	if err != nil {
-		log.Fatalln("DumpSwInterface failed:", err)
+		log.Fatalln("ERROR: DumpSwInterface failed:", err)
 	}
 
-	fmt.Printf("Listing %d interfaces:\n", len(ifaces))
-	for _, d := range ifaces {
-		fmt.Printf("- interface: %s\n", bytes.Trim(d.InterfaceName, "\x00"))
+	fmt.Println("Dumping interfaces")
+	for {
+		iface, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalln("ERROR: DumpSwInterface failed:", err)
+		}
+		fmt.Printf("- interface: %s\n", bytes.Trim(iface.InterfaceName, "\x00"))
 	}
 }

@@ -36,8 +36,9 @@ import (
 
 var (
 	statsSocket = flag.String("socket", adapter.DefaultStatsSocket, "Path to VPP stats socket")
-	goclient    = flag.Bool("goclient", true, "Use pure Go client for stats API")
 	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
+
+	goclient = flag.Bool("goclient", false, "Use pure Go client for stats API")
 )
 
 func init() {

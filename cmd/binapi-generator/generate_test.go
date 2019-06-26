@@ -85,7 +85,7 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 func TestGetContext(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	result, err := getContext("testdata/af_packet.api.json", outDir)
+	result, err := newContext("testdata/af_packet.api.json", outDir)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
 	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/af_packet/af_packet.ba.go"))
@@ -94,7 +94,7 @@ func TestGetContext(t *testing.T) {
 func TestGetContextNoJsonFile(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	result, err := getContext("testdata/input.txt", outDir)
+	result, err := newContext("testdata/input.txt", outDir)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 	Expect(result).To(BeNil())
@@ -103,7 +103,7 @@ func TestGetContextNoJsonFile(t *testing.T) {
 func TestGetContextInterfaceJson(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	result, err := getContext("testdata/ip.api.json", outDir)
+	result, err := newContext("testdata/ip.api.json", outDir)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
 	Expect(result.outputFile)
