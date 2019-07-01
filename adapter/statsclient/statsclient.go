@@ -120,10 +120,14 @@ func (c *StatsClient) ListStats(patterns ...string) (statNames []string, err err
 
 		nul := bytes.IndexByte(dirEntry.name[:], '\x00')
 		if nul < 0 {
-			Log.Warnf("no zero byte found for: %q", dirEntry.name[:])
+			Log.Debugf("no zero byte found for: %q", dirEntry.name[:])
 			continue
 		}
 		name := string(dirEntry.name[:nul])
+		if name == "" {
+			Log.Debugf("entry with empty name found (%d)", i)
+			continue
+		}
 
 		Log.Debugf(" %80q (type: %v, data: %d, offset: %d) ", name, dirEntry.directoryType, dirEntry.unionData, dirEntry.offsetVector)
 
@@ -161,7 +165,27 @@ func (c *StatsClient) DumpStats(patterns ...string) (entries []*adapter.StatEntr
 		offset := uintptr(i) * unsafe.Sizeof(statSegDirectoryEntry{})
 		dirEntry := (*statSegDirectoryEntry)(add(unsafe.Pointer(&c.sharedHeader[dirOffset]), offset))
 
-		entry := c.copyData(dirEntry)
+		nul := bytes.IndexByte(dirEntry.name[:], '\x00')
+		if nul < 0 {
+			Log.Debugf("no zero byte found for: %q", dirEntry.name[:])
+			continue
+		}
+		name := string(dirEntry.name[:nul])
+		if name == "" {
+			Log.Debugf("entry with empty name found (%d)", i)
+			continue
+		}
+
+		Log.Debugf(" - %s (type: %v, data: %v, offset: %v) ", name, dirEntry.directoryType, dirEntry.unionData, dirEntry.offsetVector)
+
+		entry := adapter.StatEntry{
+			Name: name,
+			Type: adapter.StatType(dirEntry.directoryType),
+			Data: c.copyData(dirEntry),
+		}
+
+		Log.Debugf("\tentry data: %#v", entry.Data)
+
 		if nameMatches(entry.Name, patterns) {
 			entries = append(entries, &entry)
 		}
@@ -174,22 +198,10 @@ func (c *StatsClient) DumpStats(patterns ...string) (entries []*adapter.StatEntr
 	return entries, nil
 }
 
-func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapter.StatEntry) {
-	name := dirEntry.name[:]
-	if nul := bytes.IndexByte(name, '\x00'); nul < 0 {
-		Log.Warnf("no zero byte found for: %q", dirEntry.name[:])
-	} else {
-		name = dirEntry.name[:nul]
-	}
-
-	statEntry.Name = string(name)
-	statEntry.Type = adapter.StatType(dirEntry.directoryType)
-
-	Log.Debugf(" - %s (type: %v, data: %v, offset: %v) ", statEntry.Name, statEntry.Type, dirEntry.unionData, dirEntry.offsetVector)
-
-	switch statEntry.Type {
+func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) adapter.Stat {
+	switch typ := adapter.StatType(dirEntry.directoryType); typ {
 	case adapter.ScalarIndex:
-		statEntry.Data = adapter.ScalarStat(dirEntry.unionData)
+		return adapter.ScalarStat(dirEntry.unionData)
 
 	case adapter.ErrorIndex:
 		_, errOffset, _ := c.readOffsets()
@@ -203,7 +215,7 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 			val := *(*adapter.Counter)(add(unsafe.Pointer(&c.sharedHeader[0]), offset))
 			errData += val
 		}
-		statEntry.Data = adapter.ErrorStat(errData)
+		return adapter.ErrorStat(errData)
 
 	case adapter.SimpleCounterVector:
 		if dirEntry.unionData == 0 {
@@ -229,7 +241,7 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 				data[i] = append(data[i], val)
 			}
 		}
-		statEntry.Data = adapter.SimpleCounterStat(data)
+		return adapter.SimpleCounterStat(data)
 
 	case adapter.CombinedCounterVector:
 		if dirEntry.unionData == 0 {
@@ -255,7 +267,7 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 				data[i] = append(data[i], val)
 			}
 		}
-		statEntry.Data = adapter.CombinedCounterStat(data)
+		return adapter.CombinedCounterStat(data)
 
 	case adapter.NameVector:
 		if dirEntry.unionData == 0 {
@@ -269,7 +281,6 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 		nameVector := unsafe.Pointer(&c.sharedHeader[dirEntry.unionData]) // offset
 		vecLen := vectorLen(nameVector)
 		offsetVector := add(unsafe.Pointer(&c.sharedHeader[0]), uintptr(dirEntry.offsetVector))
-		fmt.Printf("vecLen: %v\n", vecLen)
 
 		data := make([]adapter.Name, vecLen)
 		for i := uint64(0); i < vecLen; i++ {
@@ -279,7 +290,6 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 				continue
 			}
 			nameVec := unsafe.Pointer(&c.sharedHeader[cb])
-			fmt.Printf("offsetVector: %v, cb: %v\n", offsetVector, cb)
 			vecLen2 := vectorLen(nameVec)
 
 			var nameStr []byte
@@ -292,15 +302,13 @@ func (c *StatsClient) copyData(dirEntry *statSegDirectoryEntry) (statEntry adapt
 			}
 			data[i] = adapter.Name(nameStr)
 		}
-		statEntry.Data = adapter.NameStat(data)
+		return adapter.NameStat(data)
 
 	default:
-		Log.Warnf("Unknown type %d for stat entry: %s", statEntry.Type, statEntry.Name)
+		Log.Warnf("Unknown type %d for stat entry: %q", dirEntry.directoryType, dirEntry.name)
 	}
 
-	Log.Debugf("\tentry data: %#v", statEntry.Data)
-
-	return statEntry
+	return nil
 }
 
 func nameMatches(name string, patterns []string) bool {

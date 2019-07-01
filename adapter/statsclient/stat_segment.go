@@ -119,7 +119,7 @@ func (c *statSegment) connect(sockName string) error {
 	// we try to provide fallback support by skipping it in header
 	if header.version > MaxVersion && header.inProgress > 1 && header.epoch == 0 {
 		h := c.readHeaderOld()
-		Log.Warnf("falling back to old stat segment header version: %+v", h)
+		Log.Infof("statsclient: falling back to old stat segment version (VPP 19.04): %+v", h)
 		c.oldHeader = true
 	}
 
