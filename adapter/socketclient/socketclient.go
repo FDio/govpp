@@ -36,8 +36,8 @@ import (
 )
 
 const (
-	// DefaultSocketName is default VPP API socket file name
-	DefaultSocketName = "/run/vpp-api.sock"
+	// DefaultSocketName is default VPP API socket file path.
+	DefaultSocketName = adapter.DefaultBinapiSocket
 )
 
 var (
@@ -58,7 +58,8 @@ var (
 	// DebugMsgIds is global variable that determines debug mode for msg ids
 	DebugMsgIds = os.Getenv("DEBUG_GOVPP_SOCKMSG") != ""
 
-	Log = logger.New() // global logger
+	// Log is global logger
+	Log = logger.New()
 )
 
 // init initializes global logger, which logs debug level messages to stdout.
@@ -66,6 +67,7 @@ func init() {
 	Log.Out = os.Stdout
 	if Debug {
 		Log.Level = logger.DebugLevel
+		Log.Debug("govpp/socketclient: enabled debug mode")
 	}
 }
 
