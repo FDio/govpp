@@ -6,7 +6,7 @@ This example demonstrates how to retrieve statistics from VPP using [the new Sta
 
 The following requirements are required to run this example:
 
-- install **VPP 18.10+** (VPP 19.04+ for goclient)
+- install VPP **18.10+** (VPP 19.04+ for statsclient)
 - enable stats in VPP
 
 To enable stats add following section to you VPP config:

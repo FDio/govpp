@@ -35,10 +35,9 @@ import (
 // ------------------------------------------------------------------
 
 var (
-	statsSocket = flag.String("socket", adapter.DefaultStatsSocket, "Path to VPP stats socket")
+	statsSocket = flag.String("socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
-
-	goclient = flag.Bool("goclient", false, "Use pure Go client for stats API")
+	oldclient   = flag.Bool("oldclient", false, "Use old client for stats API (vppapiclient)")
 )
 
 func init() {
@@ -66,10 +65,10 @@ func main() {
 	}
 
 	var client adapter.StatsAPI
-	if *goclient {
-		client = statsclient.NewStatsClient(*statsSocket)
-	} else {
+	if *oldclient {
 		client = vppapiclient.NewStatClient(*statsSocket)
+	} else {
+		client = statsclient.NewStatsClient(*statsSocket)
 	}
 
 	fmt.Printf("Connecting to stats socket: %s\n", *statsSocket)
@@ -138,6 +137,7 @@ func main() {
 
 	case "dump":
 		dumpStats(client, patterns, skipZeros)
+
 	default:
 		listStats(client, patterns)
 	}
