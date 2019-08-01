@@ -116,6 +116,14 @@ func getInputFiles(inputDir string, deep int) (files []string, err error) {
 	return files, nil
 }
 
+func parseInputJSON(inputData []byte) (*jsongo.JSONNode, error) {
+	jsonRoot := new(jsongo.JSONNode)
+	if err := json.Unmarshal(inputData, jsonRoot); err != nil {
+		return nil, fmt.Errorf("unmarshalling JSON failed: %v", err)
+	}
+	return jsonRoot, nil
+}
+
 // generateFromFile generates Go package from one input JSON file
 func generateFromFile(inputFile, outputDir string) error {
 	// create generator context
@@ -142,9 +150,9 @@ func generateFromFile(inputFile, outputDir string) error {
 		return fmt.Errorf("reading input file %s failed: %v", ctx.inputFile, err)
 	}
 	// parse JSON data into objects
-	jsonRoot := new(jsongo.JSONNode)
-	if err := json.Unmarshal(ctx.inputData, jsonRoot); err != nil {
-		return fmt.Errorf("unmarshalling JSON failed: %v", err)
+	jsonRoot, err := parseInputJSON(ctx.inputData)
+	if err != nil {
+		return fmt.Errorf("parsing JSON input failed: %v", err)
 	}
 	ctx.packageData, err = parsePackage(ctx, jsonRoot)
 	if err != nil {

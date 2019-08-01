@@ -16,6 +16,7 @@ package main
 
 import (
 	"bufio"
+	"io/ioutil"
 	"os"
 	"testing"
 
@@ -24,7 +25,7 @@ import (
 
 func TestGetInputFiles(t *testing.T) {
 	RegisterTestingT(t)
-	result, err := getInputFiles("testdata")
+	result, err := getInputFiles("testdata", 1)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).To(HaveLen(3))
 	for _, file := range result {
@@ -34,7 +35,7 @@ func TestGetInputFiles(t *testing.T) {
 
 func TestGetInputFilesError(t *testing.T) {
 	RegisterTestingT(t)
-	result, err := getInputFiles("nonexisting_directory")
+	result, err := getInputFiles("nonexisting_directory", 1)
 	Expect(err).Should(HaveOccurred())
 	Expect(result).To(BeNil())
 }
@@ -112,9 +113,9 @@ func TestGetContextInterfaceJson(t *testing.T) {
 
 func TestReadJson(t *testing.T) {
 	RegisterTestingT(t)
-	inputData, err := readFile("testdata/af_packet.api.json")
+	inputData, err := ioutil.ReadFile("testdata/af_packet.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	result, err := parseJSON(inputData)
+	result, err := parseInputJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
 	Expect(result.Len()).To(BeEquivalentTo(5))
@@ -122,9 +123,9 @@ func TestReadJson(t *testing.T) {
 
 func TestReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
-	inputData, err := readFile("testdata/input-read-json-error.json")
+	inputData, err := ioutil.ReadFile("testdata/input-read-json-error.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	result, err := parseJSON(inputData)
+	result, err := parseInputJSON(inputData)
 	Expect(err).Should(HaveOccurred())
 	Expect(result).To(BeNil())
 }
@@ -136,9 +137,9 @@ func TestGeneratePackage(t *testing.T) {
 	testCtx.packageName = "test-package-name"
 
 	// prepare input/output output files
-	inputData, err := readFile("testdata/ip.api.json")
+	inputData, err := ioutil.ReadFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	jsonRoot, err := parseJSON(inputData)
+	jsonRoot, err := parseInputJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
 	Expect(err).ShouldNot(HaveOccurred())
@@ -161,9 +162,9 @@ func TestGenerateMessageType(t *testing.T) {
 	testCtx.packageName = "test-package-name"
 
 	// prepare input/output output files
-	inputData, err := readFile("testdata/ip.api.json")
+	inputData, err := ioutil.ReadFile("testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	jsonRoot, err := parseJSON(inputData)
+	jsonRoot, err := parseInputJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	outDir := "test_output_directory"
 	outFile, err := os.Create(outDir)
