@@ -1,0 +1,5 @@
+# libmemif
+libmemif/examples/gopacket/gopacket
+libmemif/examples/icmp-responder/icmp-responder
+libmemif/examples/jumbo-frames/jumbo-frames
+libmemif/examples/raw-data/raw-data

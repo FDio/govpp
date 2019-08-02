@@ -1,0 +1,30 @@
+dist: xenial
+services: docker
+
+language: go
+go:
+  - "1.12.x"
+
+go_import_path: git.fd.io/govpp.git
+
+env:
+  global:
+    - GO_BUILD_TAGS=novpp
+
+before_script:
+  - export VPP_IMG="ligato/vpp-base:latest"
+  - docker pull $VPP_IMG
+  - GO111MODULE=on go mod download
+
+script:
+  - make test
+  - make build
+  - make examples
+  - make gen-binapi-docker
+
+notifications:
+  slack:
+    rooms:
+      - ligato:QNOK2VgHH6k40T8nQxmSgRmo
+    on_success: change
+    on_failure: always

@@ -1,6 +1,8 @@
-.idea
+*~
 *.log
 *.out
+
+.idea/
 
 # cmds
 cmd/binapi-generator/binapi-generator
@@ -10,9 +12,4 @@ examples/perf-bench/perf-bench
 examples/simple-client/simple-client
 examples/stats-api/stats-api
 examples/union-example/union-example
-
-# extras
-extras/libmemif/examples/gopacket/gopacket
-extras/libmemif/examples/icmp-responder/icmp-responder
-extras/libmemif/examples/jumbo-frames/jumbo-frames
-extras/libmemif/examples/raw-data/raw-data
+examples/rpc-service/rpc-service

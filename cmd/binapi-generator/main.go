@@ -27,6 +27,8 @@ import (
 
 	"github.com/bennyscetbun/jsongo"
 	"github.com/sirupsen/logrus"
+
+	"git.fd.io/govpp.git/version"
 )
 
 var (
@@ -40,16 +42,40 @@ var (
 	includeBinapiNames = flag.Bool("include-binapi-names", false, "Include binary API names in struct tag.")
 
 	continueOnError = flag.Bool("continue-onerror", false, "Continue with next file on error.")
+	debugMode       = flag.Bool("debug", os.Getenv("GOVPP_DEBUG") != "", "Enable debug mode.")
 
-	debug = flag.Bool("debug", debugMode, "Enable debug mode.")
+	printVersion = flag.Bool("version", false, "Prints current version and exits.")
 )
-
-var debugMode = os.Getenv("DEBUG_BINAPI_GENERATOR") != ""
 
 func main() {
 	flag.Parse()
-	if *debug {
+
+	if flag.NArg() > 1 {
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	if flag.NArg() > 0 {
+		switch cmd := flag.Arg(0); cmd {
+		case "version":
+			fmt.Fprintln(os.Stdout, version.Verbose())
+			os.Exit(0)
+
+		default:
+			fmt.Fprintf(os.Stderr, "unknown command: %s\n", cmd)
+			flag.Usage()
+			os.Exit(2)
+		}
+	}
+
+	if *printVersion {
+		fmt.Fprintln(os.Stdout, version.Info())
+		os.Exit(0)
+	}
+
+	if *debugMode {
 		logrus.SetLevel(logrus.DebugLevel)
+		logrus.Info("debug mode enabled")
 	}
 
 	if err := run(*theInputFile, *theInputDir, *theOutputDir, *continueOnError); err != nil {
@@ -185,7 +211,7 @@ func generateFromFile(inputFile, outputDir string) error {
 }
 
 func logf(f string, v ...interface{}) {
-	if *debug {
+	if *debugMode {
 		logrus.Debugf(f, v...)
 	}
 }

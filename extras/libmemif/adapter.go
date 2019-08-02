@@ -34,7 +34,7 @@ import (
 #include <stdint.h>
 #include <string.h>
 #include <sys/eventfd.h>
-#include <libmemif.h>
+#include <libmemif.h> 	// <-- VPP must be installed!
 
 // Feature tests.
 #ifndef MEMIF_HAVE_CANCEL_POLL_EVENT
