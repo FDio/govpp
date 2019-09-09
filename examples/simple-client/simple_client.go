@@ -52,7 +52,7 @@ func main() {
 	select {
 	case e := <-conev:
 		if e.State != core.Connected {
-			log.Fatalln("ERROR: connecting to VPP failed:", err)
+			log.Fatalln("ERROR: connecting to VPP failed:", e.Error)
 		}
 	}
 

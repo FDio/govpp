@@ -38,21 +38,8 @@ import (
 const (
 	// DefaultSocketName is default VPP API socket file path.
 	DefaultSocketName = adapter.DefaultBinapiSocket
+	legacySocketName  = "/run/vpp-api.sock"
 )
-
-const socketMissing = `
-------------------------------------------------------------
- VPP binary API socket file %s is missing!
-
-  - is VPP running with socket for binapi enabled?
-  - is the correct socket name configured?
-
- To enable it add following section to your VPP config:
-   socksvr {
-     default
-   }
-------------------------------------------------------------
-`
 
 var (
 	// DefaultConnectTimeout is default timeout for connecting
@@ -83,6 +70,27 @@ func init() {
 		Log.Level = logger.DebugLevel
 		Log.Debug("govpp/socketclient: enabled debug mode")
 	}
+}
+
+const socketMissing = `
+------------------------------------------------------------
+ No socket file found at: %s
+ VPP binary API socket file is missing!
+
+  - is VPP running with socket for binapi enabled?
+  - is the correct socket name configured?
+
+ To enable it add following section to your VPP config:
+   socksvr {
+     default
+   }
+------------------------------------------------------------
+`
+
+var warnOnce sync.Once
+
+func (c *vppClient) printMissingSocketMsg() {
+	fmt.Fprintf(os.Stderr, socketMissing, c.sockAddr)
 }
 
 type vppClient struct {
@@ -129,6 +137,32 @@ func (c *vppClient) SetDisconnectTimeout(t time.Duration) {
 	c.disconnectTimeout = t
 }
 
+func (c *vppClient) SetMsgCallback(cb adapter.MsgCallback) {
+	Log.Debug("SetMsgCallback")
+	c.cb = cb
+}
+
+func (c *vppClient) checkLegacySocket() bool {
+	if c.sockAddr == legacySocketName {
+		return false
+	}
+	Log.Debugf("checking legacy socket: %s", legacySocketName)
+	// check if socket exists
+	if _, err := os.Stat(c.sockAddr); err == nil {
+		return false // socket exists
+	} else if !os.IsNotExist(err) {
+		return false // some other error occurred
+	}
+	// check if legacy socket exists
+	if _, err := os.Stat(legacySocketName); err == nil {
+		// legacy socket exists, update sockAddr
+		c.sockAddr = legacySocketName
+		return true
+	}
+	// no socket socket found
+	return false
+}
+
 // WaitReady checks socket file existence and waits for it if necessary
 func (c *vppClient) WaitReady() error {
 	// check if socket already exists
@@ -136,6 +170,10 @@ func (c *vppClient) WaitReady() error {
 		return nil // socket exists, we are ready
 	} else if !os.IsNotExist(err) {
 		return err // some other error occurred
+	}
+
+	if c.checkLegacySocket() {
+		return nil
 	}
 
 	// socket does not exist, watch for it
@@ -158,6 +196,9 @@ func (c *vppClient) WaitReady() error {
 	for {
 		select {
 		case <-timeout.C:
+			if c.checkLegacySocket() {
+				return nil
+			}
 			return fmt.Errorf("timeout waiting (%s) for socket file: %s", MaxWaitReady, c.sockAddr)
 
 		case e := <-watcher.Errors:
@@ -173,15 +214,12 @@ func (c *vppClient) WaitReady() error {
 	}
 }
 
-func (c *vppClient) SetMsgCallback(cb adapter.MsgCallback) {
-	Log.Debug("SetMsgCallback")
-	c.cb = cb
-}
-
 func (c *vppClient) Connect() error {
+	c.checkLegacySocket()
+
 	// check if socket exists
 	if _, err := os.Stat(c.sockAddr); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, socketMissing, c.sockAddr)
+		warnOnce.Do(c.printMissingSocketMsg)
 		return fmt.Errorf("VPP API socket file %s does not exist", c.sockAddr)
 	} else if err != nil {
 		return fmt.Errorf("VPP API socket error: %v", err)
