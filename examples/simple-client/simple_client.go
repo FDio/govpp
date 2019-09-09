@@ -20,7 +20,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"net"
 	"os"
 	"strings"
 
@@ -28,9 +27,9 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/acl"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/ip"
+	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 var (
@@ -42,13 +41,14 @@ func main() {
 
 	fmt.Println("Starting simple client example")
 
-	// connect to VPP
+	// connect to VPP asynchronously
 	conn, conev, err := govpp.AsyncConnect(*sockAddr, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	if err != nil {
 		log.Fatalln("ERROR:", err)
 	}
 	defer conn.Disconnect()
 
+	// wait for Connected event
 	select {
 	case e := <-conev:
 		if e.State != core.Connected {
@@ -63,85 +63,64 @@ func main() {
 	}
 	defer ch.Close()
 
-	// individual examples
-	aclVersion(ch)
-	aclConfig(ch)
-	aclDump(ch)
+	vppVersion(ch)
 
+	createLoopback(ch)
+	createLoopback(ch)
 	interfaceDump(ch)
+
+	addIPAddress(ch)
 	ipAddressDump(ch)
 
-	setIpUnnumbered(ch)
-	ipUnnumberedDump(ch)
-
 	interfaceNotifications(ch)
-}
 
-// aclVersion is the simplest API example - one empty request message and one reply message.
-func aclVersion(ch api.Channel) {
-	fmt.Println("ACL getting version")
-
-	req := &acl.ACLPluginGetVersion{}
-	reply := &acl.ACLPluginGetVersionReply{}
-
-	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-		fmt.Println("ERROR:", err)
+	if len(Errors) > 0 {
+		fmt.Printf("finished with %d errors\n", len(Errors))
+		os.Exit(1)
 	} else {
-		fmt.Printf("ACL version reply: %+v\n", reply)
+		fmt.Println("finished successfully")
 	}
 }
 
-// aclConfig is another simple API example - in this case, the request contains structured data.
-func aclConfig(ch api.Channel) {
-	fmt.Println("ACL adding replace")
+var Errors []error
 
-	req := &acl.ACLAddReplace{
-		ACLIndex: ^uint32(0),
-		Tag:      []byte("access list 1"),
-		R: []acl.ACLRule{
-			{
-				IsPermit:       1,
-				SrcIPAddr:      net.ParseIP("10.0.0.0").To4(),
-				SrcIPPrefixLen: 8,
-				DstIPAddr:      net.ParseIP("192.168.1.0").To4(),
-				DstIPPrefixLen: 24,
-				Proto:          6,
-			},
-			{
-				IsPermit:       1,
-				SrcIPAddr:      net.ParseIP("8.8.8.8").To4(),
-				SrcIPPrefixLen: 32,
-				DstIPAddr:      net.ParseIP("172.16.0.0").To4(),
-				DstIPPrefixLen: 16,
-				Proto:          6,
-			},
-		},
-	}
-	reply := &acl.ACLAddReplaceReply{}
+func logError(err error, msg string) {
+	fmt.Printf("ERROR: %s: %v\n", msg, err)
+	Errors = append(Errors, err)
+}
+
+// vppVersion is the simplest API example - it retrieves VPP version.
+func vppVersion(ch api.Channel) {
+	fmt.Println("Retrieving version")
+
+	req := &vpe.ShowVersion{}
+	reply := &vpe.ShowVersionReply{}
 
 	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-		fmt.Println("ERROR:", err)
+		logError(err, "retrieving version")
 		return
 	}
+	fmt.Printf("reply: %+v\n", reply)
 
-	fmt.Printf("ACL add replace reply: %+v\n", reply)
-
+	fmt.Printf("VPP version: %q\n", cleanString(reply.Version))
+	fmt.Println("ok")
 }
 
-// aclDump shows an example where SendRequest and ReceiveReply are not chained together.
-func aclDump(ch api.Channel) {
-	fmt.Println("Dumping ACL")
+// createLoopback sends request to create loopback interface.
+func createLoopback(ch api.Channel) {
+	fmt.Println("Creating loopback interface")
 
-	req := &acl.ACLDump{}
-	reply := &acl.ACLDetails{}
+	req := &interfaces.CreateLoopback{}
+	reply := &interfaces.CreateLoopbackReply{}
 
-	reqCtx := ch.SendRequest(req)
-
-	if err := reqCtx.ReceiveReply(reply); err != nil {
-		fmt.Println("ERROR:", err)
-	} else {
-		fmt.Printf("ACL details: %+v\n", reply)
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		logError(err, "creating loopback interface")
+		return
 	}
+	fmt.Printf("reply: %+v\n", reply)
+
+	fmt.Printf("loopback interface index: %v\n", reply.SwIfIndex)
+	fmt.Println("OK")
 }
 
 // interfaceDump shows an example of multipart request (multiple replies are expected).
@@ -149,81 +128,74 @@ func interfaceDump(ch api.Channel) {
 	fmt.Println("Dumping interfaces")
 
 	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
-
 	for {
 		msg := &interfaces.SwInterfaceDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
+		if err != nil {
+			logError(err, "dumping interfaces")
+			return
+		}
 		if stop {
 			break
 		}
-		if err != nil {
-			fmt.Println("ERROR:", err)
-			return
-		}
-		ifaceName := strings.TrimFunc(string(msg.InterfaceName), func(r rune) bool {
-			return r == 0x00
-		})
-		fmt.Printf("Interface %q: %+v\n", ifaceName, msg)
+		fmt.Printf(" - interface: %+v\n", msg)
 	}
+
+	fmt.Println("OK")
+}
+
+// addIPAddress sends request to add IP address to interface.
+func addIPAddress(ch api.Channel) {
+	fmt.Println("Adding IP address to interface")
+
+	req := &interfaces.SwInterfaceAddDelAddress{
+		SwIfIndex:     1,
+		IsAdd:         1,
+		Address:       []byte{10, 10, 0, 1},
+		AddressLength: 24,
+		/* below for 20.01-rc0
+		IsAdd:     true,
+		Prefix: interfaces.Prefix{
+			Address: interfaces.Address{
+				Af: interfaces.ADDRESS_IP4,
+				Un: interfaces.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, 1}),
+			},
+			Len: 24,
+		},*/
+	}
+	reply := &interfaces.SwInterfaceAddDelAddressReply{}
+
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		logError(err, "adding IP address to interface")
+		return
+	}
+	fmt.Printf("reply: %+v\n", reply)
+
+	fmt.Println("OK")
 }
 
 func ipAddressDump(ch api.Channel) {
 	fmt.Println("Dumping IP addresses")
 
 	req := &ip.IPAddressDump{
-		SwIfIndex: 1, //^uint32(0),
+		SwIfIndex: 1,
 	}
 	reqCtx := ch.SendMultiRequest(req)
 
 	for {
 		msg := &ip.IPAddressDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
+		if err != nil {
+			logError(err, "dumping IP addresses")
+			return
+		}
 		if stop {
 			break
 		}
-		if err != nil {
-			fmt.Println("ERROR:", err)
-			return
-		}
-		fmt.Printf("ip address details: %d %+v\n", msg.SwIfIndex, msg)
+		fmt.Printf(" - ip address: %+v\n", msg)
 	}
-}
 
-// aclDump shows an example where SendRequest and ReceiveReply are not chained together.
-func setIpUnnumbered(ch api.Channel) {
-	req := &interfaces.SwInterfaceSetUnnumbered{
-		SwIfIndex:           1,
-		UnnumberedSwIfIndex: 2,
-		IsAdd:               1,
-	}
-	reply := &interfaces.SwInterfaceSetUnnumberedReply{}
-
-	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-		fmt.Println("ERROR:", err)
-	} else {
-		fmt.Printf("%+v\n", reply)
-	}
-}
-
-func ipUnnumberedDump(ch api.Channel) {
-	fmt.Println("Dumping IP unnumbered")
-
-	reqCtx := ch.SendMultiRequest(&ip.IPUnnumberedDump{
-		SwIfIndex: ^uint32(0),
-	})
-
-	for {
-		msg := &ip.IPUnnumberedDetails{}
-		stop, err := reqCtx.ReceiveReply(msg)
-		if stop {
-			break
-		}
-		if err != nil {
-			fmt.Println("ERROR:", err)
-			return
-		}
-		fmt.Printf("IP unnumbered details: %+v\n", msg)
-	}
+	fmt.Println("OK")
 }
 
 // interfaceNotifications shows the usage of notification API. Note that for notifications,
@@ -237,7 +209,8 @@ func interfaceNotifications(ch api.Channel) {
 	// subscribe for specific notification message
 	sub, err := ch.SubscribeNotification(notifChan, &interfaces.SwInterfaceEvent{})
 	if err != nil {
-		panic(err)
+		logError(err, "subscribing to interface events")
+		return
 	}
 
 	// enable interface events in VPP
@@ -246,23 +219,28 @@ func interfaceNotifications(ch api.Channel) {
 		EnableDisable: 1,
 	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
 	if err != nil {
-		panic(err)
+		logError(err, "enabling interface events")
+		return
 	}
 
 	// generate some events in VPP
 	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex:   0,
-		AdminUpDown: 0,
+		SwIfIndex: 1,
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
 	if err != nil {
-		panic(err)
+		logError(err, "setting interface flags")
+		return
 	}
 	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex:   0,
+		SwIfIndex:   1,
 		AdminUpDown: 1,
+		/* below for 20.01-rc0
+		AdminUpDown: true,
+		Flags:     interfaces.IF_STATUS_API_FLAG_ADMIN_UP,*/
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
 	if err != nil {
-		panic(err)
+		logError(err, "setting interface flags")
+		return
 	}
 
 	// receive one notification
@@ -275,12 +253,20 @@ func interfaceNotifications(ch api.Channel) {
 		EnableDisable: 0,
 	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
 	if err != nil {
-		panic(err)
+		logError(err, "setting interface flags")
+		return
 	}
 
 	// unsubscribe from delivery of the notifications
 	err = sub.Unsubscribe()
 	if err != nil {
-		panic(err)
+		logError(err, "unsubscribing from interface events")
+		return
 	}
+
+	fmt.Println()
+}
+
+func cleanString(str string) string {
+	return strings.Split(str, "\x00")[0]
 }

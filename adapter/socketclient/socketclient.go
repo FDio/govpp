@@ -32,7 +32,6 @@ import (
 
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/codec"
-	"git.fd.io/govpp.git/examples/binapi/memclnt"
 )
 
 const (
@@ -313,9 +312,7 @@ const (
 func (c *vppClient) open() error {
 	msgCodec := new(codec.MsgCodec)
 
-	req := &memclnt.SockclntCreate{
-		Name: []byte(ClientName),
-	}
+	req := &SockclntCreate{Name: ClientName}
 	msg, err := msgCodec.EncodeMsg(req, sockCreateMsgId)
 	if err != nil {
 		Log.Debugln("Encode error:", err)
@@ -343,7 +340,7 @@ func (c *vppClient) open() error {
 		return err
 	}
 
-	reply := new(memclnt.SockclntCreateReply)
+	reply := new(SockclntCreateReply)
 	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
 		Log.Println("Decode error:", err)
 		return err
@@ -355,7 +352,8 @@ func (c *vppClient) open() error {
 	c.clientIndex = reply.Index
 	c.msgTable = make(map[string]uint16, reply.Count)
 	for _, x := range reply.MessageTable {
-		name := string(bytes.TrimSuffix(bytes.Split(x.Name, []byte{0x00})[0], []byte{0x13}))
+		msgName := strings.Split(x.Name, "\x00")[0]
+		name := strings.TrimSuffix(msgName, "\x13")
 		c.msgTable[name] = x.Index
 		if strings.HasPrefix(name, "sockclnt_delete_") {
 			c.sockDelMsgId = x.Index
@@ -371,7 +369,7 @@ func (c *vppClient) open() error {
 func (c *vppClient) close() error {
 	msgCodec := new(codec.MsgCodec)
 
-	req := &memclnt.SockclntDelete{
+	req := &SockclntDelete{
 		Index: c.clientIndex,
 	}
 	msg, err := msgCodec.EncodeMsg(req, c.sockDelMsgId)
@@ -406,7 +404,7 @@ func (c *vppClient) close() error {
 		return err
 	}
 
-	reply := new(memclnt.SockclntDeleteReply)
+	reply := new(SockclntDeleteReply)
 	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
 		Log.Debugln("Decode error:", err)
 		return err

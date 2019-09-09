@@ -5,12 +5,12 @@
 Package ip is a generated VPP binary API for 'ip' module.
 
 It consists of:
-	  2 enums
+	  9 enums
 	  3 aliases
-	 12 types
+	 17 types
 	  1 union
-	 91 messages
-	 44 services
+	 93 messages
+	 45 services
 */
 package ip
 
@@ -27,9 +27,9 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "ip"
 	// APIVersion is the API version of this module.
-	APIVersion = "2.0.0"
+	APIVersion = "3.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x51ac4ce0
+	VersionCrc = 0x902699f5
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -52,6 +52,241 @@ var AddressFamily_value = map[string]uint32{
 
 func (x AddressFamily) String() string {
 	s, ok := AddressFamily_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// FibPathFlags represents VPP binary API enum 'fib_path_flags'.
+type FibPathFlags uint32
+
+const (
+	FIB_API_PATH_FLAG_NONE                 FibPathFlags = 0
+	FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED FibPathFlags = 1
+	FIB_API_PATH_FLAG_RESOLVE_VIA_HOST     FibPathFlags = 2
+	FIB_API_PATH_FLAG_POP_PW_CW            FibPathFlags = 4
+)
+
+var FibPathFlags_name = map[uint32]string{
+	0: "FIB_API_PATH_FLAG_NONE",
+	1: "FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED",
+	2: "FIB_API_PATH_FLAG_RESOLVE_VIA_HOST",
+	4: "FIB_API_PATH_FLAG_POP_PW_CW",
+}
+
+var FibPathFlags_value = map[string]uint32{
+	"FIB_API_PATH_FLAG_NONE":                 0,
+	"FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED": 1,
+	"FIB_API_PATH_FLAG_RESOLVE_VIA_HOST":     2,
+	"FIB_API_PATH_FLAG_POP_PW_CW":            4,
+}
+
+func (x FibPathFlags) String() string {
+	s, ok := FibPathFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// FibPathNhProto represents VPP binary API enum 'fib_path_nh_proto'.
+type FibPathNhProto uint32
+
+const (
+	FIB_API_PATH_NH_PROTO_IP4      FibPathNhProto = 0
+	FIB_API_PATH_NH_PROTO_IP6      FibPathNhProto = 1
+	FIB_API_PATH_NH_PROTO_MPLS     FibPathNhProto = 2
+	FIB_API_PATH_NH_PROTO_ETHERNET FibPathNhProto = 3
+	FIB_API_PATH_NH_PROTO_BIER     FibPathNhProto = 4
+)
+
+var FibPathNhProto_name = map[uint32]string{
+	0: "FIB_API_PATH_NH_PROTO_IP4",
+	1: "FIB_API_PATH_NH_PROTO_IP6",
+	2: "FIB_API_PATH_NH_PROTO_MPLS",
+	3: "FIB_API_PATH_NH_PROTO_ETHERNET",
+	4: "FIB_API_PATH_NH_PROTO_BIER",
+}
+
+var FibPathNhProto_value = map[string]uint32{
+	"FIB_API_PATH_NH_PROTO_IP4":      0,
+	"FIB_API_PATH_NH_PROTO_IP6":      1,
+	"FIB_API_PATH_NH_PROTO_MPLS":     2,
+	"FIB_API_PATH_NH_PROTO_ETHERNET": 3,
+	"FIB_API_PATH_NH_PROTO_BIER":     4,
+}
+
+func (x FibPathNhProto) String() string {
+	s, ok := FibPathNhProto_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// FibPathType represents VPP binary API enum 'fib_path_type'.
+type FibPathType uint32
+
+const (
+	FIB_API_PATH_TYPE_NORMAL        FibPathType = 0
+	FIB_API_PATH_TYPE_LOCAL         FibPathType = 1
+	FIB_API_PATH_TYPE_DROP          FibPathType = 2
+	FIB_API_PATH_TYPE_UDP_ENCAP     FibPathType = 3
+	FIB_API_PATH_TYPE_BIER_IMP      FibPathType = 4
+	FIB_API_PATH_TYPE_ICMP_UNREACH  FibPathType = 5
+	FIB_API_PATH_TYPE_ICMP_PROHIBIT FibPathType = 6
+	FIB_API_PATH_TYPE_SOURCE_LOOKUP FibPathType = 7
+	FIB_API_PATH_TYPE_DVR           FibPathType = 8
+	FIB_API_PATH_TYPE_INTERFACE_RX  FibPathType = 9
+	FIB_API_PATH_TYPE_CLASSIFY      FibPathType = 10
+)
+
+var FibPathType_name = map[uint32]string{
+	0:  "FIB_API_PATH_TYPE_NORMAL",
+	1:  "FIB_API_PATH_TYPE_LOCAL",
+	2:  "FIB_API_PATH_TYPE_DROP",
+	3:  "FIB_API_PATH_TYPE_UDP_ENCAP",
+	4:  "FIB_API_PATH_TYPE_BIER_IMP",
+	5:  "FIB_API_PATH_TYPE_ICMP_UNREACH",
+	6:  "FIB_API_PATH_TYPE_ICMP_PROHIBIT",
+	7:  "FIB_API_PATH_TYPE_SOURCE_LOOKUP",
+	8:  "FIB_API_PATH_TYPE_DVR",
+	9:  "FIB_API_PATH_TYPE_INTERFACE_RX",
+	10: "FIB_API_PATH_TYPE_CLASSIFY",
+}
+
+var FibPathType_value = map[string]uint32{
+	"FIB_API_PATH_TYPE_NORMAL":        0,
+	"FIB_API_PATH_TYPE_LOCAL":         1,
+	"FIB_API_PATH_TYPE_DROP":          2,
+	"FIB_API_PATH_TYPE_UDP_ENCAP":     3,
+	"FIB_API_PATH_TYPE_BIER_IMP":      4,
+	"FIB_API_PATH_TYPE_ICMP_UNREACH":  5,
+	"FIB_API_PATH_TYPE_ICMP_PROHIBIT": 6,
+	"FIB_API_PATH_TYPE_SOURCE_LOOKUP": 7,
+	"FIB_API_PATH_TYPE_DVR":           8,
+	"FIB_API_PATH_TYPE_INTERFACE_RX":  9,
+	"FIB_API_PATH_TYPE_CLASSIFY":      10,
+}
+
+func (x FibPathType) String() string {
+	s, ok := FibPathType_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPDscp represents VPP binary API enum 'ip_dscp'.
+type IPDscp uint8
+
+const (
+	IP_API_DSCP_CS0  IPDscp = 0
+	IP_API_DSCP_CS1  IPDscp = 8
+	IP_API_DSCP_AF11 IPDscp = 10
+	IP_API_DSCP_AF12 IPDscp = 12
+	IP_API_DSCP_AF13 IPDscp = 14
+	IP_API_DSCP_CS2  IPDscp = 16
+	IP_API_DSCP_AF21 IPDscp = 18
+	IP_API_DSCP_AF22 IPDscp = 20
+	IP_API_DSCP_AF23 IPDscp = 22
+	IP_API_DSCP_CS3  IPDscp = 24
+	IP_API_DSCP_AF31 IPDscp = 26
+	IP_API_DSCP_AF32 IPDscp = 28
+	IP_API_DSCP_AF33 IPDscp = 30
+	IP_API_DSCP_CS4  IPDscp = 32
+	IP_API_DSCP_AF41 IPDscp = 34
+	IP_API_DSCP_AF42 IPDscp = 36
+	IP_API_DSCP_AF43 IPDscp = 38
+	IP_API_DSCP_CS5  IPDscp = 40
+	IP_API_DSCP_EF   IPDscp = 46
+	IP_API_DSCP_CS6  IPDscp = 48
+	IP_API_DSCP_CS7  IPDscp = 50
+)
+
+var IPDscp_name = map[uint8]string{
+	0:  "IP_API_DSCP_CS0",
+	8:  "IP_API_DSCP_CS1",
+	10: "IP_API_DSCP_AF11",
+	12: "IP_API_DSCP_AF12",
+	14: "IP_API_DSCP_AF13",
+	16: "IP_API_DSCP_CS2",
+	18: "IP_API_DSCP_AF21",
+	20: "IP_API_DSCP_AF22",
+	22: "IP_API_DSCP_AF23",
+	24: "IP_API_DSCP_CS3",
+	26: "IP_API_DSCP_AF31",
+	28: "IP_API_DSCP_AF32",
+	30: "IP_API_DSCP_AF33",
+	32: "IP_API_DSCP_CS4",
+	34: "IP_API_DSCP_AF41",
+	36: "IP_API_DSCP_AF42",
+	38: "IP_API_DSCP_AF43",
+	40: "IP_API_DSCP_CS5",
+	46: "IP_API_DSCP_EF",
+	48: "IP_API_DSCP_CS6",
+	50: "IP_API_DSCP_CS7",
+}
+
+var IPDscp_value = map[string]uint8{
+	"IP_API_DSCP_CS0":  0,
+	"IP_API_DSCP_CS1":  8,
+	"IP_API_DSCP_AF11": 10,
+	"IP_API_DSCP_AF12": 12,
+	"IP_API_DSCP_AF13": 14,
+	"IP_API_DSCP_CS2":  16,
+	"IP_API_DSCP_AF21": 18,
+	"IP_API_DSCP_AF22": 20,
+	"IP_API_DSCP_AF23": 22,
+	"IP_API_DSCP_CS3":  24,
+	"IP_API_DSCP_AF31": 26,
+	"IP_API_DSCP_AF32": 28,
+	"IP_API_DSCP_AF33": 30,
+	"IP_API_DSCP_CS4":  32,
+	"IP_API_DSCP_AF41": 34,
+	"IP_API_DSCP_AF42": 36,
+	"IP_API_DSCP_AF43": 38,
+	"IP_API_DSCP_CS5":  40,
+	"IP_API_DSCP_EF":   46,
+	"IP_API_DSCP_CS6":  48,
+	"IP_API_DSCP_CS7":  50,
+}
+
+func (x IPDscp) String() string {
+	s, ok := IPDscp_name[uint8(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// IPEcn represents VPP binary API enum 'ip_ecn'.
+type IPEcn uint8
+
+const (
+	IP_API_ECN_NONE IPEcn = 0
+	IP_API_ECN_ECT0 IPEcn = 1
+	IP_API_ECN_ECT1 IPEcn = 2
+	IP_API_ECN_CE   IPEcn = 3
+)
+
+var IPEcn_name = map[uint8]string{
+	0: "IP_API_ECN_NONE",
+	1: "IP_API_ECN_ECT0",
+	2: "IP_API_ECN_ECT1",
+	3: "IP_API_ECN_CE",
+}
+
+var IPEcn_value = map[string]uint8{
+	"IP_API_ECN_NONE": 0,
+	"IP_API_ECN_ECT0": 1,
+	"IP_API_ECN_ECT1": 2,
+	"IP_API_ECN_CE":   3,
+}
+
+func (x IPEcn) String() string {
+	s, ok := IPEcn_name[uint8(x)]
 	if ok {
 		return s
 	}
@@ -87,6 +322,100 @@ func (x IPNeighborFlags) String() string {
 	return strconv.Itoa(int(x))
 }
 
+// IPProto represents VPP binary API enum 'ip_proto'.
+type IPProto uint32
+
+const (
+	IP_API_PROTO_HOPOPT   IPProto = 0
+	IP_API_PROTO_ICMP     IPProto = 1
+	IP_API_PROTO_IGMP     IPProto = 2
+	IP_API_PROTO_TCP      IPProto = 6
+	IP_API_PROTO_UDP      IPProto = 17
+	IP_API_PROTO_GRE      IPProto = 47
+	IP_API_PROTO_AH       IPProto = 50
+	IP_API_PROTO_ESP      IPProto = 51
+	IP_API_PROTO_EIGRP    IPProto = 88
+	IP_API_PROTO_OSPF     IPProto = 89
+	IP_API_PROTO_SCTP     IPProto = 132
+	IP_API_PROTO_RESERVED IPProto = 255
+)
+
+var IPProto_name = map[uint32]string{
+	0:   "IP_API_PROTO_HOPOPT",
+	1:   "IP_API_PROTO_ICMP",
+	2:   "IP_API_PROTO_IGMP",
+	6:   "IP_API_PROTO_TCP",
+	17:  "IP_API_PROTO_UDP",
+	47:  "IP_API_PROTO_GRE",
+	50:  "IP_API_PROTO_AH",
+	51:  "IP_API_PROTO_ESP",
+	88:  "IP_API_PROTO_EIGRP",
+	89:  "IP_API_PROTO_OSPF",
+	132: "IP_API_PROTO_SCTP",
+	255: "IP_API_PROTO_RESERVED",
+}
+
+var IPProto_value = map[string]uint32{
+	"IP_API_PROTO_HOPOPT":   0,
+	"IP_API_PROTO_ICMP":     1,
+	"IP_API_PROTO_IGMP":     2,
+	"IP_API_PROTO_TCP":      6,
+	"IP_API_PROTO_UDP":      17,
+	"IP_API_PROTO_GRE":      47,
+	"IP_API_PROTO_AH":       50,
+	"IP_API_PROTO_ESP":      51,
+	"IP_API_PROTO_EIGRP":    88,
+	"IP_API_PROTO_OSPF":     89,
+	"IP_API_PROTO_SCTP":     132,
+	"IP_API_PROTO_RESERVED": 255,
+}
+
+func (x IPProto) String() string {
+	s, ok := IPProto_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// MfibItfFlags represents VPP binary API enum 'mfib_itf_flags'.
+type MfibItfFlags uint32
+
+const (
+	MFIB_API_ITF_FLAG_NONE           MfibItfFlags = 0
+	MFIB_API_ITF_FLAG_NEGATE_SIGNAL  MfibItfFlags = 1
+	MFIB_API_ITF_FLAG_ACCEPT         MfibItfFlags = 2
+	MFIB_API_ITF_FLAG_FORWARD        MfibItfFlags = 4
+	MFIB_API_ITF_FLAG_SIGNAL_PRESENT MfibItfFlags = 8
+	MFIB_API_ITF_FLAG_DONT_PRESERVE  MfibItfFlags = 16
+)
+
+var MfibItfFlags_name = map[uint32]string{
+	0:  "MFIB_API_ITF_FLAG_NONE",
+	1:  "MFIB_API_ITF_FLAG_NEGATE_SIGNAL",
+	2:  "MFIB_API_ITF_FLAG_ACCEPT",
+	4:  "MFIB_API_ITF_FLAG_FORWARD",
+	8:  "MFIB_API_ITF_FLAG_SIGNAL_PRESENT",
+	16: "MFIB_API_ITF_FLAG_DONT_PRESERVE",
+}
+
+var MfibItfFlags_value = map[string]uint32{
+	"MFIB_API_ITF_FLAG_NONE":           0,
+	"MFIB_API_ITF_FLAG_NEGATE_SIGNAL":  1,
+	"MFIB_API_ITF_FLAG_ACCEPT":         2,
+	"MFIB_API_ITF_FLAG_FORWARD":        4,
+	"MFIB_API_ITF_FLAG_SIGNAL_PRESENT": 8,
+	"MFIB_API_ITF_FLAG_DONT_PRESERVE":  16,
+}
+
+func (x MfibItfFlags) String() string {
+	s, ok := MfibItfFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
 // IP4Address represents VPP binary API alias 'ip4_address'.
 type IP4Address [4]uint8
 
@@ -105,9 +434,6 @@ type Address struct {
 func (*Address) GetTypeName() string {
 	return "address"
 }
-func (*Address) GetCrcString() string {
-	return "09f11671"
-}
 
 // FibMplsLabel represents VPP binary API type 'fib_mpls_label'.
 type FibMplsLabel struct {
@@ -120,66 +446,56 @@ type FibMplsLabel struct {
 func (*FibMplsLabel) GetTypeName() string {
 	return "fib_mpls_label"
 }
-func (*FibMplsLabel) GetCrcString() string {
-	return "c93bf35c"
-}
 
 // FibPath represents VPP binary API type 'fib_path'.
 type FibPath struct {
-	SwIfIndex         uint32
-	TableID           uint32
-	Weight            uint8
-	Preference        uint8
-	IsLocal           uint8
-	IsDrop            uint8
-	IsUDPEncap        uint8
-	IsUnreach         uint8
-	IsProhibit        uint8
-	IsResolveHost     uint8
-	IsResolveAttached uint8
-	IsDvr             uint8
-	IsSourceLookup    uint8
-	IsInterfaceRx     uint8
-	Afi               uint8
-	NextHop           []byte `struc:"[16]byte"`
-	NextHopID         uint32
-	RpfID             uint32
-	ViaLabel          uint32
-	NLabels           uint8
-	LabelStack        []FibMplsLabel `struc:"[16]FibMplsLabel"`
+	SwIfIndex  uint32
+	TableID    uint32
+	RpfID      uint32
+	Weight     uint8
+	Preference uint8
+	Type       FibPathType
+	Flags      FibPathFlags
+	Proto      FibPathNhProto
+	Nh         FibPathNh
+	NLabels    uint8
+	LabelStack []FibMplsLabel `struc:"[16]FibMplsLabel"`
 }
 
 func (*FibPath) GetTypeName() string {
 	return "fib_path"
 }
-func (*FibPath) GetCrcString() string {
-	return "ba7a81f0"
+
+// FibPathNh represents VPP binary API type 'fib_path_nh'.
+type FibPathNh struct {
+	Address            AddressUnion
+	ViaLabel           uint32
+	ObjID              uint32
+	ClassifyTableIndex uint32
+}
+
+func (*FibPathNh) GetTypeName() string {
+	return "fib_path_nh"
 }
 
 // IP4Prefix represents VPP binary API type 'ip4_prefix'.
 type IP4Prefix struct {
-	Prefix IP4Address
-	Len    uint8
+	Address IP4Address
+	Len     uint8
 }
 
 func (*IP4Prefix) GetTypeName() string {
 	return "ip4_prefix"
 }
-func (*IP4Prefix) GetCrcString() string {
-	return "ea8dc11d"
-}
 
 // IP6Prefix represents VPP binary API type 'ip6_prefix'.
 type IP6Prefix struct {
-	Prefix IP6Address
-	Len    uint8
+	Address IP6Address
+	Len     uint8
 }
 
 func (*IP6Prefix) GetTypeName() string {
 	return "ip6_prefix"
-}
-func (*IP6Prefix) GetCrcString() string {
-	return "779fd64f"
 }
 
 // IP6RaPrefixInfo represents VPP binary API type 'ip6_ra_prefix_info'.
@@ -193,8 +509,19 @@ type IP6RaPrefixInfo struct {
 func (*IP6RaPrefixInfo) GetTypeName() string {
 	return "ip6_ra_prefix_info"
 }
-func (*IP6RaPrefixInfo) GetCrcString() string {
-	return "fa025b72"
+
+// IPMroute represents VPP binary API type 'ip_mroute'.
+type IPMroute struct {
+	TableID    uint32
+	EntryFlags uint32
+	RpfID      uint32
+	Prefix     Mprefix
+	NPaths     uint8 `struc:"sizeof=Paths"`
+	Paths      []MfibPath
+}
+
+func (*IPMroute) GetTypeName() string {
+	return "ip_mroute"
 }
 
 // IPNeighbor represents VPP binary API type 'ip_neighbor'.
@@ -208,21 +535,39 @@ type IPNeighbor struct {
 func (*IPNeighbor) GetTypeName() string {
 	return "ip_neighbor"
 }
-func (*IPNeighbor) GetCrcString() string {
-	return "4bf82d5d"
+
+// IPRoute represents VPP binary API type 'ip_route'.
+type IPRoute struct {
+	TableID    uint32
+	StatsIndex uint32
+	Prefix     Prefix
+	NPaths     uint8 `struc:"sizeof=Paths"`
+	Paths      []FibPath
+}
+
+func (*IPRoute) GetTypeName() string {
+	return "ip_route"
+}
+
+// IPTable represents VPP binary API type 'ip_table'.
+type IPTable struct {
+	TableID uint32
+	IsIP6   uint8
+	Name    []byte `struc:"[64]byte"`
+}
+
+func (*IPTable) GetTypeName() string {
+	return "ip_table"
 }
 
 // MfibPath represents VPP binary API type 'mfib_path'.
 type MfibPath struct {
+	ItfFlags MfibItfFlags
 	Path     FibPath
-	ItfFlags uint32
 }
 
 func (*MfibPath) GetTypeName() string {
 	return "mfib_path"
-}
-func (*MfibPath) GetCrcString() string {
-	return "4ba77d32"
 }
 
 // Mprefix represents VPP binary API type 'mprefix'.
@@ -236,21 +581,25 @@ type Mprefix struct {
 func (*Mprefix) GetTypeName() string {
 	return "mprefix"
 }
-func (*Mprefix) GetCrcString() string {
-	return "1c4cba05"
-}
 
 // Prefix represents VPP binary API type 'prefix'.
 type Prefix struct {
-	Address       Address
-	AddressLength uint8
+	Address Address
+	Len     uint8
 }
 
 func (*Prefix) GetTypeName() string {
 	return "prefix"
 }
-func (*Prefix) GetCrcString() string {
-	return "0403aebc"
+
+// PrefixMatcher represents VPP binary API type 'prefix_matcher'.
+type PrefixMatcher struct {
+	Le uint8
+	Ge uint8
+}
+
+func (*PrefixMatcher) GetTypeName() string {
+	return "prefix_matcher"
 }
 
 // ProxyArp represents VPP binary API type 'proxy_arp'.
@@ -263,9 +612,6 @@ type ProxyArp struct {
 func (*ProxyArp) GetTypeName() string {
 	return "proxy_arp"
 }
-func (*ProxyArp) GetCrcString() string {
-	return "e9067693"
-}
 
 // PuntRedirect represents VPP binary API type 'punt_redirect'.
 type PuntRedirect struct {
@@ -277,9 +623,6 @@ type PuntRedirect struct {
 func (*PuntRedirect) GetTypeName() string {
 	return "punt_redirect"
 }
-func (*PuntRedirect) GetCrcString() string {
-	return "3e7a801f"
-}
 
 // AddressUnion represents VPP binary API union 'address_union'.
 type AddressUnion struct {
@@ -288,9 +631,6 @@ type AddressUnion struct {
 
 func (*AddressUnion) GetTypeName() string {
 	return "address_union"
-}
-func (*AddressUnion) GetCrcString() string {
-	return "d68a2fb4"
 }
 
 func AddressUnionIP4(a IP4Address) (u AddressUnion) {
@@ -411,73 +751,6 @@ func (*IP4ArpEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-// IP6FibDetails represents VPP binary API message 'ip6_fib_details'.
-type IP6FibDetails struct {
-	TableID       uint32
-	TableName     []byte `struc:"[64]byte"`
-	AddressLength uint8
-	Address       []byte `struc:"[16]byte"`
-	Count         uint32 `struc:"sizeof=Path"`
-	StatsIndex    uint32
-	Path          []FibPath
-}
-
-func (*IP6FibDetails) GetMessageName() string {
-	return "ip6_fib_details"
-}
-func (*IP6FibDetails) GetCrcString() string {
-	return "ef11e94d"
-}
-func (*IP6FibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// IP6FibDump represents VPP binary API message 'ip6_fib_dump'.
-type IP6FibDump struct{}
-
-func (*IP6FibDump) GetMessageName() string {
-	return "ip6_fib_dump"
-}
-func (*IP6FibDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*IP6FibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// IP6MfibDetails represents VPP binary API message 'ip6_mfib_details'.
-type IP6MfibDetails struct {
-	TableID       uint32
-	AddressLength uint8
-	GrpAddress    []byte `struc:"[16]byte"`
-	SrcAddress    []byte `struc:"[16]byte"`
-	Count         uint32 `struc:"sizeof=Path"`
-	Path          []MfibPath
-}
-
-func (*IP6MfibDetails) GetMessageName() string {
-	return "ip6_mfib_details"
-}
-func (*IP6MfibDetails) GetCrcString() string {
-	return "738c546e"
-}
-func (*IP6MfibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// IP6MfibDump represents VPP binary API message 'ip6_mfib_dump'.
-type IP6MfibDump struct{}
-
-func (*IP6MfibDump) GetMessageName() string {
-	return "ip6_mfib_dump"
-}
-func (*IP6MfibDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*IP6MfibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
 // IP6NdEvent represents VPP binary API message 'ip6_nd_event'.
 type IP6NdEvent struct {
 	PID       uint32
@@ -515,7 +788,7 @@ func (*IP6RaEvent) GetMessageName() string {
 	return "ip6_ra_event"
 }
 func (*IP6RaEvent) GetCrcString() string {
-	return "2e718fcc"
+	return "34c9ddac"
 }
 func (*IP6RaEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
@@ -617,76 +890,17 @@ func (*IP6ndSendRouterSolicitationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-// IPAddDelRoute represents VPP binary API message 'ip_add_del_route'.
-type IPAddDelRoute struct {
-	NextHopSwIfIndex     uint32
-	TableID              uint32
-	ClassifyTableIndex   uint32
-	NextHopTableID       uint32
-	NextHopID            uint32
-	IsAdd                uint8
-	IsDrop               uint8
-	IsUnreach            uint8
-	IsProhibit           uint8
-	IsIPv6               uint8
-	IsLocal              uint8
-	IsClassify           uint8
-	IsMultipath          uint8
-	IsResolveHost        uint8
-	IsResolveAttached    uint8
-	IsDvr                uint8
-	IsSourceLookup       uint8
-	IsUDPEncap           uint8
-	NextHopWeight        uint8
-	NextHopPreference    uint8
-	NextHopProto         uint8
-	DstAddressLength     uint8
-	DstAddress           []byte `struc:"[16]byte"`
-	NextHopAddress       []byte `struc:"[16]byte"`
-	NextHopNOutLabels    uint8  `struc:"sizeof=NextHopOutLabelStack"`
-	NextHopViaLabel      uint32
-	NextHopOutLabelStack []FibMplsLabel
-}
-
-func (*IPAddDelRoute) GetMessageName() string {
-	return "ip_add_del_route"
-}
-func (*IPAddDelRoute) GetCrcString() string {
-	return "4219d62d"
-}
-func (*IPAddDelRoute) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// IPAddDelRouteReply represents VPP binary API message 'ip_add_del_route_reply'.
-type IPAddDelRouteReply struct {
-	Retval     int32
-	StatsIndex uint32
-}
-
-func (*IPAddDelRouteReply) GetMessageName() string {
-	return "ip_add_del_route_reply"
-}
-func (*IPAddDelRouteReply) GetCrcString() string {
-	return "1992deab"
-}
-func (*IPAddDelRouteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
 // IPAddressDetails represents VPP binary API message 'ip_address_details'.
 type IPAddressDetails struct {
-	IP           []byte `struc:"[16]byte"`
-	PrefixLength uint8
-	SwIfIndex    uint32
-	IsIPv6       uint8
+	SwIfIndex uint32
+	Prefix    Prefix
 }
 
 func (*IPAddressDetails) GetMessageName() string {
 	return "ip_address_details"
 }
 func (*IPAddressDetails) GetCrcString() string {
-	return "9bc25966"
+	return "2f1dbc7d"
 }
 func (*IPAddressDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -719,7 +933,7 @@ func (*IPContainerProxyAddDel) GetMessageName() string {
 	return "ip_container_proxy_add_del"
 }
 func (*IPContainerProxyAddDel) GetCrcString() string {
-	return "5938e73a"
+	return "5ba831f3"
 }
 func (*IPContainerProxyAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -750,7 +964,7 @@ func (*IPContainerProxyDetails) GetMessageName() string {
 	return "ip_container_proxy_details"
 }
 func (*IPContainerProxyDetails) GetCrcString() string {
-	return "d528df63"
+	return "2f1dbc7d"
 }
 func (*IPContainerProxyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -800,99 +1014,18 @@ func (*IPDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-// IPFibDetails represents VPP binary API message 'ip_fib_details'.
-type IPFibDetails struct {
-	TableID       uint32
-	TableName     []byte `struc:"[64]byte"`
-	AddressLength uint8
-	Address       []byte `struc:"[4]byte"`
-	Count         uint32 `struc:"sizeof=Path"`
-	StatsIndex    uint32
-	Path          []FibPath
-}
-
-func (*IPFibDetails) GetMessageName() string {
-	return "ip_fib_details"
-}
-func (*IPFibDetails) GetCrcString() string {
-	return "f6a2fab3"
-}
-func (*IPFibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// IPFibDump represents VPP binary API message 'ip_fib_dump'.
-type IPFibDump struct{}
-
-func (*IPFibDump) GetMessageName() string {
-	return "ip_fib_dump"
-}
-func (*IPFibDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*IPFibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
-// IPMfibDetails represents VPP binary API message 'ip_mfib_details'.
-type IPMfibDetails struct {
-	TableID       uint32
-	EntryFlags    uint32
-	RpfID         uint32
-	AddressLength uint8
-	GrpAddress    []byte `struc:"[4]byte"`
-	SrcAddress    []byte `struc:"[4]byte"`
-	Count         uint32 `struc:"sizeof=Path"`
-	StatsIndex    uint32
-	Path          []MfibPath
-}
-
-func (*IPMfibDetails) GetMessageName() string {
-	return "ip_mfib_details"
-}
-func (*IPMfibDetails) GetCrcString() string {
-	return "61faa26f"
-}
-func (*IPMfibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
-}
-
-// IPMfibDump represents VPP binary API message 'ip_mfib_dump'.
-type IPMfibDump struct{}
-
-func (*IPMfibDump) GetMessageName() string {
-	return "ip_mfib_dump"
-}
-func (*IPMfibDump) GetCrcString() string {
-	return "51077d14"
-}
-func (*IPMfibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
-
 // IPMrouteAddDel represents VPP binary API message 'ip_mroute_add_del'.
 type IPMrouteAddDel struct {
-	NextHopSwIfIndex uint32
-	TableID          uint32
-	EntryFlags       uint32
-	ItfFlags         uint32
-	RpfID            uint32
-	BierImp          uint32
-	GrpAddressLength uint16
-	NextHopAfi       uint8
-	IsAdd            uint8
-	IsIPv6           uint8
-	IsLocal          uint8
-	GrpAddress       []byte `struc:"[16]byte"`
-	SrcAddress       []byte `struc:"[16]byte"`
-	NhAddress        []byte `struc:"[16]byte"`
+	IsAdd       uint8
+	IsMultipath uint8
+	Route       IPMroute
 }
 
 func (*IPMrouteAddDel) GetMessageName() string {
 	return "ip_mroute_add_del"
 }
 func (*IPMrouteAddDel) GetCrcString() string {
-	return "f44c17b1"
+	return "997baab2"
 }
 func (*IPMrouteAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -914,6 +1047,64 @@ func (*IPMrouteAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// IPMrouteDetails represents VPP binary API message 'ip_mroute_details'.
+type IPMrouteDetails struct {
+	Route IPMroute
+}
+
+func (*IPMrouteDetails) GetMessageName() string {
+	return "ip_mroute_details"
+}
+func (*IPMrouteDetails) GetCrcString() string {
+	return "39405e5a"
+}
+func (*IPMrouteDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// IPMrouteDump represents VPP binary API message 'ip_mroute_dump'.
+type IPMrouteDump struct {
+	Table IPTable
+}
+
+func (*IPMrouteDump) GetMessageName() string {
+	return "ip_mroute_dump"
+}
+func (*IPMrouteDump) GetCrcString() string {
+	return "f5ad78e8"
+}
+func (*IPMrouteDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// IPMtableDetails represents VPP binary API message 'ip_mtable_details'.
+type IPMtableDetails struct {
+	Table IPTable
+}
+
+func (*IPMtableDetails) GetMessageName() string {
+	return "ip_mtable_details"
+}
+func (*IPMtableDetails) GetCrcString() string {
+	return "f5ad78e8"
+}
+func (*IPMtableDetails) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// IPMtableDump represents VPP binary API message 'ip_mtable_dump'.
+type IPMtableDump struct{}
+
+func (*IPMtableDump) GetMessageName() string {
+	return "ip_mtable_dump"
+}
+func (*IPMtableDump) GetCrcString() string {
+	return "51077d14"
+}
+func (*IPMtableDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
 // IPNeighborAddDel represents VPP binary API message 'ip_neighbor_add_del'.
 type IPNeighborAddDel struct {
 	IsAdd    uint8
@@ -924,7 +1115,7 @@ func (*IPNeighborAddDel) GetMessageName() string {
 	return "ip_neighbor_add_del"
 }
 func (*IPNeighborAddDel) GetCrcString() string {
-	return "adea3ef4"
+	return "7a68a3c4"
 }
 func (*IPNeighborAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -955,7 +1146,7 @@ func (*IPNeighborDetails) GetMessageName() string {
 	return "ip_neighbor_details"
 }
 func (*IPNeighborDetails) GetCrcString() string {
-	return "512fb08d"
+	return "4a05f212"
 }
 func (*IPNeighborDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -987,7 +1178,7 @@ func (*IPProbeNeighbor) GetMessageName() string {
 	return "ip_probe_neighbor"
 }
 func (*IPProbeNeighbor) GetCrcString() string {
-	return "1e6c0a77"
+	return "2736142d"
 }
 func (*IPProbeNeighbor) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1050,7 +1241,7 @@ func (*IPPuntRedirect) GetMessageName() string {
 	return "ip_punt_redirect"
 }
 func (*IPPuntRedirect) GetCrcString() string {
-	return "a953495b"
+	return "70b793c6"
 }
 func (*IPPuntRedirect) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1065,7 +1256,7 @@ func (*IPPuntRedirectDetails) GetMessageName() string {
 	return "ip_punt_redirect_details"
 }
 func (*IPPuntRedirectDetails) GetCrcString() string {
-	return "a47f70da"
+	return "07e504f8"
 }
 func (*IPPuntRedirectDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -1154,6 +1345,7 @@ type IPReassemblyGetReply struct {
 	Retval               int32
 	TimeoutMs            uint32
 	MaxReassemblies      uint32
+	MaxReassemblyLength  uint32
 	ExpireWalkIntervalMs uint32
 	IsIP6                uint8
 }
@@ -1162,7 +1354,7 @@ func (*IPReassemblyGetReply) GetMessageName() string {
 	return "ip_reassembly_get_reply"
 }
 func (*IPReassemblyGetReply) GetCrcString() string {
-	return "1f90afd1"
+	return "c96e518d"
 }
 func (*IPReassemblyGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -1172,6 +1364,7 @@ func (*IPReassemblyGetReply) GetMessageType() api.MessageType {
 type IPReassemblySet struct {
 	TimeoutMs            uint32
 	MaxReassemblies      uint32
+	MaxReassemblyLength  uint32
 	ExpireWalkIntervalMs uint32
 	IsIP6                uint8
 }
@@ -1180,7 +1373,7 @@ func (*IPReassemblySet) GetMessageName() string {
 	return "ip_reassembly_set"
 }
 func (*IPReassemblySet) GetCrcString() string {
-	return "1db184de"
+	return "403051cd"
 }
 func (*IPReassemblySet) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1199,6 +1392,69 @@ func (*IPReassemblySetReply) GetCrcString() string {
 }
 func (*IPReassemblySetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+
+// IPRouteAddDel represents VPP binary API message 'ip_route_add_del'.
+type IPRouteAddDel struct {
+	IsAdd       uint8
+	IsMultipath uint8
+	Route       IPRoute
+}
+
+func (*IPRouteAddDel) GetMessageName() string {
+	return "ip_route_add_del"
+}
+func (*IPRouteAddDel) GetCrcString() string {
+	return "83e086ce"
+}
+func (*IPRouteAddDel) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// IPRouteAddDelReply represents VPP binary API message 'ip_route_add_del_reply'.
+type IPRouteAddDelReply struct {
+	Retval     int32
+	StatsIndex uint32
+}
+
+func (*IPRouteAddDelReply) GetMessageName() string {
+	return "ip_route_add_del_reply"
+}
+func (*IPRouteAddDelReply) GetCrcString() string {
+	return "1992deab"
+}
+func (*IPRouteAddDelReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// IPRouteDetails represents VPP binary API message 'ip_route_details'.
+type IPRouteDetails struct {
+	Route IPRoute
+}
+
+func (*IPRouteDetails) GetMessageName() string {
+	return "ip_route_details"
+}
+func (*IPRouteDetails) GetCrcString() string {
+	return "acdee858"
+}
+func (*IPRouteDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// IPRouteDump represents VPP binary API message 'ip_route_dump'.
+type IPRouteDump struct {
+	Table IPTable
+}
+
+func (*IPRouteDump) GetMessageName() string {
+	return "ip_route_dump"
+}
+func (*IPRouteDump) GetCrcString() string {
+	return "f5ad78e8"
+}
+func (*IPRouteDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
 }
 
 // IPScanNeighborEnableDisable represents VPP binary API message 'ip_scan_neighbor_enable_disable'.
@@ -1250,7 +1506,7 @@ func (*IPSourceAndPortRangeCheckAddDel) GetMessageName() string {
 	return "ip_source_and_port_range_check_add_del"
 }
 func (*IPSourceAndPortRangeCheckAddDel) GetCrcString() string {
-	return "ea07c429"
+	return "b50ed159"
 }
 func (*IPSourceAndPortRangeCheckAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1340,17 +1596,15 @@ func (*IPSourceCheckInterfaceAddDelReply) GetMessageType() api.MessageType {
 
 // IPTableAddDel represents VPP binary API message 'ip_table_add_del'.
 type IPTableAddDel struct {
-	TableID uint32
-	IsIPv6  uint8
-	IsAdd   uint8
-	Name    []byte `struc:"[64]byte"`
+	IsAdd uint8
+	Table IPTable
 }
 
 func (*IPTableAddDel) GetMessageName() string {
 	return "ip_table_add_del"
 }
 func (*IPTableAddDel) GetCrcString() string {
-	return "0240c89d"
+	return "e5d378f2"
 }
 func (*IPTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1369,6 +1623,34 @@ func (*IPTableAddDelReply) GetCrcString() string {
 }
 func (*IPTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+
+// IPTableDetails represents VPP binary API message 'ip_table_details'.
+type IPTableDetails struct {
+	Table IPTable
+}
+
+func (*IPTableDetails) GetMessageName() string {
+	return "ip_table_details"
+}
+func (*IPTableDetails) GetCrcString() string {
+	return "4d251961"
+}
+func (*IPTableDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// IPTableDump represents VPP binary API message 'ip_table_dump'.
+type IPTableDump struct{}
+
+func (*IPTableDump) GetMessageName() string {
+	return "ip_table_dump"
+}
+func (*IPTableDump) GetCrcString() string {
+	return "51077d14"
+}
+func (*IPTableDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
 }
 
 // IPUnnumberedDetails represents VPP binary API message 'ip_unnumbered_details'.
@@ -1404,20 +1686,18 @@ func (*IPUnnumberedDump) GetMessageType() api.MessageType {
 
 // MfibSignalDetails represents VPP binary API message 'mfib_signal_details'.
 type MfibSignalDetails struct {
-	SwIfIndex     uint32
-	TableID       uint32
-	GrpAddressLen uint16
-	GrpAddress    []byte `struc:"[16]byte"`
-	SrcAddress    []byte `struc:"[16]byte"`
-	IPPacketLen   uint16
-	IPPacketData  []byte `struc:"[256]byte"`
+	SwIfIndex    uint32
+	TableID      uint32
+	Prefix       Mprefix
+	IPPacketLen  uint16
+	IPPacketData []byte `struc:"[256]byte"`
 }
 
 func (*MfibSignalDetails) GetMessageName() string {
 	return "mfib_signal_details"
 }
 func (*MfibSignalDetails) GetCrcString() string {
-	return "3f5f03f5"
+	return "cd461bfa"
 }
 func (*MfibSignalDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -1446,7 +1726,7 @@ func (*ProxyArpAddDel) GetMessageName() string {
 	return "proxy_arp_add_del"
 }
 func (*ProxyArpAddDel) GetCrcString() string {
-	return "227988d9"
+	return "93a0e853"
 }
 func (*ProxyArpAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1476,7 +1756,7 @@ func (*ProxyArpDetails) GetMessageName() string {
 	return "proxy_arp_details"
 }
 func (*ProxyArpDetails) GetCrcString() string {
-	return "9b707c77"
+	return "2515902a"
 }
 func (*ProxyArpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -1685,6 +1965,37 @@ func (*SwInterfaceIP6EnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// SwInterfaceIP6SetLinkLocalAddress represents VPP binary API message 'sw_interface_ip6_set_link_local_address'.
+type SwInterfaceIP6SetLinkLocalAddress struct {
+	SwIfIndex uint32
+	Address   []byte `struc:"[16]byte"`
+}
+
+func (*SwInterfaceIP6SetLinkLocalAddress) GetMessageName() string {
+	return "sw_interface_ip6_set_link_local_address"
+}
+func (*SwInterfaceIP6SetLinkLocalAddress) GetCrcString() string {
+	return "d73bf1ab"
+}
+func (*SwInterfaceIP6SetLinkLocalAddress) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// SwInterfaceIP6SetLinkLocalAddressReply represents VPP binary API message 'sw_interface_ip6_set_link_local_address_reply'.
+type SwInterfaceIP6SetLinkLocalAddressReply struct {
+	Retval int32
+}
+
+func (*SwInterfaceIP6SetLinkLocalAddressReply) GetMessageName() string {
+	return "sw_interface_ip6_set_link_local_address_reply"
+}
+func (*SwInterfaceIP6SetLinkLocalAddressReply) GetCrcString() string {
+	return "e8d4e804"
+}
+func (*SwInterfaceIP6SetLinkLocalAddressReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 // SwInterfaceIP6ndRaConfig represents VPP binary API message 'sw_interface_ip6nd_ra_config'.
 type SwInterfaceIP6ndRaConfig struct {
 	SwIfIndex       uint32
@@ -1746,7 +2057,7 @@ func (*SwInterfaceIP6ndRaPrefix) GetMessageName() string {
 	return "sw_interface_ip6nd_ra_prefix"
 }
 func (*SwInterfaceIP6ndRaPrefix) GetCrcString() string {
-	return "59934d3b"
+	return "0f759f82"
 }
 func (*SwInterfaceIP6ndRaPrefix) GetMessageType() api.MessageType {
 	return api.RequestMessage
@@ -1868,10 +2179,6 @@ func init() {
 	api.RegisterMessage((*IoamEnable)(nil), "ip.IoamEnable")
 	api.RegisterMessage((*IoamEnableReply)(nil), "ip.IoamEnableReply")
 	api.RegisterMessage((*IP4ArpEvent)(nil), "ip.IP4ArpEvent")
-	api.RegisterMessage((*IP6FibDetails)(nil), "ip.IP6FibDetails")
-	api.RegisterMessage((*IP6FibDump)(nil), "ip.IP6FibDump")
-	api.RegisterMessage((*IP6MfibDetails)(nil), "ip.IP6MfibDetails")
-	api.RegisterMessage((*IP6MfibDump)(nil), "ip.IP6MfibDump")
 	api.RegisterMessage((*IP6NdEvent)(nil), "ip.IP6NdEvent")
 	api.RegisterMessage((*IP6RaEvent)(nil), "ip.IP6RaEvent")
 	api.RegisterMessage((*IP6ndProxyAddDel)(nil), "ip.IP6ndProxyAddDel")
@@ -1880,8 +2187,6 @@ func init() {
 	api.RegisterMessage((*IP6ndProxyDump)(nil), "ip.IP6ndProxyDump")
 	api.RegisterMessage((*IP6ndSendRouterSolicitation)(nil), "ip.IP6ndSendRouterSolicitation")
 	api.RegisterMessage((*IP6ndSendRouterSolicitationReply)(nil), "ip.IP6ndSendRouterSolicitationReply")
-	api.RegisterMessage((*IPAddDelRoute)(nil), "ip.IPAddDelRoute")
-	api.RegisterMessage((*IPAddDelRouteReply)(nil), "ip.IPAddDelRouteReply")
 	api.RegisterMessage((*IPAddressDetails)(nil), "ip.IPAddressDetails")
 	api.RegisterMessage((*IPAddressDump)(nil), "ip.IPAddressDump")
 	api.RegisterMessage((*IPContainerProxyAddDel)(nil), "ip.IPContainerProxyAddDel")
@@ -1890,12 +2195,12 @@ func init() {
 	api.RegisterMessage((*IPContainerProxyDump)(nil), "ip.IPContainerProxyDump")
 	api.RegisterMessage((*IPDetails)(nil), "ip.IPDetails")
 	api.RegisterMessage((*IPDump)(nil), "ip.IPDump")
-	api.RegisterMessage((*IPFibDetails)(nil), "ip.IPFibDetails")
-	api.RegisterMessage((*IPFibDump)(nil), "ip.IPFibDump")
-	api.RegisterMessage((*IPMfibDetails)(nil), "ip.IPMfibDetails")
-	api.RegisterMessage((*IPMfibDump)(nil), "ip.IPMfibDump")
 	api.RegisterMessage((*IPMrouteAddDel)(nil), "ip.IPMrouteAddDel")
 	api.RegisterMessage((*IPMrouteAddDelReply)(nil), "ip.IPMrouteAddDelReply")
+	api.RegisterMessage((*IPMrouteDetails)(nil), "ip.IPMrouteDetails")
+	api.RegisterMessage((*IPMrouteDump)(nil), "ip.IPMrouteDump")
+	api.RegisterMessage((*IPMtableDetails)(nil), "ip.IPMtableDetails")
+	api.RegisterMessage((*IPMtableDump)(nil), "ip.IPMtableDump")
 	api.RegisterMessage((*IPNeighborAddDel)(nil), "ip.IPNeighborAddDel")
 	api.RegisterMessage((*IPNeighborAddDelReply)(nil), "ip.IPNeighborAddDelReply")
 	api.RegisterMessage((*IPNeighborDetails)(nil), "ip.IPNeighborDetails")
@@ -1914,6 +2219,10 @@ func init() {
 	api.RegisterMessage((*IPReassemblyGetReply)(nil), "ip.IPReassemblyGetReply")
 	api.RegisterMessage((*IPReassemblySet)(nil), "ip.IPReassemblySet")
 	api.RegisterMessage((*IPReassemblySetReply)(nil), "ip.IPReassemblySetReply")
+	api.RegisterMessage((*IPRouteAddDel)(nil), "ip.IPRouteAddDel")
+	api.RegisterMessage((*IPRouteAddDelReply)(nil), "ip.IPRouteAddDelReply")
+	api.RegisterMessage((*IPRouteDetails)(nil), "ip.IPRouteDetails")
+	api.RegisterMessage((*IPRouteDump)(nil), "ip.IPRouteDump")
 	api.RegisterMessage((*IPScanNeighborEnableDisable)(nil), "ip.IPScanNeighborEnableDisable")
 	api.RegisterMessage((*IPScanNeighborEnableDisableReply)(nil), "ip.IPScanNeighborEnableDisableReply")
 	api.RegisterMessage((*IPSourceAndPortRangeCheckAddDel)(nil), "ip.IPSourceAndPortRangeCheckAddDel")
@@ -1924,6 +2233,8 @@ func init() {
 	api.RegisterMessage((*IPSourceCheckInterfaceAddDelReply)(nil), "ip.IPSourceCheckInterfaceAddDelReply")
 	api.RegisterMessage((*IPTableAddDel)(nil), "ip.IPTableAddDel")
 	api.RegisterMessage((*IPTableAddDelReply)(nil), "ip.IPTableAddDelReply")
+	api.RegisterMessage((*IPTableDetails)(nil), "ip.IPTableDetails")
+	api.RegisterMessage((*IPTableDump)(nil), "ip.IPTableDump")
 	api.RegisterMessage((*IPUnnumberedDetails)(nil), "ip.IPUnnumberedDetails")
 	api.RegisterMessage((*IPUnnumberedDump)(nil), "ip.IPUnnumberedDump")
 	api.RegisterMessage((*MfibSignalDetails)(nil), "ip.MfibSignalDetails")
@@ -1944,6 +2255,8 @@ func init() {
 	api.RegisterMessage((*SetIPFlowHashReply)(nil), "ip.SetIPFlowHashReply")
 	api.RegisterMessage((*SwInterfaceIP6EnableDisable)(nil), "ip.SwInterfaceIP6EnableDisable")
 	api.RegisterMessage((*SwInterfaceIP6EnableDisableReply)(nil), "ip.SwInterfaceIP6EnableDisableReply")
+	api.RegisterMessage((*SwInterfaceIP6SetLinkLocalAddress)(nil), "ip.SwInterfaceIP6SetLinkLocalAddress")
+	api.RegisterMessage((*SwInterfaceIP6SetLinkLocalAddressReply)(nil), "ip.SwInterfaceIP6SetLinkLocalAddressReply")
 	api.RegisterMessage((*SwInterfaceIP6ndRaConfig)(nil), "ip.SwInterfaceIP6ndRaConfig")
 	api.RegisterMessage((*SwInterfaceIP6ndRaConfigReply)(nil), "ip.SwInterfaceIP6ndRaConfigReply")
 	api.RegisterMessage((*SwInterfaceIP6ndRaPrefix)(nil), "ip.SwInterfaceIP6ndRaPrefix")
@@ -1964,10 +2277,6 @@ func AllMessages() []api.Message {
 		(*IoamEnable)(nil),
 		(*IoamEnableReply)(nil),
 		(*IP4ArpEvent)(nil),
-		(*IP6FibDetails)(nil),
-		(*IP6FibDump)(nil),
-		(*IP6MfibDetails)(nil),
-		(*IP6MfibDump)(nil),
 		(*IP6NdEvent)(nil),
 		(*IP6RaEvent)(nil),
 		(*IP6ndProxyAddDel)(nil),
@@ -1976,8 +2285,6 @@ func AllMessages() []api.Message {
 		(*IP6ndProxyDump)(nil),
 		(*IP6ndSendRouterSolicitation)(nil),
 		(*IP6ndSendRouterSolicitationReply)(nil),
-		(*IPAddDelRoute)(nil),
-		(*IPAddDelRouteReply)(nil),
 		(*IPAddressDetails)(nil),
 		(*IPAddressDump)(nil),
 		(*IPContainerProxyAddDel)(nil),
@@ -1986,12 +2293,12 @@ func AllMessages() []api.Message {
 		(*IPContainerProxyDump)(nil),
 		(*IPDetails)(nil),
 		(*IPDump)(nil),
-		(*IPFibDetails)(nil),
-		(*IPFibDump)(nil),
-		(*IPMfibDetails)(nil),
-		(*IPMfibDump)(nil),
 		(*IPMrouteAddDel)(nil),
 		(*IPMrouteAddDelReply)(nil),
+		(*IPMrouteDetails)(nil),
+		(*IPMrouteDump)(nil),
+		(*IPMtableDetails)(nil),
+		(*IPMtableDump)(nil),
 		(*IPNeighborAddDel)(nil),
 		(*IPNeighborAddDelReply)(nil),
 		(*IPNeighborDetails)(nil),
@@ -2010,6 +2317,10 @@ func AllMessages() []api.Message {
 		(*IPReassemblyGetReply)(nil),
 		(*IPReassemblySet)(nil),
 		(*IPReassemblySetReply)(nil),
+		(*IPRouteAddDel)(nil),
+		(*IPRouteAddDelReply)(nil),
+		(*IPRouteDetails)(nil),
+		(*IPRouteDump)(nil),
 		(*IPScanNeighborEnableDisable)(nil),
 		(*IPScanNeighborEnableDisableReply)(nil),
 		(*IPSourceAndPortRangeCheckAddDel)(nil),
@@ -2020,6 +2331,8 @@ func AllMessages() []api.Message {
 		(*IPSourceCheckInterfaceAddDelReply)(nil),
 		(*IPTableAddDel)(nil),
 		(*IPTableAddDelReply)(nil),
+		(*IPTableDetails)(nil),
+		(*IPTableDump)(nil),
 		(*IPUnnumberedDetails)(nil),
 		(*IPUnnumberedDump)(nil),
 		(*MfibSignalDetails)(nil),
@@ -2040,6 +2353,8 @@ func AllMessages() []api.Message {
 		(*SetIPFlowHashReply)(nil),
 		(*SwInterfaceIP6EnableDisable)(nil),
 		(*SwInterfaceIP6EnableDisableReply)(nil),
+		(*SwInterfaceIP6SetLinkLocalAddress)(nil),
+		(*SwInterfaceIP6SetLinkLocalAddressReply)(nil),
 		(*SwInterfaceIP6ndRaConfig)(nil),
 		(*SwInterfaceIP6ndRaConfigReply)(nil),
 		(*SwInterfaceIP6ndRaPrefix)(nil),
@@ -2055,16 +2370,16 @@ func AllMessages() []api.Message {
 
 // RPCService represents RPC service API for ip module.
 type RPCService interface {
-	DumpIP6Fib(ctx context.Context, in *IP6FibDump) (RPCService_DumpIP6FibClient, error)
-	DumpIP6Mfib(ctx context.Context, in *IP6MfibDump) (RPCService_DumpIP6MfibClient, error)
 	DumpIP6ndProxy(ctx context.Context, in *IP6ndProxyDump) (RPCService_DumpIP6ndProxyClient, error)
 	DumpIPAddress(ctx context.Context, in *IPAddressDump) (RPCService_DumpIPAddressClient, error)
 	DumpIPContainerProxy(ctx context.Context, in *IPContainerProxyDump) (RPCService_DumpIPContainerProxyClient, error)
 	DumpIP(ctx context.Context, in *IPDump) (RPCService_DumpIPClient, error)
-	DumpIPFib(ctx context.Context, in *IPFibDump) (RPCService_DumpIPFibClient, error)
-	DumpIPMfib(ctx context.Context, in *IPMfibDump) (RPCService_DumpIPMfibClient, error)
+	DumpIPMroute(ctx context.Context, in *IPMrouteDump) (RPCService_DumpIPMrouteClient, error)
+	DumpIPMtable(ctx context.Context, in *IPMtableDump) (RPCService_DumpIPMtableClient, error)
 	DumpIPNeighbor(ctx context.Context, in *IPNeighborDump) (RPCService_DumpIPNeighborClient, error)
 	DumpIPPuntRedirect(ctx context.Context, in *IPPuntRedirectDump) (RPCService_DumpIPPuntRedirectClient, error)
+	DumpIPRoute(ctx context.Context, in *IPRouteDump) (RPCService_DumpIPRouteClient, error)
+	DumpIPTable(ctx context.Context, in *IPTableDump) (RPCService_DumpIPTableClient, error)
 	DumpIPUnnumbered(ctx context.Context, in *IPUnnumberedDump) (RPCService_DumpIPUnnumberedClient, error)
 	DumpMfibSignal(ctx context.Context, in *MfibSignalDump) (RPCService_DumpMfibSignalClient, error)
 	DumpProxyArp(ctx context.Context, in *ProxyArpDump) (RPCService_DumpProxyArpClient, error)
@@ -2073,7 +2388,6 @@ type RPCService interface {
 	IoamEnable(ctx context.Context, in *IoamEnable) (*IoamEnableReply, error)
 	IP6ndProxyAddDel(ctx context.Context, in *IP6ndProxyAddDel) (*IP6ndProxyAddDelReply, error)
 	IP6ndSendRouterSolicitation(ctx context.Context, in *IP6ndSendRouterSolicitation) (*IP6ndSendRouterSolicitationReply, error)
-	IPAddDelRoute(ctx context.Context, in *IPAddDelRoute) (*IPAddDelRouteReply, error)
 	IPContainerProxyAddDel(ctx context.Context, in *IPContainerProxyAddDel) (*IPContainerProxyAddDelReply, error)
 	IPMrouteAddDel(ctx context.Context, in *IPMrouteAddDel) (*IPMrouteAddDelReply, error)
 	IPNeighborAddDel(ctx context.Context, in *IPNeighborAddDel) (*IPNeighborAddDelReply, error)
@@ -2083,6 +2397,7 @@ type RPCService interface {
 	IPReassemblyEnableDisable(ctx context.Context, in *IPReassemblyEnableDisable) (*IPReassemblyEnableDisableReply, error)
 	IPReassemblyGet(ctx context.Context, in *IPReassemblyGet) (*IPReassemblyGetReply, error)
 	IPReassemblySet(ctx context.Context, in *IPReassemblySet) (*IPReassemblySetReply, error)
+	IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error)
 	IPScanNeighborEnableDisable(ctx context.Context, in *IPScanNeighborEnableDisable) (*IPScanNeighborEnableDisableReply, error)
 	IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error)
 	IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error)
@@ -2094,6 +2409,7 @@ type RPCService interface {
 	SetArpNeighborLimit(ctx context.Context, in *SetArpNeighborLimit) (*SetArpNeighborLimitReply, error)
 	SetIPFlowHash(ctx context.Context, in *SetIPFlowHash) (*SetIPFlowHashReply, error)
 	SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error)
+	SwInterfaceIP6SetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6SetLinkLocalAddress) (*SwInterfaceIP6SetLinkLocalAddressReply, error)
 	SwInterfaceIP6ndRaConfig(ctx context.Context, in *SwInterfaceIP6ndRaConfig) (*SwInterfaceIP6ndRaConfigReply, error)
 	SwInterfaceIP6ndRaPrefix(ctx context.Context, in *SwInterfaceIP6ndRaPrefix) (*SwInterfaceIP6ndRaPrefixReply, error)
 	WantIP4ArpEvents(ctx context.Context, in *WantIP4ArpEvents) (*WantIP4ArpEventsReply, error)
@@ -2107,58 +2423,6 @@ type serviceClient struct {
 
 func NewServiceClient(ch api.Channel) RPCService {
 	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpIP6Fib(ctx context.Context, in *IP6FibDump) (RPCService_DumpIP6FibClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpIP6FibClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpIP6FibClient interface {
-	Recv() (*IP6FibDetails, error)
-}
-
-type serviceClient_DumpIP6FibClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpIP6FibClient) Recv() (*IP6FibDetails, error) {
-	m := new(IP6FibDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpIP6Mfib(ctx context.Context, in *IP6MfibDump) (RPCService_DumpIP6MfibClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpIP6MfibClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpIP6MfibClient interface {
-	Recv() (*IP6MfibDetails, error)
-}
-
-type serviceClient_DumpIP6MfibClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpIP6MfibClient) Recv() (*IP6MfibDetails, error) {
-	m := new(IP6MfibDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
 }
 
 func (c *serviceClient) DumpIP6ndProxy(ctx context.Context, in *IP6ndProxyDump) (RPCService_DumpIP6ndProxyClient, error) {
@@ -2265,22 +2529,22 @@ func (c *serviceClient_DumpIPClient) Recv() (*IPDetails, error) {
 	return m, nil
 }
 
-func (c *serviceClient) DumpIPFib(ctx context.Context, in *IPFibDump) (RPCService_DumpIPFibClient, error) {
+func (c *serviceClient) DumpIPMroute(ctx context.Context, in *IPMrouteDump) (RPCService_DumpIPMrouteClient, error) {
 	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpIPFibClient{stream}
+	x := &serviceClient_DumpIPMrouteClient{stream}
 	return x, nil
 }
 
-type RPCService_DumpIPFibClient interface {
-	Recv() (*IPFibDetails, error)
+type RPCService_DumpIPMrouteClient interface {
+	Recv() (*IPMrouteDetails, error)
 }
 
-type serviceClient_DumpIPFibClient struct {
+type serviceClient_DumpIPMrouteClient struct {
 	api.MultiRequestCtx
 }
 
-func (c *serviceClient_DumpIPFibClient) Recv() (*IPFibDetails, error) {
-	m := new(IPFibDetails)
+func (c *serviceClient_DumpIPMrouteClient) Recv() (*IPMrouteDetails, error) {
+	m := new(IPMrouteDetails)
 	stop, err := c.MultiRequestCtx.ReceiveReply(m)
 	if err != nil {
 		return nil, err
@@ -2291,22 +2555,22 @@ func (c *serviceClient_DumpIPFibClient) Recv() (*IPFibDetails, error) {
 	return m, nil
 }
 
-func (c *serviceClient) DumpIPMfib(ctx context.Context, in *IPMfibDump) (RPCService_DumpIPMfibClient, error) {
+func (c *serviceClient) DumpIPMtable(ctx context.Context, in *IPMtableDump) (RPCService_DumpIPMtableClient, error) {
 	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpIPMfibClient{stream}
+	x := &serviceClient_DumpIPMtableClient{stream}
 	return x, nil
 }
 
-type RPCService_DumpIPMfibClient interface {
-	Recv() (*IPMfibDetails, error)
+type RPCService_DumpIPMtableClient interface {
+	Recv() (*IPMtableDetails, error)
 }
 
-type serviceClient_DumpIPMfibClient struct {
+type serviceClient_DumpIPMtableClient struct {
 	api.MultiRequestCtx
 }
 
-func (c *serviceClient_DumpIPMfibClient) Recv() (*IPMfibDetails, error) {
-	m := new(IPMfibDetails)
+func (c *serviceClient_DumpIPMtableClient) Recv() (*IPMtableDetails, error) {
+	m := new(IPMtableDetails)
 	stop, err := c.MultiRequestCtx.ReceiveReply(m)
 	if err != nil {
 		return nil, err
@@ -2359,6 +2623,58 @@ type serviceClient_DumpIPPuntRedirectClient struct {
 
 func (c *serviceClient_DumpIPPuntRedirectClient) Recv() (*IPPuntRedirectDetails, error) {
 	m := new(IPPuntRedirectDetails)
+	stop, err := c.MultiRequestCtx.ReceiveReply(m)
+	if err != nil {
+		return nil, err
+	}
+	if stop {
+		return nil, io.EOF
+	}
+	return m, nil
+}
+
+func (c *serviceClient) DumpIPRoute(ctx context.Context, in *IPRouteDump) (RPCService_DumpIPRouteClient, error) {
+	stream := c.ch.SendMultiRequest(in)
+	x := &serviceClient_DumpIPRouteClient{stream}
+	return x, nil
+}
+
+type RPCService_DumpIPRouteClient interface {
+	Recv() (*IPRouteDetails, error)
+}
+
+type serviceClient_DumpIPRouteClient struct {
+	api.MultiRequestCtx
+}
+
+func (c *serviceClient_DumpIPRouteClient) Recv() (*IPRouteDetails, error) {
+	m := new(IPRouteDetails)
+	stop, err := c.MultiRequestCtx.ReceiveReply(m)
+	if err != nil {
+		return nil, err
+	}
+	if stop {
+		return nil, io.EOF
+	}
+	return m, nil
+}
+
+func (c *serviceClient) DumpIPTable(ctx context.Context, in *IPTableDump) (RPCService_DumpIPTableClient, error) {
+	stream := c.ch.SendMultiRequest(in)
+	x := &serviceClient_DumpIPTableClient{stream}
+	return x, nil
+}
+
+type RPCService_DumpIPTableClient interface {
+	Recv() (*IPTableDetails, error)
+}
+
+type serviceClient_DumpIPTableClient struct {
+	api.MultiRequestCtx
+}
+
+func (c *serviceClient_DumpIPTableClient) Recv() (*IPTableDetails, error) {
+	m := new(IPTableDetails)
 	stop, err := c.MultiRequestCtx.ReceiveReply(m)
 	if err != nil {
 		return nil, err
@@ -2509,15 +2825,6 @@ func (c *serviceClient) IP6ndSendRouterSolicitation(ctx context.Context, in *IP6
 	return out, nil
 }
 
-func (c *serviceClient) IPAddDelRoute(ctx context.Context, in *IPAddDelRoute) (*IPAddDelRouteReply, error) {
-	out := new(IPAddDelRouteReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *serviceClient) IPContainerProxyAddDel(ctx context.Context, in *IPContainerProxyAddDel) (*IPContainerProxyAddDelReply, error) {
 	out := new(IPContainerProxyAddDelReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
@@ -2592,6 +2899,15 @@ func (c *serviceClient) IPReassemblyGet(ctx context.Context, in *IPReassemblyGet
 
 func (c *serviceClient) IPReassemblySet(ctx context.Context, in *IPReassemblySet) (*IPReassemblySetReply, error) {
 	out := new(IPReassemblySetReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error) {
+	out := new(IPRouteAddDelReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err
@@ -2691,6 +3007,15 @@ func (c *serviceClient) SetIPFlowHash(ctx context.Context, in *SetIPFlowHash) (*
 
 func (c *serviceClient) SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error) {
 	out := new(SwInterfaceIP6EnableDisableReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SwInterfaceIP6SetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6SetLinkLocalAddress) (*SwInterfaceIP6SetLinkLocalAddressReply, error) {
+	out := new(SwInterfaceIP6SetLinkLocalAddressReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

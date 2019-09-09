@@ -8,7 +8,6 @@ package binapi
 //go:generate binapigen --input-file=/usr/share/vpp/api/core/ip.api.json
 //go:generate binapigen --input-file=/usr/share/vpp/api/core/memclnt.api.json
 //go:generate binapigen --input-file=/usr/share/vpp/api/core/vpe.api.json
-//go:generate binapigen --input-file=/usr/share/vpp/api/plugins/acl.api.json
 //go:generate binapigen --input-file=/usr/share/vpp/api/plugins/memif.api.json
 
 // VPP version

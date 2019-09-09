@@ -26,7 +26,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "2.1.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0xb619530
+	VersionCrc = 0x949f3cb1
 )
 
 // MessageTableEntry represents VPP binary API type 'message_table_entry'.
@@ -37,9 +37,6 @@ type MessageTableEntry struct {
 
 func (*MessageTableEntry) GetTypeName() string {
 	return "message_table_entry"
-}
-func (*MessageTableEntry) GetCrcString() string {
-	return "913bf1c6"
 }
 
 // ModuleVersion represents VPP binary API type 'module_version'.
@@ -52,9 +49,6 @@ type ModuleVersion struct {
 
 func (*ModuleVersion) GetTypeName() string {
 	return "module_version"
-}
-func (*ModuleVersion) GetCrcString() string {
-	return "4b6da11a"
 }
 
 // APIVersions represents VPP binary API message 'api_versions'.
@@ -81,7 +75,7 @@ func (*APIVersionsReply) GetMessageName() string {
 	return "api_versions_reply"
 }
 func (*APIVersionsReply) GetCrcString() string {
-	return "90a39195"
+	return "76f45113"
 }
 func (*APIVersionsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -354,7 +348,7 @@ func (*SockclntCreateReply) GetMessageName() string {
 	return "sockclnt_create_reply"
 }
 func (*SockclntCreateReply) GetCrcString() string {
-	return "a134a8a8"
+	return "21795657"
 }
 func (*SockclntCreateReply) GetMessageType() api.MessageType {
 	return api.RequestMessage

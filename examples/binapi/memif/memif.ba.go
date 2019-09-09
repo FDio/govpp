@@ -25,7 +25,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "2.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x31b42e17
+	VersionCrc = 0x939f78a7
 )
 
 // MemifCreate represents VPP binary API message 'memif_create'.

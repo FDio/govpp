@@ -5,9 +5,11 @@
 Package vpe is a generated VPP binary API for 'vpe' module.
 
 It consists of:
-	  1 type
-	 18 messages
-	  9 services
+	  1 enum
+	  2 aliases
+	  2 types
+	 26 messages
+	 13 services
 */
 package vpe
 
@@ -24,10 +26,63 @@ const (
 	// ModuleName is the name of this module.
 	ModuleName = "vpe"
 	// APIVersion is the API version of this module.
-	APIVersion = "1.1.0"
+	APIVersion = "1.5.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x2cc8d629
+	VersionCrc = 0x2521f24d
 )
+
+// LogLevel represents VPP binary API enum 'log_level'.
+type LogLevel uint32
+
+const (
+	VPE_API_LOG_LEVEL_EMERG    LogLevel = 0
+	VPE_API_LOG_LEVEL_ALERT    LogLevel = 1
+	VPE_API_LOG_LEVEL_CRIT     LogLevel = 2
+	VPE_API_LOG_LEVEL_ERR      LogLevel = 3
+	VPE_API_LOG_LEVEL_WARNING  LogLevel = 4
+	VPE_API_LOG_LEVEL_NOTICE   LogLevel = 5
+	VPE_API_LOG_LEVEL_INFO     LogLevel = 6
+	VPE_API_LOG_LEVEL_DEBUG    LogLevel = 7
+	VPE_API_LOG_LEVEL_DISABLED LogLevel = 8
+)
+
+var LogLevel_name = map[uint32]string{
+	0: "VPE_API_LOG_LEVEL_EMERG",
+	1: "VPE_API_LOG_LEVEL_ALERT",
+	2: "VPE_API_LOG_LEVEL_CRIT",
+	3: "VPE_API_LOG_LEVEL_ERR",
+	4: "VPE_API_LOG_LEVEL_WARNING",
+	5: "VPE_API_LOG_LEVEL_NOTICE",
+	6: "VPE_API_LOG_LEVEL_INFO",
+	7: "VPE_API_LOG_LEVEL_DEBUG",
+	8: "VPE_API_LOG_LEVEL_DISABLED",
+}
+
+var LogLevel_value = map[string]uint32{
+	"VPE_API_LOG_LEVEL_EMERG":    0,
+	"VPE_API_LOG_LEVEL_ALERT":    1,
+	"VPE_API_LOG_LEVEL_CRIT":     2,
+	"VPE_API_LOG_LEVEL_ERR":      3,
+	"VPE_API_LOG_LEVEL_WARNING":  4,
+	"VPE_API_LOG_LEVEL_NOTICE":   5,
+	"VPE_API_LOG_LEVEL_INFO":     6,
+	"VPE_API_LOG_LEVEL_DEBUG":    7,
+	"VPE_API_LOG_LEVEL_DISABLED": 8,
+}
+
+func (x LogLevel) String() string {
+	s, ok := LogLevel_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+
+// Timedelta represents VPP binary API alias 'timedelta'.
+type Timedelta float64
+
+// Timestamp represents VPP binary API alias 'timestamp'.
+type Timestamp float64
 
 // ThreadData represents VPP binary API type 'thread_data'.
 type ThreadData struct {
@@ -43,8 +98,18 @@ type ThreadData struct {
 func (*ThreadData) GetTypeName() string {
 	return "thread_data"
 }
-func (*ThreadData) GetCrcString() string {
-	return "0f57094e"
+
+// Version represents VPP binary API type 'version'.
+type Version struct {
+	Major         uint32
+	Minor         uint32
+	Patch         uint32
+	PreRelease    []byte `struc:"[17]byte"`
+	BuildMetadata []byte `struc:"[17]byte"`
+}
+
+func (*Version) GetTypeName() string {
+	return "version"
 }
 
 // AddNodeNext represents VPP binary API message 'add_node_next'.
@@ -173,6 +238,68 @@ func (*ControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// GetF64EndianValue represents VPP binary API message 'get_f64_endian_value'.
+type GetF64EndianValue struct {
+	F64One float64
+}
+
+func (*GetF64EndianValue) GetMessageName() string {
+	return "get_f64_endian_value"
+}
+func (*GetF64EndianValue) GetCrcString() string {
+	return "809fcd44"
+}
+func (*GetF64EndianValue) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// GetF64EndianValueReply represents VPP binary API message 'get_f64_endian_value_reply'.
+type GetF64EndianValueReply struct {
+	Retval       uint32
+	F64OneResult float64
+}
+
+func (*GetF64EndianValueReply) GetMessageName() string {
+	return "get_f64_endian_value_reply"
+}
+func (*GetF64EndianValueReply) GetCrcString() string {
+	return "7e02e404"
+}
+func (*GetF64EndianValueReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// GetF64IncrementByOne represents VPP binary API message 'get_f64_increment_by_one'.
+type GetF64IncrementByOne struct {
+	F64Value float64
+}
+
+func (*GetF64IncrementByOne) GetMessageName() string {
+	return "get_f64_increment_by_one"
+}
+func (*GetF64IncrementByOne) GetCrcString() string {
+	return "b64f027e"
+}
+func (*GetF64IncrementByOne) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// GetF64IncrementByOneReply represents VPP binary API message 'get_f64_increment_by_one_reply'.
+type GetF64IncrementByOneReply struct {
+	Retval   uint32
+	F64Value float64
+}
+
+func (*GetF64IncrementByOneReply) GetMessageName() string {
+	return "get_f64_increment_by_one_reply"
+}
+func (*GetF64IncrementByOneReply) GetCrcString() string {
+	return "d25dbaa3"
+}
+func (*GetF64IncrementByOneReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 // GetNextIndex represents VPP binary API message 'get_next_index'.
 type GetNextIndex struct {
 	NodeName []byte `struc:"[64]byte"`
@@ -265,6 +392,41 @@ func (*GetNodeIndexReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// LogDetails represents VPP binary API message 'log_details'.
+type LogDetails struct {
+	Timestamp       Timestamp
+	Level           LogLevel
+	XXX_MsgClassLen uint32 `struc:"sizeof=MsgClass"`
+	MsgClass        string `binapi:",limit=32"`
+	XXX_MessageLen  uint32 `struc:"sizeof=Message"`
+	Message         string `binapi:",limit=256"`
+}
+
+func (*LogDetails) GetMessageName() string {
+	return "log_details"
+}
+func (*LogDetails) GetCrcString() string {
+	return "4aea1f4d"
+}
+func (*LogDetails) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+// LogDump represents VPP binary API message 'log_dump'.
+type LogDump struct {
+	StartTimestamp Timestamp
+}
+
+func (*LogDump) GetMessageName() string {
+	return "log_dump"
+}
+func (*LogDump) GetCrcString() string {
+	return "e4a022b6"
+}
+func (*LogDump) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
 // ShowThreads represents VPP binary API message 'show_threads'.
 type ShowThreads struct{}
 
@@ -289,7 +451,7 @@ func (*ShowThreadsReply) GetMessageName() string {
 	return "show_threads_reply"
 }
 func (*ShowThreadsReply) GetCrcString() string {
-	return "6942fb35"
+	return "f5e0b66f"
 }
 func (*ShowThreadsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
@@ -312,13 +474,13 @@ func (*ShowVersion) GetMessageType() api.MessageType {
 type ShowVersionReply struct {
 	Retval                int32
 	XXX_ProgramLen        uint32 `struc:"sizeof=Program"`
-	Program               string
+	Program               string `binapi:",limit=32"`
 	XXX_VersionLen        uint32 `struc:"sizeof=Version"`
-	Version               string
+	Version               string `binapi:",limit=32"`
 	XXX_BuildDateLen      uint32 `struc:"sizeof=BuildDate"`
-	BuildDate             string
+	BuildDate             string `binapi:",limit=32"`
 	XXX_BuildDirectoryLen uint32 `struc:"sizeof=BuildDirectory"`
-	BuildDirectory        string
+	BuildDirectory        string `binapi:",limit=256"`
 }
 
 func (*ShowVersionReply) GetMessageName() string {
@@ -331,6 +493,35 @@ func (*ShowVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
+// ShowVpeSystemTime represents VPP binary API message 'show_vpe_system_time'.
+type ShowVpeSystemTime struct{}
+
+func (*ShowVpeSystemTime) GetMessageName() string {
+	return "show_vpe_system_time"
+}
+func (*ShowVpeSystemTime) GetCrcString() string {
+	return "51077d14"
+}
+func (*ShowVpeSystemTime) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+// ShowVpeSystemTimeReply represents VPP binary API message 'show_vpe_system_time_reply'.
+type ShowVpeSystemTimeReply struct {
+	Retval        int32
+	VpeSystemTime Timestamp
+}
+
+func (*ShowVpeSystemTimeReply) GetMessageName() string {
+	return "show_vpe_system_time_reply"
+}
+func (*ShowVpeSystemTimeReply) GetCrcString() string {
+	return "3b12fb3f"
+}
+func (*ShowVpeSystemTimeReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
 func init() {
 	api.RegisterMessage((*AddNodeNext)(nil), "vpe.AddNodeNext")
 	api.RegisterMessage((*AddNodeNextReply)(nil), "vpe.AddNodeNextReply")
@@ -340,16 +531,24 @@ func init() {
 	api.RegisterMessage((*CliReply)(nil), "vpe.CliReply")
 	api.RegisterMessage((*ControlPing)(nil), "vpe.ControlPing")
 	api.RegisterMessage((*ControlPingReply)(nil), "vpe.ControlPingReply")
+	api.RegisterMessage((*GetF64EndianValue)(nil), "vpe.GetF64EndianValue")
+	api.RegisterMessage((*GetF64EndianValueReply)(nil), "vpe.GetF64EndianValueReply")
+	api.RegisterMessage((*GetF64IncrementByOne)(nil), "vpe.GetF64IncrementByOne")
+	api.RegisterMessage((*GetF64IncrementByOneReply)(nil), "vpe.GetF64IncrementByOneReply")
 	api.RegisterMessage((*GetNextIndex)(nil), "vpe.GetNextIndex")
 	api.RegisterMessage((*GetNextIndexReply)(nil), "vpe.GetNextIndexReply")
 	api.RegisterMessage((*GetNodeGraph)(nil), "vpe.GetNodeGraph")
 	api.RegisterMessage((*GetNodeGraphReply)(nil), "vpe.GetNodeGraphReply")
 	api.RegisterMessage((*GetNodeIndex)(nil), "vpe.GetNodeIndex")
 	api.RegisterMessage((*GetNodeIndexReply)(nil), "vpe.GetNodeIndexReply")
+	api.RegisterMessage((*LogDetails)(nil), "vpe.LogDetails")
+	api.RegisterMessage((*LogDump)(nil), "vpe.LogDump")
 	api.RegisterMessage((*ShowThreads)(nil), "vpe.ShowThreads")
 	api.RegisterMessage((*ShowThreadsReply)(nil), "vpe.ShowThreadsReply")
 	api.RegisterMessage((*ShowVersion)(nil), "vpe.ShowVersion")
 	api.RegisterMessage((*ShowVersionReply)(nil), "vpe.ShowVersionReply")
+	api.RegisterMessage((*ShowVpeSystemTime)(nil), "vpe.ShowVpeSystemTime")
+	api.RegisterMessage((*ShowVpeSystemTimeReply)(nil), "vpe.ShowVpeSystemTimeReply")
 }
 
 // Messages returns list of all messages in this module.
@@ -363,30 +562,42 @@ func AllMessages() []api.Message {
 		(*CliReply)(nil),
 		(*ControlPing)(nil),
 		(*ControlPingReply)(nil),
+		(*GetF64EndianValue)(nil),
+		(*GetF64EndianValueReply)(nil),
+		(*GetF64IncrementByOne)(nil),
+		(*GetF64IncrementByOneReply)(nil),
 		(*GetNextIndex)(nil),
 		(*GetNextIndexReply)(nil),
 		(*GetNodeGraph)(nil),
 		(*GetNodeGraphReply)(nil),
 		(*GetNodeIndex)(nil),
 		(*GetNodeIndexReply)(nil),
+		(*LogDetails)(nil),
+		(*LogDump)(nil),
 		(*ShowThreads)(nil),
 		(*ShowThreadsReply)(nil),
 		(*ShowVersion)(nil),
 		(*ShowVersionReply)(nil),
+		(*ShowVpeSystemTime)(nil),
+		(*ShowVpeSystemTimeReply)(nil),
 	}
 }
 
 // RPCService represents RPC service API for vpe module.
 type RPCService interface {
+	DumpLog(ctx context.Context, in *LogDump) (RPCService_DumpLogClient, error)
 	AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error)
 	Cli(ctx context.Context, in *Cli) (*CliReply, error)
 	CliInband(ctx context.Context, in *CliInband) (*CliInbandReply, error)
 	ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error)
+	GetF64EndianValue(ctx context.Context, in *GetF64EndianValue) (*GetF64EndianValueReply, error)
+	GetF64IncrementByOne(ctx context.Context, in *GetF64IncrementByOne) (*GetF64IncrementByOneReply, error)
 	GetNextIndex(ctx context.Context, in *GetNextIndex) (*GetNextIndexReply, error)
 	GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*GetNodeGraphReply, error)
 	GetNodeIndex(ctx context.Context, in *GetNodeIndex) (*GetNodeIndexReply, error)
 	ShowThreads(ctx context.Context, in *ShowThreads) (*ShowThreadsReply, error)
 	ShowVersion(ctx context.Context, in *ShowVersion) (*ShowVersionReply, error)
+	ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystemTime) (*ShowVpeSystemTimeReply, error)
 }
 
 type serviceClient struct {
@@ -395,6 +606,32 @@ type serviceClient struct {
 
 func NewServiceClient(ch api.Channel) RPCService {
 	return &serviceClient{ch}
+}
+
+func (c *serviceClient) DumpLog(ctx context.Context, in *LogDump) (RPCService_DumpLogClient, error) {
+	stream := c.ch.SendMultiRequest(in)
+	x := &serviceClient_DumpLogClient{stream}
+	return x, nil
+}
+
+type RPCService_DumpLogClient interface {
+	Recv() (*LogDetails, error)
+}
+
+type serviceClient_DumpLogClient struct {
+	api.MultiRequestCtx
+}
+
+func (c *serviceClient_DumpLogClient) Recv() (*LogDetails, error) {
+	m := new(LogDetails)
+	stop, err := c.MultiRequestCtx.ReceiveReply(m)
+	if err != nil {
+		return nil, err
+	}
+	if stop {
+		return nil, io.EOF
+	}
+	return m, nil
 }
 
 func (c *serviceClient) AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error) {
@@ -426,6 +663,24 @@ func (c *serviceClient) CliInband(ctx context.Context, in *CliInband) (*CliInban
 
 func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error) {
 	out := new(ControlPingReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) GetF64EndianValue(ctx context.Context, in *GetF64EndianValue) (*GetF64EndianValueReply, error) {
+	out := new(GetF64EndianValueReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) GetF64IncrementByOne(ctx context.Context, in *GetF64IncrementByOne) (*GetF64IncrementByOneReply, error) {
+	out := new(GetF64IncrementByOneReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err
@@ -471,6 +726,15 @@ func (c *serviceClient) ShowThreads(ctx context.Context, in *ShowThreads) (*Show
 
 func (c *serviceClient) ShowVersion(ctx context.Context, in *ShowVersion) (*ShowVersionReply, error) {
 	out := new(ShowVersionReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystemTime) (*ShowVpeSystemTimeReply, error) {
+	out := new(ShowVpeSystemTimeReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

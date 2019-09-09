@@ -25,7 +25,7 @@ const (
 	// APIVersion is the API version of this module.
 	APIVersion = "1.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x206563c
+	VersionCrc = 0xfefd69b7
 )
 
 // AfPacketCreate represents VPP binary API message 'af_packet_create'.
