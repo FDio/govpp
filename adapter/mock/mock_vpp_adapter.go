@@ -176,7 +176,6 @@ func (a *VppAdapter) ReplyBytes(request MessageDTO, reply api.Message) ([]byte, 
 			" ", err)
 		return nil, err
 	}
-	log.Println("ReplyBytes ", replyMsgID, " ", reply.GetMessageName(), " clientId: ", request.ClientID)
 
 	buf := new(bytes.Buffer)
 	err = struc.Pack(buf, &codec.VppReplyHeader{
