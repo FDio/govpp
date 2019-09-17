@@ -20,10 +20,11 @@ import (
 	"log"
 	"os"
 	"strings"
+	"time"
 
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/adapter/vppapiclient"
+	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
 )
 
@@ -37,12 +38,12 @@ import (
 var (
 	statsSocket = flag.String("socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
-	oldclient   = flag.Bool("oldclient", false, "Use old client for stats API (vppapiclient)")
+	pollPeriod  = flag.Duration("period", time.Second*5, "Polling interval period")
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|errors|interfaces|nodes|system|buffers] <patterns>...\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|poll|errors|interfaces|nodes|system|buffers] <patterns>...\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -52,26 +53,12 @@ func main() {
 	flag.Parse()
 	skipZeros := !*dumpAll
 
-	cmd := flag.Arg(0)
-	switch cmd {
-	case "", "ls", "dump", "errors", "interfaces", "nodes", "system", "buffers":
-	default:
-		flag.Usage()
-	}
-
 	var patterns []string
 	if flag.NArg() > 0 {
 		patterns = flag.Args()[1:]
 	}
 
-	var client adapter.StatsAPI
-	if *oldclient {
-		client = vppapiclient.NewStatClient(*statsSocket)
-	} else {
-		client = statsclient.NewStatsClient(*statsSocket)
-	}
-
-	fmt.Printf("Connecting to stats socket: %s\n", *statsSocket)
+	client := statsclient.NewStatsClient(*statsSocket)
 
 	c, err := core.ConnectStats(client)
 	if err != nil {
@@ -79,22 +66,26 @@ func main() {
 	}
 	defer c.Disconnect()
 
-	switch cmd {
+	switch cmd := flag.Arg(0); cmd {
 	case "system":
-		stats, err := c.GetSystemStats()
-		if err != nil {
+		stats := new(api.SystemStats)
+		if err := c.GetSystemStats(stats); err != nil {
 			log.Fatalln("getting system stats failed:", err)
 		}
 		fmt.Printf("System stats: %+v\n", stats)
 
+	case "poll-system":
+		pollSystem(c)
+
 	case "nodes":
 		fmt.Println("Listing node stats..")
-		stats, err := c.GetNodeStats()
-		if err != nil {
+		stats := new(api.NodeStats)
+		if err := c.GetNodeStats(stats); err != nil {
 			log.Fatalln("getting node stats failed:", err)
 		}
+
 		for _, node := range stats.Nodes {
-			if node.Calls == 0 && node.Suspends == 0 && node.Clocks == 0 && node.Vectors == 0 && skipZeros {
+			if skipZeros && node.Calls == 0 && node.Suspends == 0 && node.Clocks == 0 && node.Vectors == 0 {
 				continue
 			}
 			fmt.Printf(" - %+v\n", node)
@@ -103,8 +94,8 @@ func main() {
 
 	case "interfaces":
 		fmt.Println("Listing interface stats..")
-		stats, err := c.GetInterfaceStats()
-		if err != nil {
+		stats := new(api.InterfaceStats)
+		if err := c.GetInterfaceStats(stats); err != nil {
 			log.Fatalln("getting interface stats failed:", err)
 		}
 		for _, iface := range stats.Interfaces {
@@ -112,15 +103,18 @@ func main() {
 		}
 		fmt.Printf("Listed %d interface counters\n", len(stats.Interfaces))
 
+	case "poll-interfaces":
+		pollInterfaces(c)
+
 	case "errors":
 		fmt.Printf("Listing error stats.. %s\n", strings.Join(patterns, " "))
-		stats, err := c.GetErrorStats(patterns...)
-		if err != nil {
+		stats := new(api.ErrorStats)
+		if err := c.GetErrorStats(stats); err != nil {
 			log.Fatalln("getting error stats failed:", err)
 		}
 		n := 0
 		for _, counter := range stats.Errors {
-			if counter.Value == 0 && skipZeros {
+			if skipZeros && counter.Value == 0 {
 				continue
 			}
 			fmt.Printf(" - %v\n", counter)
@@ -129,23 +123,33 @@ func main() {
 		fmt.Printf("Listed %d (%d) error counters\n", n, len(stats.Errors))
 
 	case "buffers":
-		stats, err := c.GetBufferStats()
-		if err != nil {
+		stats := new(api.BufferStats)
+		if err := c.GetBufferStats(stats); err != nil {
 			log.Fatalln("getting buffer stats failed:", err)
 		}
 		fmt.Printf("Buffer stats: %+v\n", stats)
 
 	case "dump":
+		fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))
+
 		dumpStats(client, patterns, skipZeros)
 
-	default:
+	case "poll":
+		fmt.Printf("Polling stats.. %s\n", strings.Join(patterns, " "))
+
+		pollStats(client, patterns, skipZeros)
+
+	case "list", "ls", "":
+		fmt.Printf("Listing stats.. %s\n", strings.Join(patterns, " "))
+
 		listStats(client, patterns)
+
+	default:
+		fmt.Printf("invalid command: %q\n", cmd)
 	}
 }
 
 func listStats(client adapter.StatsAPI, patterns []string) {
-	fmt.Printf("Listing stats.. %s\n", strings.Join(patterns, " "))
-
 	list, err := client.ListStats(patterns...)
 	if err != nil {
 		log.Fatalln("listing stats failed:", err)
@@ -159,8 +163,6 @@ func listStats(client adapter.StatsAPI, patterns []string) {
 }
 
 func dumpStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
-	fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))
-
 	stats, err := client.DumpStats(patterns...)
 	if err != nil {
 		log.Fatalln("dumping stats failed:", err)
@@ -168,40 +170,91 @@ func dumpStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
 
 	n := 0
 	for _, stat := range stats {
-		if isZero(stat.Data) && skipZeros {
+		if skipZeros && (stat.Data == nil || stat.Data.IsZero()) {
 			continue
 		}
-		fmt.Printf(" - %-25s %25v %+v\n", stat.Name, stat.Type, stat.Data)
+		fmt.Printf(" - %-50s %25v %+v\n", stat.Name, stat.Type, stat.Data)
 		n++
 	}
 
 	fmt.Printf("Dumped %d (%d) stats\n", n, len(stats))
 }
 
-func isZero(stat adapter.Stat) bool {
-	switch s := stat.(type) {
-	case adapter.ScalarStat:
-		return s == 0
-	case adapter.ErrorStat:
-		return s == 0
-	case adapter.SimpleCounterStat:
-		for _, ss := range s {
-			for _, sss := range ss {
-				if sss != 0 {
-					return false
-				}
-			}
-		}
-		return true
-	case adapter.CombinedCounterStat:
-		for _, ss := range s {
-			for _, sss := range ss {
-				if sss.Bytes != 0 || sss.Packets != 0 {
-					return false
-				}
-			}
-		}
-		return true
+func pollStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
+	dir, err := client.PrepareDir(patterns...)
+	if err != nil {
+		log.Fatalln("preparing dir failed:", err)
 	}
-	return false
+
+	tick := time.Tick(*pollPeriod)
+	for {
+		n := 0
+		fmt.Println(time.Now().Format(time.Stamp))
+		for _, stat := range dir.Entries {
+			if skipZeros && (stat.Data == nil || stat.Data.IsZero()) {
+				continue
+			}
+			fmt.Printf("%-50s %+v\n", stat.Name, stat.Data)
+			n++
+		}
+		fmt.Println()
+
+		select {
+		case <-tick:
+			if err := client.UpdateDir(dir); err != nil {
+				if err == adapter.ErrStatsDirStale {
+					if dir, err = client.PrepareDir(patterns...); err != nil {
+						log.Fatalln("preparing dir failed:", err)
+					}
+					continue
+				}
+				log.Fatalln("updating dir failed:", err)
+			}
+		}
+	}
+}
+
+func pollSystem(client api.StatsProvider) {
+	stats := new(api.SystemStats)
+
+	if err := client.GetSystemStats(stats); err != nil {
+		log.Fatalln("updating system stats failed:", err)
+	}
+
+	tick := time.Tick(*pollPeriod)
+	for {
+		fmt.Printf("System stats: %+v\n", stats)
+		fmt.Println()
+
+		select {
+		case <-tick:
+			if err := client.GetSystemStats(stats); err != nil {
+				log.Println("updating system stats failed:", err)
+			}
+		}
+	}
+}
+
+func pollInterfaces(client api.StatsProvider) {
+	stats := new(api.InterfaceStats)
+
+	if err := client.GetInterfaceStats(stats); err != nil {
+		log.Fatalln("updating system stats failed:", err)
+	}
+
+	tick := time.Tick(*pollPeriod)
+	for {
+		fmt.Printf("Interface stats (%d interfaces)\n", len(stats.Interfaces))
+		for i := range stats.Interfaces {
+			fmt.Printf(" - %+v\n", stats.Interfaces[i])
+		}
+		fmt.Println()
+
+		select {
+		case <-tick:
+			if err := client.GetInterfaceStats(stats); err != nil {
+				log.Println("updating system stats failed:", err)
+			}
+		}
+	}
 }

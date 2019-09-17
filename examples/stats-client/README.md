@@ -1,4 +1,4 @@
-# Stats API Example
+# Stats Client Example
 
 This example demonstrates how to retrieve statistics from VPP using [the new Stats API](https://github.com/FDio/vpp/blob/master/src/vpp/stats/stats.md).
 

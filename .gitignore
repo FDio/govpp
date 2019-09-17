@@ -1,6 +1,7 @@
 *~
 *.log
 *.out
+*.test
 
 .idea/
 
@@ -9,7 +10,7 @@ cmd/binapi-generator/binapi-generator
 
 # examples
 examples/perf-bench/perf-bench
-examples/simple-client/simple-client
-examples/stats-api/stats-api
-examples/union-example/union-example
 examples/rpc-service/rpc-service
+examples/simple-client/simple-client
+examples/stats-client/stats-client
+examples/union-example/union-example

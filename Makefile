@@ -43,11 +43,11 @@ build:
 
 examples:
 	@echo "=> building examples"
-	cd examples/simple-client && $(GO) build ${GO_BUILD_ARGS} -v
-	cd examples/stats-api && $(GO) build ${GO_BUILD_ARGS} -v
 	cd examples/perf-bench && $(GO) build ${GO_BUILD_ARGS} -v
-	cd examples/union-example && $(GO) build ${GO_BUILD_ARGS} -v
 	cd examples/rpc-service && $(GO) build ${GO_BUILD_ARGS} -v
+	cd examples/simple-client && $(GO) build ${GO_BUILD_ARGS} -v
+	cd examples/stats-client && $(GO) build ${GO_BUILD_ARGS} -v
+	cd examples/union-example && $(GO) build ${GO_BUILD_ARGS} -v
 
 clean:
 	@echo "=> cleaning"
@@ -56,8 +56,12 @@ clean:
 
 test:
 	@echo "=> running tests"
-	$(GO) test -v ./cmd/...
-	$(GO) test -v ./ ./api ./adapter ./codec ./core
+	$(GO) test ${GO_BUILD_ARGS} ./cmd/...
+	$(GO) test ${GO_BUILD_ARGS} ./ ./api ./adapter ./codec ./core
+
+test-integration:
+	@echo "=> running integration tests"
+	$(GO) test ${GO_BUILD_ARGS} ./test/integration
 
 lint:
 	@echo "=> running linter"
@@ -87,6 +91,6 @@ extras:
 
 
 .PHONY: all \
-	install build examples clean test lint \
+	install build examples clean test test-integration lint \
 	generate generate-binapi gen-binapi-docker \
 	extras

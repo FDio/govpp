@@ -25,9 +25,8 @@ import (
 	"github.com/pkg/profile"
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/socketclient"
-	"git.fd.io/govpp.git/adapter/vppapiclient"
+	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
@@ -40,10 +39,12 @@ const (
 
 func main() {
 	// parse optional flags
-	var sync, prof, sock bool
+	var sync, prof bool
 	var cnt int
+	var sock string
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
-	flag.BoolVar(&sock, "sock", false, "use socket client for VPP API")
+	flag.StringVar(&sock, "socket", socketclient.DefaultSocketName, "Path to VPP API socket")
+	flag.String("socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
 	flag.BoolVar(&prof, "prof", false, "generate profile data")
 	flag.Parse()
@@ -61,12 +62,7 @@ func main() {
 		defer profile.Start().Stop()
 	}
 
-	var a adapter.VppAPI
-	if sock {
-		a = socketclient.NewVppClient("/run/vpp-api.sock")
-	} else {
-		a = vppapiclient.NewVppClient("")
-	}
+	a := socketclient.NewVppClient(sock)
 
 	// connect to VPP
 	conn, err := core.Connect(a)
