@@ -24,6 +24,7 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
+	_ "git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 	"git.fd.io/govpp.git/proxy"
@@ -83,6 +84,13 @@ func runClient() {
 	binapiChannel, err := client.NewBinapiClient()
 	if err != nil {
 		log.Fatalln(err)
+	}
+	log.Println("checking compatibility")
+	var msgs []api.Message
+	msgs = append(msgs, interfaces.AllMessages()...)
+	msgs = append(msgs, vpe.AllMessages()...)
+	if err := binapiChannel.CheckCompatiblity(msgs...); err != nil {
+		panic(err)
 	}
 
 	// - using binapi message directly

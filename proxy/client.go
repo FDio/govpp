@@ -20,7 +20,7 @@ type Client struct {
 func Connect(addr string) (*Client, error) {
 	client, err := rpc.DialHTTP("tcp", addr)
 	if err != nil {
-		log.Fatal("Connection error: ", err)
+		return nil, fmt.Errorf("connection error:%v", err)
 	}
 	c := &Client{
 		serverAddr: addr,
@@ -50,33 +50,56 @@ type StatsClient struct {
 }
 
 func (s *StatsClient) GetSystemStats(sysStats *api.SystemStats) error {
+	// we need to start with a clean, zeroed item before decoding
+	// 'cause if the new values are 'zero' for the type, they will be ignored
+	// by the decoder. (i.e the old values will be left unchanged).
 	req := StatsRequest{StatsType: "system"}
-	resp := StatsResponse{SysStats: sysStats}
-	return s.rpc.Call("StatsRPC.GetStats", req, &resp)
+	resp := StatsResponse{SysStats: new(api.SystemStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*sysStats = *resp.SysStats
+	return nil
 }
 
 func (s *StatsClient) GetNodeStats(nodeStats *api.NodeStats) error {
 	req := StatsRequest{StatsType: "node"}
-	resp := StatsResponse{NodeStats: nodeStats}
-	return s.rpc.Call("StatsRPC.GetStats", req, &resp)
+	resp := StatsResponse{NodeStats: new(api.NodeStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*nodeStats = *resp.NodeStats
+	return nil
 }
 
 func (s *StatsClient) GetInterfaceStats(ifaceStats *api.InterfaceStats) error {
 	req := StatsRequest{StatsType: "interface"}
-	resp := StatsResponse{IfaceStats: ifaceStats}
-	return s.rpc.Call("StatsRPC.GetStats", req, &resp)
+	resp := StatsResponse{IfaceStats: new(api.InterfaceStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*ifaceStats = *resp.IfaceStats
+	return nil
 }
 
 func (s *StatsClient) GetErrorStats(errStats *api.ErrorStats) error {
 	req := StatsRequest{StatsType: "error"}
-	resp := StatsResponse{ErrStats: errStats}
-	return s.rpc.Call("StatsRPC.GetStats", req, &resp)
+	resp := StatsResponse{ErrStats: new(api.ErrorStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*errStats = *resp.ErrStats
+	return nil
 }
 
 func (s *StatsClient) GetBufferStats(bufStats *api.BufferStats) error {
 	req := StatsRequest{StatsType: "buffer"}
-	resp := StatsResponse{BufStats: bufStats}
-	return s.rpc.Call("StatsRPC.GetStats", req, &resp)
+	resp := StatsResponse{BufStats: new(api.BufferStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*bufStats = *resp.BufStats
+	return nil
 }
 
 type BinapiClient struct {
@@ -166,11 +189,25 @@ func (b *BinapiClient) SubscribeNotification(notifChan chan api.Message, event a
 }
 
 func (b *BinapiClient) SetReplyTimeout(timeout time.Duration) {
-	panic("implement me")
+	req := BinapiTimeoutRequest{Timeout: timeout}
+	resp := BinapiTimeoutResponse{}
+	if err := b.rpc.Call("BinapiRPC.SetTimeout", req, &resp); err != nil {
+		log.Println(err)
+	}
 }
 
 func (b *BinapiClient) CheckCompatiblity(msgs ...api.Message) error {
-	return nil // TODO: proxy this
+	for _, msg := range msgs {
+		req := BinapiCompatibilityRequest{
+			MsgName: msg.GetMessageName(),
+			Crc:     msg.GetCrcString(),
+		}
+		resp := BinapiCompatibilityResponse{}
+		if err := b.rpc.Call("BinapiRPC.Compatibility", req, &resp); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (b *BinapiClient) Close() {

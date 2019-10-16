@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"reflect"
+	"time"
 
 	"git.fd.io/govpp.git/api"
 )
@@ -66,6 +67,21 @@ type BinapiResponse struct {
 	Msgs []api.Message
 }
 
+type BinapiCompatibilityRequest struct {
+	MsgName string
+	Crc     string
+}
+
+type BinapiCompatibilityResponse struct {
+}
+
+type BinapiTimeoutRequest struct {
+	Timeout time.Duration
+}
+
+type BinapiTimeoutResponse struct {
+}
+
 // BinapiRPC is a RPC server for proxying client request to api.Channel.
 type BinapiRPC struct {
 	binapi api.Channel
@@ -106,4 +122,18 @@ func (s *BinapiRPC) Invoke(req BinapiRequest, resp *BinapiResponse) error {
 	}
 
 	return nil
+}
+
+func (s *BinapiRPC) SetTimeout(req BinapiTimeoutRequest, _ *BinapiTimeoutResponse) error {
+	log.Printf("BinapiRPC.SetTimeout - REQ: %#v", req)
+	s.binapi.SetReplyTimeout(req.Timeout)
+	return nil
+}
+
+func (s *BinapiRPC) Compatibility(req BinapiCompatibilityRequest, _ *BinapiCompatibilityResponse) error {
+	log.Printf("BinapiRPC.Compatiblity - REQ: %#v", req)
+	if val, ok := api.GetRegisteredMessages()[req.MsgName+"_"+req.Crc]; ok {
+		return s.binapi.CheckCompatiblity(val)
+	}
+	return fmt.Errorf("compatibility check failed for the message: %s", req.MsgName+"_"+req.Crc)
 }
