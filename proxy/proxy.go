@@ -15,88 +15,78 @@
 package proxy
 
 import (
-	"log"
+	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"net/rpc"
 
 	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/core"
 )
 
 // Server defines a proxy server that serves client requests to stats and binapi.
 type Server struct {
 	rpc *rpc.Server
 
-	statsConn  *core.StatsConnection
-	binapiConn *core.Connection
+	statsRPC  *StatsRPC
+	binapiRPC *BinapiRPC
 }
 
-func NewServer() *Server {
-	return &Server{
-		rpc: rpc.NewServer(),
+func NewServer() (*Server, error) {
+	srv := &Server{
+		rpc:       rpc.NewServer(),
+		statsRPC:  &StatsRPC{},
+		binapiRPC: &BinapiRPC{},
 	}
+
+	if err := srv.rpc.Register(srv.statsRPC); err != nil {
+		return nil, err
+	}
+
+	if err := srv.rpc.Register(srv.binapiRPC); err != nil {
+		return nil, err
+	}
+
+	return srv, nil
 }
 
 func (p *Server) ConnectStats(stats adapter.StatsAPI) error {
-	var err error
-	p.statsConn, err = core.ConnectStats(stats)
-	if err != nil {
-		return err
-	}
-	return nil
+	return p.statsRPC.Connect(stats)
 }
 
 func (p *Server) DisconnectStats() {
-	if p.statsConn != nil {
-		p.statsConn.Disconnect()
-	}
+	p.statsRPC.Disconnect()
 }
 
 func (p *Server) ConnectBinapi(binapi adapter.VppAPI) error {
-	var err error
-	p.binapiConn, err = core.Connect(binapi)
-	if err != nil {
-		return err
-	}
-	return nil
+	return p.binapiRPC.Connect(binapi)
 }
 
 func (p *Server) DisconnectBinapi() {
-	if p.binapiConn != nil {
-		p.binapiConn.Disconnect()
-	}
+	p.binapiRPC.Disconnect()
 }
 
-func (p *Server) ListenAndServe(addr string) {
-	if p.statsConn != nil {
-		statsRPC := NewStatsRPC(p.statsConn)
-		if err := p.rpc.Register(statsRPC); err != nil {
-			panic(err)
-		}
-	}
-	if p.binapiConn != nil {
-		ch, err := p.binapiConn.NewAPIChannel()
-		if err != nil {
-			panic(err)
-		}
-		binapiRPC := NewBinapiRPC(ch)
-		if err := p.rpc.Register(binapiRPC); err != nil {
-			panic(err)
-		}
-	}
+func (p *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	p.rpc.ServeHTTP(w, req)
+}
 
+func (p *Server) ServeCodec(codec rpc.ServerCodec) {
+	p.rpc.ServeCodec(codec)
+}
+
+func (p *Server) ServeConn(conn io.ReadWriteCloser) {
+	p.rpc.ServeConn(conn)
+}
+
+func (p *Server) ListenAndServe(addr string) error {
 	p.rpc.HandleHTTP(rpc.DefaultRPCPath, rpc.DefaultDebugPath)
 
 	l, e := net.Listen("tcp", addr)
 	if e != nil {
-		log.Fatal("listen error:", e)
+		return fmt.Errorf("listen error:", e)
 	}
 	defer l.Close()
 
 	log.Printf("proxy serving on: %v", addr)
-
-	if err := http.Serve(l, nil); err != nil {
-		log.Fatalln(err)
-	}
+	return http.Serve(l, nil)
 }

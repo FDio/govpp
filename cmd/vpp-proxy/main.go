@@ -120,7 +120,10 @@ func runClient() {
 }
 
 func runServer() {
-	p := proxy.NewServer()
+	p, err := proxy.NewServer()
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	statsAdapter := statsclient.NewStatsClient(*statsSocket)
 	binapiAdapter := socketclient.NewVppClient(*binapiSocket)
@@ -135,5 +138,7 @@ func runServer() {
 	}
 	defer p.DisconnectBinapi()
 
-	p.ListenAndServe(*proxyAddr)
+	if err := p.ListenAndServe(*proxyAddr); err != nil {
+		log.Fatalln(err)
+	}
 }

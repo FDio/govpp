@@ -9,7 +9,7 @@ require (
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
-	github.com/lunixbochs/struc v0.0.0-20180408203800-02e4c2afbb2a
+	github.com/lunixbochs/struc v0.0.0-20190916212049-a5c72983bc42
 	github.com/onsi/ginkgo v1.8.0 // indirect
 	github.com/onsi/gomega v1.1.0
 	github.com/pkg/profile v1.2.1

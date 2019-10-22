@@ -111,6 +111,9 @@ type Connection struct {
 
 	lastReplyLock sync.Mutex // lock for the last reply
 	lastReply     time.Time  // time of the last received reply from VPP
+
+	msgControlPing      api.Message
+	msgControlPingReply api.Message
 }
 
 func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) *Connection {
@@ -122,14 +125,16 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) 
 	}
 
 	c := &Connection{
-		vppClient:     binapi,
-		maxAttempts:   attempts,
-		recInterval:   interval,
-		codec:         &codec.MsgCodec{},
-		msgIDs:        make(map[string]uint16),
-		msgMap:        make(map[uint16]api.Message),
-		channels:      make(map[uint16]*Channel),
-		subscriptions: make(map[uint16][]*subscriptionCtx),
+		vppClient:           binapi,
+		maxAttempts:         attempts,
+		recInterval:         interval,
+		codec:               &codec.MsgCodec{},
+		msgIDs:              make(map[string]uint16),
+		msgMap:              make(map[uint16]api.Message),
+		channels:            make(map[uint16]*Channel),
+		subscriptions:       make(map[uint16][]*subscriptionCtx),
+		msgControlPing:      msgControlPing,
+		msgControlPingReply: msgControlPingReply,
 	}
 	binapi.SetMsgCallback(c.msgCallback)
 	return c
@@ -314,7 +319,7 @@ func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
 		}
 
 		// send the control ping request
-		ch.reqChan <- &vppRequest{msg: msgControlPing}
+		ch.reqChan <- &vppRequest{msg: c.msgControlPing}
 
 		for {
 			// expect response within timeout period
@@ -427,12 +432,12 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 		}
 		n++
 
-		if c.pingReqID == 0 && msg.GetMessageName() == msgControlPing.GetMessageName() {
+		if c.pingReqID == 0 && msg.GetMessageName() == c.msgControlPing.GetMessageName() {
 			c.pingReqID = msgID
-			msgControlPing = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-		} else if c.pingReplyID == 0 && msg.GetMessageName() == msgControlPingReply.GetMessageName() {
+			c.msgControlPing = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+		} else if c.pingReplyID == 0 && msg.GetMessageName() == c.msgControlPingReply.GetMessageName() {
 			c.pingReplyID = msgID
-			msgControlPingReply = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+			c.msgControlPingReply = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 		}
 
 		if debugMsgIDs {

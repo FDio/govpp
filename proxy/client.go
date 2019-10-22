@@ -1,8 +1,22 @@
+//  Copyright (c) 2019 Cisco and/or its affiliates.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at:
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
 package proxy
 
 import (
 	"fmt"
-	"log"
+	"git.fd.io/govpp.git/core"
 	"net/rpc"
 	"reflect"
 	"time"
@@ -40,7 +54,8 @@ func (c *Client) NewStatsClient() (*StatsClient, error) {
 // NewBinapiClient returns new BinapiClient which implements api.Channel.
 func (c *Client) NewBinapiClient() (*BinapiClient, error) {
 	binapi := &BinapiClient{
-		rpc: c.rpc,
+		rpc:     c.rpc,
+		timeout: core.DefaultReplyTimeout,
 	}
 	return binapi, nil
 }
@@ -103,27 +118,31 @@ func (s *StatsClient) GetBufferStats(bufStats *api.BufferStats) error {
 }
 
 type BinapiClient struct {
-	rpc *rpc.Client
+	rpc     *rpc.Client
+	timeout time.Duration
 }
 
 func (b *BinapiClient) SendRequest(msg api.Message) api.RequestCtx {
 	req := &requestCtx{
-		rpc: b.rpc,
-		req: msg,
+		rpc:     b.rpc,
+		timeout: b.timeout,
+		req:     msg,
 	}
-	log.Printf("SendRequest: %T %+v", msg, msg)
+	log.Debugf("SendRequest: %T %+v", msg, msg)
 	return req
 }
 
 type requestCtx struct {
-	rpc *rpc.Client
-	req api.Message
+	rpc     *rpc.Client
+	req     api.Message
+	timeout time.Duration
 }
 
 func (r *requestCtx) ReceiveReply(msg api.Message) error {
 	req := BinapiRequest{
 		Msg:      r.req,
 		ReplyMsg: msg,
+		Timeout:  r.timeout,
 	}
 	resp := BinapiResponse{}
 
@@ -140,16 +159,18 @@ func (r *requestCtx) ReceiveReply(msg api.Message) error {
 
 func (b *BinapiClient) SendMultiRequest(msg api.Message) api.MultiRequestCtx {
 	req := &multiRequestCtx{
-		rpc: b.rpc,
-		req: msg,
+		rpc:     b.rpc,
+		timeout: b.timeout,
+		req:     msg,
 	}
-	log.Printf("SendMultiRequest: %T %+v", msg, msg)
+	log.Debugf("SendMultiRequest: %T %+v", msg, msg)
 	return req
 }
 
 type multiRequestCtx struct {
-	rpc *rpc.Client
-	req api.Message
+	rpc     *rpc.Client
+	req     api.Message
+	timeout time.Duration
 
 	index   int
 	replies []api.Message
@@ -162,6 +183,7 @@ func (r *multiRequestCtx) ReceiveReply(msg api.Message) (stop bool, err error) {
 			Msg:      r.req,
 			ReplyMsg: msg,
 			IsMulti:  true,
+			Timeout:  r.timeout,
 		}
 		resp := BinapiResponse{}
 
@@ -189,24 +211,23 @@ func (b *BinapiClient) SubscribeNotification(notifChan chan api.Message, event a
 }
 
 func (b *BinapiClient) SetReplyTimeout(timeout time.Duration) {
-	req := BinapiTimeoutRequest{Timeout: timeout}
-	resp := BinapiTimeoutResponse{}
-	if err := b.rpc.Call("BinapiRPC.SetTimeout", req, &resp); err != nil {
-		log.Println(err)
-	}
+	b.timeout = timeout
 }
 
 func (b *BinapiClient) CheckCompatiblity(msgs ...api.Message) error {
+	msgNamesCrscs := make([]string, 0, len(msgs))
+
 	for _, msg := range msgs {
-		req := BinapiCompatibilityRequest{
-			MsgName: msg.GetMessageName(),
-			Crc:     msg.GetCrcString(),
-		}
-		resp := BinapiCompatibilityResponse{}
-		if err := b.rpc.Call("BinapiRPC.Compatibility", req, &resp); err != nil {
-			return err
-		}
+		msgNamesCrscs = append(msgNamesCrscs, msg.GetMessageName()+"_"+msg.GetCrcString())
 	}
+
+	req := BinapiCompatibilityRequest{MsgNameCrcs: msgNamesCrscs}
+	resp := BinapiCompatibilityResponse{}
+
+	if err := b.rpc.Call("BinapiRPC.Compatibility", req, &resp); err != nil {
+		return err
+	}
+
 	return nil
 }
 
