@@ -92,7 +92,7 @@ func (s *StatsRPC) watchConnection() {
 	s.mu.Lock()
 	if err := s.statsConn.GetSystemStats(prev); err != nil {
 		atomic.StoreUint32(&s.available, 0)
-		log.Warnf("disabling statsRPC service, reason:", err)
+		log.Warnf("disabling statsRPC service, reason: %v", err)
 	}
 	s.mu.Unlock()
 
@@ -110,7 +110,7 @@ func (s *StatsRPC) watchConnection() {
 			s.mu.Lock()
 			if err := s.statsConn.GetSystemStats(curr); err != nil {
 				atomic.StoreUint32(&s.available, 0)
-				log.Warnf("disabling statsRPC service, reason:", err)
+				log.Warnf("disabling statsRPC service, reason: %v", err)
 			}
 			s.mu.Unlock()
 

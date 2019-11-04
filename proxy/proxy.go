@@ -83,10 +83,11 @@ func (p *Server) ListenAndServe(addr string) error {
 
 	l, e := net.Listen("tcp", addr)
 	if e != nil {
-		return fmt.Errorf("listen error:", e)
+		return fmt.Errorf("listen failed: %v", e)
 	}
 	defer l.Close()
 
 	log.Printf("proxy serving on: %v", addr)
+
 	return http.Serve(l, nil)
 }

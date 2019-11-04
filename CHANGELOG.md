@@ -2,6 +2,11 @@
 
 This file lists changes for the GoVPP releases.
 
+## 0.3.0
+> _in development_
+
+// TO BE ADDED
+
 ## 0.2.0
 > _04 November 2019_
 
@@ -17,7 +22,6 @@ This file lists changes for the GoVPP releases.
 ### Other
 - migrate to Go modules
 - print info for users when sockets are missing
-
 
 ## 0.1.0
 > _03 July 2019_

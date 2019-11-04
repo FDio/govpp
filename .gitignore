@@ -5,8 +5,11 @@
 
 .idea/
 
-# cmds
+/bin/
+
+# cmd
 cmd/binapi-generator/binapi-generator
+cmd/vpp-proxy/vpp-proxy
 
 # examples
 examples/perf-bench/perf-bench

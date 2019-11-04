@@ -3,7 +3,7 @@ services: docker
 
 language: go
 go:
-  - "1.12.x"
+  - "1.13.x"
 
 go_import_path: git.fd.io/govpp.git
 
@@ -14,12 +14,12 @@ env:
 before_script:
   - export VPP_IMG="ligato/vpp-base:latest"
   - docker pull $VPP_IMG
-  - GO111MODULE=on go mod download
+  - go mod download
 
 script:
+  - make lint || true
   - make test
   - make build
-  - make examples
   - make gen-binapi-docker
 
 notifications:

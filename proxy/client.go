@@ -16,12 +16,12 @@ package proxy
 
 import (
 	"fmt"
-	"git.fd.io/govpp.git/core"
 	"net/rpc"
 	"reflect"
 	"time"
 
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/core"
 )
 
 type Client struct {
