@@ -23,6 +23,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/api"
 )
 
@@ -144,14 +145,23 @@ func (ch *Channel) SendMultiRequest(msg api.Message) api.MultiRequestCtx {
 }
 
 func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
+	var comperr api.CompatibilityError
 	for _, msg := range msgs {
-		// TODO: collect all incompatible messages and return summarized error
 		_, err := ch.msgIdentifier.GetMessageID(msg)
 		if err != nil {
+			if uerr, ok := err.(*adapter.UnknownMsgError); ok {
+				m := fmt.Sprintf("%s_%s", uerr.MsgName, uerr.MsgCrc)
+				comperr.IncompatibleMessages = append(comperr.IncompatibleMessages, m)
+				continue
+			}
+			// other errors return immediatelly
 			return err
 		}
 	}
-	return nil
+	if len(comperr.IncompatibleMessages) == 0 {
+		return nil
+	}
+	return &comperr
 }
 
 func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {

@@ -17,12 +17,12 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"flag"
 	"fmt"
 	"io"
 	"log"
+	"strings"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
@@ -88,6 +88,6 @@ func interfaceDump(ch api.Channel) {
 		if err != nil {
 			log.Fatalln("ERROR: DumpSwInterface failed:", err)
 		}
-		fmt.Printf("- interface: %s\n", bytes.Trim(iface.InterfaceName, "\x00"))
+		fmt.Printf("- interface: %s\n", strings.Trim(iface.InterfaceName, "\x00"))
 	}
 }

@@ -16,6 +16,7 @@ package adapter
 
 import (
 	"errors"
+	"fmt"
 )
 
 const (
@@ -51,4 +52,15 @@ type VppAPI interface {
 
 	// WaitReady waits until adapter is ready.
 	WaitReady() error
+}
+
+// UnknownMsgError is the error type usually returned by GetMsgID
+// method of VppAPI. It describes the name and CRC for the unknown message.
+type UnknownMsgError struct {
+	MsgName string
+	MsgCrc  string
+}
+
+func (u *UnknownMsgError) Error() string {
+	return fmt.Sprintf("unknown message: %s_%s", u.MsgName, u.MsgCrc)
 }

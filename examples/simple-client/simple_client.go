@@ -65,6 +65,10 @@ func main() {
 
 	vppVersion(ch)
 
+	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
+		log.Fatal(err)
+	}
+
 	createLoopback(ch)
 	createLoopback(ch)
 	interfaceDump(ch)

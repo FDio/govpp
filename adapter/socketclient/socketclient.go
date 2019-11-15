@@ -419,7 +419,7 @@ func (c *vppClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	msg := msgName + "_" + msgCrc
 	msgID, ok := c.msgTable[msg]
 	if !ok {
-		return 0, fmt.Errorf("unknown message: %q", msg)
+		return 0, &adapter.UnknownMsgError{msgName, msgCrc}
 	}
 	return msgID, nil
 }

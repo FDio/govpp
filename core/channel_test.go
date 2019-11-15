@@ -213,15 +213,15 @@ func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 	ctx.mockVpp.MockReply(
 		&interfaces.SwInterfaceDetails{
 			SwIfIndex:     1,
-			InterfaceName: []byte("if-name-test"),
+			InterfaceName: "if-name-test",
 		},
 		&interfaces.SwInterfaceDetails{
 			SwIfIndex:     2,
-			InterfaceName: []byte("if-name-test"),
+			InterfaceName: "if-name-test",
 		},
 		&interfaces.SwInterfaceDetails{
 			SwIfIndex:     3,
-			InterfaceName: []byte("if-name-test"),
+			InterfaceName: "if-name-test",
 		},
 	)
 	ctx.mockVpp.MockReply(&ControlPingReply{})
@@ -288,7 +288,7 @@ func TestMultiRequestDouble(t *testing.T) {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
 				SwIfIndex:     uint32(i),
-				InterfaceName: []byte("if-name-test"),
+				InterfaceName: "if-name-test",
 			},
 			Multipart: true,
 			SeqNum:    1,
@@ -301,7 +301,7 @@ func TestMultiRequestDouble(t *testing.T) {
 			mock.MsgWithContext{
 				Msg: &interfaces.SwInterfaceDetails{
 					SwIfIndex:     uint32(i),
-					InterfaceName: []byte("if-name-test"),
+					InterfaceName: "if-name-test",
 				},
 				Multipart: true,
 				SeqNum:    2,
@@ -427,7 +427,7 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
 				SwIfIndex:     uint32(i),
-				InterfaceName: []byte("if-name-test"),
+				InterfaceName: "if-name-test",
 			},
 			Multipart: true,
 			SeqNum:    2,
