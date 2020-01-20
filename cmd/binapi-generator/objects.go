@@ -65,7 +65,7 @@ type Field struct {
 // FieldMeta represents VPP binary API meta info for field
 type FieldMeta struct {
 	Limit   int
-	Default float64
+	Default string
 }
 
 // Union represents VPP binary API union

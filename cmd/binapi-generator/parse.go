@@ -468,7 +468,7 @@ func parseField(ctx *context, field *jsongo.JSONNode) (*Field, error) {
 				case fieldMetaLimit:
 					f.Meta.Limit = int(metaNode.Get().(float64))
 				case fieldMetaDefault:
-					f.Meta.Default = metaNode.Get().(float64)
+					f.Meta.Default = fmt.Sprint(metaNode.Get())
 				default:
 					logrus.Warnf("unknown meta info (%s) for field (%s)", metaName, fieldName)
 				}
