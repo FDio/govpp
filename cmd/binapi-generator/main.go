@@ -142,8 +142,8 @@ func getInputFiles(inputDir string, deep int) (files []string, err error) {
 	return files, nil
 }
 
-func parseInputJSON(inputData []byte) (*jsongo.JSONNode, error) {
-	jsonRoot := new(jsongo.JSONNode)
+func parseInputJSON(inputData []byte) (*jsongo.Node, error) {
+	jsonRoot := new(jsongo.Node)
 	if err := json.Unmarshal(inputData, jsonRoot); err != nil {
 		return nil, fmt.Errorf("unmarshalling JSON failed: %v", err)
 	}

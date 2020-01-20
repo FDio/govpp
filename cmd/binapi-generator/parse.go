@@ -73,7 +73,7 @@ const (
 )
 
 // parsePackage parses provided JSON data into objects prepared for code generation
-func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
+func parsePackage(ctx *context, jsonRoot *jsongo.Node) (*Package, error) {
 	pkg := Package{
 		Name:   ctx.packageName,
 		RefMap: make(map[string]string),
@@ -241,7 +241,7 @@ func parsePackage(ctx *context, jsonRoot *jsongo.JSONNode) (*Package, error) {
 }
 
 // parseEnum parses VPP binary API enum object from JSON node
-func parseEnum(ctx *context, enumNode *jsongo.JSONNode) (*Enum, error) {
+func parseEnum(ctx *context, enumNode *jsongo.Node) (*Enum, error) {
 	if enumNode.Len() == 0 || enumNode.At(0).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for enum specified")
 	}
@@ -286,7 +286,7 @@ func parseEnum(ctx *context, enumNode *jsongo.JSONNode) (*Enum, error) {
 }
 
 // parseUnion parses VPP binary API union object from JSON node
-func parseUnion(ctx *context, unionNode *jsongo.JSONNode) (*Union, error) {
+func parseUnion(ctx *context, unionNode *jsongo.Node) (*Union, error) {
 	if unionNode.Len() == 0 || unionNode.At(0).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for union specified")
 	}
@@ -323,7 +323,7 @@ func parseUnion(ctx *context, unionNode *jsongo.JSONNode) (*Union, error) {
 }
 
 // parseType parses VPP binary API type object from JSON node
-func parseType(ctx *context, typeNode *jsongo.JSONNode) (*Type, error) {
+func parseType(ctx *context, typeNode *jsongo.Node) (*Type, error) {
 	if typeNode.Len() == 0 || typeNode.At(0).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for type specified")
 	}
@@ -360,7 +360,7 @@ func parseType(ctx *context, typeNode *jsongo.JSONNode) (*Type, error) {
 }
 
 // parseAlias parses VPP binary API alias object from JSON node
-func parseAlias(ctx *context, aliasName string, aliasNode *jsongo.JSONNode) (*Alias, error) {
+func parseAlias(ctx *context, aliasName string, aliasNode *jsongo.Node) (*Alias, error) {
 	if aliasNode.Len() == 0 || aliasNode.At(aliasTypeField).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for alias specified")
 	}
@@ -391,7 +391,7 @@ func parseAlias(ctx *context, aliasName string, aliasNode *jsongo.JSONNode) (*Al
 }
 
 // parseMessage parses VPP binary API message object from JSON node
-func parseMessage(ctx *context, msgNode *jsongo.JSONNode) (*Message, error) {
+func parseMessage(ctx *context, msgNode *jsongo.Node) (*Message, error) {
 	if msgNode.Len() == 0 || msgNode.At(0).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for message specified")
 	}
@@ -429,7 +429,7 @@ func parseMessage(ctx *context, msgNode *jsongo.JSONNode) (*Message, error) {
 }
 
 // parseField parses VPP binary API object field from JSON node
-func parseField(ctx *context, field *jsongo.JSONNode) (*Field, error) {
+func parseField(ctx *context, field *jsongo.Node) (*Field, error) {
 	if field.Len() < 2 || field.At(0).GetType() != jsongo.TypeValue || field.At(1).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for field specified")
 	}
@@ -489,7 +489,7 @@ func parseField(ctx *context, field *jsongo.JSONNode) (*Field, error) {
 }
 
 // parseService parses VPP binary API service object from JSON node
-func parseService(ctx *context, svcName string, svcNode *jsongo.JSONNode) (*Service, error) {
+func parseService(ctx *context, svcName string, svcNode *jsongo.Node) (*Service, error) {
 	if svcNode.Len() == 0 || svcNode.At(replyField).GetType() != jsongo.TypeValue {
 		return nil, errors.New("invalid JSON for service specified")
 	}

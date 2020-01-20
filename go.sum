@@ -1,5 +1,5 @@
-github.com/bennyscetbun/jsongo v0.0.0-20160422144625-5240b3f82c66 h1:isQTypXGM6KLr0gdEDjhJ9Z5F0gefMdgDI42LrS5/LQ=
-github.com/bennyscetbun/jsongo v0.0.0-20160422144625-5240b3f82c66/go.mod h1:suxbVmjBV8+A2BBAM5EYVh6Uj8j3rqJhzWf3hv7Ff8U=
+github.com/bennyscetbun/jsongo v1.1.0 h1:ZDSks3aLP13jhY139lWaUqZaU8G0tELMohzumut/KDM=
+github.com/bennyscetbun/jsongo v1.1.0/go.mod h1:suxbVmjBV8+A2BBAM5EYVh6Uj8j3rqJhzWf3hv7Ff8U=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fsnotify/fsnotify v0.0.0-20170329110642-4da3e2cfbabc h1:fqUzyjP8DApxXq0dOZJE/NvqQkyjxiTy9ARNyRwBPEw=

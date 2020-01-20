@@ -3,7 +3,7 @@ module git.fd.io/govpp.git
 go 1.12
 
 require (
-	github.com/bennyscetbun/jsongo v0.0.0-20160422144625-5240b3f82c66
+	github.com/bennyscetbun/jsongo v1.1.0
 	github.com/fsnotify/fsnotify v0.0.0-20170329110642-4da3e2cfbabc
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/golang/protobuf v1.3.2 // indirect
