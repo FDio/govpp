@@ -14,6 +14,11 @@ type Package struct {
 	Unions   []Union
 	Messages []Message
 	RefMap   map[string]string
+	Imports  map[string]Import
+}
+
+type Import struct {
+	Package string
 }
 
 // Service represents VPP binary API service

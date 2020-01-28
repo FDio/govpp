@@ -75,8 +75,9 @@ const (
 // parsePackage parses provided JSON data into objects prepared for code generation
 func parsePackage(ctx *context, jsonRoot *jsongo.Node) (*Package, error) {
 	pkg := Package{
-		Name:   ctx.packageName,
-		RefMap: make(map[string]string),
+		Name:    ctx.packageName,
+		RefMap:  make(map[string]string),
+		Imports: map[string]Import{},
 	}
 
 	// parse CRC for API version

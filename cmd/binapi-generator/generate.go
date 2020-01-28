@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os/exec"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -125,6 +126,10 @@ func generatePackage(ctx *context, w io.Writer) error {
 	// generate enums
 	if len(ctx.packageData.Enums) > 0 {
 		for _, enum := range ctx.packageData.Enums {
+			if imp, ok := ctx.packageData.Imports[enum.Name]; ok {
+				generateImportedAlias(ctx, w, enum.Name, &imp)
+				continue
+			}
 			generateEnum(ctx, w, &enum)
 		}
 	}
@@ -132,6 +137,10 @@ func generatePackage(ctx *context, w io.Writer) error {
 	// generate aliases
 	if len(ctx.packageData.Aliases) > 0 {
 		for _, alias := range ctx.packageData.Aliases {
+			if imp, ok := ctx.packageData.Imports[alias.Name]; ok {
+				generateImportedAlias(ctx, w, alias.Name, &imp)
+				continue
+			}
 			generateAlias(ctx, w, &alias)
 		}
 	}
@@ -139,6 +148,10 @@ func generatePackage(ctx *context, w io.Writer) error {
 	// generate types
 	if len(ctx.packageData.Types) > 0 {
 		for _, typ := range ctx.packageData.Types {
+			if imp, ok := ctx.packageData.Imports[typ.Name]; ok {
+				generateImportedAlias(ctx, w, typ.Name, &imp)
+				continue
+			}
 			generateType(ctx, w, &typ)
 		}
 	}
@@ -146,6 +159,10 @@ func generatePackage(ctx *context, w io.Writer) error {
 	// generate unions
 	if len(ctx.packageData.Unions) > 0 {
 		for _, union := range ctx.packageData.Unions {
+			if imp, ok := ctx.packageData.Imports[union.Name]; ok {
+				generateImportedAlias(ctx, w, union.Name, &imp)
+				continue
+			}
 			generateUnion(ctx, w, &union)
 		}
 	}
@@ -224,8 +241,40 @@ func generateHeader(ctx *context, w io.Writer) {
 	fmt.Fprintf(w, "\tio \"%s\"\n", "io")
 	fmt.Fprintf(w, "\tstrconv \"%s\"\n", "strconv")
 	fmt.Fprintf(w, "\tstruc \"%s\"\n", "github.com/lunixbochs/struc")
+	if len(ctx.packageData.Imports) > 0 {
+		fmt.Fprintln(w)
+		for _, imp := range getImports(ctx) {
+			impPkg := getImportPkg(filepath.Dir(ctx.outputFile), imp)
+			fmt.Fprintf(w, "\t%s \"%s\"\n", imp, strings.TrimSpace(impPkg))
+		}
+	}
 	fmt.Fprintln(w, ")")
 	fmt.Fprintln(w)
+}
+
+func getImportPkg(outputDir string, pkg string) string {
+	absPath, _ := filepath.Abs(filepath.Join(outputDir, "..", pkg))
+	cmd := exec.Command("go", "list", absPath)
+	var errbuf, outbuf bytes.Buffer
+	cmd.Stdout = &outbuf
+	cmd.Stderr = &errbuf
+	if err := cmd.Run(); err != nil {
+		fmt.Printf("ERR: %v\n", errbuf.String())
+		panic(err)
+	}
+	return outbuf.String()
+}
+
+func getImports(ctx *context) (imports []string) {
+	impmap := map[string]struct{}{}
+	for _, imp := range ctx.packageData.Imports {
+		if _, ok := impmap[imp.Package]; !ok {
+			imports = append(imports, imp.Package)
+			impmap[imp.Package] = struct{}{}
+		}
+	}
+	sort.Strings(imports)
+	return imports
 }
 
 func generateFooter(ctx *context, w io.Writer) {
@@ -347,6 +396,14 @@ func generateEnum(ctx *context, w io.Writer, enum *Enum) {
 	fmt.Fprintf(w, "\tif ok { return s }\n")
 	fmt.Fprintf(w, "\treturn strconv.Itoa(int(x))\n")
 	fmt.Fprintln(w, "}")
+	fmt.Fprintln(w)
+}
+
+func generateImportedAlias(ctx *context, w io.Writer, tName string, imp *Import) {
+	name := camelCaseName(tName)
+
+	fmt.Fprintf(w, "type %s = %s.%s\n", name, imp.Package, name)
+
 	fmt.Fprintln(w)
 }
 
@@ -550,13 +607,10 @@ func generateMessage(ctx *context, w io.Writer, msg *Message) {
 	// generate end of the struct
 	fmt.Fprintln(w, "}")
 
-	// generate name getter
+	// generate message methods
+	generateMessageResetMethod(w, name)
 	generateMessageNameGetter(w, name, msg.Name)
-
-	// generate CRC getter
 	generateCrcGetter(w, name, msg.CRC)
-
-	// generate message type getter method
 	generateMessageTypeGetter(w, name, msgType)
 
 	fmt.Fprintln(w)
@@ -637,40 +691,36 @@ func generateField(ctx *context, w io.Writer, fields []Field, i int) {
 	fmt.Fprintln(w)
 }
 
-func generateMessageNameGetter(w io.Writer, structName, msgName string) {
-	fmt.Fprintf(w, `func (*%s) GetMessageName() string {
-	return %q
+func generateMessageResetMethod(w io.Writer, structName string) {
+	fmt.Fprintf(w, "func (m *%[1]s) Reset() { *m = %[1]s{} }\n", structName)
 }
-`, structName, msgName)
+
+func generateMessageNameGetter(w io.Writer, structName, msgName string) {
+	fmt.Fprintf(w, "func (*%s) GetMessageName() string {	return %q }\n", structName, msgName)
 }
 
 func generateTypeNameGetter(w io.Writer, structName, msgName string) {
-	fmt.Fprintf(w, `func (*%s) GetTypeName() string {
-	return %q
-}
-`, structName, msgName)
+	fmt.Fprintf(w, "func (*%s) GetTypeName() string { return %q }\n", structName, msgName)
 }
 
 func generateCrcGetter(w io.Writer, structName, crc string) {
 	crc = strings.TrimPrefix(crc, "0x")
-	fmt.Fprintf(w, `func (*%s) GetCrcString() string {
-	return %q
-}
-`, structName, crc)
+	fmt.Fprintf(w, "func (*%s) GetCrcString() string { return %q }\n", structName, crc)
 }
 
 func generateMessageTypeGetter(w io.Writer, structName string, msgType MessageType) {
-	fmt.Fprintln(w, "func (*"+structName+") GetMessageType() api.MessageType {")
+	fmt.Fprintf(w, "func (*"+structName+") GetMessageType() api.MessageType {")
 	if msgType == requestMessage {
-		fmt.Fprintln(w, "\treturn api.RequestMessage")
+		fmt.Fprintf(w, "\treturn api.RequestMessage")
 	} else if msgType == replyMessage {
-		fmt.Fprintln(w, "\treturn api.ReplyMessage")
+		fmt.Fprintf(w, "\treturn api.ReplyMessage")
 	} else if msgType == eventMessage {
-		fmt.Fprintln(w, "\treturn api.EventMessage")
+		fmt.Fprintf(w, "\treturn api.EventMessage")
 	} else {
-		fmt.Fprintln(w, "\treturn api.OtherMessage")
+		fmt.Fprintf(w, "\treturn api.OtherMessage")
 	}
 	fmt.Fprintln(w, "}")
+	fmt.Fprintln(w)
 }
 
 func generateServices(ctx *context, w io.Writer, services []Service) {
