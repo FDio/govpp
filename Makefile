@@ -75,19 +75,25 @@ lint: ## Run code linter
 	@echo "# running linter"
 	@golint ./...
 
+install: install-generator install-proxy ## Install all
+
 install-generator: ## Install binapi-generator
 	@echo "# installing binapi-generator ${VERSION}"
 	$(GO) install ${GO_BUILD_ARGS} ./cmd/binapi-generator
 
-generate: ## Generate code
+install-proxy: ## Install vpp-proxy
+	@echo "# installing vpp-proxy ${VERSION}"
+	$(GO) install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
+
+generate: ## Generate all
 	@echo "# generating code"
 	$(GO) generate -x ./...
 
-generate-binapi: install-generator
+generate-binapi: install-generator ## Generate binapi code
 	@echo "# generating binapi VPP $(VPP_VERSION)"
 	$(GO) generate -x "$(BINAPI_DIR)"
 
-gen-binapi-docker: install-generator
+gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 	@echo "# generating binapi in docker image ${VPP_IMG}"
 	$(eval cmds := $(shell go generate -n $(BINAPI_DIR) 2>&1 | tr "\n" ";"))
 	docker run -t --rm \
@@ -105,6 +111,7 @@ extras:
 .PHONY: help \
     build cmd examples clean \
 	lint test integration \
-	install-generator generate generate-binapi gen-binapi-docker \
+	install install-generator install-proxy \
+	generate generate-binapi gen-binapi-docker \
 	extras
 

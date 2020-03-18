@@ -103,7 +103,7 @@ func TestRequestReplyMemifDetails(t *testing.T) {
 	// mock reply
 	ctx.mockVpp.MockReply(&memif.MemifDetails{
 		SwIfIndex: 25,
-		IfName:    []byte("memif-name"),
+		IfName:    "memif-name",
 		Role:      0,
 	})
 

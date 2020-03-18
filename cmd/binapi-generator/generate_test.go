@@ -45,7 +45,7 @@ func TestGenerateFromFile(t *testing.T) {
 	outDir := "test_output_directory"
 	// remove directory created during test
 	defer os.RemoveAll(outDir)
-	err := generateFromFile("testdata/acl.api.json", outDir)
+	err := generateFromFile("testdata/acl.api.json", outDir, nil)
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(outDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -56,7 +56,7 @@ func TestGenerateFromFile(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	err := generateFromFile("testdata/nonexisting.json", outDir)
+	err := generateFromFile("testdata/nonexisting.json", outDir, nil)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
@@ -64,7 +64,7 @@ func TestGenerateFromFileInputError(t *testing.T) {
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	err := generateFromFile("testdata/input-read-json-error.json", outDir)
+	err := generateFromFile("testdata/input-read-json-error.json", outDir, nil)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
@@ -79,7 +79,7 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		}
 		os.RemoveAll(outDir)
 	}()
-	err := generateFromFile("testdata/input-generate-error.json", outDir)
+	err := generateFromFile("testdata/input-generate-error.json", outDir, nil)
 	Expect(err).Should(HaveOccurred())
 }
 

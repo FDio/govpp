@@ -41,6 +41,7 @@ var (
 	includeServices    = flag.Bool("include-services", true, "Include RPC service api and client implementation.")
 	includeComments    = flag.Bool("include-comments", false, "Include JSON API source in comments for each object.")
 	includeBinapiNames = flag.Bool("include-binapi-names", false, "Include binary API names in struct tag.")
+	importPrefix       = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
 
 	continueOnError = flag.Bool("continue-onerror", false, "Continue with next file on error.")
 	debugMode       = flag.Bool("debug", os.Getenv("GOVPP_DEBUG") != "", "Enable debug mode.")
@@ -179,6 +180,7 @@ func generateFromFile(inputFile, outputDir string, typesPkgs []*context) error {
 	ctx.includeComments = *includeComments
 	ctx.includeBinapiNames = *includeBinapiNames
 	ctx.includeServices = *includeServices
+	ctx.importPrefix = *importPrefix
 
 	// read API definition from input file
 	ctx.inputData, err = ioutil.ReadFile(ctx.inputFile)

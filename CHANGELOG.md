@@ -2,10 +2,33 @@
 
 This file lists changes for the GoVPP releases.
 
-## 0.3.0
-> _in development_
+<!-- TEMPLATE
+### Fixes
+-
+### Features
+-
+### Other
+-
+-->
 
-// TO BE ADDED
+## 0.3.0
+> _18 March 2020_
+
+### Fixes
+- binapi-generator: Fix parsing default meta parameter
+
+### Features
+- api: Improve compatibility checking with new error types:
+  `adapter.UnknownMsgError` and `api.CompatibilityError`
+- api: Added exported function `api.GetRegisteredMessageTypes()`
+  for getting list of all registered message types
+- binapi-generator: Support imports of common types from other packages
+- binapi-generator: Generate `Reset()` method for messages
+- binapi-generator: Compact generated methods
+
+### Other
+- deps: Update `github.com/bennyscetbun/jsongo` to `v1.1.0`
+- regenerate examples/binapi for latest VPP from stable/2001
 
 ## 0.2.0
 > _04 November 2019_
@@ -27,11 +50,3 @@ This file lists changes for the GoVPP releases.
 > _03 July 2019_
 
 The first release that introduces versioning for GoVPP.
-
-### VPP compatibility
-
-| VPP | Status | Notes |
-|---|---|---|
-| 19.08-rc0 | ❕ | preliminary support (`19.08-rc0~478-g2f5f` recommended) |
-| 19.04 | ✔ | latest release (preffered) |
-| 19.01 | ✔ | limited capabilities (dropping soon) |
