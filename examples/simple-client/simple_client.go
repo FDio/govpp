@@ -27,8 +27,10 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
+	"git.fd.io/govpp.git/examples/binapi/interface_types"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/ip"
+	"git.fd.io/govpp.git/examples/binapi/ip_types"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
@@ -153,19 +155,15 @@ func addIPAddress(ch api.Channel) {
 	fmt.Println("Adding IP address to interface")
 
 	req := &interfaces.SwInterfaceAddDelAddress{
-		SwIfIndex:     1,
-		IsAdd:         1,
-		Address:       []byte{10, 10, 0, 1},
-		AddressLength: 24,
-		/* below for 20.01-rc0
+		SwIfIndex: 1,
 		IsAdd:     true,
-		Prefix: interfaces.Prefix{
+		Prefix: ip_types.AddressWithPrefix{
 			Address: interfaces.Address{
-				Af: interfaces.ADDRESS_IP4,
-				Un: interfaces.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, 1}),
+				Af: ip_types.ADDRESS_IP4,
+				Un: ip_types.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, 1}),
 			},
 			Len: 24,
-		},*/
+		},
 	}
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
@@ -236,11 +234,8 @@ func interfaceNotifications(ch api.Channel) {
 		return
 	}
 	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex:   1,
-		AdminUpDown: 1,
-		/* below for 20.01-rc0
-		AdminUpDown: true,
-		Flags:     interfaces.IF_STATUS_API_FLAG_ADMIN_UP,*/
+		SwIfIndex: 1,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
 	if err != nil {
 		logError(err, "setting interface flags")

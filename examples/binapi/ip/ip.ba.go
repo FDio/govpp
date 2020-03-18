@@ -22,9 +22,9 @@ import (
 	io "io"
 	strconv "strconv"
 
-	ethernet_types "git.fd.io/govpp.git/examples/ethernet_types"
-	interface_types "git.fd.io/govpp.git/examples/interface_types"
-	ip_types "git.fd.io/govpp.git/examples/ip_types"
+	ethernet_types "git.fd.io/govpp.git/examples/binapi/ethernet_types"
+	interface_types "git.fd.io/govpp.git/examples/binapi/interface_types"
+	ip_types "git.fd.io/govpp.git/examples/binapi/ip_types"
 )
 
 const (

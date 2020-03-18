@@ -22,6 +22,7 @@ import (
 
 	"git.fd.io/govpp.git/adapter/mock"
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/examples/binapi/interface_types"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/memif"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
@@ -128,7 +129,7 @@ func TestMultiRequestReplySwInterfaceMemifDump(t *testing.T) {
 	var msgs []api.Message
 	for i := 1; i <= 10; i++ {
 		msgs = append(msgs, &memif.MemifDetails{
-			SwIfIndex: uint32(i),
+			SwIfIndex: interfaces.InterfaceIndex(i),
 		})
 	}
 	ctx.mockVpp.MockReply(msgs...)
@@ -159,8 +160,8 @@ func TestNotificationEvent(t *testing.T) {
 
 	// mock event and force its delivery
 	ctx.mockVpp.MockReply(&interfaces.SwInterfaceEvent{
-		SwIfIndex:  2,
-		LinkUpDown: 1,
+		SwIfIndex: 2,
+		Flags:     interface_types.IF_STATUS_API_FLAG_LINK_UP,
 	})
 	ctx.mockVpp.SendMsg(0, []byte(""))
 
@@ -178,7 +179,7 @@ func TestNotificationEvent(t *testing.T) {
 
 	// verify the received notifications
 	Expect(notif.SwIfIndex).To(BeEquivalentTo(2), "Incorrect SwIfIndex value for SwInterfaceSetFlags")
-	Expect(notif.LinkUpDown).To(BeEquivalentTo(1), "Incorrect LinkUpDown value for SwInterfaceSetFlags")
+	Expect(notif.Flags).To(BeEquivalentTo(interface_types.IF_STATUS_API_FLAG_LINK_UP), "Incorrect LinkUpDown value for SwInterfaceSetFlags")
 
 	err = sub.Unsubscribe()
 	Expect(err).ShouldNot(HaveOccurred())
@@ -287,7 +288,7 @@ func TestMultiRequestDouble(t *testing.T) {
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
-				SwIfIndex:     uint32(i),
+				SwIfIndex:     interfaces.InterfaceIndex(i),
 				InterfaceName: "if-name-test",
 			},
 			Multipart: true,
@@ -300,7 +301,7 @@ func TestMultiRequestDouble(t *testing.T) {
 		msgs = append(msgs,
 			mock.MsgWithContext{
 				Msg: &interfaces.SwInterfaceDetails{
-					SwIfIndex:     uint32(i),
+					SwIfIndex:     interfaces.InterfaceIndex(i),
 					InterfaceName: "if-name-test",
 				},
 				Multipart: true,
@@ -368,8 +369,8 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	)
 
 	req := &interfaces.SwInterfaceSetFlags{
-		SwIfIndex:   1,
-		AdminUpDown: 1,
+		SwIfIndex: 1,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
 	}
 	reply := &interfaces.SwInterfaceSetFlagsReply{}
 
@@ -426,7 +427,7 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
-				SwIfIndex:     uint32(i),
+				SwIfIndex:     interfaces.InterfaceIndex(i),
 				InterfaceName: "if-name-test",
 			},
 			Multipart: true,
@@ -440,8 +441,8 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{Msg: &interfaces.SwInterfaceSetFlagsReply{}, SeqNum: 3})
 
 	req := &interfaces.SwInterfaceSetFlags{
-		SwIfIndex:   1,
-		AdminUpDown: 1,
+		SwIfIndex: 1,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
 	}
 	reply := &interfaces.SwInterfaceSetFlagsReply{}
 

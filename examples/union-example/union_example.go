@@ -22,6 +22,8 @@ import (
 	"net"
 
 	"git.fd.io/govpp.git/examples/binapi/ip"
+	"git.fd.io/govpp.git/examples/binapi/ip_types"
+
 	"github.com/lunixbochs/struc"
 )
 
@@ -37,8 +39,8 @@ func encodingExample() {
 
 	// use it in the Address type
 	addr := &ip.Address{
-		Af: ip.ADDRESS_IP4,
-		Un: ip.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
+		Af: ip_types.ADDRESS_IP4,
+		Un: ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
 	}
 	log.Printf("encoding union IPv4: %v", addr.Un.GetIP4())
 
@@ -89,12 +91,12 @@ func ipToAddress(ipstr string) (addr ip.Address, err error) {
 		return ip.Address{}, fmt.Errorf("invalid IP: %q", ipstr)
 	}
 	if ip4 := netIP.To4(); ip4 == nil {
-		addr.Af = ip.ADDRESS_IP6
+		addr.Af = ip_types.ADDRESS_IP6
 		var ip6addr ip.IP6Address
 		copy(ip6addr[:], netIP.To16())
 		addr.Un.SetIP6(ip6addr)
 	} else {
-		addr.Af = ip.ADDRESS_IP4
+		addr.Af = ip_types.ADDRESS_IP4
 		var ip4addr ip.IP4Address
 		copy(ip4addr[:], ip4)
 		addr.Un.SetIP4(ip4addr)

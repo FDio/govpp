@@ -21,7 +21,7 @@ import (
 	io "io"
 	strconv "strconv"
 
-	vpe_types "git.fd.io/govpp.git/examples/vpe_types"
+	vpe_types "git.fd.io/govpp.git/examples/binapi/vpe_types"
 )
 
 const (
