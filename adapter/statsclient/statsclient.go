@@ -121,12 +121,24 @@ func (c *StatsClient) ListStats(patterns ...string) (names []string, err error) 
 	if err != nil {
 		return nil, err
 	}
+
+	dirVector := c.getStatDirVector()
+	vecLen := uint32(vectorLen(dirVector))
+
 	for _, index := range indexes {
-		name, err := c.entryName(index)
-		if err != nil {
-			return nil, err
+		if index >= vecLen {
+			return nil, fmt.Errorf("stat entry index %d out of dir vector len (%d)", index, vecLen)
 		}
-		names = append(names, name)
+
+		dirEntry := c.getStatDirIndex(dirVector, index)
+		var name []byte
+		for n := 0; n < len(dirEntry.name); n++ {
+			if dirEntry.name[n] == 0 {
+				name = dirEntry.name[:n]
+				break
+			}
+		}
+		names = append(names, string(name))
 	}
 
 	if !c.accessEnd(&sa) {
@@ -142,11 +154,11 @@ func (c *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntry
 		return nil, adapter.ErrStatsAccessFailed
 	}
 
-	dir, err := c.listIndexes(patterns...)
+	indexes, err := c.listIndexes(patterns...)
 	if err != nil {
 		return nil, err
 	}
-	if entries, err = c.dumpEntries(dir); err != nil {
+	if entries, err = c.dumpEntries(indexes); err != nil {
 		return nil, err
 	}
 
@@ -261,7 +273,7 @@ func (c *StatsClient) listIndexes(patterns ...string) (indexes []uint32, err err
 
 func (c *StatsClient) listIndexesFunc(f func(name []byte) bool) (indexes []uint32, err error) {
 	if f == nil {
-		// there is around ~3150 stats, so to avoid too many allocations
+		// there is around ~3157 stats, so to avoid too many allocations
 		// we set capacity to 3200 when listing all stats
 		indexes = make([]uint32, 0, 3200)
 	}
@@ -290,33 +302,18 @@ func (c *StatsClient) listIndexesFunc(f func(name []byte) bool) (indexes []uint3
 	return indexes, nil
 }
 
-func (c *StatsClient) entryName(index uint32) (string, error) {
-	dirVector := c.getStatDirVector()
-	vecLen := uint32(vectorLen(dirVector))
-
-	if index >= vecLen {
-		return "", fmt.Errorf("stat entry index %d out of range (%d)", index, vecLen)
-	}
-
-	dirEntry := c.getStatDirIndex(dirVector, index)
-
-	var name []byte
-	for n := 0; n < len(dirEntry.name); n++ {
-		if dirEntry.name[n] == 0 {
-			name = dirEntry.name[:n]
-			break
-		}
-	}
-
-	return string(name), nil
-}
-
 func (c *StatsClient) dumpEntries(indexes []uint32) (entries []adapter.StatEntry, err error) {
-	entries = make([]adapter.StatEntry, 0, len(indexes))
-
 	dirVector := c.getStatDirVector()
+	dirLen := uint32(vectorLen(dirVector))
 
+	debugf("dumping entres for %d indexes", len(indexes))
+
+	entries = make([]adapter.StatEntry, 0, len(indexes))
 	for _, index := range indexes {
+		if index >= dirLen {
+			return nil, fmt.Errorf("stat entry index %d out of dir vector length (%d)", index, dirLen)
+		}
+
 		dirEntry := c.getStatDirIndex(dirVector, index)
 
 		var name []byte
@@ -326,6 +323,12 @@ func (c *StatsClient) dumpEntries(indexes []uint32) (entries []adapter.StatEntry
 				break
 			}
 		}
+
+		if Debug {
+			debugf(" - %3d. dir: %q type: %v offset: %d union: %d", index, name,
+				adapter.StatType(dirEntry.directoryType), dirEntry.offsetVector, dirEntry.unionData)
+		}
+
 		if len(name) == 0 {
 			continue
 		}

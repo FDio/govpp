@@ -113,7 +113,7 @@ func (n Name) String() string {
 	return string(n)
 }
 
-// Data represents some type of stat which is usually defined by StatType.
+// Stat represents some type of stat which is usually defined by StatType.
 type Stat interface {
 	// IsZero returns true if all of its values equal to zero.
 	IsZero() bool
@@ -205,7 +205,7 @@ func ReduceSimpleCounterStatIndex(s SimpleCounterStat, i int) uint64 {
 	return val
 }
 
-// ReduceSimpleCounterStatIndex returns reduced CombinedCounterStat s for index i.
+// ReduceCombinedCounterStatIndex returns reduced CombinedCounterStat s for index i.
 func ReduceCombinedCounterStatIndex(s CombinedCounterStat, i int) [2]uint64 {
 	var val [2]uint64
 	for _, w := range s {

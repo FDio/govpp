@@ -19,12 +19,16 @@ type sharedHeaderBase struct {
 	statsOffset     int64
 }
 
-type statSegSharedHeader struct {
+type sharedHeaderV0 struct {
+	sharedHeaderBase
+}
+
+type sharedHeader struct {
 	version uint64
 	sharedHeaderBase
 }
 
-func (h *statSegSharedHeader) legacyVersion() bool {
+func (h *sharedHeader) legacyVersion() bool {
 	// older VPP (<=19.04) did not have version in stat segment header
 	// we try to provide fallback support by skipping it in header
 	if h.version > maxVersion && h.inProgress > 1 && h.epoch == 0 {
@@ -33,8 +37,8 @@ func (h *statSegSharedHeader) legacyVersion() bool {
 	return false
 }
 
-func statSegHeader(b []byte) (header statSegSharedHeader) {
-	h := (*statSegSharedHeader)(unsafe.Pointer(&b[0]))
+func loadSharedHeader(b []byte) (header sharedHeader) {
+	h := (*sharedHeader)(unsafe.Pointer(&b[0]))
 	header.version = atomic.LoadUint64(&h.version)
 	header.epoch = atomic.LoadInt64(&h.epoch)
 	header.inProgress = atomic.LoadInt64(&h.inProgress)
@@ -44,8 +48,8 @@ func statSegHeader(b []byte) (header statSegSharedHeader) {
 	return
 }
 
-func statSegHeaderLegacy(b []byte) (header statSegSharedHeader) {
-	h := (*sharedHeaderBase)(unsafe.Pointer(&b[0]))
+func loadSharedHeaderLegacy(b []byte) (header sharedHeader) {
+	h := (*sharedHeaderV0)(unsafe.Pointer(&b[0]))
 	header.version = 0
 	header.epoch = atomic.LoadInt64(&h.epoch)
 	header.inProgress = atomic.LoadInt64(&h.inProgress)
@@ -90,7 +94,7 @@ type vecHeader struct {
 }
 
 func vectorLen(v unsafe.Pointer) uint64 {
-	vec := *(*vecHeader)(unsafe.Pointer(uintptr(v) - unsafe.Sizeof(uintptr(0))))
+	vec := *(*vecHeader)(unsafe.Pointer(uintptr(v) - unsafe.Sizeof(uint64(0))))
 	return vec.length
 }
 
