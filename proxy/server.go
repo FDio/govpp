@@ -75,7 +75,7 @@ type StatsRPC struct {
 // proxying request to given api.StatsProvider.
 func NewStatsRPC(stats adapter.StatsAPI) (*StatsRPC, error) {
 	rpc := new(StatsRPC)
-	if err := rpc.Connect(stats); err != nil {
+	if err := rpc.connect(stats); err != nil {
 		return nil, err
 	}
 	return rpc, nil
@@ -127,7 +127,7 @@ func (s *StatsRPC) watchConnection() {
 						s.statsConn, err = core.ConnectStats(s.stats)
 						if err == nil {
 							atomic.StoreUint32(&s.available, 1)
-							log.Println("enabling statsRPC service")
+							log.Debugln("enabling statsRPC service")
 							break
 						}
 						time.Sleep(5 * time.Second)
@@ -144,7 +144,7 @@ func (s *StatsRPC) watchConnection() {
 	}
 }
 
-func (s *StatsRPC) Connect(stats adapter.StatsAPI) error {
+func (s *StatsRPC) connect(stats adapter.StatsAPI) error {
 	if atomic.LoadUint32(&s.isConnected) == 1 {
 		return errors.New("connection already exists")
 	}
@@ -161,7 +161,7 @@ func (s *StatsRPC) Connect(stats adapter.StatsAPI) error {
 	return nil
 }
 
-func (s *StatsRPC) Disconnect() {
+func (s *StatsRPC) disconnect() {
 	if atomic.LoadUint32(&s.isConnected) == 1 {
 		atomic.StoreUint32(&s.isConnected, 0)
 		close(s.done)
@@ -243,7 +243,7 @@ type BinapiRPC struct {
 // proxying request to given api.Channel.
 func NewBinapiRPC(binapi adapter.VppAPI) (*BinapiRPC, error) {
 	rpc := new(BinapiRPC)
-	if err := rpc.Connect(binapi); err != nil {
+	if err := rpc.connect(binapi); err != nil {
 		return nil, err
 	}
 	return rpc, nil
@@ -290,7 +290,7 @@ func (s *BinapiRPC) watchConnection() {
 	}
 }
 
-func (s *BinapiRPC) Connect(binapi adapter.VppAPI) error {
+func (s *BinapiRPC) connect(binapi adapter.VppAPI) error {
 	if atomic.LoadUint32(&s.isConnected) == 1 {
 		return errors.New("connection already exists")
 	}
@@ -307,7 +307,7 @@ func (s *BinapiRPC) Connect(binapi adapter.VppAPI) error {
 	return nil
 }
 
-func (s *BinapiRPC) Disconnect() {
+func (s *BinapiRPC) disconnect() {
 	if atomic.LoadUint32(&s.isConnected) == 1 {
 		atomic.StoreUint32(&s.isConnected, 0)
 		close(s.done)

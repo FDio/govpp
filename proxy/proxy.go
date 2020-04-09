@@ -51,19 +51,19 @@ func NewServer() (*Server, error) {
 }
 
 func (p *Server) ConnectStats(stats adapter.StatsAPI) error {
-	return p.statsRPC.Connect(stats)
+	return p.statsRPC.connect(stats)
 }
 
 func (p *Server) DisconnectStats() {
-	p.statsRPC.Disconnect()
+	p.statsRPC.disconnect()
 }
 
 func (p *Server) ConnectBinapi(binapi adapter.VppAPI) error {
-	return p.binapiRPC.Connect(binapi)
+	return p.binapiRPC.connect(binapi)
 }
 
 func (p *Server) DisconnectBinapi() {
-	p.binapiRPC.Disconnect()
+	p.binapiRPC.disconnect()
 }
 
 func (p *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {

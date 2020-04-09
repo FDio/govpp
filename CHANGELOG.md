@@ -11,11 +11,23 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.3.3
+> _9 April 2020_
+
+### Fixes
+- proxy: Unexport methods that do not satisfy rpc to remove warning
+
 ## 0.3.2
 > _20 March 2020_
 
 ### Fixes
 - statsclient: Fix panic occurring with VPP 20.05-rc0 (master)
+
+## 0.3.1
+> _18 March 2020_
+
+### Fixes
+- Fix import path in examples/binapi
 
 ## 0.3.0
 > _18 March 2020_

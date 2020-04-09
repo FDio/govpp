@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"io"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -13,19 +14,23 @@ var (
 )
 
 func init() {
-	log.Out = os.Stdout
 	if debug {
 		log.Level = logrus.DebugLevel
 		log.Debugf("govpp/proxy: debug mode enabled")
 	}
 }
 
-// SetLogger sets global logger to l.
+// SetLogger sets logger.
 func SetLogger(l *logrus.Logger) {
 	log = l
 }
 
-// SetLogLevel sets global logger level to lvl.
+// SetLogLevel sets log level for logger.
 func SetLogLevel(lvl logrus.Level) {
 	log.Level = lvl
+}
+
+// SetOutput sets log output for logger.
+func SetLogOutput(out io.Writer) {
+	log.Out = out
 }
