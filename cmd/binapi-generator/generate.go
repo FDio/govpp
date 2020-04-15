@@ -243,13 +243,16 @@ func generateHeader(ctx *context, w io.Writer) {
 }
 
 func generateImports(ctx *context, w io.Writer) {
-	fmt.Fprintln(w, "import (")
-	fmt.Fprintf(w, "\tapi \"%s\"\n", govppApiImportPath)
-	fmt.Fprintf(w, "\tbytes \"%s\"\n", "bytes")
-	fmt.Fprintf(w, "\tcontext \"%s\"\n", "context")
-	fmt.Fprintf(w, "\tio \"%s\"\n", "io")
-	fmt.Fprintf(w, "\tstrconv \"%s\"\n", "strconv")
-	fmt.Fprintf(w, "\tstruc \"%s\"\n", "github.com/lunixbochs/struc")
+	fmt.Fprintf(w,
+		`import (
+	"bytes"
+	"context"
+	"io"
+	"strconv"
+
+	"github.com/lunixbochs/struc"
+	api %q
+`, govppApiImportPath)
 	if len(ctx.packageData.Imports) > 0 {
 		fmt.Fprintln(w)
 		for _, imp := range getImports(ctx) {
