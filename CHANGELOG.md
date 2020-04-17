@@ -11,6 +11,12 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.3.4
+> _17 April 2020_
+
+### Features
+- Format generated Go source code in-process
+
 ## 0.3.3
 > _9 April 2020_
 

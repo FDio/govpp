@@ -97,7 +97,6 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 	@echo "# generating binapi in docker image ${VPP_IMG}"
 	$(eval cmds := $(shell go generate -n $(BINAPI_DIR) 2>&1 | tr "\n" ";"))
 	docker run -t --rm \
-		-v "$(shell which gofmt):/usr/local/bin/gofmt:ro" \
 		-v "$(shell which binapi-generator):/usr/local/bin/binapi-generator:ro" \
 		-v "$(shell pwd):/govpp" -w /govpp \
 		-u "$(shell id -u):$(shell id -g)" \

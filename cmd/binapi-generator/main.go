@@ -19,9 +19,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"go/format"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -204,10 +204,15 @@ func generateFromFile(inputFile, outputDir string, typesPkgs []*context) error {
 		}
 	}
 
-	// generate Go package code
+	// generate Go package
 	var buf bytes.Buffer
 	if err := generatePackage(ctx, &buf); err != nil {
-		return fmt.Errorf("generating code for package %s failed: %v", ctx.packageName, err)
+		return fmt.Errorf("generating Go package for %s failed: %v", ctx.packageName, err)
+	}
+	// format generated source code
+	gosrc, err := format.Source(buf.Bytes())
+	if err != nil {
+		return fmt.Errorf("formatting source code for package %s failed: %v", ctx.packageName, err)
 	}
 
 	// create output directory
@@ -216,14 +221,8 @@ func generateFromFile(inputFile, outputDir string, typesPkgs []*context) error {
 		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
 	}
 	// write generated code to output file
-	if err := ioutil.WriteFile(ctx.outputFile, buf.Bytes(), 0666); err != nil {
+	if err := ioutil.WriteFile(ctx.outputFile, gosrc, 0666); err != nil {
 		return fmt.Errorf("writing to output file %s failed: %v", ctx.outputFile, err)
-	}
-
-	// go format the output file (fail probably means the output is not compilable)
-	cmd := exec.Command("gofmt", "-w", ctx.outputFile)
-	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("gofmt failed: %v\n%s", err, string(output))
 	}
 
 	return nil

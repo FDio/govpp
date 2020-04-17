@@ -36,8 +36,6 @@ const (
 	inputFileExt  = ".api.json" // file extension of the VPP API files
 	outputFileExt = ".ba.go"    // file extension of the Go generated files
 
-	govppApiImportPath = "git.fd.io/govpp.git/api" // import path of the govpp API package
-
 	constModuleName = "ModuleName" // module name constant
 	constAPIVersion = "APIVersion" // API version constant
 	constVersionCrc = "VersionCrc" // version CRC constant
@@ -244,11 +242,12 @@ func generateHeader(ctx *context, w io.Writer) {
 
 func generateImports(ctx *context, w io.Writer) {
 	fmt.Fprintln(w, "import (")
-	fmt.Fprintf(w, "\tapi \"%s\"\n", govppApiImportPath)
-	fmt.Fprintf(w, "\tbytes \"%s\"\n", "bytes")
-	fmt.Fprintf(w, "\tcontext \"%s\"\n", "context")
-	fmt.Fprintf(w, "\tio \"%s\"\n", "io")
-	fmt.Fprintf(w, "\tstrconv \"%s\"\n", "strconv")
+	fmt.Fprintln(w, `	"bytes"`)
+	fmt.Fprintln(w, `	"context"`)
+	fmt.Fprintln(w, `	"io"`)
+	fmt.Fprintln(w, `	"strconv"`)
+	fmt.Fprintln(w)
+	fmt.Fprintf(w, "\tapi \"%s\"\n", "git.fd.io/govpp.git/api")
 	fmt.Fprintf(w, "\tstruc \"%s\"\n", "github.com/lunixbochs/struc")
 	if len(ctx.packageData.Imports) > 0 {
 		fmt.Fprintln(w)

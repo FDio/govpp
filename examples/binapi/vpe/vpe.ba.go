@@ -14,12 +14,13 @@ It consists of:
 package vpe
 
 import (
-	bytes "bytes"
-	context "context"
+	"bytes"
+	"context"
+	"io"
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	struc "github.com/lunixbochs/struc"
-	io "io"
-	strconv "strconv"
 
 	vpe_types "git.fd.io/govpp.git/examples/binapi/vpe_types"
 )

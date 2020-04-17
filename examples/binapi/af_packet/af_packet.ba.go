@@ -13,12 +13,13 @@ It consists of:
 package af_packet
 
 import (
-	bytes "bytes"
-	context "context"
+	"bytes"
+	"context"
+	"io"
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	struc "github.com/lunixbochs/struc"
-	io "io"
-	strconv "strconv"
 
 	ethernet_types "git.fd.io/govpp.git/examples/binapi/ethernet_types"
 	interface_types "git.fd.io/govpp.git/examples/binapi/interface_types"
