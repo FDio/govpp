@@ -11,11 +11,17 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.3.5
+> _18 May 2020_
+
+### Fixes
+- statsclient: Fix stats data errors and panic for VPP 20.05
+
 ## 0.3.4
 > _17 April 2020_
 
 ### Features
-- Format generated Go source code in-process
+- binapi-generator: Format generated Go source code in-process
 
 ## 0.3.3
 > _9 April 2020_
