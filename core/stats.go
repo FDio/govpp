@@ -88,7 +88,7 @@ func newStatsConnection(stats adapter.StatsAPI) *StatsConnection {
 	}
 }
 
-// Connect connects to Stats API using specified adapter and returns a connection handle.
+// ConnectStats connects to Stats API using specified adapter and returns a connection handle.
 // This call blocks until it is either connected, or an error occurs.
 // Only one connection attempt will be performed.
 func ConnectStats(stats adapter.StatsAPI) (*StatsConnection, error) {
@@ -177,7 +177,7 @@ func (c *StatsConnection) updateStats(statDir **adapter.StatDir, patterns ...str
 	return err
 }
 
-// UpdateSystemStats retrieves VPP system stats.
+// GetSystemStats retrieves VPP system stats.
 func (c *StatsConnection) GetSystemStats(sysStats *api.SystemStats) (err error) {
 	if err := c.updateStats(&c.sysStatsData, SystemStatsPrefix); err != nil {
 		return err
