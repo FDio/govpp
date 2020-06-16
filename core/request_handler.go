@@ -17,10 +17,13 @@ package core
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"sync/atomic"
 	"time"
 
 	logger "github.com/sirupsen/logrus"
+
+	"git.fd.io/govpp.git/api"
 )
 
 var ReplyChannelTimeout = time.Millisecond * 100
@@ -93,7 +96,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 			"msg_size": len(data),
 			"seq_num":  req.seqNum,
 			"msg_crc":  req.msg.GetCrcString(),
-		}).Debugf("==> govpp send: %s: %+v", req.msg.GetMessageName(), req.msg)
+		}).Debugf("--> govpp SEND: %s %+v", req.msg.GetMessageName(), req.msg)
 	}
 
 	// send the request to VPP
@@ -118,7 +121,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 			"msg_id":   c.pingReqID,
 			"msg_size": len(pingData),
 			"seq_num":  req.seqNum,
-		}).Debug("--> sending control ping")
+		}).Debug(" -> sending control ping")
 
 		if err := c.vppClient.SendMsg(context, pingData); err != nil {
 			log.WithFields(logger.Fields{
@@ -156,7 +159,16 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	}
 
 	chanID, isMulti, seqNum := unpackRequestContext(context)
+
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
+		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+
+		// decode the message
+		if err = c.codec.DecodeMsg(data, msg); err != nil {
+			err = fmt.Errorf("decoding message failed: %w", err)
+			return
+		}
+
 		log.WithFields(logger.Fields{
 			"context":  context,
 			"msg_id":   msgID,
@@ -165,7 +177,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			"is_multi": isMulti,
 			"seq_num":  seqNum,
 			"msg_crc":  msg.GetCrcString(),
-		}).Debugf("<== govpp recv: %s", msg.GetMessageName())
+		}).Debugf("<-- govpp RECEIVE: %s %+v", msg.GetMessageName(), msg)
 	}
 
 	if context == 0 || c.isNotificationMessage(msgID) {
@@ -210,7 +222,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 func sendReply(ch *Channel, reply *vppReply) {
 	select {
 	case ch.replyChan <- reply:
-		// reply sent successfully
+	// reply sent successfully
 	case <-time.After(ReplyChannelTimeout):
 		// receiver still not ready
 		log.WithFields(logger.Fields{

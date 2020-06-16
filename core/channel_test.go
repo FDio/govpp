@@ -466,5 +466,5 @@ func TestInvalidMessageID(t *testing.T) {
 	// second should fail with error invalid message ID
 	err = ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("invalid message ID"))
+	Expect(err.Error()).To(ContainSubstring("unexpected message"))
 }

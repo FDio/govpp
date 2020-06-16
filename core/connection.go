@@ -95,7 +95,7 @@ type Connection struct {
 
 	vppConnected uint32 // non-zero if the adapter is connected to VPP
 
-	codec  *codec.MsgCodec        // message codec
+	codec  MessageCodec           // message codec
 	msgIDs map[string]uint16      // map of message IDs indexed by message name + CRC
 	msgMap map[uint16]api.Message // map of messages indexed by message ID
 
@@ -374,7 +374,11 @@ func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
 }
 
 func getMsgNameWithCrc(x api.Message) string {
-	return x.GetMessageName() + "_" + x.GetCrcString()
+	return getMsgID(x.GetMessageName(), x.GetCrcString())
+}
+
+func getMsgID(name, crc string) string {
+	return name + "_" + crc
 }
 
 func getMsgFactory(msg api.Message) func() api.Message {
@@ -425,9 +429,14 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 
 	var n int
 	for name, msg := range msgs {
+		typ := reflect.TypeOf(msg).Elem()
+		path := fmt.Sprintf("%s.%s", typ.PkgPath(), typ.Name())
+
 		msgID, err := c.GetMessageID(msg)
 		if err != nil {
-			log.Debugf("retrieving msgID for %s failed: %v", name, err)
+			if debugMsgIDs {
+				log.Debugf("retrieving message ID for %s failed: %v", path, err)
+			}
 			continue
 		}
 		n++
@@ -444,7 +453,8 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 			log.Debugf("message %q (%s) has ID: %d", name, getMsgNameWithCrc(msg), msgID)
 		}
 	}
-	log.Debugf("retrieved %d/%d msgIDs (took %s)", n, len(msgs), time.Since(t))
+	log.WithField("took", time.Since(t)).
+		Debugf("retrieved IDs for %d messages (registered %d)", n, len(msgs))
 
 	return nil
 }

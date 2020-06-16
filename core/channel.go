@@ -37,6 +37,8 @@ type MessageCodec interface {
 	EncodeMsg(msg api.Message, msgID uint16) ([]byte, error)
 	// DecodeMsg decodes binary-encoded data of a message into provided Message structure.
 	DecodeMsg(data []byte, msg api.Message) error
+	// DecodeMsgContext decodes context from message data.
+	DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error)
 }
 
 // MessageIdentifier provides identification of generated API messages.
@@ -84,7 +86,7 @@ type subscriptionCtx struct {
 	msgFactory func() api.Message // function that returns a new instance of the specific message that is expected as a notification
 }
 
-// channel is the main communication interface with govpp core. It contains four Go channels, one for sending the requests
+// Channel is the main communication interface with govpp core. It contains four Go channels, one for sending the requests
 // to VPP, one for receiving the replies from it and the same set for notifications. The user can access the Go channels
 // via methods provided by Channel interface in this package. Do not use the same channel from multiple goroutines
 // concurrently, otherwise the responses could mix! Use multiple channels instead.
@@ -150,13 +152,13 @@ func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
 		_, err := ch.msgIdentifier.GetMessageID(msg)
 		if err != nil {
 			if uerr, ok := err.(*adapter.UnknownMsgError); ok {
-				m := fmt.Sprintf("%s_%s", uerr.MsgName, uerr.MsgCrc)
-				comperr.IncompatibleMessages = append(comperr.IncompatibleMessages, m)
+				comperr.IncompatibleMessages = append(comperr.IncompatibleMessages, getMsgID(uerr.MsgName, uerr.MsgCrc))
 				continue
 			}
 			// other errors return immediatelly
 			return err
 		}
+		comperr.CompatibleMessages = append(comperr.CompatibleMessages, getMsgNameWithCrc(msg))
 	}
 	if len(comperr.IncompatibleMessages) == 0 {
 		return nil
@@ -234,6 +236,8 @@ func (sub *subscriptionCtx) Unsubscribe() error {
 
 	for i, item := range sub.ch.conn.subscriptions[sub.msgID] {
 		if item == sub {
+			// close notification channel
+			close(sub.ch.conn.subscriptions[sub.msgID][i].notifChan)
 			// remove i-th item in the slice
 			sub.ch.conn.subscriptions[sub.msgID] = append(sub.ch.conn.subscriptions[sub.msgID][:i], sub.ch.conn.subscriptions[sub.msgID][i+1:]...)
 			return nil
@@ -328,9 +332,9 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 			msgNameCrc = getMsgNameWithCrc(replyMsg)
 		}
 
-		err = fmt.Errorf("received invalid message ID (seqNum=%d), expected %d (%s), but got %d (%s) "+
+		err = fmt.Errorf("received unexpected message (seqNum=%d), expected %s (ID %d), but got %s (ID %d) "+
 			"(check if multiple goroutines are not sharing single GoVPP channel)",
-			reply.seqNum, expMsgID, msg.GetMessageName(), reply.msgID, msgNameCrc)
+			reply.seqNum, msg.GetMessageName(), expMsgID, msgNameCrc, reply.msgID)
 		return
 	}
 

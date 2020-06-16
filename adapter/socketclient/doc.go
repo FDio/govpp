@@ -21,13 +21,18 @@
 //
 // Requirements
 //
-// The socketclient will connect to /run/vpp-api.sock by default. However this
-// is not enabled in VPP configuration by default.
+// The socketclient connects to unix domain socket defined in VPP configuration.
 //
-// To enable the socket in VPP, add following section to VPP config.
+// It is enabled by default at /run/vpp/api.sock by the following config section:
 //
 //	socksvr {
-//		default
+//		socket-name default
+//	}
+//
+// If you want to use custom socket path:
+//
+//	socksvr {
+//		socket-name /run/vpp/api.sock
 //	}
 //
 package socketclient

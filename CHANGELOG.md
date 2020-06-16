@@ -11,6 +11,29 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.4.0 (in development)
+> _NOT RELEASED YET_
+
+### Features
+- optimized [socketclient](adapter/socketclient) adapter and add method to set client name
+- added list of compatible messages to `CompatibilityError`
+
+### Fixes
+- `MsgCodec` will recover panic occurring during a message decoding  
+- calling `Unsubscibe` will close the notification channel 
+
+### Other
+- improved log messages to provide more relevant info
+
+#### Examples
+- added more code samples of working with unions in [union example](examples/union-example)
+- added profiling mode to [perf bench](examples/perf-bench) example
+- improved [simple client](examples/simple-client) example to work properly even with multiple runs
+
+#### Dependencies
+- updated `github.com/sirupsen/logrus` dep to `v1.6.0`
+- updated `github.com/lunixbochs/struc` dep to `v0.0.0-20200521075829-a4cb8d33dbbe`
+
 ## 0.3.5
 > _18 May 2020_
 

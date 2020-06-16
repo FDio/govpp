@@ -101,7 +101,7 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 		-v "$(shell pwd):/govpp" -w /govpp \
 		-u "$(shell id -u):$(shell id -g)" \
 		"${VPP_IMG}" \
-	  sh -xc "cd $(BINAPI_DIR) && $(cmds)"
+	  sh -exc "cd $(BINAPI_DIR) && $(cmds)"
 
 extras:
 	@make -C extras

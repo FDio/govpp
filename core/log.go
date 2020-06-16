@@ -2,32 +2,35 @@ package core
 
 import (
 	"os"
+	"strings"
 
-	logger "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 var (
 	debug       = os.Getenv("DEBUG_GOVPP") != ""
-	debugMsgIDs = os.Getenv("DEBUG_GOVPP_MSGIDS") != ""
+	debugMsgIDs = strings.Contains(os.Getenv("DEBUG_GOVPP"), "msgid")
 
-	log = logger.New() // global logger
+	log = logrus.New()
 )
 
-// init initializes global logger, which logs debug level messages to stdout.
+// init initializes global logger
 func init() {
-	log.Out = os.Stdout
+	log.Formatter = &logrus.TextFormatter{
+		EnvironmentOverrideColors: true,
+	}
 	if debug {
-		log.Level = logger.DebugLevel
-		log.Debugf("govpp/core: debug mode enabled")
+		log.Level = logrus.DebugLevel
+		log.Debugf("govpp: debug level enabled")
 	}
 }
 
 // SetLogger sets global logger to l.
-func SetLogger(l *logger.Logger) {
+func SetLogger(l *logrus.Logger) {
 	log = l
 }
 
 // SetLogLevel sets global logger level to lvl.
-func SetLogLevel(lvl logger.Level) {
+func SetLogLevel(lvl logrus.Level) {
 	log.Level = lvl
 }

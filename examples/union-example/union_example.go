@@ -16,73 +16,82 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"net"
+	"reflect"
 
+	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/examples/binapi/ip"
 	"git.fd.io/govpp.git/examples/binapi/ip_types"
-
-	"github.com/lunixbochs/struc"
 )
 
+func init() {
+	log.SetFlags(0)
+}
+
 func main() {
+	constructExample()
+
 	encodingExample()
-	usageExample()
+
+	// convert IP from string form into Address type containing union
+	convertIP("10.10.1.1")
+	convertIP("ff80::1")
+}
+
+func constructExample() {
+	var union ip_types.AddressUnion
+
+	// create AddressUnion with AdressUnionXXX constructors
+	union = ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10})
+	union = ip_types.AddressUnionIP6(ip.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
+
+	// set AddressUnion with SetXXX methods
+	union.SetIP4(ip.IP4Address{192, 168, 1, 10})
+	union.SetIP6(ip.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
 }
 
 func encodingExample() {
-	// create union with IPv4 address
-	var unionIP4 ip.AddressUnion
-	unionIP4.SetIP4(ip.IP4Address{192, 168, 1, 10})
+	var c codec.MsgCodec
 
-	// use it in the Address type
-	addr := &ip.Address{
-		Af: ip_types.ADDRESS_IP4,
-		Un: ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
+	// encode this message
+	var msg = ip.IPPuntRedirect{
+		Punt: ip.PuntRedirect{
+			Nh: ip_types.Address{
+				Af: ip_types.ADDRESS_IP4,
+				Un: ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
+			},
+		},
+		IsAdd: true,
 	}
-	log.Printf("encoding union IPv4: %v", addr.Un.GetIP4())
+	log.Printf("encoding message: %+v", msg)
 
-	// encode the address with union
-	data := encode(addr)
-	// decode the address with union
-	addr2 := decode(data)
+	b, err := c.EncodeMsg(&msg, 1)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	log.Printf("decoded union IPv4: %v", addr2.Un.GetIP4())
+	// decode into this message
+	var msg2 ip.IPPuntRedirect
+	if err := c.DecodeMsg(b, &msg2); err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("decoded message: %+v", msg2)
+
+	// compare the messages
+	if !reflect.DeepEqual(msg, msg2) {
+		log.Fatal("messages are not equal")
+	}
 }
 
-func encode(addr *ip.Address) []byte {
-	log.Printf("encoding address: %#v", addr)
-	buf := new(bytes.Buffer)
-	if err := struc.Pack(buf, addr); err != nil {
-		panic(err)
+func convertIP(ip string) {
+	addr, err := ipToAddress(ip)
+	if err != nil {
+		log.Printf("error converting IP: %v", err)
+		return
 	}
-	return buf.Bytes()
-}
-
-func decode(data []byte) *ip.Address {
-	addr := new(ip.Address)
-	buf := bytes.NewReader(data)
-	if err := struc.Unpack(buf, addr); err != nil {
-		panic(err)
-	}
-	log.Printf("decoded address: %#v", addr)
-	return addr
-}
-
-func usageExample() {
-	var convAddr = func(ip string) {
-		addr, err := ipToAddress(ip)
-		if err != nil {
-			log.Printf("converting ip %q failed: %v", ip, err)
-		}
-		fmt.Printf("% 0X\n", addr)
-	}
-
-	convAddr("10.10.10.10")
-	convAddr("::1")
-	convAddr("")
+	fmt.Printf("converted IP %q to: %+v\n", ip, addr)
 }
 
 func ipToAddress(ipstr string) (addr ip.Address, err error) {
@@ -98,7 +107,7 @@ func ipToAddress(ipstr string) (addr ip.Address, err error) {
 	} else {
 		addr.Af = ip_types.ADDRESS_IP4
 		var ip4addr ip.IP4Address
-		copy(ip4addr[:], ip4)
+		copy(ip4addr[:], ip4.To4())
 		addr.Un.SetIP4(ip4addr)
 	}
 	return

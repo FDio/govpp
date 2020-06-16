@@ -20,6 +20,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/pkg/profile"
@@ -39,14 +40,14 @@ const (
 
 func main() {
 	// parse optional flags
-	var sync, prof bool
+	var sync bool
 	var cnt int
-	var sock string
+	var sock, prof string
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
-	flag.StringVar(&sock, "socket", socketclient.DefaultSocketName, "Path to VPP API socket")
-	flag.String("socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
+	flag.StringVar(&sock, "api-socket", socketclient.DefaultSocketName, "Path to VPP API socket")
+	flag.String("stats-socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
-	flag.BoolVar(&prof, "prof", false, "generate profile data")
+	flag.StringVar(&prof, "prof", "", "enable profiling mode [mem, cpu]")
 	flag.Parse()
 
 	if cnt == 0 {
@@ -58,8 +59,16 @@ func main() {
 		}
 	}
 
-	if prof {
-		defer profile.Start().Stop()
+	switch prof {
+	case "mem":
+		defer profile.Start(profile.MemProfile, profile.MemProfileRate(1)).Stop()
+	case "cpu":
+		defer profile.Start(profile.CPUProfile).Stop()
+	case "":
+	default:
+		fmt.Printf("invalid profiling mode: %q\n", prof)
+		flag.Usage()
+		os.Exit(1)
 	}
 
 	a := socketclient.NewVppClient(sock)

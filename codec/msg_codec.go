@@ -20,8 +20,9 @@ import (
 	"fmt"
 	"reflect"
 
-	"git.fd.io/govpp.git/api"
 	"github.com/lunixbochs/struc"
+
+	"git.fd.io/govpp.git/api"
 )
 
 // MsgCodec provides encoding and decoding functionality of `api.Message` structs into/from
@@ -65,7 +66,7 @@ func (*MsgCodec) EncodeMsg(msg api.Message, msgID uint16) (data []byte, err erro
 			if err, ok = r.(error); !ok {
 				err = fmt.Errorf("%v", r)
 			}
-			err = fmt.Errorf("panic occurred: %v", err)
+			err = fmt.Errorf("panic occurred during encoding message %s: %v", msg.GetMessageName(), err)
 		}
 	}()
 
@@ -101,10 +102,21 @@ func (*MsgCodec) EncodeMsg(msg api.Message, msgID uint16) (data []byte, err erro
 }
 
 // DecodeMsg decodes binary-encoded data of a message into provided `Message` structure.
-func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) error {
+func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) (err error) {
 	if msg == nil {
 		return errors.New("nil message passed in")
 	}
+
+	// try to recover panic which might possibly occur
+	defer func() {
+		if r := recover(); r != nil {
+			var ok bool
+			if err, ok = r.(error); !ok {
+				err = fmt.Errorf("%v", r)
+			}
+			err = fmt.Errorf("panic occurred during decoding message %s: %v", msg.GetMessageName(), err)
+		}
+	}()
 
 	var header interface{}
 
@@ -123,7 +135,7 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) error {
 	buf := bytes.NewReader(data)
 
 	// decode message header
-	if err := struc.Unpack(buf, header); err != nil {
+	if err = struc.Unpack(buf, header); err != nil {
 		return fmt.Errorf("failed to decode message header: %+v, error: %v", header, err)
 	}
 

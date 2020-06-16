@@ -21,14 +21,17 @@ import (
 	"time"
 )
 
+// Following variables should normally be updated via `-ldflags "-X ..."`.
+// However, the version string is hard-coded to ensure it is always included
+// even with bare go build/install.
 var (
-	name        = "govpp"
-	version     = "v0.3.5"
-	commitHash  = "unknown"
-	buildBranch = "HEAD"
-	buildStamp  = ""
-	buildUser   = ""
-	buildHost   = ""
+	name       = "govpp"
+	version    = "v0.4.0-dev"
+	commit     = "unknown"
+	branch     = "HEAD"
+	buildStamp = ""
+	buildUser  = ""
+	buildHost  = ""
 
 	buildDate time.Time
 )
@@ -39,6 +42,10 @@ func init() {
 		buildstampInt64 = time.Now().Unix()
 	}
 	buildDate = time.Unix(buildstampInt64, 0)
+}
+
+func Version() string {
+	return version
 }
 
 func Info() string {
@@ -54,7 +61,7 @@ func Verbose() string {
   Build date:	%s
   Go runtime:	%s (%s/%s)`,
 		name,
-		version, buildBranch, commitHash,
+		version, branch, commit,
 		buildUser, buildHost, buildDate.Format(time.UnixDate),
 		runtime.Version(), runtime.GOOS, runtime.GOARCH,
 	)

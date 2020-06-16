@@ -91,42 +91,47 @@ type Channel interface {
 	// It will return an error if any of the given messages are not compatible.
 	CheckCompatiblity(msgs ...Message) error
 
-	// Close closes the API channel and releases all API channel-related resources in the ChannelProvider.
+	// Close closes the API channel and releases all API channel-related resources
+	// in the ChannelProvider.
 	Close()
 }
 
 // RequestCtx is helper interface which allows to receive reply on request.
 type RequestCtx interface {
-	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered from VPP, or until an error occurs).
-	// The reply will be decoded into the msg argument. Error will be returned if the response cannot be received or decoded.
+	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered
+	// from VPP, or until an error occurs). The reply will be decoded into the msg
+	// argument. Error will be returned if the response cannot be received or decoded.
 	ReceiveReply(msg Message) error
 }
 
 // MultiRequestCtx is helper interface which allows to receive reply on multi-request.
 type MultiRequestCtx interface {
-	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered from VPP, or until an error occurs).
-	// The reply will be decoded into the msg argument. If the last reply has been already consumed, lastReplyReceived is
-	// set to true. Do not use the message itself if lastReplyReceived is true - it won't be filled with actual data.
-	// Error will be returned if the response cannot be received or decoded.
+	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered
+	// from VPP, or until an error occurs).The reply will be decoded into the msg
+	// argument. If the last reply has been already consumed, lastReplyReceived is
+	// set to true. Do not use the message itself if lastReplyReceived is
+	// true - it won't be filled with actual data.Error will be returned if the
+	// response cannot be received or decoded.
 	ReceiveReply(msg Message) (lastReplyReceived bool, err error)
 }
 
-// SubscriptionCtx is helper interface which allows to control subscription for notification events.
+// SubscriptionCtx is helper interface which allows to control subscription for
+// notification events.
 type SubscriptionCtx interface {
-	// Unsubscribe unsubscribes from receiving the notifications tied to the subscription context.
+	// Unsubscribe unsubscribes from receiving the notifications tied to the
+	// subscription context.
 	Unsubscribe() error
 }
 
 // CompatibilityError is the error type usually returned by CheckCompatibility
-// method of Channel. It describes all of the incompatible messages.
+// method of Channel. It contains list of all the compatible/incompatible messages.
 type CompatibilityError struct {
-	// IncompatibleMessages is the list of all messages
-	// that failed compatibility check.
+	CompatibleMessages   []string
 	IncompatibleMessages []string
 }
 
 func (c *CompatibilityError) Error() string {
-	return fmt.Sprintf("%d incompatible messages: %v", len(c.IncompatibleMessages), c.IncompatibleMessages)
+	return fmt.Sprintf("%d/%d messages incompatible", len(c.IncompatibleMessages), len(c.CompatibleMessages)+len(c.IncompatibleMessages))
 }
 
 var (
@@ -155,6 +160,6 @@ func GetRegisteredMessageTypes() map[reflect.Type]string {
 	return registeredMessageTypes
 }
 
-// GoVppAPIPackageIsVersion1 is referenced from generated binapi files
+// GoVppAPIPackageIsVersionX is referenced from generated binapi files
 // to assert that that code is compatible with this version of the GoVPP api package.
 const GoVppAPIPackageIsVersion1 = true
