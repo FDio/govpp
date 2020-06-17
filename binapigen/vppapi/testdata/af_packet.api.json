@@ -1,21 +1,15 @@
 {
-    "services": [
-        {
-            "af_packet_delete": {
-                "reply": "af_packet_delete_reply"
-            }
+    "services": {
+        "af_packet_delete": {
+            "reply": "af_packet_delete_reply"
         },
-        {
-            "af_packet_create": {
-                "reply": "af_packet_create_reply"
-            }
+        "af_packet_create": {
+            "reply": "af_packet_create_reply"
         },
-        {
-            "af_packet_set_l4_cksum_offload": {
-                "reply": "af_packet_set_l4_cksum_offload_reply"
-            }
+        "af_packet_set_l4_cksum_offload": {
+            "reply": "af_packet_set_l4_cksum_offload_reply"
         }
-    ],
+    },
     "vl_api_version": "0x8957ca8b",
     "enums": [],
     "messages": [

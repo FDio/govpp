@@ -12,15 +12,31 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// Context of Go structs out of the VPP binary API definitions in JSON format.
-//
-// The JSON input can be specified as a single file (using the `input-file`
-// CLI flag), or as a directory that will be scanned for all `.json` files
-// (using the `input-dir` CLI flag). The generated Go bindings will  be
-// placed into `output-dir` (by default the current working directory),
-// where each Go package will be placed into its own separate directory,
-// for example:
-//
-//    binapi-generator --input-file=/usr/share/vpp/api/core/interface.api.json --output-dir=.
-//
-package main
+// +build integration
+
+package vppapi_test
+
+import (
+	"encoding/json"
+	"testing"
+
+	"git.fd.io/govpp.git/binapigen/vppapi"
+)
+
+func TestParse(t *testing.T) {
+	modules, err := vppapi.Parse()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for path, module := range modules {
+		//t.Logf(" - %s: %+v", path, module)
+		b, err := json.MarshalIndent(module, "\t", "  ")
+		if err != nil {
+			t.Fatal(err)
+		}
+		t.Logf(" - %s:\n%s", path, b)
+	}
+	t.Logf("parsed %d modules", len(modules))
+
+}

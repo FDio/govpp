@@ -1,51 +1,32 @@
-// Copyright (c) 2017 Cisco and/or its affiliates.
+//  Copyright (c) 2020 Cisco and/or its affiliates.
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at:
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at:
 //
-//     http://www.apache.org/licenses/LICENSE-2.0
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 
-package main
+package binapigen
 
 import (
-	"bufio"
-	"io/ioutil"
 	"os"
 	"testing"
 
 	. "github.com/onsi/gomega"
 )
 
-func TestGetInputFiles(t *testing.T) {
-	RegisterTestingT(t)
-	result, err := getInputFiles("testdata", 1)
-	Expect(err).ShouldNot(HaveOccurred())
-	Expect(result).To(HaveLen(3))
-	for _, file := range result {
-		Expect(file).To(BeAnExistingFile())
-	}
-}
-
-func TestGetInputFilesError(t *testing.T) {
-	RegisterTestingT(t)
-	result, err := getInputFiles("nonexisting_directory", 1)
-	Expect(err).Should(HaveOccurred())
-	Expect(result).To(BeNil())
-}
-
 func TestGenerateFromFile(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
 	// remove directory created during test
 	defer os.RemoveAll(outDir)
-	err := generateFromFile("testdata/acl.api.json", outDir, nil)
+	err := GenerateFromFile("testdata/acl.api.json", outDir, nil, Options{})
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(outDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -56,7 +37,7 @@ func TestGenerateFromFile(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	err := generateFromFile("testdata/nonexisting.json", outDir, nil)
+	err := GenerateFromFile("testdata/nonexisting.json", outDir, nil, Options{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
@@ -64,7 +45,7 @@ func TestGenerateFromFileInputError(t *testing.T) {
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 	outDir := "test_output_directory"
-	err := generateFromFile("testdata/input-read-json-error.json", outDir, nil)
+	err := GenerateFromFile("testdata/input-read-json-error.json", outDir, nil, Options{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
 }
@@ -79,7 +60,7 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		}
 		os.RemoveAll(outDir)
 	}()
-	err := generateFromFile("testdata/input-generate-error.json", outDir, nil)
+	err := GenerateFromFile("testdata/input-generate-error.json", outDir, nil, Options{})
 	Expect(err).Should(HaveOccurred())
 }
 
@@ -111,29 +92,10 @@ func TestGetContextInterfaceJson(t *testing.T) {
 	Expect(result.outputFile).To(BeEquivalentTo(outDir + "/ip/ip.ba.go"))
 }
 
-func TestReadJson(t *testing.T) {
-	RegisterTestingT(t)
-	inputData, err := ioutil.ReadFile("testdata/af_packet.api.json")
-	Expect(err).ShouldNot(HaveOccurred())
-	result, err := parseInputJSON(inputData)
-	Expect(err).ShouldNot(HaveOccurred())
-	Expect(result).ToNot(BeNil())
-	Expect(result.Len()).To(BeEquivalentTo(5))
-}
-
-func TestReadJsonError(t *testing.T) {
-	RegisterTestingT(t)
-	inputData, err := ioutil.ReadFile("testdata/input-read-json-error.json")
-	Expect(err).ShouldNot(HaveOccurred())
-	result, err := parseInputJSON(inputData)
-	Expect(err).Should(HaveOccurred())
-	Expect(result).To(BeNil())
-}
-
-func TestGeneratePackage(t *testing.T) {
+/*func TestGeneratePackage(t *testing.T) {
 	RegisterTestingT(t)
 	// prepare context
-	testCtx := new(context)
+	testCtx := new(Context)
 	testCtx.packageName = "test-package-name"
 
 	// prepare input/output output files
@@ -141,7 +103,7 @@ func TestGeneratePackage(t *testing.T) {
 	Expect(err).ShouldNot(HaveOccurred())
 	jsonRoot, err := parseInputJSON(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
-	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
+	testCtx.packageData, err = parseModule(testCtx, jsonRoot)
 	Expect(err).ShouldNot(HaveOccurred())
 	outDir := "test_output_directory"
 	outFile, err := os.Create(outDir)
@@ -158,7 +120,7 @@ func TestGeneratePackage(t *testing.T) {
 func TestGenerateMessageType(t *testing.T) {
 	RegisterTestingT(t)
 	// prepare context
-	testCtx := new(context)
+	testCtx := new(Context)
 	testCtx.packageName = "test-package-name"
 
 	// prepare input/output output files
@@ -169,7 +131,7 @@ func TestGenerateMessageType(t *testing.T) {
 	outDir := "test_output_directory"
 	outFile, err := os.Create(outDir)
 	Expect(err).ShouldNot(HaveOccurred())
-	testCtx.packageData, err = parsePackage(testCtx, jsonRoot)
+	testCtx.packageData, err = parseModule(testCtx, jsonRoot)
 	Expect(err).ShouldNot(HaveOccurred())
 	defer os.RemoveAll(outDir)
 
@@ -180,7 +142,7 @@ func TestGenerateMessageType(t *testing.T) {
 		generateMessage(testCtx, writer, &msg)
 		Expect(writer.Buffered()).ToNot(BeZero())
 	}
-}
+}*/
 
 /*func TestGenerateMessageName(t *testing.T) {
 	RegisterTestingT(t)

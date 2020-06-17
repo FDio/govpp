@@ -1,7 +1,23 @@
-package main
+//  Copyright (c) 2020 Cisco and/or its affiliates.
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at:
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+package binapigen
 
 import (
 	"testing"
+
+	. "git.fd.io/govpp.git/binapigen/vppapi"
 )
 
 func TestBinapiTypeSizes(t *testing.T) {
@@ -14,7 +30,8 @@ func TestBinapiTypeSizes(t *testing.T) {
 		{name: "basic2", input: "i8", expsize: 1},
 		{name: "basic3", input: "u16", expsize: 2},
 		{name: "basic4", input: "i32", expsize: 4},
-		{name: "invalid1", input: "x", expsize: -1},
+		{name: "string", input: "string", expsize: 1},
+		{name: "invalid1", input: "x", expsize: 0},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -81,14 +98,12 @@ func TestSizeOfType(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			ctx := &context{
-				packageData: &Package{
-					Enums: []Enum{
-						{Name: "myenum", Type: "u32"},
-					},
+			module := &File{
+				Enums: []Enum{
+					{Name: "myenum", Type: "u32"},
 				},
 			}
-			size := getSizeOfType(ctx, &test.input)
+			size := getSizeOfType(module, &test.input)
 			if size != test.expsize {
 				t.Errorf("expected %d, got %d", test.expsize, size)
 			}

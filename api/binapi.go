@@ -163,3 +163,4 @@ func GetRegisteredMessageTypes() map[reflect.Type]string {
 // GoVppAPIPackageIsVersionX is referenced from generated binapi files
 // to assert that that code is compatible with this version of the GoVPP api package.
 const GoVppAPIPackageIsVersion1 = true
+const GoVppAPIPackageIsVersion2 = true

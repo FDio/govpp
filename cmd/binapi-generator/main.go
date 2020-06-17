@@ -15,46 +15,43 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"go/format"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 
-	"github.com/bennyscetbun/jsongo"
 	"github.com/sirupsen/logrus"
 
+	"git.fd.io/govpp.git/binapigen"
+	"git.fd.io/govpp.git/binapigen/vppapi"
 	"git.fd.io/govpp.git/version"
 )
 
-var (
-	theInputFile  = flag.String("input-file", "", "Input file with VPP API in JSON format.")
-	theInputTypes = flag.String("input-types", "", "Types input file with VPP API in JSON format. (split by comma)")
-	theInputDir   = flag.String("input-dir", "/usr/share/vpp/api", "Input directory with VPP API files in JSON format.")
-	theOutputDir  = flag.String("output-dir", ".", "Output directory where package folders will be generated.")
-
-	includeAPIVer      = flag.Bool("include-apiver", true, "Include APIVersion constant for each module.")
-	includeServices    = flag.Bool("include-services", true, "Include RPC service api and client implementation.")
-	includeComments    = flag.Bool("include-comments", false, "Include JSON API source in comments for each object.")
-	includeBinapiNames = flag.Bool("include-binapi-names", false, "Include binary API names in struct tag.")
-	importPrefix       = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
-
-	continueOnError = flag.Bool("continue-onerror", false, "Continue with next file on error.")
-	debugMode       = flag.Bool("debug", os.Getenv("GOVPP_DEBUG") != "", "Enable debug mode.")
-
-	printVersion = flag.Bool("version", false, "Prints current version and exits.")
-)
-
 func main() {
+	var (
+		theInputFile = flag.String("input-file", "", "Input VPP API file.")
+		theInputDir  = flag.String("input-dir", vppapi.DefaultAPIDir, "Directory with VPP API files.")
+		theOutputDir = flag.String("output-dir", ".", "Output directory where package folders will be generated.")
+
+		importPrefix = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
+		//theInputTypes = flag.String("input-types", "", "Types input file with VPP API in JSON format. (split by comma)")
+
+		includeAPIVer      = flag.Bool("include-apiver", true, "Include APIVersion constant for each module.")
+		includeServices    = flag.Bool("include-services", true, "Include RPC service api and client implementation.")
+		includeComments    = flag.Bool("include-comments", false, "Include JSON API source in comments for each object.")
+		includeBinapiNames = flag.Bool("include-binapi-names", false, "Include binary API names in struct tag.")
+		includeVppVersion  = flag.Bool("include-vpp-version", true, "Include version of the VPP that provided input files.")
+
+		continueOnError = flag.Bool("continue-onerror", false, "Continue with next file on error.")
+		debugMode       = flag.Bool("debug", os.Getenv("DEBUG_GOVPP") != "", "Enable debug mode.")
+
+		printVersion = flag.Bool("version", false, "Prints version and exits.")
+	)
 	flag.Parse()
 
-	if flag.NArg() > 1 {
-		flag.Usage()
-		os.Exit(1)
+	if *printVersion {
+		fmt.Fprintln(os.Stdout, version.Info())
+		os.Exit(0)
 	}
 
 	if flag.NArg() > 0 {
@@ -70,39 +67,51 @@ func main() {
 		}
 	}
 
-	if *printVersion {
-		fmt.Fprintln(os.Stdout, version.Info())
-		os.Exit(0)
+	var opts binapigen.Options
+
+	if ver := os.Getenv("VPP_API_VERSION"); ver != "" {
+		// use version from env var if set
+		opts.VPPVersion = ver
+	} else {
+		opts.VPPVersion = ResolveVppVersion(*theInputDir)
 	}
+
+	// prepare options
+	opts.IncludeAPIVersion = *includeAPIVer
+	opts.IncludeComments = *includeComments
+	opts.IncludeBinapiNames = *includeBinapiNames
+	opts.IncludeServices = *includeServices
+	opts.IncludeVppVersion = *includeVppVersion
+	opts.ImportPrefix = *importPrefix
 
 	if *debugMode {
 		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Info("debug mode enabled")
+		logrus.Debug("debug mode enabled")
 	}
 
-	if err := run(*theInputFile, *theInputDir, *theOutputDir, *continueOnError); err != nil {
+	if err := run(*theInputFile, *theInputDir, *theOutputDir, *continueOnError, opts); err != nil {
 		logrus.Errorln("binapi-generator:", err)
 		os.Exit(1)
 	}
 }
 
-func run(inputFile, inputDir string, outputDir string, continueErr bool) (err error) {
+func run(inputFile, inputDir string, outputDir string, continueErr bool, opts binapigen.Options) (err error) {
 	if inputFile == "" && inputDir == "" {
-		return fmt.Errorf("input-file or input-dir must be specified")
+		return fmt.Errorf("input file or input dir must be specified")
 	}
 
-	var typesPkgs []*context
-	if *theInputTypes != "" {
+	var typesPkgs []*binapigen.Context
+	/*if *theInputTypes != "" {
 		types := strings.Split(*theInputTypes, ",")
-		typesPkgs, err = loadTypesPackages(types...)
+		typesPkgs, err = binapigen.LoadTypesPackages(types...)
 		if err != nil {
 			return fmt.Errorf("loading types input failed: %v", err)
 		}
-	}
+	}*/
 
 	if inputFile != "" {
 		// process one input file
-		if err := generateFromFile(inputFile, outputDir, typesPkgs); err != nil {
+		if err := binapigen.GenerateFromFile(inputFile, outputDir, typesPkgs, opts); err != nil {
 			return fmt.Errorf("code generation from %s failed: %v\n", inputFile, err)
 		}
 	} else {
@@ -111,14 +120,14 @@ func run(inputFile, inputDir string, outputDir string, continueErr bool) (err er
 		if err != nil {
 			return fmt.Errorf("invalid input directory: %v\n", err)
 		}
-		files, err := getInputFiles(inputDir, 1)
+		files, err := vppapi.FindFiles(inputDir, 1)
 		if err != nil {
 			return fmt.Errorf("problem getting files from input directory: %v\n", err)
 		} else if len(files) == 0 {
 			return fmt.Errorf("no input files found in input directory: %v\n", dir)
 		}
 		for _, file := range files {
-			if err := generateFromFile(file, outputDir, typesPkgs); err != nil {
+			if err := binapigen.GenerateFromFile(file, outputDir, typesPkgs, opts); err != nil {
 				if continueErr {
 					logrus.Warnf("code generation from %s failed: %v (error ignored)\n", file, err)
 					continue
@@ -130,209 +139,4 @@ func run(inputFile, inputDir string, outputDir string, continueErr bool) (err er
 	}
 
 	return nil
-}
-
-// getInputFiles returns all input files located in specified directory
-func getInputFiles(inputDir string, deep int) (files []string, err error) {
-	entries, err := ioutil.ReadDir(inputDir)
-	if err != nil {
-		return nil, fmt.Errorf("reading directory %s failed: %v", inputDir, err)
-	}
-	for _, e := range entries {
-		if e.IsDir() && deep > 0 {
-			nestedDir := filepath.Join(inputDir, e.Name())
-			if nested, err := getInputFiles(nestedDir, deep-1); err != nil {
-				return nil, err
-			} else {
-				files = append(files, nested...)
-			}
-		} else if strings.HasSuffix(e.Name(), inputFileExt) {
-			files = append(files, filepath.Join(inputDir, e.Name()))
-		}
-	}
-	return files, nil
-}
-
-func parseInputJSON(inputData []byte) (*jsongo.Node, error) {
-	jsonRoot := new(jsongo.Node)
-	if err := json.Unmarshal(inputData, jsonRoot); err != nil {
-		return nil, fmt.Errorf("unmarshalling JSON failed: %v", err)
-	}
-	return jsonRoot, nil
-}
-
-// generateFromFile generates Go package from one input JSON file
-func generateFromFile(inputFile, outputDir string, typesPkgs []*context) error {
-	// create generator context
-	ctx, err := newContext(inputFile, outputDir)
-	if err != nil {
-		return err
-	}
-
-	logf("------------------------------------------------------------")
-	logf("module: %s", ctx.moduleName)
-	logf(" - input: %s", ctx.inputFile)
-	logf(" - output: %s", ctx.outputFile)
-	logf("------------------------------------------------------------")
-
-	// prepare options
-	ctx.includeAPIVersion = *includeAPIVer
-	ctx.includeComments = *includeComments
-	ctx.includeBinapiNames = *includeBinapiNames
-	ctx.includeServices = *includeServices
-	ctx.importPrefix = *importPrefix
-
-	// read API definition from input file
-	ctx.inputData, err = ioutil.ReadFile(ctx.inputFile)
-	if err != nil {
-		return fmt.Errorf("reading input file %s failed: %v", ctx.inputFile, err)
-	}
-	// parse JSON data into objects
-	jsonRoot, err := parseInputJSON(ctx.inputData)
-	if err != nil {
-		return fmt.Errorf("parsing JSON input failed: %v", err)
-	}
-	ctx.packageData, err = parsePackage(ctx, jsonRoot)
-	if err != nil {
-		return fmt.Errorf("parsing package %s failed: %v", ctx.packageName, err)
-	}
-
-	if len(typesPkgs) > 0 {
-		err = loadTypeAliases(ctx, typesPkgs)
-		if err != nil {
-			return fmt.Errorf("loading type aliases failed: %v", err)
-		}
-	}
-
-	// generate Go package
-	var buf bytes.Buffer
-	if err := generatePackage(ctx, &buf); err != nil {
-		return fmt.Errorf("generating Go package for %s failed: %v", ctx.packageName, err)
-	}
-	// format generated source code
-	gosrc, err := format.Source(buf.Bytes())
-	if err != nil {
-		return fmt.Errorf("formatting source code for package %s failed: %v", ctx.packageName, err)
-	}
-
-	// create output directory
-	packageDir := filepath.Dir(ctx.outputFile)
-	if err := os.MkdirAll(packageDir, 0775); err != nil {
-		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
-	}
-	// write generated code to output file
-	if err := ioutil.WriteFile(ctx.outputFile, gosrc, 0666); err != nil {
-		return fmt.Errorf("writing to output file %s failed: %v", ctx.outputFile, err)
-	}
-
-	return nil
-}
-
-func loadTypesPackages(types ...string) ([]*context, error) {
-	var ctxs []*context
-	for _, inputFile := range types {
-		// create generator context
-		ctx, err := newContext(inputFile, "")
-		if err != nil {
-			return nil, err
-		}
-		// read API definition from input file
-		ctx.inputData, err = ioutil.ReadFile(ctx.inputFile)
-		if err != nil {
-			return nil, fmt.Errorf("reading input file %s failed: %v", ctx.inputFile, err)
-		}
-		// parse JSON data into objects
-		jsonRoot, err := parseInputJSON(ctx.inputData)
-		if err != nil {
-			return nil, fmt.Errorf("parsing JSON input failed: %v", err)
-		}
-		ctx.packageData, err = parsePackage(ctx, jsonRoot)
-		if err != nil {
-			return nil, fmt.Errorf("parsing package %s failed: %v", ctx.packageName, err)
-		}
-		ctxs = append(ctxs, ctx)
-	}
-	return ctxs, nil
-}
-
-func loadTypeAliases(ctx *context, typesCtxs []*context) error {
-	for _, t := range ctx.packageData.Types {
-		for _, c := range typesCtxs {
-			if _, ok := ctx.packageData.Imports[t.Name]; ok {
-				break
-			}
-			for _, at := range c.packageData.Types {
-				if at.Name != t.Name {
-					continue
-				}
-				if len(at.Fields) != len(t.Fields) {
-					continue
-				}
-				ctx.packageData.Imports[t.Name] = Import{
-					Package: c.packageName,
-				}
-			}
-		}
-	}
-	for _, t := range ctx.packageData.Aliases {
-		for _, c := range typesCtxs {
-			if _, ok := ctx.packageData.Imports[t.Name]; ok {
-				break
-			}
-			for _, at := range c.packageData.Aliases {
-				if at.Name != t.Name {
-					continue
-				}
-				if at.Length != t.Length {
-					continue
-				}
-				if at.Type != t.Type {
-					continue
-				}
-				ctx.packageData.Imports[t.Name] = Import{
-					Package: c.packageName,
-				}
-			}
-		}
-	}
-	for _, t := range ctx.packageData.Enums {
-		for _, c := range typesCtxs {
-			if _, ok := ctx.packageData.Imports[t.Name]; ok {
-				break
-			}
-			for _, at := range c.packageData.Enums {
-				if at.Name != t.Name {
-					continue
-				}
-				if at.Type != t.Type {
-					continue
-				}
-				ctx.packageData.Imports[t.Name] = Import{
-					Package: c.packageName,
-				}
-			}
-		}
-	}
-	for _, t := range ctx.packageData.Unions {
-		for _, c := range typesCtxs {
-			if _, ok := ctx.packageData.Imports[t.Name]; ok {
-				break
-			}
-			for _, at := range c.packageData.Unions {
-				if at.Name != t.Name {
-					continue
-				}
-				ctx.packageData.Imports[t.Name] = Import{
-					Package: c.packageName,
-				}
-			}
-		}
-	}
-	return nil
-}
-
-func logf(f string, v ...interface{}) {
-	if *debugMode {
-		logrus.Debugf(f, v...)
-	}
 }
