@@ -2,18 +2,18 @@
 // versions:
 //  binapi-generator: v0.4.0-alpha-1-g435c3f4-dirty
 //  VPP:              20.01-45~g7a071e370~b63
-// source: /usr/share/vpp/api/core/ip_types.api.json
+// source: /usr/share/vpp/api/core/fib_types.api.json
 
 /*
-Package ip_types contains generated code for VPP binary API defined by ip_types.api (version 3.0.0).
+Package fib_types contains generated code for VPP binary API defined by fib_types.api (version 2.0.0).
 
 It consists of:
 	  5 aliases
-	  4 enums
-	  6 types
+	  7 enums
+	  9 types
 	  1 union
 */
-package ip_types
+package fib_types
 
 import (
 	"bytes"
@@ -36,11 +36,11 @@ const _ = api.GoVppAPIPackageIsVersion2 // please upgrade the GoVPP api package
 
 const (
 	// ModuleName is the name of this module.
-	ModuleName = "ip_types"
+	ModuleName = "fib_types"
 	// APIVersion is the API version of this module.
-	APIVersion = "3.0.0"
+	APIVersion = "2.0.0"
 	// VersionCrc is the CRC of this module.
-	VersionCrc = 0x80424562
+	VersionCrc = 0x57387845
 )
 
 // AddressFamily represents VPP binary API enum 'address_family'.
@@ -68,6 +68,129 @@ func (x AddressFamily) String() string {
 		return s
 	}
 	return "AddressFamily(" + strconv.Itoa(int(x)) + ")"
+}
+
+// FibPathFlags represents VPP binary API enum 'fib_path_flags'.
+type FibPathFlags uint32
+
+const (
+	FIB_API_PATH_FLAG_NONE                 FibPathFlags = 0
+	FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED FibPathFlags = 1
+	FIB_API_PATH_FLAG_RESOLVE_VIA_HOST     FibPathFlags = 2
+	FIB_API_PATH_FLAG_POP_PW_CW            FibPathFlags = 4
+)
+
+var (
+	FibPathFlags_name = map[uint32]string{
+		0: "FIB_API_PATH_FLAG_NONE",
+		1: "FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED",
+		2: "FIB_API_PATH_FLAG_RESOLVE_VIA_HOST",
+		4: "FIB_API_PATH_FLAG_POP_PW_CW",
+	}
+	FibPathFlags_value = map[string]uint32{
+		"FIB_API_PATH_FLAG_NONE":                 0,
+		"FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED": 1,
+		"FIB_API_PATH_FLAG_RESOLVE_VIA_HOST":     2,
+		"FIB_API_PATH_FLAG_POP_PW_CW":            4,
+	}
+)
+
+func (x FibPathFlags) String() string {
+	s, ok := FibPathFlags_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "FibPathFlags(" + strconv.Itoa(int(x)) + ")"
+}
+
+// FibPathNhProto represents VPP binary API enum 'fib_path_nh_proto'.
+type FibPathNhProto uint32
+
+const (
+	FIB_API_PATH_NH_PROTO_IP4      FibPathNhProto = 0
+	FIB_API_PATH_NH_PROTO_IP6      FibPathNhProto = 1
+	FIB_API_PATH_NH_PROTO_MPLS     FibPathNhProto = 2
+	FIB_API_PATH_NH_PROTO_ETHERNET FibPathNhProto = 3
+	FIB_API_PATH_NH_PROTO_BIER     FibPathNhProto = 4
+)
+
+var (
+	FibPathNhProto_name = map[uint32]string{
+		0: "FIB_API_PATH_NH_PROTO_IP4",
+		1: "FIB_API_PATH_NH_PROTO_IP6",
+		2: "FIB_API_PATH_NH_PROTO_MPLS",
+		3: "FIB_API_PATH_NH_PROTO_ETHERNET",
+		4: "FIB_API_PATH_NH_PROTO_BIER",
+	}
+	FibPathNhProto_value = map[string]uint32{
+		"FIB_API_PATH_NH_PROTO_IP4":      0,
+		"FIB_API_PATH_NH_PROTO_IP6":      1,
+		"FIB_API_PATH_NH_PROTO_MPLS":     2,
+		"FIB_API_PATH_NH_PROTO_ETHERNET": 3,
+		"FIB_API_PATH_NH_PROTO_BIER":     4,
+	}
+)
+
+func (x FibPathNhProto) String() string {
+	s, ok := FibPathNhProto_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "FibPathNhProto(" + strconv.Itoa(int(x)) + ")"
+}
+
+// FibPathType represents VPP binary API enum 'fib_path_type'.
+type FibPathType uint32
+
+const (
+	FIB_API_PATH_TYPE_NORMAL        FibPathType = 0
+	FIB_API_PATH_TYPE_LOCAL         FibPathType = 1
+	FIB_API_PATH_TYPE_DROP          FibPathType = 2
+	FIB_API_PATH_TYPE_UDP_ENCAP     FibPathType = 3
+	FIB_API_PATH_TYPE_BIER_IMP      FibPathType = 4
+	FIB_API_PATH_TYPE_ICMP_UNREACH  FibPathType = 5
+	FIB_API_PATH_TYPE_ICMP_PROHIBIT FibPathType = 6
+	FIB_API_PATH_TYPE_SOURCE_LOOKUP FibPathType = 7
+	FIB_API_PATH_TYPE_DVR           FibPathType = 8
+	FIB_API_PATH_TYPE_INTERFACE_RX  FibPathType = 9
+	FIB_API_PATH_TYPE_CLASSIFY      FibPathType = 10
+)
+
+var (
+	FibPathType_name = map[uint32]string{
+		0:  "FIB_API_PATH_TYPE_NORMAL",
+		1:  "FIB_API_PATH_TYPE_LOCAL",
+		2:  "FIB_API_PATH_TYPE_DROP",
+		3:  "FIB_API_PATH_TYPE_UDP_ENCAP",
+		4:  "FIB_API_PATH_TYPE_BIER_IMP",
+		5:  "FIB_API_PATH_TYPE_ICMP_UNREACH",
+		6:  "FIB_API_PATH_TYPE_ICMP_PROHIBIT",
+		7:  "FIB_API_PATH_TYPE_SOURCE_LOOKUP",
+		8:  "FIB_API_PATH_TYPE_DVR",
+		9:  "FIB_API_PATH_TYPE_INTERFACE_RX",
+		10: "FIB_API_PATH_TYPE_CLASSIFY",
+	}
+	FibPathType_value = map[string]uint32{
+		"FIB_API_PATH_TYPE_NORMAL":        0,
+		"FIB_API_PATH_TYPE_LOCAL":         1,
+		"FIB_API_PATH_TYPE_DROP":          2,
+		"FIB_API_PATH_TYPE_UDP_ENCAP":     3,
+		"FIB_API_PATH_TYPE_BIER_IMP":      4,
+		"FIB_API_PATH_TYPE_ICMP_UNREACH":  5,
+		"FIB_API_PATH_TYPE_ICMP_PROHIBIT": 6,
+		"FIB_API_PATH_TYPE_SOURCE_LOOKUP": 7,
+		"FIB_API_PATH_TYPE_DVR":           8,
+		"FIB_API_PATH_TYPE_INTERFACE_RX":  9,
+		"FIB_API_PATH_TYPE_CLASSIFY":      10,
+	}
+)
+
+func (x FibPathType) String() string {
+	s, ok := FibPathType_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "FibPathType(" + strconv.Itoa(int(x)) + ")"
 }
 
 // IPDscp represents VPP binary API enum 'ip_dscp'.
@@ -266,6 +389,43 @@ type Address struct {
 }
 
 func (*Address) GetTypeName() string { return "address" }
+
+// FibMplsLabel represents VPP binary API type 'fib_mpls_label'.
+type FibMplsLabel struct {
+	IsUniform uint8  `binapi:"u8,name=is_uniform" json:"is_uniform,omitempty"`
+	Label     uint32 `binapi:"u32,name=label" json:"label,omitempty"`
+	TTL       uint8  `binapi:"u8,name=ttl" json:"ttl,omitempty"`
+	Exp       uint8  `binapi:"u8,name=exp" json:"exp,omitempty"`
+}
+
+func (*FibMplsLabel) GetTypeName() string { return "fib_mpls_label" }
+
+// FibPath represents VPP binary API type 'fib_path'.
+type FibPath struct {
+	SwIfIndex  uint32           `binapi:"u32,name=sw_if_index" json:"sw_if_index,omitempty"`
+	TableID    uint32           `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	RpfID      uint32           `binapi:"u32,name=rpf_id" json:"rpf_id,omitempty"`
+	Weight     uint8            `binapi:"u8,name=weight" json:"weight,omitempty"`
+	Preference uint8            `binapi:"u8,name=preference" json:"preference,omitempty"`
+	Type       FibPathType      `binapi:"fib_path_type,name=type" json:"type,omitempty"`
+	Flags      FibPathFlags     `binapi:"fib_path_flags,name=flags" json:"flags,omitempty"`
+	Proto      FibPathNhProto   `binapi:"fib_path_nh_proto,name=proto" json:"proto,omitempty"`
+	Nh         FibPathNh        `binapi:"fib_path_nh,name=nh" json:"nh,omitempty"`
+	NLabels    uint8            `binapi:"u8,name=n_labels" json:"n_labels,omitempty"`
+	LabelStack [16]FibMplsLabel `binapi:"fib_mpls_label[16],name=label_stack" json:"label_stack,omitempty" struc:"[16]FibMplsLabel"`
+}
+
+func (*FibPath) GetTypeName() string { return "fib_path" }
+
+// FibPathNh represents VPP binary API type 'fib_path_nh'.
+type FibPathNh struct {
+	Address            AddressUnion `binapi:"address_union,name=address" json:"address,omitempty"`
+	ViaLabel           uint32       `binapi:"u32,name=via_label" json:"via_label,omitempty"`
+	ObjID              uint32       `binapi:"u32,name=obj_id" json:"obj_id,omitempty"`
+	ClassifyTableIndex uint32       `binapi:"u32,name=classify_table_index" json:"classify_table_index,omitempty"`
+}
+
+func (*FibPathNh) GetTypeName() string { return "fib_path_nh" }
 
 // IP4Prefix represents VPP binary API type 'ip4_prefix'.
 type IP4Prefix struct {

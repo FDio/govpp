@@ -12,15 +12,28 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// Context of Go structs out of the VPP binary API definitions in JSON format.
-//
-// The JSON input can be specified as a single file (using the `input-file`
-// CLI flag), or as a directory that will be scanned for all `.json` files
-// (using the `input-dir` CLI flag). The generated Go bindings will  be
-// placed into `output-dir` (by default the current working directory),
-// where each Go package will be placed into its own separate directory,
-// for example:
-//
-//    binapi-generator --input-file=/usr/share/vpp/api/core/interface.api.json --output-dir=.
-//
-package main
+package binapigen
+
+import (
+	"testing"
+)
+
+func TestInitialism(t *testing.T) {
+	tests := []struct {
+		name      string
+		input     string
+		expOutput string
+	}{
+		{name: "id", input: "id", expOutput: "ID"},
+		{name: "ipv6", input: "is_ipv6", expOutput: "IsIPv6"},
+		{name: "ip6", input: "is_ip6", expOutput: "IsIP6"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			output := camelCaseName(test.input)
+			if output != test.expOutput {
+				t.Errorf("expected %q, got %q", test.expOutput, output)
+			}
+		})
+	}
+}

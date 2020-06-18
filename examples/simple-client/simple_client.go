@@ -27,10 +27,8 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
@@ -166,10 +164,10 @@ func addIPAddress(ch api.Channel, index interfaces.InterfaceIndex) {
 	req := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex: index,
 		IsAdd:     true,
-		Prefix: ip_types.AddressWithPrefix{
+		Prefix: interfaces.AddressWithPrefix{
 			Address: interfaces.Address{
-				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, uint8(index)}),
+				Af: interfaces.ADDRESS_IP4,
+				Un: interfaces.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, uint8(index)}),
 			},
 			Len: 32,
 		},
@@ -190,7 +188,7 @@ func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
 	fmt.Printf("Dumping IP addresses for interface index %d\n", index)
 
 	req := &ip.IPAddressDump{
-		SwIfIndex: index,
+		SwIfIndex: ip.InterfaceIndex(index),
 	}
 	reqCtx := ch.SendMultiRequest(req)
 
@@ -246,7 +244,7 @@ func interfaceNotifications(ch api.Channel, index interfaces.InterfaceIndex) {
 	// generate some events in VPP
 	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
 		SwIfIndex: index,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+		Flags:     interfaces.IF_STATUS_API_FLAG_ADMIN_UP,
 	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
 	if err != nil {
 		logError(err, "setting interface flags")
