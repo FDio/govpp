@@ -128,7 +128,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) 
 		vppClient:           binapi,
 		maxAttempts:         attempts,
 		recInterval:         interval,
-		codec:               &codec.MsgCodec{},
+		codec:               codec.DefaultCodec,
 		msgIDs:              make(map[string]uint16),
 		msgMap:              make(map[uint16]api.Message),
 		channels:            make(map[uint16]*Channel),

@@ -322,7 +322,7 @@ const (
 )
 
 func (c *socketClient) open() error {
-	var msgCodec codec.MsgCodec
+	var msgCodec = codec.DefaultCodec
 
 	// Request socket client create
 	req := &SockclntCreate{
@@ -375,7 +375,7 @@ func (c *socketClient) open() error {
 }
 
 func (c *socketClient) close() error {
-	msgCodec := new(codec.MsgCodec)
+	var msgCodec = codec.DefaultCodec
 
 	req := &SockclntDelete{
 		Index: c.clientIndex,

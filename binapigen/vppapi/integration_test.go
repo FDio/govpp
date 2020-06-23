@@ -30,7 +30,6 @@ func TestParse(t *testing.T) {
 	}
 
 	for _, file := range files {
-		//t.Logf(" - %s: %+v", path, module)
 		b, err := json.MarshalIndent(file, "\t", "  ")
 		if err != nil {
 			t.Fatal(err)
@@ -39,5 +38,4 @@ func TestParse(t *testing.T) {
 	}
 
 	t.Logf("parsed %d files", len(files))
-
 }

@@ -4,12 +4,9 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/lunixbochs/struc"
-
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/sr"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
@@ -36,11 +33,11 @@ func TestEncode(t *testing.T) {
 		msgID   uint16
 		expData []byte
 	}{
-		/*{name: "basic",
+		{name: "basic",
 			msg:     &MyMsg{Index: 1, Label: []byte("Abcdef"), Port: 1000},
 			msgID:   100,
 			expData: []byte{0x00, 0x64, 0x00, 0x01, 0x41, 0x62, 0x63, 0x64, 0x65, 0x66, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xE8},
-		},*/
+		},
 		{name: "show version",
 			msg:     &vpe.ShowVersion{},
 			msgID:   743,
@@ -55,32 +52,10 @@ func TestEncode(t *testing.T) {
 					StatsIndex: 0,
 					Prefix:     ip.Prefix{},
 					NPaths:     0,
-					Paths: []ip.FibPath{
-						{
-							SwIfIndex:  0,
-							TableID:    0,
-							RpfID:      0,
-							Weight:     0,
-							Preference: 0,
-							Type:       0,
-							Flags:      0,
-							Proto:      0,
-							Nh:         ip.FibPathNh{},
-							NLabels:    5,
-							LabelStack: [16]ip.FibMplsLabel{
-								{
-									IsUniform: 1,
-									Label:     2,
-									TTL:       3,
-									Exp:       4,
-								},
-							},
-						},
-					},
 				},
 			},
 			msgID:   743,
-			expData: []byte{0x02, 0xE7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+			expData: []byte{0x02, 0xE7, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
 		},
 		/*{name: "sr",
 			msg: &sr.SrPolicyAdd{
@@ -97,8 +72,7 @@ func TestEncode(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			c := &codec.MsgCodec{}
-			//c := &codec.NewCodec{}
+			c := codec.DefaultCodec
 
 			data, err := c.EncodeMsg(test.msg, test.msgID)
 			if err != nil {
@@ -112,25 +86,12 @@ func TestEncode(t *testing.T) {
 }
 
 func TestEncodePanic(t *testing.T) {
-	c := &codec.MsgCodec{}
+	c := codec.DefaultCodec
 
 	msg := &MyMsg{Index: 1, Label: []byte("thisIsLongerThan16Bytes"), Port: 1000}
 
 	_, err := c.EncodeMsg(msg, 100)
 	if err == nil {
 		t.Fatalf("expected non-nil error, got: %v", err)
-	}
-}
-
-func TestEncodeSr(t *testing.T) {
-	msg := sr.Srv6SidList{
-		NumSids: 0,
-		Weight:  0,
-		//Sids:    nil,
-	}
-	buf := new(bytes.Buffer)
-
-	if err := struc.Pack(buf, msg); err != nil {
-		t.Fatal(err)
 	}
 }

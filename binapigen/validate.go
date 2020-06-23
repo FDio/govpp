@@ -17,8 +17,9 @@ package binapigen
 import (
 	"strings"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
 	"github.com/sirupsen/logrus"
+
+	"git.fd.io/govpp.git/binapigen/vppapi"
 )
 
 const (

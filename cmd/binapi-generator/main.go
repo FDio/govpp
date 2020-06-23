@@ -44,7 +44,7 @@ func main() {
 		theOutputDir = flag.String("output-dir", ".", "Output directory where code will be generated.")
 
 		importPrefix       = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
-		importTypes        = flag.Bool("import-types", false, "Generate packages for imported types.")
+		importTypes        = flag.Bool("import-types", true, "Generate packages for imported types.")
 		includeAPIVer      = flag.Bool("include-apiver", true, "Include APIVersion constant for each module.")
 		includeServices    = flag.Bool("include-services", true, "Include RPC service api and client implementation.")
 		includeComments    = flag.Bool("include-comments", false, "Include JSON API source in comments for each object.")
@@ -55,19 +55,17 @@ func main() {
 		printVersion = flag.Bool("version", false, "Prints version and exits.")
 	)
 	flag.Parse()
-
 	if *printVersion {
 		fmt.Fprintln(os.Stdout, version.Info())
 		os.Exit(0)
 	}
-
 	if flag.NArg() == 1 && flag.Arg(0) == "version" {
 		fmt.Fprintln(os.Stdout, version.Verbose())
 		os.Exit(0)
 	}
 
+	// prepare options
 	var opts binapigen.Options
-
 	if *theInputFile != "" {
 		if flag.NArg() > 0 {
 			fmt.Fprintln(os.Stderr, "input-file cannot be combined with files to generate in arguments")
@@ -77,8 +75,6 @@ func main() {
 	} else {
 		opts.FilesToGenerate = append(opts.FilesToGenerate, flag.Args()...)
 	}
-
-	// prepare options
 	if ver := os.Getenv("VPP_API_VERSION"); ver != "" {
 		// use version from env var if set
 		opts.VPPVersion = ver
@@ -106,7 +102,7 @@ func main() {
 			if !file.Generate {
 				continue
 			}
-			binapigen.GenerateBinapiFile(g, file, outputDir)
+			binapigen.GenerateBinapi(g, file, outputDir)
 			if g.IncludeServices && file.Service != nil {
 				binapigen.GenerateRPC(g, file, outputDir)
 			}

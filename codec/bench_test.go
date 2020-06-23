@@ -15,7 +15,6 @@
 package codec_test
 
 import (
-	"fmt"
 	"testing"
 
 	"git.fd.io/govpp.git/codec"
@@ -23,14 +22,15 @@ import (
 
 var Data []byte
 
-func BenchmarkEncode(b *testing.B) {
+func BenchmarkEncodeNew(b *testing.B) {
 	m := NewTestAllMsg()
+	c := codec.DefaultCodec
 
 	var err error
 	var data []byte
 
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		c := codec.MsgCodec{}
 		data, err = c.EncodeMsg(m, 100)
 		if err != nil {
 			b.Fatalf("expected nil error, got: %v", err)
@@ -39,39 +39,23 @@ func BenchmarkEncode(b *testing.B) {
 	Data = data
 }
 
-func BenchmarkEncodeStruc(b *testing.B) {
-	m := NewTestAllMsg()
-	c := codec.OldCodec{}
+func BenchmarkEncodeWrapper(b *testing.B) {
+	m := codec.Wrapper{NewTestAllMsg()}
+	c := codec.DefaultCodec
 
 	var err error
 	var data []byte
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		data, err = c.Marshal(m)
+		data, err = c.EncodeMsg(m, 100)
 		if err != nil {
 			b.Fatalf("expected nil error, got: %v", err)
 		}
 	}
 	Data = data
-	fmt.Printf("DATA(%d): % 0X\n", len(Data), Data)
 }
 
-/*func BenchmarkEncodeNew(b *testing.B) {
-	m := NewTestAllMsg()
-
-	var err error
-	var data []byte
-
-	for i := 0; i < b.N; i++ {
-		c := CodecNew{}
-		data, err = c.Marshal(m)
-		if err != nil {
-			b.Fatalf("expected nil error, got: %v", err)
-		}
-	}
-	Data = data
-}*/
 func BenchmarkEncodeHard(b *testing.B) {
 	m := NewTestAllMsg()
 
@@ -86,5 +70,4 @@ func BenchmarkEncodeHard(b *testing.B) {
 		}
 	}
 	Data = data
-	fmt.Printf("DATA(%d): % 0X\n", len(Data), Data)
 }

@@ -25,14 +25,13 @@ import (
 
 const testOutputDir = "test_output_directory"
 
-func GenerateFromFile(apiDir, outputDir string, opts Options) error {
-	// parse API files
-	apifiles, err := vppapi.ParseDir(apiDir)
+func GenerateFromFile(file, outputDir string, opts Options) error {
+	apifile, err := vppapi.ParseFile(file)
 	if err != nil {
 		return err
 	}
 
-	g, err := New(opts, apifiles)
+	g, err := New(opts, []*vppapi.File{apifile})
 	if err != nil {
 		return err
 	}
@@ -40,7 +39,7 @@ func GenerateFromFile(apiDir, outputDir string, opts Options) error {
 		if !file.Generate {
 			continue
 		}
-		GenerateBinapiFile(g, file, outputDir)
+		GenerateBinapi(g, file, outputDir)
 		if file.Service != nil {
 			GenerateRPC(g, file, outputDir)
 		}
@@ -59,7 +58,7 @@ func TestGenerateFromFile(t *testing.T) {
 	// remove directory created during test
 	defer os.RemoveAll(testOutputDir)
 
-	err := GenerateFromFile("testdata/acl.api.json", testOutputDir, Options{})
+	err := GenerateFromFile("vppapi/testdata/acl.api.json", testOutputDir, Options{FilesToGenerate: []string{"acl"}})
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(testOutputDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -70,17 +69,17 @@ func TestGenerateFromFile(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("testdata/nonexisting.json", testOutputDir, Options{})
+	err := GenerateFromFile("vppapi/testdata/nonexisting.json", testOutputDir, Options{})
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
+	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
 
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("testdata/input-read-json-error.json", testOutputDir, Options{})
+	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", testOutputDir, Options{})
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("invalid input file name"))
+	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
 
 func TestGenerateFromFileGeneratePackageError(t *testing.T) {
@@ -94,7 +93,7 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		os.RemoveAll(testOutputDir)
 	}()
 
-	err := GenerateFromFile("testdata/input-generate-error.json", testOutputDir, Options{})
+	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", testOutputDir, Options{})
 	Expect(err).Should(HaveOccurred())
 }
 
@@ -147,7 +146,7 @@ func TestGetContextInterfaceJson(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	err = generatePackage(testCtx, writer)
+	err = generateFileBinapi(testCtx, writer)
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
@@ -313,7 +312,7 @@ func TestGeneratePackageHeader(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	generateHeader(testCtx, writer, inFile)
+	generatePackageHeader(testCtx, writer, inFile)
 	Expect(writer.Buffered()).ToNot(BeZero())
 }
 

@@ -53,7 +53,7 @@ func constructExample() {
 }
 
 func encodingExample() {
-	var c codec.MsgCodec
+	var c = codec.DefaultCodec
 
 	// encode this message
 	var msg = ip.IPPuntRedirect{

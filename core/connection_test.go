@@ -92,7 +92,7 @@ func TestAsyncConnection(t *testing.T) {
 func TestCodec(t *testing.T) {
 	RegisterTestingT(t)
 
-	msgCodec := &codec.MsgCodec{}
+	var msgCodec = codec.DefaultCodec
 
 	// request
 	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: interfaces.MacAddress{1, 2, 3, 4, 5, 6}}, 11)
@@ -118,7 +118,7 @@ func TestCodec(t *testing.T) {
 func TestCodecNegative(t *testing.T) {
 	RegisterTestingT(t)
 
-	msgCodec := &codec.MsgCodec{}
+	var msgCodec = codec.DefaultCodec
 
 	// nil message for encoding
 	data, err := msgCodec.EncodeMsg(nil, 15)
@@ -134,7 +134,7 @@ func TestCodecNegative(t *testing.T) {
 	// nil data for decoding
 	err = msgCodec.DecodeMsg(nil, &vpe.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("EOF"))
+	Expect(err.Error()).To(ContainSubstring("panic"))
 }
 
 func TestSimpleRequestsWithSequenceNumbers(t *testing.T) {

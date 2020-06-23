@@ -14,13 +14,23 @@ This file lists changes for the GoVPP releases.
 ## 0.4.0 (in development)
 > _NOT RELEASED YET_
 
+### Binapi Generator
+- generator code has been split into multiple packages:
+  - [vppapi](binapigen/vppapi) - parses VPP API (`.api.json`) files
+  - [binapigen](binapigen) - processes parsed VPP API and handles code generation
+- previously required manual patches for generated code should not longer be needed
+- any types imported from other VPP API (`*_types.api`) files are now automatically resolved for generated Go code
+- dependency on `github.com/lunixbochs/struc` was removed and message un/marshaling is now part of generated code
+- generated code now contains comment with information about versions of VPP and binapi-generator
+- RPC service code is now generated into a separated file (`*_rpc.ba.go`) in same directory
+
 ### Features
 - optimized [socketclient](adapter/socketclient) adapter and add method to set client name
 - added list of compatible messages to `CompatibilityError`
 
 ### Fixes
-- `MsgCodec` will recover panic occurring during a message decoding  
-- calling `Unsubscibe` will close the notification channel 
+- `MsgCodec` will recover panic occurring during a message decoding
+- calling `Unsubscibe` will close the notification channel
 
 ### Other
 - improved log messages to provide more relevant info

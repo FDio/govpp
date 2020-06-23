@@ -31,9 +31,9 @@ type RPCService interface {
 	IPReassemblyGet(ctx context.Context, in *IPReassemblyGet) (*IPReassemblyGetReply, error)
 	IPReassemblySet(ctx context.Context, in *IPReassemblySet) (*IPReassemblySetReply, error)
 	IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error)
+	IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*IPRouteLookupReply, error)
 	IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error)
 	IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error)
-	IPSourceCheckInterfaceAddDel(ctx context.Context, in *IPSourceCheckInterfaceAddDel) (*IPSourceCheckInterfaceAddDelReply, error)
 	IPTableAddDel(ctx context.Context, in *IPTableAddDel) (*IPTableAddDelReply, error)
 	IPTableFlush(ctx context.Context, in *IPTableFlush) (*IPTableFlushReply, error)
 	IPTableReplaceBegin(ctx context.Context, in *IPTableReplaceBegin) (*IPTableReplaceBeginReply, error)
@@ -401,6 +401,15 @@ func (c *serviceClient) IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*
 	return out, nil
 }
 
+func (c *serviceClient) IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*IPRouteLookupReply, error) {
+	out := new(IPRouteLookupReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *serviceClient) IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error) {
 	out := new(IPSourceAndPortRangeCheckAddDelReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
@@ -412,15 +421,6 @@ func (c *serviceClient) IPSourceAndPortRangeCheckAddDel(ctx context.Context, in 
 
 func (c *serviceClient) IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error) {
 	out := new(IPSourceAndPortRangeCheckInterfaceAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *serviceClient) IPSourceCheckInterfaceAddDel(ctx context.Context, in *IPSourceCheckInterfaceAddDel) (*IPSourceCheckInterfaceAddDelReply, error) {
-	out := new(IPSourceCheckInterfaceAddDelReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

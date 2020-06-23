@@ -24,13 +24,82 @@ import (
 
 	"git.fd.io/govpp.git/api"
 	"git.fd.io/govpp.git/codec"
-	"git.fd.io/govpp.git/examples/binapi/fib_types"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
-	"git.fd.io/govpp.git/examples/binapi/sr"
+	"git.fd.io/govpp.git/codec/testdata/binapi2001/interfaces"
+	"git.fd.io/govpp.git/codec/testdata/binapi2001/ip"
 )
+
+// CliInband represents VPP binary API message 'cli_inband'.
+type CliInband struct {
+	XXX_CmdLen uint32 `struc:"sizeof=Cmd"`
+	Cmd        string
+}
+
+func (m *CliInband) Reset()                        { *m = CliInband{} }
+func (*CliInband) GetMessageName() string          { return "cli_inband" }
+func (*CliInband) GetCrcString() string            { return "f8377302" }
+func (*CliInband) GetMessageType() api.MessageType { return api.RequestMessage }
+
+// CliInbandReply represents VPP binary API message 'cli_inband_reply'.
+type CliInbandReply struct {
+	Retval       int32
+	XXX_ReplyLen uint32 `struc:"sizeof=Reply"`
+	Reply        string
+}
+
+func (m *CliInbandReply) Reset()                        { *m = CliInbandReply{} }
+func (*CliInbandReply) GetMessageName() string          { return "cli_inband_reply" }
+func (*CliInbandReply) GetCrcString() string            { return "05879051" }
+func (*CliInbandReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+
+func TestWrapperEncode(t *testing.T) {
+	msg := &CliInband{
+		XXX_CmdLen: 5,
+		Cmd:        "abcde",
+	}
+	expectedData := []byte{
+		0x00, 0x64,
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x05,
+		0x61, 0x62, 0x63, 0x64, 0x65,
+	}
+
+	c := codec.DefaultCodec
+
+	data, err := c.EncodeMsg(msg, 100)
+	if err != nil {
+		t.Fatalf("EncodeMsg failed: %v", err)
+	}
+	if !bytes.Equal(data, expectedData) {
+		t.Fatalf("unexpected encoded data,\nexpected: % 02x\n     got: % 02x\n", expectedData, data)
+	}
+}
+
+func TestWrapperDecode(t *testing.T) {
+	data := []byte{
+		0x00, 0x64,
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x05,
+		0x61, 0x62, 0x63, 0x64, 0x65,
+	}
+	expectedMsg := &CliInbandReply{
+		Retval:       0,
+		XXX_ReplyLen: 5,
+		Reply:        "abcde",
+	}
+
+	c := codec.DefaultCodec
+
+	msg := new(CliInbandReply)
+	err := c.DecodeMsg(data, msg)
+	if err != nil {
+		t.Fatalf("DecodeMsg failed: %v", err)
+	}
+	if !reflect.DeepEqual(msg, expectedMsg) {
+		t.Fatalf("unexpected decoded msg,\nexpected: %+v\n     got: %+v\n", expectedMsg, msg)
+	}
+}
 
 /*func TestNewCodecEncodeDecode(t *testing.T) {
 	tests := []struct {
@@ -136,6 +205,7 @@ func TestNewCodecEncodeDecode_(t *testing.T) {
 
 func TestNewCodecEncodeDecode3(t *testing.T) {
 	m := NewTestAllMsg()
+
 	data, err := m.Marshal(nil)
 	if err != nil {
 		t.Fatalf("expected nil error, got: %v", err)
@@ -154,7 +224,7 @@ func TestNewCodecEncodeDecode3(t *testing.T) {
 }
 func TestNewCodecEncodeDecode4(t *testing.T) {
 	m := &interfaces.SwInterfaceSetRxMode{
-		Mode:         interface_types.RX_MODE_API_POLLING,
+		Mode:         interfaces.RX_MODE_API_POLLING,
 		QueueID:      70000,
 		QueueIDValid: true,
 		SwIfIndex:    300,
@@ -180,7 +250,8 @@ func TestNewCodecEncodeDecode4(t *testing.T) {
 		t.Fatalf("newData differs from oldData")
 	}
 }
-func TestNewCodecEncodeDecode2(t *testing.T) {
+
+/*func TestNewCodecEncodeDecode2(t *testing.T) {
 	m := &sr.SrPoliciesDetails{
 		Bsid:        sr.IP6Address{00, 11, 22, 33, 44, 55, 66, 77, 88, 99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff},
 		IsSpray:     true,
@@ -199,7 +270,7 @@ func TestNewCodecEncodeDecode2(t *testing.T) {
 		},
 	}
 
-	b := make([]byte, 0, m.Size())
+	b := make([]byte, m.Size())
 	data, err := m.Marshal(b)
 	if err != nil {
 		t.Fatalf("expected nil error, got: %v", err)
@@ -217,11 +288,11 @@ func TestNewCodecEncodeDecode2(t *testing.T) {
 	if !reflect.DeepEqual(m, &m2) {
 		t.Fatalf("newData differs from oldData")
 	}
-}
+}*/
 
 func TestNewCodecEncode(t *testing.T) {
-	//m := NewIPRouteLookupReply()
-	m := &sr.SrPoliciesDetails{
+	m := NewIPRouteLookupReply()
+	/*m := &sr.SrPoliciesDetails{
 		Bsid:        sr.IP6Address{00, 11, 22, 33, 44, 55, 66, 77, 88, 99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff},
 		IsSpray:     true,
 		IsEncap:     false,
@@ -237,21 +308,22 @@ func TestNewCodecEncode(t *testing.T) {
 				},
 			},
 		},
-	}
-
-	size := m.Size()
-	t.Logf("size: %d", size)
+	}*/
 
 	var err error
 	var oldData, newData []byte
 	{
-		var c codec.OldCodec
-		oldData, err = c.Marshal(m)
+		w := codec.Wrapper{m}
+		size := m.Size()
+		t.Logf("wrapper size: %d", size)
+		oldData, err = w.Marshal(nil)
 		if err != nil {
 			t.Fatalf("expected nil error, got: %v", err)
 		}
 	}
 	{
+		size := m.Size()
+		t.Logf("size: %d", size)
 		newData, err = m.Marshal(nil)
 		if err != nil {
 			t.Fatalf("expected nil error, got: %v", err)
@@ -265,9 +337,6 @@ func TestNewCodecEncode(t *testing.T) {
 }
 
 func TestNewCodecDecode(t *testing.T) {
-	/*m := &ip.IPRouteLookupReply{}
-	size := m.Size()
-	t.Logf("size: %d", size)*/
 	data := []byte{
 		0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x03,
 		0x00, 0x00, 0x00, 0x05, 0x01, 0x00, 0x00, 0x00,
@@ -297,10 +366,10 @@ func TestNewCodecDecode(t *testing.T) {
 	}
 
 	var err error
-	var oldData, newData ip.IPRouteLookupReply
+	var oldData, newData ip.IPRouteAddDel
 	{
-		var c codec.OldCodec
-		err = c.Unmarshal(data, &oldData)
+		w := codec.Wrapper{&oldData}
+		err = w.Unmarshal(data)
 		if err != nil {
 			t.Errorf("expected nil error, got: %v", err)
 		}
@@ -318,16 +387,15 @@ func TestNewCodecDecode(t *testing.T) {
 	}
 }
 
-func NewIPRouteLookupReply() *ip.IPRouteLookupReply {
-	return &ip.IPRouteLookupReply{
-		Retval: 1,
+func NewIPRouteLookupReply() *ip.IPRouteAddDel {
+	return &ip.IPRouteAddDel{
 		Route: ip.IPRoute{
 			TableID:    3,
 			StatsIndex: 5,
 			Prefix: ip.Prefix{
-				Address: ip_types.Address{
-					Af: fib_types.ADDRESS_IP6,
-					Un: ip_types.AddressUnion{},
+				Address: ip.Address{
+					Af: ip.ADDRESS_IP6,
+					Un: ip.AddressUnion{},
 				},
 				Len: 24,
 			},
@@ -472,12 +540,6 @@ func (m *TestAllMsg) Marshal(b []byte) ([]byte, error) {
 	pos += 16
 
 	return tmp, nil
-
-	/*_, err := buf.Write(tmp)
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil*/
 }
 
 func (m *TestAllMsg) Unmarshal(tmp []byte) error {
@@ -578,11 +640,6 @@ func (m *TestAllMsg) Unmarshal(tmp []byte) error {
 	pos += 16
 
 	return nil
-	/*_, err := buf.Write(tmp)
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil*/
 }
 
 func boolToUint(b bool) uint8 {

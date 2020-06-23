@@ -18,6 +18,15 @@ import (
 	"testing"
 )
 
+func TestModule(t *testing.T) {
+	const expected = "git.fd.io/govpp.git/examples/binapi"
+
+	impPath := resolveImportPath("../examples/binapi")
+	if impPath != expected {
+		t.Fatalf("expected: %q, got: %q", expected, impPath)
+	}
+}
+
 func TestBinapiTypeSizes(t *testing.T) {
 	tests := []struct {
 		name    string

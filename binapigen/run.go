@@ -19,44 +19,13 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sirupsen/logrus"
-
 	"git.fd.io/govpp.git/binapigen/vppapi"
 )
 
-var debugMode = true
-
-func logf(f string, v ...interface{}) {
-	if debugMode {
-		logrus.Debugf(f, v...)
-	}
-}
-
-func GenerateBinapiFile(gen *Generator, file *File, outputDir string) *GenFile {
-	packageDir := filepath.Join(outputDir, file.PackageName)
-	filename := filepath.Join(packageDir, file.PackageName+outputFileExt)
-
-	g := gen.NewGenFile(filename)
-	g.file = file
-	g.packageDir = filepath.Join(outputDir, file.PackageName)
-
-	generatePackage(g, &g.buf)
-
-	return g
-}
-
-func GenerateRPC(gen *Generator, file *File, outputDir string) *GenFile {
-	packageDir := filepath.Join(outputDir, file.PackageName)
-	filename := filepath.Join(packageDir, file.PackageName+rpcFileSuffix+outputFileExt)
-
-	g := gen.NewGenFile(filename)
-	g.file = file
-	g.packageDir = filepath.Join(outputDir, file.PackageName)
-
-	generatePackageRPC(g, &g.buf)
-
-	return g
-}
+const (
+	outputFileExt = ".ba.go" // file extension of the Go generated files
+	rpcFileSuffix = "_rpc"   // file name suffix for the RPC services
+)
 
 func Run(apiDir string, opts Options, f func(*Generator) error) {
 	if err := run(apiDir, opts, f); err != nil {
@@ -86,4 +55,30 @@ func run(apiDir string, opts Options, f func(*Generator) error) error {
 	}
 
 	return nil
+}
+
+func GenerateBinapi(gen *Generator, file *File, outputDir string) *GenFile {
+	packageDir := filepath.Join(outputDir, file.PackageName)
+	filename := filepath.Join(packageDir, file.PackageName+outputFileExt)
+
+	g := gen.NewGenFile(filename)
+	g.file = file
+	g.outputDir = outputDir
+
+	generateFileBinapi(g, &g.buf)
+
+	return g
+}
+
+func GenerateRPC(gen *Generator, file *File, outputDir string) *GenFile {
+	packageDir := filepath.Join(outputDir, file.PackageName)
+	filename := filepath.Join(packageDir, file.PackageName+rpcFileSuffix+outputFileExt)
+
+	g := gen.NewGenFile(filename)
+	g.file = file
+	g.outputDir = outputDir
+
+	generateFileRPC(g, &g.buf)
+
+	return g
 }

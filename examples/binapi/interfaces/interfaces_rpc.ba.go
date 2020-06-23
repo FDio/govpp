@@ -24,6 +24,8 @@ type RPCService interface {
 	InterfaceNameRenumber(ctx context.Context, in *InterfaceNameRenumber) (*InterfaceNameRenumberReply, error)
 	SwInterfaceAddDelAddress(ctx context.Context, in *SwInterfaceAddDelAddress) (*SwInterfaceAddDelAddressReply, error)
 	SwInterfaceAddDelMacAddress(ctx context.Context, in *SwInterfaceAddDelMacAddress) (*SwInterfaceAddDelMacAddressReply, error)
+	SwInterfaceAddressReplaceBegin(ctx context.Context, in *SwInterfaceAddressReplaceBegin) (*SwInterfaceAddressReplaceBeginReply, error)
+	SwInterfaceAddressReplaceEnd(ctx context.Context, in *SwInterfaceAddressReplaceEnd) (*SwInterfaceAddressReplaceEndReply, error)
 	SwInterfaceClearStats(ctx context.Context, in *SwInterfaceClearStats) (*SwInterfaceClearStatsReply, error)
 	SwInterfaceGetMacAddress(ctx context.Context, in *SwInterfaceGetMacAddress) (*SwInterfaceGetMacAddressReply, error)
 	SwInterfaceGetTable(ctx context.Context, in *SwInterfaceGetTable) (*SwInterfaceGetTableReply, error)
@@ -191,6 +193,24 @@ func (c *serviceClient) SwInterfaceAddDelAddress(ctx context.Context, in *SwInte
 
 func (c *serviceClient) SwInterfaceAddDelMacAddress(ctx context.Context, in *SwInterfaceAddDelMacAddress) (*SwInterfaceAddDelMacAddressReply, error) {
 	out := new(SwInterfaceAddDelMacAddressReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SwInterfaceAddressReplaceBegin(ctx context.Context, in *SwInterfaceAddressReplaceBegin) (*SwInterfaceAddressReplaceBeginReply, error) {
+	out := new(SwInterfaceAddressReplaceBeginReply)
+	err := c.ch.SendRequest(in).ReceiveReply(out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SwInterfaceAddressReplaceEnd(ctx context.Context, in *SwInterfaceAddressReplaceEnd) (*SwInterfaceAddressReplaceEndReply, error) {
+	out := new(SwInterfaceAddressReplaceEndReply)
 	err := c.ch.SendRequest(in).ReceiveReply(out)
 	if err != nil {
 		return nil, err

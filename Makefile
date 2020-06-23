@@ -24,7 +24,7 @@ endif
 
 GO_BUILD_TAGS ?= novpp
 
-GO_BUILD_ARGS = -ldflags "${LDFLAGS}"
+GO_BUILD_ARGS = -ldflags "$(LDFLAGS)"
 ifneq ($(GO_BUILD_TAGS),)
 GO_BUILD_ARGS += -tags="${GO_BUILD_TAGS}"
 endif

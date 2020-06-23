@@ -98,9 +98,7 @@ func (file *File) importedFiles(gen *Generator) []*File {
 			logf("file %s import %s not found API files", file.Name, imp)
 			continue
 		}
-		//if gen.ImportTypes || impFile.Generate {
 		files = append(files, impFile)
-		//}
 	}
 	return files
 }
@@ -300,13 +298,6 @@ func newField(gen *Generator, file *File, apitype vppapi.Field) *Field {
 		GoName: camelCaseName(apitype.Name),
 	}
 	return typ
-}
-
-func (f *Field) resolveType(gen *Generator) error {
-	switch {
-
-	}
-	return nil
 }
 
 type Service = vppapi.Service
