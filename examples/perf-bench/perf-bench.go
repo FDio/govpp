@@ -17,6 +17,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -98,9 +99,11 @@ func main() {
 	if sync {
 		// run synchronous test
 		syncTest(ch, cnt)
+		//syncTest2(conn, cnt)
 	} else {
 		// run asynchronous test
 		asyncTest(ch, cnt)
+		//asyncTest2(conn, cnt)
 	}
 
 	elapsed := time.Since(start)
@@ -123,6 +126,27 @@ func syncTest(ch api.Channel, cnt int) {
 	}
 }
 
+func syncTest2(conn api.Connection, cnt int) {
+	fmt.Printf("Running synchronous perf test with %d requests...\n", cnt)
+
+	stream, err := conn.NewStream(context.Background())
+	if err != nil {
+		log.Fatalln("Error NewStream:", err)
+	}
+	for i := 0; i < cnt; i++ {
+		if err := stream.SendMsg(&vpe.ControlPing{}); err != nil {
+			log.Fatalln("Error SendMsg:", err)
+		}
+		if msg, err := stream.RecvMsg(); err != nil {
+			log.Fatalln("Error RecvMsg:", err)
+		} else if _, ok := msg.(*vpe.ControlPingReply); ok {
+			// ok
+		} else {
+			log.Fatalf("unexpected reply: %v", msg.GetMessageName())
+		}
+	}
+}
+
 func asyncTest(ch api.Channel, cnt int) {
 	fmt.Printf("Running asynchronous perf test with %d requests...\n", cnt)
 
@@ -141,5 +165,37 @@ func asyncTest(ch api.Channel, cnt int) {
 		if err := ctx.ReceiveReply(reply); err != nil {
 			log.Fatalln("Error in reply:", err)
 		}
+	}
+}
+
+func asyncTest2(conn api.Connection, cnt int) {
+	fmt.Printf("Running asynchronous perf test with %d requests...\n", cnt)
+
+	ctxChan := make(chan api.Stream, cnt)
+
+	go func() {
+		for i := 0; i < cnt; i++ {
+			stream, err := conn.NewStream(context.Background())
+			if err != nil {
+				log.Fatalln("Error NewStream:", err)
+			}
+			if err := stream.SendMsg(&vpe.ControlPing{}); err != nil {
+				log.Fatalln("Error SendMsg:", err)
+			}
+			ctxChan <- stream
+		}
+		close(ctxChan)
+		fmt.Printf("Sending asynchronous requests finished\n")
+	}()
+
+	for ctx := range ctxChan {
+		if msg, err := ctx.RecvMsg(); err != nil {
+			log.Fatalln("Error RecvMsg:", err)
+		} else if _, ok := msg.(*vpe.ControlPingReply); ok {
+			// ok
+		} else {
+			log.Fatalf("unexpected reply: %v", msg.GetMessageName())
+		}
+		ctx.Close()
 	}
 }

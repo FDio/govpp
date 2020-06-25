@@ -15,4 +15,7 @@
 // Package vppapiclient is the default VPP adapter being used for
 // the connection to VPP binary & stats API via shared memory.
 // It is essentially Go wrapper for the VPP vppapiclient library written in C.
+//
+// DEPRECATED: The vppapiclient implementation has been deprecated.
+// Use socketclient and statsclient.
 package vppapiclient

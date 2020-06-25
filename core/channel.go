@@ -102,19 +102,21 @@ type Channel struct {
 
 	lastSeqNum uint16 // sequence number of the last sent request
 
-	delayedReply *vppReply     // reply already taken from ReplyChan, buffered for later delivery
-	replyTimeout time.Duration // maximum time that the API waits for a reply from VPP before returning an error, can be set with SetReplyTimeout
+	delayedReply        *vppReply     // reply already taken from ReplyChan, buffered for later delivery
+	replyTimeout        time.Duration // maximum time that the API waits for a reply from VPP before returning an error, can be set with SetReplyTimeout
+	receiveReplyTimeout time.Duration // maximum time that we wait for receiver to consume reply
 }
 
 func newChannel(id uint16, conn *Connection, codec MessageCodec, identifier MessageIdentifier, reqSize, replySize int) *Channel {
 	return &Channel{
-		id:            id,
-		conn:          conn,
-		msgCodec:      codec,
-		msgIdentifier: identifier,
-		reqChan:       make(chan *vppRequest, reqSize),
-		replyChan:     make(chan *vppReply, replySize),
-		replyTimeout:  DefaultReplyTimeout,
+		id:                  id,
+		conn:                conn,
+		msgCodec:            codec,
+		msgIdentifier:       identifier,
+		reqChan:             make(chan *vppRequest, reqSize),
+		replyChan:           make(chan *vppReply, replySize),
+		replyTimeout:        DefaultReplyTimeout,
+		receiveReplyTimeout: ReplyChannelTimeout,
 	}
 }
 
@@ -122,28 +124,29 @@ func (ch *Channel) GetID() uint16 {
 	return ch.id
 }
 
+func (ch *Channel) SendRequest(msg api.Message) api.RequestCtx {
+	req := ch.newRequest(msg, false)
+	ch.reqChan <- req
+	return &requestCtx{ch: ch, seqNum: req.seqNum}
+}
+
+func (ch *Channel) SendMultiRequest(msg api.Message) api.MultiRequestCtx {
+	req := ch.newRequest(msg, true)
+	ch.reqChan <- req
+	return &multiRequestCtx{ch: ch, seqNum: req.seqNum}
+}
+
 func (ch *Channel) nextSeqNum() uint16 {
 	ch.lastSeqNum++
 	return ch.lastSeqNum
 }
 
-func (ch *Channel) SendRequest(msg api.Message) api.RequestCtx {
-	seqNum := ch.nextSeqNum()
-	ch.reqChan <- &vppRequest{
+func (ch *Channel) newRequest(msg api.Message, multi bool) *vppRequest {
+	return &vppRequest{
 		msg:    msg,
-		seqNum: seqNum,
+		seqNum: ch.nextSeqNum(),
+		multi:  multi,
 	}
-	return &requestCtx{ch: ch, seqNum: seqNum}
-}
-
-func (ch *Channel) SendMultiRequest(msg api.Message) api.MultiRequestCtx {
-	seqNum := ch.nextSeqNum()
-	ch.reqChan <- &vppRequest{
-		msg:    msg,
-		seqNum: seqNum,
-		multi:  true,
-	}
-	return &multiRequestCtx{ch: ch, seqNum: seqNum}
 }
 
 func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {

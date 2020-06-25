@@ -17,11 +17,11 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"os"
-	"strings"
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
@@ -31,6 +31,7 @@ import (
 	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/ip"
 	"git.fd.io/govpp.git/examples/binapi/ip_types"
+	"git.fd.io/govpp.git/examples/binapi/mactime"
 	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
@@ -82,6 +83,8 @@ func main() {
 	ipAddressDump(ch, idx)
 	interfaceNotifications(ch, idx)
 
+	mactimeDump(conn)
+
 	if len(Errors) > 0 {
 		fmt.Printf("finished with %d errors\n", len(Errors))
 		os.Exit(1)
@@ -110,7 +113,7 @@ func vppVersion(ch api.Channel) {
 	}
 	fmt.Printf("reply: %+v\n", reply)
 
-	fmt.Printf("VPP version: %q\n", cleanString(reply.Version))
+	fmt.Printf("VPP version: %q\n", reply.Version)
 	fmt.Println("OK")
 	fmt.Println()
 }
@@ -282,6 +285,44 @@ func interfaceNotifications(ch api.Channel, index interfaces.InterfaceIndex) {
 	fmt.Println()
 }
 
-func cleanString(str string) string {
-	return strings.Split(str, "\x00")[0]
+func mactimeDump(conn api.Connection) {
+	fmt.Println("Sending mactime dump")
+
+	ctx := context.Background()
+
+	stream, err := conn.NewStream(ctx)
+	if err != nil {
+		panic(err)
+	}
+	defer stream.Close()
+
+	if err := stream.SendMsg(&mactime.MactimeDump{}); err != nil {
+		logError(err, "sending mactime dump")
+		return
+	}
+
+Loop:
+	for {
+		msg, err := stream.RecvMsg()
+		if err != nil {
+			logError(err, "dumping mactime")
+			return
+		}
+
+		switch msg.(type) {
+		case *mactime.MactimeDetails:
+			fmt.Printf(" - MactimeDetails: %+v\n", msg)
+
+		case *mactime.MactimeDumpReply:
+			fmt.Printf(" - MactimeDumpReply: %+v\n", msg)
+			break Loop
+
+		default:
+			logError(err, "unexpected message")
+			return
+		}
+	}
+
+	fmt.Println("OK")
+	fmt.Println()
 }

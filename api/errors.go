@@ -5,6 +5,17 @@ import (
 	"strconv"
 )
 
+// CompatibilityError is the error type usually returned by CheckCompatibility
+// method of Channel. It contains list of all the compatible/incompatible messages.
+type CompatibilityError struct {
+	CompatibleMessages   []string
+	IncompatibleMessages []string
+}
+
+func (c *CompatibilityError) Error() string {
+	return fmt.Sprintf("%d/%d messages incompatible", len(c.IncompatibleMessages), len(c.CompatibleMessages)+len(c.IncompatibleMessages))
+}
+
 // RetvalToVPPApiError returns error for retval value.
 // Retval 0 returns nil error.
 func RetvalToVPPApiError(retval int32) error {
