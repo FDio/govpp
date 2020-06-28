@@ -47,6 +47,10 @@ var (
 	DefaultReplyTimeout      = time.Second            // default timeout for replies from VPP
 )
 
+var (
+	AutoReconnect = true // if true a connection is automaticly reestablished when broken
+)
+
 // ConnectionState represents the current state of the connection to VPP.
 type ConnectionState int
 
@@ -277,6 +281,7 @@ func (c *Connection) connectLoop(connChan chan ConnectionEvent) {
 			time.Sleep(c.recInterval)
 		} else {
 			connChan <- ConnectionEvent{Timestamp: time.Now(), State: Failed, Error: err}
+			close(connChan)
 			return
 		}
 	}
@@ -370,7 +375,11 @@ func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
 	c.disconnectVPP()
 
 	// we are now disconnected, start connect loop
-	c.connectLoop(connChan)
+	if AutoReconnect {
+		c.connectLoop(connChan)
+	}
+
+	close(connChan)
 }
 
 func getMsgNameWithCrc(x api.Message) string {
