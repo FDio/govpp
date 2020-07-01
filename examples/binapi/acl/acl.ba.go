@@ -20,9 +20,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -77,80 +80,47 @@ func (x ACLAction) String() string {
 	return "ACLAction(" + strconv.Itoa(int(x)) + ")"
 }
 
-type AddressFamily = ip_types.AddressFamily
-
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type IPDscp = ip_types.IPDscp
-
-type IPEcn = ip_types.IPEcn
-
-type IPProto = ip_types.IPProto
-
-type LinkDuplex = interface_types.LinkDuplex
-
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type AddressWithPrefix = ip_types.AddressWithPrefix
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
-type IP4Address = ip_types.IP4Address
-
-type IP4AddressWithPrefix = ip_types.IP4AddressWithPrefix
-
-type IP6Address = ip_types.IP6Address
-
-type IP6AddressWithPrefix = ip_types.IP6AddressWithPrefix
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
 
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
+
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
+
 // ACLRule represents VPP binary API type 'acl_rule'.
 type ACLRule struct {
-	IsPermit               ACLAction `binapi:"acl_action,name=is_permit" json:"is_permit,omitempty"`
-	SrcPrefix              Prefix    `binapi:"prefix,name=src_prefix" json:"src_prefix,omitempty"`
-	DstPrefix              Prefix    `binapi:"prefix,name=dst_prefix" json:"dst_prefix,omitempty"`
-	Proto                  IPProto   `binapi:"ip_proto,name=proto" json:"proto,omitempty"`
-	SrcportOrIcmptypeFirst uint16    `binapi:"u16,name=srcport_or_icmptype_first" json:"srcport_or_icmptype_first,omitempty"`
-	SrcportOrIcmptypeLast  uint16    `binapi:"u16,name=srcport_or_icmptype_last" json:"srcport_or_icmptype_last,omitempty"`
-	DstportOrIcmpcodeFirst uint16    `binapi:"u16,name=dstport_or_icmpcode_first" json:"dstport_or_icmpcode_first,omitempty"`
-	DstportOrIcmpcodeLast  uint16    `binapi:"u16,name=dstport_or_icmpcode_last" json:"dstport_or_icmpcode_last,omitempty"`
-	TCPFlagsMask           uint8     `binapi:"u8,name=tcp_flags_mask" json:"tcp_flags_mask,omitempty"`
-	TCPFlagsValue          uint8     `binapi:"u8,name=tcp_flags_value" json:"tcp_flags_value,omitempty"`
+	IsPermit               ACLAction        `binapi:"acl_action,name=is_permit" json:"is_permit,omitempty"`
+	SrcPrefix              ip_types.Prefix  `binapi:"prefix,name=src_prefix" json:"src_prefix,omitempty"`
+	DstPrefix              ip_types.Prefix  `binapi:"prefix,name=dst_prefix" json:"dst_prefix,omitempty"`
+	Proto                  ip_types.IPProto `binapi:"ip_proto,name=proto" json:"proto,omitempty"`
+	SrcportOrIcmptypeFirst uint16           `binapi:"u16,name=srcport_or_icmptype_first" json:"srcport_or_icmptype_first,omitempty"`
+	SrcportOrIcmptypeLast  uint16           `binapi:"u16,name=srcport_or_icmptype_last" json:"srcport_or_icmptype_last,omitempty"`
+	DstportOrIcmpcodeFirst uint16           `binapi:"u16,name=dstport_or_icmpcode_first" json:"dstport_or_icmpcode_first,omitempty"`
+	DstportOrIcmpcodeLast  uint16           `binapi:"u16,name=dstport_or_icmpcode_last" json:"dstport_or_icmpcode_last,omitempty"`
+	TCPFlagsMask           uint8            `binapi:"u8,name=tcp_flags_mask" json:"tcp_flags_mask,omitempty"`
+	TCPFlagsValue          uint8            `binapi:"u8,name=tcp_flags_value" json:"tcp_flags_value,omitempty"`
 }
 
 func (*ACLRule) GetTypeName() string { return "acl_rule" }
 
-type Address = ip_types.Address
-
-type IP4Prefix = ip_types.IP4Prefix
-
-type IP6Prefix = ip_types.IP6Prefix
-
 // MacipACLRule represents VPP binary API type 'macip_acl_rule'.
 type MacipACLRule struct {
-	IsPermit   ACLAction  `binapi:"acl_action,name=is_permit" json:"is_permit,omitempty"`
-	SrcMac     MacAddress `binapi:"mac_address,name=src_mac" json:"src_mac,omitempty"`
-	SrcMacMask MacAddress `binapi:"mac_address,name=src_mac_mask" json:"src_mac_mask,omitempty"`
-	SrcPrefix  Prefix     `binapi:"prefix,name=src_prefix" json:"src_prefix,omitempty"`
+	IsPermit   ACLAction       `binapi:"acl_action,name=is_permit" json:"is_permit,omitempty"`
+	SrcMac     MacAddress      `binapi:"mac_address,name=src_mac" json:"src_mac,omitempty"`
+	SrcMacMask MacAddress      `binapi:"mac_address,name=src_mac_mask" json:"src_mac_mask,omitempty"`
+	SrcPrefix  ip_types.Prefix `binapi:"prefix,name=src_prefix" json:"src_prefix,omitempty"`
 }
 
 func (*MacipACLRule) GetTypeName() string { return "macip_acl_rule" }
-
-type Mprefix = ip_types.Mprefix
-
-type Prefix = ip_types.Prefix
-
-type PrefixMatcher = ip_types.PrefixMatcher
-
-type AddressUnion = ip_types.AddressUnion
 
 // ACLAddReplace represents VPP binary API message 'acl_add_replace'.
 type ACLAddReplace struct {
@@ -319,7 +289,7 @@ func (m *ACLAddReplace) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].SrcPrefix
 		// field[3] m.R[j1].SrcPrefix.Address
 		// field[4] m.R[j1].SrcPrefix.Address.Af
-		m.R[j1].SrcPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].SrcPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].SrcPrefix.Address.Un
 		copy(m.R[j1].SrcPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -330,7 +300,7 @@ func (m *ACLAddReplace) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].DstPrefix
 		// field[3] m.R[j1].DstPrefix.Address
 		// field[4] m.R[j1].DstPrefix.Address.Af
-		m.R[j1].DstPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].DstPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].DstPrefix.Address.Un
 		copy(m.R[j1].DstPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -339,7 +309,7 @@ func (m *ACLAddReplace) Unmarshal(tmp []byte) error {
 		m.R[j1].DstPrefix.Len = uint8(tmp[pos])
 		pos += 1
 		// field[2] m.R[j1].Proto
-		m.R[j1].Proto = IPProto(tmp[pos])
+		m.R[j1].Proto = ip_types.IPProto(tmp[pos])
 		pos += 1
 		// field[2] m.R[j1].SrcportOrIcmptypeFirst
 		m.R[j1].SrcportOrIcmptypeFirst = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -677,7 +647,7 @@ func (m *ACLDetails) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].SrcPrefix
 		// field[3] m.R[j1].SrcPrefix.Address
 		// field[4] m.R[j1].SrcPrefix.Address.Af
-		m.R[j1].SrcPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].SrcPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].SrcPrefix.Address.Un
 		copy(m.R[j1].SrcPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -688,7 +658,7 @@ func (m *ACLDetails) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].DstPrefix
 		// field[3] m.R[j1].DstPrefix.Address
 		// field[4] m.R[j1].DstPrefix.Address.Af
-		m.R[j1].DstPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].DstPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].DstPrefix.Address.Un
 		copy(m.R[j1].DstPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -697,7 +667,7 @@ func (m *ACLDetails) Unmarshal(tmp []byte) error {
 		m.R[j1].DstPrefix.Len = uint8(tmp[pos])
 		pos += 1
 		// field[2] m.R[j1].Proto
-		m.R[j1].Proto = IPProto(tmp[pos])
+		m.R[j1].Proto = ip_types.IPProto(tmp[pos])
 		pos += 1
 		// field[2] m.R[j1].SrcportOrIcmptypeFirst
 		m.R[j1].SrcportOrIcmptypeFirst = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -769,10 +739,10 @@ func (m *ACLDump) Unmarshal(tmp []byte) error {
 
 // ACLInterfaceAddDel represents VPP binary API message 'acl_interface_add_del'.
 type ACLInterfaceAddDel struct {
-	IsAdd     bool           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
-	IsInput   bool           `binapi:"bool,name=is_input" json:"is_input,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	ACLIndex  uint32         `binapi:"u32,name=acl_index" json:"acl_index,omitempty"`
+	IsAdd     bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
+	IsInput   bool                           `binapi:"bool,name=is_input" json:"is_input,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	ACLIndex  uint32                         `binapi:"u32,name=acl_index" json:"acl_index,omitempty"`
 }
 
 func (m *ACLInterfaceAddDel) Reset()                        { *m = ACLInterfaceAddDel{} }
@@ -836,7 +806,7 @@ func (m *ACLInterfaceAddDel) Unmarshal(tmp []byte) error {
 	m.IsInput = tmp[pos] != 0
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.ACLIndex
 	m.ACLIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -892,10 +862,10 @@ func (m *ACLInterfaceAddDelReply) Unmarshal(tmp []byte) error {
 
 // ACLInterfaceEtypeWhitelistDetails represents VPP binary API message 'acl_interface_etype_whitelist_details'.
 type ACLInterfaceEtypeWhitelistDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Count     uint8          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Whitelist"`
-	NInput    uint8          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
-	Whitelist []uint16       `binapi:"u16[count],name=whitelist" json:"whitelist,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Count     uint8                          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Whitelist"`
+	NInput    uint8                          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
+	Whitelist []uint16                       `binapi:"u16[count],name=whitelist" json:"whitelist,omitempty"`
 }
 
 func (m *ACLInterfaceEtypeWhitelistDetails) Reset() { *m = ACLInterfaceEtypeWhitelistDetails{} }
@@ -957,7 +927,7 @@ func (m *ACLInterfaceEtypeWhitelistDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Count
 	m.Count = uint8(tmp[pos])
@@ -976,7 +946,7 @@ func (m *ACLInterfaceEtypeWhitelistDetails) Unmarshal(tmp []byte) error {
 
 // ACLInterfaceEtypeWhitelistDump represents VPP binary API message 'acl_interface_etype_whitelist_dump'.
 type ACLInterfaceEtypeWhitelistDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *ACLInterfaceEtypeWhitelistDump) Reset() { *m = ACLInterfaceEtypeWhitelistDump{} }
@@ -1017,17 +987,17 @@ func (m *ACLInterfaceEtypeWhitelistDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // ACLInterfaceListDetails represents VPP binary API message 'acl_interface_list_details'.
 type ACLInterfaceListDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Count     uint8          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
-	NInput    uint8          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
-	Acls      []uint32       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Count     uint8                          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
+	NInput    uint8                          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
+	Acls      []uint32                       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
 }
 
 func (m *ACLInterfaceListDetails) Reset()                        { *m = ACLInterfaceListDetails{} }
@@ -1087,7 +1057,7 @@ func (m *ACLInterfaceListDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Count
 	m.Count = uint8(tmp[pos])
@@ -1106,7 +1076,7 @@ func (m *ACLInterfaceListDetails) Unmarshal(tmp []byte) error {
 
 // ACLInterfaceListDump represents VPP binary API message 'acl_interface_list_dump'.
 type ACLInterfaceListDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4.294967295e+09" json:"sw_if_index,omitempty"`
 }
 
 func (m *ACLInterfaceListDump) Reset()                        { *m = ACLInterfaceListDump{} }
@@ -1145,17 +1115,17 @@ func (m *ACLInterfaceListDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // ACLInterfaceSetACLList represents VPP binary API message 'acl_interface_set_acl_list'.
 type ACLInterfaceSetACLList struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Count     uint8          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
-	NInput    uint8          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
-	Acls      []uint32       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Count     uint8                          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
+	NInput    uint8                          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
+	Acls      []uint32                       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
 }
 
 func (m *ACLInterfaceSetACLList) Reset()                        { *m = ACLInterfaceSetACLList{} }
@@ -1215,7 +1185,7 @@ func (m *ACLInterfaceSetACLList) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Count
 	m.Count = uint8(tmp[pos])
@@ -1282,10 +1252,10 @@ func (m *ACLInterfaceSetACLListReply) Unmarshal(tmp []byte) error {
 
 // ACLInterfaceSetEtypeWhitelist represents VPP binary API message 'acl_interface_set_etype_whitelist'.
 type ACLInterfaceSetEtypeWhitelist struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Count     uint8          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Whitelist"`
-	NInput    uint8          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
-	Whitelist []uint16       `binapi:"u16[count],name=whitelist" json:"whitelist,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Count     uint8                          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Whitelist"`
+	NInput    uint8                          `binapi:"u8,name=n_input" json:"n_input,omitempty"`
+	Whitelist []uint16                       `binapi:"u16[count],name=whitelist" json:"whitelist,omitempty"`
 }
 
 func (m *ACLInterfaceSetEtypeWhitelist) Reset() { *m = ACLInterfaceSetEtypeWhitelist{} }
@@ -1347,7 +1317,7 @@ func (m *ACLInterfaceSetEtypeWhitelist) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Count
 	m.Count = uint8(tmp[pos])
@@ -1923,7 +1893,7 @@ func (m *MacipACLAdd) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].SrcPrefix
 		// field[3] m.R[j1].SrcPrefix.Address
 		// field[4] m.R[j1].SrcPrefix.Address.Af
-		m.R[j1].SrcPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].SrcPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].SrcPrefix.Address.Un
 		copy(m.R[j1].SrcPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2080,7 +2050,7 @@ func (m *MacipACLAddReplace) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].SrcPrefix
 		// field[3] m.R[j1].SrcPrefix.Address
 		// field[4] m.R[j1].SrcPrefix.Address.Af
-		m.R[j1].SrcPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].SrcPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].SrcPrefix.Address.Un
 		copy(m.R[j1].SrcPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2439,7 +2409,7 @@ func (m *MacipACLDetails) Unmarshal(tmp []byte) error {
 		// field[2] m.R[j1].SrcPrefix
 		// field[3] m.R[j1].SrcPrefix.Address
 		// field[4] m.R[j1].SrcPrefix.Address.Af
-		m.R[j1].SrcPrefix.Address.Af = AddressFamily(tmp[pos])
+		m.R[j1].SrcPrefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 		pos += 1
 		// field[4] m.R[j1].SrcPrefix.Address.Un
 		copy(m.R[j1].SrcPrefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2499,9 +2469,9 @@ func (m *MacipACLDump) Unmarshal(tmp []byte) error {
 
 // MacipACLInterfaceAddDel represents VPP binary API message 'macip_acl_interface_add_del'.
 type MacipACLInterfaceAddDel struct {
-	IsAdd     bool           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	ACLIndex  uint32         `binapi:"u32,name=acl_index" json:"acl_index,omitempty"`
+	IsAdd     bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	ACLIndex  uint32                         `binapi:"u32,name=acl_index" json:"acl_index,omitempty"`
 }
 
 func (m *MacipACLInterfaceAddDel) Reset()                        { *m = MacipACLInterfaceAddDel{} }
@@ -2555,7 +2525,7 @@ func (m *MacipACLInterfaceAddDel) Unmarshal(tmp []byte) error {
 	m.IsAdd = tmp[pos] != 0
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.ACLIndex
 	m.ACLIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -2713,9 +2683,9 @@ func (m *MacipACLInterfaceGetReply) Unmarshal(tmp []byte) error {
 
 // MacipACLInterfaceListDetails represents VPP binary API message 'macip_acl_interface_list_details'.
 type MacipACLInterfaceListDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Count     uint8          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
-	Acls      []uint32       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Count     uint8                          `binapi:"u8,name=count" json:"count,omitempty" struc:"sizeof=Acls"`
+	Acls      []uint32                       `binapi:"u32[count],name=acls" json:"acls,omitempty"`
 }
 
 func (m *MacipACLInterfaceListDetails) Reset() { *m = MacipACLInterfaceListDetails{} }
@@ -2772,7 +2742,7 @@ func (m *MacipACLInterfaceListDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Count
 	m.Count = uint8(tmp[pos])
@@ -2788,7 +2758,7 @@ func (m *MacipACLInterfaceListDetails) Unmarshal(tmp []byte) error {
 
 // MacipACLInterfaceListDump represents VPP binary API message 'macip_acl_interface_list_dump'.
 type MacipACLInterfaceListDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *MacipACLInterfaceListDump) Reset()                        { *m = MacipACLInterfaceListDump{} }
@@ -2827,7 +2797,7 @@ func (m *MacipACLInterfaceListDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -2925,6 +2895,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

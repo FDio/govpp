@@ -119,7 +119,7 @@ func vppVersion(ch api.Channel) {
 }
 
 // createLoopback sends request to create loopback interface.
-func createLoopback(ch api.Channel) interfaces.InterfaceIndex {
+func createLoopback(ch api.Channel) interface_types.InterfaceIndex {
 	fmt.Println("Creating loopback interface")
 
 	req := &interfaces.CreateLoopback{}
@@ -163,16 +163,16 @@ func interfaceDump(ch api.Channel) {
 }
 
 // addIPAddress sends request to add IP address to interface.
-func addIPAddress(ch api.Channel, index interfaces.InterfaceIndex) {
+func addIPAddress(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Adding IP address to interface to interface index %d\n", index)
 
 	req := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex: index,
 		IsAdd:     true,
-		Prefix: interfaces.AddressWithPrefix{
-			Address: interfaces.Address{
+		Prefix: ip_types.AddressWithPrefix{
+			Address: ip_types.Address{
 				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, uint8(index)}),
+				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{10, 10, 0, uint8(index)}),
 			},
 			Len: 32,
 		},
@@ -189,11 +189,11 @@ func addIPAddress(ch api.Channel, index interfaces.InterfaceIndex) {
 	fmt.Println()
 }
 
-func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
+func ipAddressDump(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Dumping IP addresses for interface index %d\n", index)
 
 	req := &ip.IPAddressDump{
-		SwIfIndex: ip.InterfaceIndex(index),
+		SwIfIndex: index,
 	}
 	reqCtx := ch.SendMultiRequest(req)
 
@@ -217,7 +217,7 @@ func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
 // interfaceNotifications shows the usage of notification API. Note that for notifications,
 // you are supposed to create your own Go channel with your preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
-func interfaceNotifications(ch api.Channel, index interfaces.InterfaceIndex) {
+func interfaceNotifications(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Subscribing to notificaiton events for interface index %d\n", index)
 
 	notifChan := make(chan api.Message, 100)

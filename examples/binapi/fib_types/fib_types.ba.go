@@ -19,9 +19,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -217,10 +220,10 @@ func (*FibPath) GetTypeName() string { return "fib_path" }
 
 // FibPathNh represents VPP binary API type 'fib_path_nh'.
 type FibPathNh struct {
-	Address            AddressUnion `binapi:"address_union,name=address" json:"address,omitempty"`
-	ViaLabel           uint32       `binapi:"u32,name=via_label" json:"via_label,omitempty"`
-	ObjID              uint32       `binapi:"u32,name=obj_id" json:"obj_id,omitempty"`
-	ClassifyTableIndex uint32       `binapi:"u32,name=classify_table_index" json:"classify_table_index,omitempty"`
+	Address            ip_types.AddressUnion `binapi:"address_union,name=address" json:"address,omitempty"`
+	ViaLabel           uint32                `binapi:"u32,name=via_label" json:"via_label,omitempty"`
+	ObjID              uint32                `binapi:"u32,name=obj_id" json:"obj_id,omitempty"`
+	ClassifyTableIndex uint32                `binapi:"u32,name=classify_table_index" json:"classify_table_index,omitempty"`
 }
 
 func (*FibPathNh) GetTypeName() string { return "fib_path_nh" }
@@ -244,6 +247,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

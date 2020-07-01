@@ -20,9 +20,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -46,24 +49,6 @@ const (
 	// VersionCrc is the CRC of this module.
 	VersionCrc = 0x765d74b1
 )
-
-type AddressFamily = fib_types.AddressFamily
-
-type FibPathFlags = fib_types.FibPathFlags
-
-type FibPathNhProto = fib_types.FibPathNhProto
-
-type FibPathType = fib_types.FibPathType
-
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type IPDscp = fib_types.IPDscp
-
-type IPEcn = fib_types.IPEcn
-
-type IPProto = fib_types.IPProto
 
 // IPReassType represents VPP binary API enum 'ip_reass_type'.
 type IPReassType uint32
@@ -91,8 +76,6 @@ func (x IPReassType) String() string {
 	}
 	return "IPReassType(" + strconv.Itoa(int(x)) + ")"
 }
-
-type LinkDuplex = interface_types.LinkDuplex
 
 // MfibItfFlags represents VPP binary API enum 'mfib_itf_flags'.
 type MfibItfFlags uint32
@@ -133,58 +116,41 @@ func (x MfibItfFlags) String() string {
 	return "MfibItfFlags(" + strconv.Itoa(int(x)) + ")"
 }
 
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type AddressWithPrefix = fib_types.AddressWithPrefix
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
-type IP4Address = fib_types.IP4Address
-
-type IP4AddressWithPrefix = fib_types.IP4AddressWithPrefix
-
-type IP6Address = fib_types.IP6Address
-
-type IP6AddressWithPrefix = fib_types.IP6AddressWithPrefix
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
 
-type Address = fib_types.Address
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
 
-type FibMplsLabel = fib_types.FibMplsLabel
-
-type FibPath = fib_types.FibPath
-
-type FibPathNh = fib_types.FibPathNh
-
-type IP4Prefix = fib_types.IP4Prefix
-
-type IP6Prefix = fib_types.IP6Prefix
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
 
 // IPMroute represents VPP binary API type 'ip_mroute'.
 type IPMroute struct {
-	TableID    uint32     `binapi:"u32,name=table_id" json:"table_id,omitempty"`
-	EntryFlags uint32     `binapi:"u32,name=entry_flags" json:"entry_flags,omitempty"`
-	RpfID      uint32     `binapi:"u32,name=rpf_id" json:"rpf_id,omitempty"`
-	Prefix     Mprefix    `binapi:"mprefix,name=prefix" json:"prefix,omitempty"`
-	NPaths     uint8      `binapi:"u8,name=n_paths" json:"n_paths,omitempty" struc:"sizeof=Paths"`
-	Paths      []MfibPath `binapi:"mfib_path[n_paths],name=paths" json:"paths,omitempty"`
+	TableID    uint32            `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	EntryFlags uint32            `binapi:"u32,name=entry_flags" json:"entry_flags,omitempty"`
+	RpfID      uint32            `binapi:"u32,name=rpf_id" json:"rpf_id,omitempty"`
+	Prefix     fib_types.Mprefix `binapi:"mprefix,name=prefix" json:"prefix,omitempty"`
+	NPaths     uint8             `binapi:"u8,name=n_paths" json:"n_paths,omitempty" struc:"sizeof=Paths"`
+	Paths      []MfibPath        `binapi:"mfib_path[n_paths],name=paths" json:"paths,omitempty"`
 }
 
 func (*IPMroute) GetTypeName() string { return "ip_mroute" }
 
 // IPRoute represents VPP binary API type 'ip_route'.
 type IPRoute struct {
-	TableID    uint32    `binapi:"u32,name=table_id" json:"table_id,omitempty"`
-	StatsIndex uint32    `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
-	Prefix     Prefix    `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
-	NPaths     uint8     `binapi:"u8,name=n_paths" json:"n_paths,omitempty" struc:"sizeof=Paths"`
-	Paths      []FibPath `binapi:"fib_path[n_paths],name=paths" json:"paths,omitempty"`
+	TableID    uint32              `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	StatsIndex uint32              `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
+	Prefix     fib_types.Prefix    `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	NPaths     uint8               `binapi:"u8,name=n_paths" json:"n_paths,omitempty" struc:"sizeof=Paths"`
+	Paths      []fib_types.FibPath `binapi:"fib_path[n_paths],name=paths" json:"paths,omitempty"`
 }
 
 func (*IPRoute) GetTypeName() string { return "ip_route" }
@@ -200,28 +166,20 @@ func (*IPTable) GetTypeName() string { return "ip_table" }
 
 // MfibPath represents VPP binary API type 'mfib_path'.
 type MfibPath struct {
-	ItfFlags MfibItfFlags `binapi:"mfib_itf_flags,name=itf_flags" json:"itf_flags,omitempty"`
-	Path     FibPath      `binapi:"fib_path,name=path" json:"path,omitempty"`
+	ItfFlags MfibItfFlags      `binapi:"mfib_itf_flags,name=itf_flags" json:"itf_flags,omitempty"`
+	Path     fib_types.FibPath `binapi:"fib_path,name=path" json:"path,omitempty"`
 }
 
 func (*MfibPath) GetTypeName() string { return "mfib_path" }
 
-type Mprefix = fib_types.Mprefix
-
-type Prefix = fib_types.Prefix
-
-type PrefixMatcher = fib_types.PrefixMatcher
-
 // PuntRedirect represents VPP binary API type 'punt_redirect'.
 type PuntRedirect struct {
-	RxSwIfIndex InterfaceIndex `binapi:"interface_index,name=rx_sw_if_index" json:"rx_sw_if_index,omitempty"`
-	TxSwIfIndex InterfaceIndex `binapi:"interface_index,name=tx_sw_if_index" json:"tx_sw_if_index,omitempty"`
-	Nh          Address        `binapi:"address,name=nh" json:"nh,omitempty"`
+	RxSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=rx_sw_if_index" json:"rx_sw_if_index,omitempty"`
+	TxSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=tx_sw_if_index" json:"tx_sw_if_index,omitempty"`
+	Nh          fib_types.Address              `binapi:"address,name=nh" json:"nh,omitempty"`
 }
 
 func (*PuntRedirect) GetTypeName() string { return "punt_redirect" }
-
-type AddressUnion = fib_types.AddressUnion
 
 // IoamDisable represents VPP binary API message 'ioam_disable'.
 type IoamDisable struct {
@@ -462,8 +420,8 @@ func (m *IoamEnableReply) Unmarshal(tmp []byte) error {
 
 // IPAddressDetails represents VPP binary API message 'ip_address_details'.
 type IPAddressDetails struct {
-	SwIfIndex InterfaceIndex    `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Prefix    AddressWithPrefix `binapi:"address_with_prefix,name=prefix" json:"prefix,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Prefix    fib_types.AddressWithPrefix    `binapi:"address_with_prefix,name=prefix" json:"prefix,omitempty"`
 }
 
 func (m *IPAddressDetails) Reset()                        { *m = IPAddressDetails{} }
@@ -521,12 +479,12 @@ func (m *IPAddressDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -539,8 +497,8 @@ func (m *IPAddressDetails) Unmarshal(tmp []byte) error {
 
 // IPAddressDump represents VPP binary API message 'ip_address_dump'.
 type IPAddressDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsIPv6    bool           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsIPv6    bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
 func (m *IPAddressDump) Reset()                        { *m = IPAddressDump{} }
@@ -586,7 +544,7 @@ func (m *IPAddressDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsIPv6
 	m.IsIPv6 = tmp[pos] != 0
@@ -596,9 +554,9 @@ func (m *IPAddressDump) Unmarshal(tmp []byte) error {
 
 // IPContainerProxyAddDel represents VPP binary API message 'ip_container_proxy_add_del'.
 type IPContainerProxyAddDel struct {
-	Pfx       Prefix         `binapi:"prefix,name=pfx" json:"pfx,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsAdd     bool           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
+	Pfx       fib_types.Prefix               `binapi:"prefix,name=pfx" json:"pfx,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsAdd     bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
 func (m *IPContainerProxyAddDel) Reset()                        { *m = IPContainerProxyAddDel{} }
@@ -665,7 +623,7 @@ func (m *IPContainerProxyAddDel) Unmarshal(tmp []byte) error {
 	// field[1] m.Pfx
 	// field[2] m.Pfx.Address
 	// field[3] m.Pfx.Address.Af
-	m.Pfx.Address.Af = AddressFamily(tmp[pos])
+	m.Pfx.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Pfx.Address.Un
 	copy(m.Pfx.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -674,7 +632,7 @@ func (m *IPContainerProxyAddDel) Unmarshal(tmp []byte) error {
 	m.Pfx.Len = uint8(tmp[pos])
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsAdd
 	m.IsAdd = tmp[pos] != 0
@@ -732,8 +690,8 @@ func (m *IPContainerProxyAddDelReply) Unmarshal(tmp []byte) error {
 
 // IPContainerProxyDetails represents VPP binary API message 'ip_container_proxy_details'.
 type IPContainerProxyDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Prefix    Prefix         `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Prefix    fib_types.Prefix               `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
 }
 
 func (m *IPContainerProxyDetails) Reset()                        { *m = IPContainerProxyDetails{} }
@@ -791,12 +749,12 @@ func (m *IPContainerProxyDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -845,8 +803,8 @@ func (m *IPContainerProxyDump) Unmarshal(tmp []byte) error {
 
 // IPDetails represents VPP binary API message 'ip_details'.
 type IPDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsIPv6    bool           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsIPv6    bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
 func (m *IPDetails) Reset()                        { *m = IPDetails{} }
@@ -892,7 +850,7 @@ func (m *IPDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsIPv6
 	m.IsIPv6 = tmp[pos] != 0
@@ -1026,7 +984,7 @@ func (m *IPMrouteAddDel) Size() int {
 		size += 1
 		// field[4] s2.Path.LabelStack
 		for j4 := 0; j4 < 16; j4++ {
-			var s4 FibMplsLabel
+			var s4 fib_types.FibMplsLabel
 			_ = s4
 			if j4 < len(s2.Path.LabelStack) {
 				s4 = s2.Path.LabelStack[j4]
@@ -1142,7 +1100,7 @@ func (m *IPMrouteAddDel) Marshal(b []byte) ([]byte, error) {
 		pos += 1
 		// field[4] v2.Path.LabelStack
 		for j4 := 0; j4 < 16; j4++ {
-			var v4 FibMplsLabel
+			var v4 fib_types.FibMplsLabel
 			if j4 < len(v2.Path.LabelStack) {
 				v4 = v2.Path.LabelStack[j4]
 			}
@@ -1185,7 +1143,7 @@ func (m *IPMrouteAddDel) Unmarshal(tmp []byte) error {
 	pos += 4
 	// field[2] m.Route.Prefix
 	// field[3] m.Route.Prefix.Af
-	m.Route.Prefix.Af = AddressFamily(tmp[pos])
+	m.Route.Prefix.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Route.Prefix.GrpAddressLength
 	m.Route.Prefix.GrpAddressLength = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -1222,13 +1180,13 @@ func (m *IPMrouteAddDel) Unmarshal(tmp []byte) error {
 		m.Route.Paths[j2].Path.Preference = uint8(tmp[pos])
 		pos += 1
 		// field[4] m.Route.Paths[j2].Path.Type
-		m.Route.Paths[j2].Path.Type = FibPathType(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Type = fib_types.FibPathType(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Flags
-		m.Route.Paths[j2].Path.Flags = FibPathFlags(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Flags = fib_types.FibPathFlags(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Proto
-		m.Route.Paths[j2].Path.Proto = FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Proto = fib_types.FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Nh
 		// field[5] m.Route.Paths[j2].Path.Nh.Address
@@ -1392,7 +1350,7 @@ func (m *IPMrouteDetails) Size() int {
 		size += 1
 		// field[4] s2.Path.LabelStack
 		for j4 := 0; j4 < 16; j4++ {
-			var s4 FibMplsLabel
+			var s4 fib_types.FibMplsLabel
 			_ = s4
 			if j4 < len(s2.Path.LabelStack) {
 				s4 = s2.Path.LabelStack[j4]
@@ -1498,7 +1456,7 @@ func (m *IPMrouteDetails) Marshal(b []byte) ([]byte, error) {
 		pos += 1
 		// field[4] v2.Path.LabelStack
 		for j4 := 0; j4 < 16; j4++ {
-			var v4 FibMplsLabel
+			var v4 fib_types.FibMplsLabel
 			if j4 < len(v2.Path.LabelStack) {
 				v4 = v2.Path.LabelStack[j4]
 			}
@@ -1535,7 +1493,7 @@ func (m *IPMrouteDetails) Unmarshal(tmp []byte) error {
 	pos += 4
 	// field[2] m.Route.Prefix
 	// field[3] m.Route.Prefix.Af
-	m.Route.Prefix.Af = AddressFamily(tmp[pos])
+	m.Route.Prefix.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Route.Prefix.GrpAddressLength
 	m.Route.Prefix.GrpAddressLength = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -1572,13 +1530,13 @@ func (m *IPMrouteDetails) Unmarshal(tmp []byte) error {
 		m.Route.Paths[j2].Path.Preference = uint8(tmp[pos])
 		pos += 1
 		// field[4] m.Route.Paths[j2].Path.Type
-		m.Route.Paths[j2].Path.Type = FibPathType(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Type = fib_types.FibPathType(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Flags
-		m.Route.Paths[j2].Path.Flags = FibPathFlags(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Flags = fib_types.FibPathFlags(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Proto
-		m.Route.Paths[j2].Path.Proto = FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Path.Proto = fib_types.FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[4] m.Route.Paths[j2].Path.Nh
 		// field[5] m.Route.Paths[j2].Path.Nh.Address
@@ -1974,14 +1932,14 @@ func (m *IPPuntRedirect) Unmarshal(tmp []byte) error {
 	_ = pos
 	// field[1] m.Punt
 	// field[2] m.Punt.RxSwIfIndex
-	m.Punt.RxSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.Punt.RxSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[2] m.Punt.TxSwIfIndex
-	m.Punt.TxSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.Punt.TxSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[2] m.Punt.Nh
 	// field[3] m.Punt.Nh.Af
-	m.Punt.Nh.Af = AddressFamily(tmp[pos])
+	m.Punt.Nh.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Punt.Nh.Un
 	copy(m.Punt.Nh.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2053,14 +2011,14 @@ func (m *IPPuntRedirectDetails) Unmarshal(tmp []byte) error {
 	_ = pos
 	// field[1] m.Punt
 	// field[2] m.Punt.RxSwIfIndex
-	m.Punt.RxSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.Punt.RxSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[2] m.Punt.TxSwIfIndex
-	m.Punt.TxSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.Punt.TxSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[2] m.Punt.Nh
 	// field[3] m.Punt.Nh.Af
-	m.Punt.Nh.Af = AddressFamily(tmp[pos])
+	m.Punt.Nh.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Punt.Nh.Un
 	copy(m.Punt.Nh.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2070,8 +2028,8 @@ func (m *IPPuntRedirectDetails) Unmarshal(tmp []byte) error {
 
 // IPPuntRedirectDump represents VPP binary API message 'ip_punt_redirect_dump'.
 type IPPuntRedirectDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsIPv6    bool           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsIPv6    bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
 func (m *IPPuntRedirectDump) Reset()                        { *m = IPPuntRedirectDump{} }
@@ -2117,7 +2075,7 @@ func (m *IPPuntRedirectDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsIPv6
 	m.IsIPv6 = tmp[pos] != 0
@@ -2173,10 +2131,10 @@ func (m *IPPuntRedirectReply) Unmarshal(tmp []byte) error {
 
 // IPReassemblyEnableDisable represents VPP binary API message 'ip_reassembly_enable_disable'.
 type IPReassemblyEnableDisable struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	EnableIP4 bool           `binapi:"bool,name=enable_ip4" json:"enable_ip4,omitempty"`
-	EnableIP6 bool           `binapi:"bool,name=enable_ip6" json:"enable_ip6,omitempty"`
-	Type      IPReassType    `binapi:"ip_reass_type,name=type" json:"type,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	EnableIP4 bool                           `binapi:"bool,name=enable_ip4" json:"enable_ip4,omitempty"`
+	EnableIP6 bool                           `binapi:"bool,name=enable_ip6" json:"enable_ip6,omitempty"`
+	Type      IPReassType                    `binapi:"ip_reass_type,name=type" json:"type,omitempty"`
 }
 
 func (m *IPReassemblyEnableDisable) Reset()                        { *m = IPReassemblyEnableDisable{} }
@@ -2234,7 +2192,7 @@ func (m *IPReassemblyEnableDisable) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.EnableIP4
 	m.EnableIP4 = tmp[pos] != 0
@@ -2623,7 +2581,7 @@ func (m *IPRouteAddDel) Size() int {
 	size += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var s2 FibPath
+		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
 			s2 = m.Route.Paths[j2]
@@ -2657,7 +2615,7 @@ func (m *IPRouteAddDel) Size() int {
 		size += 1
 		// field[3] s2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 FibMplsLabel
+			var s3 fib_types.FibMplsLabel
 			_ = s3
 			if j3 < len(s2.LabelStack) {
 				s3 = s2.LabelStack[j3]
@@ -2718,7 +2676,7 @@ func (m *IPRouteAddDel) Marshal(b []byte) ([]byte, error) {
 	pos += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var v2 FibPath
+		var v2 fib_types.FibPath
 		if j2 < len(m.Route.Paths) {
 			v2 = m.Route.Paths[j2]
 		}
@@ -2764,7 +2722,7 @@ func (m *IPRouteAddDel) Marshal(b []byte) ([]byte, error) {
 		pos += 1
 		// field[3] v2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var v3 FibMplsLabel
+			var v3 fib_types.FibMplsLabel
 			if j3 < len(v2.LabelStack) {
 				v3 = v2.LabelStack[j3]
 			}
@@ -2805,7 +2763,7 @@ func (m *IPRouteAddDel) Unmarshal(tmp []byte) error {
 	// field[2] m.Route.Prefix
 	// field[3] m.Route.Prefix.Address
 	// field[4] m.Route.Prefix.Address.Af
-	m.Route.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Route.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[4] m.Route.Prefix.Address.Un
 	copy(m.Route.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -2817,7 +2775,7 @@ func (m *IPRouteAddDel) Unmarshal(tmp []byte) error {
 	m.Route.NPaths = uint8(tmp[pos])
 	pos += 1
 	// field[2] m.Route.Paths
-	m.Route.Paths = make([]FibPath, int(m.Route.NPaths))
+	m.Route.Paths = make([]fib_types.FibPath, int(m.Route.NPaths))
 	for j2 := 0; j2 < int(m.Route.NPaths); j2++ {
 		// field[3] m.Route.Paths[j2].SwIfIndex
 		m.Route.Paths[j2].SwIfIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -2835,13 +2793,13 @@ func (m *IPRouteAddDel) Unmarshal(tmp []byte) error {
 		m.Route.Paths[j2].Preference = uint8(tmp[pos])
 		pos += 1
 		// field[3] m.Route.Paths[j2].Type
-		m.Route.Paths[j2].Type = FibPathType(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Type = fib_types.FibPathType(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Flags
-		m.Route.Paths[j2].Flags = FibPathFlags(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Flags = fib_types.FibPathFlags(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Proto
-		m.Route.Paths[j2].Proto = FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Proto = fib_types.FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Nh
 		// field[4] m.Route.Paths[j2].Nh.Address
@@ -2965,7 +2923,7 @@ func (m *IPRouteDetails) Size() int {
 	size += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var s2 FibPath
+		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
 			s2 = m.Route.Paths[j2]
@@ -2999,7 +2957,7 @@ func (m *IPRouteDetails) Size() int {
 		size += 1
 		// field[3] s2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 FibMplsLabel
+			var s3 fib_types.FibMplsLabel
 			_ = s3
 			if j3 < len(s2.LabelStack) {
 				s3 = s2.LabelStack[j3]
@@ -3050,7 +3008,7 @@ func (m *IPRouteDetails) Marshal(b []byte) ([]byte, error) {
 	pos += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var v2 FibPath
+		var v2 fib_types.FibPath
 		if j2 < len(m.Route.Paths) {
 			v2 = m.Route.Paths[j2]
 		}
@@ -3096,7 +3054,7 @@ func (m *IPRouteDetails) Marshal(b []byte) ([]byte, error) {
 		pos += 1
 		// field[3] v2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var v3 FibMplsLabel
+			var v3 fib_types.FibMplsLabel
 			if j3 < len(v2.LabelStack) {
 				v3 = v2.LabelStack[j3]
 			}
@@ -3131,7 +3089,7 @@ func (m *IPRouteDetails) Unmarshal(tmp []byte) error {
 	// field[2] m.Route.Prefix
 	// field[3] m.Route.Prefix.Address
 	// field[4] m.Route.Prefix.Address.Af
-	m.Route.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Route.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[4] m.Route.Prefix.Address.Un
 	copy(m.Route.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -3143,7 +3101,7 @@ func (m *IPRouteDetails) Unmarshal(tmp []byte) error {
 	m.Route.NPaths = uint8(tmp[pos])
 	pos += 1
 	// field[2] m.Route.Paths
-	m.Route.Paths = make([]FibPath, int(m.Route.NPaths))
+	m.Route.Paths = make([]fib_types.FibPath, int(m.Route.NPaths))
 	for j2 := 0; j2 < int(m.Route.NPaths); j2++ {
 		// field[3] m.Route.Paths[j2].SwIfIndex
 		m.Route.Paths[j2].SwIfIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -3161,13 +3119,13 @@ func (m *IPRouteDetails) Unmarshal(tmp []byte) error {
 		m.Route.Paths[j2].Preference = uint8(tmp[pos])
 		pos += 1
 		// field[3] m.Route.Paths[j2].Type
-		m.Route.Paths[j2].Type = FibPathType(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Type = fib_types.FibPathType(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Flags
-		m.Route.Paths[j2].Flags = FibPathFlags(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Flags = fib_types.FibPathFlags(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Proto
-		m.Route.Paths[j2].Proto = FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Proto = fib_types.FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Nh
 		// field[4] m.Route.Paths[j2].Nh.Address
@@ -3276,9 +3234,9 @@ func (m *IPRouteDump) Unmarshal(tmp []byte) error {
 
 // IPRouteLookup represents VPP binary API message 'ip_route_lookup'.
 type IPRouteLookup struct {
-	TableID uint32 `binapi:"u32,name=table_id" json:"table_id,omitempty"`
-	Exact   uint8  `binapi:"u8,name=exact" json:"exact,omitempty"`
-	Prefix  Prefix `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	TableID uint32           `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	Exact   uint8            `binapi:"u8,name=exact" json:"exact,omitempty"`
+	Prefix  fib_types.Prefix `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
 }
 
 func (m *IPRouteLookup) Reset()                        { *m = IPRouteLookup{} }
@@ -3349,7 +3307,7 @@ func (m *IPRouteLookup) Unmarshal(tmp []byte) error {
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -3395,7 +3353,7 @@ func (m *IPRouteLookupReply) Size() int {
 	size += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var s2 FibPath
+		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
 			s2 = m.Route.Paths[j2]
@@ -3429,7 +3387,7 @@ func (m *IPRouteLookupReply) Size() int {
 		size += 1
 		// field[3] s2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 FibMplsLabel
+			var s3 fib_types.FibMplsLabel
 			_ = s3
 			if j3 < len(s2.LabelStack) {
 				s3 = s2.LabelStack[j3]
@@ -3483,7 +3441,7 @@ func (m *IPRouteLookupReply) Marshal(b []byte) ([]byte, error) {
 	pos += 1
 	// field[2] m.Route.Paths
 	for j2 := 0; j2 < len(m.Route.Paths); j2++ {
-		var v2 FibPath
+		var v2 fib_types.FibPath
 		if j2 < len(m.Route.Paths) {
 			v2 = m.Route.Paths[j2]
 		}
@@ -3529,7 +3487,7 @@ func (m *IPRouteLookupReply) Marshal(b []byte) ([]byte, error) {
 		pos += 1
 		// field[3] v2.LabelStack
 		for j3 := 0; j3 < 16; j3++ {
-			var v3 FibMplsLabel
+			var v3 fib_types.FibMplsLabel
 			if j3 < len(v2.LabelStack) {
 				v3 = v2.LabelStack[j3]
 			}
@@ -3567,7 +3525,7 @@ func (m *IPRouteLookupReply) Unmarshal(tmp []byte) error {
 	// field[2] m.Route.Prefix
 	// field[3] m.Route.Prefix.Address
 	// field[4] m.Route.Prefix.Address.Af
-	m.Route.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Route.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[4] m.Route.Prefix.Address.Un
 	copy(m.Route.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -3579,7 +3537,7 @@ func (m *IPRouteLookupReply) Unmarshal(tmp []byte) error {
 	m.Route.NPaths = uint8(tmp[pos])
 	pos += 1
 	// field[2] m.Route.Paths
-	m.Route.Paths = make([]FibPath, int(m.Route.NPaths))
+	m.Route.Paths = make([]fib_types.FibPath, int(m.Route.NPaths))
 	for j2 := 0; j2 < int(m.Route.NPaths); j2++ {
 		// field[3] m.Route.Paths[j2].SwIfIndex
 		m.Route.Paths[j2].SwIfIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -3597,13 +3555,13 @@ func (m *IPRouteLookupReply) Unmarshal(tmp []byte) error {
 		m.Route.Paths[j2].Preference = uint8(tmp[pos])
 		pos += 1
 		// field[3] m.Route.Paths[j2].Type
-		m.Route.Paths[j2].Type = FibPathType(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Type = fib_types.FibPathType(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Flags
-		m.Route.Paths[j2].Flags = FibPathFlags(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Flags = fib_types.FibPathFlags(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Proto
-		m.Route.Paths[j2].Proto = FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
+		m.Route.Paths[j2].Proto = fib_types.FibPathNhProto(o.Uint32(tmp[pos : pos+4]))
 		pos += 4
 		// field[3] m.Route.Paths[j2].Nh
 		// field[4] m.Route.Paths[j2].Nh.Address
@@ -3642,12 +3600,12 @@ func (m *IPRouteLookupReply) Unmarshal(tmp []byte) error {
 
 // IPSourceAndPortRangeCheckAddDel represents VPP binary API message 'ip_source_and_port_range_check_add_del'.
 type IPSourceAndPortRangeCheckAddDel struct {
-	IsAdd          bool     `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
-	Prefix         Prefix   `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
-	NumberOfRanges uint8    `binapi:"u8,name=number_of_ranges" json:"number_of_ranges,omitempty"`
-	LowPorts       []uint16 `binapi:"u16[32],name=low_ports" json:"low_ports,omitempty" struc:"[32]uint16"`
-	HighPorts      []uint16 `binapi:"u16[32],name=high_ports" json:"high_ports,omitempty" struc:"[32]uint16"`
-	VrfID          uint32   `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
+	IsAdd          bool             `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
+	Prefix         fib_types.Prefix `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	NumberOfRanges uint8            `binapi:"u8,name=number_of_ranges" json:"number_of_ranges,omitempty"`
+	LowPorts       []uint16         `binapi:"u16[32],name=low_ports" json:"low_ports,omitempty" struc:"[32]uint16"`
+	HighPorts      []uint16         `binapi:"u16[32],name=high_ports" json:"high_ports,omitempty" struc:"[32]uint16"`
+	VrfID          uint32           `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
 func (m *IPSourceAndPortRangeCheckAddDel) Reset() { *m = IPSourceAndPortRangeCheckAddDel{} }
@@ -3746,7 +3704,7 @@ func (m *IPSourceAndPortRangeCheckAddDel) Unmarshal(tmp []byte) error {
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -3827,12 +3785,12 @@ func (m *IPSourceAndPortRangeCheckAddDelReply) Unmarshal(tmp []byte) error {
 
 // IPSourceAndPortRangeCheckInterfaceAddDel represents VPP binary API message 'ip_source_and_port_range_check_interface_add_del'.
 type IPSourceAndPortRangeCheckInterfaceAddDel struct {
-	IsAdd       bool           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
-	SwIfIndex   InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	TCPInVrfID  uint32         `binapi:"u32,name=tcp_in_vrf_id" json:"tcp_in_vrf_id,omitempty"`
-	TCPOutVrfID uint32         `binapi:"u32,name=tcp_out_vrf_id" json:"tcp_out_vrf_id,omitempty"`
-	UDPInVrfID  uint32         `binapi:"u32,name=udp_in_vrf_id" json:"udp_in_vrf_id,omitempty"`
-	UDPOutVrfID uint32         `binapi:"u32,name=udp_out_vrf_id" json:"udp_out_vrf_id,omitempty"`
+	IsAdd       bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
+	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	TCPInVrfID  uint32                         `binapi:"u32,name=tcp_in_vrf_id" json:"tcp_in_vrf_id,omitempty"`
+	TCPOutVrfID uint32                         `binapi:"u32,name=tcp_out_vrf_id" json:"tcp_out_vrf_id,omitempty"`
+	UDPInVrfID  uint32                         `binapi:"u32,name=udp_in_vrf_id" json:"udp_in_vrf_id,omitempty"`
+	UDPOutVrfID uint32                         `binapi:"u32,name=udp_out_vrf_id" json:"udp_out_vrf_id,omitempty"`
 }
 
 func (m *IPSourceAndPortRangeCheckInterfaceAddDel) Reset() {
@@ -3907,7 +3865,7 @@ func (m *IPSourceAndPortRangeCheckInterfaceAddDel) Unmarshal(tmp []byte) error {
 	m.IsAdd = tmp[pos] != 0
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.TCPInVrfID
 	m.TCPInVrfID = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -4559,8 +4517,8 @@ func (m *IPTableReplaceEndReply) Unmarshal(tmp []byte) error {
 
 // IPUnnumberedDetails represents VPP binary API message 'ip_unnumbered_details'.
 type IPUnnumberedDetails struct {
-	SwIfIndex   InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IPSwIfIndex InterfaceIndex `binapi:"interface_index,name=ip_sw_if_index" json:"ip_sw_if_index,omitempty"`
+	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IPSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=ip_sw_if_index" json:"ip_sw_if_index,omitempty"`
 }
 
 func (m *IPUnnumberedDetails) Reset()                        { *m = IPUnnumberedDetails{} }
@@ -4604,17 +4562,17 @@ func (m *IPUnnumberedDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IPSwIfIndex
-	m.IPSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.IPSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // IPUnnumberedDump represents VPP binary API message 'ip_unnumbered_dump'.
 type IPUnnumberedDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4.294967295e+09" json:"sw_if_index,omitempty"`
 }
 
 func (m *IPUnnumberedDump) Reset()                        { *m = IPUnnumberedDump{} }
@@ -4653,18 +4611,18 @@ func (m *IPUnnumberedDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // MfibSignalDetails represents VPP binary API message 'mfib_signal_details'.
 type MfibSignalDetails struct {
-	SwIfIndex    InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	TableID      uint32         `binapi:"u32,name=table_id" json:"table_id,omitempty"`
-	Prefix       Mprefix        `binapi:"mprefix,name=prefix" json:"prefix,omitempty"`
-	IPPacketLen  uint16         `binapi:"u16,name=ip_packet_len" json:"ip_packet_len,omitempty"`
-	IPPacketData []byte         `binapi:"u8[256],name=ip_packet_data" json:"ip_packet_data,omitempty" struc:"[256]byte"`
+	SwIfIndex    interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	TableID      uint32                         `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	Prefix       fib_types.Mprefix              `binapi:"mprefix,name=prefix" json:"prefix,omitempty"`
+	IPPacketLen  uint16                         `binapi:"u16,name=ip_packet_len" json:"ip_packet_len,omitempty"`
+	IPPacketData []byte                         `binapi:"u8[256],name=ip_packet_data" json:"ip_packet_data,omitempty" struc:"[256]byte"`
 }
 
 func (m *MfibSignalDetails) Reset()                        { *m = MfibSignalDetails{} }
@@ -4746,14 +4704,14 @@ func (m *MfibSignalDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.TableID
 	m.TableID = uint32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Af
-	m.Prefix.Af = AddressFamily(tmp[pos])
+	m.Prefix.Af = fib_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[2] m.Prefix.GrpAddressLength
 	m.Prefix.GrpAddressLength = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -4994,8 +4952,8 @@ func (m *SetIPFlowHashReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceIP6EnableDisable represents VPP binary API message 'sw_interface_ip6_enable_disable'.
 type SwInterfaceIP6EnableDisable struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Enable    bool           `binapi:"bool,name=enable" json:"enable,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
 func (m *SwInterfaceIP6EnableDisable) Reset()                        { *m = SwInterfaceIP6EnableDisable{} }
@@ -5041,7 +4999,7 @@ func (m *SwInterfaceIP6EnableDisable) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Enable
 	m.Enable = tmp[pos] != 0
@@ -5099,8 +5057,8 @@ func (m *SwInterfaceIP6EnableDisableReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceIP6SetLinkLocalAddress represents VPP binary API message 'sw_interface_ip6_set_link_local_address'.
 type SwInterfaceIP6SetLinkLocalAddress struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IP        IP6Address     `binapi:"ip6_address,name=ip" json:"ip,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IP        fib_types.IP6Address           `binapi:"ip6_address,name=ip" json:"ip,omitempty"`
 }
 
 func (m *SwInterfaceIP6SetLinkLocalAddress) Reset() { *m = SwInterfaceIP6SetLinkLocalAddress{} }
@@ -5152,7 +5110,7 @@ func (m *SwInterfaceIP6SetLinkLocalAddress) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IP
 	for i := 0; i < len(m.IP); i++ {
@@ -5351,6 +5309,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

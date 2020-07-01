@@ -20,9 +20,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -47,59 +50,26 @@ const (
 	VersionCrc = 0x58d4cf5a
 )
 
-type AddressFamily = ip_types.AddressFamily
-
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type IPDscp = ip_types.IPDscp
-
-type IPEcn = ip_types.IPEcn
-
-type IPProto = ip_types.IPProto
-
-type LinkDuplex = interface_types.LinkDuplex
-
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type AddressWithPrefix = ip_types.AddressWithPrefix
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
-type IP4Address = ip_types.IP4Address
-
-type IP4AddressWithPrefix = ip_types.IP4AddressWithPrefix
-
-type IP6Address = ip_types.IP6Address
-
-type IP6AddressWithPrefix = ip_types.IP6AddressWithPrefix
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
 
-type Address = ip_types.Address
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
 
-type IP4Prefix = ip_types.IP4Prefix
-
-type IP6Prefix = ip_types.IP6Prefix
-
-type Mprefix = ip_types.Mprefix
-
-type Prefix = ip_types.Prefix
-
-type PrefixMatcher = ip_types.PrefixMatcher
-
-type AddressUnion = ip_types.AddressUnion
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
 
 // CollectDetailedInterfaceStats represents VPP binary API message 'collect_detailed_interface_stats'.
 type CollectDetailedInterfaceStats struct {
-	SwIfIndex     InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	EnableDisable bool           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
+	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	EnableDisable bool                           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
 }
 
 func (m *CollectDetailedInterfaceStats) Reset() { *m = CollectDetailedInterfaceStats{} }
@@ -147,7 +117,7 @@ func (m *CollectDetailedInterfaceStats) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.EnableDisable
 	m.EnableDisable = tmp[pos] != 0
@@ -333,8 +303,8 @@ func (m *CreateLoopbackInstance) Unmarshal(tmp []byte) error {
 
 // CreateLoopbackInstanceReply represents VPP binary API message 'create_loopback_instance_reply'.
 type CreateLoopbackInstanceReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *CreateLoopbackInstanceReply) Reset()                        { *m = CreateLoopbackInstanceReply{} }
@@ -381,15 +351,15 @@ func (m *CreateLoopbackInstanceReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // CreateLoopbackReply represents VPP binary API message 'create_loopback_reply'.
 type CreateLoopbackReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *CreateLoopbackReply) Reset()                        { *m = CreateLoopbackReply{} }
@@ -436,18 +406,18 @@ func (m *CreateLoopbackReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // CreateSubif represents VPP binary API message 'create_subif'.
 type CreateSubif struct {
-	SwIfIndex   InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	SubID       uint32         `binapi:"u32,name=sub_id" json:"sub_id,omitempty"`
-	SubIfFlags  SubIfFlags     `binapi:"sub_if_flags,name=sub_if_flags" json:"sub_if_flags,omitempty"`
-	OuterVlanID uint16         `binapi:"u16,name=outer_vlan_id" json:"outer_vlan_id,omitempty"`
-	InnerVlanID uint16         `binapi:"u16,name=inner_vlan_id" json:"inner_vlan_id,omitempty"`
+	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SubID       uint32                         `binapi:"u32,name=sub_id" json:"sub_id,omitempty"`
+	SubIfFlags  interface_types.SubIfFlags     `binapi:"sub_if_flags,name=sub_if_flags" json:"sub_if_flags,omitempty"`
+	OuterVlanID uint16                         `binapi:"u16,name=outer_vlan_id" json:"outer_vlan_id,omitempty"`
+	InnerVlanID uint16                         `binapi:"u16,name=inner_vlan_id" json:"inner_vlan_id,omitempty"`
 }
 
 func (m *CreateSubif) Reset()                        { *m = CreateSubif{} }
@@ -506,13 +476,13 @@ func (m *CreateSubif) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SubID
 	m.SubID = uint32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SubIfFlags
-	m.SubIfFlags = SubIfFlags(o.Uint32(tmp[pos : pos+4]))
+	m.SubIfFlags = interface_types.SubIfFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.OuterVlanID
 	m.OuterVlanID = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -525,8 +495,8 @@ func (m *CreateSubif) Unmarshal(tmp []byte) error {
 
 // CreateSubifReply represents VPP binary API message 'create_subif_reply'.
 type CreateSubifReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *CreateSubifReply) Reset()                        { *m = CreateSubifReply{} }
@@ -573,15 +543,15 @@ func (m *CreateSubifReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // CreateVlanSubif represents VPP binary API message 'create_vlan_subif'.
 type CreateVlanSubif struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	VlanID    uint32         `binapi:"u32,name=vlan_id" json:"vlan_id,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	VlanID    uint32                         `binapi:"u32,name=vlan_id" json:"vlan_id,omitempty"`
 }
 
 func (m *CreateVlanSubif) Reset()                        { *m = CreateVlanSubif{} }
@@ -625,7 +595,7 @@ func (m *CreateVlanSubif) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.VlanID
 	m.VlanID = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -635,8 +605,8 @@ func (m *CreateVlanSubif) Unmarshal(tmp []byte) error {
 
 // CreateVlanSubifReply represents VPP binary API message 'create_vlan_subif_reply'.
 type CreateVlanSubifReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *CreateVlanSubifReply) Reset()                        { *m = CreateVlanSubifReply{} }
@@ -683,14 +653,14 @@ func (m *CreateVlanSubifReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // DeleteLoopback represents VPP binary API message 'delete_loopback'.
 type DeleteLoopback struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *DeleteLoopback) Reset()                        { *m = DeleteLoopback{} }
@@ -729,7 +699,7 @@ func (m *DeleteLoopback) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -782,7 +752,7 @@ func (m *DeleteLoopbackReply) Unmarshal(tmp []byte) error {
 
 // DeleteSubif represents VPP binary API message 'delete_subif'.
 type DeleteSubif struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *DeleteSubif) Reset()                        { *m = DeleteSubif{} }
@@ -821,7 +791,7 @@ func (m *DeleteSubif) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -874,8 +844,8 @@ func (m *DeleteSubifReply) Unmarshal(tmp []byte) error {
 
 // HwInterfaceSetMtu represents VPP binary API message 'hw_interface_set_mtu'.
 type HwInterfaceSetMtu struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Mtu       uint16         `binapi:"u16,name=mtu" json:"mtu,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Mtu       uint16                         `binapi:"u16,name=mtu" json:"mtu,omitempty"`
 }
 
 func (m *HwInterfaceSetMtu) Reset()                        { *m = HwInterfaceSetMtu{} }
@@ -919,7 +889,7 @@ func (m *HwInterfaceSetMtu) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Mtu
 	m.Mtu = uint16(o.Uint16(tmp[pos : pos+2]))
@@ -975,8 +945,8 @@ func (m *HwInterfaceSetMtuReply) Unmarshal(tmp []byte) error {
 
 // InterfaceNameRenumber represents VPP binary API message 'interface_name_renumber'.
 type InterfaceNameRenumber struct {
-	SwIfIndex          InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	NewShowDevInstance uint32         `binapi:"u32,name=new_show_dev_instance" json:"new_show_dev_instance,omitempty"`
+	SwIfIndex          interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	NewShowDevInstance uint32                         `binapi:"u32,name=new_show_dev_instance" json:"new_show_dev_instance,omitempty"`
 }
 
 func (m *InterfaceNameRenumber) Reset()                        { *m = InterfaceNameRenumber{} }
@@ -1020,7 +990,7 @@ func (m *InterfaceNameRenumber) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.NewShowDevInstance
 	m.NewShowDevInstance = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -1076,10 +1046,10 @@ func (m *InterfaceNameRenumberReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceAddDelAddress represents VPP binary API message 'sw_interface_add_del_address'.
 type SwInterfaceAddDelAddress struct {
-	SwIfIndex InterfaceIndex    `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsAdd     bool              `binapi:"bool,name=is_add" json:"is_add,omitempty"`
-	DelAll    bool              `binapi:"bool,name=del_all" json:"del_all,omitempty"`
-	Prefix    AddressWithPrefix `binapi:"address_with_prefix,name=prefix" json:"prefix,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsAdd     bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
+	DelAll    bool                           `binapi:"bool,name=del_all" json:"del_all,omitempty"`
+	Prefix    ip_types.AddressWithPrefix     `binapi:"address_with_prefix,name=prefix" json:"prefix,omitempty"`
 }
 
 func (m *SwInterfaceAddDelAddress) Reset()                        { *m = SwInterfaceAddDelAddress{} }
@@ -1151,7 +1121,7 @@ func (m *SwInterfaceAddDelAddress) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsAdd
 	m.IsAdd = tmp[pos] != 0
@@ -1162,7 +1132,7 @@ func (m *SwInterfaceAddDelAddress) Unmarshal(tmp []byte) error {
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -1517,7 +1487,7 @@ func (m *SwInterfaceAddressReplaceEndReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceClearStats represents VPP binary API message 'sw_interface_clear_stats'.
 type SwInterfaceClearStats struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *SwInterfaceClearStats) Reset()                        { *m = SwInterfaceClearStats{} }
@@ -1556,7 +1526,7 @@ func (m *SwInterfaceClearStats) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -1609,32 +1579,32 @@ func (m *SwInterfaceClearStatsReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceDetails represents VPP binary API message 'sw_interface_details'.
 type SwInterfaceDetails struct {
-	SwIfIndex        InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	SupSwIfIndex     uint32         `binapi:"u32,name=sup_sw_if_index" json:"sup_sw_if_index,omitempty"`
-	L2Address        MacAddress     `binapi:"mac_address,name=l2_address" json:"l2_address,omitempty"`
-	Flags            IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
-	Type             IfType         `binapi:"if_type,name=type" json:"type,omitempty"`
-	LinkDuplex       LinkDuplex     `binapi:"link_duplex,name=link_duplex" json:"link_duplex,omitempty"`
-	LinkSpeed        uint32         `binapi:"u32,name=link_speed" json:"link_speed,omitempty"`
-	LinkMtu          uint16         `binapi:"u16,name=link_mtu" json:"link_mtu,omitempty"`
-	Mtu              []uint32       `binapi:"u32[4],name=mtu" json:"mtu,omitempty" struc:"[4]uint32"`
-	SubID            uint32         `binapi:"u32,name=sub_id" json:"sub_id,omitempty"`
-	SubNumberOfTags  uint8          `binapi:"u8,name=sub_number_of_tags" json:"sub_number_of_tags,omitempty"`
-	SubOuterVlanID   uint16         `binapi:"u16,name=sub_outer_vlan_id" json:"sub_outer_vlan_id,omitempty"`
-	SubInnerVlanID   uint16         `binapi:"u16,name=sub_inner_vlan_id" json:"sub_inner_vlan_id,omitempty"`
-	SubIfFlags       SubIfFlags     `binapi:"sub_if_flags,name=sub_if_flags" json:"sub_if_flags,omitempty"`
-	VtrOp            uint32         `binapi:"u32,name=vtr_op" json:"vtr_op,omitempty"`
-	VtrPushDot1q     uint32         `binapi:"u32,name=vtr_push_dot1q" json:"vtr_push_dot1q,omitempty"`
-	VtrTag1          uint32         `binapi:"u32,name=vtr_tag1" json:"vtr_tag1,omitempty"`
-	VtrTag2          uint32         `binapi:"u32,name=vtr_tag2" json:"vtr_tag2,omitempty"`
-	OuterTag         uint16         `binapi:"u16,name=outer_tag" json:"outer_tag,omitempty"`
-	BDmac            MacAddress     `binapi:"mac_address,name=b_dmac" json:"b_dmac,omitempty"`
-	BSmac            MacAddress     `binapi:"mac_address,name=b_smac" json:"b_smac,omitempty"`
-	BVlanid          uint16         `binapi:"u16,name=b_vlanid" json:"b_vlanid,omitempty"`
-	ISid             uint32         `binapi:"u32,name=i_sid" json:"i_sid,omitempty"`
-	InterfaceName    string         `binapi:"string[64],name=interface_name" json:"interface_name,omitempty" struc:"[64]byte"`
-	InterfaceDevType string         `binapi:"string[64],name=interface_dev_type" json:"interface_dev_type,omitempty" struc:"[64]byte"`
-	Tag              string         `binapi:"string[64],name=tag" json:"tag,omitempty" struc:"[64]byte"`
+	SwIfIndex        interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SupSwIfIndex     uint32                         `binapi:"u32,name=sup_sw_if_index" json:"sup_sw_if_index,omitempty"`
+	L2Address        MacAddress                     `binapi:"mac_address,name=l2_address" json:"l2_address,omitempty"`
+	Flags            interface_types.IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
+	Type             interface_types.IfType         `binapi:"if_type,name=type" json:"type,omitempty"`
+	LinkDuplex       interface_types.LinkDuplex     `binapi:"link_duplex,name=link_duplex" json:"link_duplex,omitempty"`
+	LinkSpeed        uint32                         `binapi:"u32,name=link_speed" json:"link_speed,omitempty"`
+	LinkMtu          uint16                         `binapi:"u16,name=link_mtu" json:"link_mtu,omitempty"`
+	Mtu              []uint32                       `binapi:"u32[4],name=mtu" json:"mtu,omitempty" struc:"[4]uint32"`
+	SubID            uint32                         `binapi:"u32,name=sub_id" json:"sub_id,omitempty"`
+	SubNumberOfTags  uint8                          `binapi:"u8,name=sub_number_of_tags" json:"sub_number_of_tags,omitempty"`
+	SubOuterVlanID   uint16                         `binapi:"u16,name=sub_outer_vlan_id" json:"sub_outer_vlan_id,omitempty"`
+	SubInnerVlanID   uint16                         `binapi:"u16,name=sub_inner_vlan_id" json:"sub_inner_vlan_id,omitempty"`
+	SubIfFlags       interface_types.SubIfFlags     `binapi:"sub_if_flags,name=sub_if_flags" json:"sub_if_flags,omitempty"`
+	VtrOp            uint32                         `binapi:"u32,name=vtr_op" json:"vtr_op,omitempty"`
+	VtrPushDot1q     uint32                         `binapi:"u32,name=vtr_push_dot1q" json:"vtr_push_dot1q,omitempty"`
+	VtrTag1          uint32                         `binapi:"u32,name=vtr_tag1" json:"vtr_tag1,omitempty"`
+	VtrTag2          uint32                         `binapi:"u32,name=vtr_tag2" json:"vtr_tag2,omitempty"`
+	OuterTag         uint16                         `binapi:"u16,name=outer_tag" json:"outer_tag,omitempty"`
+	BDmac            MacAddress                     `binapi:"mac_address,name=b_dmac" json:"b_dmac,omitempty"`
+	BSmac            MacAddress                     `binapi:"mac_address,name=b_smac" json:"b_smac,omitempty"`
+	BVlanid          uint16                         `binapi:"u16,name=b_vlanid" json:"b_vlanid,omitempty"`
+	ISid             uint32                         `binapi:"u32,name=i_sid" json:"i_sid,omitempty"`
+	InterfaceName    string                         `binapi:"string[64],name=interface_name" json:"interface_name,omitempty" struc:"[64]byte"`
+	InterfaceDevType string                         `binapi:"string[64],name=interface_dev_type" json:"interface_dev_type,omitempty" struc:"[64]byte"`
+	Tag              string                         `binapi:"string[64],name=tag" json:"tag,omitempty" struc:"[64]byte"`
 }
 
 func (m *SwInterfaceDetails) Reset()                        { *m = SwInterfaceDetails{} }
@@ -1822,7 +1792,7 @@ func (m *SwInterfaceDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SupSwIfIndex
 	m.SupSwIfIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -1833,13 +1803,13 @@ func (m *SwInterfaceDetails) Unmarshal(tmp []byte) error {
 		pos += 1
 	}
 	// field[1] m.Flags
-	m.Flags = IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
+	m.Flags = interface_types.IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Type
-	m.Type = IfType(o.Uint32(tmp[pos : pos+4]))
+	m.Type = interface_types.IfType(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.LinkDuplex
-	m.LinkDuplex = LinkDuplex(o.Uint32(tmp[pos : pos+4]))
+	m.LinkDuplex = interface_types.LinkDuplex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.LinkSpeed
 	m.LinkSpeed = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -1866,7 +1836,7 @@ func (m *SwInterfaceDetails) Unmarshal(tmp []byte) error {
 	m.SubInnerVlanID = uint16(o.Uint16(tmp[pos : pos+2]))
 	pos += 2
 	// field[1] m.SubIfFlags
-	m.SubIfFlags = SubIfFlags(o.Uint32(tmp[pos : pos+4]))
+	m.SubIfFlags = interface_types.SubIfFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.VtrOp
 	m.VtrOp = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -1922,10 +1892,10 @@ func (m *SwInterfaceDetails) Unmarshal(tmp []byte) error {
 
 // SwInterfaceDump represents VPP binary API message 'sw_interface_dump'.
 type SwInterfaceDump struct {
-	SwIfIndex         InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
-	NameFilterValid   bool           `binapi:"bool,name=name_filter_valid" json:"name_filter_valid,omitempty"`
-	XXX_NameFilterLen uint32         `struc:"sizeof=NameFilter"`
-	NameFilter        string         `json:"name_filter,omitempty"`
+	SwIfIndex         interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4.294967295e+09" json:"sw_if_index,omitempty"`
+	NameFilterValid   bool                           `binapi:"bool,name=name_filter_valid" json:"name_filter_valid,omitempty"`
+	XXX_NameFilterLen uint32                         `struc:"sizeof=NameFilter"`
+	NameFilter        string                         `json:"name_filter,omitempty"`
 }
 
 func (m *SwInterfaceDump) Reset()                        { *m = SwInterfaceDump{} }
@@ -1978,7 +1948,7 @@ func (m *SwInterfaceDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.NameFilterValid
 	m.NameFilterValid = tmp[pos] != 0
@@ -1995,10 +1965,10 @@ func (m *SwInterfaceDump) Unmarshal(tmp []byte) error {
 
 // SwInterfaceEvent represents VPP binary API message 'sw_interface_event'.
 type SwInterfaceEvent struct {
-	PID       uint32         `binapi:"u32,name=pid" json:"pid,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Flags     IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
-	Deleted   bool           `binapi:"bool,name=deleted" json:"deleted,omitempty"`
+	PID       uint32                         `binapi:"u32,name=pid" json:"pid,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Flags     interface_types.IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
+	Deleted   bool                           `binapi:"bool,name=deleted" json:"deleted,omitempty"`
 }
 
 func (m *SwInterfaceEvent) Reset()                        { *m = SwInterfaceEvent{} }
@@ -2057,10 +2027,10 @@ func (m *SwInterfaceEvent) Unmarshal(tmp []byte) error {
 	m.PID = uint32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Flags
-	m.Flags = IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
+	m.Flags = interface_types.IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Deleted
 	m.Deleted = tmp[pos] != 0
@@ -2070,7 +2040,7 @@ func (m *SwInterfaceEvent) Unmarshal(tmp []byte) error {
 
 // SwInterfaceGetMacAddress represents VPP binary API message 'sw_interface_get_mac_address'.
 type SwInterfaceGetMacAddress struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *SwInterfaceGetMacAddress) Reset()                        { *m = SwInterfaceGetMacAddress{} }
@@ -2109,7 +2079,7 @@ func (m *SwInterfaceGetMacAddress) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -2181,8 +2151,8 @@ func (m *SwInterfaceGetMacAddressReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceGetTable represents VPP binary API message 'sw_interface_get_table'.
 type SwInterfaceGetTable struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsIPv6    bool           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsIPv6    bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
 func (m *SwInterfaceGetTable) Reset()                        { *m = SwInterfaceGetTable{} }
@@ -2228,7 +2198,7 @@ func (m *SwInterfaceGetTable) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsIPv6
 	m.IsIPv6 = tmp[pos] != 0
@@ -2293,10 +2263,10 @@ func (m *SwInterfaceGetTableReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceRxPlacementDetails represents VPP binary API message 'sw_interface_rx_placement_details'.
 type SwInterfaceRxPlacementDetails struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	QueueID   uint32         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
-	WorkerID  uint32         `binapi:"u32,name=worker_id" json:"worker_id,omitempty"`
-	Mode      RxMode         `binapi:"rx_mode,name=mode" json:"mode,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	QueueID   uint32                         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
+	WorkerID  uint32                         `binapi:"u32,name=worker_id" json:"worker_id,omitempty"`
+	Mode      interface_types.RxMode         `binapi:"rx_mode,name=mode" json:"mode,omitempty"`
 }
 
 func (m *SwInterfaceRxPlacementDetails) Reset() { *m = SwInterfaceRxPlacementDetails{} }
@@ -2352,7 +2322,7 @@ func (m *SwInterfaceRxPlacementDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.QueueID
 	m.QueueID = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -2361,14 +2331,14 @@ func (m *SwInterfaceRxPlacementDetails) Unmarshal(tmp []byte) error {
 	m.WorkerID = uint32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Mode
-	m.Mode = RxMode(o.Uint32(tmp[pos : pos+4]))
+	m.Mode = interface_types.RxMode(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // SwInterfaceRxPlacementDump represents VPP binary API message 'sw_interface_rx_placement_dump'.
 type SwInterfaceRxPlacementDump struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *SwInterfaceRxPlacementDump) Reset()                        { *m = SwInterfaceRxPlacementDump{} }
@@ -2407,15 +2377,15 @@ func (m *SwInterfaceRxPlacementDump) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // SwInterfaceSetFlags represents VPP binary API message 'sw_interface_set_flags'.
 type SwInterfaceSetFlags struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Flags     IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Flags     interface_types.IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
 }
 
 func (m *SwInterfaceSetFlags) Reset()                        { *m = SwInterfaceSetFlags{} }
@@ -2459,10 +2429,10 @@ func (m *SwInterfaceSetFlags) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Flags
-	m.Flags = IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
+	m.Flags = interface_types.IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -2515,8 +2485,8 @@ func (m *SwInterfaceSetFlagsReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetIPDirectedBroadcast represents VPP binary API message 'sw_interface_set_ip_directed_broadcast'.
 type SwInterfaceSetIPDirectedBroadcast struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Enable    bool           `binapi:"bool,name=enable" json:"enable,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
 func (m *SwInterfaceSetIPDirectedBroadcast) Reset() { *m = SwInterfaceSetIPDirectedBroadcast{} }
@@ -2564,7 +2534,7 @@ func (m *SwInterfaceSetIPDirectedBroadcast) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Enable
 	m.Enable = tmp[pos] != 0
@@ -2626,8 +2596,8 @@ func (m *SwInterfaceSetIPDirectedBroadcastReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetMacAddress represents VPP binary API message 'sw_interface_set_mac_address'.
 type SwInterfaceSetMacAddress struct {
-	SwIfIndex  InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	MacAddress MacAddress     `binapi:"mac_address,name=mac_address" json:"mac_address,omitempty"`
+	SwIfIndex  interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	MacAddress MacAddress                     `binapi:"mac_address,name=mac_address" json:"mac_address,omitempty"`
 }
 
 func (m *SwInterfaceSetMacAddress) Reset()                        { *m = SwInterfaceSetMacAddress{} }
@@ -2677,7 +2647,7 @@ func (m *SwInterfaceSetMacAddress) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.MacAddress
 	for i := 0; i < len(m.MacAddress); i++ {
@@ -2737,8 +2707,8 @@ func (m *SwInterfaceSetMacAddressReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetMtu represents VPP binary API message 'sw_interface_set_mtu'.
 type SwInterfaceSetMtu struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Mtu       []uint32       `binapi:"u32[4],name=mtu" json:"mtu,omitempty" struc:"[4]uint32"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Mtu       []uint32                       `binapi:"u32[4],name=mtu" json:"mtu,omitempty" struc:"[4]uint32"`
 }
 
 func (m *SwInterfaceSetMtu) Reset()                        { *m = SwInterfaceSetMtu{} }
@@ -2788,7 +2758,7 @@ func (m *SwInterfaceSetMtu) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Mtu
 	m.Mtu = make([]uint32, 4)
@@ -2847,10 +2817,10 @@ func (m *SwInterfaceSetMtuReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetRxMode represents VPP binary API message 'sw_interface_set_rx_mode'.
 type SwInterfaceSetRxMode struct {
-	SwIfIndex    InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	QueueIDValid bool           `binapi:"bool,name=queue_id_valid" json:"queue_id_valid,omitempty"`
-	QueueID      uint32         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
-	Mode         RxMode         `binapi:"rx_mode,name=mode" json:"mode,omitempty"`
+	SwIfIndex    interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	QueueIDValid bool                           `binapi:"bool,name=queue_id_valid" json:"queue_id_valid,omitempty"`
+	QueueID      uint32                         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
+	Mode         interface_types.RxMode         `binapi:"rx_mode,name=mode" json:"mode,omitempty"`
 }
 
 func (m *SwInterfaceSetRxMode) Reset()                        { *m = SwInterfaceSetRxMode{} }
@@ -2906,7 +2876,7 @@ func (m *SwInterfaceSetRxMode) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.QueueIDValid
 	m.QueueIDValid = tmp[pos] != 0
@@ -2915,7 +2885,7 @@ func (m *SwInterfaceSetRxMode) Unmarshal(tmp []byte) error {
 	m.QueueID = uint32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Mode
-	m.Mode = RxMode(o.Uint32(tmp[pos : pos+4]))
+	m.Mode = interface_types.RxMode(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -2968,10 +2938,10 @@ func (m *SwInterfaceSetRxModeReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetRxPlacement represents VPP binary API message 'sw_interface_set_rx_placement'.
 type SwInterfaceSetRxPlacement struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	QueueID   uint32         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
-	WorkerID  uint32         `binapi:"u32,name=worker_id" json:"worker_id,omitempty"`
-	IsMain    bool           `binapi:"bool,name=is_main" json:"is_main,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	QueueID   uint32                         `binapi:"u32,name=queue_id" json:"queue_id,omitempty"`
+	WorkerID  uint32                         `binapi:"u32,name=worker_id" json:"worker_id,omitempty"`
+	IsMain    bool                           `binapi:"bool,name=is_main" json:"is_main,omitempty"`
 }
 
 func (m *SwInterfaceSetRxPlacement) Reset()                        { *m = SwInterfaceSetRxPlacement{} }
@@ -3027,7 +2997,7 @@ func (m *SwInterfaceSetRxPlacement) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.QueueID
 	m.QueueID = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -3091,9 +3061,9 @@ func (m *SwInterfaceSetRxPlacementReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetTable represents VPP binary API message 'sw_interface_set_table'.
 type SwInterfaceSetTable struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	IsIPv6    bool           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
-	VrfID     uint32         `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	IsIPv6    bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
+	VrfID     uint32                         `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
 func (m *SwInterfaceSetTable) Reset()                        { *m = SwInterfaceSetTable{} }
@@ -3144,7 +3114,7 @@ func (m *SwInterfaceSetTable) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsIPv6
 	m.IsIPv6 = tmp[pos] != 0
@@ -3203,9 +3173,9 @@ func (m *SwInterfaceSetTableReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceSetUnnumbered represents VPP binary API message 'sw_interface_set_unnumbered'.
 type SwInterfaceSetUnnumbered struct {
-	SwIfIndex           InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	UnnumberedSwIfIndex InterfaceIndex `binapi:"interface_index,name=unnumbered_sw_if_index" json:"unnumbered_sw_if_index,omitempty"`
-	IsAdd               bool           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
+	SwIfIndex           interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	UnnumberedSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=unnumbered_sw_if_index" json:"unnumbered_sw_if_index,omitempty"`
+	IsAdd               bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
 func (m *SwInterfaceSetUnnumbered) Reset()                        { *m = SwInterfaceSetUnnumbered{} }
@@ -3256,10 +3226,10 @@ func (m *SwInterfaceSetUnnumbered) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.UnnumberedSwIfIndex
-	m.UnnumberedSwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.UnnumberedSwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IsAdd
 	m.IsAdd = tmp[pos] != 0
@@ -3317,9 +3287,9 @@ func (m *SwInterfaceSetUnnumberedReply) Unmarshal(tmp []byte) error {
 
 // SwInterfaceTagAddDel represents VPP binary API message 'sw_interface_tag_add_del'.
 type SwInterfaceTagAddDel struct {
-	IsAdd     bool           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Tag       string         `binapi:"string[64],name=tag" json:"tag,omitempty" struc:"[64]byte"`
+	IsAdd     bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Tag       string                         `binapi:"string[64],name=tag" json:"tag,omitempty" struc:"[64]byte"`
 }
 
 func (m *SwInterfaceTagAddDel) Reset()                        { *m = SwInterfaceTagAddDel{} }
@@ -3373,7 +3343,7 @@ func (m *SwInterfaceTagAddDel) Unmarshal(tmp []byte) error {
 	m.IsAdd = tmp[pos] != 0
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Tag
 	{
@@ -3662,6 +3632,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

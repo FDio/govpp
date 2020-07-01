@@ -17,13 +17,12 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"net"
-	"reflect"
-
 	"git.fd.io/govpp.git/codec"
+	"git.fd.io/govpp.git/examples/binapi/interfaces"
 	"git.fd.io/govpp.git/examples/binapi/ip"
 	"git.fd.io/govpp.git/examples/binapi/ip_types"
+	"log"
+	"reflect"
 )
 
 func init() {
@@ -33,26 +32,35 @@ func init() {
 func main() {
 	constructExample()
 
-	encodingExample()
+	encodingExampleIP()
 
 	// convert IP from string form into Address type containing union
 	convertIP("10.10.1.1")
 	convertIP("ff80::1")
+
+	// convert IP from string form into Prefix type
+	convertIPPrefix("20.10.1.1/24")
+	convertIPPrefix("21.10.1.1")
+	convertIPPrefix("ff90::1/64")
+	convertIPPrefix("ff91::1")
+
+	// convert MAC address from string into MacAddress
+	convertToMacAddress("00:10:ab:4f:00:01")
 }
 
 func constructExample() {
 	var union ip_types.AddressUnion
 
 	// create AddressUnion with AdressUnionXXX constructors
-	union = ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10})
-	union = ip_types.AddressUnionIP6(ip.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
+	union = ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 1, 10})
+	union = ip_types.AddressUnionIP6(ip_types.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
 
 	// set AddressUnion with SetXXX methods
-	union.SetIP4(ip.IP4Address{192, 168, 1, 10})
-	union.SetIP6(ip.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
+	union.SetIP4(ip_types.IP4Address{192, 168, 1, 10})
+	union.SetIP6(ip_types.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
 }
 
-func encodingExample() {
+func encodingExampleIP() {
 	var c = codec.DefaultCodec
 
 	// encode this message
@@ -60,7 +68,7 @@ func encodingExample() {
 		Punt: ip.PuntRedirect{
 			Nh: ip_types.Address{
 				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(ip.IP4Address{192, 168, 1, 10}),
+				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 1, 10}),
 			},
 		},
 		IsAdd: true,
@@ -86,29 +94,37 @@ func encodingExample() {
 }
 
 func convertIP(ip string) {
-	addr, err := ipToAddress(ip)
+	addr, err := ip_types.ParseAddress(ip)
 	if err != nil {
-		log.Printf("error converting IP: %v", err)
+		log.Printf("error converting IP to Address: %v", err)
 		return
 	}
 	fmt.Printf("converted IP %q to: %+v\n", ip, addr)
+
+	ipStr := addr.ToString()
+	fmt.Printf("Address converted back to string IP %+v to: %q\n", addr, ipStr)
 }
 
-func ipToAddress(ipstr string) (addr ip.Address, err error) {
-	netIP := net.ParseIP(ipstr)
-	if netIP == nil {
-		return ip.Address{}, fmt.Errorf("invalid IP: %q", ipstr)
+func convertIPPrefix(ip string) {
+	prefix, err := ip_types.ParsePrefix(ip)
+	if err != nil {
+		log.Printf("error converting prefix to IP4Prefix: %v", err)
+		return
 	}
-	if ip4 := netIP.To4(); ip4 == nil {
-		addr.Af = ip_types.ADDRESS_IP6
-		var ip6addr ip.IP6Address
-		copy(ip6addr[:], netIP.To16())
-		addr.Un.SetIP6(ip6addr)
-	} else {
-		addr.Af = ip_types.ADDRESS_IP4
-		var ip4addr ip.IP4Address
-		copy(ip4addr[:], ip4.To4())
-		addr.Un.SetIP4(ip4addr)
+	fmt.Printf("converted prefix %q to: %+v\n", ip, prefix)
+
+	ipStr := prefix.ToString()
+	fmt.Printf("IP4Prefix converted back to string prefix %+v to: %q\n", prefix, ipStr)
+}
+
+func convertToMacAddress(mac string) {
+	parsedMac, err := interfaces.ParseMAC(mac)
+	if err != nil {
+		log.Printf("error converting MAC to MacAddress: %v", err)
+		return
 	}
-	return
+	fmt.Printf("converted prefix %q to: %+v\n", mac, parsedMac)
+
+	macStr := parsedMac.ToString()
+	fmt.Printf("MacAddress converted back to string %+v to: %q\n", parsedMac, macStr)
 }

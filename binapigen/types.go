@@ -15,6 +15,7 @@
 package binapigen
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -213,14 +214,23 @@ func getActualType(file *File, typ string) (actual string) {
 	return typ
 }
 
-// convertToGoType translates the VPP binary API type into Go type
+// convertToGoType translates the VPP binary API type into Go type.
+// Imported types are with import prefix.
 func convertToGoType(file *File, binapiType string) (typ string) {
 	if t, ok := binapiTypes[binapiType]; ok {
 		// basic types
 		typ = t
 	} else if r, ok := file.refmap[binapiType]; ok {
 		// specific types (enums/types/unions)
+		var prefix string
 		typ = camelCaseName(r)
+		// look in imports using name and type name eventually
+		if imp, ok := file.imports[typ]; ok {
+			prefix = fmt.Sprintf("%s.", imp)
+		} else if imp, ok := file.imports[fromApiType(binapiType)]; ok {
+			prefix = fmt.Sprintf("%s.", imp)
+		}
+		typ = fmt.Sprintf("%s%s", prefix, typ)
 	} else {
 		switch binapiType {
 		case "bool", "string":

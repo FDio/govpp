@@ -18,9 +18,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -43,12 +46,6 @@ const (
 	// VersionCrc is the CRC of this module.
 	VersionCrc = 0x1a1c95b8
 )
-
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type LinkDuplex = interface_types.LinkDuplex
 
 // MemifMode represents VPP binary API enum 'memif_mode'.
 type MemifMode uint32
@@ -107,16 +104,21 @@ func (x MemifRole) String() string {
 	return "MemifRole(" + strconv.Itoa(int(x)) + ")"
 }
 
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
+
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
+
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
 
 // MemifCreate represents VPP binary API message 'memif_create'.
 type MemifCreate struct {
@@ -269,8 +271,8 @@ func (m *MemifCreate) Unmarshal(tmp []byte) error {
 
 // MemifCreateReply represents VPP binary API message 'memif_create_reply'.
 type MemifCreateReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *MemifCreateReply) Reset()                        { *m = MemifCreateReply{} }
@@ -317,14 +319,14 @@ func (m *MemifCreateReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
 
 // MemifDelete represents VPP binary API message 'memif_delete'.
 type MemifDelete struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *MemifDelete) Reset()                        { *m = MemifDelete{} }
@@ -363,7 +365,7 @@ func (m *MemifDelete) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -416,17 +418,17 @@ func (m *MemifDeleteReply) Unmarshal(tmp []byte) error {
 
 // MemifDetails represents VPP binary API message 'memif_details'.
 type MemifDetails struct {
-	SwIfIndex  InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	HwAddr     MacAddress     `binapi:"mac_address,name=hw_addr" json:"hw_addr,omitempty"`
-	ID         uint32         `binapi:"u32,name=id" json:"id,omitempty"`
-	Role       MemifRole      `binapi:"memif_role,name=role" json:"role,omitempty"`
-	Mode       MemifMode      `binapi:"memif_mode,name=mode" json:"mode,omitempty"`
-	ZeroCopy   bool           `binapi:"bool,name=zero_copy" json:"zero_copy,omitempty"`
-	SocketID   uint32         `binapi:"u32,name=socket_id" json:"socket_id,omitempty"`
-	RingSize   uint32         `binapi:"u32,name=ring_size" json:"ring_size,omitempty"`
-	BufferSize uint16         `binapi:"u16,name=buffer_size" json:"buffer_size,omitempty"`
-	Flags      IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
-	IfName     string         `binapi:"string[64],name=if_name" json:"if_name,omitempty" struc:"[64]byte"`
+	SwIfIndex  interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	HwAddr     MacAddress                     `binapi:"mac_address,name=hw_addr" json:"hw_addr,omitempty"`
+	ID         uint32                         `binapi:"u32,name=id" json:"id,omitempty"`
+	Role       MemifRole                      `binapi:"memif_role,name=role" json:"role,omitempty"`
+	Mode       MemifMode                      `binapi:"memif_mode,name=mode" json:"mode,omitempty"`
+	ZeroCopy   bool                           `binapi:"bool,name=zero_copy" json:"zero_copy,omitempty"`
+	SocketID   uint32                         `binapi:"u32,name=socket_id" json:"socket_id,omitempty"`
+	RingSize   uint32                         `binapi:"u32,name=ring_size" json:"ring_size,omitempty"`
+	BufferSize uint16                         `binapi:"u16,name=buffer_size" json:"buffer_size,omitempty"`
+	Flags      interface_types.IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
+	IfName     string                         `binapi:"string[64],name=if_name" json:"if_name,omitempty" struc:"[64]byte"`
 }
 
 func (m *MemifDetails) Reset()                        { *m = MemifDetails{} }
@@ -523,7 +525,7 @@ func (m *MemifDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.HwAddr
 	for i := 0; i < len(m.HwAddr); i++ {
@@ -552,7 +554,7 @@ func (m *MemifDetails) Unmarshal(tmp []byte) error {
 	m.BufferSize = uint16(o.Uint16(tmp[pos : pos+2]))
 	pos += 2
 	// field[1] m.Flags
-	m.Flags = IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
+	m.Flags = interface_types.IfStatusFlags(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.IfName
 	{
@@ -847,6 +849,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

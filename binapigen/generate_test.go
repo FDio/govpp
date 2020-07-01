@@ -15,7 +15,10 @@
 package binapigen
 
 import (
+	"git.fd.io/govpp.git/examples/binapi/interfaces"
+	"git.fd.io/govpp.git/examples/binapi/ip_types"
 	"os"
+	"strings"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -94,6 +97,137 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 	}()
 
 	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", testOutputDir, Options{})
+	Expect(err).Should(HaveOccurred())
+}
+
+func TestGeneratedParseAddress(t *testing.T) {
+	RegisterTestingT(t)
+
+	var data = []struct {
+		input  string
+		result ip_types.Address
+	}{
+		{"192.168.0.1", ip_types.Address{
+			Af: ip_types.ADDRESS_IP4,
+			Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
+		}},
+		{"aac1:0:ab45::", ip_types.Address{
+			Af: ip_types.ADDRESS_IP6,
+			Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+		}},
+	}
+
+	for _, entry := range data {
+		t.Run(entry.input, func(t *testing.T) {
+			parsedAddress, err := ip_types.ParseAddress(entry.input)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(parsedAddress).To(Equal(entry.result))
+
+			originAddress := parsedAddress.ToString()
+			Expect(originAddress).To(Equal(entry.input))
+		})
+	}
+}
+
+func TestGeneratedParseAddressError(t *testing.T) {
+	RegisterTestingT(t)
+
+	_, err := ip_types.ParseAddress("malformed_ip")
+	Expect(err).Should(HaveOccurred())
+}
+
+func TestGeneratedParsePrefix(t *testing.T) {
+	RegisterTestingT(t)
+
+	var data = []struct {
+		input  string
+		result ip_types.Prefix
+	}{
+		{"192.168.0.1/24", ip_types.Prefix{
+			Address: ip_types.Address{
+				Af: ip_types.ADDRESS_IP4,
+				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
+			},
+			Len: 24,
+		}},
+		{"192.168.0.1", ip_types.Prefix{
+			Address: ip_types.Address{
+				Af: ip_types.ADDRESS_IP4,
+				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
+			},
+			Len: 32,
+		}},
+		{"aac1:0:ab45::/96", ip_types.Prefix{
+			Address: ip_types.Address{
+				Af: ip_types.ADDRESS_IP6,
+				Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			},
+			Len: 96,
+		}},
+		{"aac1:0:ab45::", ip_types.Prefix{
+			Address: ip_types.Address{
+				Af: ip_types.ADDRESS_IP6,
+				Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			},
+			Len: 128,
+		}},
+	}
+
+	for _, entry := range data {
+		t.Run(entry.input, func(t *testing.T) {
+			parsedAddress, err := ip_types.ParsePrefix(entry.input)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(parsedAddress).To(Equal(entry.result))
+
+			// Parsed IP without prefix receives a default one
+			// so the input data must be adjusted
+			if entry.result.Address.Af == ip_types.ADDRESS_IP4 && !strings.Contains(entry.input, "/") {
+				entry.input = entry.input + "/32"
+			}
+			if entry.result.Address.Af == ip_types.ADDRESS_IP6 && !strings.Contains(entry.input, "/") {
+				entry.input = entry.input + "/128"
+			}
+			originAddress := parsedAddress.ToString()
+			Expect(originAddress).To(Equal(entry.input))
+		})
+	}
+}
+
+func TestGeneratedParsePrefixError(t *testing.T) {
+	RegisterTestingT(t)
+
+	_, err := ip_types.ParsePrefix("malformed_ip")
+	Expect(err).Should(HaveOccurred())
+}
+
+func TestGeneratedParseMAC(t *testing.T) {
+	RegisterTestingT(t)
+
+	var data = []struct {
+		input  string
+		result interfaces.MacAddress
+	}{
+		{"b7:b9:bb:a1:5c:af", interfaces.MacAddress{183, 185, 187, 161, 92, 175}},
+		{"47:4b:c7:3e:06:c8", interfaces.MacAddress{71, 75, 199, 62, 6, 200}},
+		{"a7:cc:9f:10:18:e3", interfaces.MacAddress{167, 204, 159, 16, 24, 227}},
+	}
+
+	for _, entry := range data {
+		t.Run(entry.input, func(t *testing.T) {
+			parsedMac, err := interfaces.ParseMAC(entry.input)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(parsedMac).To(Equal(entry.result))
+
+			originAddress := parsedMac.ToString()
+			Expect(originAddress).To(Equal(entry.input))
+		})
+	}
+}
+
+func TestGeneratedParseMACError(t *testing.T) {
+	RegisterTestingT(t)
+
+	_, err := interfaces.ParseMAC("malformed_mac")
 	Expect(err).Should(HaveOccurred())
 }
 

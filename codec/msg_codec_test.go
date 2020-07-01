@@ -2,6 +2,7 @@ package codec_test
 
 import (
 	"bytes"
+	"git.fd.io/govpp.git/examples/binapi/ip_types"
 	"testing"
 
 	"git.fd.io/govpp.git/api"
@@ -50,7 +51,7 @@ func TestEncode(t *testing.T) {
 				Route: ip.IPRoute{
 					TableID:    0,
 					StatsIndex: 0,
-					Prefix:     ip.Prefix{},
+					Prefix:     ip_types.Prefix{},
 					NPaths:     0,
 				},
 			},

@@ -15,6 +15,7 @@
 package core_test
 
 import (
+	"git.fd.io/govpp.git/examples/binapi/interface_types"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -161,7 +162,7 @@ func TestMultiRequestsWithSequenceNumbers(t *testing.T) {
 
 	var msgs []api.Message
 	for i := 0; i < 10; i++ {
-		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interfaces.InterfaceIndex(i)})
+		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)})
 	}
 	ctx.mockVpp.MockReply(msgs...)
 	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
@@ -280,7 +281,7 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 	}
 	for i := 0; i < 10; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
-			Msg:       &interfaces.SwInterfaceDetails{SwIfIndex: interfaces.InterfaceIndex(i)},
+			Msg:       &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)},
 			SeqNum:    1,
 			Multipart: true,
 		})

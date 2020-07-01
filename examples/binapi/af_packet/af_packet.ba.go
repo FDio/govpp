@@ -18,9 +18,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -44,22 +47,21 @@ const (
 	VersionCrc = 0xe0b6c022
 )
 
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type LinkDuplex = interface_types.LinkDuplex
-
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
+
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
+
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
 
 // AfPacketCreate represents VPP binary API message 'af_packet_create'.
 type AfPacketCreate struct {
@@ -140,8 +142,8 @@ func (m *AfPacketCreate) Unmarshal(tmp []byte) error {
 
 // AfPacketCreateReply represents VPP binary API message 'af_packet_create_reply'.
 type AfPacketCreateReply struct {
-	Retval    int32          `binapi:"i32,name=retval" json:"retval,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *AfPacketCreateReply) Reset()                        { *m = AfPacketCreateReply{} }
@@ -188,7 +190,7 @@ func (m *AfPacketCreateReply) Unmarshal(tmp []byte) error {
 	m.Retval = int32(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -290,8 +292,8 @@ func (m *AfPacketDeleteReply) Unmarshal(tmp []byte) error {
 
 // AfPacketDetails represents VPP binary API message 'af_packet_details'.
 type AfPacketDetails struct {
-	SwIfIndex  InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	HostIfName string         `binapi:"string[64],name=host_if_name" json:"host_if_name,omitempty" struc:"[64]byte"`
+	SwIfIndex  interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	HostIfName string                         `binapi:"string[64],name=host_if_name" json:"host_if_name,omitempty" struc:"[64]byte"`
 }
 
 func (m *AfPacketDetails) Reset()                        { *m = AfPacketDetails{} }
@@ -335,7 +337,7 @@ func (m *AfPacketDetails) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.HostIfName
 	{
@@ -384,8 +386,8 @@ func (m *AfPacketDump) Unmarshal(tmp []byte) error {
 
 // AfPacketSetL4CksumOffload represents VPP binary API message 'af_packet_set_l4_cksum_offload'.
 type AfPacketSetL4CksumOffload struct {
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Set       bool           `binapi:"bool,name=set" json:"set,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Set       bool                           `binapi:"bool,name=set" json:"set,omitempty"`
 }
 
 func (m *AfPacketSetL4CksumOffload) Reset()                        { *m = AfPacketSetL4CksumOffload{} }
@@ -431,7 +433,7 @@ func (m *AfPacketSetL4CksumOffload) Unmarshal(tmp []byte) error {
 	pos := 0
 	_ = pos
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Set
 	m.Set = tmp[pos] != 0
@@ -520,6 +522,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

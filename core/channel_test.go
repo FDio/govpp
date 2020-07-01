@@ -129,7 +129,7 @@ func TestMultiRequestReplySwInterfaceMemifDump(t *testing.T) {
 	var msgs []api.Message
 	for i := 1; i <= 10; i++ {
 		msgs = append(msgs, &memif.MemifDetails{
-			SwIfIndex: interfaces.InterfaceIndex(i),
+			SwIfIndex: interface_types.InterfaceIndex(i),
 		})
 	}
 	ctx.mockVpp.MockReply(msgs...)
@@ -288,7 +288,7 @@ func TestMultiRequestDouble(t *testing.T) {
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
-				SwIfIndex:     interfaces.InterfaceIndex(i),
+				SwIfIndex:     interface_types.InterfaceIndex(i),
 				InterfaceName: "if-name-test",
 			},
 			Multipart: true,
@@ -301,7 +301,7 @@ func TestMultiRequestDouble(t *testing.T) {
 		msgs = append(msgs,
 			mock.MsgWithContext{
 				Msg: &interfaces.SwInterfaceDetails{
-					SwIfIndex:     interfaces.InterfaceIndex(i),
+					SwIfIndex:     interface_types.InterfaceIndex(i),
 					InterfaceName: "if-name-test",
 				},
 				Multipart: true,
@@ -427,7 +427,7 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	for i := 1; i <= 3; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
 			Msg: &interfaces.SwInterfaceDetails{
-				SwIfIndex:     interfaces.InterfaceIndex(i),
+				SwIfIndex:     interface_types.InterfaceIndex(i),
 				InterfaceName: "if-name-test",
 			},
 			Multipart: true,

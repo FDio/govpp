@@ -19,9 +19,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -270,6 +273,38 @@ type Address struct {
 
 func (*Address) GetTypeName() string { return "address" }
 
+func ParseAddress(ip string) (Address, error) {
+	var address Address
+	netIP := net.ParseIP(ip)
+	if netIP == nil {
+		return address, fmt.Errorf("invalid address: %s", ip)
+	}
+	if ip4 := netIP.To4(); ip4 == nil {
+		address.Af = ADDRESS_IP6
+		var ip6addr IP6Address
+		copy(ip6addr[:], netIP.To16())
+		address.Un.SetIP6(ip6addr)
+	} else {
+		address.Af = ADDRESS_IP4
+		var ip4addr IP4Address
+		copy(ip4addr[:], netIP.To4())
+		address.Un.SetIP4(ip4addr)
+	}
+	return address, nil
+}
+
+func (a *Address) ToString() string {
+	var ip string
+	if a.Af == ADDRESS_IP6 {
+		ip6Address := a.Un.GetIP6()
+		ip = net.IP(ip6Address[:]).To16().String()
+	} else {
+		ip4Address := a.Un.GetIP4()
+		ip = net.IP(ip4Address[:]).To4().String()
+	}
+	return ip
+}
+
 // IP4Prefix represents VPP binary API type 'ip4_prefix'.
 type IP4Prefix struct {
 	Address IP4Address `binapi:"ip4_address,name=address" json:"address,omitempty"`
@@ -303,6 +338,39 @@ type Prefix struct {
 }
 
 func (*Prefix) GetTypeName() string { return "prefix" }
+
+func ParsePrefix(ip string) (prefix Prefix, err error) {
+	hasPrefix := strings.Contains(ip, "/")
+	if hasPrefix {
+		netIP, network, err := net.ParseCIDR(ip)
+		if err != nil {
+			return Prefix{}, fmt.Errorf("invalid IP %s: %v", ip, err)
+		}
+		maskSize, _ := network.Mask.Size()
+		prefix.Len = byte(maskSize)
+		prefix.Address, err = ParseAddress(netIP.String())
+		if err != nil {
+			return Prefix{}, fmt.Errorf("invalid IP %s: %v", ip, err)
+		}
+	} else {
+		netIP := net.ParseIP(ip)
+		defaultMaskSize, _ := net.CIDRMask(32, 32).Size()
+		if netIP.To4() == nil {
+			defaultMaskSize, _ = net.CIDRMask(128, 128).Size()
+		}
+		prefix.Len = byte(defaultMaskSize)
+		prefix.Address, err = ParseAddress(netIP.String())
+		if err != nil {
+			return Prefix{}, fmt.Errorf("invalid IP %s: %v", ip, err)
+		}
+	}
+	return prefix, nil
+}
+
+func (p *Prefix) ToString() string {
+	ip := p.Address.ToString()
+	return ip + "/" + strconv.Itoa(int(p.Len))
+}
 
 // PrefixMatcher represents VPP binary API type 'prefix_matcher'.
 type PrefixMatcher struct {
@@ -360,6 +428,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

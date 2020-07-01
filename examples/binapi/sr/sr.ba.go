@@ -20,9 +20,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -46,24 +49,6 @@ const (
 	// VersionCrc is the CRC of this module.
 	VersionCrc = 0xd85c77ca
 )
-
-type AddressFamily = ip_types.AddressFamily
-
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type IPDscp = ip_types.IPDscp
-
-type IPEcn = ip_types.IPEcn
-
-type IPProto = ip_types.IPProto
-
-type LinkDuplex = interface_types.LinkDuplex
-
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
 
 // SrBehavior represents VPP binary API enum 'sr_behavior'.
 type SrBehavior uint8
@@ -179,53 +164,25 @@ func (x SrSteer) String() string {
 	return "SrSteer(" + strconv.Itoa(int(x)) + ")"
 }
 
-type SubIfFlags = interface_types.SubIfFlags
-
-type AddressWithPrefix = ip_types.AddressWithPrefix
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
-type IP4Address = ip_types.IP4Address
-
-type IP4AddressWithPrefix = ip_types.IP4AddressWithPrefix
-
-type IP6Address = ip_types.IP6Address
-
-type IP6AddressWithPrefix = ip_types.IP6AddressWithPrefix
-
-type Address = ip_types.Address
-
-type IP4Prefix = ip_types.IP4Prefix
-
-type IP6Prefix = ip_types.IP6Prefix
-
-type Mprefix = ip_types.Mprefix
-
-type Prefix = ip_types.Prefix
-
-type PrefixMatcher = ip_types.PrefixMatcher
-
 // Srv6SidList represents VPP binary API type 'srv6_sid_list'.
 type Srv6SidList struct {
-	NumSids uint8          `binapi:"u8,name=num_sids" json:"num_sids,omitempty"`
-	Weight  uint32         `binapi:"u32,name=weight" json:"weight,omitempty"`
-	Sids    [16]IP6Address `binapi:"ip6_address[16],name=sids" json:"sids,omitempty" struc:"[16]IP6Address"`
+	NumSids uint8                   `binapi:"u8,name=num_sids" json:"num_sids,omitempty"`
+	Weight  uint32                  `binapi:"u32,name=weight" json:"weight,omitempty"`
+	Sids    [16]ip_types.IP6Address `binapi:"ip6_address[16],name=sids" json:"sids,omitempty" struc:"[16]ip_types.IP6Address"`
 }
 
 func (*Srv6SidList) GetTypeName() string { return "srv6_sid_list" }
 
-type AddressUnion = ip_types.AddressUnion
-
 // SrLocalsidAddDel represents VPP binary API message 'sr_localsid_add_del'.
 type SrLocalsidAddDel struct {
-	IsDel     bool           `binapi:"bool,name=is_del,default=false" json:"is_del,omitempty"`
-	Localsid  IP6Address     `binapi:"ip6_address,name=localsid" json:"localsid,omitempty"`
-	EndPsp    bool           `binapi:"bool,name=end_psp" json:"end_psp,omitempty"`
-	Behavior  SrBehavior     `binapi:"sr_behavior,name=behavior" json:"behavior,omitempty"`
-	SwIfIndex InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
-	VlanIndex uint32         `binapi:"u32,name=vlan_index" json:"vlan_index,omitempty"`
-	FibTable  uint32         `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	NhAddr    Address        `binapi:"address,name=nh_addr" json:"nh_addr,omitempty"`
+	IsDel     bool                           `binapi:"bool,name=is_del,default=false" json:"is_del,omitempty"`
+	Localsid  ip_types.IP6Address            `binapi:"ip6_address,name=localsid" json:"localsid,omitempty"`
+	EndPsp    bool                           `binapi:"bool,name=end_psp" json:"end_psp,omitempty"`
+	Behavior  SrBehavior                     `binapi:"sr_behavior,name=behavior" json:"behavior,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4.294967295e+09" json:"sw_if_index,omitempty"`
+	VlanIndex uint32                         `binapi:"u32,name=vlan_index" json:"vlan_index,omitempty"`
+	FibTable  uint32                         `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	NhAddr    ip_types.Address               `binapi:"address,name=nh_addr" json:"nh_addr,omitempty"`
 }
 
 func (m *SrLocalsidAddDel) Reset()                        { *m = SrLocalsidAddDel{} }
@@ -330,7 +287,7 @@ func (m *SrLocalsidAddDel) Unmarshal(tmp []byte) error {
 	m.Behavior = SrBehavior(tmp[pos])
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.VlanIndex
 	m.VlanIndex = uint32(o.Uint32(tmp[pos : pos+4]))
@@ -340,7 +297,7 @@ func (m *SrLocalsidAddDel) Unmarshal(tmp []byte) error {
 	pos += 4
 	// field[1] m.NhAddr
 	// field[2] m.NhAddr.Af
-	m.NhAddr.Af = AddressFamily(tmp[pos])
+	m.NhAddr.Af = ip_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[2] m.NhAddr.Un
 	copy(m.NhAddr.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -396,13 +353,13 @@ func (m *SrLocalsidAddDelReply) Unmarshal(tmp []byte) error {
 
 // SrLocalsidsDetails represents VPP binary API message 'sr_localsids_details'.
 type SrLocalsidsDetails struct {
-	Addr                    IP6Address `binapi:"ip6_address,name=addr" json:"addr,omitempty"`
-	EndPsp                  bool       `binapi:"bool,name=end_psp" json:"end_psp,omitempty"`
-	Behavior                SrBehavior `binapi:"sr_behavior,name=behavior" json:"behavior,omitempty"`
-	FibTable                uint32     `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	VlanIndex               uint32     `binapi:"u32,name=vlan_index" json:"vlan_index,omitempty"`
-	XconnectNhAddr          Address    `binapi:"address,name=xconnect_nh_addr" json:"xconnect_nh_addr,omitempty"`
-	XconnectIfaceOrVrfTable uint32     `binapi:"u32,name=xconnect_iface_or_vrf_table" json:"xconnect_iface_or_vrf_table,omitempty"`
+	Addr                    ip_types.IP6Address `binapi:"ip6_address,name=addr" json:"addr,omitempty"`
+	EndPsp                  bool                `binapi:"bool,name=end_psp" json:"end_psp,omitempty"`
+	Behavior                SrBehavior          `binapi:"sr_behavior,name=behavior" json:"behavior,omitempty"`
+	FibTable                uint32              `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	VlanIndex               uint32              `binapi:"u32,name=vlan_index" json:"vlan_index,omitempty"`
+	XconnectNhAddr          ip_types.Address    `binapi:"address,name=xconnect_nh_addr" json:"xconnect_nh_addr,omitempty"`
+	XconnectIfaceOrVrfTable uint32              `binapi:"u32,name=xconnect_iface_or_vrf_table" json:"xconnect_iface_or_vrf_table,omitempty"`
 }
 
 func (m *SrLocalsidsDetails) Reset()                        { *m = SrLocalsidsDetails{} }
@@ -504,7 +461,7 @@ func (m *SrLocalsidsDetails) Unmarshal(tmp []byte) error {
 	pos += 4
 	// field[1] m.XconnectNhAddr
 	// field[2] m.XconnectNhAddr.Af
-	m.XconnectNhAddr.Af = AddressFamily(tmp[pos])
+	m.XconnectNhAddr.Af = ip_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[2] m.XconnectNhAddr.Un
 	copy(m.XconnectNhAddr.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -553,12 +510,12 @@ func (m *SrLocalsidsDump) Unmarshal(tmp []byte) error {
 
 // SrPoliciesDetails represents VPP binary API message 'sr_policies_details'.
 type SrPoliciesDetails struct {
-	Bsid        IP6Address    `binapi:"ip6_address,name=bsid" json:"bsid,omitempty"`
-	IsSpray     bool          `binapi:"bool,name=is_spray" json:"is_spray,omitempty"`
-	IsEncap     bool          `binapi:"bool,name=is_encap" json:"is_encap,omitempty"`
-	FibTable    uint32        `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	NumSidLists uint8         `binapi:"u8,name=num_sid_lists" json:"num_sid_lists,omitempty" struc:"sizeof=SidLists"`
-	SidLists    []Srv6SidList `binapi:"srv6_sid_list[num_sid_lists],name=sid_lists" json:"sid_lists,omitempty"`
+	Bsid        ip_types.IP6Address `binapi:"ip6_address,name=bsid" json:"bsid,omitempty"`
+	IsSpray     bool                `binapi:"bool,name=is_spray" json:"is_spray,omitempty"`
+	IsEncap     bool                `binapi:"bool,name=is_encap" json:"is_encap,omitempty"`
+	FibTable    uint32              `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	NumSidLists uint8               `binapi:"u8,name=num_sid_lists" json:"num_sid_lists,omitempty" struc:"sizeof=SidLists"`
+	SidLists    []Srv6SidList       `binapi:"srv6_sid_list[num_sid_lists],name=sid_lists" json:"sid_lists,omitempty"`
 }
 
 func (m *SrPoliciesDetails) Reset()                        { *m = SrPoliciesDetails{} }
@@ -594,7 +551,7 @@ func (m *SrPoliciesDetails) Size() int {
 		size += 4
 		// field[2] s1.Sids
 		for j2 := 0; j2 < 16; j2++ {
-			var s2 IP6Address
+			var s2 ip_types.IP6Address
 			_ = s2
 			if j2 < len(s1.Sids) {
 				s2 = s1.Sids[j2]
@@ -654,7 +611,7 @@ func (m *SrPoliciesDetails) Marshal(b []byte) ([]byte, error) {
 		pos += 4
 		// field[2] v1.Sids
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 IP6Address
+			var v2 ip_types.IP6Address
 			if j2 < len(v1.Sids) {
 				v2 = v1.Sids[j2]
 			}
@@ -750,12 +707,12 @@ func (m *SrPoliciesDump) Unmarshal(tmp []byte) error {
 
 // SrPolicyAdd represents VPP binary API message 'sr_policy_add'.
 type SrPolicyAdd struct {
-	BsidAddr IP6Address  `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
-	Weight   uint32      `binapi:"u32,name=weight" json:"weight,omitempty"`
-	IsEncap  bool        `binapi:"bool,name=is_encap" json:"is_encap,omitempty"`
-	IsSpray  bool        `binapi:"bool,name=is_spray" json:"is_spray,omitempty"`
-	FibTable uint32      `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	Sids     Srv6SidList `binapi:"srv6_sid_list,name=sids" json:"sids,omitempty"`
+	BsidAddr ip_types.IP6Address `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
+	Weight   uint32              `binapi:"u32,name=weight" json:"weight,omitempty"`
+	IsEncap  bool                `binapi:"bool,name=is_encap" json:"is_encap,omitempty"`
+	IsSpray  bool                `binapi:"bool,name=is_spray" json:"is_spray,omitempty"`
+	FibTable uint32              `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	Sids     Srv6SidList         `binapi:"srv6_sid_list,name=sids" json:"sids,omitempty"`
 }
 
 func (m *SrPolicyAdd) Reset()                        { *m = SrPolicyAdd{} }
@@ -785,7 +742,7 @@ func (m *SrPolicyAdd) Size() int {
 	size += 4
 	// field[2] m.Sids.Sids
 	for j2 := 0; j2 < 16; j2++ {
-		var s2 IP6Address
+		var s2 ip_types.IP6Address
 		_ = s2
 		if j2 < len(m.Sids.Sids) {
 			s2 = m.Sids.Sids[j2]
@@ -839,7 +796,7 @@ func (m *SrPolicyAdd) Marshal(b []byte) ([]byte, error) {
 	pos += 4
 	// field[2] m.Sids.Sids
 	for j2 := 0; j2 < 16; j2++ {
-		var v2 IP6Address
+		var v2 ip_types.IP6Address
 		if j2 < len(m.Sids.Sids) {
 			v2 = m.Sids.Sids[j2]
 		}
@@ -941,8 +898,8 @@ func (m *SrPolicyAddReply) Unmarshal(tmp []byte) error {
 
 // SrPolicyDel represents VPP binary API message 'sr_policy_del'.
 type SrPolicyDel struct {
-	BsidAddr      IP6Address `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
-	SrPolicyIndex uint32     `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
+	BsidAddr      ip_types.IP6Address `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
+	SrPolicyIndex uint32              `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
 }
 
 func (m *SrPolicyDel) Reset()                        { *m = SrPolicyDel{} }
@@ -1050,13 +1007,13 @@ func (m *SrPolicyDelReply) Unmarshal(tmp []byte) error {
 
 // SrPolicyMod represents VPP binary API message 'sr_policy_mod'.
 type SrPolicyMod struct {
-	BsidAddr      IP6Address  `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
-	SrPolicyIndex uint32      `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
-	FibTable      uint32      `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	Operation     SrPolicyOp  `binapi:"sr_policy_op,name=operation" json:"operation,omitempty"`
-	SlIndex       uint32      `binapi:"u32,name=sl_index" json:"sl_index,omitempty"`
-	Weight        uint32      `binapi:"u32,name=weight" json:"weight,omitempty"`
-	Sids          Srv6SidList `binapi:"srv6_sid_list,name=sids" json:"sids,omitempty"`
+	BsidAddr      ip_types.IP6Address `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
+	SrPolicyIndex uint32              `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
+	FibTable      uint32              `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	Operation     SrPolicyOp          `binapi:"sr_policy_op,name=operation" json:"operation,omitempty"`
+	SlIndex       uint32              `binapi:"u32,name=sl_index" json:"sl_index,omitempty"`
+	Weight        uint32              `binapi:"u32,name=weight" json:"weight,omitempty"`
+	Sids          Srv6SidList         `binapi:"srv6_sid_list,name=sids" json:"sids,omitempty"`
 }
 
 func (m *SrPolicyMod) Reset()                        { *m = SrPolicyMod{} }
@@ -1088,7 +1045,7 @@ func (m *SrPolicyMod) Size() int {
 	size += 4
 	// field[2] m.Sids.Sids
 	for j2 := 0; j2 < 16; j2++ {
-		var s2 IP6Address
+		var s2 ip_types.IP6Address
 		_ = s2
 		if j2 < len(m.Sids.Sids) {
 			s2 = m.Sids.Sids[j2]
@@ -1141,7 +1098,7 @@ func (m *SrPolicyMod) Marshal(b []byte) ([]byte, error) {
 	pos += 4
 	// field[2] m.Sids.Sids
 	for j2 := 0; j2 < 16; j2++ {
-		var v2 IP6Address
+		var v2 ip_types.IP6Address
 		if j2 < len(m.Sids.Sids) {
 			v2 = m.Sids.Sids[j2]
 		}
@@ -1338,7 +1295,7 @@ func (m *SrSetEncapHopLimitReply) Unmarshal(tmp []byte) error {
 
 // SrSetEncapSource represents VPP binary API message 'sr_set_encap_source'.
 type SrSetEncapSource struct {
-	EncapsSource IP6Address `binapi:"ip6_address,name=encaps_source" json:"encaps_source,omitempty"`
+	EncapsSource ip_types.IP6Address `binapi:"ip6_address,name=encaps_source" json:"encaps_source,omitempty"`
 }
 
 func (m *SrSetEncapSource) Reset()                        { *m = SrSetEncapSource{} }
@@ -1438,13 +1395,13 @@ func (m *SrSetEncapSourceReply) Unmarshal(tmp []byte) error {
 
 // SrSteeringAddDel represents VPP binary API message 'sr_steering_add_del'.
 type SrSteeringAddDel struct {
-	IsDel         bool           `binapi:"bool,name=is_del,default=false" json:"is_del,omitempty"`
-	BsidAddr      IP6Address     `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
-	SrPolicyIndex uint32         `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
-	TableID       uint32         `binapi:"u32,name=table_id" json:"table_id,omitempty"`
-	Prefix        Prefix         `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
-	SwIfIndex     InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	TrafficType   SrSteer        `binapi:"sr_steer,name=traffic_type" json:"traffic_type,omitempty"`
+	IsDel         bool                           `binapi:"bool,name=is_del,default=false" json:"is_del,omitempty"`
+	BsidAddr      ip_types.IP6Address            `binapi:"ip6_address,name=bsid_addr" json:"bsid_addr,omitempty"`
+	SrPolicyIndex uint32                         `binapi:"u32,name=sr_policy_index" json:"sr_policy_index,omitempty"`
+	TableID       uint32                         `binapi:"u32,name=table_id" json:"table_id,omitempty"`
+	Prefix        ip_types.Prefix                `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	TrafficType   SrSteer                        `binapi:"sr_steer,name=traffic_type" json:"traffic_type,omitempty"`
 }
 
 func (m *SrSteeringAddDel) Reset()                        { *m = SrSteeringAddDel{} }
@@ -1551,7 +1508,7 @@ func (m *SrSteeringAddDel) Unmarshal(tmp []byte) error {
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -1560,7 +1517,7 @@ func (m *SrSteeringAddDel) Unmarshal(tmp []byte) error {
 	m.Prefix.Len = uint8(tmp[pos])
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.TrafficType
 	m.TrafficType = SrSteer(tmp[pos])
@@ -1616,11 +1573,11 @@ func (m *SrSteeringAddDelReply) Unmarshal(tmp []byte) error {
 
 // SrSteeringPolDetails represents VPP binary API message 'sr_steering_pol_details'.
 type SrSteeringPolDetails struct {
-	TrafficType SrSteer        `binapi:"sr_steer,name=traffic_type" json:"traffic_type,omitempty"`
-	FibTable    uint32         `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
-	Prefix      Prefix         `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
-	SwIfIndex   InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Bsid        IP6Address     `binapi:"ip6_address,name=bsid" json:"bsid,omitempty"`
+	TrafficType SrSteer                        `binapi:"sr_steer,name=traffic_type" json:"traffic_type,omitempty"`
+	FibTable    uint32                         `binapi:"u32,name=fib_table" json:"fib_table,omitempty"`
+	Prefix      ip_types.Prefix                `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
+	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Bsid        ip_types.IP6Address            `binapi:"ip6_address,name=bsid" json:"bsid,omitempty"`
 }
 
 func (m *SrSteeringPolDetails) Reset()                        { *m = SrSteeringPolDetails{} }
@@ -1707,7 +1664,7 @@ func (m *SrSteeringPolDetails) Unmarshal(tmp []byte) error {
 	// field[1] m.Prefix
 	// field[2] m.Prefix.Address
 	// field[3] m.Prefix.Address.Af
-	m.Prefix.Address.Af = AddressFamily(tmp[pos])
+	m.Prefix.Address.Af = ip_types.AddressFamily(tmp[pos])
 	pos += 1
 	// field[3] m.Prefix.Address.Un
 	copy(m.Prefix.Address.Un.XXX_UnionData[:], tmp[pos:pos+16])
@@ -1716,7 +1673,7 @@ func (m *SrSteeringPolDetails) Unmarshal(tmp []byte) error {
 	m.Prefix.Len = uint8(tmp[pos])
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	// field[1] m.Bsid
 	for i := 0; i < len(m.Bsid); i++ {
@@ -1819,6 +1776,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf
