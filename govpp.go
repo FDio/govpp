@@ -17,40 +17,22 @@ package govpp
 import (
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/core"
 )
-
-var (
-	// VPP binary API adapter that will be used in the subsequent Connect calls
-	vppAdapter adapter.VppAPI
-)
-
-func getVppAdapter(addr string) adapter.VppAPI {
-	if vppAdapter == nil {
-		vppAdapter = socketclient.NewVppClient(addr)
-	}
-	return vppAdapter
-}
-
-// SetVppAdapter sets the adapter that will be used for connections to VPP in the subsequent `Connect` calls.
-func SetVppAdapter(a adapter.VppAPI) {
-	vppAdapter = a
-}
 
 // Connect connects the govpp core to VPP either using the default VPP Adapter, or using the adapter previously
 // set by SetAdapter (useful mostly just for unit/integration tests with mocked VPP adapter).
 // This call blocks until VPP is connected, or an error occurs. Only one connection attempt will be performed.
 func Connect(shm string) (*core.Connection, error) {
-	return core.Connect(getVppAdapter(shm))
+	return core.Connect(socketclient.NewVppClient(shm))
 }
 
 // AsyncConnect asynchronously connects the govpp core to VPP either using the default VPP Adapter,
 // or using the adapter previously set by SetAdapter.
-// This call does not block until connection is established, it returns immediately. The caller is
+// This call does not block until the connection is established, it returns immediately. The caller is
 // supposed to watch the returned ConnectionState channel for Connected/Disconnected events.
-// In case of disconnect, the library will asynchronously try to reconnect.
+// In case of a disconnect, the library will asynchronously try to reconnect.
 func AsyncConnect(shm string, attempts int, interval time.Duration) (*core.Connection, chan core.ConnectionEvent, error) {
-	return core.AsyncConnect(getVppAdapter(shm), attempts, interval)
+	return core.AsyncConnect(socketclient.NewVppClient(shm), attempts, interval)
 }

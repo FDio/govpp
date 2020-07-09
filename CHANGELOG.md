@@ -23,10 +23,14 @@ This file lists changes for the GoVPP releases.
 - dependency on `github.com/lunixbochs/struc` was removed and message un/marshaling is now part of generated code
 - generated code now contains comment with information about versions of VPP and binapi-generator
 - RPC service code is now generated into a separated file (`*_rpc.ba.go`) in same directory
+- many generated aliases were removed and referenced to `*_types` files for simpler reading 
+- generated new helper methods for more convenient IP and MAC address conversion
 
 ### Features
 - optimized [socketclient](adapter/socketclient) adapter and add method to set client name
 - added list of compatible messages to `CompatibilityError`
+- removed global binary API adapter - this change allows GoVPP to manage multiple VPP connections with different 
+  sockets simultaneously
 
 ### Fixes
 - `MsgCodec` will recover panic occurring during a message decoding
@@ -39,6 +43,8 @@ This file lists changes for the GoVPP releases.
 - added more code samples of working with unions in [union example](examples/union-example)
 - added profiling mode to [perf bench](examples/perf-bench) example
 - improved [simple client](examples/simple-client) example to work properly even with multiple runs
+- added [multi-vpp](examples/multi-vpp) example displaying management of two VPP instances from single
+  application
 
 #### Dependencies
 - updated `github.com/sirupsen/logrus` dep to `v1.6.0`
