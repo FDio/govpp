@@ -266,9 +266,8 @@ func (c *socketClient) Disconnect() error {
 	// wait for readerLoop to return
 	c.wg.Wait()
 
-	if err := c.close(); err != nil {
-		log.Debugf("closing failed: %v", err)
-	}
+	// Don't bother sending a vl_api_sockclnt_delete_t message,
+	// just close the socket.
 
 	if err := c.disconnect(); err != nil {
 		return err
@@ -370,48 +369,6 @@ func (c *socketClient) open() error {
 		if debugMsgIds {
 			log.Debugf(" - %4d: %q", x.Index, name)
 		}
-	}
-
-	return nil
-}
-
-func (c *socketClient) close() error {
-	var msgCodec = codec.DefaultCodec
-
-	req := &memclnt.SockclntDelete{
-		Index: c.clientIndex,
-	}
-	msg, err := msgCodec.EncodeMsg(req, c.sockDelMsgId)
-	if err != nil {
-		log.Debugln("Encode error:", err)
-		return err
-	}
-	// set non-0 context
-	msg[5] = deleteMsgContext
-
-	log.Debugf("sending socklntDel (%d bytes): % 0X", len(msg), msg)
-
-	if err := c.writeMsg(msg); err != nil {
-		log.Debugln("Write error: ", err)
-		return err
-	}
-
-	msgReply, err := c.readMsgTimeout(nil, c.disconnectTimeout)
-	if err != nil {
-		if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
-			// we accept timeout for reply
-			return nil
-		}
-		log.Debugln("Read error:", err)
-		return err
-	}
-
-	reply := new(memclnt.SockclntDeleteReply)
-	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
-		log.Debugln("Decoding sockclnt_delete_reply failed:", err)
-		return err
-	} else if reply.Response != 0 {
-		return fmt.Errorf("sockclnt_delete_reply: response error (%d)", reply.Response)
 	}
 
 	return nil
