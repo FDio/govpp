@@ -19,9 +19,12 @@ import (
 	"bytes"
 	"context"
 	"encoding/binary"
+	"fmt"
 	"io"
 	"math"
+	"net"
 	"strconv"
+	"strings"
 
 	api "git.fd.io/govpp.git/api"
 	codec "git.fd.io/govpp.git/codec"
@@ -45,22 +48,21 @@ const (
 	VersionCrc = 0x9283d3e
 )
 
-type IfStatusFlags = interface_types.IfStatusFlags
-
-type IfType = interface_types.IfType
-
-type LinkDuplex = interface_types.LinkDuplex
-
-type MtuProto = interface_types.MtuProto
-
-type RxMode = interface_types.RxMode
-
-type SubIfFlags = interface_types.SubIfFlags
-
-type InterfaceIndex = interface_types.InterfaceIndex
-
 // MacAddress represents VPP binary API alias 'mac_address'.
 type MacAddress [6]uint8
+
+func ParseMAC(mac string) (parsed MacAddress, err error) {
+	var hw net.HardwareAddr
+	if hw, err = net.ParseMAC(mac); err != nil {
+		return
+	}
+	copy(parsed[:], hw[:])
+	return
+}
+
+func (m *MacAddress) ToString() string {
+	return net.HardwareAddr(m[:]).String()
+}
 
 // MactimeTimeRange represents VPP binary API type 'mactime_time_range'.
 type MactimeTimeRange struct {
@@ -547,8 +549,8 @@ func (m *MactimeDumpReply) Unmarshal(tmp []byte) error {
 
 // MactimeEnableDisable represents VPP binary API message 'mactime_enable_disable'.
 type MactimeEnableDisable struct {
-	EnableDisable bool           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
-	SwIfIndex     InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	EnableDisable bool                           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
+	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
 func (m *MactimeEnableDisable) Reset()                        { *m = MactimeEnableDisable{} }
@@ -597,7 +599,7 @@ func (m *MactimeEnableDisable) Unmarshal(tmp []byte) error {
 	m.EnableDisable = tmp[pos] != 0
 	pos += 1
 	// field[1] m.SwIfIndex
-	m.SwIfIndex = InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
+	m.SwIfIndex = interface_types.InterfaceIndex(o.Uint32(tmp[pos : pos+4]))
 	pos += 4
 	return nil
 }
@@ -679,6 +681,9 @@ var _ = bytes.NewBuffer
 var _ = context.Background
 var _ = io.Copy
 var _ = strconv.Itoa
+var _ = strings.Contains
 var _ = struc.Pack
 var _ = binary.BigEndian
 var _ = math.Float32bits
+var _ = net.ParseIP
+var _ = fmt.Errorf

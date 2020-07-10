@@ -19,6 +19,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"git.fd.io/govpp.git/adapter/socketclient/binapi/memclnt"
 	"io"
 	"net"
 	"os"
@@ -325,7 +326,7 @@ func (c *socketClient) open() error {
 	var msgCodec = codec.DefaultCodec
 
 	// Request socket client create
-	req := &SockclntCreate{
+	req := &memclnt.SockclntCreate{
 		Name: c.clientName,
 	}
 	msg, err := msgCodec.EncodeMsg(req, sockCreateMsgId)
@@ -346,7 +347,7 @@ func (c *socketClient) open() error {
 		return err
 	}
 
-	reply := new(SockclntCreateReply)
+	reply := new(memclnt.SockclntCreateReply)
 	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
 		log.Println("Decoding sockclnt_create_reply failed:", err)
 		return err
@@ -377,7 +378,7 @@ func (c *socketClient) open() error {
 func (c *socketClient) close() error {
 	var msgCodec = codec.DefaultCodec
 
-	req := &SockclntDelete{
+	req := &memclnt.SockclntDelete{
 		Index: c.clientIndex,
 	}
 	msg, err := msgCodec.EncodeMsg(req, c.sockDelMsgId)
@@ -405,7 +406,7 @@ func (c *socketClient) close() error {
 		return err
 	}
 
-	reply := new(SockclntDeleteReply)
+	reply := new(memclnt.SockclntDeleteReply)
 	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
 		log.Debugln("Decoding sockclnt_delete_reply failed:", err)
 		return err
