@@ -18,17 +18,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/ip"
+	"git.fd.io/govpp.git/binapi/ip_types"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
-	"log"
-	"os"
 )
 
 var (
@@ -175,7 +176,6 @@ func addIPToInterface(ch api.Channel, index interface_types.InterfaceIndex, ip s
 		return
 	}
 
-
 	req := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex: index,
 		IsAdd:     true,
@@ -212,7 +212,7 @@ func retrieveIPAddresses(ch api.Channel, index interface_types.InterfaceIndex) {
 			break
 		}
 		prefix := ip_types.Prefix(msg.Prefix)
-		fmt.Printf(" - ip address: %+v\n", prefix.ToString())
+		fmt.Printf(" - ip address: %v\n", prefix)
 	}
 
 	fmt.Println("OK")

@@ -15,17 +15,18 @@
 package core_test
 
 import (
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
 	"testing"
 
 	. "github.com/onsi/gomega"
 
 	"git.fd.io/govpp.git/adapter/mock"
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/binapi/ethernet_types"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 type testCtx struct {
@@ -96,14 +97,14 @@ func TestCodec(t *testing.T) {
 	var msgCodec = codec.DefaultCodec
 
 	// request
-	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: interfaces.MacAddress{1, 2, 3, 4, 5, 6}}, 11)
+	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: ethernet_types.MacAddress{1, 2, 3, 4, 5, 6}}, 11)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
 	msg1 := &interfaces.CreateLoopback{}
 	err = msgCodec.DecodeMsg(data, msg1)
 	Expect(err).ShouldNot(HaveOccurred())
-	Expect(msg1.MacAddress).To(BeEquivalentTo(interfaces.MacAddress{1, 2, 3, 4, 5, 6}))
+	Expect(msg1.MacAddress).To(BeEquivalentTo(ethernet_types.MacAddress{1, 2, 3, 4, 5, 6}))
 
 	// reply
 	data, err = msgCodec.EncodeMsg(&vpe.ControlPingReply{Retval: 55}, 22)

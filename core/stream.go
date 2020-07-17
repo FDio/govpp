@@ -62,8 +62,23 @@ func (c *Connection) NewStream(ctx context.Context) (api.Stream, error) {
 }
 
 func (c *Connection) Invoke(ctx context.Context, req api.Message, reply api.Message) error {
-	// TODO: implement invoke
-	panic("not implemented")
+	stream, err := c.NewStream(ctx)
+	if err != nil {
+		return err
+	}
+	if err := stream.SendMsg(req); err != nil {
+		return err
+	}
+	msg, err := stream.RecvMsg()
+	if err != nil {
+		return err
+	}
+	if msg.GetMessageName() != reply.GetMessageName() ||
+		msg.GetCrcString() != reply.GetCrcString() {
+		return fmt.Errorf("unexpected reply: %T %+v", msg, msg)
+	}
+	reflect.ValueOf(reply).Elem().Set(reflect.ValueOf(msg).Elem())
+	return nil
 }
 
 func (s *Stream) Context() context.Context {

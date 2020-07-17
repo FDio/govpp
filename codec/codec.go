@@ -15,21 +15,41 @@
 package codec
 
 import (
+	"bytes"
 	"encoding/binary"
 	"math"
 	"reflect"
 	"unsafe"
 )
 
-var order = binary.BigEndian
-
+// Buffer provides buffer for encoding and decoding data on wire.
 type Buffer struct {
-	pos int
 	buf []byte
+	pos int
+}
+
+func NewBuffer(b []byte) *Buffer {
+	return &Buffer{
+		buf: b,
+	}
 }
 
 func (b *Buffer) Bytes() []byte {
 	return b.buf[:b.pos]
+}
+
+func (b *Buffer) EncodeBytes(v []byte, length int) {
+	if length == 0 {
+		length = len(v)
+	}
+	copy(b.buf[b.pos:b.pos+length], v)
+	b.pos += length
+}
+
+func (b *Buffer) DecodeBytes(length int) []byte {
+	v := b.buf[b.pos : b.pos+length]
+	b.pos += length
+	return v
 }
 
 func (b *Buffer) EncodeBool(v bool) {
@@ -41,38 +61,105 @@ func (b *Buffer) EncodeBool(v bool) {
 	b.pos += 1
 }
 
+func (b *Buffer) DecodeBool() bool {
+	v := b.buf[b.pos] != 0
+	b.pos += 1
+	return v
+}
+
 func (b *Buffer) EncodeUint8(v uint8) {
 	b.buf[b.pos] = v
 	b.pos += 1
 }
 
+func (b *Buffer) DecodeUint8() uint8 {
+	v := b.buf[b.pos]
+	b.pos += 1
+	return v
+}
+
 func (b *Buffer) EncodeUint16(v uint16) {
-	order.PutUint16(b.buf[b.pos:b.pos+2], v)
+	binary.BigEndian.PutUint16(b.buf[b.pos:b.pos+2], v)
 	b.pos += 2
 }
 
+func (b *Buffer) DecodeUint16() uint16 {
+	v := binary.BigEndian.Uint16(b.buf[b.pos : b.pos+2])
+	b.pos += 2
+	return v
+}
+
 func (b *Buffer) EncodeUint32(v uint32) {
-	order.PutUint32(b.buf[b.pos:b.pos+4], v)
+	binary.BigEndian.PutUint32(b.buf[b.pos:b.pos+4], v)
 	b.pos += 4
 }
 
+func (b *Buffer) DecodeUint32() uint32 {
+	v := binary.BigEndian.Uint32(b.buf[b.pos : b.pos+4])
+	b.pos += 4
+	return v
+}
+
 func (b *Buffer) EncodeUint64(v uint64) {
-	order.PutUint64(b.buf[b.pos:b.pos+8], v)
+	binary.BigEndian.PutUint64(b.buf[b.pos:b.pos+8], v)
 	b.pos += 8
+}
+
+func (b *Buffer) DecodeUint64() uint64 {
+	v := binary.BigEndian.Uint64(b.buf[b.pos : b.pos+8])
+	b.pos += 8
+	return v
 }
 
 func (b *Buffer) EncodeFloat64(v float64) {
-	order.PutUint64(b.buf[b.pos:b.pos+8], math.Float64bits(v))
+	binary.BigEndian.PutUint64(b.buf[b.pos:b.pos+8], math.Float64bits(v))
 	b.pos += 8
 }
 
+func (b *Buffer) DecodeFloat64() float64 {
+	v := math.Float64frombits(binary.BigEndian.Uint64(b.buf[b.pos : b.pos+8]))
+	b.pos += 8
+	return v
+}
+
 func (b *Buffer) EncodeString(v string, length int) {
+	if length == 0 {
+		b.EncodeUint32(uint32(len(v)))
+		length = len(v)
+	}
 	copy(b.buf[b.pos:b.pos+length], v)
 	b.pos += length
 }
 
-func DecodeString(b []byte) string {
+func (b *Buffer) DecodeString(length int) string {
+	var v []byte
+	if length == 0 {
+		length = int(b.DecodeUint32())
+		v = b.buf[b.pos : b.pos+length]
+	} else {
+		v = b.buf[b.pos : b.pos+length]
+		if nul := bytes.Index(v, []byte{0x00}); nul >= 0 {
+			v = v[:nul]
+		}
+	}
+	b.pos += length
+	return string(v)
+}
+
+func BytesToString(b []byte) string {
 	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
 	stringHeader := reflect.StringHeader{Data: sliceHeader.Data, Len: sliceHeader.Len}
 	return *(*string)(unsafe.Pointer(&stringHeader))
+}
+
+func DecodeString(b []byte) string {
+	return string(b)
+}
+
+func DecodeStringZero(b []byte) string {
+	nul := bytes.Index(b, []byte{0x00})
+	if nul >= 0 {
+		b = b[:nul]
+	}
+	return string(b)
 }

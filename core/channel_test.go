@@ -22,10 +22,10 @@ import (
 
 	"git.fd.io/govpp.git/adapter/mock"
 	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/memif"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/memif"
+	"git.fd.io/govpp.git/binapi/vpe"
 )
 
 type testCtx struct {

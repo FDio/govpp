@@ -38,13 +38,7 @@ endif
 VPP_VERSION	= $(shell dpkg-query -f '\${Version}' -W vpp)
 
 VPP_IMG 	?= ligato/vpp-base:latest
-BINAPI_DIR	?= ./examples/binapi
-
-help:
-	@echo "List of make targets:"
-	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
-.DEFAULT = help
+BINAPI_DIR	?= ./binapi
 
 bin:
 	mkdir -p bin
@@ -64,6 +58,7 @@ clean: ## Clean all
 	$(GO) clean -v ./...
 
 test: ## Run unit tests
+	$(GO) version
 	@echo "# running tests"
 	$(GO) test -tags="${GO_BUILD_TAGS}" ./...
 
@@ -79,7 +74,7 @@ install: install-generator install-proxy ## Install all
 
 install-generator: ## Install binapi-generator
 	@echo "# installing binapi-generator ${VERSION}"
-	$(GO) install ${GO_BUILD_ARGS} ./cmd/binapi-generator
+	@$(GO) install ${GO_BUILD_ARGS} ./cmd/binapi-generator
 
 install-proxy: ## Install vpp-proxy
 	@echo "# installing vpp-proxy ${VERSION}"
@@ -107,6 +102,11 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 extras:
 	@make -C extras
 
+help:
+	@echo "List of make targets:"
+	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+.DEFAULT = help
 
 .PHONY: help \
     build cmd examples clean \

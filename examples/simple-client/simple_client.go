@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -26,13 +27,13 @@ import (
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/ip"
+	"git.fd.io/govpp.git/binapi/ip_types"
+	"git.fd.io/govpp.git/binapi/mactime"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
-	"git.fd.io/govpp.git/examples/binapi/mactime"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 var (
@@ -156,6 +157,7 @@ func interfaceDump(ch api.Channel) {
 		}
 		n++
 		fmt.Printf(" - interface #%d: %+v\n", n, msg)
+		marshal(msg)
 	}
 
 	fmt.Println("OK")
@@ -177,6 +179,7 @@ func addIPAddress(ch api.Channel, index interface_types.InterfaceIndex) {
 			Len: 32,
 		},
 	}
+	marshal(req)
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
 	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
@@ -208,6 +211,7 @@ func ipAddressDump(ch api.Channel, index interface_types.InterfaceIndex) {
 			break
 		}
 		fmt.Printf(" - ip address: %+v\n", msg)
+		marshal(msg)
 	}
 
 	fmt.Println("OK")
@@ -242,7 +246,9 @@ func interfaceNotifications(ch api.Channel, index interface_types.InterfaceIndex
 	// receive notifications
 	go func() {
 		for notif := range notifChan {
-			fmt.Printf("incoming event: %+v\n", notif.(*interfaces.SwInterfaceEvent))
+			e := notif.(*interfaces.SwInterfaceEvent)
+			fmt.Printf("incoming event: %+v\n", e)
+			marshal(e)
 		}
 	}()
 
@@ -325,4 +331,13 @@ Loop:
 
 	fmt.Println("OK")
 	fmt.Println()
+}
+
+func marshal(v interface{}) {
+	fmt.Printf("GO: %#v\n", v)
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("JSON: %s\n", b)
 }

@@ -18,93 +18,82 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
+	"strings"
+	"unicode"
 
 	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git/binapigen"
 	"git.fd.io/govpp.git/binapigen/vppapi"
-	"git.fd.io/govpp.git/version"
+	"git.fd.io/govpp.git/internal/version"
 )
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), "Usage: %s [OPTION]... [API]...\n", os.Args[0])
-		fmt.Fprintln(flag.CommandLine.Output(), "Generate code for each API.")
-		fmt.Fprintf(flag.CommandLine.Output(), "Example: %s -output-dir=binapi acl interface l2\n", os.Args[0])
-		fmt.Fprintln(flag.CommandLine.Output())
-		fmt.Fprintln(flag.CommandLine.Output(), "Options:")
-		flag.CommandLine.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "Usage: %s [OPTION] API_FILES\n", os.Args[0])
+		fmt.Fprintln(os.Stderr, "Parse API_FILES and generate Go bindings based on the options given:")
+		flag.PrintDefaults()
 	}
 }
 
 func main() {
 	var (
-		theInputFile = flag.String("input-file", "", "Input VPP API file. (DEPRECATED: Use program arguments to define VPP API files)")
-		theApiDir    = flag.String("input-dir", vppapi.DefaultAPIDir, "Directory with VPP API files.")
-		theOutputDir = flag.String("output-dir", ".", "Output directory where code will be generated.")
+		theApiDir        = flag.String("input-dir", vppapi.DefaultDir, "Input directory containing API files.")
+		theInputFile     = flag.String("input-file", "", "DEPRECATED: Use program arguments to define files to generate.")
+		theOutputDir     = flag.String("output-dir", "binapi", "Output directory where code will be generated.")
+		importPrefix     = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
+		generatorPlugins = flag.String("gen", "rpc", "List of generator plugins to run for files.")
 
-		importPrefix       = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
-		importTypes        = flag.Bool("import-types", true, "Generate packages for imported types.")
-		includeAPIVer      = flag.Bool("include-apiver", true, "Include APIVersion constant for each module.")
-		includeServices    = flag.Bool("include-services", true, "Include RPC service api and client implementation.")
-		includeComments    = flag.Bool("include-comments", false, "Include JSON API source in comments for each object.")
-		includeBinapiNames = flag.Bool("include-binapi-names", true, "Include binary API names in struct tag.")
-		includeVppVersion  = flag.Bool("include-vpp-version", true, "Include version of the VPP that provided input files.")
-
-		debugMode    = flag.Bool("debug", os.Getenv("DEBUG_GOVPP") != "", "Enable debug mode.")
 		printVersion = flag.Bool("version", false, "Prints version and exits.")
+		debugLog     = flag.Bool("debug", false, "Enable verbose logging.")
 	)
 	flag.Parse()
+
 	if *printVersion {
 		fmt.Fprintln(os.Stdout, version.Info())
 		os.Exit(0)
 	}
-	if flag.NArg() == 1 && flag.Arg(0) == "version" {
-		fmt.Fprintln(os.Stdout, version.Verbose())
-		os.Exit(0)
+
+	if *debugLog {
+		logrus.SetLevel(logrus.DebugLevel)
 	}
 
-	// prepare options
-	var opts binapigen.Options
+	var filesToGenerate []string
 	if *theInputFile != "" {
 		if flag.NArg() > 0 {
 			fmt.Fprintln(os.Stderr, "input-file cannot be combined with files to generate in arguments")
 			os.Exit(1)
 		}
-		opts.FilesToGenerate = append(opts.FilesToGenerate, *theInputFile)
+		filesToGenerate = append(filesToGenerate, *theInputFile)
 	} else {
-		opts.FilesToGenerate = append(opts.FilesToGenerate, flag.Args()...)
-	}
-	if ver := os.Getenv("VPP_API_VERSION"); ver != "" {
-		// use version from env var if set
-		opts.VPPVersion = ver
-	} else {
-		opts.VPPVersion = ResolveVppVersion(*theApiDir)
-	}
-	opts.IncludeAPIVersion = *includeAPIVer
-	opts.IncludeComments = *includeComments
-	opts.IncludeBinapiNames = *includeBinapiNames
-	opts.IncludeServices = *includeServices
-	opts.IncludeVppVersion = *includeVppVersion
-	opts.ImportPrefix = *importPrefix
-	opts.ImportTypes = *importTypes
-
-	if *debugMode {
-		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Debug("debug mode enabled")
+		filesToGenerate = append(filesToGenerate, flag.Args()...)
 	}
 
+	opts := binapigen.Options{
+		ImportPrefix: *importPrefix,
+		OutputDir:    *theOutputDir,
+	}
+	if opts.OutputDir == "binapi" {
+		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {
+			opts.OutputDir = "."
+		}
+	}
 	apiDir := *theApiDir
-	outputDir := *theOutputDir
+	genPlugins := strings.FieldsFunc(*generatorPlugins, func(c rune) bool {
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c)
+	})
 
-	binapigen.Run(apiDir, opts, func(g *binapigen.Generator) error {
-		for _, file := range g.Files {
+	binapigen.Run(apiDir, filesToGenerate, opts, func(gen *binapigen.Generator) error {
+		for _, file := range gen.Files {
 			if !file.Generate {
 				continue
 			}
-			binapigen.GenerateBinapi(g, file, outputDir)
-			if g.IncludeServices && file.Service != nil {
-				binapigen.GenerateRPC(g, file, outputDir)
+			binapigen.GenerateAPI(gen, file)
+			for _, p := range genPlugins {
+				if err := binapigen.RunPlugin(p, gen, file); err != nil {
+					return err
+				}
 			}
 		}
 		return nil

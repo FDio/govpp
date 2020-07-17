@@ -15,43 +15,35 @@
 package binapigen
 
 import (
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
 	"os"
-	"strings"
 	"testing"
 
 	. "github.com/onsi/gomega"
 
+	"git.fd.io/govpp.git/binapi/ip_types"
 	"git.fd.io/govpp.git/binapigen/vppapi"
 )
 
-const testOutputDir = "test_output_directory"
+const testOutputDir = "test_output_dir"
 
-func GenerateFromFile(file, outputDir string, opts Options) error {
+func GenerateFromFile(file string, opts Options) error {
 	apifile, err := vppapi.ParseFile(file)
 	if err != nil {
 		return err
 	}
-
-	g, err := New(opts, []*vppapi.File{apifile})
+	gen, err := New(opts, []*vppapi.File{apifile}, nil)
 	if err != nil {
 		return err
 	}
-	for _, file := range g.Files {
+	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
 		}
-		GenerateBinapi(g, file, outputDir)
-		if file.Service != nil {
-			GenerateRPC(g, file, outputDir)
-		}
+		GenerateAPI(gen, file)
 	}
-
-	if err = g.Generate(); err != nil {
+	if err = gen.Generate(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -61,7 +53,8 @@ func TestGenerateFromFile(t *testing.T) {
 	// remove directory created during test
 	defer os.RemoveAll(testOutputDir)
 
-	err := GenerateFromFile("vppapi/testdata/acl.api.json", testOutputDir, Options{FilesToGenerate: []string{"acl"}})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/acl.api.json", opts)
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(testOutputDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -72,7 +65,8 @@ func TestGenerateFromFile(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("vppapi/testdata/nonexisting.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/nonexisting.json", opts)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
@@ -80,7 +74,8 @@ func TestGenerateFromFileInputError(t *testing.T) {
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", opts)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
@@ -96,139 +91,23 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		os.RemoveAll(testOutputDir)
 	}()
 
-	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", opts)
 	Expect(err).Should(HaveOccurred())
 }
 
-func TestGeneratedParseAddress(t *testing.T) {
+func TestAddress(t *testing.T) {
 	RegisterTestingT(t)
 
-	var data = []struct {
-		input  string
-		result ip_types.Address
-	}{
-		{"192.168.0.1", ip_types.Address{
-			Af: ip_types.ADDRESS_IP4,
-			Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
-		}},
-		{"aac1:0:ab45::", ip_types.Address{
-			Af: ip_types.ADDRESS_IP6,
-			Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-		}},
-	}
+	addr := ip_types.AddressUnionIP4(ip_types.IP4Address{10, 20, 0, 1})
+	t.Logf("addr: %v (%#v)", addr, addr)
 
-	for _, entry := range data {
-		t.Run(entry.input, func(t *testing.T) {
-			parsedAddress, err := ip_types.ParseAddress(entry.input)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(parsedAddress).To(Equal(entry.result))
+	ip4 := addr.GetIP4()
+	t.Logf("ip4: %v", ip4)
+	addr.SetIP4(ip_types.IP4Address{192, 168, 1, 1})
+	t.Logf("ip4: %v", addr.GetIP4())
 
-			originAddress := parsedAddress.ToString()
-			Expect(originAddress).To(Equal(entry.input))
-		})
-	}
-}
-
-func TestGeneratedParseAddressError(t *testing.T) {
-	RegisterTestingT(t)
-
-	_, err := ip_types.ParseAddress("malformed_ip")
-	Expect(err).Should(HaveOccurred())
-}
-
-func TestGeneratedParsePrefix(t *testing.T) {
-	RegisterTestingT(t)
-
-	var data = []struct {
-		input  string
-		result ip_types.Prefix
-	}{
-		{"192.168.0.1/24", ip_types.Prefix{
-			Address: ip_types.Address{
-				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
-			},
-			Len: 24,
-		}},
-		{"192.168.0.1", ip_types.Prefix{
-			Address: ip_types.Address{
-				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 0, 1}),
-			},
-			Len: 32,
-		}},
-		{"aac1:0:ab45::/96", ip_types.Prefix{
-			Address: ip_types.Address{
-				Af: ip_types.ADDRESS_IP6,
-				Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-			},
-			Len: 96,
-		}},
-		{"aac1:0:ab45::", ip_types.Prefix{
-			Address: ip_types.Address{
-				Af: ip_types.ADDRESS_IP6,
-				Un: ip_types.AddressUnionIP6(ip_types.IP6Address{170, 193, 0, 0, 171, 69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}),
-			},
-			Len: 128,
-		}},
-	}
-
-	for _, entry := range data {
-		t.Run(entry.input, func(t *testing.T) {
-			parsedAddress, err := ip_types.ParsePrefix(entry.input)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(parsedAddress).To(Equal(entry.result))
-
-			// Parsed IP without prefix receives a default one
-			// so the input data must be adjusted
-			if entry.result.Address.Af == ip_types.ADDRESS_IP4 && !strings.Contains(entry.input, "/") {
-				entry.input = entry.input + "/32"
-			}
-			if entry.result.Address.Af == ip_types.ADDRESS_IP6 && !strings.Contains(entry.input, "/") {
-				entry.input = entry.input + "/128"
-			}
-			originAddress := parsedAddress.ToString()
-			Expect(originAddress).To(Equal(entry.input))
-		})
-	}
-}
-
-func TestGeneratedParsePrefixError(t *testing.T) {
-	RegisterTestingT(t)
-
-	_, err := ip_types.ParsePrefix("malformed_ip")
-	Expect(err).Should(HaveOccurred())
-}
-
-func TestGeneratedParseMAC(t *testing.T) {
-	RegisterTestingT(t)
-
-	var data = []struct {
-		input  string
-		result interfaces.MacAddress
-	}{
-		{"b7:b9:bb:a1:5c:af", interfaces.MacAddress{183, 185, 187, 161, 92, 175}},
-		{"47:4b:c7:3e:06:c8", interfaces.MacAddress{71, 75, 199, 62, 6, 200}},
-		{"a7:cc:9f:10:18:e3", interfaces.MacAddress{167, 204, 159, 16, 24, 227}},
-	}
-
-	for _, entry := range data {
-		t.Run(entry.input, func(t *testing.T) {
-			parsedMac, err := interfaces.ParseMAC(entry.input)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(parsedMac).To(Equal(entry.result))
-
-			originAddress := parsedMac.ToString()
-			Expect(originAddress).To(Equal(entry.input))
-		})
-	}
-}
-
-func TestGeneratedParseMACError(t *testing.T) {
-	RegisterTestingT(t)
-
-	_, err := interfaces.ParseMAC("malformed_mac")
-	Expect(err).Should(HaveOccurred())
+	Expect(addr.GetIP4()).To(Equal(ip_types.IP4Address{192, 168, 1, 1}))
 }
 
 /*func TestGetContext(t *testing.T) {
@@ -280,7 +159,7 @@ func TestGetContextInterfaceJson(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	err = generateFileBinapi(testCtx, writer)
+	err = GenerateFileBinapi(testCtx, writer)
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
@@ -306,7 +185,7 @@ func TestGenerateMessageType(t *testing.T) {
 	writer := bufio.NewWriter(outFile)
 
 	for _, msg := range testCtx.file.Messages {
-		generateMessage(testCtx, writer, &msg)
+		genMessage(testCtx, writer, &msg)
 		Expect(writer.Buffered()).ToNot(BeZero())
 	}
 }*/
@@ -335,7 +214,7 @@ func TestGenerateMessageType(t *testing.T) {
 	for i := 0; i < types.Len(); i++ {
 		typ := types.At(i)
 		Expect(writer.Buffered()).To(BeZero())
-		err := generateMessage(testCtx, writer, typ, false)
+		err := genMessage(testCtx, writer, typ, false)
 		Expect(err).ShouldNot(HaveOccurred())
 		Expect(writer.Buffered()).ToNot(BeZero())
 
@@ -446,7 +325,7 @@ func TestGeneratePackageHeader(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	generatePackageHeader(testCtx, writer, inFile)
+	genPackageComment(testCtx, writer, inFile)
 	Expect(writer.Buffered()).ToNot(BeZero())
 }
 

@@ -19,7 +19,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"git.fd.io/govpp.git/adapter/socketclient/binapi/memclnt"
 	"io"
 	"net"
 	"os"
@@ -32,6 +31,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/binapi/memclnt"
 	"git.fd.io/govpp.git/codec"
 )
 

@@ -16,69 +16,145 @@ package binapigen
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 	"path/filepath"
+	"regexp"
+	"strings"
+
+	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git/binapigen/vppapi"
 )
 
-const (
-	outputFileExt = ".ba.go" // file extension of the Go generated files
-	rpcFileSuffix = "_rpc"   // file name suffix for the RPC services
-)
+type Options struct {
+	OutputDir     string // output directory for generated files
+	ImportPrefix  string // prefix for import paths
+	NoVersionInfo bool   // disables generating version info
+}
 
-func Run(apiDir string, opts Options, f func(*Generator) error) {
-	if err := run(apiDir, opts, f); err != nil {
+func Run(apiDir string, filesToGenerate []string, opts Options, f func(*Generator) error) {
+	if err := run(apiDir, filesToGenerate, opts, f); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
 		os.Exit(1)
 	}
 }
 
-func run(apiDir string, opts Options, f func(*Generator) error) error {
-	// parse API files
+func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generator) error) error {
 	apifiles, err := vppapi.ParseDir(apiDir)
 	if err != nil {
 		return err
 	}
 
-	g, err := New(opts, apifiles)
+	if opts.ImportPrefix == "" {
+		opts.ImportPrefix = resolveImportPath(opts.OutputDir)
+		logrus.Debugf("resolved import prefix: %s", opts.ImportPrefix)
+	}
+
+	gen, err := New(opts, apifiles, filesToGenerate)
 	if err != nil {
 		return err
 	}
 
-	if err := f(g); err != nil {
-		return err
+	gen.vppVersion = vppapi.ResolveVPPVersion(apiDir)
+	if gen.vppVersion == "" {
+		gen.vppVersion = "unknown"
 	}
 
-	if err = g.Generate(); err != nil {
+	if fn == nil {
+		GenerateDefault(gen)
+	} else {
+		if err := fn(gen); err != nil {
+			return err
+		}
+	}
+
+	if err = gen.Generate(); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func GenerateBinapi(gen *Generator, file *File, outputDir string) *GenFile {
-	packageDir := filepath.Join(outputDir, file.PackageName)
-	filename := filepath.Join(packageDir, file.PackageName+outputFileExt)
-
-	g := gen.NewGenFile(filename)
-	g.file = file
-	g.outputDir = outputDir
-
-	generateFileBinapi(g, &g.buf)
-
-	return g
+func GenerateDefault(gen *Generator) {
+	for _, file := range gen.Files {
+		if !file.Generate {
+			continue
+		}
+		GenerateAPI(gen, file)
+		GenerateRPC(gen, file)
+	}
 }
 
-func GenerateRPC(gen *Generator, file *File, outputDir string) *GenFile {
-	packageDir := filepath.Join(outputDir, file.PackageName)
-	filename := filepath.Join(packageDir, file.PackageName+rpcFileSuffix+outputFileExt)
+var Logger = logrus.New()
 
-	g := gen.NewGenFile(filename)
-	g.file = file
-	g.outputDir = outputDir
+func init() {
+	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
+		Logger.SetLevel(logrus.DebugLevel)
+		logrus.SetLevel(logrus.DebugLevel)
+	} else if debug != "" {
+		Logger.SetLevel(logrus.InfoLevel)
+	} else {
+		Logger.SetLevel(logrus.WarnLevel)
+	}
+}
 
-	generateFileRPC(g, &g.buf)
+func logf(f string, v ...interface{}) {
+	Logger.Debugf(f, v...)
+}
 
-	return g
+func resolveImportPath(dir string) string {
+	absPath, err := filepath.Abs(dir)
+	if err != nil {
+		panic(err)
+	}
+	modRoot := findGoModuleRoot(absPath)
+	if modRoot == "" {
+		logrus.Fatalf("module root not found at: %s", absPath)
+	}
+	modPath := findModulePath(path.Join(modRoot, "go.mod"))
+	if modPath == "" {
+		logrus.Fatalf("module path not found")
+	}
+	relDir, err := filepath.Rel(modRoot, absPath)
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(modPath, relDir)
+}
+
+func findGoModuleRoot(dir string) (root string) {
+	if dir == "" {
+		panic("dir not set")
+	}
+	dir = filepath.Clean(dir)
+	// Look for enclosing go.mod.
+	for {
+		if fi, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil && !fi.IsDir() {
+			return dir
+		}
+		d := filepath.Dir(dir)
+		if d == dir {
+			break
+		}
+		dir = d
+	}
+	return ""
+}
+
+var (
+	modulePathRE = regexp.MustCompile(`module[ \t]+([^ \t\r\n]+)`)
+)
+
+func findModulePath(file string) string {
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		return ""
+	}
+	m := modulePathRE.FindSubmatch(data)
+	if m == nil {
+		return ""
+	}
+	return string(m[1])
 }

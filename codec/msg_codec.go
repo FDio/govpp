@@ -15,6 +15,7 @@
 package codec
 
 import (
+	"encoding/binary"
 	"errors"
 	"fmt"
 
@@ -22,30 +23,6 @@ import (
 )
 
 var DefaultCodec = new(MsgCodec)
-
-// VppRequestHeader struct contains header fields implemented by all VPP requests.
-type VppRequestHeader struct {
-	VlMsgID     uint16
-	ClientIndex uint32
-	Context     uint32
-}
-
-// VppReplyHeader struct contains header fields implemented by all VPP replies.
-type VppReplyHeader struct {
-	VlMsgID uint16
-	Context uint32
-}
-
-// VppEventHeader struct contains header fields implemented by all VPP events.
-type VppEventHeader struct {
-	VlMsgID     uint16
-	ClientIndex uint32
-}
-
-// VppOtherHeader struct contains header fields implemented by other VPP messages (not requests nor replies).
-type VppOtherHeader struct {
-	VlMsgID uint16
-}
 
 // MsgCodec provides encoding and decoding functionality of `api.Message` structs into/from
 // binary format as accepted by VPP.
@@ -126,9 +103,9 @@ func (*MsgCodec) DecodeMsgContext(data []byte, msg api.Message) (context uint32,
 
 	switch msg.GetMessageType() {
 	case api.RequestMessage:
-		return order.Uint32(data[6:10]), nil
+		return binary.BigEndian.Uint32(data[6:10]), nil
 	case api.ReplyMessage:
-		return order.Uint32(data[2:6]), nil
+		return binary.BigEndian.Uint32(data[2:6]), nil
 	}
 
 	return 0, nil
