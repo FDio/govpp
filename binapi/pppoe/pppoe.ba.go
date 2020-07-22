@@ -47,11 +47,10 @@ func (*PppoeAddDelSession) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PppoeAddDelSession) Size() int {
+func (m *PppoeAddDelSession) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 2      // m.SessionID
 	size += 1      // m.ClientIP.Af
@@ -61,17 +60,15 @@ func (m *PppoeAddDelSession) Size() int {
 	return size
 }
 func (m *PppoeAddDelSession) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint16(uint16(m.SessionID))
+	buf.EncodeUint16(m.SessionID)
 	buf.EncodeUint8(uint8(m.ClientIP.Af))
-	buf.EncodeBytes(m.ClientIP.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.DecapVrfID))
+	buf.EncodeBytes(m.ClientIP.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.DecapVrfID)
 	buf.EncodeBytes(m.ClientMac[:], 6)
 	return buf.Bytes(), nil
 }
@@ -99,29 +96,26 @@ func (*PppoeAddDelSessionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PppoeAddDelSessionReply) Size() int {
+func (m *PppoeAddDelSessionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *PppoeAddDelSessionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *PppoeAddDelSessionReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -144,11 +138,10 @@ func (*PppoeSessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PppoeSessionDetails) Size() int {
+func (m *PppoeSessionDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 2      // m.SessionID
 	size += 1      // m.ClientIP.Af
@@ -160,18 +153,16 @@ func (m *PppoeSessionDetails) Size() int {
 	return size
 }
 func (m *PppoeSessionDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint16(uint16(m.SessionID))
+	buf.EncodeUint16(m.SessionID)
 	buf.EncodeUint8(uint8(m.ClientIP.Af))
-	buf.EncodeBytes(m.ClientIP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.ClientIP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.EncapIfIndex))
-	buf.EncodeUint32(uint32(m.DecapVrfID))
+	buf.EncodeUint32(m.DecapVrfID)
 	buf.EncodeBytes(m.LocalMac[:], 6)
 	buf.EncodeBytes(m.ClientMac[:], 6)
 	return buf.Bytes(), nil
@@ -201,21 +192,18 @@ func (*PppoeSessionDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PppoeSessionDump) Size() int {
+func (m *PppoeSessionDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *PppoeSessionDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

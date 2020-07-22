@@ -87,8 +87,10 @@ func fieldActualType(field *Field) (actual string) {
 		actual = field.TypeAlias.Type
 	case field.TypeEnum != nil:
 		actual = field.TypeEnum.Type
+	default:
+		actual = field.Type
 	}
-	return field.Type
+	return
 }
 
 func fieldGoType(g *GenFile, field *Field) string {

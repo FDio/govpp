@@ -43,11 +43,10 @@ func (*TLSOpensslSetEngine) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TLSOpensslSetEngine) Size() int {
+func (m *TLSOpensslSetEngine) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.AsyncEnable
 	size += 1 * 64 // m.Engine
 	size += 1 * 64 // m.Algorithm
@@ -55,24 +54,25 @@ func (m *TLSOpensslSetEngine) Size() int {
 	return size
 }
 func (m *TLSOpensslSetEngine) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.AsyncEnable))
-	buf.EncodeBytes(m.Engine[:], 64)
-	buf.EncodeBytes(m.Algorithm[:], 64)
-	buf.EncodeBytes(m.Ciphers[:], 64)
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.AsyncEnable)
+	buf.EncodeBytes(m.Engine, 64)
+	buf.EncodeBytes(m.Algorithm, 64)
+	buf.EncodeBytes(m.Ciphers, 64)
 	return buf.Bytes(), nil
 }
 func (m *TLSOpensslSetEngine) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.AsyncEnable = buf.DecodeUint32()
-	copy(m.Engine[:], buf.DecodeBytes(64))
-	copy(m.Algorithm[:], buf.DecodeBytes(64))
-	copy(m.Ciphers[:], buf.DecodeBytes(64))
+	m.Engine = make([]byte, 64)
+	copy(m.Engine, buf.DecodeBytes(len(m.Engine)))
+	m.Algorithm = make([]byte, 64)
+	copy(m.Algorithm, buf.DecodeBytes(len(m.Algorithm)))
+	m.Ciphers = make([]byte, 64)
+	copy(m.Ciphers, buf.DecodeBytes(len(m.Ciphers)))
 	return nil
 }
 
@@ -88,27 +88,24 @@ func (*TLSOpensslSetEngineReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TLSOpensslSetEngineReply) Size() int {
+func (m *TLSOpensslSetEngineReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TLSOpensslSetEngineReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TLSOpensslSetEngineReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -82,11 +82,10 @@ func (*L2tpv3CreateTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2tpv3CreateTunnel) Size() int {
+func (m *L2tpv3CreateTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.ClientAddress.Af
 	size += 1 * 16 // m.ClientAddress.Un
 	size += 1      // m.OurAddress.Af
@@ -100,22 +99,20 @@ func (m *L2tpv3CreateTunnel) Size() int {
 	return size
 }
 func (m *L2tpv3CreateTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.ClientAddress.Af))
-	buf.EncodeBytes(m.ClientAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.ClientAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.OurAddress.Af))
-	buf.EncodeBytes(m.OurAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.LocalSessionID))
-	buf.EncodeUint32(uint32(m.RemoteSessionID))
-	buf.EncodeUint64(uint64(m.LocalCookie))
-	buf.EncodeUint64(uint64(m.RemoteCookie))
+	buf.EncodeBytes(m.OurAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.LocalSessionID)
+	buf.EncodeUint32(m.RemoteSessionID)
+	buf.EncodeUint64(m.LocalCookie)
+	buf.EncodeUint64(m.RemoteCookie)
 	buf.EncodeBool(m.L2SublayerPresent)
-	buf.EncodeUint32(uint32(m.EncapVrfID))
+	buf.EncodeUint32(m.EncapVrfID)
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3CreateTunnel) Unmarshal(b []byte) error {
@@ -146,29 +143,26 @@ func (*L2tpv3CreateTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2tpv3CreateTunnelReply) Size() int {
+func (m *L2tpv3CreateTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *L2tpv3CreateTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3CreateTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -188,22 +182,19 @@ func (*L2tpv3InterfaceEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2tpv3InterfaceEnableDisable) Size() int {
+func (m *L2tpv3InterfaceEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *L2tpv3InterfaceEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableDisable)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -229,27 +220,24 @@ func (*L2tpv3InterfaceEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2tpv3InterfaceEnableDisableReply) Size() int {
+func (m *L2tpv3InterfaceEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2tpv3InterfaceEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3InterfaceEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -265,21 +253,18 @@ func (*L2tpv3SetLookupKey) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2tpv3SetLookupKey) Size() int {
+func (m *L2tpv3SetLookupKey) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Key
 	return size
 }
 func (m *L2tpv3SetLookupKey) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Key))
 	return buf.Bytes(), nil
 }
@@ -301,27 +286,24 @@ func (*L2tpv3SetLookupKeyReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2tpv3SetLookupKeyReply) Size() int {
+func (m *L2tpv3SetLookupKeyReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2tpv3SetLookupKeyReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3SetLookupKeyReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -339,26 +321,23 @@ func (*L2tpv3SetTunnelCookies) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2tpv3SetTunnelCookies) Size() int {
+func (m *L2tpv3SetTunnelCookies) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 8 // m.NewLocalCookie
 	size += 8 // m.NewRemoteCookie
 	return size
 }
 func (m *L2tpv3SetTunnelCookies) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint64(uint64(m.NewLocalCookie))
-	buf.EncodeUint64(uint64(m.NewRemoteCookie))
+	buf.EncodeUint64(m.NewLocalCookie)
+	buf.EncodeUint64(m.NewRemoteCookie)
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3SetTunnelCookies) Unmarshal(b []byte) error {
@@ -381,27 +360,24 @@ func (*L2tpv3SetTunnelCookiesReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2tpv3SetTunnelCookiesReply) Size() int {
+func (m *L2tpv3SetTunnelCookiesReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2tpv3SetTunnelCookiesReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2tpv3SetTunnelCookiesReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -425,11 +401,10 @@ func (*SwIfL2tpv3TunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwIfL2tpv3TunnelDetails) Size() int {
+func (m *SwIfL2tpv3TunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 64     // m.InterfaceName
 	size += 1      // m.ClientAddress.Af
@@ -444,28 +419,26 @@ func (m *SwIfL2tpv3TunnelDetails) Size() int {
 	return size
 }
 func (m *SwIfL2tpv3TunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.InterfaceName, 64)
 	buf.EncodeUint8(uint8(m.ClientAddress.Af))
-	buf.EncodeBytes(m.ClientAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.ClientAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.OurAddress.Af))
-	buf.EncodeBytes(m.OurAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.LocalSessionID))
-	buf.EncodeUint32(uint32(m.RemoteSessionID))
+	buf.EncodeBytes(m.OurAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.LocalSessionID)
+	buf.EncodeUint32(m.RemoteSessionID)
 	for i := 0; i < 2; i++ {
 		var x uint64
 		if i < len(m.LocalCookie) {
 			x = uint64(m.LocalCookie[i])
 		}
-		buf.EncodeUint64(uint64(x))
+		buf.EncodeUint64(x)
 	}
-	buf.EncodeUint64(uint64(m.RemoteCookie))
+	buf.EncodeUint64(m.RemoteCookie)
 	buf.EncodeBool(m.L2SublayerPresent)
 	return buf.Bytes(), nil
 }
@@ -498,20 +471,17 @@ func (*SwIfL2tpv3TunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwIfL2tpv3TunnelDump) Size() int {
+func (m *SwIfL2tpv3TunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SwIfL2tpv3TunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SwIfL2tpv3TunnelDump) Unmarshal(b []byte) error {

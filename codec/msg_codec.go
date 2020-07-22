@@ -24,6 +24,16 @@ import (
 
 var DefaultCodec = new(MsgCodec)
 
+func EncodeMsg(msg api.Message, msgID uint16) (data []byte, err error) {
+	return DefaultCodec.EncodeMsg(msg, msgID)
+}
+func DecodeMsg(data []byte, msg api.Message) (err error) {
+	return DefaultCodec.DecodeMsg(data, msg)
+}
+func DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error) {
+	return DefaultCodec.DecodeMsgContext(data, msg)
+}
+
 // MsgCodec provides encoding and decoding functionality of `api.Message` structs into/from
 // binary format as accepted by VPP.
 type MsgCodec struct{}

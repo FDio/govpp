@@ -109,11 +109,10 @@ func (*IpsecBackendDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecBackendDetails) Size() int {
+func (m *IpsecBackendDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 128 // m.Name
 	size += 4   // m.Protocol
 	size += 1   // m.Index
@@ -121,15 +120,13 @@ func (m *IpsecBackendDetails) Size() int {
 	return size
 }
 func (m *IpsecBackendDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 128)
 	buf.EncodeUint32(uint32(m.Protocol))
-	buf.EncodeUint8(uint8(m.Index))
+	buf.EncodeUint8(m.Index)
 	buf.EncodeBool(m.Active)
 	return buf.Bytes(), nil
 }
@@ -152,20 +149,17 @@ func (*IpsecBackendDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecBackendDump) Size() int {
+func (m *IpsecBackendDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpsecBackendDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpsecBackendDump) Unmarshal(b []byte) error {
@@ -186,26 +180,23 @@ func (*IpsecInterfaceAddDelSpd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecInterfaceAddDelSpd) Size() int {
+func (m *IpsecInterfaceAddDelSpd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	size += 4 // m.SpdID
 	return size
 }
 func (m *IpsecInterfaceAddDelSpd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.SpdID))
+	buf.EncodeUint32(m.SpdID)
 	return buf.Bytes(), nil
 }
 func (m *IpsecInterfaceAddDelSpd) Unmarshal(b []byte) error {
@@ -230,27 +221,24 @@ func (*IpsecInterfaceAddDelSpdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecInterfaceAddDelSpdReply) Size() int {
+func (m *IpsecInterfaceAddDelSpdReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecInterfaceAddDelSpdReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecInterfaceAddDelSpdReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -272,11 +260,10 @@ func (*IpsecSaDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSaDetails) Size() int {
+func (m *IpsecSaDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4       // m.Entry.SadID
 	size += 4       // m.Entry.Spi
 	size += 4       // m.Entry.Protocol
@@ -304,36 +291,34 @@ func (m *IpsecSaDetails) Size() int {
 	return size
 }
 func (m *IpsecSaDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Entry.SadID))
-	buf.EncodeUint32(uint32(m.Entry.Spi))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Entry.SadID)
+	buf.EncodeUint32(m.Entry.Spi)
 	buf.EncodeUint32(uint32(m.Entry.Protocol))
 	buf.EncodeUint32(uint32(m.Entry.CryptoAlgorithm))
-	buf.EncodeUint8(uint8(m.Entry.CryptoKey.Length))
-	buf.EncodeBytes(m.Entry.CryptoKey.Data[:], 128)
+	buf.EncodeUint8(m.Entry.CryptoKey.Length)
+	buf.EncodeBytes(m.Entry.CryptoKey.Data, 128)
 	buf.EncodeUint32(uint32(m.Entry.IntegrityAlgorithm))
-	buf.EncodeUint8(uint8(m.Entry.IntegrityKey.Length))
-	buf.EncodeBytes(m.Entry.IntegrityKey.Data[:], 128)
+	buf.EncodeUint8(m.Entry.IntegrityKey.Length)
+	buf.EncodeBytes(m.Entry.IntegrityKey.Data, 128)
 	buf.EncodeUint32(uint32(m.Entry.Flags))
 	buf.EncodeUint8(uint8(m.Entry.TunnelSrc.Af))
-	buf.EncodeBytes(m.Entry.TunnelSrc.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.TunnelSrc.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.TunnelDst.Af))
-	buf.EncodeBytes(m.Entry.TunnelDst.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Entry.TxTableID))
-	buf.EncodeUint32(uint32(m.Entry.Salt))
-	buf.EncodeUint16(uint16(m.Entry.UDPSrcPort))
-	buf.EncodeUint16(uint16(m.Entry.UDPDstPort))
+	buf.EncodeBytes(m.Entry.TunnelDst.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Entry.TxTableID)
+	buf.EncodeUint32(m.Entry.Salt)
+	buf.EncodeUint16(m.Entry.UDPSrcPort)
+	buf.EncodeUint16(m.Entry.UDPDstPort)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Salt))
-	buf.EncodeUint64(uint64(m.SeqOutbound))
-	buf.EncodeUint64(uint64(m.LastSeqInbound))
-	buf.EncodeUint64(uint64(m.ReplayWindow))
-	buf.EncodeUint32(uint32(m.StatIndex))
+	buf.EncodeUint32(m.Salt)
+	buf.EncodeUint64(m.SeqOutbound)
+	buf.EncodeUint64(m.LastSeqInbound)
+	buf.EncodeUint64(m.ReplayWindow)
+	buf.EncodeUint32(m.StatIndex)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSaDetails) Unmarshal(b []byte) error {
@@ -343,10 +328,12 @@ func (m *IpsecSaDetails) Unmarshal(b []byte) error {
 	m.Entry.Protocol = ipsec_types.IpsecProto(buf.DecodeUint32())
 	m.Entry.CryptoAlgorithm = ipsec_types.IpsecCryptoAlg(buf.DecodeUint32())
 	m.Entry.CryptoKey.Length = buf.DecodeUint8()
-	copy(m.Entry.CryptoKey.Data[:], buf.DecodeBytes(128))
+	m.Entry.CryptoKey.Data = make([]byte, 128)
+	copy(m.Entry.CryptoKey.Data, buf.DecodeBytes(len(m.Entry.CryptoKey.Data)))
 	m.Entry.IntegrityAlgorithm = ipsec_types.IpsecIntegAlg(buf.DecodeUint32())
 	m.Entry.IntegrityKey.Length = buf.DecodeUint8()
-	copy(m.Entry.IntegrityKey.Data[:], buf.DecodeBytes(128))
+	m.Entry.IntegrityKey.Data = make([]byte, 128)
+	copy(m.Entry.IntegrityKey.Data, buf.DecodeBytes(len(m.Entry.IntegrityKey.Data)))
 	m.Entry.Flags = ipsec_types.IpsecSadFlags(buf.DecodeUint32())
 	m.Entry.TunnelSrc.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(m.Entry.TunnelSrc.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -377,22 +364,19 @@ func (*IpsecSaDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSaDump) Size() int {
+func (m *IpsecSaDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SaID
 	return size
 }
 func (m *IpsecSaDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SaID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SaID)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSaDump) Unmarshal(b []byte) error {
@@ -414,11 +398,10 @@ func (*IpsecSadEntryAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSadEntryAddDel) Size() int {
+func (m *IpsecSadEntryAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1       // m.IsAdd
 	size += 4       // m.Entry.SadID
 	size += 4       // m.Entry.Spi
@@ -441,31 +424,29 @@ func (m *IpsecSadEntryAddDel) Size() int {
 	return size
 }
 func (m *IpsecSadEntryAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Entry.SadID))
-	buf.EncodeUint32(uint32(m.Entry.Spi))
+	buf.EncodeUint32(m.Entry.SadID)
+	buf.EncodeUint32(m.Entry.Spi)
 	buf.EncodeUint32(uint32(m.Entry.Protocol))
 	buf.EncodeUint32(uint32(m.Entry.CryptoAlgorithm))
-	buf.EncodeUint8(uint8(m.Entry.CryptoKey.Length))
-	buf.EncodeBytes(m.Entry.CryptoKey.Data[:], 128)
+	buf.EncodeUint8(m.Entry.CryptoKey.Length)
+	buf.EncodeBytes(m.Entry.CryptoKey.Data, 128)
 	buf.EncodeUint32(uint32(m.Entry.IntegrityAlgorithm))
-	buf.EncodeUint8(uint8(m.Entry.IntegrityKey.Length))
-	buf.EncodeBytes(m.Entry.IntegrityKey.Data[:], 128)
+	buf.EncodeUint8(m.Entry.IntegrityKey.Length)
+	buf.EncodeBytes(m.Entry.IntegrityKey.Data, 128)
 	buf.EncodeUint32(uint32(m.Entry.Flags))
 	buf.EncodeUint8(uint8(m.Entry.TunnelSrc.Af))
-	buf.EncodeBytes(m.Entry.TunnelSrc.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.TunnelSrc.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.TunnelDst.Af))
-	buf.EncodeBytes(m.Entry.TunnelDst.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Entry.TxTableID))
-	buf.EncodeUint32(uint32(m.Entry.Salt))
-	buf.EncodeUint16(uint16(m.Entry.UDPSrcPort))
-	buf.EncodeUint16(uint16(m.Entry.UDPDstPort))
+	buf.EncodeBytes(m.Entry.TunnelDst.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Entry.TxTableID)
+	buf.EncodeUint32(m.Entry.Salt)
+	buf.EncodeUint16(m.Entry.UDPSrcPort)
+	buf.EncodeUint16(m.Entry.UDPDstPort)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSadEntryAddDel) Unmarshal(b []byte) error {
@@ -476,10 +457,12 @@ func (m *IpsecSadEntryAddDel) Unmarshal(b []byte) error {
 	m.Entry.Protocol = ipsec_types.IpsecProto(buf.DecodeUint32())
 	m.Entry.CryptoAlgorithm = ipsec_types.IpsecCryptoAlg(buf.DecodeUint32())
 	m.Entry.CryptoKey.Length = buf.DecodeUint8()
-	copy(m.Entry.CryptoKey.Data[:], buf.DecodeBytes(128))
+	m.Entry.CryptoKey.Data = make([]byte, 128)
+	copy(m.Entry.CryptoKey.Data, buf.DecodeBytes(len(m.Entry.CryptoKey.Data)))
 	m.Entry.IntegrityAlgorithm = ipsec_types.IpsecIntegAlg(buf.DecodeUint32())
 	m.Entry.IntegrityKey.Length = buf.DecodeUint8()
-	copy(m.Entry.IntegrityKey.Data[:], buf.DecodeBytes(128))
+	m.Entry.IntegrityKey.Data = make([]byte, 128)
+	copy(m.Entry.IntegrityKey.Data, buf.DecodeBytes(len(m.Entry.IntegrityKey.Data)))
 	m.Entry.Flags = ipsec_types.IpsecSadFlags(buf.DecodeUint32())
 	m.Entry.TunnelSrc.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(m.Entry.TunnelSrc.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -505,29 +488,26 @@ func (*IpsecSadEntryAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSadEntryAddDelReply) Size() int {
+func (m *IpsecSadEntryAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.StatIndex
 	return size
 }
 func (m *IpsecSadEntryAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.StatIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatIndex)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSadEntryAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StatIndex = buf.DecodeUint32()
 	return nil
 }
@@ -545,24 +525,21 @@ func (*IpsecSelectBackend) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSelectBackend) Size() int {
+func (m *IpsecSelectBackend) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Protocol
 	size += 1 // m.Index
 	return size
 }
 func (m *IpsecSelectBackend) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Protocol))
-	buf.EncodeUint8(uint8(m.Index))
+	buf.EncodeUint8(m.Index)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSelectBackend) Unmarshal(b []byte) error {
@@ -584,27 +561,24 @@ func (*IpsecSelectBackendReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSelectBackendReply) Size() int {
+func (m *IpsecSelectBackendReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecSelectBackendReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSelectBackendReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -621,24 +595,21 @@ func (*IpsecSpdAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSpdAddDel) Size() int {
+func (m *IpsecSpdAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SpdID
 	return size
 }
 func (m *IpsecSpdAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.SpdID))
+	buf.EncodeUint32(m.SpdID)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdAddDel) Unmarshal(b []byte) error {
@@ -660,27 +631,24 @@ func (*IpsecSpdAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSpdAddDelReply) Size() int {
+func (m *IpsecSpdAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecSpdAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -696,11 +664,10 @@ func (*IpsecSpdDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSpdDetails) Size() int {
+func (m *IpsecSpdDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Entry.SpdID
 	size += 4      // m.Entry.Priority
 	size += 1      // m.Entry.IsOutbound
@@ -722,36 +689,34 @@ func (m *IpsecSpdDetails) Size() int {
 	return size
 }
 func (m *IpsecSpdDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Entry.SpdID))
-	buf.EncodeUint32(uint32(m.Entry.Priority))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Entry.SpdID)
+	buf.EncodeInt32(m.Entry.Priority)
 	buf.EncodeBool(m.Entry.IsOutbound)
-	buf.EncodeUint32(uint32(m.Entry.SaID))
+	buf.EncodeUint32(m.Entry.SaID)
 	buf.EncodeUint32(uint32(m.Entry.Policy))
-	buf.EncodeUint8(uint8(m.Entry.Protocol))
+	buf.EncodeUint8(m.Entry.Protocol)
 	buf.EncodeUint8(uint8(m.Entry.RemoteAddressStart.Af))
-	buf.EncodeBytes(m.Entry.RemoteAddressStart.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.RemoteAddressStart.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.RemoteAddressStop.Af))
-	buf.EncodeBytes(m.Entry.RemoteAddressStop.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.RemoteAddressStop.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.LocalAddressStart.Af))
-	buf.EncodeBytes(m.Entry.LocalAddressStart.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.LocalAddressStart.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.LocalAddressStop.Af))
-	buf.EncodeBytes(m.Entry.LocalAddressStop.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint16(uint16(m.Entry.RemotePortStart))
-	buf.EncodeUint16(uint16(m.Entry.RemotePortStop))
-	buf.EncodeUint16(uint16(m.Entry.LocalPortStart))
-	buf.EncodeUint16(uint16(m.Entry.LocalPortStop))
+	buf.EncodeBytes(m.Entry.LocalAddressStop.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint16(m.Entry.RemotePortStart)
+	buf.EncodeUint16(m.Entry.RemotePortStop)
+	buf.EncodeUint16(m.Entry.LocalPortStart)
+	buf.EncodeUint16(m.Entry.LocalPortStop)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Entry.SpdID = buf.DecodeUint32()
-	m.Entry.Priority = int32(buf.DecodeUint32())
+	m.Entry.Priority = buf.DecodeInt32()
 	m.Entry.IsOutbound = buf.DecodeBool()
 	m.Entry.SaID = buf.DecodeUint32()
 	m.Entry.Policy = IpsecSpdAction(buf.DecodeUint32())
@@ -784,24 +749,21 @@ func (*IpsecSpdDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSpdDump) Size() int {
+func (m *IpsecSpdDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SpdID
 	size += 4 // m.SaID
 	return size
 }
 func (m *IpsecSpdDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SpdID))
-	buf.EncodeUint32(uint32(m.SaID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SpdID)
+	buf.EncodeUint32(m.SaID)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdDump) Unmarshal(b []byte) error {
@@ -824,11 +786,10 @@ func (*IpsecSpdEntryAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSpdEntryAddDel) Size() int {
+func (m *IpsecSpdEntryAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.Entry.SpdID
 	size += 4      // m.Entry.Priority
@@ -851,38 +812,36 @@ func (m *IpsecSpdEntryAddDel) Size() int {
 	return size
 }
 func (m *IpsecSpdEntryAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Entry.SpdID))
-	buf.EncodeUint32(uint32(m.Entry.Priority))
+	buf.EncodeUint32(m.Entry.SpdID)
+	buf.EncodeInt32(m.Entry.Priority)
 	buf.EncodeBool(m.Entry.IsOutbound)
-	buf.EncodeUint32(uint32(m.Entry.SaID))
+	buf.EncodeUint32(m.Entry.SaID)
 	buf.EncodeUint32(uint32(m.Entry.Policy))
-	buf.EncodeUint8(uint8(m.Entry.Protocol))
+	buf.EncodeUint8(m.Entry.Protocol)
 	buf.EncodeUint8(uint8(m.Entry.RemoteAddressStart.Af))
-	buf.EncodeBytes(m.Entry.RemoteAddressStart.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.RemoteAddressStart.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.RemoteAddressStop.Af))
-	buf.EncodeBytes(m.Entry.RemoteAddressStop.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.RemoteAddressStop.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.LocalAddressStart.Af))
-	buf.EncodeBytes(m.Entry.LocalAddressStart.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.LocalAddressStart.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.LocalAddressStop.Af))
-	buf.EncodeBytes(m.Entry.LocalAddressStop.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint16(uint16(m.Entry.RemotePortStart))
-	buf.EncodeUint16(uint16(m.Entry.RemotePortStop))
-	buf.EncodeUint16(uint16(m.Entry.LocalPortStart))
-	buf.EncodeUint16(uint16(m.Entry.LocalPortStop))
+	buf.EncodeBytes(m.Entry.LocalAddressStop.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint16(m.Entry.RemotePortStart)
+	buf.EncodeUint16(m.Entry.RemotePortStop)
+	buf.EncodeUint16(m.Entry.LocalPortStart)
+	buf.EncodeUint16(m.Entry.LocalPortStop)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdEntryAddDel) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.IsAdd = buf.DecodeBool()
 	m.Entry.SpdID = buf.DecodeUint32()
-	m.Entry.Priority = int32(buf.DecodeUint32())
+	m.Entry.Priority = buf.DecodeInt32()
 	m.Entry.IsOutbound = buf.DecodeBool()
 	m.Entry.SaID = buf.DecodeUint32()
 	m.Entry.Policy = IpsecSpdAction(buf.DecodeUint32())
@@ -915,29 +874,26 @@ func (*IpsecSpdEntryAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSpdEntryAddDelReply) Size() int {
+func (m *IpsecSpdEntryAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.StatIndex
 	return size
 }
 func (m *IpsecSpdEntryAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.StatIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatIndex)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdEntryAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StatIndex = buf.DecodeUint32()
 	return nil
 }
@@ -955,23 +911,20 @@ func (*IpsecSpdInterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSpdInterfaceDetails) Size() int {
+func (m *IpsecSpdInterfaceDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SpdIndex
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpsecSpdInterfaceDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SpdIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SpdIndex)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -995,24 +948,21 @@ func (*IpsecSpdInterfaceDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSpdInterfaceDump) Size() int {
+func (m *IpsecSpdInterfaceDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SpdIndex
 	size += 1 // m.SpdIndexValid
 	return size
 }
 func (m *IpsecSpdInterfaceDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SpdIndex))
-	buf.EncodeUint8(uint8(m.SpdIndexValid))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SpdIndex)
+	buf.EncodeUint8(m.SpdIndexValid)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdInterfaceDump) Unmarshal(b []byte) error {
@@ -1035,24 +985,21 @@ func (*IpsecSpdsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecSpdsDetails) Size() int {
+func (m *IpsecSpdsDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SpdID
 	size += 4 // m.Npolicies
 	return size
 }
 func (m *IpsecSpdsDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SpdID))
-	buf.EncodeUint32(uint32(m.Npolicies))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SpdID)
+	buf.EncodeUint32(m.Npolicies)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdsDetails) Unmarshal(b []byte) error {
@@ -1072,20 +1019,17 @@ func (*IpsecSpdsDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecSpdsDump) Size() int {
+func (m *IpsecSpdsDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpsecSpdsDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpsecSpdsDump) Unmarshal(b []byte) error {
@@ -1125,11 +1069,10 @@ func (*IpsecTunnelIfAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecTunnelIfAddDel) Size() int {
+func (m *IpsecTunnelIfAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1       // m.IsAdd
 	size += 1       // m.Esn
 	size += 1       // m.AntiReplay
@@ -1157,36 +1100,34 @@ func (m *IpsecTunnelIfAddDel) Size() int {
 	return size
 }
 func (m *IpsecTunnelIfAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.Esn)
 	buf.EncodeBool(m.AntiReplay)
 	buf.EncodeUint8(uint8(m.LocalIP.Af))
-	buf.EncodeBytes(m.LocalIP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.LocalIP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.RemoteIP.Af))
-	buf.EncodeBytes(m.RemoteIP.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.LocalSpi))
-	buf.EncodeUint32(uint32(m.RemoteSpi))
-	buf.EncodeUint8(uint8(m.CryptoAlg))
-	buf.EncodeUint8(uint8(m.LocalCryptoKeyLen))
-	buf.EncodeBytes(m.LocalCryptoKey[:], 128)
-	buf.EncodeUint8(uint8(m.RemoteCryptoKeyLen))
-	buf.EncodeBytes(m.RemoteCryptoKey[:], 128)
-	buf.EncodeUint8(uint8(m.IntegAlg))
-	buf.EncodeUint8(uint8(m.LocalIntegKeyLen))
-	buf.EncodeBytes(m.LocalIntegKey[:], 128)
-	buf.EncodeUint8(uint8(m.RemoteIntegKeyLen))
-	buf.EncodeBytes(m.RemoteIntegKey[:], 128)
+	buf.EncodeBytes(m.RemoteIP.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.LocalSpi)
+	buf.EncodeUint32(m.RemoteSpi)
+	buf.EncodeUint8(m.CryptoAlg)
+	buf.EncodeUint8(m.LocalCryptoKeyLen)
+	buf.EncodeBytes(m.LocalCryptoKey, 128)
+	buf.EncodeUint8(m.RemoteCryptoKeyLen)
+	buf.EncodeBytes(m.RemoteCryptoKey, 128)
+	buf.EncodeUint8(m.IntegAlg)
+	buf.EncodeUint8(m.LocalIntegKeyLen)
+	buf.EncodeBytes(m.LocalIntegKey, 128)
+	buf.EncodeUint8(m.RemoteIntegKeyLen)
+	buf.EncodeBytes(m.RemoteIntegKey, 128)
 	buf.EncodeBool(m.Renumber)
-	buf.EncodeUint32(uint32(m.ShowInstance))
+	buf.EncodeUint32(m.ShowInstance)
 	buf.EncodeBool(m.UDPEncap)
-	buf.EncodeUint32(uint32(m.TxTableID))
-	buf.EncodeUint32(uint32(m.Salt))
+	buf.EncodeUint32(m.TxTableID)
+	buf.EncodeUint32(m.Salt)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelIfAddDel) Unmarshal(b []byte) error {
@@ -1202,14 +1143,18 @@ func (m *IpsecTunnelIfAddDel) Unmarshal(b []byte) error {
 	m.RemoteSpi = buf.DecodeUint32()
 	m.CryptoAlg = buf.DecodeUint8()
 	m.LocalCryptoKeyLen = buf.DecodeUint8()
-	copy(m.LocalCryptoKey[:], buf.DecodeBytes(128))
+	m.LocalCryptoKey = make([]byte, 128)
+	copy(m.LocalCryptoKey, buf.DecodeBytes(len(m.LocalCryptoKey)))
 	m.RemoteCryptoKeyLen = buf.DecodeUint8()
-	copy(m.RemoteCryptoKey[:], buf.DecodeBytes(128))
+	m.RemoteCryptoKey = make([]byte, 128)
+	copy(m.RemoteCryptoKey, buf.DecodeBytes(len(m.RemoteCryptoKey)))
 	m.IntegAlg = buf.DecodeUint8()
 	m.LocalIntegKeyLen = buf.DecodeUint8()
-	copy(m.LocalIntegKey[:], buf.DecodeBytes(128))
+	m.LocalIntegKey = make([]byte, 128)
+	copy(m.LocalIntegKey, buf.DecodeBytes(len(m.LocalIntegKey)))
 	m.RemoteIntegKeyLen = buf.DecodeUint8()
-	copy(m.RemoteIntegKey[:], buf.DecodeBytes(128))
+	m.RemoteIntegKey = make([]byte, 128)
+	copy(m.RemoteIntegKey, buf.DecodeBytes(len(m.RemoteIntegKey)))
 	m.Renumber = buf.DecodeBool()
 	m.ShowInstance = buf.DecodeUint32()
 	m.UDPEncap = buf.DecodeBool()
@@ -1231,29 +1176,26 @@ func (*IpsecTunnelIfAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecTunnelIfAddDelReply) Size() int {
+func (m *IpsecTunnelIfAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpsecTunnelIfAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelIfAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -1272,26 +1214,23 @@ func (*IpsecTunnelIfSetSa) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecTunnelIfSetSa) Size() int {
+func (m *IpsecTunnelIfSetSa) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.SaID
 	size += 1 // m.IsOutbound
 	return size
 }
 func (m *IpsecTunnelIfSetSa) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.SaID))
-	buf.EncodeUint8(uint8(m.IsOutbound))
+	buf.EncodeUint32(m.SaID)
+	buf.EncodeUint8(m.IsOutbound)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelIfSetSa) Unmarshal(b []byte) error {
@@ -1314,27 +1253,24 @@ func (*IpsecTunnelIfSetSaReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecTunnelIfSetSaReply) Size() int {
+func (m *IpsecTunnelIfSetSaReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecTunnelIfSetSaReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelIfSetSaReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1351,26 +1287,23 @@ func (*IpsecTunnelProtectDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecTunnelProtectDel) Size() int {
+func (m *IpsecTunnelProtectDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1      // m.Nh.Af
 	size += 1 * 16 // m.Nh.Un
 	return size
 }
 func (m *IpsecTunnelProtectDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Nh.Af))
-	buf.EncodeBytes(m.Nh.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Nh.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelProtectDel) Unmarshal(b []byte) error {
@@ -1393,27 +1326,24 @@ func (*IpsecTunnelProtectDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecTunnelProtectDelReply) Size() int {
+func (m *IpsecTunnelProtectDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecTunnelProtectDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelProtectDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1429,11 +1359,10 @@ func (*IpsecTunnelProtectDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecTunnelProtectDetails) Size() int {
+func (m *IpsecTunnelProtectDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                   // m.Tun.SwIfIndex
 	size += 1                   // m.Tun.Nh.Af
 	size += 1 * 16              // m.Tun.Nh.Un
@@ -1443,23 +1372,21 @@ func (m *IpsecTunnelProtectDetails) Size() int {
 	return size
 }
 func (m *IpsecTunnelProtectDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Tun.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Tun.Nh.Af))
-	buf.EncodeBytes(m.Tun.Nh.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Tun.SaOut))
+	buf.EncodeBytes(m.Tun.Nh.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Tun.SaOut)
 	buf.EncodeUint8(uint8(len(m.Tun.SaIn)))
 	for i := 0; i < len(m.Tun.SaIn); i++ {
 		var x uint32
 		if i < len(m.Tun.SaIn) {
 			x = uint32(m.Tun.SaIn[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -1489,21 +1416,18 @@ func (*IpsecTunnelProtectDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecTunnelProtectDump) Size() int {
+func (m *IpsecTunnelProtectDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpsecTunnelProtectDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -1525,11 +1449,10 @@ func (*IpsecTunnelProtectUpdate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpsecTunnelProtectUpdate) Size() int {
+func (m *IpsecTunnelProtectUpdate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                      // m.Tunnel.SwIfIndex
 	size += 1                      // m.Tunnel.Nh.Af
 	size += 1 * 16                 // m.Tunnel.Nh.Un
@@ -1539,23 +1462,21 @@ func (m *IpsecTunnelProtectUpdate) Size() int {
 	return size
 }
 func (m *IpsecTunnelProtectUpdate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Tunnel.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Tunnel.Nh.Af))
-	buf.EncodeBytes(m.Tunnel.Nh.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Tunnel.SaOut))
+	buf.EncodeBytes(m.Tunnel.Nh.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Tunnel.SaOut)
 	buf.EncodeUint8(uint8(len(m.Tunnel.SaIn)))
 	for i := 0; i < len(m.Tunnel.SaIn); i++ {
 		var x uint32
 		if i < len(m.Tunnel.SaIn) {
 			x = uint32(m.Tunnel.SaIn[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -1587,27 +1508,24 @@ func (*IpsecTunnelProtectUpdateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpsecTunnelProtectUpdateReply) Size() int {
+func (m *IpsecTunnelProtectUpdateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpsecTunnelProtectUpdateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpsecTunnelProtectUpdateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

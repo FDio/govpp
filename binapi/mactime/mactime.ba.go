@@ -64,11 +64,10 @@ func (*MactimeAddDelRange) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MactimeAddDelRange) Size() int {
+func (m *MactimeAddDelRange) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.Drop
 	size += 1     // m.Allow
@@ -90,28 +89,26 @@ func (m *MactimeAddDelRange) Size() int {
 	return size
 }
 func (m *MactimeAddDelRange) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.Drop)
 	buf.EncodeBool(m.Allow)
-	buf.EncodeUint8(uint8(m.AllowQuota))
+	buf.EncodeUint8(m.AllowQuota)
 	buf.EncodeBool(m.NoUDP10001)
-	buf.EncodeUint64(uint64(m.DataQuota))
+	buf.EncodeUint64(m.DataQuota)
 	buf.EncodeBytes(m.MacAddress[:], 6)
 	buf.EncodeString(m.DeviceName, 64)
 	buf.EncodeUint32(uint32(len(m.Ranges)))
 	for j0 := 0; j0 < len(m.Ranges); j0++ {
-		var v0 TimeRange
+		var v0 TimeRange // Ranges
 		if j0 < len(m.Ranges) {
 			v0 = m.Ranges[j0]
 		}
-		buf.EncodeFloat64(float64(v0.Start))
-		buf.EncodeFloat64(float64(v0.End))
+		buf.EncodeFloat64(v0.Start)
+		buf.EncodeFloat64(v0.End)
 	}
 	return buf.Bytes(), nil
 }
@@ -126,10 +123,10 @@ func (m *MactimeAddDelRange) Unmarshal(b []byte) error {
 	copy(m.MacAddress[:], buf.DecodeBytes(6))
 	m.DeviceName = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.Ranges = make([]TimeRange, int(m.Count))
+	m.Ranges = make([]TimeRange, m.Count)
 	for j0 := 0; j0 < len(m.Ranges); j0++ {
-		m.Ranges[j0].Start = float64(buf.DecodeFloat64())
-		m.Ranges[j0].End = float64(buf.DecodeFloat64())
+		m.Ranges[j0].Start = buf.DecodeFloat64()
+		m.Ranges[j0].End = buf.DecodeFloat64()
 	}
 	return nil
 }
@@ -146,27 +143,24 @@ func (*MactimeAddDelRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MactimeAddDelRangeReply) Size() int {
+func (m *MactimeAddDelRangeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MactimeAddDelRangeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MactimeAddDelRangeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -189,11 +183,10 @@ func (*MactimeDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MactimeDetails) Size() int {
+func (m *MactimeDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.PoolIndex
 	size += 1 * 6 // m.MacAddress
 	size += 8     // m.DataQuota
@@ -213,26 +206,24 @@ func (m *MactimeDetails) Size() int {
 	return size
 }
 func (m *MactimeDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PoolIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PoolIndex)
 	buf.EncodeBytes(m.MacAddress[:], 6)
-	buf.EncodeUint64(uint64(m.DataQuota))
-	buf.EncodeUint64(uint64(m.DataUsedInRange))
-	buf.EncodeUint32(uint32(m.Flags))
+	buf.EncodeUint64(m.DataQuota)
+	buf.EncodeUint64(m.DataUsedInRange)
+	buf.EncodeUint32(m.Flags)
 	buf.EncodeString(m.DeviceName, 64)
 	buf.EncodeUint32(uint32(len(m.Ranges)))
 	for j0 := 0; j0 < len(m.Ranges); j0++ {
-		var v0 MactimeTimeRange
+		var v0 MactimeTimeRange // Ranges
 		if j0 < len(m.Ranges) {
 			v0 = m.Ranges[j0]
 		}
-		buf.EncodeFloat64(float64(v0.Start))
-		buf.EncodeFloat64(float64(v0.End))
+		buf.EncodeFloat64(v0.Start)
+		buf.EncodeFloat64(v0.End)
 	}
 	return buf.Bytes(), nil
 }
@@ -245,10 +236,10 @@ func (m *MactimeDetails) Unmarshal(b []byte) error {
 	m.Flags = buf.DecodeUint32()
 	m.DeviceName = buf.DecodeString(64)
 	m.Nranges = buf.DecodeUint32()
-	m.Ranges = make([]MactimeTimeRange, int(m.Nranges))
+	m.Ranges = make([]MactimeTimeRange, m.Nranges)
 	for j0 := 0; j0 < len(m.Ranges); j0++ {
-		m.Ranges[j0].Start = float64(buf.DecodeFloat64())
-		m.Ranges[j0].End = float64(buf.DecodeFloat64())
+		m.Ranges[j0].Start = buf.DecodeFloat64()
+		m.Ranges[j0].End = buf.DecodeFloat64()
 	}
 	return nil
 }
@@ -265,22 +256,19 @@ func (*MactimeDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MactimeDump) Size() int {
+func (m *MactimeDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.MyTableEpoch
 	return size
 }
 func (m *MactimeDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MyTableEpoch))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MyTableEpoch)
 	return buf.Bytes(), nil
 }
 func (m *MactimeDump) Unmarshal(b []byte) error {
@@ -302,29 +290,26 @@ func (*MactimeDumpReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MactimeDumpReply) Size() int {
+func (m *MactimeDumpReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.TableEpoch
 	return size
 }
 func (m *MactimeDumpReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.TableEpoch))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.TableEpoch)
 	return buf.Bytes(), nil
 }
 func (m *MactimeDumpReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.TableEpoch = buf.DecodeUint32()
 	return nil
 }
@@ -342,22 +327,19 @@ func (*MactimeEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MactimeEnableDisable) Size() int {
+func (m *MactimeEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *MactimeEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableDisable)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -381,27 +363,24 @@ func (*MactimeEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MactimeEnableDisableReply) Size() int {
+func (m *MactimeEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MactimeEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MactimeEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

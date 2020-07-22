@@ -133,13 +133,13 @@ func EidAddressPrefix(a ip_types.Prefix) (u EidAddress) {
 	return
 }
 func (u *EidAddress) SetPrefix(a ip_types.Prefix) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeUint8(uint8(a.Address.Af))
-	buf.EncodeBytes(a.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(a.Len))
+	buf.EncodeBytes(a.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(a.Len)
 }
 func (u *EidAddress) GetPrefix() (a ip_types.Prefix) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(a.Address.Un.XXX_UnionData[:], buf.DecodeBytes(16))
 	a.Len = buf.DecodeUint8()
@@ -151,11 +151,11 @@ func EidAddressMac(a ethernet_types.MacAddress) (u EidAddress) {
 	return
 }
 func (u *EidAddress) SetMac(a ethernet_types.MacAddress) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeBytes(a[:], 6)
 }
 func (u *EidAddress) GetMac() (a ethernet_types.MacAddress) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	copy(a[:], buf.DecodeBytes(6))
 	return
 }
@@ -165,12 +165,12 @@ func EidAddressNsh(a Nsh) (u EidAddress) {
 	return
 }
 func (u *EidAddress) SetNsh(a Nsh) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
-	buf.EncodeUint32(uint32(a.Spi))
-	buf.EncodeUint8(uint8(a.Si))
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeUint32(a.Spi)
+	buf.EncodeUint8(a.Si)
 }
 func (u *EidAddress) GetNsh() (a Nsh) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Spi = buf.DecodeUint32()
 	a.Si = buf.DecodeUint8()
 	return

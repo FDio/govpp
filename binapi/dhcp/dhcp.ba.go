@@ -219,21 +219,18 @@ func (*DHCP6ClientsEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6ClientsEnableDisable) Size() int {
+func (m *DHCP6ClientsEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	return size
 }
 func (m *DHCP6ClientsEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -257,27 +254,24 @@ func (*DHCP6ClientsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6ClientsEnableDisableReply) Size() int {
+func (m *DHCP6ClientsEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6ClientsEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6ClientsEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -293,27 +287,25 @@ func (*DHCP6DuidLlSet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6DuidLlSet) Size() int {
+func (m *DHCP6DuidLlSet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 10 // m.DuidLl
 	return size
 }
 func (m *DHCP6DuidLlSet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeBytes(m.DuidLl[:], 10)
+	buf := codec.NewBuffer(b)
+	buf.EncodeBytes(m.DuidLl, 10)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6DuidLlSet) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	copy(m.DuidLl[:], buf.DecodeBytes(10))
+	m.DuidLl = make([]byte, 10)
+	copy(m.DuidLl, buf.DecodeBytes(len(m.DuidLl)))
 	return nil
 }
 
@@ -329,27 +321,24 @@ func (*DHCP6DuidLlSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6DuidLlSetReply) Size() int {
+func (m *DHCP6DuidLlSetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6DuidLlSetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6DuidLlSetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -375,11 +364,10 @@ func (*DHCP6PdReplyEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *DHCP6PdReplyEvent) Size() int {
+func (m *DHCP6PdReplyEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PID
 	size += 4 // m.SwIfIndex
 	size += 4 // m.ServerIndex
@@ -404,31 +392,29 @@ func (m *DHCP6PdReplyEvent) Size() int {
 	return size
 }
 func (m *DHCP6PdReplyEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ServerIndex))
+	buf.EncodeUint32(m.ServerIndex)
 	buf.EncodeUint32(uint32(m.MsgType))
-	buf.EncodeUint32(uint32(m.T1))
-	buf.EncodeUint32(uint32(m.T2))
-	buf.EncodeUint16(uint16(m.InnerStatusCode))
-	buf.EncodeUint16(uint16(m.StatusCode))
-	buf.EncodeUint8(uint8(m.Preference))
+	buf.EncodeUint32(m.T1)
+	buf.EncodeUint32(m.T2)
+	buf.EncodeUint16(m.InnerStatusCode)
+	buf.EncodeUint16(m.StatusCode)
+	buf.EncodeUint8(m.Preference)
 	buf.EncodeUint32(uint32(len(m.Prefixes)))
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
-		var v0 DHCP6PdPrefixInfo
+		var v0 DHCP6PdPrefixInfo // Prefixes
 		if j0 < len(m.Prefixes) {
 			v0 = m.Prefixes[j0]
 		}
 		buf.EncodeBytes(v0.Prefix.Address[:], 16)
-		buf.EncodeUint8(uint8(v0.Prefix.Len))
-		buf.EncodeUint32(uint32(v0.ValidTime))
-		buf.EncodeUint32(uint32(v0.PreferredTime))
+		buf.EncodeUint8(v0.Prefix.Len)
+		buf.EncodeUint32(v0.ValidTime)
+		buf.EncodeUint32(v0.PreferredTime)
 	}
 	return buf.Bytes(), nil
 }
@@ -444,7 +430,7 @@ func (m *DHCP6PdReplyEvent) Unmarshal(b []byte) error {
 	m.StatusCode = buf.DecodeUint16()
 	m.Preference = buf.DecodeUint8()
 	m.NPrefixes = buf.DecodeUint32()
-	m.Prefixes = make([]DHCP6PdPrefixInfo, int(m.NPrefixes))
+	m.Prefixes = make([]DHCP6PdPrefixInfo, m.NPrefixes)
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
 		copy(m.Prefixes[j0].Prefix.Address[:], buf.DecodeBytes(16))
 		m.Prefixes[j0].Prefix.Len = buf.DecodeUint8()
@@ -477,11 +463,10 @@ func (*DHCP6PdSendClientMessage) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6PdSendClientMessage) Size() int {
+func (m *DHCP6PdSendClientMessage) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.ServerIndex
 	size += 4 // m.Irt
@@ -507,32 +492,30 @@ func (m *DHCP6PdSendClientMessage) Size() int {
 	return size
 }
 func (m *DHCP6PdSendClientMessage) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ServerIndex))
-	buf.EncodeUint32(uint32(m.Irt))
-	buf.EncodeUint32(uint32(m.Mrt))
-	buf.EncodeUint32(uint32(m.Mrc))
-	buf.EncodeUint32(uint32(m.Mrd))
+	buf.EncodeUint32(m.ServerIndex)
+	buf.EncodeUint32(m.Irt)
+	buf.EncodeUint32(m.Mrt)
+	buf.EncodeUint32(m.Mrc)
+	buf.EncodeUint32(m.Mrd)
 	buf.EncodeBool(m.Stop)
 	buf.EncodeUint32(uint32(m.MsgType))
-	buf.EncodeUint32(uint32(m.T1))
-	buf.EncodeUint32(uint32(m.T2))
+	buf.EncodeUint32(m.T1)
+	buf.EncodeUint32(m.T2)
 	buf.EncodeUint32(uint32(len(m.Prefixes)))
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
-		var v0 DHCP6PdPrefixInfo
+		var v0 DHCP6PdPrefixInfo // Prefixes
 		if j0 < len(m.Prefixes) {
 			v0 = m.Prefixes[j0]
 		}
 		buf.EncodeBytes(v0.Prefix.Address[:], 16)
-		buf.EncodeUint8(uint8(v0.Prefix.Len))
-		buf.EncodeUint32(uint32(v0.ValidTime))
-		buf.EncodeUint32(uint32(v0.PreferredTime))
+		buf.EncodeUint8(v0.Prefix.Len)
+		buf.EncodeUint32(v0.ValidTime)
+		buf.EncodeUint32(v0.PreferredTime)
 	}
 	return buf.Bytes(), nil
 }
@@ -549,7 +532,7 @@ func (m *DHCP6PdSendClientMessage) Unmarshal(b []byte) error {
 	m.T1 = buf.DecodeUint32()
 	m.T2 = buf.DecodeUint32()
 	m.NPrefixes = buf.DecodeUint32()
-	m.Prefixes = make([]DHCP6PdPrefixInfo, int(m.NPrefixes))
+	m.Prefixes = make([]DHCP6PdPrefixInfo, m.NPrefixes)
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
 		copy(m.Prefixes[j0].Prefix.Address[:], buf.DecodeBytes(16))
 		m.Prefixes[j0].Prefix.Len = buf.DecodeUint8()
@@ -573,27 +556,24 @@ func (*DHCP6PdSendClientMessageReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6PdSendClientMessageReply) Size() int {
+func (m *DHCP6PdSendClientMessageReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6PdSendClientMessageReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6PdSendClientMessageReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -619,11 +599,10 @@ func (*DHCP6ReplyEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *DHCP6ReplyEvent) Size() int {
+func (m *DHCP6ReplyEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PID
 	size += 4 // m.SwIfIndex
 	size += 4 // m.ServerIndex
@@ -647,30 +626,28 @@ func (m *DHCP6ReplyEvent) Size() int {
 	return size
 }
 func (m *DHCP6ReplyEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ServerIndex))
+	buf.EncodeUint32(m.ServerIndex)
 	buf.EncodeUint32(uint32(m.MsgType))
-	buf.EncodeUint32(uint32(m.T1))
-	buf.EncodeUint32(uint32(m.T2))
-	buf.EncodeUint16(uint16(m.InnerStatusCode))
-	buf.EncodeUint16(uint16(m.StatusCode))
-	buf.EncodeUint8(uint8(m.Preference))
+	buf.EncodeUint32(m.T1)
+	buf.EncodeUint32(m.T2)
+	buf.EncodeUint16(m.InnerStatusCode)
+	buf.EncodeUint16(m.StatusCode)
+	buf.EncodeUint8(m.Preference)
 	buf.EncodeUint32(uint32(len(m.Addresses)))
 	for j0 := 0; j0 < len(m.Addresses); j0++ {
-		var v0 DHCP6AddressInfo
+		var v0 DHCP6AddressInfo // Addresses
 		if j0 < len(m.Addresses) {
 			v0 = m.Addresses[j0]
 		}
 		buf.EncodeBytes(v0.Address[:], 16)
-		buf.EncodeUint32(uint32(v0.ValidTime))
-		buf.EncodeUint32(uint32(v0.PreferredTime))
+		buf.EncodeUint32(v0.ValidTime)
+		buf.EncodeUint32(v0.PreferredTime)
 	}
 	return buf.Bytes(), nil
 }
@@ -686,7 +663,7 @@ func (m *DHCP6ReplyEvent) Unmarshal(b []byte) error {
 	m.StatusCode = buf.DecodeUint16()
 	m.Preference = buf.DecodeUint8()
 	m.NAddresses = buf.DecodeUint32()
-	m.Addresses = make([]DHCP6AddressInfo, int(m.NAddresses))
+	m.Addresses = make([]DHCP6AddressInfo, m.NAddresses)
 	for j0 := 0; j0 < len(m.Addresses); j0++ {
 		copy(m.Addresses[j0].Address[:], buf.DecodeBytes(16))
 		m.Addresses[j0].ValidTime = buf.DecodeUint32()
@@ -718,11 +695,10 @@ func (*DHCP6SendClientMessage) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6SendClientMessage) Size() int {
+func (m *DHCP6SendClientMessage) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.ServerIndex
 	size += 4 // m.Irt
@@ -747,31 +723,29 @@ func (m *DHCP6SendClientMessage) Size() int {
 	return size
 }
 func (m *DHCP6SendClientMessage) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ServerIndex))
-	buf.EncodeUint32(uint32(m.Irt))
-	buf.EncodeUint32(uint32(m.Mrt))
-	buf.EncodeUint32(uint32(m.Mrc))
-	buf.EncodeUint32(uint32(m.Mrd))
+	buf.EncodeUint32(m.ServerIndex)
+	buf.EncodeUint32(m.Irt)
+	buf.EncodeUint32(m.Mrt)
+	buf.EncodeUint32(m.Mrc)
+	buf.EncodeUint32(m.Mrd)
 	buf.EncodeBool(m.Stop)
 	buf.EncodeUint32(uint32(m.MsgType))
-	buf.EncodeUint32(uint32(m.T1))
-	buf.EncodeUint32(uint32(m.T2))
+	buf.EncodeUint32(m.T1)
+	buf.EncodeUint32(m.T2)
 	buf.EncodeUint32(uint32(len(m.Addresses)))
 	for j0 := 0; j0 < len(m.Addresses); j0++ {
-		var v0 DHCP6AddressInfo
+		var v0 DHCP6AddressInfo // Addresses
 		if j0 < len(m.Addresses) {
 			v0 = m.Addresses[j0]
 		}
 		buf.EncodeBytes(v0.Address[:], 16)
-		buf.EncodeUint32(uint32(v0.ValidTime))
-		buf.EncodeUint32(uint32(v0.PreferredTime))
+		buf.EncodeUint32(v0.ValidTime)
+		buf.EncodeUint32(v0.PreferredTime)
 	}
 	return buf.Bytes(), nil
 }
@@ -788,7 +762,7 @@ func (m *DHCP6SendClientMessage) Unmarshal(b []byte) error {
 	m.T1 = buf.DecodeUint32()
 	m.T2 = buf.DecodeUint32()
 	m.NAddresses = buf.DecodeUint32()
-	m.Addresses = make([]DHCP6AddressInfo, int(m.NAddresses))
+	m.Addresses = make([]DHCP6AddressInfo, m.NAddresses)
 	for j0 := 0; j0 < len(m.Addresses); j0++ {
 		copy(m.Addresses[j0].Address[:], buf.DecodeBytes(16))
 		m.Addresses[j0].ValidTime = buf.DecodeUint32()
@@ -809,27 +783,24 @@ func (*DHCP6SendClientMessageReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6SendClientMessageReply) Size() int {
+func (m *DHCP6SendClientMessageReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6SendClientMessageReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6SendClientMessageReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -846,11 +817,10 @@ func (*DHCPClientConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPClientConfig) Size() int {
+func (m *DHCPClientConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.Client.SwIfIndex
 	size += 64     // m.Client.Hostname
@@ -862,20 +832,18 @@ func (m *DHCPClientConfig) Size() int {
 	return size
 }
 func (m *DHCPClientConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.Client.SwIfIndex))
 	buf.EncodeString(m.Client.Hostname, 64)
-	buf.EncodeBytes(m.Client.ID[:], 64)
+	buf.EncodeBytes(m.Client.ID, 64)
 	buf.EncodeBool(m.Client.WantDHCPEvent)
 	buf.EncodeBool(m.Client.SetBroadcastFlag)
 	buf.EncodeUint8(uint8(m.Client.Dscp))
-	buf.EncodeUint32(uint32(m.Client.PID))
+	buf.EncodeUint32(m.Client.PID)
 	return buf.Bytes(), nil
 }
 func (m *DHCPClientConfig) Unmarshal(b []byte) error {
@@ -883,7 +851,8 @@ func (m *DHCPClientConfig) Unmarshal(b []byte) error {
 	m.IsAdd = buf.DecodeBool()
 	m.Client.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.Client.Hostname = buf.DecodeString(64)
-	copy(m.Client.ID[:], buf.DecodeBytes(64))
+	m.Client.ID = make([]byte, 64)
+	copy(m.Client.ID, buf.DecodeBytes(len(m.Client.ID)))
 	m.Client.WantDHCPEvent = buf.DecodeBool()
 	m.Client.SetBroadcastFlag = buf.DecodeBool()
 	m.Client.Dscp = ip_types.IPDscp(buf.DecodeUint8())
@@ -903,27 +872,24 @@ func (*DHCPClientConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPClientConfigReply) Size() int {
+func (m *DHCPClientConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCPClientConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCPClientConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -940,11 +906,10 @@ func (*DHCPClientDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPClientDetails) Size() int {
+func (m *DHCPClientDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Client.SwIfIndex
 	size += 64     // m.Client.Hostname
 	size += 1 * 64 // m.Client.ID
@@ -975,37 +940,35 @@ func (m *DHCPClientDetails) Size() int {
 	return size
 }
 func (m *DHCPClientDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Client.SwIfIndex))
 	buf.EncodeString(m.Client.Hostname, 64)
-	buf.EncodeBytes(m.Client.ID[:], 64)
+	buf.EncodeBytes(m.Client.ID, 64)
 	buf.EncodeBool(m.Client.WantDHCPEvent)
 	buf.EncodeBool(m.Client.SetBroadcastFlag)
 	buf.EncodeUint8(uint8(m.Client.Dscp))
-	buf.EncodeUint32(uint32(m.Client.PID))
+	buf.EncodeUint32(m.Client.PID)
 	buf.EncodeUint32(uint32(m.Lease.SwIfIndex))
 	buf.EncodeUint32(uint32(m.Lease.State))
 	buf.EncodeBool(m.Lease.IsIPv6)
 	buf.EncodeString(m.Lease.Hostname, 64)
-	buf.EncodeUint8(uint8(m.Lease.MaskWidth))
+	buf.EncodeUint8(m.Lease.MaskWidth)
 	buf.EncodeUint8(uint8(m.Lease.HostAddress.Af))
-	buf.EncodeBytes(m.Lease.HostAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Lease.HostAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Lease.RouterAddress.Af))
-	buf.EncodeBytes(m.Lease.RouterAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Lease.RouterAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeBytes(m.Lease.HostMac[:], 6)
 	buf.EncodeUint8(uint8(len(m.Lease.DomainServer)))
 	for j1 := 0; j1 < len(m.Lease.DomainServer); j1++ {
-		var v1 DomainServer
+		var v1 DomainServer // DomainServer
 		if j1 < len(m.Lease.DomainServer) {
 			v1 = m.Lease.DomainServer[j1]
 		}
 		buf.EncodeUint8(uint8(v1.Address.Af))
-		buf.EncodeBytes(v1.Address.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v1.Address.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
@@ -1013,7 +976,8 @@ func (m *DHCPClientDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Client.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.Client.Hostname = buf.DecodeString(64)
-	copy(m.Client.ID[:], buf.DecodeBytes(64))
+	m.Client.ID = make([]byte, 64)
+	copy(m.Client.ID, buf.DecodeBytes(len(m.Client.ID)))
 	m.Client.WantDHCPEvent = buf.DecodeBool()
 	m.Client.SetBroadcastFlag = buf.DecodeBool()
 	m.Client.Dscp = ip_types.IPDscp(buf.DecodeUint8())
@@ -1029,7 +993,7 @@ func (m *DHCPClientDetails) Unmarshal(b []byte) error {
 	copy(m.Lease.RouterAddress.Un.XXX_UnionData[:], buf.DecodeBytes(16))
 	copy(m.Lease.HostMac[:], buf.DecodeBytes(6))
 	m.Lease.Count = buf.DecodeUint8()
-	m.Lease.DomainServer = make([]DomainServer, int(m.Lease.Count))
+	m.Lease.DomainServer = make([]DomainServer, m.Lease.Count)
 	for j1 := 0; j1 < len(m.Lease.DomainServer); j1++ {
 		m.Lease.DomainServer[j1].Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
 		copy(m.Lease.DomainServer[j1].Address.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -1047,20 +1011,17 @@ func (*DHCPClientDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPClientDump) Size() int {
+func (m *DHCPClientDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DHCPClientDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DHCPClientDump) Unmarshal(b []byte) error {
@@ -1080,11 +1041,10 @@ func (*DHCPComplEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *DHCPComplEvent) Size() int {
+func (m *DHCPComplEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.PID
 	size += 4      // m.Lease.SwIfIndex
 	size += 4      // m.Lease.State
@@ -1109,31 +1069,29 @@ func (m *DHCPComplEvent) Size() int {
 	return size
 }
 func (m *DHCPComplEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(m.Lease.SwIfIndex))
 	buf.EncodeUint32(uint32(m.Lease.State))
 	buf.EncodeBool(m.Lease.IsIPv6)
 	buf.EncodeString(m.Lease.Hostname, 64)
-	buf.EncodeUint8(uint8(m.Lease.MaskWidth))
+	buf.EncodeUint8(m.Lease.MaskWidth)
 	buf.EncodeUint8(uint8(m.Lease.HostAddress.Af))
-	buf.EncodeBytes(m.Lease.HostAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Lease.HostAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Lease.RouterAddress.Af))
-	buf.EncodeBytes(m.Lease.RouterAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Lease.RouterAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeBytes(m.Lease.HostMac[:], 6)
 	buf.EncodeUint8(uint8(len(m.Lease.DomainServer)))
 	for j1 := 0; j1 < len(m.Lease.DomainServer); j1++ {
-		var v1 DomainServer
+		var v1 DomainServer // DomainServer
 		if j1 < len(m.Lease.DomainServer) {
 			v1 = m.Lease.DomainServer[j1]
 		}
 		buf.EncodeUint8(uint8(v1.Address.Af))
-		buf.EncodeBytes(v1.Address.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v1.Address.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
@@ -1151,7 +1109,7 @@ func (m *DHCPComplEvent) Unmarshal(b []byte) error {
 	copy(m.Lease.RouterAddress.Un.XXX_UnionData[:], buf.DecodeBytes(16))
 	copy(m.Lease.HostMac[:], buf.DecodeBytes(6))
 	m.Lease.Count = buf.DecodeUint8()
-	m.Lease.DomainServer = make([]DomainServer, int(m.Lease.Count))
+	m.Lease.DomainServer = make([]DomainServer, m.Lease.Count)
 	for j1 := 0; j1 < len(m.Lease.DomainServer); j1++ {
 		m.Lease.DomainServer[j1].Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
 		copy(m.Lease.DomainServer[j1].Address.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -1169,20 +1127,17 @@ func (*DHCPPluginControlPing) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPPluginControlPing) Size() int {
+func (m *DHCPPluginControlPing) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DHCPPluginControlPing) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DHCPPluginControlPing) Unmarshal(b []byte) error {
@@ -1203,31 +1158,28 @@ func (*DHCPPluginControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPPluginControlPingReply) Size() int {
+func (m *DHCPPluginControlPingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ClientIndex
 	size += 4 // m.VpePID
 	return size
 }
 func (m *DHCPPluginControlPingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ClientIndex))
-	buf.EncodeUint32(uint32(m.VpePID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ClientIndex)
+	buf.EncodeUint32(m.VpePID)
 	return buf.Bytes(), nil
 }
 func (m *DHCPPluginControlPingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ClientIndex = buf.DecodeUint32()
 	m.VpePID = buf.DecodeUint32()
 	return nil
@@ -1243,20 +1195,17 @@ func (*DHCPPluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPPluginGetVersion) Size() int {
+func (m *DHCPPluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DHCPPluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DHCPPluginGetVersion) Unmarshal(b []byte) error {
@@ -1276,24 +1225,21 @@ func (*DHCPPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPPluginGetVersionReply) Size() int {
+func (m *DHCPPluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *DHCPPluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *DHCPPluginGetVersionReply) Unmarshal(b []byte) error {
@@ -1319,11 +1265,10 @@ func (*DHCPProxyConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPProxyConfig) Size() int {
+func (m *DHCPProxyConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.RxVrfID
 	size += 4      // m.ServerVrfID
 	size += 1      // m.IsAdd
@@ -1334,19 +1279,17 @@ func (m *DHCPProxyConfig) Size() int {
 	return size
 }
 func (m *DHCPProxyConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.RxVrfID))
-	buf.EncodeUint32(uint32(m.ServerVrfID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.RxVrfID)
+	buf.EncodeUint32(m.ServerVrfID)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.DHCPServer.Af))
-	buf.EncodeBytes(m.DHCPServer.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DHCPServer.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.DHCPSrcAddress.Af))
-	buf.EncodeBytes(m.DHCPSrcAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DHCPSrcAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *DHCPProxyConfig) Unmarshal(b []byte) error {
@@ -1373,27 +1316,24 @@ func (*DHCPProxyConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPProxyConfigReply) Size() int {
+func (m *DHCPProxyConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCPProxyConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCPProxyConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1417,11 +1357,10 @@ func (*DHCPProxyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPProxyDetails) Size() int {
+func (m *DHCPProxyDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.RxVrfID
 	size += 4      // m.VssOui
 	size += 4      // m.VssFibID
@@ -1444,29 +1383,27 @@ func (m *DHCPProxyDetails) Size() int {
 	return size
 }
 func (m *DHCPProxyDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.RxVrfID))
-	buf.EncodeUint32(uint32(m.VssOui))
-	buf.EncodeUint32(uint32(m.VssFibID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.RxVrfID)
+	buf.EncodeUint32(m.VssOui)
+	buf.EncodeUint32(m.VssFibID)
 	buf.EncodeUint32(uint32(m.VssType))
 	buf.EncodeBool(m.IsIPv6)
 	buf.EncodeString(m.VssVPNAsciiID, 129)
 	buf.EncodeUint8(uint8(m.DHCPSrcAddress.Af))
-	buf.EncodeBytes(m.DHCPSrcAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DHCPSrcAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(len(m.Servers)))
 	for j0 := 0; j0 < len(m.Servers); j0++ {
-		var v0 DHCPServer
+		var v0 DHCPServer // Servers
 		if j0 < len(m.Servers) {
 			v0 = m.Servers[j0]
 		}
-		buf.EncodeUint32(uint32(v0.ServerVrfID))
+		buf.EncodeUint32(v0.ServerVrfID)
 		buf.EncodeUint8(uint8(v0.DHCPServer.Af))
-		buf.EncodeBytes(v0.DHCPServer.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.DHCPServer.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
@@ -1481,7 +1418,7 @@ func (m *DHCPProxyDetails) Unmarshal(b []byte) error {
 	m.DHCPSrcAddress.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(m.DHCPSrcAddress.Un.XXX_UnionData[:], buf.DecodeBytes(16))
 	m.Count = buf.DecodeUint8()
-	m.Servers = make([]DHCPServer, int(m.Count))
+	m.Servers = make([]DHCPServer, m.Count)
 	for j0 := 0; j0 < len(m.Servers); j0++ {
 		m.Servers[j0].ServerVrfID = buf.DecodeUint32()
 		m.Servers[j0].DHCPServer.Af = ip_types.AddressFamily(buf.DecodeUint8())
@@ -1502,21 +1439,18 @@ func (*DHCPProxyDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPProxyDump) Size() int {
+func (m *DHCPProxyDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsIP6
 	return size
 }
 func (m *DHCPProxyDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsIP6)
 	return buf.Bytes(), nil
 }
@@ -1544,11 +1478,10 @@ func (*DHCPProxySetVss) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCPProxySetVss) Size() int {
+func (m *DHCPProxySetVss) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.TblID
 	size += 4   // m.VssType
 	size += 129 // m.VPNAsciiID
@@ -1559,17 +1492,15 @@ func (m *DHCPProxySetVss) Size() int {
 	return size
 }
 func (m *DHCPProxySetVss) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TblID)
 	buf.EncodeUint32(uint32(m.VssType))
 	buf.EncodeString(m.VPNAsciiID, 129)
-	buf.EncodeUint32(uint32(m.Oui))
-	buf.EncodeUint32(uint32(m.VPNIndex))
+	buf.EncodeUint32(m.Oui)
+	buf.EncodeUint32(m.VPNIndex)
 	buf.EncodeBool(m.IsIPv6)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
@@ -1598,27 +1529,24 @@ func (*DHCPProxySetVssReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCPProxySetVssReply) Size() int {
+func (m *DHCPProxySetVssReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCPProxySetVssReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCPProxySetVssReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1635,24 +1563,21 @@ func (*WantDHCP6PdReplyEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantDHCP6PdReplyEvents) Size() int {
+func (m *WantDHCP6PdReplyEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.PID
 	return size
 }
 func (m *WantDHCP6PdReplyEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableDisable)
-	buf.EncodeUint32(uint32(m.PID))
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantDHCP6PdReplyEvents) Unmarshal(b []byte) error {
@@ -1676,27 +1601,24 @@ func (*WantDHCP6PdReplyEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantDHCP6PdReplyEventsReply) Size() int {
+func (m *WantDHCP6PdReplyEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantDHCP6PdReplyEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantDHCP6PdReplyEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1713,24 +1635,21 @@ func (*WantDHCP6ReplyEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantDHCP6ReplyEvents) Size() int {
+func (m *WantDHCP6ReplyEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.PID
 	return size
 }
 func (m *WantDHCP6ReplyEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.EnableDisable))
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.EnableDisable)
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantDHCP6ReplyEvents) Unmarshal(b []byte) error {
@@ -1752,27 +1671,24 @@ func (*WantDHCP6ReplyEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantDHCP6ReplyEventsReply) Size() int {
+func (m *WantDHCP6ReplyEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantDHCP6ReplyEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantDHCP6ReplyEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

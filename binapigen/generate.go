@@ -237,13 +237,13 @@ func genAlias(g *GenFile, alias *Alias) {
 	// generate alias-specific methods
 	switch alias.Name {
 	case "ip4_address":
-		generateIPConversion(g, alias.GoName, 4)
+		genIPConversion(g, alias.GoName, 4)
 	case "ip6_address":
-		generateIPConversion(g, alias.GoName, 16)
+		genIPConversion(g, alias.GoName, 16)
 	case "address_with_prefix":
-		generateAddressWithPrefixConversion(g, alias.GoName)
+		genAddressWithPrefixConversion(g, alias.GoName)
 	case "mac_address":
-		generateMacAddressConversion(g, alias.GoName)
+		genMacAddressConversion(g, alias.GoName)
 	}
 }
 
@@ -257,7 +257,7 @@ func genStruct(g *GenFile, typ *Struct) {
 	} else {
 		g.P("type ", typ.GoName, " struct {")
 		for i := range typ.Fields {
-			generateField(g, typ.Fields, i)
+			genField(g, typ.Fields, i)
 		}
 		g.P("}")
 	}
@@ -266,13 +266,13 @@ func genStruct(g *GenFile, typ *Struct) {
 	// generate type-specific methods
 	switch typ.Name {
 	case "address":
-		generateAddressConversion(g, typ.GoName)
+		genAddressConversion(g, typ.GoName)
 	case "prefix":
-		generatePrefixConversion(g, typ.GoName)
+		genPrefixConversion(g, typ.GoName)
 	case "ip4_prefix":
-		generateIPPrefixConversion(g, typ.GoName, 4)
+		genIPPrefixConversion(g, typ.GoName, 4)
 	case "ip6_prefix":
-		generateIPPrefixConversion(g, typ.GoName, 6)
+		genIPPrefixConversion(g, typ.GoName, 6)
 	}
 }
 
@@ -313,7 +313,7 @@ func genUnionFieldMethods(g *GenFile, structName string, field *Field) {
 
 	// Setter
 	g.P("func (u *", structName, ") Set", field.GoName, "(a ", getterStruct, ") {")
-	g.P("	var buf = ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
+	g.P("	buf := ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
 	encodeField(g, field, "a", func(name string) string {
 		return "a." + name
 	}, 0)
@@ -321,7 +321,7 @@ func genUnionFieldMethods(g *GenFile, structName string, field *Field) {
 
 	// Getter
 	g.P("func (u *", structName, ") Get", field.GoName, "() (a ", getterStruct, ") {")
-	g.P("	var buf = ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
+	g.P("	buf := ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
 	decodeField(g, field, "a", func(name string) string {
 		return "a." + name
 	}, 0)
@@ -330,28 +330,28 @@ func genUnionFieldMethods(g *GenFile, structName string, field *Field) {
 	g.P()
 }
 
-func generateField(g *GenFile, fields []*Field, i int) {
+func genField(g *GenFile, fields []*Field, i int) {
 	field := fields[i]
 
 	logf(" gen FIELD[%d] %s (%s) - type: %q (array: %v/%v)", i, field.GoName, field.Name, field.Type, field.Array, field.Length)
 
 	gotype := getFieldType(g, field)
 	tags := structTags{
-		"binapi": fieldTagJSON(field),
-		"json":   fieldTagBinapi(field),
+		"binapi": fieldTagBinapi(field),
+		"json":   fieldTagJson(field),
 	}
 
 	g.P(field.GoName, " ", gotype, tags)
 }
 
-func fieldTagBinapi(field *Field) string {
+func fieldTagJson(field *Field) string {
 	if field.FieldSizeOf != nil {
 		return "-"
 	}
 	return fmt.Sprintf("%s,omitempty", field.Name)
 }
 
-func fieldTagJSON(field *Field) string {
+func fieldTagBinapi(field *Field) string {
 	typ := fromApiType(field.Type)
 	if field.Array {
 		if field.Length > 0 {
@@ -370,18 +370,15 @@ func fieldTagJSON(field *Field) string {
 		tag = append(tag, fmt.Sprintf("limit=%s", limit))
 	}
 	if def, ok := field.Meta["default"]; ok && def != nil {
-		actual := fieldActualType(field)
-		if t, ok := BaseTypesGo[actual]; ok {
-			switch t {
-			case I8, I16, I32, I64:
-				def = int(def.(float64))
-			case U8, U16, U32, U64:
-				def = uint(def.(float64))
-			case F64:
-				def = def.(float64)
-			}
+		switch fieldActualType(field) {
+		case I8, I16, I32, I64:
+			def = int(def.(float64))
+		case U8, U16, U32, U64:
+			def = uint(def.(float64))
+		case F64:
+			def = def.(float64)
 		}
-		tag = append(tag, fmt.Sprintf("default=%s", def))
+		tag = append(tag, fmt.Sprintf("default=%v", def))
 	}
 	return strings.Join(tag, ",")
 }
@@ -448,23 +445,23 @@ func genMessage(g *GenFile, msg *Message) {
 	} else {
 		g.P("type ", msg.GoIdent, " struct {")
 		for i := range msg.Fields {
-			generateField(g, msg.Fields, i)
+			genField(g, msg.Fields, i)
 		}
 		g.P("}")
 	}
 	g.P()
 
-	generateMessageMethods(g, msg)
+	genMessageMethods(g, msg)
 
 	// encoding methods
-	generateMessageSize(g, msg.GoIdent.GoName, msg.Fields)
-	generateMessageMarshal(g, msg.GoIdent.GoName, msg.Fields)
-	generateMessageUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageSize(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
 
 	g.P()
 }
 
-func generateMessageMethods(g *GenFile, msg *Message) {
+func genMessageMethods(g *GenFile, msg *Message) {
 	// Reset method
 	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
 
@@ -480,4 +477,17 @@ func generateMessageMethods(g *GenFile, msg *Message) {
 	g.P("}")
 
 	g.P()
+}
+
+func apiMsgType(t msgType) GoIdent {
+	switch t {
+	case msgTypeRequest:
+		return govppApiPkg.Ident("RequestMessage")
+	case msgTypeReply:
+		return govppApiPkg.Ident("ReplyMessage")
+	case msgTypeEvent:
+		return govppApiPkg.Ident("EventMessage")
+	default:
+		return govppApiPkg.Ident("OtherMessage")
+	}
 }

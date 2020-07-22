@@ -45,11 +45,10 @@ func (*AvfCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AvfCreate) Size() int {
+func (m *AvfCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PciAddr
 	size += 4 // m.EnableElog
 	size += 2 // m.RxqNum
@@ -58,23 +57,21 @@ func (m *AvfCreate) Size() int {
 	return size
 }
 func (m *AvfCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PciAddr))
-	buf.EncodeUint32(uint32(m.EnableElog))
-	buf.EncodeUint16(uint16(m.RxqNum))
-	buf.EncodeUint16(uint16(m.RxqSize))
-	buf.EncodeUint16(uint16(m.TxqSize))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PciAddr)
+	buf.EncodeInt32(m.EnableElog)
+	buf.EncodeUint16(m.RxqNum)
+	buf.EncodeUint16(m.RxqSize)
+	buf.EncodeUint16(m.TxqSize)
 	return buf.Bytes(), nil
 }
 func (m *AvfCreate) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.PciAddr = buf.DecodeUint32()
-	m.EnableElog = int32(buf.DecodeUint32())
+	m.EnableElog = buf.DecodeInt32()
 	m.RxqNum = buf.DecodeUint16()
 	m.RxqSize = buf.DecodeUint16()
 	m.TxqSize = buf.DecodeUint16()
@@ -94,29 +91,26 @@ func (*AvfCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AvfCreateReply) Size() int {
+func (m *AvfCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *AvfCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *AvfCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -133,21 +127,18 @@ func (*AvfDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AvfDelete) Size() int {
+func (m *AvfDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *AvfDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -169,27 +160,24 @@ func (*AvfDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AvfDeleteReply) Size() int {
+func (m *AvfDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *AvfDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *AvfDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

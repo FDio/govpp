@@ -52,11 +52,10 @@ func (*ProxyArpAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ProxyArpAddDel) Size() int {
+func (m *ProxyArpAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 4     // m.Proxy.TableID
 	size += 1 * 4 // m.Proxy.Low
@@ -64,14 +63,12 @@ func (m *ProxyArpAddDel) Size() int {
 	return size
 }
 func (m *ProxyArpAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Proxy.TableID))
+	buf.EncodeUint32(m.Proxy.TableID)
 	buf.EncodeBytes(m.Proxy.Low[:], 4)
 	buf.EncodeBytes(m.Proxy.Hi[:], 4)
 	return buf.Bytes(), nil
@@ -97,27 +94,24 @@ func (*ProxyArpAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ProxyArpAddDelReply) Size() int {
+func (m *ProxyArpAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ProxyArpAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ProxyArpAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -133,24 +127,21 @@ func (*ProxyArpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ProxyArpDetails) Size() int {
+func (m *ProxyArpDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Proxy.TableID
 	size += 1 * 4 // m.Proxy.Low
 	size += 1 * 4 // m.Proxy.Hi
 	return size
 }
 func (m *ProxyArpDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Proxy.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Proxy.TableID)
 	buf.EncodeBytes(m.Proxy.Low[:], 4)
 	buf.EncodeBytes(m.Proxy.Hi[:], 4)
 	return buf.Bytes(), nil
@@ -173,20 +164,17 @@ func (*ProxyArpDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ProxyArpDump) Size() int {
+func (m *ProxyArpDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ProxyArpDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ProxyArpDump) Unmarshal(b []byte) error {
@@ -205,22 +193,19 @@ func (*ProxyArpIntfcDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ProxyArpIntfcDetails) Size() int {
+func (m *ProxyArpIntfcDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *ProxyArpIntfcDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SwIfIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SwIfIndex)
 	return buf.Bytes(), nil
 }
 func (m *ProxyArpIntfcDetails) Unmarshal(b []byte) error {
@@ -239,20 +224,17 @@ func (*ProxyArpIntfcDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ProxyArpIntfcDump) Size() int {
+func (m *ProxyArpIntfcDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ProxyArpIntfcDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ProxyArpIntfcDump) Unmarshal(b []byte) error {
@@ -272,22 +254,19 @@ func (*ProxyArpIntfcEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ProxyArpIntfcEnableDisable) Size() int {
+func (m *ProxyArpIntfcEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *ProxyArpIntfcEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
@@ -313,27 +292,24 @@ func (*ProxyArpIntfcEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ProxyArpIntfcEnableDisableReply) Size() int {
+func (m *ProxyArpIntfcEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ProxyArpIntfcEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ProxyArpIntfcEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

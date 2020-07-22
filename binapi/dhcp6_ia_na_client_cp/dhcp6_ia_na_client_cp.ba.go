@@ -42,22 +42,19 @@ func (*DHCP6ClientEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6ClientEnableDisable) Size() int {
+func (m *DHCP6ClientEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *DHCP6ClientEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
@@ -83,27 +80,24 @@ func (*DHCP6ClientEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6ClientEnableDisableReply) Size() int {
+func (m *DHCP6ClientEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6ClientEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6ClientEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

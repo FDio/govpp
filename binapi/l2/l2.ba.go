@@ -190,11 +190,10 @@ func (*BdIPMacAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BdIPMacAddDel) Size() int {
+func (m *BdIPMacAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.Entry.BdID
 	size += 1      // m.Entry.IP.Af
@@ -203,16 +202,14 @@ func (m *BdIPMacAddDel) Size() int {
 	return size
 }
 func (m *BdIPMacAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Entry.BdID))
+	buf.EncodeUint32(m.Entry.BdID)
 	buf.EncodeUint8(uint8(m.Entry.IP.Af))
-	buf.EncodeBytes(m.Entry.IP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.IP.Un.XXX_UnionData[:], 16)
 	buf.EncodeBytes(m.Entry.Mac[:], 6)
 	return buf.Bytes(), nil
 }
@@ -238,27 +235,24 @@ func (*BdIPMacAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BdIPMacAddDelReply) Size() int {
+func (m *BdIPMacAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BdIPMacAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BdIPMacAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -274,11 +268,10 @@ func (*BdIPMacDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BdIPMacDetails) Size() int {
+func (m *BdIPMacDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Entry.BdID
 	size += 1      // m.Entry.IP.Af
 	size += 1 * 16 // m.Entry.IP.Un
@@ -286,15 +279,13 @@ func (m *BdIPMacDetails) Size() int {
 	return size
 }
 func (m *BdIPMacDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Entry.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Entry.BdID)
 	buf.EncodeUint8(uint8(m.Entry.IP.Af))
-	buf.EncodeBytes(m.Entry.IP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.IP.Un.XXX_UnionData[:], 16)
 	buf.EncodeBytes(m.Entry.Mac[:], 6)
 	return buf.Bytes(), nil
 }
@@ -319,22 +310,19 @@ func (*BdIPMacDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BdIPMacDump) Size() int {
+func (m *BdIPMacDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	return size
 }
 func (m *BdIPMacDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	return buf.Bytes(), nil
 }
 func (m *BdIPMacDump) Unmarshal(b []byte) error {
@@ -355,22 +343,19 @@ func (*BdIPMacFlush) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BdIPMacFlush) Size() int {
+func (m *BdIPMacFlush) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	return size
 }
 func (m *BdIPMacFlush) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	return buf.Bytes(), nil
 }
 func (m *BdIPMacFlush) Unmarshal(b []byte) error {
@@ -391,27 +376,24 @@ func (*BdIPMacFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BdIPMacFlushReply) Size() int {
+func (m *BdIPMacFlushReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BdIPMacFlushReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BdIPMacFlushReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -436,11 +418,10 @@ func (*BridgeDomainAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BridgeDomainAddDel) Size() int {
+func (m *BridgeDomainAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.BdID
 	size += 1  // m.Flood
 	size += 1  // m.UuFlood
@@ -454,20 +435,18 @@ func (m *BridgeDomainAddDel) Size() int {
 	return size
 }
 func (m *BridgeDomainAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeBool(m.Flood)
 	buf.EncodeBool(m.UuFlood)
 	buf.EncodeBool(m.Forward)
 	buf.EncodeBool(m.Learn)
 	buf.EncodeBool(m.ArpTerm)
 	buf.EncodeBool(m.ArpUfwd)
-	buf.EncodeUint8(uint8(m.MacAge))
+	buf.EncodeUint8(m.MacAge)
 	buf.EncodeString(m.BdTag, 64)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
@@ -499,27 +478,24 @@ func (*BridgeDomainAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BridgeDomainAddDelReply) Size() int {
+func (m *BridgeDomainAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BridgeDomainAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BridgeDomainAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -547,11 +523,10 @@ func (*BridgeDomainDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BridgeDomainDetails) Size() int {
+func (m *BridgeDomainDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.BdID
 	size += 1  // m.Flood
 	size += 1  // m.UuFlood
@@ -577,32 +552,30 @@ func (m *BridgeDomainDetails) Size() int {
 	return size
 }
 func (m *BridgeDomainDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeBool(m.Flood)
 	buf.EncodeBool(m.UuFlood)
 	buf.EncodeBool(m.Forward)
 	buf.EncodeBool(m.Learn)
 	buf.EncodeBool(m.ArpTerm)
 	buf.EncodeBool(m.ArpUfwd)
-	buf.EncodeUint8(uint8(m.MacAge))
+	buf.EncodeUint8(m.MacAge)
 	buf.EncodeString(m.BdTag, 64)
 	buf.EncodeUint32(uint32(m.BviSwIfIndex))
 	buf.EncodeUint32(uint32(m.UuFwdSwIfIndex))
 	buf.EncodeUint32(uint32(len(m.SwIfDetails)))
 	for j0 := 0; j0 < len(m.SwIfDetails); j0++ {
-		var v0 BridgeDomainSwIf
+		var v0 BridgeDomainSwIf // SwIfDetails
 		if j0 < len(m.SwIfDetails) {
 			v0 = m.SwIfDetails[j0]
 		}
-		buf.EncodeUint32(uint32(v0.Context))
+		buf.EncodeUint32(v0.Context)
 		buf.EncodeUint32(uint32(v0.SwIfIndex))
-		buf.EncodeUint8(uint8(v0.Shg))
+		buf.EncodeUint8(v0.Shg)
 	}
 	return buf.Bytes(), nil
 }
@@ -620,7 +593,7 @@ func (m *BridgeDomainDetails) Unmarshal(b []byte) error {
 	m.BviSwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.UuFwdSwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.NSwIfs = buf.DecodeUint32()
-	m.SwIfDetails = make([]BridgeDomainSwIf, int(m.NSwIfs))
+	m.SwIfDetails = make([]BridgeDomainSwIf, m.NSwIfs)
 	for j0 := 0; j0 < len(m.SwIfDetails); j0++ {
 		m.SwIfDetails[j0].Context = buf.DecodeUint32()
 		m.SwIfDetails[j0].SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
@@ -631,8 +604,8 @@ func (m *BridgeDomainDetails) Unmarshal(b []byte) error {
 
 // BridgeDomainDump defines message 'bridge_domain_dump'.
 type BridgeDomainDump struct {
-	BdID      uint32                         `binapi:"u32,name=bd_id,default=%!s(float64=4.294967295e+09)" json:"bd_id,omitempty"`
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	BdID      uint32                         `binapi:"u32,name=bd_id,default=4294967295" json:"bd_id,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *BridgeDomainDump) Reset()               { *m = BridgeDomainDump{} }
@@ -642,23 +615,20 @@ func (*BridgeDomainDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BridgeDomainDump) Size() int {
+func (m *BridgeDomainDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BridgeDomainDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -682,24 +652,21 @@ func (*BridgeDomainSetMacAge) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BridgeDomainSetMacAge) Size() int {
+func (m *BridgeDomainSetMacAge) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	size += 1 // m.MacAge
 	return size
 }
 func (m *BridgeDomainSetMacAge) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
-	buf.EncodeUint8(uint8(m.MacAge))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
+	buf.EncodeUint8(m.MacAge)
 	return buf.Bytes(), nil
 }
 func (m *BridgeDomainSetMacAge) Unmarshal(b []byte) error {
@@ -721,27 +688,24 @@ func (*BridgeDomainSetMacAgeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BridgeDomainSetMacAgeReply) Size() int {
+func (m *BridgeDomainSetMacAgeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BridgeDomainSetMacAgeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BridgeDomainSetMacAgeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -759,24 +723,21 @@ func (*BridgeFlags) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BridgeFlags) Size() int {
+func (m *BridgeFlags) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	size += 1 // m.IsSet
 	size += 4 // m.Flags
 	return size
 }
 func (m *BridgeFlags) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeBool(m.IsSet)
 	buf.EncodeUint32(uint32(m.Flags))
 	return buf.Bytes(), nil
@@ -802,29 +763,26 @@ func (*BridgeFlagsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BridgeFlagsReply) Size() int {
+func (m *BridgeFlagsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ResultingFeatureBitmap
 	return size
 }
 func (m *BridgeFlagsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ResultingFeatureBitmap))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ResultingFeatureBitmap)
 	return buf.Bytes(), nil
 }
 func (m *BridgeFlagsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ResultingFeatureBitmap = buf.DecodeUint32()
 	return nil
 }
@@ -832,7 +790,7 @@ func (m *BridgeFlagsReply) Unmarshal(b []byte) error {
 // BviCreate defines message 'bvi_create'.
 type BviCreate struct {
 	Mac          ethernet_types.MacAddress `binapi:"mac_address,name=mac" json:"mac,omitempty"`
-	UserInstance uint32                    `binapi:"u32,name=user_instance,default=%!s(float64=4.294967295e+09)" json:"user_instance,omitempty"`
+	UserInstance uint32                    `binapi:"u32,name=user_instance,default=4294967295" json:"user_instance,omitempty"`
 }
 
 func (m *BviCreate) Reset()               { *m = BviCreate{} }
@@ -842,24 +800,21 @@ func (*BviCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BviCreate) Size() int {
+func (m *BviCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 6 // m.Mac
 	size += 4     // m.UserInstance
 	return size
 }
 func (m *BviCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Mac[:], 6)
-	buf.EncodeUint32(uint32(m.UserInstance))
+	buf.EncodeUint32(m.UserInstance)
 	return buf.Bytes(), nil
 }
 func (m *BviCreate) Unmarshal(b []byte) error {
@@ -882,29 +837,26 @@ func (*BviCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BviCreateReply) Size() int {
+func (m *BviCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BviCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *BviCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -921,21 +873,18 @@ func (*BviDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BviDelete) Size() int {
+func (m *BviDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BviDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -957,27 +906,24 @@ func (*BviDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BviDeleteReply) Size() int {
+func (m *BviDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BviDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BviDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -996,11 +942,10 @@ func (*L2ArpTermEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *L2ArpTermEvent) Size() int {
+func (m *L2ArpTermEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.PID
 	size += 1      // m.IP.Af
 	size += 1 * 16 // m.IP.Un
@@ -1009,15 +954,13 @@ func (m *L2ArpTermEvent) Size() int {
 	return size
 }
 func (m *L2ArpTermEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint8(uint8(m.IP.Af))
-	buf.EncodeBytes(m.IP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.Mac[:], 6)
 	return buf.Bytes(), nil
@@ -1042,20 +985,17 @@ func (*L2FibClearTable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2FibClearTable) Size() int {
+func (m *L2FibClearTable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *L2FibClearTable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *L2FibClearTable) Unmarshal(b []byte) error {
@@ -1074,27 +1014,24 @@ func (*L2FibClearTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2FibClearTableReply) Size() int {
+func (m *L2FibClearTableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2FibClearTableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2FibClearTableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1115,11 +1052,10 @@ func (*L2FibTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2FibTableDetails) Size() int {
+func (m *L2FibTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.BdID
 	size += 1 * 6 // m.Mac
 	size += 4     // m.SwIfIndex
@@ -1129,13 +1065,11 @@ func (m *L2FibTableDetails) Size() int {
 	return size
 }
 func (m *L2FibTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeBytes(m.Mac[:], 6)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.StaticMac)
@@ -1166,22 +1100,19 @@ func (*L2FibTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2FibTableDump) Size() int {
+func (m *L2FibTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	return size
 }
 func (m *L2FibTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	return buf.Bytes(), nil
 }
 func (m *L2FibTableDump) Unmarshal(b []byte) error {
@@ -1204,26 +1135,23 @@ func (*L2Flags) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2Flags) Size() int {
+func (m *L2Flags) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.IsSet
 	size += 4 // m.FeatureBitmap
 	return size
 }
 func (m *L2Flags) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsSet)
-	buf.EncodeUint32(uint32(m.FeatureBitmap))
+	buf.EncodeUint32(m.FeatureBitmap)
 	return buf.Bytes(), nil
 }
 func (m *L2Flags) Unmarshal(b []byte) error {
@@ -1247,29 +1175,26 @@ func (*L2FlagsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2FlagsReply) Size() int {
+func (m *L2FlagsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ResultingFeatureBitmap
 	return size
 }
 func (m *L2FlagsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ResultingFeatureBitmap))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ResultingFeatureBitmap)
 	return buf.Bytes(), nil
 }
 func (m *L2FlagsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ResultingFeatureBitmap = buf.DecodeUint32()
 	return nil
 }
@@ -1287,22 +1212,19 @@ func (*L2InterfaceEfpFilter) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2InterfaceEfpFilter) Size() int {
+func (m *L2InterfaceEfpFilter) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.EnableDisable
 	return size
 }
 func (m *L2InterfaceEfpFilter) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.EnableDisable)
 	return buf.Bytes(), nil
@@ -1326,27 +1248,24 @@ func (*L2InterfaceEfpFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2InterfaceEfpFilterReply) Size() int {
+func (m *L2InterfaceEfpFilterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2InterfaceEfpFilterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2InterfaceEfpFilterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1368,11 +1287,10 @@ func (*L2InterfacePbbTagRewrite) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2InterfacePbbTagRewrite) Size() int {
+func (m *L2InterfacePbbTagRewrite) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 4     // m.VtrOp
 	size += 2     // m.OuterTag
@@ -1383,19 +1301,17 @@ func (m *L2InterfacePbbTagRewrite) Size() int {
 	return size
 }
 func (m *L2InterfacePbbTagRewrite) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.VtrOp))
-	buf.EncodeUint16(uint16(m.OuterTag))
+	buf.EncodeUint32(m.VtrOp)
+	buf.EncodeUint16(m.OuterTag)
 	buf.EncodeBytes(m.BDmac[:], 6)
 	buf.EncodeBytes(m.BSmac[:], 6)
-	buf.EncodeUint16(uint16(m.BVlanid))
-	buf.EncodeUint32(uint32(m.ISid))
+	buf.EncodeUint16(m.BVlanid)
+	buf.EncodeUint32(m.ISid)
 	return buf.Bytes(), nil
 }
 func (m *L2InterfacePbbTagRewrite) Unmarshal(b []byte) error {
@@ -1424,27 +1340,24 @@ func (*L2InterfacePbbTagRewriteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2InterfacePbbTagRewriteReply) Size() int {
+func (m *L2InterfacePbbTagRewriteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2InterfacePbbTagRewriteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2InterfacePbbTagRewriteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1464,11 +1377,10 @@ func (*L2InterfaceVlanTagRewrite) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2InterfaceVlanTagRewrite) Size() int {
+func (m *L2InterfaceVlanTagRewrite) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.VtrOp
 	size += 4 // m.PushDot1q
@@ -1477,17 +1389,15 @@ func (m *L2InterfaceVlanTagRewrite) Size() int {
 	return size
 }
 func (m *L2InterfaceVlanTagRewrite) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.VtrOp))
-	buf.EncodeUint32(uint32(m.PushDot1q))
-	buf.EncodeUint32(uint32(m.Tag1))
-	buf.EncodeUint32(uint32(m.Tag2))
+	buf.EncodeUint32(m.VtrOp)
+	buf.EncodeUint32(m.PushDot1q)
+	buf.EncodeUint32(m.Tag1)
+	buf.EncodeUint32(m.Tag2)
 	return buf.Bytes(), nil
 }
 func (m *L2InterfaceVlanTagRewrite) Unmarshal(b []byte) error {
@@ -1514,27 +1424,24 @@ func (*L2InterfaceVlanTagRewriteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2InterfaceVlanTagRewriteReply) Size() int {
+func (m *L2InterfaceVlanTagRewriteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2InterfaceVlanTagRewriteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2InterfaceVlanTagRewriteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1552,11 +1459,10 @@ func (*L2MacsEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *L2MacsEvent) Size() int {
+func (m *L2MacsEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PID
 	size += 4 // m.NMacs
 	for j1 := 0; j1 < len(m.Mac); j1++ {
@@ -1573,23 +1479,21 @@ func (m *L2MacsEvent) Size() int {
 	return size
 }
 func (m *L2MacsEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(len(m.Mac)))
 	for j0 := 0; j0 < len(m.Mac); j0++ {
-		var v0 MacEntry
+		var v0 MacEntry // Mac
 		if j0 < len(m.Mac) {
 			v0 = m.Mac[j0]
 		}
 		buf.EncodeUint32(uint32(v0.SwIfIndex))
 		buf.EncodeBytes(v0.MacAddr[:], 6)
 		buf.EncodeUint32(uint32(v0.Action))
-		buf.EncodeUint8(uint8(v0.Flags))
+		buf.EncodeUint8(v0.Flags)
 	}
 	return buf.Bytes(), nil
 }
@@ -1597,7 +1501,7 @@ func (m *L2MacsEvent) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.PID = buf.DecodeUint32()
 	m.NMacs = buf.DecodeUint32()
-	m.Mac = make([]MacEntry, int(m.NMacs))
+	m.Mac = make([]MacEntry, m.NMacs)
 	for j0 := 0; j0 < len(m.Mac); j0++ {
 		m.Mac[j0].SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 		copy(m.Mac[j0].MacAddr[:], buf.DecodeBytes(6))
@@ -1621,23 +1525,20 @@ func (*L2PatchAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2PatchAddDel) Size() int {
+func (m *L2PatchAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.RxSwIfIndex
 	size += 4 // m.TxSwIfIndex
 	size += 1 // m.IsAdd
 	return size
 }
 func (m *L2PatchAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
 	buf.EncodeUint32(uint32(m.TxSwIfIndex))
 	buf.EncodeBool(m.IsAdd)
@@ -1663,27 +1564,24 @@ func (*L2PatchAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2PatchAddDelReply) Size() int {
+func (m *L2PatchAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2PatchAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2PatchAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1700,22 +1598,19 @@ func (*L2XconnectDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2XconnectDetails) Size() int {
+func (m *L2XconnectDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.RxSwIfIndex
 	size += 4 // m.TxSwIfIndex
 	return size
 }
 func (m *L2XconnectDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
 	buf.EncodeUint32(uint32(m.TxSwIfIndex))
 	return buf.Bytes(), nil
@@ -1737,20 +1632,17 @@ func (*L2XconnectDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2XconnectDump) Size() int {
+func (m *L2XconnectDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *L2XconnectDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *L2XconnectDump) Unmarshal(b []byte) error {
@@ -1775,11 +1667,10 @@ func (*L2fibAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2fibAddDel) Size() int {
+func (m *L2fibAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 6 // m.Mac
 	size += 4     // m.BdID
 	size += 4     // m.SwIfIndex
@@ -1790,14 +1681,12 @@ func (m *L2fibAddDel) Size() int {
 	return size
 }
 func (m *L2fibAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Mac[:], 6)
-	buf.EncodeUint32(uint32(m.BdID))
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.StaticMac)
@@ -1829,27 +1718,24 @@ func (*L2fibAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2fibAddDelReply) Size() int {
+func (m *L2fibAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2fibAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2fibAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1863,20 +1749,17 @@ func (*L2fibFlushAll) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2fibFlushAll) Size() int {
+func (m *L2fibFlushAll) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *L2fibFlushAll) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *L2fibFlushAll) Unmarshal(b []byte) error {
@@ -1895,27 +1778,24 @@ func (*L2fibFlushAllReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2fibFlushAllReply) Size() int {
+func (m *L2fibFlushAllReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2fibFlushAllReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2fibFlushAllReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1931,22 +1811,19 @@ func (*L2fibFlushBd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2fibFlushBd) Size() int {
+func (m *L2fibFlushBd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdID
 	return size
 }
 func (m *L2fibFlushBd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdID)
 	return buf.Bytes(), nil
 }
 func (m *L2fibFlushBd) Unmarshal(b []byte) error {
@@ -1967,27 +1844,24 @@ func (*L2fibFlushBdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2fibFlushBdReply) Size() int {
+func (m *L2fibFlushBdReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2fibFlushBdReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2fibFlushBdReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2003,21 +1877,18 @@ func (*L2fibFlushInt) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L2fibFlushInt) Size() int {
+func (m *L2fibFlushInt) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *L2fibFlushInt) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -2039,27 +1910,24 @@ func (*L2fibFlushIntReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L2fibFlushIntReply) Size() int {
+func (m *L2fibFlushIntReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L2fibFlushIntReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L2fibFlushIntReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2079,11 +1947,10 @@ func (*SwInterfaceSetL2Bridge) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetL2Bridge) Size() int {
+func (m *SwInterfaceSetL2Bridge) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.RxSwIfIndex
 	size += 4 // m.BdID
 	size += 4 // m.PortType
@@ -2092,16 +1959,14 @@ func (m *SwInterfaceSetL2Bridge) Size() int {
 	return size
 }
 func (m *SwInterfaceSetL2Bridge) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
-	buf.EncodeUint32(uint32(m.BdID))
+	buf.EncodeUint32(m.BdID)
 	buf.EncodeUint32(uint32(m.PortType))
-	buf.EncodeUint8(uint8(m.Shg))
+	buf.EncodeUint8(m.Shg)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -2129,27 +1994,24 @@ func (*SwInterfaceSetL2BridgeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetL2BridgeReply) Size() int {
+func (m *SwInterfaceSetL2BridgeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetL2BridgeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetL2BridgeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2167,23 +2029,20 @@ func (*SwInterfaceSetL2Xconnect) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetL2Xconnect) Size() int {
+func (m *SwInterfaceSetL2Xconnect) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.RxSwIfIndex
 	size += 4 // m.TxSwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *SwInterfaceSetL2Xconnect) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
 	buf.EncodeUint32(uint32(m.TxSwIfIndex))
 	buf.EncodeBool(m.Enable)
@@ -2211,34 +2070,31 @@ func (*SwInterfaceSetL2XconnectReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetL2XconnectReply) Size() int {
+func (m *SwInterfaceSetL2XconnectReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetL2XconnectReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetL2XconnectReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
 // SwInterfaceSetVpath defines message 'sw_interface_set_vpath'.
 type SwInterfaceSetVpath struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
-	Enable    bool                           `binapi:"bool,name=enable,default=%!s(float64=4.294967295e+09)" json:"enable,omitempty"`
+	Enable    bool                           `binapi:"bool,name=enable,default=4.294967295e+09" json:"enable,omitempty"`
 }
 
 func (m *SwInterfaceSetVpath) Reset()               { *m = SwInterfaceSetVpath{} }
@@ -2248,22 +2104,19 @@ func (*SwInterfaceSetVpath) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetVpath) Size() int {
+func (m *SwInterfaceSetVpath) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *SwInterfaceSetVpath) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
@@ -2287,27 +2140,24 @@ func (*SwInterfaceSetVpathReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetVpathReply) Size() int {
+func (m *SwInterfaceSetVpathReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetVpathReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetVpathReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2324,24 +2174,21 @@ func (*WantL2ArpTermEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantL2ArpTermEvents) Size() int {
+func (m *WantL2ArpTermEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 4 // m.PID
 	return size
 }
 func (m *WantL2ArpTermEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
-	buf.EncodeUint32(uint32(m.PID))
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantL2ArpTermEvents) Unmarshal(b []byte) error {
@@ -2363,35 +2210,32 @@ func (*WantL2ArpTermEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantL2ArpTermEventsReply) Size() int {
+func (m *WantL2ArpTermEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantL2ArpTermEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantL2ArpTermEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
 // WantL2MacsEvents defines message 'want_l2_macs_events'.
 type WantL2MacsEvents struct {
-	LearnLimit     uint32 `binapi:"u32,name=learn_limit,default=%!s(float64=1000)" json:"learn_limit,omitempty"`
-	ScanDelay      uint8  `binapi:"u8,name=scan_delay,default=%!s(float64=10)" json:"scan_delay,omitempty"`
-	MaxMacsInEvent uint8  `binapi:"u8,name=max_macs_in_event,default=%!s(float64=10)" json:"max_macs_in_event,omitempty"`
+	LearnLimit     uint32 `binapi:"u32,name=learn_limit,default=1000" json:"learn_limit,omitempty"`
+	ScanDelay      uint8  `binapi:"u8,name=scan_delay,default=10" json:"scan_delay,omitempty"`
+	MaxMacsInEvent uint8  `binapi:"u8,name=max_macs_in_event,default=10" json:"max_macs_in_event,omitempty"`
 	EnableDisable  bool   `binapi:"bool,name=enable_disable,default=true" json:"enable_disable,omitempty"`
 	PID            uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
@@ -2403,11 +2247,10 @@ func (*WantL2MacsEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantL2MacsEvents) Size() int {
+func (m *WantL2MacsEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.LearnLimit
 	size += 1 // m.ScanDelay
 	size += 1 // m.MaxMacsInEvent
@@ -2416,17 +2259,15 @@ func (m *WantL2MacsEvents) Size() int {
 	return size
 }
 func (m *WantL2MacsEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.LearnLimit))
-	buf.EncodeUint8(uint8(m.ScanDelay))
-	buf.EncodeUint8(uint8(m.MaxMacsInEvent))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.LearnLimit)
+	buf.EncodeUint8(m.ScanDelay)
+	buf.EncodeUint8(m.MaxMacsInEvent)
 	buf.EncodeBool(m.EnableDisable)
-	buf.EncodeUint32(uint32(m.PID))
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantL2MacsEvents) Unmarshal(b []byte) error {
@@ -2451,27 +2292,24 @@ func (*WantL2MacsEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantL2MacsEventsReply) Size() int {
+func (m *WantL2MacsEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantL2MacsEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantL2MacsEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

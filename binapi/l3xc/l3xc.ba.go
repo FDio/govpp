@@ -53,22 +53,19 @@ func (*L3xcDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L3xcDel) Size() int {
+func (m *L3xcDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.IsIP6
 	return size
 }
 func (m *L3xcDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsIP6)
 	return buf.Bytes(), nil
@@ -92,27 +89,24 @@ func (*L3xcDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L3xcDelReply) Size() int {
+func (m *L3xcDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *L3xcDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *L3xcDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -128,11 +122,10 @@ func (*L3xcDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L3xcDetails) Size() int {
+func (m *L3xcDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.L3xc.SwIfIndex
 	size += 1 // m.L3xc.IsIP6
 	size += 1 // m.L3xc.NPaths
@@ -156,56 +149,45 @@ func (m *L3xcDetails) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *L3xcDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.L3xc.SwIfIndex))
 	buf.EncodeBool(m.L3xc.IsIP6)
 	buf.EncodeUint8(uint8(len(m.L3xc.Paths)))
 	for j1 := 0; j1 < len(m.L3xc.Paths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // Paths
 		if j1 < len(m.L3xc.Paths) {
 			v1 = m.L3xc.Paths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -215,7 +197,7 @@ func (m *L3xcDetails) Unmarshal(b []byte) error {
 	m.L3xc.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.L3xc.IsIP6 = buf.DecodeBool()
 	m.L3xc.NPaths = buf.DecodeUint8()
-	m.L3xc.Paths = make([]fib_types.FibPath, int(m.L3xc.NPaths))
+	m.L3xc.Paths = make([]fib_types.FibPath, m.L3xc.NPaths)
 	for j1 := 0; j1 < len(m.L3xc.Paths); j1++ {
 		m.L3xc.Paths[j1].SwIfIndex = buf.DecodeUint32()
 		m.L3xc.Paths[j1].TableID = buf.DecodeUint32()
@@ -252,21 +234,18 @@ func (*L3xcDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L3xcDump) Size() int {
+func (m *L3xcDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *L3xcDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -286,20 +265,17 @@ func (*L3xcPluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L3xcPluginGetVersion) Size() int {
+func (m *L3xcPluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *L3xcPluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *L3xcPluginGetVersion) Unmarshal(b []byte) error {
@@ -319,24 +295,21 @@ func (*L3xcPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L3xcPluginGetVersionReply) Size() int {
+func (m *L3xcPluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *L3xcPluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *L3xcPluginGetVersionReply) Unmarshal(b []byte) error {
@@ -358,11 +331,10 @@ func (*L3xcUpdate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *L3xcUpdate) Size() int {
+func (m *L3xcUpdate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.L3xc.SwIfIndex
 	size += 1 // m.L3xc.IsIP6
 	size += 1 // m.L3xc.NPaths
@@ -386,56 +358,45 @@ func (m *L3xcUpdate) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *L3xcUpdate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.L3xc.SwIfIndex))
 	buf.EncodeBool(m.L3xc.IsIP6)
 	buf.EncodeUint8(uint8(len(m.L3xc.Paths)))
 	for j1 := 0; j1 < len(m.L3xc.Paths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // Paths
 		if j1 < len(m.L3xc.Paths) {
 			v1 = m.L3xc.Paths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -445,7 +406,7 @@ func (m *L3xcUpdate) Unmarshal(b []byte) error {
 	m.L3xc.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.L3xc.IsIP6 = buf.DecodeBool()
 	m.L3xc.NPaths = buf.DecodeUint8()
-	m.L3xc.Paths = make([]fib_types.FibPath, int(m.L3xc.NPaths))
+	m.L3xc.Paths = make([]fib_types.FibPath, m.L3xc.NPaths)
 	for j1 := 0; j1 < len(m.L3xc.Paths); j1++ {
 		m.L3xc.Paths[j1].SwIfIndex = buf.DecodeUint32()
 		m.L3xc.Paths[j1].TableID = buf.DecodeUint32()
@@ -483,29 +444,26 @@ func (*L3xcUpdateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *L3xcUpdateReply) Size() int {
+func (m *L3xcUpdateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.StatsIndex
 	return size
 }
 func (m *L3xcUpdateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.StatsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatsIndex)
 	return buf.Bytes(), nil
 }
 func (m *L3xcUpdateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StatsIndex = buf.DecodeUint32()
 	return nil
 }

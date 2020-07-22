@@ -44,23 +44,20 @@ func (*DsliteAddDelPoolAddrRange) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteAddDelPoolAddrRange) Size() int {
+func (m *DsliteAddDelPoolAddrRange) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.StartAddr
 	size += 1 * 4 // m.EndAddr
 	size += 1     // m.IsAdd
 	return size
 }
 func (m *DsliteAddDelPoolAddrRange) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.StartAddr[:], 4)
 	buf.EncodeBytes(m.EndAddr[:], 4)
 	buf.EncodeBool(m.IsAdd)
@@ -88,27 +85,24 @@ func (*DsliteAddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteAddDelPoolAddrRangeReply) Size() int {
+func (m *DsliteAddDelPoolAddrRangeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DsliteAddDelPoolAddrRangeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DsliteAddDelPoolAddrRangeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -124,21 +118,18 @@ func (*DsliteAddressDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteAddressDetails) Size() int {
+func (m *DsliteAddressDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	return size
 }
 func (m *DsliteAddressDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
 	return buf.Bytes(), nil
 }
@@ -158,20 +149,17 @@ func (*DsliteAddressDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteAddressDump) Size() int {
+func (m *DsliteAddressDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DsliteAddressDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DsliteAddressDump) Unmarshal(b []byte) error {
@@ -188,20 +176,17 @@ func (*DsliteGetAftrAddr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteGetAftrAddr) Size() int {
+func (m *DsliteGetAftrAddr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DsliteGetAftrAddr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DsliteGetAftrAddr) Unmarshal(b []byte) error {
@@ -222,31 +207,28 @@ func (*DsliteGetAftrAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteGetAftrAddrReply) Size() int {
+func (m *DsliteGetAftrAddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Retval
 	size += 1 * 4  // m.IP4Addr
 	size += 1 * 16 // m.IP6Addr
 	return size
 }
 func (m *DsliteGetAftrAddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.IP4Addr[:], 4)
 	buf.EncodeBytes(m.IP6Addr[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *DsliteGetAftrAddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.IP4Addr[:], buf.DecodeBytes(4))
 	copy(m.IP6Addr[:], buf.DecodeBytes(16))
 	return nil
@@ -262,20 +244,17 @@ func (*DsliteGetB4Addr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteGetB4Addr) Size() int {
+func (m *DsliteGetB4Addr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *DsliteGetB4Addr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *DsliteGetB4Addr) Unmarshal(b []byte) error {
@@ -296,31 +275,28 @@ func (*DsliteGetB4AddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteGetB4AddrReply) Size() int {
+func (m *DsliteGetB4AddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Retval
 	size += 1 * 4  // m.IP4Addr
 	size += 1 * 16 // m.IP6Addr
 	return size
 }
 func (m *DsliteGetB4AddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.IP4Addr[:], 4)
 	buf.EncodeBytes(m.IP6Addr[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *DsliteGetB4AddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.IP4Addr[:], buf.DecodeBytes(4))
 	copy(m.IP6Addr[:], buf.DecodeBytes(16))
 	return nil
@@ -339,22 +315,19 @@ func (*DsliteSetAftrAddr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteSetAftrAddr) Size() int {
+func (m *DsliteSetAftrAddr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4  // m.IP4Addr
 	size += 1 * 16 // m.IP6Addr
 	return size
 }
 func (m *DsliteSetAftrAddr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP4Addr[:], 4)
 	buf.EncodeBytes(m.IP6Addr[:], 16)
 	return buf.Bytes(), nil
@@ -378,27 +351,24 @@ func (*DsliteSetAftrAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteSetAftrAddrReply) Size() int {
+func (m *DsliteSetAftrAddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DsliteSetAftrAddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DsliteSetAftrAddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -415,22 +385,19 @@ func (*DsliteSetB4Addr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DsliteSetB4Addr) Size() int {
+func (m *DsliteSetB4Addr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4  // m.IP4Addr
 	size += 1 * 16 // m.IP6Addr
 	return size
 }
 func (m *DsliteSetB4Addr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP4Addr[:], 4)
 	buf.EncodeBytes(m.IP6Addr[:], 16)
 	return buf.Bytes(), nil
@@ -454,27 +421,24 @@ func (*DsliteSetB4AddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DsliteSetB4AddrReply) Size() int {
+func (m *DsliteSetB4AddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DsliteSetB4AddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DsliteSetB4AddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

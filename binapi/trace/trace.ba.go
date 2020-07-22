@@ -44,11 +44,10 @@ func (*TraceProfileAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TraceProfileAdd) Size() int {
+func (m *TraceProfileAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.TraceType
 	size += 1 // m.NumElts
 	size += 1 // m.TraceTsp
@@ -57,17 +56,15 @@ func (m *TraceProfileAdd) Size() int {
 	return size
 }
 func (m *TraceProfileAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.TraceType))
-	buf.EncodeUint8(uint8(m.NumElts))
-	buf.EncodeUint8(uint8(m.TraceTsp))
-	buf.EncodeUint32(uint32(m.NodeID))
-	buf.EncodeUint32(uint32(m.AppData))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.TraceType)
+	buf.EncodeUint8(m.NumElts)
+	buf.EncodeUint8(m.TraceTsp)
+	buf.EncodeUint32(m.NodeID)
+	buf.EncodeUint32(m.AppData)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileAdd) Unmarshal(b []byte) error {
@@ -92,27 +89,24 @@ func (*TraceProfileAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TraceProfileAddReply) Size() int {
+func (m *TraceProfileAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TraceProfileAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -126,20 +120,17 @@ func (*TraceProfileDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TraceProfileDel) Size() int {
+func (m *TraceProfileDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *TraceProfileDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileDel) Unmarshal(b []byte) error {
@@ -158,27 +149,24 @@ func (*TraceProfileDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TraceProfileDelReply) Size() int {
+func (m *TraceProfileDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TraceProfileDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -192,20 +180,17 @@ func (*TraceProfileShowConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TraceProfileShowConfig) Size() int {
+func (m *TraceProfileShowConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *TraceProfileShowConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileShowConfig) Unmarshal(b []byte) error {
@@ -229,11 +214,10 @@ func (*TraceProfileShowConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TraceProfileShowConfigReply) Size() int {
+func (m *TraceProfileShowConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.TraceType
 	size += 1 // m.NumElts
@@ -243,23 +227,21 @@ func (m *TraceProfileShowConfigReply) Size() int {
 	return size
 }
 func (m *TraceProfileShowConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.TraceType))
-	buf.EncodeUint8(uint8(m.NumElts))
-	buf.EncodeUint8(uint8(m.TraceTsp))
-	buf.EncodeUint32(uint32(m.NodeID))
-	buf.EncodeUint32(uint32(m.AppData))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.TraceType)
+	buf.EncodeUint8(m.NumElts)
+	buf.EncodeUint8(m.TraceTsp)
+	buf.EncodeUint32(m.NodeID)
+	buf.EncodeUint32(m.AppData)
 	return buf.Bytes(), nil
 }
 func (m *TraceProfileShowConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.TraceType = buf.DecodeUint8()
 	m.NumElts = buf.DecodeUint8()
 	m.TraceTsp = buf.DecodeUint8()

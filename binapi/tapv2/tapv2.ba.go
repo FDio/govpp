@@ -115,11 +115,10 @@ func (*SwInterfaceTapV2Details) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceTapV2Details) Size() int {
+func (m *SwInterfaceTapV2Details) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 4      // m.ID
 	size += 2      // m.TxRingSz
@@ -138,22 +137,20 @@ func (m *SwInterfaceTapV2Details) Size() int {
 	return size
 }
 func (m *SwInterfaceTapV2Details) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ID))
-	buf.EncodeUint16(uint16(m.TxRingSz))
-	buf.EncodeUint16(uint16(m.RxRingSz))
-	buf.EncodeUint32(uint32(m.HostMtuSize))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SwIfIndex)
+	buf.EncodeUint32(m.ID)
+	buf.EncodeUint16(m.TxRingSz)
+	buf.EncodeUint16(m.RxRingSz)
+	buf.EncodeUint32(m.HostMtuSize)
 	buf.EncodeBytes(m.HostMacAddr[:], 6)
 	buf.EncodeBytes(m.HostIP4Prefix.Address[:], 4)
-	buf.EncodeUint8(uint8(m.HostIP4Prefix.Len))
+	buf.EncodeUint8(m.HostIP4Prefix.Len)
 	buf.EncodeBytes(m.HostIP6Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.HostIP6Prefix.Len))
+	buf.EncodeUint8(m.HostIP6Prefix.Len)
 	buf.EncodeUint32(uint32(m.TapFlags))
 	buf.EncodeString(m.DevName, 64)
 	buf.EncodeString(m.HostIfName, 64)
@@ -183,7 +180,7 @@ func (m *SwInterfaceTapV2Details) Unmarshal(b []byte) error {
 
 // SwInterfaceTapV2Dump defines message 'sw_interface_tap_v2_dump'.
 type SwInterfaceTapV2Dump struct {
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *SwInterfaceTapV2Dump) Reset()               { *m = SwInterfaceTapV2Dump{} }
@@ -193,21 +190,18 @@ func (*SwInterfaceTapV2Dump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceTapV2Dump) Size() int {
+func (m *SwInterfaceTapV2Dump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *SwInterfaceTapV2Dump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -219,12 +213,12 @@ func (m *SwInterfaceTapV2Dump) Unmarshal(b []byte) error {
 
 // TapCreateV2 defines message 'tap_create_v2'.
 type TapCreateV2 struct {
-	ID               uint32                        `binapi:"u32,name=id,default=%!s(float64=4.294967295e+09)" json:"id,omitempty"`
+	ID               uint32                        `binapi:"u32,name=id,default=4294967295" json:"id,omitempty"`
 	UseRandomMac     bool                          `binapi:"bool,name=use_random_mac,default=true" json:"use_random_mac,omitempty"`
 	MacAddress       ethernet_types.MacAddress     `binapi:"mac_address,name=mac_address" json:"mac_address,omitempty"`
-	NumRxQueues      uint8                         `binapi:"u8,name=num_rx_queues,default=%!s(float64=1)" json:"num_rx_queues,omitempty"`
-	TxRingSz         uint16                        `binapi:"u16,name=tx_ring_sz,default=%!s(float64=256)" json:"tx_ring_sz,omitempty"`
-	RxRingSz         uint16                        `binapi:"u16,name=rx_ring_sz,default=%!s(float64=256)" json:"rx_ring_sz,omitempty"`
+	NumRxQueues      uint8                         `binapi:"u8,name=num_rx_queues,default=1" json:"num_rx_queues,omitempty"`
+	TxRingSz         uint16                        `binapi:"u16,name=tx_ring_sz,default=256" json:"tx_ring_sz,omitempty"`
+	RxRingSz         uint16                        `binapi:"u16,name=rx_ring_sz,default=256" json:"rx_ring_sz,omitempty"`
 	HostMtuSet       bool                          `binapi:"bool,name=host_mtu_set" json:"host_mtu_set,omitempty"`
 	HostMtuSize      uint32                        `binapi:"u32,name=host_mtu_size" json:"host_mtu_size,omitempty"`
 	HostMacAddrSet   bool                          `binapi:"bool,name=host_mac_addr_set" json:"host_mac_addr_set,omitempty"`
@@ -254,11 +248,10 @@ func (*TapCreateV2) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TapCreateV2) Size() int {
+func (m *TapCreateV2) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4              // m.ID
 	size += 1              // m.UseRandomMac
 	size += 1 * 6          // m.MacAddress
@@ -290,28 +283,26 @@ func (m *TapCreateV2) Size() int {
 	return size
 }
 func (m *TapCreateV2) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ID)
 	buf.EncodeBool(m.UseRandomMac)
 	buf.EncodeBytes(m.MacAddress[:], 6)
-	buf.EncodeUint8(uint8(m.NumRxQueues))
-	buf.EncodeUint16(uint16(m.TxRingSz))
-	buf.EncodeUint16(uint16(m.RxRingSz))
+	buf.EncodeUint8(m.NumRxQueues)
+	buf.EncodeUint16(m.TxRingSz)
+	buf.EncodeUint16(m.RxRingSz)
 	buf.EncodeBool(m.HostMtuSet)
-	buf.EncodeUint32(uint32(m.HostMtuSize))
+	buf.EncodeUint32(m.HostMtuSize)
 	buf.EncodeBool(m.HostMacAddrSet)
 	buf.EncodeBytes(m.HostMacAddr[:], 6)
 	buf.EncodeBool(m.HostIP4PrefixSet)
 	buf.EncodeBytes(m.HostIP4Prefix.Address[:], 4)
-	buf.EncodeUint8(uint8(m.HostIP4Prefix.Len))
+	buf.EncodeUint8(m.HostIP4Prefix.Len)
 	buf.EncodeBool(m.HostIP6PrefixSet)
 	buf.EncodeBytes(m.HostIP6Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.HostIP6Prefix.Len))
+	buf.EncodeUint8(m.HostIP6Prefix.Len)
 	buf.EncodeBool(m.HostIP4GwSet)
 	buf.EncodeBytes(m.HostIP4Gw[:], 4)
 	buf.EncodeBool(m.HostIP6GwSet)
@@ -372,29 +363,26 @@ func (*TapCreateV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TapCreateV2Reply) Size() int {
+func (m *TapCreateV2Reply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *TapCreateV2Reply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *TapCreateV2Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -411,21 +399,18 @@ func (*TapDeleteV2) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TapDeleteV2) Size() int {
+func (m *TapDeleteV2) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *TapDeleteV2) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -447,27 +432,24 @@ func (*TapDeleteV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TapDeleteV2Reply) Size() int {
+func (m *TapDeleteV2Reply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TapDeleteV2Reply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TapDeleteV2Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

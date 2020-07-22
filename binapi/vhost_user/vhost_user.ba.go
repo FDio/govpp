@@ -53,11 +53,10 @@ func (*CreateVhostUserIf) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *CreateVhostUserIf) Size() int {
+func (m *CreateVhostUserIf) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsServer
 	size += 256   // m.SockFilename
 	size += 1     // m.Renumber
@@ -72,12 +71,10 @@ func (m *CreateVhostUserIf) Size() int {
 	return size
 }
 func (m *CreateVhostUserIf) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsServer)
 	buf.EncodeString(m.SockFilename, 256)
 	buf.EncodeBool(m.Renumber)
@@ -85,7 +82,7 @@ func (m *CreateVhostUserIf) Marshal(b []byte) ([]byte, error) {
 	buf.EncodeBool(m.DisableIndirectDesc)
 	buf.EncodeBool(m.EnableGso)
 	buf.EncodeBool(m.EnablePacked)
-	buf.EncodeUint32(uint32(m.CustomDevInstance))
+	buf.EncodeUint32(m.CustomDevInstance)
 	buf.EncodeBool(m.UseCustomMac)
 	buf.EncodeBytes(m.MacAddress[:], 6)
 	buf.EncodeString(m.Tag, 64)
@@ -120,29 +117,26 @@ func (*CreateVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *CreateVhostUserIfReply) Size() int {
+func (m *CreateVhostUserIfReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *CreateVhostUserIfReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *CreateVhostUserIfReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -159,21 +153,18 @@ func (*DeleteVhostUserIf) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DeleteVhostUserIf) Size() int {
+func (m *DeleteVhostUserIf) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *DeleteVhostUserIf) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -195,27 +186,24 @@ func (*DeleteVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DeleteVhostUserIfReply) Size() int {
+func (m *DeleteVhostUserIfReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DeleteVhostUserIfReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DeleteVhostUserIfReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -237,11 +225,10 @@ func (*ModifyVhostUserIf) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ModifyVhostUserIf) Size() int {
+func (m *ModifyVhostUserIf) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.SwIfIndex
 	size += 1   // m.IsServer
 	size += 256 // m.SockFilename
@@ -252,19 +239,17 @@ func (m *ModifyVhostUserIf) Size() int {
 	return size
 }
 func (m *ModifyVhostUserIf) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsServer)
 	buf.EncodeString(m.SockFilename, 256)
 	buf.EncodeBool(m.Renumber)
 	buf.EncodeBool(m.EnableGso)
 	buf.EncodeBool(m.EnablePacked)
-	buf.EncodeUint32(uint32(m.CustomDevInstance))
+	buf.EncodeUint32(m.CustomDevInstance)
 	return buf.Bytes(), nil
 }
 func (m *ModifyVhostUserIf) Unmarshal(b []byte) error {
@@ -291,27 +276,24 @@ func (*ModifyVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ModifyVhostUserIfReply) Size() int {
+func (m *ModifyVhostUserIfReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ModifyVhostUserIfReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ModifyVhostUserIfReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -335,11 +317,10 @@ func (*SwInterfaceVhostUserDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceVhostUserDetails) Size() int {
+func (m *SwInterfaceVhostUserDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.SwIfIndex
 	size += 64  // m.InterfaceName
 	size += 4   // m.VirtioNetHdrSz
@@ -352,21 +333,19 @@ func (m *SwInterfaceVhostUserDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceVhostUserDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.InterfaceName, 64)
-	buf.EncodeUint32(uint32(m.VirtioNetHdrSz))
+	buf.EncodeUint32(m.VirtioNetHdrSz)
 	buf.EncodeUint32(uint32(m.FeaturesFirst32))
 	buf.EncodeUint32(uint32(m.FeaturesLast32))
 	buf.EncodeBool(m.IsServer)
 	buf.EncodeString(m.SockFilename, 256)
-	buf.EncodeUint32(uint32(m.NumRegions))
-	buf.EncodeUint32(uint32(m.SockErrno))
+	buf.EncodeUint32(m.NumRegions)
+	buf.EncodeInt32(m.SockErrno)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceVhostUserDetails) Unmarshal(b []byte) error {
@@ -379,13 +358,13 @@ func (m *SwInterfaceVhostUserDetails) Unmarshal(b []byte) error {
 	m.IsServer = buf.DecodeBool()
 	m.SockFilename = buf.DecodeString(256)
 	m.NumRegions = buf.DecodeUint32()
-	m.SockErrno = int32(buf.DecodeUint32())
+	m.SockErrno = buf.DecodeInt32()
 	return nil
 }
 
 // SwInterfaceVhostUserDump defines message 'sw_interface_vhost_user_dump'.
 type SwInterfaceVhostUserDump struct {
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *SwInterfaceVhostUserDump) Reset()               { *m = SwInterfaceVhostUserDump{} }
@@ -395,21 +374,18 @@ func (*SwInterfaceVhostUserDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceVhostUserDump) Size() int {
+func (m *SwInterfaceVhostUserDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *SwInterfaceVhostUserDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

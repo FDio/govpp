@@ -63,11 +63,10 @@ func (*BierDispEntryAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierDispEntryAddDel) Size() int {
+func (m *BierDispEntryAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.BdeBp
 	size += 4 // m.BdeTblID
 	size += 1 // m.BdeIsAdd
@@ -93,58 +92,47 @@ func (m *BierDispEntryAddDel) Size() int {
 		size += 4      // s1.Nh.ClassifyTableIndex
 		size += 1      // s1.NLabels
 		for j2 := 0; j2 < 16; j2++ {
-			var s2 fib_types.FibMplsLabel
-			_ = s2
-			if j2 < len(s1.LabelStack) {
-				s2 = s1.LabelStack[j2]
-			}
-			size += 1 // s2.IsUniform
-			size += 4 // s2.Label
-			size += 1 // s2.TTL
-			size += 1 // s2.Exp
+			size += 1 // s1.LabelStack[j2].IsUniform
+			size += 4 // s1.LabelStack[j2].Label
+			size += 1 // s1.LabelStack[j2].TTL
+			size += 1 // s1.LabelStack[j2].Exp
 		}
 	}
 	return size
 }
 func (m *BierDispEntryAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.BdeBp))
-	buf.EncodeUint32(uint32(m.BdeTblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.BdeBp)
+	buf.EncodeUint32(m.BdeTblID)
 	buf.EncodeBool(m.BdeIsAdd)
-	buf.EncodeUint8(uint8(m.BdePayloadProto))
+	buf.EncodeUint8(m.BdePayloadProto)
 	buf.EncodeUint8(uint8(len(m.BdePaths)))
 	for j0 := 0; j0 < len(m.BdePaths); j0++ {
-		var v0 fib_types.FibPath
+		var v0 fib_types.FibPath // BdePaths
 		if j0 < len(m.BdePaths) {
 			v0 = m.BdePaths[j0]
 		}
-		buf.EncodeUint32(uint32(v0.SwIfIndex))
-		buf.EncodeUint32(uint32(v0.TableID))
-		buf.EncodeUint32(uint32(v0.RpfID))
-		buf.EncodeUint8(uint8(v0.Weight))
-		buf.EncodeUint8(uint8(v0.Preference))
+		buf.EncodeUint32(v0.SwIfIndex)
+		buf.EncodeUint32(v0.TableID)
+		buf.EncodeUint32(v0.RpfID)
+		buf.EncodeUint8(v0.Weight)
+		buf.EncodeUint8(v0.Preference)
 		buf.EncodeUint32(uint32(v0.Type))
 		buf.EncodeUint32(uint32(v0.Flags))
 		buf.EncodeUint32(uint32(v0.Proto))
-		buf.EncodeBytes(v0.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v0.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v0.Nh.ObjID))
-		buf.EncodeUint32(uint32(v0.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v0.NLabels))
+		buf.EncodeBytes(v0.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v0.Nh.ViaLabel)
+		buf.EncodeUint32(v0.Nh.ObjID)
+		buf.EncodeUint32(v0.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v0.NLabels)
 		for j1 := 0; j1 < 16; j1++ {
-			var v1 fib_types.FibMplsLabel
-			if j1 < len(v0.LabelStack) {
-				v1 = v0.LabelStack[j1]
-			}
-			buf.EncodeUint8(uint8(v1.IsUniform))
-			buf.EncodeUint32(uint32(v1.Label))
-			buf.EncodeUint8(uint8(v1.TTL))
-			buf.EncodeUint8(uint8(v1.Exp))
+			buf.EncodeUint8(v0.LabelStack[j1].IsUniform)
+			buf.EncodeUint32(v0.LabelStack[j1].Label)
+			buf.EncodeUint8(v0.LabelStack[j1].TTL)
+			buf.EncodeUint8(v0.LabelStack[j1].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -156,7 +144,7 @@ func (m *BierDispEntryAddDel) Unmarshal(b []byte) error {
 	m.BdeIsAdd = buf.DecodeBool()
 	m.BdePayloadProto = buf.DecodeUint8()
 	m.BdeNPaths = buf.DecodeUint8()
-	m.BdePaths = make([]fib_types.FibPath, int(m.BdeNPaths))
+	m.BdePaths = make([]fib_types.FibPath, m.BdeNPaths)
 	for j0 := 0; j0 < len(m.BdePaths); j0++ {
 		m.BdePaths[j0].SwIfIndex = buf.DecodeUint32()
 		m.BdePaths[j0].TableID = buf.DecodeUint32()
@@ -193,27 +181,24 @@ func (*BierDispEntryAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierDispEntryAddDelReply) Size() int {
+func (m *BierDispEntryAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BierDispEntryAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BierDispEntryAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -234,11 +219,10 @@ func (*BierDispEntryDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierDispEntryDetails) Size() int {
+func (m *BierDispEntryDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.BdeBp
 	size += 4 // m.BdeTblID
 	size += 1 // m.BdeIsAdd
@@ -264,58 +248,47 @@ func (m *BierDispEntryDetails) Size() int {
 		size += 4      // s1.Nh.ClassifyTableIndex
 		size += 1      // s1.NLabels
 		for j2 := 0; j2 < 16; j2++ {
-			var s2 fib_types.FibMplsLabel
-			_ = s2
-			if j2 < len(s1.LabelStack) {
-				s2 = s1.LabelStack[j2]
-			}
-			size += 1 // s2.IsUniform
-			size += 4 // s2.Label
-			size += 1 // s2.TTL
-			size += 1 // s2.Exp
+			size += 1 // s1.LabelStack[j2].IsUniform
+			size += 4 // s1.LabelStack[j2].Label
+			size += 1 // s1.LabelStack[j2].TTL
+			size += 1 // s1.LabelStack[j2].Exp
 		}
 	}
 	return size
 }
 func (m *BierDispEntryDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.BdeBp))
-	buf.EncodeUint32(uint32(m.BdeTblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.BdeBp)
+	buf.EncodeUint32(m.BdeTblID)
 	buf.EncodeBool(m.BdeIsAdd)
-	buf.EncodeUint8(uint8(m.BdePayloadProto))
+	buf.EncodeUint8(m.BdePayloadProto)
 	buf.EncodeUint8(uint8(len(m.BdePaths)))
 	for j0 := 0; j0 < len(m.BdePaths); j0++ {
-		var v0 fib_types.FibPath
+		var v0 fib_types.FibPath // BdePaths
 		if j0 < len(m.BdePaths) {
 			v0 = m.BdePaths[j0]
 		}
-		buf.EncodeUint32(uint32(v0.SwIfIndex))
-		buf.EncodeUint32(uint32(v0.TableID))
-		buf.EncodeUint32(uint32(v0.RpfID))
-		buf.EncodeUint8(uint8(v0.Weight))
-		buf.EncodeUint8(uint8(v0.Preference))
+		buf.EncodeUint32(v0.SwIfIndex)
+		buf.EncodeUint32(v0.TableID)
+		buf.EncodeUint32(v0.RpfID)
+		buf.EncodeUint8(v0.Weight)
+		buf.EncodeUint8(v0.Preference)
 		buf.EncodeUint32(uint32(v0.Type))
 		buf.EncodeUint32(uint32(v0.Flags))
 		buf.EncodeUint32(uint32(v0.Proto))
-		buf.EncodeBytes(v0.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v0.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v0.Nh.ObjID))
-		buf.EncodeUint32(uint32(v0.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v0.NLabels))
+		buf.EncodeBytes(v0.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v0.Nh.ViaLabel)
+		buf.EncodeUint32(v0.Nh.ObjID)
+		buf.EncodeUint32(v0.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v0.NLabels)
 		for j1 := 0; j1 < 16; j1++ {
-			var v1 fib_types.FibMplsLabel
-			if j1 < len(v0.LabelStack) {
-				v1 = v0.LabelStack[j1]
-			}
-			buf.EncodeUint8(uint8(v1.IsUniform))
-			buf.EncodeUint32(uint32(v1.Label))
-			buf.EncodeUint8(uint8(v1.TTL))
-			buf.EncodeUint8(uint8(v1.Exp))
+			buf.EncodeUint8(v0.LabelStack[j1].IsUniform)
+			buf.EncodeUint32(v0.LabelStack[j1].Label)
+			buf.EncodeUint8(v0.LabelStack[j1].TTL)
+			buf.EncodeUint8(v0.LabelStack[j1].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -327,7 +300,7 @@ func (m *BierDispEntryDetails) Unmarshal(b []byte) error {
 	m.BdeIsAdd = buf.DecodeBool()
 	m.BdePayloadProto = buf.DecodeUint8()
 	m.BdeNPaths = buf.DecodeUint8()
-	m.BdePaths = make([]fib_types.FibPath, int(m.BdeNPaths))
+	m.BdePaths = make([]fib_types.FibPath, m.BdeNPaths)
 	for j0 := 0; j0 < len(m.BdePaths); j0++ {
 		m.BdePaths[j0].SwIfIndex = buf.DecodeUint32()
 		m.BdePaths[j0].TableID = buf.DecodeUint32()
@@ -364,22 +337,19 @@ func (*BierDispEntryDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierDispEntryDump) Size() int {
+func (m *BierDispEntryDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdeTblID
 	return size
 }
 func (m *BierDispEntryDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdeTblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdeTblID)
 	return buf.Bytes(), nil
 }
 func (m *BierDispEntryDump) Unmarshal(b []byte) error {
@@ -401,23 +371,20 @@ func (*BierDispTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierDispTableAddDel) Size() int {
+func (m *BierDispTableAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdtTblID
 	size += 1 // m.BdtIsAdd
 	return size
 }
 func (m *BierDispTableAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdtTblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdtTblID)
 	buf.EncodeBool(m.BdtIsAdd)
 	return buf.Bytes(), nil
 }
@@ -440,27 +407,24 @@ func (*BierDispTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierDispTableAddDelReply) Size() int {
+func (m *BierDispTableAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BierDispTableAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BierDispTableAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -476,22 +440,19 @@ func (*BierDispTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierDispTableDetails) Size() int {
+func (m *BierDispTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BdtTblID
 	return size
 }
 func (m *BierDispTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BdtTblID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BdtTblID)
 	return buf.Bytes(), nil
 }
 func (m *BierDispTableDetails) Unmarshal(b []byte) error {
@@ -510,20 +471,17 @@ func (*BierDispTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierDispTableDump) Size() int {
+func (m *BierDispTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *BierDispTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *BierDispTableDump) Unmarshal(b []byte) error {
@@ -545,11 +503,10 @@ func (*BierImpAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierImpAdd) Size() int {
+func (m *BierImpAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                  // m.BiTblID.BtSet
 	size += 1                  // m.BiTblID.BtSubDomain
 	size += 1                  // m.BiTblID.BtHdrLenID
@@ -559,18 +516,16 @@ func (m *BierImpAdd) Size() int {
 	return size
 }
 func (m *BierImpAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.BiTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BiTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BiTblID.BtHdrLenID))
-	buf.EncodeUint16(uint16(m.BiSrc))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.BiTblID.BtSet)
+	buf.EncodeUint8(m.BiTblID.BtSubDomain)
+	buf.EncodeUint8(m.BiTblID.BtHdrLenID)
+	buf.EncodeUint16(m.BiSrc)
 	buf.EncodeUint8(uint8(len(m.BiBytes)))
-	buf.EncodeBytes(m.BiBytes[:], 0)
+	buf.EncodeBytes(m.BiBytes, 0)
 	return buf.Bytes(), nil
 }
 func (m *BierImpAdd) Unmarshal(b []byte) error {
@@ -580,7 +535,8 @@ func (m *BierImpAdd) Unmarshal(b []byte) error {
 	m.BiTblID.BtHdrLenID = buf.DecodeUint8()
 	m.BiSrc = buf.DecodeUint16()
 	m.BiNBytes = buf.DecodeUint8()
-	copy(m.BiBytes[:], buf.DecodeBytes(0))
+	m.BiBytes = make([]byte, m.BiNBytes)
+	copy(m.BiBytes, buf.DecodeBytes(len(m.BiBytes)))
 	return nil
 }
 
@@ -597,29 +553,26 @@ func (*BierImpAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierImpAddReply) Size() int {
+func (m *BierImpAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.BiIndex
 	return size
 }
 func (m *BierImpAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.BiIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.BiIndex)
 	return buf.Bytes(), nil
 }
 func (m *BierImpAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.BiIndex = buf.DecodeUint32()
 	return nil
 }
@@ -636,22 +589,19 @@ func (*BierImpDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierImpDel) Size() int {
+func (m *BierImpDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BiIndex
 	return size
 }
 func (m *BierImpDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BiIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BiIndex)
 	return buf.Bytes(), nil
 }
 func (m *BierImpDel) Unmarshal(b []byte) error {
@@ -672,27 +622,24 @@ func (*BierImpDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierImpDelReply) Size() int {
+func (m *BierImpDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BierImpDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BierImpDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -711,11 +658,10 @@ func (*BierImpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierImpDetails) Size() int {
+func (m *BierImpDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                  // m.BiTblID.BtSet
 	size += 1                  // m.BiTblID.BtSubDomain
 	size += 1                  // m.BiTblID.BtHdrLenID
@@ -725,18 +671,16 @@ func (m *BierImpDetails) Size() int {
 	return size
 }
 func (m *BierImpDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.BiTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BiTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BiTblID.BtHdrLenID))
-	buf.EncodeUint16(uint16(m.BiSrc))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.BiTblID.BtSet)
+	buf.EncodeUint8(m.BiTblID.BtSubDomain)
+	buf.EncodeUint8(m.BiTblID.BtHdrLenID)
+	buf.EncodeUint16(m.BiSrc)
 	buf.EncodeUint8(uint8(len(m.BiBytes)))
-	buf.EncodeBytes(m.BiBytes[:], 0)
+	buf.EncodeBytes(m.BiBytes, 0)
 	return buf.Bytes(), nil
 }
 func (m *BierImpDetails) Unmarshal(b []byte) error {
@@ -746,7 +690,8 @@ func (m *BierImpDetails) Unmarshal(b []byte) error {
 	m.BiTblID.BtHdrLenID = buf.DecodeUint8()
 	m.BiSrc = buf.DecodeUint16()
 	m.BiNBytes = buf.DecodeUint8()
-	copy(m.BiBytes[:], buf.DecodeBytes(0))
+	m.BiBytes = make([]byte, m.BiNBytes)
+	copy(m.BiBytes, buf.DecodeBytes(len(m.BiBytes)))
 	return nil
 }
 
@@ -760,20 +705,17 @@ func (*BierImpDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierImpDump) Size() int {
+func (m *BierImpDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *BierImpDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *BierImpDump) Unmarshal(b []byte) error {
@@ -794,11 +736,10 @@ func (*BierRouteAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierRouteAddDel) Size() int {
+func (m *BierRouteAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.BrIsAdd
 	size += 1 // m.BrIsReplace
 	size += 4 // m.BrRoute.BrBp
@@ -826,60 +767,49 @@ func (m *BierRouteAddDel) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *BierRouteAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.BrIsAdd)
 	buf.EncodeBool(m.BrIsReplace)
-	buf.EncodeUint32(uint32(m.BrRoute.BrBp))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtHdrLenID))
+	buf.EncodeUint32(m.BrRoute.BrBp)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtSet)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtSubDomain)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtHdrLenID)
 	buf.EncodeUint8(uint8(len(m.BrRoute.BrPaths)))
 	for j1 := 0; j1 < len(m.BrRoute.BrPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // BrPaths
 		if j1 < len(m.BrRoute.BrPaths) {
 			v1 = m.BrRoute.BrPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -893,7 +823,7 @@ func (m *BierRouteAddDel) Unmarshal(b []byte) error {
 	m.BrRoute.BrTblID.BtSubDomain = buf.DecodeUint8()
 	m.BrRoute.BrTblID.BtHdrLenID = buf.DecodeUint8()
 	m.BrRoute.BrNPaths = buf.DecodeUint8()
-	m.BrRoute.BrPaths = make([]fib_types.FibPath, int(m.BrRoute.BrNPaths))
+	m.BrRoute.BrPaths = make([]fib_types.FibPath, m.BrRoute.BrNPaths)
 	for j1 := 0; j1 < len(m.BrRoute.BrPaths); j1++ {
 		m.BrRoute.BrPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.BrRoute.BrPaths[j1].TableID = buf.DecodeUint32()
@@ -930,27 +860,24 @@ func (*BierRouteAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierRouteAddDelReply) Size() int {
+func (m *BierRouteAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BierRouteAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BierRouteAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -966,11 +893,10 @@ func (*BierRouteDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierRouteDetails) Size() int {
+func (m *BierRouteDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BrRoute.BrBp
 	size += 1 // m.BrRoute.BrTblID.BtSet
 	size += 1 // m.BrRoute.BrTblID.BtSubDomain
@@ -996,58 +922,47 @@ func (m *BierRouteDetails) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *BierRouteDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BrRoute.BrBp))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BrRoute.BrTblID.BtHdrLenID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BrRoute.BrBp)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtSet)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtSubDomain)
+	buf.EncodeUint8(m.BrRoute.BrTblID.BtHdrLenID)
 	buf.EncodeUint8(uint8(len(m.BrRoute.BrPaths)))
 	for j1 := 0; j1 < len(m.BrRoute.BrPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // BrPaths
 		if j1 < len(m.BrRoute.BrPaths) {
 			v1 = m.BrRoute.BrPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -1059,7 +974,7 @@ func (m *BierRouteDetails) Unmarshal(b []byte) error {
 	m.BrRoute.BrTblID.BtSubDomain = buf.DecodeUint8()
 	m.BrRoute.BrTblID.BtHdrLenID = buf.DecodeUint8()
 	m.BrRoute.BrNPaths = buf.DecodeUint8()
-	m.BrRoute.BrPaths = make([]fib_types.FibPath, int(m.BrRoute.BrNPaths))
+	m.BrRoute.BrPaths = make([]fib_types.FibPath, m.BrRoute.BrNPaths)
 	for j1 := 0; j1 < len(m.BrRoute.BrPaths); j1++ {
 		m.BrRoute.BrPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.BrRoute.BrPaths[j1].TableID = buf.DecodeUint32()
@@ -1096,26 +1011,23 @@ func (*BierRouteDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierRouteDump) Size() int {
+func (m *BierRouteDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.BrTblID.BtSet
 	size += 1 // m.BrTblID.BtSubDomain
 	size += 1 // m.BrTblID.BtHdrLenID
 	return size
 }
 func (m *BierRouteDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.BrTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BrTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BrTblID.BtHdrLenID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.BrTblID.BtSet)
+	buf.EncodeUint8(m.BrTblID.BtSubDomain)
+	buf.EncodeUint8(m.BrTblID.BtHdrLenID)
 	return buf.Bytes(), nil
 }
 func (m *BierRouteDump) Unmarshal(b []byte) error {
@@ -1140,11 +1052,10 @@ func (*BierTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierTableAddDel) Size() int {
+func (m *BierTableAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.BtTblID.BtSet
 	size += 1 // m.BtTblID.BtSubDomain
 	size += 1 // m.BtTblID.BtHdrLenID
@@ -1153,16 +1064,14 @@ func (m *BierTableAddDel) Size() int {
 	return size
 }
 func (m *BierTableAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.BtTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BtTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BtTblID.BtHdrLenID))
-	buf.EncodeUint32(uint32(m.BtLabel))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.BtTblID.BtSet)
+	buf.EncodeUint8(m.BtTblID.BtSubDomain)
+	buf.EncodeUint8(m.BtTblID.BtHdrLenID)
+	buf.EncodeUint32(m.BtLabel)
 	buf.EncodeBool(m.BtIsAdd)
 	return buf.Bytes(), nil
 }
@@ -1188,27 +1097,24 @@ func (*BierTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierTableAddDelReply) Size() int {
+func (m *BierTableAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BierTableAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BierTableAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1225,11 +1131,10 @@ func (*BierTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BierTableDetails) Size() int {
+func (m *BierTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.BtLabel
 	size += 1 // m.BtTblID.BtSet
 	size += 1 // m.BtTblID.BtSubDomain
@@ -1237,16 +1142,14 @@ func (m *BierTableDetails) Size() int {
 	return size
 }
 func (m *BierTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.BtLabel))
-	buf.EncodeUint8(uint8(m.BtTblID.BtSet))
-	buf.EncodeUint8(uint8(m.BtTblID.BtSubDomain))
-	buf.EncodeUint8(uint8(m.BtTblID.BtHdrLenID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.BtLabel)
+	buf.EncodeUint8(m.BtTblID.BtSet)
+	buf.EncodeUint8(m.BtTblID.BtSubDomain)
+	buf.EncodeUint8(m.BtTblID.BtHdrLenID)
 	return buf.Bytes(), nil
 }
 func (m *BierTableDetails) Unmarshal(b []byte) error {
@@ -1268,20 +1171,17 @@ func (*BierTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BierTableDump) Size() int {
+func (m *BierTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *BierTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *BierTableDump) Unmarshal(b []byte) error {

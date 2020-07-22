@@ -25,7 +25,7 @@ const (
 	stringsPkg = GoImportPath("strings")
 )
 
-func generateIPConversion(g *GenFile, structName string, ipv int) {
+func genIPConversion(g *GenFile, structName string, ipv int) {
 	// ParseIPXAddress method
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	if ipv == 4 {
@@ -77,7 +77,7 @@ func generateIPConversion(g *GenFile, structName string, ipv int) {
 	g.P()
 }
 
-func generateAddressConversion(g *GenFile, structName string) {
+func genAddressConversion(g *GenFile, structName string) {
 	// ParseAddress method
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	g.P("	ip := ", netPkg.Ident("ParseIP"), "(s)")
@@ -132,7 +132,7 @@ func generateAddressConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func generateIPPrefixConversion(g *GenFile, structName string, ipv int) {
+func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	// ParsePrefix method
 	g.P("func Parse", structName, "(s string) (prefix ", structName, ", err error) {")
 	g.P("	hasPrefix := ", stringsPkg.Ident("Contains"), "(s, \"/\")")
@@ -211,7 +211,7 @@ func generateIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	g.P()
 }
 
-func generatePrefixConversion(g *GenFile, structName string) {
+func genPrefixConversion(g *GenFile, structName string) {
 	// ParsePrefix method
 	g.P("func Parse", structName, "(ip string) (prefix ", structName, ", err error) {")
 	g.P("	hasPrefix := ", stringsPkg.Ident("Contains"), "(ip, \"/\")")
@@ -276,7 +276,7 @@ func generatePrefixConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func generateAddressWithPrefixConversion(g *GenFile, structName string) {
+func genAddressWithPrefixConversion(g *GenFile, structName string) {
 	// ParseAddressWithPrefix method
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	g.P("	prefix, err := ParsePrefix(s)")
@@ -308,7 +308,7 @@ func generateAddressWithPrefixConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func generateMacAddressConversion(g *GenFile, structName string) {
+func genMacAddressConversion(g *GenFile, structName string) {
 	// ParseMAC method
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	g.P("	var macaddr ", structName)

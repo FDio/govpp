@@ -42,22 +42,19 @@ func (*Ikev2InitiateDelChildSa) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2InitiateDelChildSa) Size() int {
+func (m *Ikev2InitiateDelChildSa) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Ispi
 	return size
 }
 func (m *Ikev2InitiateDelChildSa) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Ispi))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Ispi)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateDelChildSa) Unmarshal(b []byte) error {
@@ -80,27 +77,24 @@ func (*Ikev2InitiateDelChildSaReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2InitiateDelChildSaReply) Size() int {
+func (m *Ikev2InitiateDelChildSaReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2InitiateDelChildSaReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateDelChildSaReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -116,22 +110,19 @@ func (*Ikev2InitiateDelIkeSa) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2InitiateDelIkeSa) Size() int {
+func (m *Ikev2InitiateDelIkeSa) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 8 // m.Ispi
 	return size
 }
 func (m *Ikev2InitiateDelIkeSa) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint64(uint64(m.Ispi))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint64(m.Ispi)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateDelIkeSa) Unmarshal(b []byte) error {
@@ -152,27 +143,24 @@ func (*Ikev2InitiateDelIkeSaReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2InitiateDelIkeSaReply) Size() int {
+func (m *Ikev2InitiateDelIkeSaReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2InitiateDelIkeSaReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateDelIkeSaReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -188,22 +176,19 @@ func (*Ikev2InitiateRekeyChildSa) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2InitiateRekeyChildSa) Size() int {
+func (m *Ikev2InitiateRekeyChildSa) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Ispi
 	return size
 }
 func (m *Ikev2InitiateRekeyChildSa) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Ispi))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Ispi)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateRekeyChildSa) Unmarshal(b []byte) error {
@@ -226,27 +211,24 @@ func (*Ikev2InitiateRekeyChildSaReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2InitiateRekeyChildSaReply) Size() int {
+func (m *Ikev2InitiateRekeyChildSaReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2InitiateRekeyChildSaReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateRekeyChildSaReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -262,21 +244,18 @@ func (*Ikev2InitiateSaInit) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2InitiateSaInit) Size() int {
+func (m *Ikev2InitiateSaInit) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	return size
 }
 func (m *Ikev2InitiateSaInit) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -298,27 +277,24 @@ func (*Ikev2InitiateSaInitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2InitiateSaInitReply) Size() int {
+func (m *Ikev2InitiateSaInitReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2InitiateSaInitReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2InitiateSaInitReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -332,20 +308,17 @@ func (*Ikev2PluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2PluginGetVersion) Size() int {
+func (m *Ikev2PluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Ikev2PluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2PluginGetVersion) Unmarshal(b []byte) error {
@@ -365,24 +338,21 @@ func (*Ikev2PluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2PluginGetVersionReply) Size() int {
+func (m *Ikev2PluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *Ikev2PluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2PluginGetVersionReply) Unmarshal(b []byte) error {
@@ -405,22 +375,19 @@ func (*Ikev2ProfileAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileAddDel) Size() int {
+func (m *Ikev2ProfileAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 1  // m.IsAdd
 	return size
 }
 func (m *Ikev2ProfileAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
@@ -444,27 +411,24 @@ func (*Ikev2ProfileAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileAddDelReply) Size() int {
+func (m *Ikev2ProfileAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -484,11 +448,10 @@ func (*Ikev2ProfileSetAuth) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetAuth) Size() int {
+func (m *Ikev2ProfileSetAuth) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64              // m.Name
 	size += 1               // m.AuthMethod
 	size += 1               // m.IsHex
@@ -497,17 +460,15 @@ func (m *Ikev2ProfileSetAuth) Size() int {
 	return size
 }
 func (m *Ikev2ProfileSetAuth) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint8(uint8(m.AuthMethod))
+	buf.EncodeUint8(m.AuthMethod)
 	buf.EncodeBool(m.IsHex)
 	buf.EncodeUint32(uint32(len(m.Data)))
-	buf.EncodeBytes(m.Data[:], 0)
+	buf.EncodeBytes(m.Data, 0)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetAuth) Unmarshal(b []byte) error {
@@ -516,7 +477,8 @@ func (m *Ikev2ProfileSetAuth) Unmarshal(b []byte) error {
 	m.AuthMethod = buf.DecodeUint8()
 	m.IsHex = buf.DecodeBool()
 	m.DataLen = buf.DecodeUint32()
-	copy(m.Data[:], buf.DecodeBytes(0))
+	m.Data = make([]byte, m.DataLen)
+	copy(m.Data, buf.DecodeBytes(len(m.Data)))
 	return nil
 }
 
@@ -532,27 +494,24 @@ func (*Ikev2ProfileSetAuthReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetAuthReply) Size() int {
+func (m *Ikev2ProfileSetAuthReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetAuthReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetAuthReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -572,11 +531,10 @@ func (*Ikev2ProfileSetID) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetID) Size() int {
+func (m *Ikev2ProfileSetID) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64              // m.Name
 	size += 1               // m.IsLocal
 	size += 1               // m.IDType
@@ -585,17 +543,15 @@ func (m *Ikev2ProfileSetID) Size() int {
 	return size
 }
 func (m *Ikev2ProfileSetID) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	buf.EncodeBool(m.IsLocal)
-	buf.EncodeUint8(uint8(m.IDType))
+	buf.EncodeUint8(m.IDType)
 	buf.EncodeUint32(uint32(len(m.Data)))
-	buf.EncodeBytes(m.Data[:], 0)
+	buf.EncodeBytes(m.Data, 0)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetID) Unmarshal(b []byte) error {
@@ -604,7 +560,8 @@ func (m *Ikev2ProfileSetID) Unmarshal(b []byte) error {
 	m.IsLocal = buf.DecodeBool()
 	m.IDType = buf.DecodeUint8()
 	m.DataLen = buf.DecodeUint32()
-	copy(m.Data[:], buf.DecodeBytes(0))
+	m.Data = make([]byte, m.DataLen)
+	copy(m.Data, buf.DecodeBytes(len(m.Data)))
 	return nil
 }
 
@@ -620,27 +577,24 @@ func (*Ikev2ProfileSetIDReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetIDReply) Size() int {
+func (m *Ikev2ProfileSetIDReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetIDReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetIDReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -660,25 +614,22 @@ func (*Ikev2ProfileSetIpsecUDPPort) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetIpsecUDPPort) Size() int {
+func (m *Ikev2ProfileSetIpsecUDPPort) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsSet
 	size += 2  // m.Port
 	size += 64 // m.Name
 	return size
 }
 func (m *Ikev2ProfileSetIpsecUDPPort) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.IsSet))
-	buf.EncodeUint16(uint16(m.Port))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.IsSet)
+	buf.EncodeUint16(m.Port)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -704,27 +655,24 @@ func (*Ikev2ProfileSetIpsecUDPPortReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetIpsecUDPPortReply) Size() int {
+func (m *Ikev2ProfileSetIpsecUDPPortReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetIpsecUDPPortReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetIpsecUDPPortReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -741,24 +689,21 @@ func (*Ikev2ProfileSetLiveness) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetLiveness) Size() int {
+func (m *Ikev2ProfileSetLiveness) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Period
 	size += 4 // m.MaxRetries
 	return size
 }
 func (m *Ikev2ProfileSetLiveness) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Period))
-	buf.EncodeUint32(uint32(m.MaxRetries))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Period)
+	buf.EncodeUint32(m.MaxRetries)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetLiveness) Unmarshal(b []byte) error {
@@ -782,27 +727,24 @@ func (*Ikev2ProfileSetLivenessReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetLivenessReply) Size() int {
+func (m *Ikev2ProfileSetLivenessReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetLivenessReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetLivenessReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -824,11 +766,10 @@ func (*Ikev2ProfileSetTs) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetTs) Size() int {
+func (m *Ikev2ProfileSetTs) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 1  // m.IsLocal
 	size += 1  // m.Proto
@@ -839,19 +780,17 @@ func (m *Ikev2ProfileSetTs) Size() int {
 	return size
 }
 func (m *Ikev2ProfileSetTs) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	buf.EncodeBool(m.IsLocal)
-	buf.EncodeUint8(uint8(m.Proto))
-	buf.EncodeUint16(uint16(m.StartPort))
-	buf.EncodeUint16(uint16(m.EndPort))
-	buf.EncodeUint32(uint32(m.StartAddr))
-	buf.EncodeUint32(uint32(m.EndAddr))
+	buf.EncodeUint8(m.Proto)
+	buf.EncodeUint16(m.StartPort)
+	buf.EncodeUint16(m.EndPort)
+	buf.EncodeUint32(m.StartAddr)
+	buf.EncodeUint32(m.EndAddr)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetTs) Unmarshal(b []byte) error {
@@ -878,27 +817,24 @@ func (*Ikev2ProfileSetTsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetTsReply) Size() int {
+func (m *Ikev2ProfileSetTsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetTsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetTsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -914,21 +850,18 @@ func (*Ikev2ProfileSetUDPEncap) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2ProfileSetUDPEncap) Size() int {
+func (m *Ikev2ProfileSetUDPEncap) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	return size
 }
 func (m *Ikev2ProfileSetUDPEncap) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -952,27 +885,24 @@ func (*Ikev2ProfileSetUDPEncapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2ProfileSetUDPEncapReply) Size() int {
+func (m *Ikev2ProfileSetUDPEncapReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2ProfileSetUDPEncapReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2ProfileSetUDPEncapReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -992,11 +922,10 @@ func (*Ikev2SetEspTransforms) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetEspTransforms) Size() int {
+func (m *Ikev2SetEspTransforms) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 4  // m.CryptoAlg
 	size += 4  // m.CryptoKeySize
@@ -1005,17 +934,15 @@ func (m *Ikev2SetEspTransforms) Size() int {
 	return size
 }
 func (m *Ikev2SetEspTransforms) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint32(uint32(m.CryptoAlg))
-	buf.EncodeUint32(uint32(m.CryptoKeySize))
-	buf.EncodeUint32(uint32(m.IntegAlg))
-	buf.EncodeUint32(uint32(m.DhGroup))
+	buf.EncodeUint32(m.CryptoAlg)
+	buf.EncodeUint32(m.CryptoKeySize)
+	buf.EncodeUint32(m.IntegAlg)
+	buf.EncodeUint32(m.DhGroup)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetEspTransforms) Unmarshal(b []byte) error {
@@ -1040,27 +967,24 @@ func (*Ikev2SetEspTransformsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetEspTransformsReply) Size() int {
+func (m *Ikev2SetEspTransformsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetEspTransformsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetEspTransformsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1080,11 +1004,10 @@ func (*Ikev2SetIkeTransforms) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetIkeTransforms) Size() int {
+func (m *Ikev2SetIkeTransforms) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 4  // m.CryptoAlg
 	size += 4  // m.CryptoKeySize
@@ -1093,17 +1016,15 @@ func (m *Ikev2SetIkeTransforms) Size() int {
 	return size
 }
 func (m *Ikev2SetIkeTransforms) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint32(uint32(m.CryptoAlg))
-	buf.EncodeUint32(uint32(m.CryptoKeySize))
-	buf.EncodeUint32(uint32(m.IntegAlg))
-	buf.EncodeUint32(uint32(m.DhGroup))
+	buf.EncodeUint32(m.CryptoAlg)
+	buf.EncodeUint32(m.CryptoKeySize)
+	buf.EncodeUint32(m.IntegAlg)
+	buf.EncodeUint32(m.DhGroup)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetIkeTransforms) Unmarshal(b []byte) error {
@@ -1128,27 +1049,24 @@ func (*Ikev2SetIkeTransformsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetIkeTransformsReply) Size() int {
+func (m *Ikev2SetIkeTransformsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetIkeTransformsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetIkeTransformsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1164,21 +1082,18 @@ func (*Ikev2SetLocalKey) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetLocalKey) Size() int {
+func (m *Ikev2SetLocalKey) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 256 // m.KeyFile
 	return size
 }
 func (m *Ikev2SetLocalKey) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.KeyFile, 256)
 	return buf.Bytes(), nil
 }
@@ -1200,27 +1115,24 @@ func (*Ikev2SetLocalKeyReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetLocalKeyReply) Size() int {
+func (m *Ikev2SetLocalKeyReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetLocalKeyReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetLocalKeyReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1238,23 +1150,20 @@ func (*Ikev2SetResponder) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetResponder) Size() int {
+func (m *Ikev2SetResponder) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64    // m.Name
 	size += 4     // m.SwIfIndex
 	size += 1 * 4 // m.Address
 	return size
 }
 func (m *Ikev2SetResponder) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.Address[:], 4)
@@ -1280,27 +1189,24 @@ func (*Ikev2SetResponderReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetResponderReply) Size() int {
+func (m *Ikev2SetResponderReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetResponderReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetResponderReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1320,11 +1226,10 @@ func (*Ikev2SetSaLifetime) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetSaLifetime) Size() int {
+func (m *Ikev2SetSaLifetime) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 8  // m.Lifetime
 	size += 4  // m.LifetimeJitter
@@ -1333,17 +1238,15 @@ func (m *Ikev2SetSaLifetime) Size() int {
 	return size
 }
 func (m *Ikev2SetSaLifetime) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint64(uint64(m.Lifetime))
-	buf.EncodeUint32(uint32(m.LifetimeJitter))
-	buf.EncodeUint32(uint32(m.Handover))
-	buf.EncodeUint64(uint64(m.LifetimeMaxdata))
+	buf.EncodeUint64(m.Lifetime)
+	buf.EncodeUint32(m.LifetimeJitter)
+	buf.EncodeUint32(m.Handover)
+	buf.EncodeUint64(m.LifetimeMaxdata)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetSaLifetime) Unmarshal(b []byte) error {
@@ -1368,27 +1271,24 @@ func (*Ikev2SetSaLifetimeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetSaLifetimeReply) Size() int {
+func (m *Ikev2SetSaLifetimeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetSaLifetimeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetSaLifetimeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1405,22 +1305,19 @@ func (*Ikev2SetTunnelInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ikev2SetTunnelInterface) Size() int {
+func (m *Ikev2SetTunnelInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 4  // m.SwIfIndex
 	return size
 }
 func (m *Ikev2SetTunnelInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -1446,27 +1343,24 @@ func (*Ikev2SetTunnelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ikev2SetTunnelInterfaceReply) Size() int {
+func (m *Ikev2SetTunnelInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ikev2SetTunnelInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ikev2SetTunnelInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

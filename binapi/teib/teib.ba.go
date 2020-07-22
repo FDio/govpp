@@ -51,11 +51,10 @@ func (*TeibDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TeibDetails) Size() int {
+func (m *TeibDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Entry.SwIfIndex
 	size += 1      // m.Entry.Peer.Af
 	size += 1 * 16 // m.Entry.Peer.Un
@@ -65,18 +64,16 @@ func (m *TeibDetails) Size() int {
 	return size
 }
 func (m *TeibDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Entry.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Entry.Peer.Af))
-	buf.EncodeBytes(m.Entry.Peer.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.Peer.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.Nh.Af))
-	buf.EncodeBytes(m.Entry.Nh.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Entry.NhTableID))
+	buf.EncodeBytes(m.Entry.Nh.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Entry.NhTableID)
 	return buf.Bytes(), nil
 }
 func (m *TeibDetails) Unmarshal(b []byte) error {
@@ -100,20 +97,17 @@ func (*TeibDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TeibDump) Size() int {
+func (m *TeibDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *TeibDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *TeibDump) Unmarshal(b []byte) error {
@@ -133,11 +127,10 @@ func (*TeibEntryAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TeibEntryAddDel) Size() int {
+func (m *TeibEntryAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.Entry.SwIfIndex
 	size += 1      // m.Entry.Peer.Af
@@ -148,19 +141,17 @@ func (m *TeibEntryAddDel) Size() int {
 	return size
 }
 func (m *TeibEntryAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.IsAdd))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.IsAdd)
 	buf.EncodeUint32(uint32(m.Entry.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Entry.Peer.Af))
-	buf.EncodeBytes(m.Entry.Peer.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Entry.Peer.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Entry.Nh.Af))
-	buf.EncodeBytes(m.Entry.Nh.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Entry.NhTableID))
+	buf.EncodeBytes(m.Entry.Nh.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Entry.NhTableID)
 	return buf.Bytes(), nil
 }
 func (m *TeibEntryAddDel) Unmarshal(b []byte) error {
@@ -187,27 +178,24 @@ func (*TeibEntryAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TeibEntryAddDelReply) Size() int {
+func (m *TeibEntryAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TeibEntryAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TeibEntryAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

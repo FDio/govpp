@@ -43,11 +43,10 @@ func (*TCPConfigureSrcAddresses) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TCPConfigureSrcAddresses) Size() int {
+func (m *TCPConfigureSrcAddresses) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.VrfID
 	size += 1      // m.FirstAddress.Af
 	size += 1 * 16 // m.FirstAddress.Un
@@ -56,17 +55,15 @@ func (m *TCPConfigureSrcAddresses) Size() int {
 	return size
 }
 func (m *TCPConfigureSrcAddresses) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeUint8(uint8(m.FirstAddress.Af))
-	buf.EncodeBytes(m.FirstAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.FirstAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.LastAddress.Af))
-	buf.EncodeBytes(m.LastAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.LastAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *TCPConfigureSrcAddresses) Unmarshal(b []byte) error {
@@ -93,27 +90,24 @@ func (*TCPConfigureSrcAddressesReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *TCPConfigureSrcAddressesReply) Size() int {
+func (m *TCPConfigureSrcAddressesReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *TCPConfigureSrcAddressesReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *TCPConfigureSrcAddressesReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

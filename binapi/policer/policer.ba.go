@@ -53,11 +53,10 @@ func (*PolicerAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PolicerAddDel) Size() int {
+func (m *PolicerAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsAdd
 	size += 64 // m.Name
 	size += 4  // m.Cir
@@ -77,28 +76,26 @@ func (m *PolicerAddDel) Size() int {
 	return size
 }
 func (m *PolicerAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint32(uint32(m.Cir))
-	buf.EncodeUint32(uint32(m.Eir))
-	buf.EncodeUint64(uint64(m.Cb))
-	buf.EncodeUint64(uint64(m.Eb))
+	buf.EncodeUint32(m.Cir)
+	buf.EncodeUint32(m.Eir)
+	buf.EncodeUint64(m.Cb)
+	buf.EncodeUint64(m.Eb)
 	buf.EncodeUint8(uint8(m.RateType))
 	buf.EncodeUint8(uint8(m.RoundType))
 	buf.EncodeUint8(uint8(m.Type))
 	buf.EncodeBool(m.ColorAware)
 	buf.EncodeUint8(uint8(m.ConformAction.Type))
-	buf.EncodeUint8(uint8(m.ConformAction.Dscp))
+	buf.EncodeUint8(m.ConformAction.Dscp)
 	buf.EncodeUint8(uint8(m.ExceedAction.Type))
-	buf.EncodeUint8(uint8(m.ExceedAction.Dscp))
+	buf.EncodeUint8(m.ExceedAction.Dscp)
 	buf.EncodeUint8(uint8(m.ViolateAction.Type))
-	buf.EncodeUint8(uint8(m.ViolateAction.Dscp))
+	buf.EncodeUint8(m.ViolateAction.Dscp)
 	return buf.Bytes(), nil
 }
 func (m *PolicerAddDel) Unmarshal(b []byte) error {
@@ -135,29 +132,26 @@ func (*PolicerAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PolicerAddDelReply) Size() int {
+func (m *PolicerAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.PolicerIndex
 	return size
 }
 func (m *PolicerAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.PolicerIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.PolicerIndex)
 	return buf.Bytes(), nil
 }
 func (m *PolicerAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.PolicerIndex = buf.DecodeUint32()
 	return nil
 }
@@ -194,11 +188,10 @@ func (*PolicerDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PolicerDetails) Size() int {
+func (m *PolicerDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	size += 4  // m.Cir
 	size += 4  // m.Eir
@@ -226,36 +219,34 @@ func (m *PolicerDetails) Size() int {
 	return size
 }
 func (m *PolicerDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint32(uint32(m.Cir))
-	buf.EncodeUint32(uint32(m.Eir))
-	buf.EncodeUint64(uint64(m.Cb))
-	buf.EncodeUint64(uint64(m.Eb))
+	buf.EncodeUint32(m.Cir)
+	buf.EncodeUint32(m.Eir)
+	buf.EncodeUint64(m.Cb)
+	buf.EncodeUint64(m.Eb)
 	buf.EncodeUint8(uint8(m.RateType))
 	buf.EncodeUint8(uint8(m.RoundType))
 	buf.EncodeUint8(uint8(m.Type))
 	buf.EncodeUint8(uint8(m.ConformAction.Type))
-	buf.EncodeUint8(uint8(m.ConformAction.Dscp))
+	buf.EncodeUint8(m.ConformAction.Dscp)
 	buf.EncodeUint8(uint8(m.ExceedAction.Type))
-	buf.EncodeUint8(uint8(m.ExceedAction.Dscp))
+	buf.EncodeUint8(m.ExceedAction.Dscp)
 	buf.EncodeUint8(uint8(m.ViolateAction.Type))
-	buf.EncodeUint8(uint8(m.ViolateAction.Dscp))
+	buf.EncodeUint8(m.ViolateAction.Dscp)
 	buf.EncodeBool(m.SingleRate)
 	buf.EncodeBool(m.ColorAware)
-	buf.EncodeUint32(uint32(m.Scale))
-	buf.EncodeUint32(uint32(m.CirTokensPerPeriod))
-	buf.EncodeUint32(uint32(m.PirTokensPerPeriod))
-	buf.EncodeUint32(uint32(m.CurrentLimit))
-	buf.EncodeUint32(uint32(m.CurrentBucket))
-	buf.EncodeUint32(uint32(m.ExtendedLimit))
-	buf.EncodeUint32(uint32(m.ExtendedBucket))
-	buf.EncodeUint64(uint64(m.LastUpdateTime))
+	buf.EncodeUint32(m.Scale)
+	buf.EncodeUint32(m.CirTokensPerPeriod)
+	buf.EncodeUint32(m.PirTokensPerPeriod)
+	buf.EncodeUint32(m.CurrentLimit)
+	buf.EncodeUint32(m.CurrentBucket)
+	buf.EncodeUint32(m.ExtendedLimit)
+	buf.EncodeUint32(m.ExtendedBucket)
+	buf.EncodeUint64(m.LastUpdateTime)
 	return buf.Bytes(), nil
 }
 func (m *PolicerDetails) Unmarshal(b []byte) error {
@@ -300,22 +291,19 @@ func (*PolicerDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PolicerDump) Size() int {
+func (m *PolicerDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.MatchNameValid
 	size += 64 // m.MatchName
 	return size
 }
 func (m *PolicerDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.MatchNameValid)
 	buf.EncodeString(m.MatchName, 64)
 	return buf.Bytes(), nil

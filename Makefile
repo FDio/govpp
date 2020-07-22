@@ -94,7 +94,8 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 	docker run -t --rm \
 		-e DEBUG_GOVPP \
 		-v "$(shell which binapi-generator):/usr/local/bin/binapi-generator:ro" \
-		-v "$(shell pwd):/govpp" -w /govpp \
+		-v "$(shell pwd):/govpp" \
+		-w /govpp \
 		-u "$(shell id -u):$(shell id -g)" \
 		"${VPP_IMG}" \
 	  sh -ec "cd $(BINAPI_DIR) && $(cmds)"
@@ -104,9 +105,9 @@ extras:
 
 help:
 	@echo "List of make targets:"
-	grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.DEFAULT = help
+.DEFAULT_GOAL = help
 
 .PHONY: help \
     build cmd examples clean \

@@ -60,11 +60,10 @@ func (*IP6RaEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *IP6RaEvent) Size() int {
+func (m *IP6RaEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.PID
 	size += 4      // m.SwIfIndex
 	size += 1 * 16 // m.RouterAddr
@@ -90,32 +89,30 @@ func (m *IP6RaEvent) Size() int {
 	return size
 }
 func (m *IP6RaEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.RouterAddr[:], 16)
-	buf.EncodeUint8(uint8(m.CurrentHopLimit))
-	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint16(uint16(m.RouterLifetimeInSec))
-	buf.EncodeUint32(uint32(m.NeighborReachableTimeInMsec))
-	buf.EncodeUint32(uint32(m.TimeInMsecBetweenRetransmittedNeighborSolicitations))
+	buf.EncodeUint8(m.CurrentHopLimit)
+	buf.EncodeUint8(m.Flags)
+	buf.EncodeUint16(m.RouterLifetimeInSec)
+	buf.EncodeUint32(m.NeighborReachableTimeInMsec)
+	buf.EncodeUint32(m.TimeInMsecBetweenRetransmittedNeighborSolicitations)
 	buf.EncodeUint32(uint32(len(m.Prefixes)))
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
-		var v0 IP6RaPrefixInfo
+		var v0 IP6RaPrefixInfo // Prefixes
 		if j0 < len(m.Prefixes) {
 			v0 = m.Prefixes[j0]
 		}
 		buf.EncodeUint8(uint8(v0.Prefix.Address.Af))
-		buf.EncodeBytes(v0.Prefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.Prefix.Len))
-		buf.EncodeUint8(uint8(v0.Flags))
-		buf.EncodeUint32(uint32(v0.ValidTime))
-		buf.EncodeUint32(uint32(v0.PreferredTime))
+		buf.EncodeBytes(v0.Prefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.Prefix.Len)
+		buf.EncodeUint8(v0.Flags)
+		buf.EncodeUint32(v0.ValidTime)
+		buf.EncodeUint32(v0.PreferredTime)
 	}
 	return buf.Bytes(), nil
 }
@@ -130,7 +127,7 @@ func (m *IP6RaEvent) Unmarshal(b []byte) error {
 	m.NeighborReachableTimeInMsec = buf.DecodeUint32()
 	m.TimeInMsecBetweenRetransmittedNeighborSolicitations = buf.DecodeUint32()
 	m.NPrefixes = buf.DecodeUint32()
-	m.Prefixes = make([]IP6RaPrefixInfo, int(m.NPrefixes))
+	m.Prefixes = make([]IP6RaPrefixInfo, m.NPrefixes)
 	for j0 := 0; j0 < len(m.Prefixes); j0++ {
 		m.Prefixes[j0].Prefix.Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
 		copy(m.Prefixes[j0].Prefix.Address.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -156,23 +153,20 @@ func (*IP6ndProxyAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IP6ndProxyAddDel) Size() int {
+func (m *IP6ndProxyAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1      // m.IsAdd
 	size += 1 * 16 // m.IP
 	return size
 }
 func (m *IP6ndProxyAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.IP[:], 16)
@@ -198,27 +192,24 @@ func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IP6ndProxyAddDelReply) Size() int {
+func (m *IP6ndProxyAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IP6ndProxyAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IP6ndProxyAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -235,22 +226,19 @@ func (*IP6ndProxyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IP6ndProxyDetails) Size() int {
+func (m *IP6ndProxyDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1 * 16 // m.IP
 	return size
 }
 func (m *IP6ndProxyDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.IP[:], 16)
 	return buf.Bytes(), nil
@@ -272,20 +260,17 @@ func (*IP6ndProxyDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IP6ndProxyDump) Size() int {
+func (m *IP6ndProxyDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IP6ndProxyDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IP6ndProxyDump) Unmarshal(b []byte) error {
@@ -309,11 +294,10 @@ func (*IP6ndSendRouterSolicitation) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IP6ndSendRouterSolicitation) Size() int {
+func (m *IP6ndSendRouterSolicitation) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Irt
 	size += 4 // m.Mrt
 	size += 4 // m.Mrc
@@ -323,16 +307,14 @@ func (m *IP6ndSendRouterSolicitation) Size() int {
 	return size
 }
 func (m *IP6ndSendRouterSolicitation) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Irt))
-	buf.EncodeUint32(uint32(m.Mrt))
-	buf.EncodeUint32(uint32(m.Mrc))
-	buf.EncodeUint32(uint32(m.Mrd))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Irt)
+	buf.EncodeUint32(m.Mrt)
+	buf.EncodeUint32(m.Mrc)
+	buf.EncodeUint32(m.Mrd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Stop)
 	return buf.Bytes(), nil
@@ -362,27 +344,24 @@ func (*IP6ndSendRouterSolicitationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IP6ndSendRouterSolicitationReply) Size() int {
+func (m *IP6ndSendRouterSolicitationReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IP6ndSendRouterSolicitationReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IP6ndSendRouterSolicitationReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -411,11 +390,10 @@ func (*SwInterfaceIP6ndRaConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceIP6ndRaConfig) Size() int {
+func (m *SwInterfaceIP6ndRaConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Suppress
 	size += 1 // m.Managed
@@ -433,26 +411,24 @@ func (m *SwInterfaceIP6ndRaConfig) Size() int {
 	return size
 }
 func (m *SwInterfaceIP6ndRaConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint8(uint8(m.Suppress))
-	buf.EncodeUint8(uint8(m.Managed))
-	buf.EncodeUint8(uint8(m.Other))
-	buf.EncodeUint8(uint8(m.LlOption))
-	buf.EncodeUint8(uint8(m.SendUnicast))
-	buf.EncodeUint8(uint8(m.Cease))
+	buf.EncodeUint8(m.Suppress)
+	buf.EncodeUint8(m.Managed)
+	buf.EncodeUint8(m.Other)
+	buf.EncodeUint8(m.LlOption)
+	buf.EncodeUint8(m.SendUnicast)
+	buf.EncodeUint8(m.Cease)
 	buf.EncodeBool(m.IsNo)
-	buf.EncodeUint8(uint8(m.DefaultRouter))
-	buf.EncodeUint32(uint32(m.MaxInterval))
-	buf.EncodeUint32(uint32(m.MinInterval))
-	buf.EncodeUint32(uint32(m.Lifetime))
-	buf.EncodeUint32(uint32(m.InitialCount))
-	buf.EncodeUint32(uint32(m.InitialInterval))
+	buf.EncodeUint8(m.DefaultRouter)
+	buf.EncodeUint32(m.MaxInterval)
+	buf.EncodeUint32(m.MinInterval)
+	buf.EncodeUint32(m.Lifetime)
+	buf.EncodeUint32(m.InitialCount)
+	buf.EncodeUint32(m.InitialInterval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceIP6ndRaConfig) Unmarshal(b []byte) error {
@@ -488,27 +464,24 @@ func (*SwInterfaceIP6ndRaConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceIP6ndRaConfigReply) Size() int {
+func (m *SwInterfaceIP6ndRaConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceIP6ndRaConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceIP6ndRaConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -533,11 +506,10 @@ func (*SwInterfaceIP6ndRaPrefix) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceIP6ndRaPrefix) Size() int {
+func (m *SwInterfaceIP6ndRaPrefix) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1      // m.Prefix.Address.Af
 	size += 1 * 16 // m.Prefix.Address.Un
@@ -553,24 +525,22 @@ func (m *SwInterfaceIP6ndRaPrefix) Size() int {
 	return size
 }
 func (m *SwInterfaceIP6ndRaPrefix) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Prefix.Address.Af))
-	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Prefix.Len))
+	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Prefix.Len)
 	buf.EncodeBool(m.UseDefault)
 	buf.EncodeBool(m.NoAdvertise)
 	buf.EncodeBool(m.OffLink)
 	buf.EncodeBool(m.NoAutoconfig)
 	buf.EncodeBool(m.NoOnlink)
 	buf.EncodeBool(m.IsNo)
-	buf.EncodeUint32(uint32(m.ValLifetime))
-	buf.EncodeUint32(uint32(m.PrefLifetime))
+	buf.EncodeUint32(m.ValLifetime)
+	buf.EncodeUint32(m.PrefLifetime)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceIP6ndRaPrefix) Unmarshal(b []byte) error {
@@ -604,27 +574,24 @@ func (*SwInterfaceIP6ndRaPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceIP6ndRaPrefixReply) Size() int {
+func (m *SwInterfaceIP6ndRaPrefixReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceIP6ndRaPrefixReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceIP6ndRaPrefixReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -641,24 +608,21 @@ func (*WantIP6RaEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantIP6RaEvents) Size() int {
+func (m *WantIP6RaEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 4 // m.PID
 	return size
 }
 func (m *WantIP6RaEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
-	buf.EncodeUint32(uint32(m.PID))
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantIP6RaEvents) Unmarshal(b []byte) error {
@@ -680,27 +644,24 @@ func (*WantIP6RaEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantIP6RaEventsReply) Size() int {
+func (m *WantIP6RaEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantIP6RaEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantIP6RaEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

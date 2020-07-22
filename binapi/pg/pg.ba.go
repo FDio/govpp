@@ -44,11 +44,10 @@ func (*PgCapture) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PgCapture) Size() int {
+func (m *PgCapture) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                       // m.InterfaceID
 	size += 1                       // m.IsEnabled
 	size += 4                       // m.Count
@@ -56,15 +55,13 @@ func (m *PgCapture) Size() int {
 	return size
 }
 func (m *PgCapture) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.InterfaceID))
 	buf.EncodeBool(m.IsEnabled)
-	buf.EncodeUint32(uint32(m.Count))
+	buf.EncodeUint32(m.Count)
 	buf.EncodeString(m.PcapFileName, 0)
 	return buf.Bytes(), nil
 }
@@ -89,27 +86,24 @@ func (*PgCaptureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PgCaptureReply) Size() int {
+func (m *PgCaptureReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PgCaptureReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PgCaptureReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -127,26 +121,23 @@ func (*PgCreateInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PgCreateInterface) Size() int {
+func (m *PgCreateInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.InterfaceID
 	size += 1 // m.GsoEnabled
 	size += 4 // m.GsoSize
 	return size
 }
 func (m *PgCreateInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.InterfaceID))
 	buf.EncodeBool(m.GsoEnabled)
-	buf.EncodeUint32(uint32(m.GsoSize))
+	buf.EncodeUint32(m.GsoSize)
 	return buf.Bytes(), nil
 }
 func (m *PgCreateInterface) Unmarshal(b []byte) error {
@@ -170,29 +161,26 @@ func (*PgCreateInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PgCreateInterfaceReply) Size() int {
+func (m *PgCreateInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *PgCreateInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *PgCreateInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -210,22 +198,19 @@ func (*PgEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PgEnableDisable) Size() int {
+func (m *PgEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                     // m.IsEnabled
 	size += 4 + len(m.StreamName) // m.StreamName
 	return size
 }
 func (m *PgEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnabled)
 	buf.EncodeString(m.StreamName, 0)
 	return buf.Bytes(), nil
@@ -249,27 +234,24 @@ func (*PgEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PgEnableDisableReply) Size() int {
+func (m *PgEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PgEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PgEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

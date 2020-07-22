@@ -109,22 +109,19 @@ func (*QosEgressMapDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosEgressMapDelete) Size() int {
+func (m *QosEgressMapDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ID
 	return size
 }
 func (m *QosEgressMapDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ID)
 	return buf.Bytes(), nil
 }
 func (m *QosEgressMapDelete) Unmarshal(b []byte) error {
@@ -145,27 +142,24 @@ func (*QosEgressMapDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosEgressMapDeleteReply) Size() int {
+func (m *QosEgressMapDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosEgressMapDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosEgressMapDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -181,36 +175,24 @@ func (*QosEgressMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosEgressMapDetails) Size() int {
+func (m *QosEgressMapDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Map.ID
 	for j2 := 0; j2 < 4; j2++ {
-		var s2 QosEgressMapRow
-		_ = s2
-		if j2 < len(m.Map.Rows) {
-			s2 = m.Map.Rows[j2]
-		}
-		size += 1 * 256 // s2.Outputs
+		size += 1 * 256 // m.Map.Rows[j2].Outputs
 	}
 	return size
 }
 func (m *QosEgressMapDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Map.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Map.ID)
 	for j1 := 0; j1 < 4; j1++ {
-		var v1 QosEgressMapRow
-		if j1 < len(m.Map.Rows) {
-			v1 = m.Map.Rows[j1]
-		}
-		buf.EncodeBytes(v1.Outputs[:], 256)
+		buf.EncodeBytes(m.Map.Rows[j1].Outputs, 256)
 	}
 	return buf.Bytes(), nil
 }
@@ -218,7 +200,8 @@ func (m *QosEgressMapDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Map.ID = buf.DecodeUint32()
 	for j1 := 0; j1 < 4; j1++ {
-		copy(m.Map.Rows[j1].Outputs[:], buf.DecodeBytes(256))
+		m.Map.Rows[j1].Outputs = make([]byte, 256)
+		copy(m.Map.Rows[j1].Outputs, buf.DecodeBytes(len(m.Map.Rows[j1].Outputs)))
 	}
 	return nil
 }
@@ -233,20 +216,17 @@ func (*QosEgressMapDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosEgressMapDump) Size() int {
+func (m *QosEgressMapDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *QosEgressMapDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *QosEgressMapDump) Unmarshal(b []byte) error {
@@ -265,36 +245,24 @@ func (*QosEgressMapUpdate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosEgressMapUpdate) Size() int {
+func (m *QosEgressMapUpdate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Map.ID
 	for j2 := 0; j2 < 4; j2++ {
-		var s2 QosEgressMapRow
-		_ = s2
-		if j2 < len(m.Map.Rows) {
-			s2 = m.Map.Rows[j2]
-		}
-		size += 1 * 256 // s2.Outputs
+		size += 1 * 256 // m.Map.Rows[j2].Outputs
 	}
 	return size
 }
 func (m *QosEgressMapUpdate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Map.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Map.ID)
 	for j1 := 0; j1 < 4; j1++ {
-		var v1 QosEgressMapRow
-		if j1 < len(m.Map.Rows) {
-			v1 = m.Map.Rows[j1]
-		}
-		buf.EncodeBytes(v1.Outputs[:], 256)
+		buf.EncodeBytes(m.Map.Rows[j1].Outputs, 256)
 	}
 	return buf.Bytes(), nil
 }
@@ -302,7 +270,8 @@ func (m *QosEgressMapUpdate) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Map.ID = buf.DecodeUint32()
 	for j1 := 0; j1 < 4; j1++ {
-		copy(m.Map.Rows[j1].Outputs[:], buf.DecodeBytes(256))
+		m.Map.Rows[j1].Outputs = make([]byte, 256)
+		copy(m.Map.Rows[j1].Outputs, buf.DecodeBytes(len(m.Map.Rows[j1].Outputs)))
 	}
 	return nil
 }
@@ -319,27 +288,24 @@ func (*QosEgressMapUpdateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosEgressMapUpdateReply) Size() int {
+func (m *QosEgressMapUpdateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosEgressMapUpdateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosEgressMapUpdateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -355,25 +321,22 @@ func (*QosMarkDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosMarkDetails) Size() int {
+func (m *QosMarkDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Mark.SwIfIndex
 	size += 4 // m.Mark.MapID
 	size += 1 // m.Mark.OutputSource
 	return size
 }
 func (m *QosMarkDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Mark.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Mark.MapID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Mark.SwIfIndex)
+	buf.EncodeUint32(m.Mark.MapID)
 	buf.EncodeUint8(uint8(m.Mark.OutputSource))
 	return buf.Bytes(), nil
 }
@@ -397,27 +360,24 @@ func (*QosMarkDetailsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosMarkDetailsReply) Size() int {
+func (m *QosMarkDetailsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosMarkDetailsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosMarkDetailsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -433,21 +393,18 @@ func (*QosMarkDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosMarkDump) Size() int {
+func (m *QosMarkDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *QosMarkDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -470,11 +427,10 @@ func (*QosMarkEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosMarkEnableDisable) Size() int {
+func (m *QosMarkEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 4 // m.Mark.SwIfIndex
 	size += 4 // m.Mark.MapID
@@ -482,15 +438,13 @@ func (m *QosMarkEnableDisable) Size() int {
 	return size
 }
 func (m *QosMarkEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
-	buf.EncodeUint32(uint32(m.Mark.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Mark.MapID))
+	buf.EncodeUint32(m.Mark.SwIfIndex)
+	buf.EncodeUint32(m.Mark.MapID)
 	buf.EncodeUint8(uint8(m.Mark.OutputSource))
 	return buf.Bytes(), nil
 }
@@ -515,27 +469,24 @@ func (*QosMarkEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosMarkEnableDisableReply) Size() int {
+func (m *QosMarkEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosMarkEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosMarkEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -551,22 +502,19 @@ func (*QosRecordDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosRecordDetails) Size() int {
+func (m *QosRecordDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Record.SwIfIndex
 	size += 1 // m.Record.InputSource
 	return size
 }
 func (m *QosRecordDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Record.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Record.InputSource))
 	return buf.Bytes(), nil
@@ -588,20 +536,17 @@ func (*QosRecordDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosRecordDump) Size() int {
+func (m *QosRecordDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *QosRecordDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *QosRecordDump) Unmarshal(b []byte) error {
@@ -621,23 +566,20 @@ func (*QosRecordEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosRecordEnableDisable) Size() int {
+func (m *QosRecordEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 4 // m.Record.SwIfIndex
 	size += 1 // m.Record.InputSource
 	return size
 }
 func (m *QosRecordEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	buf.EncodeUint32(uint32(m.Record.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Record.InputSource))
@@ -663,27 +605,24 @@ func (*QosRecordEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosRecordEnableDisableReply) Size() int {
+func (m *QosRecordEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosRecordEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosRecordEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -699,26 +638,23 @@ func (*QosStoreDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosStoreDetails) Size() int {
+func (m *QosStoreDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Store.SwIfIndex
 	size += 1 // m.Store.InputSource
 	size += 1 // m.Store.Value
 	return size
 }
 func (m *QosStoreDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Store.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Store.InputSource))
-	buf.EncodeUint8(uint8(m.Store.Value))
+	buf.EncodeUint8(m.Store.Value)
 	return buf.Bytes(), nil
 }
 func (m *QosStoreDetails) Unmarshal(b []byte) error {
@@ -739,20 +675,17 @@ func (*QosStoreDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosStoreDump) Size() int {
+func (m *QosStoreDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *QosStoreDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *QosStoreDump) Unmarshal(b []byte) error {
@@ -772,11 +705,10 @@ func (*QosStoreEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *QosStoreEnableDisable) Size() int {
+func (m *QosStoreEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 4 // m.Store.SwIfIndex
 	size += 1 // m.Store.InputSource
@@ -784,16 +716,14 @@ func (m *QosStoreEnableDisable) Size() int {
 	return size
 }
 func (m *QosStoreEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	buf.EncodeUint32(uint32(m.Store.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Store.InputSource))
-	buf.EncodeUint8(uint8(m.Store.Value))
+	buf.EncodeUint8(m.Store.Value)
 	return buf.Bytes(), nil
 }
 func (m *QosStoreEnableDisable) Unmarshal(b []byte) error {
@@ -817,27 +747,24 @@ func (*QosStoreEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *QosStoreEnableDisableReply) Size() int {
+func (m *QosStoreEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *QosStoreEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *QosStoreEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

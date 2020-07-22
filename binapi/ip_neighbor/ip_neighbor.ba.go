@@ -104,11 +104,10 @@ func (*IPNeighborAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborAddDel) Size() int {
+func (m *IPNeighborAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.Neighbor.SwIfIndex
 	size += 1      // m.Neighbor.Flags
@@ -118,18 +117,16 @@ func (m *IPNeighborAddDel) Size() int {
 	return size
 }
 func (m *IPNeighborAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.Neighbor.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Neighbor.Flags))
 	buf.EncodeBytes(m.Neighbor.MacAddress[:], 6)
 	buf.EncodeUint8(uint8(m.Neighbor.IPAddress.Af))
-	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborAddDel) Unmarshal(b []byte) error {
@@ -156,29 +153,26 @@ func (*IPNeighborAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborAddDelReply) Size() int {
+func (m *IPNeighborAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.StatsIndex
 	return size
 }
 func (m *IPNeighborAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.StatsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatsIndex)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StatsIndex = buf.DecodeUint32()
 	return nil
 }
@@ -198,11 +192,10 @@ func (*IPNeighborConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborConfig) Size() int {
+func (m *IPNeighborConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Af
 	size += 4 // m.MaxNumber
 	size += 4 // m.MaxAge
@@ -210,15 +203,13 @@ func (m *IPNeighborConfig) Size() int {
 	return size
 }
 func (m *IPNeighborConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Af))
-	buf.EncodeUint32(uint32(m.MaxNumber))
-	buf.EncodeUint32(uint32(m.MaxAge))
+	buf.EncodeUint32(m.MaxNumber)
+	buf.EncodeUint32(m.MaxAge)
 	buf.EncodeBool(m.Recycle)
 	return buf.Bytes(), nil
 }
@@ -243,27 +234,24 @@ func (*IPNeighborConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborConfigReply) Size() int {
+func (m *IPNeighborConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IPNeighborConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -280,11 +268,10 @@ func (*IPNeighborDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborDetails) Size() int {
+func (m *IPNeighborDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 8      // m.Age
 	size += 4      // m.Neighbor.SwIfIndex
 	size += 1      // m.Neighbor.Flags
@@ -294,23 +281,21 @@ func (m *IPNeighborDetails) Size() int {
 	return size
 }
 func (m *IPNeighborDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeFloat64(float64(m.Age))
+	buf := codec.NewBuffer(b)
+	buf.EncodeFloat64(m.Age)
 	buf.EncodeUint32(uint32(m.Neighbor.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Neighbor.Flags))
 	buf.EncodeBytes(m.Neighbor.MacAddress[:], 6)
 	buf.EncodeUint8(uint8(m.Neighbor.IPAddress.Af))
-	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Age = float64(buf.DecodeFloat64())
+	m.Age = buf.DecodeFloat64()
 	m.Neighbor.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.Neighbor.Flags = IPNeighborFlags(buf.DecodeUint8())
 	copy(m.Neighbor.MacAddress[:], buf.DecodeBytes(6))
@@ -321,7 +306,7 @@ func (m *IPNeighborDetails) Unmarshal(b []byte) error {
 
 // IPNeighborDump defines message 'ip_neighbor_dump'.
 type IPNeighborDump struct {
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 	Af        ip_types.AddressFamily         `binapi:"address_family,name=af" json:"af,omitempty"`
 }
 
@@ -332,22 +317,19 @@ func (*IPNeighborDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborDump) Size() int {
+func (m *IPNeighborDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Af
 	return size
 }
 func (m *IPNeighborDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Af))
 	return buf.Bytes(), nil
@@ -372,11 +354,10 @@ func (*IPNeighborEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *IPNeighborEvent) Size() int {
+func (m *IPNeighborEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.PID
 	size += 4      // m.Neighbor.SwIfIndex
 	size += 1      // m.Neighbor.Flags
@@ -386,18 +367,16 @@ func (m *IPNeighborEvent) Size() int {
 	return size
 }
 func (m *IPNeighborEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint32(uint32(m.Neighbor.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Neighbor.Flags))
 	buf.EncodeBytes(m.Neighbor.MacAddress[:], 6)
 	buf.EncodeUint8(uint8(m.Neighbor.IPAddress.Af))
-	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Neighbor.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborEvent) Unmarshal(b []byte) error {
@@ -414,7 +393,7 @@ func (m *IPNeighborEvent) Unmarshal(b []byte) error {
 // IPNeighborFlush defines message 'ip_neighbor_flush'.
 type IPNeighborFlush struct {
 	Af        ip_types.AddressFamily         `binapi:"address_family,name=af" json:"af,omitempty"`
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *IPNeighborFlush) Reset()               { *m = IPNeighborFlush{} }
@@ -424,22 +403,19 @@ func (*IPNeighborFlush) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborFlush) Size() int {
+func (m *IPNeighborFlush) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Af
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IPNeighborFlush) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Af))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -463,27 +439,24 @@ func (*IPNeighborFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborFlushReply) Size() int {
+func (m *IPNeighborFlushReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IPNeighborFlushReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborFlushReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -497,20 +470,17 @@ func (*IPNeighborReplaceBegin) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborReplaceBegin) Size() int {
+func (m *IPNeighborReplaceBegin) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IPNeighborReplaceBegin) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborReplaceBegin) Unmarshal(b []byte) error {
@@ -529,27 +499,24 @@ func (*IPNeighborReplaceBeginReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborReplaceBeginReply) Size() int {
+func (m *IPNeighborReplaceBeginReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IPNeighborReplaceBeginReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborReplaceBeginReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -563,20 +530,17 @@ func (*IPNeighborReplaceEnd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IPNeighborReplaceEnd) Size() int {
+func (m *IPNeighborReplaceEnd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IPNeighborReplaceEnd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborReplaceEnd) Unmarshal(b []byte) error {
@@ -595,27 +559,24 @@ func (*IPNeighborReplaceEndReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IPNeighborReplaceEndReply) Size() int {
+func (m *IPNeighborReplaceEndReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IPNeighborReplaceEndReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IPNeighborReplaceEndReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -624,7 +585,7 @@ type WantIPNeighborEvents struct {
 	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 	PID       uint32                         `binapi:"u32,name=pid" json:"pid,omitempty"`
 	IP        ip_types.Address               `binapi:"address,name=ip" json:"ip,omitempty"`
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *WantIPNeighborEvents) Reset()               { *m = WantIPNeighborEvents{} }
@@ -634,11 +595,10 @@ func (*WantIPNeighborEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantIPNeighborEvents) Size() int {
+func (m *WantIPNeighborEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Enable
 	size += 4      // m.PID
 	size += 1      // m.IP.Af
@@ -647,16 +607,14 @@ func (m *WantIPNeighborEvents) Size() int {
 	return size
 }
 func (m *WantIPNeighborEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
-	buf.EncodeUint32(uint32(m.PID))
+	buf.EncodeUint32(m.PID)
 	buf.EncodeUint8(uint8(m.IP.Af))
-	buf.EncodeBytes(m.IP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -682,27 +640,24 @@ func (*WantIPNeighborEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantIPNeighborEventsReply) Size() int {
+func (m *WantIPNeighborEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantIPNeighborEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantIPNeighborEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -21,7 +21,10 @@ import (
 func TestGoModule(t *testing.T) {
 	const expected = "git.fd.io/govpp.git/binapi"
 
-	impPath := resolveImportPath("../binapi")
+	impPath, err := resolveImportPath("../binapi")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if impPath != expected {
 		t.Fatalf("expected: %q, got: %q", expected, impPath)
 	}

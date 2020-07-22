@@ -48,8 +48,11 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 	}
 
 	if opts.ImportPrefix == "" {
-		opts.ImportPrefix = resolveImportPath(opts.OutputDir)
-		logrus.Debugf("resolved import prefix: %s", opts.ImportPrefix)
+		opts.ImportPrefix, err = resolveImportPath(opts.OutputDir)
+		if err != nil {
+			return fmt.Errorf("cannot resolve import path for output dir %s: %w", opts.OutputDir, err)
+		}
+		logrus.Infof("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
 	gen, err := New(opts, apifiles, filesToGenerate)
@@ -93,10 +96,6 @@ func init() {
 	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
 		Logger.SetLevel(logrus.DebugLevel)
 		logrus.SetLevel(logrus.DebugLevel)
-	} else if debug != "" {
-		Logger.SetLevel(logrus.InfoLevel)
-	} else {
-		Logger.SetLevel(logrus.WarnLevel)
 	}
 }
 
@@ -104,32 +103,30 @@ func logf(f string, v ...interface{}) {
 	Logger.Debugf(f, v...)
 }
 
-func resolveImportPath(dir string) string {
+// resolveImportPath tries to resolve import path for a directory.
+func resolveImportPath(dir string) (string, error) {
 	absPath, err := filepath.Abs(dir)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	modRoot := findGoModuleRoot(absPath)
 	if modRoot == "" {
-		logrus.Fatalf("module root not found at: %s", absPath)
+		return "", err
 	}
-	modPath := findModulePath(path.Join(modRoot, "go.mod"))
-	if modPath == "" {
-		logrus.Fatalf("module path not found")
+	modPath, err := readModulePath(path.Join(modRoot, "go.mod"))
+	if err != nil {
+		return "", err
 	}
 	relDir, err := filepath.Rel(modRoot, absPath)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
-	return filepath.Join(modPath, relDir)
+	return filepath.Join(modPath, relDir), nil
 }
 
+// findGoModuleRoot looks for enclosing Go module.
 func findGoModuleRoot(dir string) (root string) {
-	if dir == "" {
-		panic("dir not set")
-	}
 	dir = filepath.Clean(dir)
-	// Look for enclosing go.mod.
 	for {
 		if fi, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil && !fi.IsDir() {
 			return dir
@@ -143,18 +140,17 @@ func findGoModuleRoot(dir string) (root string) {
 	return ""
 }
 
-var (
-	modulePathRE = regexp.MustCompile(`module[ \t]+([^ \t\r\n]+)`)
-)
+var modulePathRE = regexp.MustCompile(`module[ \t]+([^ \t\r\n]+)`)
 
-func findModulePath(file string) string {
-	data, err := ioutil.ReadFile(file)
+// readModulePath reads module path from go.mod file.
+func readModulePath(gomod string) (string, error) {
+	data, err := ioutil.ReadFile(gomod)
 	if err != nil {
-		return ""
+		return "", err
 	}
 	m := modulePathRE.FindSubmatch(data)
 	if m == nil {
-		return ""
+		return "", err
 	}
-	return string(m[1])
+	return string(m[1]), nil
 }

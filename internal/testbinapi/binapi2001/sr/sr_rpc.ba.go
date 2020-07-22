@@ -4,123 +4,124 @@ package sr
 
 import (
 	"context"
-	"io"
-
+	"fmt"
 	api "git.fd.io/govpp.git/api"
+	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
+	"io"
 )
 
-// RPCService represents RPC service API for sr module.
+// RPCService defines RPC service  sr.
 type RPCService interface {
-	DumpSrLocalsids(ctx context.Context, in *SrLocalsidsDump) (RPCService_DumpSrLocalsidsClient, error)
-	DumpSrPolicies(ctx context.Context, in *SrPoliciesDump) (RPCService_DumpSrPoliciesClient, error)
-	DumpSrSteeringPol(ctx context.Context, in *SrSteeringPolDump) (RPCService_DumpSrSteeringPolClient, error)
 	SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error)
+	SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error)
+	SrPoliciesDump(ctx context.Context, in *SrPoliciesDump) (RPCService_SrPoliciesDumpClient, error)
 	SrPolicyAdd(ctx context.Context, in *SrPolicyAdd) (*SrPolicyAddReply, error)
 	SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPolicyDelReply, error)
 	SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPolicyModReply, error)
 	SrSetEncapHopLimit(ctx context.Context, in *SrSetEncapHopLimit) (*SrSetEncapHopLimitReply, error)
 	SrSetEncapSource(ctx context.Context, in *SrSetEncapSource) (*SrSetEncapSourceReply, error)
 	SrSteeringAddDel(ctx context.Context, in *SrSteeringAddDel) (*SrSteeringAddDelReply, error)
+	SrSteeringPolDump(ctx context.Context, in *SrSteeringPolDump) (RPCService_SrSteeringPolDumpClient, error)
 }
 
 type serviceClient struct {
-	ch api.Channel
+	conn api.Connection
 }
 
-func NewServiceClient(ch api.Channel) RPCService {
-	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpSrLocalsids(ctx context.Context, in *SrLocalsidsDump) (RPCService_DumpSrLocalsidsClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpSrLocalsidsClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpSrLocalsidsClient interface {
-	Recv() (*SrLocalsidsDetails, error)
-}
-
-type serviceClient_DumpSrLocalsidsClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpSrLocalsidsClient) Recv() (*SrLocalsidsDetails, error) {
-	m := new(SrLocalsidsDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpSrPolicies(ctx context.Context, in *SrPoliciesDump) (RPCService_DumpSrPoliciesClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpSrPoliciesClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpSrPoliciesClient interface {
-	Recv() (*SrPoliciesDetails, error)
-}
-
-type serviceClient_DumpSrPoliciesClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpSrPoliciesClient) Recv() (*SrPoliciesDetails, error) {
-	m := new(SrPoliciesDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpSrSteeringPol(ctx context.Context, in *SrSteeringPolDump) (RPCService_DumpSrSteeringPolClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpSrSteeringPolClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpSrSteeringPolClient interface {
-	Recv() (*SrSteeringPolDetails, error)
-}
-
-type serviceClient_DumpSrSteeringPolClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpSrSteeringPolClient) Recv() (*SrSteeringPolDetails, error) {
-	m := new(SrSteeringPolDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
+func NewServiceClient(conn api.Connection) RPCService {
+	return &serviceClient{conn}
 }
 
 func (c *serviceClient) SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error) {
 	out := new(SrLocalsidAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *serviceClient) SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_SrLocalsidsDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_SrLocalsidsDumpClient interface {
+	Recv() (*SrLocalsidsDetails, error)
+	api.Stream
+}
+
+type serviceClient_SrLocalsidsDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_SrLocalsidsDumpClient) Recv() (*SrLocalsidsDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *SrLocalsidsDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) SrPoliciesDump(ctx context.Context, in *SrPoliciesDump) (RPCService_SrPoliciesDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_SrPoliciesDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_SrPoliciesDumpClient interface {
+	Recv() (*SrPoliciesDetails, error)
+	api.Stream
+}
+
+type serviceClient_SrPoliciesDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_SrPoliciesDumpClient) Recv() (*SrPoliciesDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *SrPoliciesDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
 func (c *serviceClient) SrPolicyAdd(ctx context.Context, in *SrPolicyAdd) (*SrPolicyAddReply, error) {
 	out := new(SrPolicyAddReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +130,7 @@ func (c *serviceClient) SrPolicyAdd(ctx context.Context, in *SrPolicyAdd) (*SrPo
 
 func (c *serviceClient) SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPolicyDelReply, error) {
 	out := new(SrPolicyDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +139,7 @@ func (c *serviceClient) SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPo
 
 func (c *serviceClient) SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPolicyModReply, error) {
 	out := new(SrPolicyModReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +148,7 @@ func (c *serviceClient) SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPo
 
 func (c *serviceClient) SrSetEncapHopLimit(ctx context.Context, in *SrSetEncapHopLimit) (*SrSetEncapHopLimitReply, error) {
 	out := new(SrSetEncapHopLimitReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +157,7 @@ func (c *serviceClient) SrSetEncapHopLimit(ctx context.Context, in *SrSetEncapHo
 
 func (c *serviceClient) SrSetEncapSource(ctx context.Context, in *SrSetEncapSource) (*SrSetEncapSourceReply, error) {
 	out := new(SrSetEncapSourceReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -165,14 +166,48 @@ func (c *serviceClient) SrSetEncapSource(ctx context.Context, in *SrSetEncapSour
 
 func (c *serviceClient) SrSteeringAddDel(ctx context.Context, in *SrSteeringAddDel) (*SrSteeringAddDelReply, error) {
 	out := new(SrSteeringAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = api.RegisterMessage
-var _ = context.Background
-var _ = io.Copy
+func (c *serviceClient) SrSteeringPolDump(ctx context.Context, in *SrSteeringPolDump) (RPCService_SrSteeringPolDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_SrSteeringPolDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_SrSteeringPolDumpClient interface {
+	Recv() (*SrSteeringPolDetails, error)
+	api.Stream
+}
+
+type serviceClient_SrSteeringPolDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_SrSteeringPolDumpClient) Recv() (*SrSteeringPolDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *SrSteeringPolDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}

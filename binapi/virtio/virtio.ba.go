@@ -48,11 +48,10 @@ func (*SwInterfaceVirtioPciDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceVirtioPciDetails) Size() int {
+func (m *SwInterfaceVirtioPciDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 2     // m.PciAddr.Domain
 	size += 1     // m.PciAddr.Bus
@@ -65,21 +64,19 @@ func (m *SwInterfaceVirtioPciDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceVirtioPciDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint16(uint16(m.PciAddr.Domain))
-	buf.EncodeUint8(uint8(m.PciAddr.Bus))
-	buf.EncodeUint8(uint8(m.PciAddr.Slot))
-	buf.EncodeUint8(uint8(m.PciAddr.Function))
+	buf.EncodeUint16(m.PciAddr.Domain)
+	buf.EncodeUint8(m.PciAddr.Bus)
+	buf.EncodeUint8(m.PciAddr.Slot)
+	buf.EncodeUint8(m.PciAddr.Function)
 	buf.EncodeBytes(m.MacAddr[:], 6)
-	buf.EncodeUint16(uint16(m.TxRingSz))
-	buf.EncodeUint16(uint16(m.RxRingSz))
-	buf.EncodeUint64(uint64(m.Features))
+	buf.EncodeUint16(m.TxRingSz)
+	buf.EncodeUint16(m.RxRingSz)
+	buf.EncodeUint64(m.Features)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceVirtioPciDetails) Unmarshal(b []byte) error {
@@ -106,20 +103,17 @@ func (*SwInterfaceVirtioPciDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceVirtioPciDump) Size() int {
+func (m *SwInterfaceVirtioPciDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SwInterfaceVirtioPciDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceVirtioPciDump) Unmarshal(b []byte) error {
@@ -143,11 +137,10 @@ func (*VirtioPciCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VirtioPciCreate) Size() int {
+func (m *VirtioPciCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2     // m.PciAddr.Domain
 	size += 1     // m.PciAddr.Bus
 	size += 1     // m.PciAddr.Slot
@@ -160,21 +153,19 @@ func (m *VirtioPciCreate) Size() int {
 	return size
 }
 func (m *VirtioPciCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.PciAddr.Domain))
-	buf.EncodeUint8(uint8(m.PciAddr.Bus))
-	buf.EncodeUint8(uint8(m.PciAddr.Slot))
-	buf.EncodeUint8(uint8(m.PciAddr.Function))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.PciAddr.Domain)
+	buf.EncodeUint8(m.PciAddr.Bus)
+	buf.EncodeUint8(m.PciAddr.Slot)
+	buf.EncodeUint8(m.PciAddr.Function)
 	buf.EncodeBool(m.UseRandomMac)
 	buf.EncodeBytes(m.MacAddress[:], 6)
 	buf.EncodeBool(m.GsoEnabled)
 	buf.EncodeBool(m.ChecksumOffloadEnabled)
-	buf.EncodeUint64(uint64(m.Features))
+	buf.EncodeUint64(m.Features)
 	return buf.Bytes(), nil
 }
 func (m *VirtioPciCreate) Unmarshal(b []byte) error {
@@ -204,29 +195,26 @@ func (*VirtioPciCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VirtioPciCreateReply) Size() int {
+func (m *VirtioPciCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *VirtioPciCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *VirtioPciCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -243,21 +231,18 @@ func (*VirtioPciDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VirtioPciDelete) Size() int {
+func (m *VirtioPciDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *VirtioPciDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -279,27 +264,24 @@ func (*VirtioPciDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VirtioPciDeleteReply) Size() int {
+func (m *VirtioPciDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VirtioPciDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VirtioPciDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

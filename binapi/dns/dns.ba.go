@@ -40,22 +40,19 @@ func (*DNSEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DNSEnableDisable) Size() int {
+func (m *DNSEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	return size
 }
 func (m *DNSEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Enable))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Enable)
 	return buf.Bytes(), nil
 }
 func (m *DNSEnableDisable) Unmarshal(b []byte) error {
@@ -76,27 +73,24 @@ func (*DNSEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DNSEnableDisableReply) Size() int {
+func (m *DNSEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DNSEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DNSEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -114,33 +108,31 @@ func (*DNSNameServerAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DNSNameServerAddDel) Size() int {
+func (m *DNSNameServerAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsIP6
 	size += 1      // m.IsAdd
 	size += 1 * 16 // m.ServerAddress
 	return size
 }
 func (m *DNSNameServerAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.IsIP6))
-	buf.EncodeUint8(uint8(m.IsAdd))
-	buf.EncodeBytes(m.ServerAddress[:], 16)
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.IsIP6)
+	buf.EncodeUint8(m.IsAdd)
+	buf.EncodeBytes(m.ServerAddress, 16)
 	return buf.Bytes(), nil
 }
 func (m *DNSNameServerAddDel) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.IsIP6 = buf.DecodeUint8()
 	m.IsAdd = buf.DecodeUint8()
-	copy(m.ServerAddress[:], buf.DecodeBytes(16))
+	m.ServerAddress = make([]byte, 16)
+	copy(m.ServerAddress, buf.DecodeBytes(len(m.ServerAddress)))
 	return nil
 }
 
@@ -156,27 +148,24 @@ func (*DNSNameServerAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DNSNameServerAddDelReply) Size() int {
+func (m *DNSNameServerAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DNSNameServerAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DNSNameServerAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -193,30 +182,28 @@ func (*DNSResolveIP) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DNSResolveIP) Size() int {
+func (m *DNSResolveIP) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsIP6
 	size += 1 * 16 // m.Address
 	return size
 }
 func (m *DNSResolveIP) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.IsIP6))
-	buf.EncodeBytes(m.Address[:], 16)
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.IsIP6)
+	buf.EncodeBytes(m.Address, 16)
 	return buf.Bytes(), nil
 }
 func (m *DNSResolveIP) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.IsIP6 = buf.DecodeUint8()
-	copy(m.Address[:], buf.DecodeBytes(16))
+	m.Address = make([]byte, 16)
+	copy(m.Address, buf.DecodeBytes(len(m.Address)))
 	return nil
 }
 
@@ -233,30 +220,28 @@ func (*DNSResolveIPReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DNSResolveIPReply) Size() int {
+func (m *DNSResolveIPReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4       // m.Retval
 	size += 1 * 256 // m.Name
 	return size
 }
 func (m *DNSResolveIPReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeBytes(m.Name[:], 256)
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeBytes(m.Name, 256)
 	return buf.Bytes(), nil
 }
 func (m *DNSResolveIPReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
-	copy(m.Name[:], buf.DecodeBytes(256))
+	m.Retval = buf.DecodeInt32()
+	m.Name = make([]byte, 256)
+	copy(m.Name, buf.DecodeBytes(len(m.Name)))
 	return nil
 }
 
@@ -272,27 +257,25 @@ func (*DNSResolveName) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DNSResolveName) Size() int {
+func (m *DNSResolveName) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 256 // m.Name
 	return size
 }
 func (m *DNSResolveName) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeBytes(m.Name[:], 256)
+	buf := codec.NewBuffer(b)
+	buf.EncodeBytes(m.Name, 256)
 	return buf.Bytes(), nil
 }
 func (m *DNSResolveName) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	copy(m.Name[:], buf.DecodeBytes(256))
+	m.Name = make([]byte, 256)
+	copy(m.Name, buf.DecodeBytes(len(m.Name)))
 	return nil
 }
 
@@ -312,11 +295,10 @@ func (*DNSResolveNameReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DNSResolveNameReply) Size() int {
+func (m *DNSResolveNameReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Retval
 	size += 1      // m.IP4Set
 	size += 1      // m.IP6Set
@@ -325,26 +307,26 @@ func (m *DNSResolveNameReply) Size() int {
 	return size
 }
 func (m *DNSResolveNameReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.IP4Set))
-	buf.EncodeUint8(uint8(m.IP6Set))
-	buf.EncodeBytes(m.IP4Address[:], 4)
-	buf.EncodeBytes(m.IP6Address[:], 16)
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.IP4Set)
+	buf.EncodeUint8(m.IP6Set)
+	buf.EncodeBytes(m.IP4Address, 4)
+	buf.EncodeBytes(m.IP6Address, 16)
 	return buf.Bytes(), nil
 }
 func (m *DNSResolveNameReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IP4Set = buf.DecodeUint8()
 	m.IP6Set = buf.DecodeUint8()
-	copy(m.IP4Address[:], buf.DecodeBytes(4))
-	copy(m.IP6Address[:], buf.DecodeBytes(16))
+	m.IP4Address = make([]byte, 4)
+	copy(m.IP4Address, buf.DecodeBytes(len(m.IP4Address)))
+	m.IP6Address = make([]byte, 16)
+	copy(m.IP6Address, buf.DecodeBytes(len(m.IP6Address)))
 	return nil
 }
 

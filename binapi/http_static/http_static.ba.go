@@ -45,11 +45,10 @@ func (*HTTPStaticEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *HTTPStaticEnable) Size() int {
+func (m *HTTPStaticEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.FifoSize
 	size += 4   // m.CacheSizeLimit
 	size += 4   // m.PreallocFifos
@@ -59,16 +58,14 @@ func (m *HTTPStaticEnable) Size() int {
 	return size
 }
 func (m *HTTPStaticEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.FifoSize))
-	buf.EncodeUint32(uint32(m.CacheSizeLimit))
-	buf.EncodeUint32(uint32(m.PreallocFifos))
-	buf.EncodeUint32(uint32(m.PrivateSegmentSize))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.FifoSize)
+	buf.EncodeUint32(m.CacheSizeLimit)
+	buf.EncodeUint32(m.PreallocFifos)
+	buf.EncodeUint32(m.PrivateSegmentSize)
 	buf.EncodeString(m.WwwRoot, 256)
 	buf.EncodeString(m.URI, 256)
 	return buf.Bytes(), nil
@@ -96,27 +93,24 @@ func (*HTTPStaticEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *HTTPStaticEnableReply) Size() int {
+func (m *HTTPStaticEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *HTTPStaticEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *HTTPStaticEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

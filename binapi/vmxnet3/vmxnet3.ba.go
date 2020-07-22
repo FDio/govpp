@@ -67,11 +67,10 @@ func (*Vmxnet3Create) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Vmxnet3Create) Size() int {
+func (m *Vmxnet3Create) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PciAddr
 	size += 4 // m.EnableElog
 	size += 2 // m.RxqSize
@@ -83,26 +82,24 @@ func (m *Vmxnet3Create) Size() int {
 	return size
 }
 func (m *Vmxnet3Create) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PciAddr))
-	buf.EncodeUint32(uint32(m.EnableElog))
-	buf.EncodeUint16(uint16(m.RxqSize))
-	buf.EncodeUint16(uint16(m.RxqNum))
-	buf.EncodeUint16(uint16(m.TxqSize))
-	buf.EncodeUint16(uint16(m.TxqNum))
-	buf.EncodeUint8(uint8(m.Bind))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PciAddr)
+	buf.EncodeInt32(m.EnableElog)
+	buf.EncodeUint16(m.RxqSize)
+	buf.EncodeUint16(m.RxqNum)
+	buf.EncodeUint16(m.TxqSize)
+	buf.EncodeUint16(m.TxqNum)
+	buf.EncodeUint8(m.Bind)
 	buf.EncodeBool(m.EnableGso)
 	return buf.Bytes(), nil
 }
 func (m *Vmxnet3Create) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.PciAddr = buf.DecodeUint32()
-	m.EnableElog = int32(buf.DecodeUint32())
+	m.EnableElog = buf.DecodeInt32()
 	m.RxqSize = buf.DecodeUint16()
 	m.RxqNum = buf.DecodeUint16()
 	m.TxqSize = buf.DecodeUint16()
@@ -125,29 +122,26 @@ func (*Vmxnet3CreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Vmxnet3CreateReply) Size() int {
+func (m *Vmxnet3CreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Vmxnet3CreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *Vmxnet3CreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -164,21 +158,18 @@ func (*Vmxnet3Delete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Vmxnet3Delete) Size() int {
+func (m *Vmxnet3Delete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Vmxnet3Delete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -200,27 +191,24 @@ func (*Vmxnet3DeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Vmxnet3DeleteReply) Size() int {
+func (m *Vmxnet3DeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Vmxnet3DeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Vmxnet3DeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -245,11 +233,10 @@ func (*Vmxnet3Details) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Vmxnet3Details) Size() int {
+func (m *Vmxnet3Details) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 64    // m.IfName
 	size += 1 * 6 // m.HwAddr
@@ -258,84 +245,64 @@ func (m *Vmxnet3Details) Size() int {
 	size += 1     // m.AdminUpDown
 	size += 1     // m.RxCount
 	for j1 := 0; j1 < 16; j1++ {
-		var s1 Vmxnet3RxList
-		_ = s1
-		if j1 < len(m.RxList) {
-			s1 = m.RxList[j1]
-		}
-		size += 2     // s1.RxQsize
-		size += 2 * 2 // s1.RxFill
-		size += 2     // s1.RxNext
-		size += 2 * 2 // s1.RxProduce
-		size += 2 * 2 // s1.RxConsume
+		size += 2     // m.RxList[j1].RxQsize
+		size += 2 * 2 // m.RxList[j1].RxFill
+		size += 2     // m.RxList[j1].RxNext
+		size += 2 * 2 // m.RxList[j1].RxProduce
+		size += 2 * 2 // m.RxList[j1].RxConsume
 	}
 	size += 1 // m.TxCount
 	for j1 := 0; j1 < 8; j1++ {
-		var s1 Vmxnet3TxList
-		_ = s1
-		if j1 < len(m.TxList) {
-			s1 = m.TxList[j1]
-		}
-		size += 2 // s1.TxQsize
-		size += 2 // s1.TxNext
-		size += 2 // s1.TxProduce
-		size += 2 // s1.TxConsume
+		size += 2 // m.TxList[j1].TxQsize
+		size += 2 // m.TxList[j1].TxNext
+		size += 2 // m.TxList[j1].TxProduce
+		size += 2 // m.TxList[j1].TxConsume
 	}
 	return size
 }
 func (m *Vmxnet3Details) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.IfName, 64)
 	buf.EncodeBytes(m.HwAddr[:], 6)
-	buf.EncodeUint32(uint32(m.PciAddr))
-	buf.EncodeUint8(uint8(m.Version))
+	buf.EncodeUint32(m.PciAddr)
+	buf.EncodeUint8(m.Version)
 	buf.EncodeBool(m.AdminUpDown)
-	buf.EncodeUint8(uint8(m.RxCount))
+	buf.EncodeUint8(m.RxCount)
 	for j0 := 0; j0 < 16; j0++ {
-		var v0 Vmxnet3RxList
-		if j0 < len(m.RxList) {
-			v0 = m.RxList[j0]
-		}
-		buf.EncodeUint16(uint16(v0.RxQsize))
+		buf.EncodeUint16(m.RxList[j0].RxQsize)
 		for i := 0; i < 2; i++ {
 			var x uint16
-			if i < len(v0.RxFill) {
-				x = uint16(v0.RxFill[i])
+			if i < len(m.RxList[j0].RxFill) {
+				x = uint16(m.RxList[j0].RxFill[i])
 			}
-			buf.EncodeUint16(uint16(x))
+			buf.EncodeUint16(x)
 		}
-		buf.EncodeUint16(uint16(v0.RxNext))
+		buf.EncodeUint16(m.RxList[j0].RxNext)
 		for i := 0; i < 2; i++ {
 			var x uint16
-			if i < len(v0.RxProduce) {
-				x = uint16(v0.RxProduce[i])
+			if i < len(m.RxList[j0].RxProduce) {
+				x = uint16(m.RxList[j0].RxProduce[i])
 			}
-			buf.EncodeUint16(uint16(x))
+			buf.EncodeUint16(x)
 		}
 		for i := 0; i < 2; i++ {
 			var x uint16
-			if i < len(v0.RxConsume) {
-				x = uint16(v0.RxConsume[i])
+			if i < len(m.RxList[j0].RxConsume) {
+				x = uint16(m.RxList[j0].RxConsume[i])
 			}
-			buf.EncodeUint16(uint16(x))
+			buf.EncodeUint16(x)
 		}
 	}
-	buf.EncodeUint8(uint8(m.TxCount))
+	buf.EncodeUint8(m.TxCount)
 	for j0 := 0; j0 < 8; j0++ {
-		var v0 Vmxnet3TxList
-		if j0 < len(m.TxList) {
-			v0 = m.TxList[j0]
-		}
-		buf.EncodeUint16(uint16(v0.TxQsize))
-		buf.EncodeUint16(uint16(v0.TxNext))
-		buf.EncodeUint16(uint16(v0.TxProduce))
-		buf.EncodeUint16(uint16(v0.TxConsume))
+		buf.EncodeUint16(m.TxList[j0].TxQsize)
+		buf.EncodeUint16(m.TxList[j0].TxNext)
+		buf.EncodeUint16(m.TxList[j0].TxProduce)
+		buf.EncodeUint16(m.TxList[j0].TxConsume)
 	}
 	return buf.Bytes(), nil
 }
@@ -384,20 +351,17 @@ func (*Vmxnet3Dump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Vmxnet3Dump) Size() int {
+func (m *Vmxnet3Dump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Vmxnet3Dump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Vmxnet3Dump) Unmarshal(b []byte) error {

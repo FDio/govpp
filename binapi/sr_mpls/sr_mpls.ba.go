@@ -47,11 +47,10 @@ func (*SrMplsPolicyAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SrMplsPolicyAdd) Size() int {
+func (m *SrMplsPolicyAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                   // m.Bsid
 	size += 4                   // m.Weight
 	size += 1                   // m.IsSpray
@@ -60,14 +59,12 @@ func (m *SrMplsPolicyAdd) Size() int {
 	return size
 }
 func (m *SrMplsPolicyAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Bsid))
-	buf.EncodeUint32(uint32(m.Weight))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Bsid)
+	buf.EncodeUint32(m.Weight)
 	buf.EncodeBool(m.IsSpray)
 	buf.EncodeUint8(uint8(len(m.Segments)))
 	for i := 0; i < len(m.Segments); i++ {
@@ -75,7 +72,7 @@ func (m *SrMplsPolicyAdd) Marshal(b []byte) ([]byte, error) {
 		if i < len(m.Segments) {
 			x = uint32(m.Segments[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -104,27 +101,24 @@ func (*SrMplsPolicyAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SrMplsPolicyAddReply) Size() int {
+func (m *SrMplsPolicyAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SrMplsPolicyAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -144,11 +138,10 @@ func (*SrMplsPolicyAssignEndpointColor) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SrMplsPolicyAssignEndpointColor) Size() int {
+func (m *SrMplsPolicyAssignEndpointColor) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Bsid
 	size += 1      // m.Endpoint.Af
 	size += 1 * 16 // m.Endpoint.Un
@@ -156,16 +149,14 @@ func (m *SrMplsPolicyAssignEndpointColor) Size() int {
 	return size
 }
 func (m *SrMplsPolicyAssignEndpointColor) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Bsid))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Bsid)
 	buf.EncodeUint8(uint8(m.Endpoint.Af))
-	buf.EncodeBytes(m.Endpoint.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Color))
+	buf.EncodeBytes(m.Endpoint.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Color)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyAssignEndpointColor) Unmarshal(b []byte) error {
@@ -191,27 +182,24 @@ func (*SrMplsPolicyAssignEndpointColorReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SrMplsPolicyAssignEndpointColorReply) Size() int {
+func (m *SrMplsPolicyAssignEndpointColorReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SrMplsPolicyAssignEndpointColorReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyAssignEndpointColorReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -227,22 +215,19 @@ func (*SrMplsPolicyDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SrMplsPolicyDel) Size() int {
+func (m *SrMplsPolicyDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Bsid
 	return size
 }
 func (m *SrMplsPolicyDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Bsid))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Bsid)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyDel) Unmarshal(b []byte) error {
@@ -263,27 +248,24 @@ func (*SrMplsPolicyDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SrMplsPolicyDelReply) Size() int {
+func (m *SrMplsPolicyDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SrMplsPolicyDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -304,11 +286,10 @@ func (*SrMplsPolicyMod) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SrMplsPolicyMod) Size() int {
+func (m *SrMplsPolicyMod) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                   // m.Bsid
 	size += 1                   // m.Operation
 	size += 4                   // m.SlIndex
@@ -318,23 +299,21 @@ func (m *SrMplsPolicyMod) Size() int {
 	return size
 }
 func (m *SrMplsPolicyMod) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Bsid))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Bsid)
 	buf.EncodeUint8(uint8(m.Operation))
-	buf.EncodeUint32(uint32(m.SlIndex))
-	buf.EncodeUint32(uint32(m.Weight))
+	buf.EncodeUint32(m.SlIndex)
+	buf.EncodeUint32(m.Weight)
 	buf.EncodeUint8(uint8(len(m.Segments)))
 	for i := 0; i < len(m.Segments); i++ {
 		var x uint32
 		if i < len(m.Segments) {
 			x = uint32(m.Segments[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -364,33 +343,30 @@ func (*SrMplsPolicyModReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SrMplsPolicyModReply) Size() int {
+func (m *SrMplsPolicyModReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SrMplsPolicyModReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsPolicyModReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
 // SrMplsSteeringAddDel defines message 'sr_mpls_steering_add_del'.
 type SrMplsSteeringAddDel struct {
-	IsDel     bool             `binapi:"bool,name=is_del,default=%!s(bool=false)" json:"is_del,omitempty"`
+	IsDel     bool             `binapi:"bool,name=is_del,default=false" json:"is_del,omitempty"`
 	Bsid      uint32           `binapi:"u32,name=bsid" json:"bsid,omitempty"`
 	TableID   uint32           `binapi:"u32,name=table_id" json:"table_id,omitempty"`
 	Prefix    ip_types.Prefix  `binapi:"prefix,name=prefix" json:"prefix,omitempty"`
@@ -408,11 +384,10 @@ func (*SrMplsSteeringAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SrMplsSteeringAddDel) Size() int {
+func (m *SrMplsSteeringAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsDel
 	size += 4      // m.Bsid
 	size += 4      // m.TableID
@@ -428,24 +403,22 @@ func (m *SrMplsSteeringAddDel) Size() int {
 	return size
 }
 func (m *SrMplsSteeringAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsDel)
-	buf.EncodeUint32(uint32(m.Bsid))
-	buf.EncodeUint32(uint32(m.TableID))
+	buf.EncodeUint32(m.Bsid)
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint8(uint8(m.Prefix.Address.Af))
-	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Prefix.Len))
-	buf.EncodeUint32(uint32(m.MaskWidth))
+	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Prefix.Len)
+	buf.EncodeUint32(m.MaskWidth)
 	buf.EncodeUint8(uint8(m.NextHop.Af))
-	buf.EncodeBytes(m.NextHop.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Color))
-	buf.EncodeUint8(uint8(m.CoBits))
-	buf.EncodeUint32(uint32(m.VPNLabel))
+	buf.EncodeBytes(m.NextHop.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Color)
+	buf.EncodeUint8(m.CoBits)
+	buf.EncodeUint32(m.VPNLabel)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsSteeringAddDel) Unmarshal(b []byte) error {
@@ -477,27 +450,24 @@ func (*SrMplsSteeringAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SrMplsSteeringAddDelReply) Size() int {
+func (m *SrMplsSteeringAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SrMplsSteeringAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SrMplsSteeringAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

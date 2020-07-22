@@ -4,14 +4,13 @@ package vpe
 
 import (
 	"context"
-	"io"
-
+	"fmt"
 	api "git.fd.io/govpp.git/api"
+	"io"
 )
 
-// RPCService represents RPC service API for vpe module.
+// RPCService defines RPC service  vpe.
 type RPCService interface {
-	DumpLog(ctx context.Context, in *LogDump) (RPCService_DumpLogClient, error)
 	AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error)
 	Cli(ctx context.Context, in *Cli) (*CliReply, error)
 	CliInband(ctx context.Context, in *CliInband) (*CliInbandReply, error)
@@ -21,48 +20,23 @@ type RPCService interface {
 	GetNextIndex(ctx context.Context, in *GetNextIndex) (*GetNextIndexReply, error)
 	GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*GetNodeGraphReply, error)
 	GetNodeIndex(ctx context.Context, in *GetNodeIndex) (*GetNodeIndexReply, error)
+	LogDump(ctx context.Context, in *LogDump) (RPCService_LogDumpClient, error)
 	ShowThreads(ctx context.Context, in *ShowThreads) (*ShowThreadsReply, error)
 	ShowVersion(ctx context.Context, in *ShowVersion) (*ShowVersionReply, error)
 	ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystemTime) (*ShowVpeSystemTimeReply, error)
 }
 
 type serviceClient struct {
-	ch api.Channel
+	conn api.Connection
 }
 
-func NewServiceClient(ch api.Channel) RPCService {
-	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpLog(ctx context.Context, in *LogDump) (RPCService_DumpLogClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpLogClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpLogClient interface {
-	Recv() (*LogDetails, error)
-}
-
-type serviceClient_DumpLogClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpLogClient) Recv() (*LogDetails, error) {
-	m := new(LogDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
+func NewServiceClient(conn api.Connection) RPCService {
+	return &serviceClient{conn}
 }
 
 func (c *serviceClient) AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error) {
 	out := new(AddNodeNextReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +45,7 @@ func (c *serviceClient) AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddN
 
 func (c *serviceClient) Cli(ctx context.Context, in *Cli) (*CliReply, error) {
 	out := new(CliReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +54,7 @@ func (c *serviceClient) Cli(ctx context.Context, in *Cli) (*CliReply, error) {
 
 func (c *serviceClient) CliInband(ctx context.Context, in *CliInband) (*CliInbandReply, error) {
 	out := new(CliInbandReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +63,7 @@ func (c *serviceClient) CliInband(ctx context.Context, in *CliInband) (*CliInban
 
 func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error) {
 	out := new(ControlPingReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +72,7 @@ func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*Cont
 
 func (c *serviceClient) GetF64EndianValue(ctx context.Context, in *GetF64EndianValue) (*GetF64EndianValueReply, error) {
 	out := new(GetF64EndianValueReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +81,7 @@ func (c *serviceClient) GetF64EndianValue(ctx context.Context, in *GetF64EndianV
 
 func (c *serviceClient) GetF64IncrementByOne(ctx context.Context, in *GetF64IncrementByOne) (*GetF64IncrementByOneReply, error) {
 	out := new(GetF64IncrementByOneReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +90,7 @@ func (c *serviceClient) GetF64IncrementByOne(ctx context.Context, in *GetF64Incr
 
 func (c *serviceClient) GetNextIndex(ctx context.Context, in *GetNextIndex) (*GetNextIndexReply, error) {
 	out := new(GetNextIndexReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +99,7 @@ func (c *serviceClient) GetNextIndex(ctx context.Context, in *GetNextIndex) (*Ge
 
 func (c *serviceClient) GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*GetNodeGraphReply, error) {
 	out := new(GetNodeGraphReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -134,16 +108,55 @@ func (c *serviceClient) GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*Ge
 
 func (c *serviceClient) GetNodeIndex(ctx context.Context, in *GetNodeIndex) (*GetNodeIndexReply, error) {
 	out := new(GetNodeIndexReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *serviceClient) LogDump(ctx context.Context, in *LogDump) (RPCService_LogDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_LogDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_LogDumpClient interface {
+	Recv() (*LogDetails, error)
+	api.Stream
+}
+
+type serviceClient_LogDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_LogDumpClient) Recv() (*LogDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *LogDetails:
+		return m, nil
+	case *ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
 func (c *serviceClient) ShowThreads(ctx context.Context, in *ShowThreads) (*ShowThreadsReply, error) {
 	out := new(ShowThreadsReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -152,7 +165,7 @@ func (c *serviceClient) ShowThreads(ctx context.Context, in *ShowThreads) (*Show
 
 func (c *serviceClient) ShowVersion(ctx context.Context, in *ShowVersion) (*ShowVersionReply, error) {
 	out := new(ShowVersionReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -161,14 +174,9 @@ func (c *serviceClient) ShowVersion(ctx context.Context, in *ShowVersion) (*Show
 
 func (c *serviceClient) ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystemTime) (*ShowVpeSystemTimeReply, error) {
 	out := new(ShowVpeSystemTimeReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = api.RegisterMessage
-var _ = context.Background
-var _ = io.Copy

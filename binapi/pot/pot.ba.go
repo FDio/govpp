@@ -41,23 +41,20 @@ func (*PotProfileActivate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PotProfileActivate) Size() int {
+func (m *PotProfileActivate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                   // m.ID
 	size += 4 + len(m.ListName) // m.ListName
 	return size
 }
 func (m *PotProfileActivate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.ID)
 	buf.EncodeString(m.ListName, 0)
 	return buf.Bytes(), nil
 }
@@ -80,27 +77,24 @@ func (*PotProfileActivateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PotProfileActivateReply) Size() int {
+func (m *PotProfileActivateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PotProfileActivateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PotProfileActivateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -124,11 +118,10 @@ func (*PotProfileAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PotProfileAdd) Size() int {
+func (m *PotProfileAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                   // m.ID
 	size += 1                   // m.Validator
 	size += 8                   // m.SecretKey
@@ -141,20 +134,18 @@ func (m *PotProfileAdd) Size() int {
 	return size
 }
 func (m *PotProfileAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.ID))
-	buf.EncodeUint8(uint8(m.Validator))
-	buf.EncodeUint64(uint64(m.SecretKey))
-	buf.EncodeUint64(uint64(m.SecretShare))
-	buf.EncodeUint64(uint64(m.Prime))
-	buf.EncodeUint8(uint8(m.MaxBits))
-	buf.EncodeUint64(uint64(m.Lpc))
-	buf.EncodeUint64(uint64(m.PolynomialPublic))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.ID)
+	buf.EncodeUint8(m.Validator)
+	buf.EncodeUint64(m.SecretKey)
+	buf.EncodeUint64(m.SecretShare)
+	buf.EncodeUint64(m.Prime)
+	buf.EncodeUint8(m.MaxBits)
+	buf.EncodeUint64(m.Lpc)
+	buf.EncodeUint64(m.PolynomialPublic)
 	buf.EncodeString(m.ListName, 0)
 	return buf.Bytes(), nil
 }
@@ -184,27 +175,24 @@ func (*PotProfileAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PotProfileAddReply) Size() int {
+func (m *PotProfileAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PotProfileAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PotProfileAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -220,21 +208,18 @@ func (*PotProfileDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PotProfileDel) Size() int {
+func (m *PotProfileDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 + len(m.ListName) // m.ListName
 	return size
 }
 func (m *PotProfileDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.ListName, 0)
 	return buf.Bytes(), nil
 }
@@ -256,27 +241,24 @@ func (*PotProfileDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PotProfileDelReply) Size() int {
+func (m *PotProfileDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PotProfileDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PotProfileDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -300,11 +282,10 @@ func (*PotProfileShowConfigDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PotProfileShowConfigDetails) Size() int {
+func (m *PotProfileShowConfigDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.ID
 	size += 1 // m.Validator
@@ -317,26 +298,24 @@ func (m *PotProfileShowConfigDetails) Size() int {
 	return size
 }
 func (m *PotProfileShowConfigDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.ID))
-	buf.EncodeUint8(uint8(m.Validator))
-	buf.EncodeUint64(uint64(m.SecretKey))
-	buf.EncodeUint64(uint64(m.SecretShare))
-	buf.EncodeUint64(uint64(m.Prime))
-	buf.EncodeUint64(uint64(m.BitMask))
-	buf.EncodeUint64(uint64(m.Lpc))
-	buf.EncodeUint64(uint64(m.PolynomialPublic))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.ID)
+	buf.EncodeUint8(m.Validator)
+	buf.EncodeUint64(m.SecretKey)
+	buf.EncodeUint64(m.SecretShare)
+	buf.EncodeUint64(m.Prime)
+	buf.EncodeUint64(m.BitMask)
+	buf.EncodeUint64(m.Lpc)
+	buf.EncodeUint64(m.PolynomialPublic)
 	return buf.Bytes(), nil
 }
 func (m *PotProfileShowConfigDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ID = buf.DecodeUint8()
 	m.Validator = buf.DecodeUint8()
 	m.SecretKey = buf.DecodeUint64()
@@ -360,22 +339,19 @@ func (*PotProfileShowConfigDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PotProfileShowConfigDump) Size() int {
+func (m *PotProfileShowConfigDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.ID
 	return size
 }
 func (m *PotProfileShowConfigDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.ID)
 	return buf.Bytes(), nil
 }
 func (m *PotProfileShowConfigDump) Unmarshal(b []byte) error {

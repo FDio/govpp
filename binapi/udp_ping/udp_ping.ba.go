@@ -50,11 +50,10 @@ func (*UDPPingAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UDPPingAddDel) Size() int {
+func (m *UDPPingAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.SrcIPAddress.Af
 	size += 1 * 16 // m.SrcIPAddress.Un
 	size += 1      // m.DstIPAddress.Af
@@ -70,24 +69,22 @@ func (m *UDPPingAddDel) Size() int {
 	return size
 }
 func (m *UDPPingAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.SrcIPAddress.Af))
-	buf.EncodeBytes(m.SrcIPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.SrcIPAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.DstIPAddress.Af))
-	buf.EncodeBytes(m.DstIPAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint16(uint16(m.StartSrcPort))
-	buf.EncodeUint16(uint16(m.EndSrcPort))
-	buf.EncodeUint16(uint16(m.StartDstPort))
-	buf.EncodeUint16(uint16(m.EndDstPort))
-	buf.EncodeUint16(uint16(m.Interval))
-	buf.EncodeUint8(uint8(m.Dis))
-	buf.EncodeUint8(uint8(m.FaultDet))
-	buf.EncodeBytes(m.Reserve[:], 3)
+	buf.EncodeBytes(m.DstIPAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint16(m.StartSrcPort)
+	buf.EncodeUint16(m.EndSrcPort)
+	buf.EncodeUint16(m.StartDstPort)
+	buf.EncodeUint16(m.EndDstPort)
+	buf.EncodeUint16(m.Interval)
+	buf.EncodeUint8(m.Dis)
+	buf.EncodeUint8(m.FaultDet)
+	buf.EncodeBytes(m.Reserve, 3)
 	return buf.Bytes(), nil
 }
 func (m *UDPPingAddDel) Unmarshal(b []byte) error {
@@ -103,7 +100,8 @@ func (m *UDPPingAddDel) Unmarshal(b []byte) error {
 	m.Interval = buf.DecodeUint16()
 	m.Dis = buf.DecodeUint8()
 	m.FaultDet = buf.DecodeUint8()
-	copy(m.Reserve[:], buf.DecodeBytes(3))
+	m.Reserve = make([]byte, 3)
+	copy(m.Reserve, buf.DecodeBytes(len(m.Reserve)))
 	return nil
 }
 
@@ -119,27 +117,24 @@ func (*UDPPingAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UDPPingAddDelReply) Size() int {
+func (m *UDPPingAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *UDPPingAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *UDPPingAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -155,21 +150,18 @@ func (*UDPPingExport) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UDPPingExport) Size() int {
+func (m *UDPPingExport) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	return size
 }
 func (m *UDPPingExport) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -191,27 +183,24 @@ func (*UDPPingExportReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UDPPingExportReply) Size() int {
+func (m *UDPPingExportReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *UDPPingExportReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *UDPPingExportReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -4,21 +4,20 @@ package acl
 
 import (
 	"context"
-	"io"
-
+	"fmt"
 	api "git.fd.io/govpp.git/api"
+	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
+	"io"
 )
 
-// RPCService represents RPC service API for acl module.
+// RPCService defines RPC service  acl.
 type RPCService interface {
-	DumpACL(ctx context.Context, in *ACLDump) (RPCService_DumpACLClient, error)
-	DumpACLInterfaceEtypeWhitelist(ctx context.Context, in *ACLInterfaceEtypeWhitelistDump) (RPCService_DumpACLInterfaceEtypeWhitelistClient, error)
-	DumpACLInterfaceList(ctx context.Context, in *ACLInterfaceListDump) (RPCService_DumpACLInterfaceListClient, error)
-	DumpMacipACL(ctx context.Context, in *MacipACLDump) (RPCService_DumpMacipACLClient, error)
-	DumpMacipACLInterfaceList(ctx context.Context, in *MacipACLInterfaceListDump) (RPCService_DumpMacipACLInterfaceListClient, error)
 	ACLAddReplace(ctx context.Context, in *ACLAddReplace) (*ACLAddReplaceReply, error)
 	ACLDel(ctx context.Context, in *ACLDel) (*ACLDelReply, error)
+	ACLDump(ctx context.Context, in *ACLDump) (RPCService_ACLDumpClient, error)
 	ACLInterfaceAddDel(ctx context.Context, in *ACLInterfaceAddDel) (*ACLInterfaceAddDelReply, error)
+	ACLInterfaceEtypeWhitelistDump(ctx context.Context, in *ACLInterfaceEtypeWhitelistDump) (RPCService_ACLInterfaceEtypeWhitelistDumpClient, error)
+	ACLInterfaceListDump(ctx context.Context, in *ACLInterfaceListDump) (RPCService_ACLInterfaceListDumpClient, error)
 	ACLInterfaceSetACLList(ctx context.Context, in *ACLInterfaceSetACLList) (*ACLInterfaceSetACLListReply, error)
 	ACLInterfaceSetEtypeWhitelist(ctx context.Context, in *ACLInterfaceSetEtypeWhitelist) (*ACLInterfaceSetEtypeWhitelistReply, error)
 	ACLPluginControlPing(ctx context.Context, in *ACLPluginControlPing) (*ACLPluginControlPingReply, error)
@@ -28,151 +27,23 @@ type RPCService interface {
 	MacipACLAdd(ctx context.Context, in *MacipACLAdd) (*MacipACLAddReply, error)
 	MacipACLAddReplace(ctx context.Context, in *MacipACLAddReplace) (*MacipACLAddReplaceReply, error)
 	MacipACLDel(ctx context.Context, in *MacipACLDel) (*MacipACLDelReply, error)
+	MacipACLDump(ctx context.Context, in *MacipACLDump) (RPCService_MacipACLDumpClient, error)
 	MacipACLInterfaceAddDel(ctx context.Context, in *MacipACLInterfaceAddDel) (*MacipACLInterfaceAddDelReply, error)
 	MacipACLInterfaceGet(ctx context.Context, in *MacipACLInterfaceGet) (*MacipACLInterfaceGetReply, error)
+	MacipACLInterfaceListDump(ctx context.Context, in *MacipACLInterfaceListDump) (RPCService_MacipACLInterfaceListDumpClient, error)
 }
 
 type serviceClient struct {
-	ch api.Channel
+	conn api.Connection
 }
 
-func NewServiceClient(ch api.Channel) RPCService {
-	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpACL(ctx context.Context, in *ACLDump) (RPCService_DumpACLClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpACLClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpACLClient interface {
-	Recv() (*ACLDetails, error)
-}
-
-type serviceClient_DumpACLClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpACLClient) Recv() (*ACLDetails, error) {
-	m := new(ACLDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpACLInterfaceEtypeWhitelist(ctx context.Context, in *ACLInterfaceEtypeWhitelistDump) (RPCService_DumpACLInterfaceEtypeWhitelistClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpACLInterfaceEtypeWhitelistClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpACLInterfaceEtypeWhitelistClient interface {
-	Recv() (*ACLInterfaceEtypeWhitelistDetails, error)
-}
-
-type serviceClient_DumpACLInterfaceEtypeWhitelistClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpACLInterfaceEtypeWhitelistClient) Recv() (*ACLInterfaceEtypeWhitelistDetails, error) {
-	m := new(ACLInterfaceEtypeWhitelistDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpACLInterfaceList(ctx context.Context, in *ACLInterfaceListDump) (RPCService_DumpACLInterfaceListClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpACLInterfaceListClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpACLInterfaceListClient interface {
-	Recv() (*ACLInterfaceListDetails, error)
-}
-
-type serviceClient_DumpACLInterfaceListClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpACLInterfaceListClient) Recv() (*ACLInterfaceListDetails, error) {
-	m := new(ACLInterfaceListDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpMacipACL(ctx context.Context, in *MacipACLDump) (RPCService_DumpMacipACLClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpMacipACLClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpMacipACLClient interface {
-	Recv() (*MacipACLDetails, error)
-}
-
-type serviceClient_DumpMacipACLClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpMacipACLClient) Recv() (*MacipACLDetails, error) {
-	m := new(MacipACLDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpMacipACLInterfaceList(ctx context.Context, in *MacipACLInterfaceListDump) (RPCService_DumpMacipACLInterfaceListClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpMacipACLInterfaceListClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpMacipACLInterfaceListClient interface {
-	Recv() (*MacipACLInterfaceListDetails, error)
-}
-
-type serviceClient_DumpMacipACLInterfaceListClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpMacipACLInterfaceListClient) Recv() (*MacipACLInterfaceListDetails, error) {
-	m := new(MacipACLInterfaceListDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
+func NewServiceClient(conn api.Connection) RPCService {
+	return &serviceClient{conn}
 }
 
 func (c *serviceClient) ACLAddReplace(ctx context.Context, in *ACLAddReplace) (*ACLAddReplaceReply, error) {
 	out := new(ACLAddReplaceReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -181,25 +52,142 @@ func (c *serviceClient) ACLAddReplace(ctx context.Context, in *ACLAddReplace) (*
 
 func (c *serviceClient) ACLDel(ctx context.Context, in *ACLDel) (*ACLDelReply, error) {
 	out := new(ACLDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *serviceClient) ACLDump(ctx context.Context, in *ACLDump) (RPCService_ACLDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_ACLDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_ACLDumpClient interface {
+	Recv() (*ACLDetails, error)
+	api.Stream
+}
+
+type serviceClient_ACLDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_ACLDumpClient) Recv() (*ACLDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *ACLDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) ACLInterfaceAddDel(ctx context.Context, in *ACLInterfaceAddDel) (*ACLInterfaceAddDelReply, error) {
 	out := new(ACLInterfaceAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *serviceClient) ACLInterfaceEtypeWhitelistDump(ctx context.Context, in *ACLInterfaceEtypeWhitelistDump) (RPCService_ACLInterfaceEtypeWhitelistDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_ACLInterfaceEtypeWhitelistDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_ACLInterfaceEtypeWhitelistDumpClient interface {
+	Recv() (*ACLInterfaceEtypeWhitelistDetails, error)
+	api.Stream
+}
+
+type serviceClient_ACLInterfaceEtypeWhitelistDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_ACLInterfaceEtypeWhitelistDumpClient) Recv() (*ACLInterfaceEtypeWhitelistDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *ACLInterfaceEtypeWhitelistDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) ACLInterfaceListDump(ctx context.Context, in *ACLInterfaceListDump) (RPCService_ACLInterfaceListDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_ACLInterfaceListDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_ACLInterfaceListDumpClient interface {
+	Recv() (*ACLInterfaceListDetails, error)
+	api.Stream
+}
+
+type serviceClient_ACLInterfaceListDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_ACLInterfaceListDumpClient) Recv() (*ACLInterfaceListDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *ACLInterfaceListDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
 func (c *serviceClient) ACLInterfaceSetACLList(ctx context.Context, in *ACLInterfaceSetACLList) (*ACLInterfaceSetACLListReply, error) {
 	out := new(ACLInterfaceSetACLListReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -208,7 +196,7 @@ func (c *serviceClient) ACLInterfaceSetACLList(ctx context.Context, in *ACLInter
 
 func (c *serviceClient) ACLInterfaceSetEtypeWhitelist(ctx context.Context, in *ACLInterfaceSetEtypeWhitelist) (*ACLInterfaceSetEtypeWhitelistReply, error) {
 	out := new(ACLInterfaceSetEtypeWhitelistReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +205,7 @@ func (c *serviceClient) ACLInterfaceSetEtypeWhitelist(ctx context.Context, in *A
 
 func (c *serviceClient) ACLPluginControlPing(ctx context.Context, in *ACLPluginControlPing) (*ACLPluginControlPingReply, error) {
 	out := new(ACLPluginControlPingReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +214,7 @@ func (c *serviceClient) ACLPluginControlPing(ctx context.Context, in *ACLPluginC
 
 func (c *serviceClient) ACLPluginGetConnTableMaxEntries(ctx context.Context, in *ACLPluginGetConnTableMaxEntries) (*ACLPluginGetConnTableMaxEntriesReply, error) {
 	out := new(ACLPluginGetConnTableMaxEntriesReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -235,7 +223,7 @@ func (c *serviceClient) ACLPluginGetConnTableMaxEntries(ctx context.Context, in 
 
 func (c *serviceClient) ACLPluginGetVersion(ctx context.Context, in *ACLPluginGetVersion) (*ACLPluginGetVersionReply, error) {
 	out := new(ACLPluginGetVersionReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -244,7 +232,7 @@ func (c *serviceClient) ACLPluginGetVersion(ctx context.Context, in *ACLPluginGe
 
 func (c *serviceClient) ACLStatsIntfCountersEnable(ctx context.Context, in *ACLStatsIntfCountersEnable) (*ACLStatsIntfCountersEnableReply, error) {
 	out := new(ACLStatsIntfCountersEnableReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +241,7 @@ func (c *serviceClient) ACLStatsIntfCountersEnable(ctx context.Context, in *ACLS
 
 func (c *serviceClient) MacipACLAdd(ctx context.Context, in *MacipACLAdd) (*MacipACLAddReply, error) {
 	out := new(MacipACLAddReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -262,7 +250,7 @@ func (c *serviceClient) MacipACLAdd(ctx context.Context, in *MacipACLAdd) (*Maci
 
 func (c *serviceClient) MacipACLAddReplace(ctx context.Context, in *MacipACLAddReplace) (*MacipACLAddReplaceReply, error) {
 	out := new(MacipACLAddReplaceReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -271,16 +259,55 @@ func (c *serviceClient) MacipACLAddReplace(ctx context.Context, in *MacipACLAddR
 
 func (c *serviceClient) MacipACLDel(ctx context.Context, in *MacipACLDel) (*MacipACLDelReply, error) {
 	out := new(MacipACLDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
+func (c *serviceClient) MacipACLDump(ctx context.Context, in *MacipACLDump) (RPCService_MacipACLDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MacipACLDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MacipACLDumpClient interface {
+	Recv() (*MacipACLDetails, error)
+	api.Stream
+}
+
+type serviceClient_MacipACLDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MacipACLDumpClient) Recv() (*MacipACLDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MacipACLDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
 func (c *serviceClient) MacipACLInterfaceAddDel(ctx context.Context, in *MacipACLInterfaceAddDel) (*MacipACLInterfaceAddDelReply, error) {
 	out := new(MacipACLInterfaceAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -289,14 +316,48 @@ func (c *serviceClient) MacipACLInterfaceAddDel(ctx context.Context, in *MacipAC
 
 func (c *serviceClient) MacipACLInterfaceGet(ctx context.Context, in *MacipACLInterfaceGet) (*MacipACLInterfaceGetReply, error) {
 	out := new(MacipACLInterfaceGetReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = api.RegisterMessage
-var _ = context.Background
-var _ = io.Copy
+func (c *serviceClient) MacipACLInterfaceListDump(ctx context.Context, in *MacipACLInterfaceListDump) (RPCService_MacipACLInterfaceListDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MacipACLInterfaceListDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MacipACLInterfaceListDumpClient interface {
+	Recv() (*MacipACLInterfaceListDetails, error)
+	api.Stream
+}
+
+type serviceClient_MacipACLInterfaceListDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MacipACLInterfaceListDumpClient) Recv() (*MacipACLInterfaceListDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MacipACLInterfaceListDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}

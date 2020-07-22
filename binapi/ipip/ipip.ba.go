@@ -62,11 +62,10 @@ func (*Ipip6rdAddTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ipip6rdAddTunnel) Size() int {
+func (m *Ipip6rdAddTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.IP6TableID
 	size += 4      // m.IP4TableID
 	size += 1 * 16 // m.IP6Prefix.Address
@@ -79,21 +78,19 @@ func (m *Ipip6rdAddTunnel) Size() int {
 	return size
 }
 func (m *Ipip6rdAddTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.IP6TableID))
-	buf.EncodeUint32(uint32(m.IP4TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.IP6TableID)
+	buf.EncodeUint32(m.IP4TableID)
 	buf.EncodeBytes(m.IP6Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.IP6Prefix.Len))
+	buf.EncodeUint8(m.IP6Prefix.Len)
 	buf.EncodeBytes(m.IP4Prefix.Address[:], 4)
-	buf.EncodeUint8(uint8(m.IP4Prefix.Len))
+	buf.EncodeUint8(m.IP4Prefix.Len)
 	buf.EncodeBytes(m.IP4Src[:], 4)
 	buf.EncodeBool(m.SecurityCheck)
-	buf.EncodeUint8(uint8(m.TcTos))
+	buf.EncodeUint8(m.TcTos)
 	return buf.Bytes(), nil
 }
 func (m *Ipip6rdAddTunnel) Unmarshal(b []byte) error {
@@ -123,29 +120,26 @@ func (*Ipip6rdAddTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ipip6rdAddTunnelReply) Size() int {
+func (m *Ipip6rdAddTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Ipip6rdAddTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *Ipip6rdAddTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -162,21 +156,18 @@ func (*Ipip6rdDelTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Ipip6rdDelTunnel) Size() int {
+func (m *Ipip6rdDelTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Ipip6rdDelTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -198,27 +189,24 @@ func (*Ipip6rdDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Ipip6rdDelTunnelReply) Size() int {
+func (m *Ipip6rdDelTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Ipip6rdDelTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Ipip6rdDelTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -234,11 +222,10 @@ func (*IpipAddTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpipAddTunnel) Size() int {
+func (m *IpipAddTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Tunnel.Instance
 	size += 1      // m.Tunnel.Src.Af
 	size += 1 * 16 // m.Tunnel.Src.Un
@@ -252,19 +239,17 @@ func (m *IpipAddTunnel) Size() int {
 	return size
 }
 func (m *IpipAddTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Tunnel.Instance))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Tunnel.Instance)
 	buf.EncodeUint8(uint8(m.Tunnel.Src.Af))
-	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Tunnel.Dst.Af))
-	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.Tunnel.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Tunnel.TableID))
+	buf.EncodeUint32(m.Tunnel.TableID)
 	buf.EncodeUint8(uint8(m.Tunnel.Flags))
 	buf.EncodeUint8(uint8(m.Tunnel.Mode))
 	buf.EncodeUint8(uint8(m.Tunnel.Dscp))
@@ -298,29 +283,26 @@ func (*IpipAddTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpipAddTunnelReply) Size() int {
+func (m *IpipAddTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpipAddTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *IpipAddTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -337,21 +319,18 @@ func (*IpipDelTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpipDelTunnel) Size() int {
+func (m *IpipDelTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpipDelTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -373,27 +352,24 @@ func (*IpipDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpipDelTunnelReply) Size() int {
+func (m *IpipDelTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpipDelTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpipDelTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -409,11 +385,10 @@ func (*IpipTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpipTunnelDetails) Size() int {
+func (m *IpipTunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Tunnel.Instance
 	size += 1      // m.Tunnel.Src.Af
 	size += 1 * 16 // m.Tunnel.Src.Un
@@ -427,19 +402,17 @@ func (m *IpipTunnelDetails) Size() int {
 	return size
 }
 func (m *IpipTunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Tunnel.Instance))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Tunnel.Instance)
 	buf.EncodeUint8(uint8(m.Tunnel.Src.Af))
-	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Tunnel.Dst.Af))
-	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.Tunnel.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Tunnel.TableID))
+	buf.EncodeUint32(m.Tunnel.TableID)
 	buf.EncodeUint8(uint8(m.Tunnel.Flags))
 	buf.EncodeUint8(uint8(m.Tunnel.Mode))
 	buf.EncodeUint8(uint8(m.Tunnel.Dscp))
@@ -472,21 +445,18 @@ func (*IpipTunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpipTunnelDump) Size() int {
+func (m *IpipTunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IpipTunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

@@ -1,0 +1,32 @@
+{
+    "types": [
+        [
+            "pci_address",
+            [
+                "u16",
+                "domain"
+            ],
+            [
+                "u8",
+                "bus"
+            ],
+            [
+                "u8",
+                "slot"
+            ],
+            [
+                "u8",
+                "function"
+            ]
+        ]
+    ],
+    "messages": [],
+    "unions": [],
+    "enums": [],
+    "services": {},
+    "options": {
+        "version": "1.0.0"
+    },
+    "aliases": {},
+    "vl_api_version": "0x5d418665"
+}

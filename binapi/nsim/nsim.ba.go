@@ -44,11 +44,10 @@ func (*NsimConfigure) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NsimConfigure) Size() int {
+func (m *NsimConfigure) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.DelayInUsec
 	size += 4 // m.AveragePacketSize
 	size += 8 // m.BandwidthInBitsPerSecond
@@ -56,16 +55,14 @@ func (m *NsimConfigure) Size() int {
 	return size
 }
 func (m *NsimConfigure) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DelayInUsec))
-	buf.EncodeUint32(uint32(m.AveragePacketSize))
-	buf.EncodeUint64(uint64(m.BandwidthInBitsPerSecond))
-	buf.EncodeUint32(uint32(m.PacketsPerDrop))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DelayInUsec)
+	buf.EncodeUint32(m.AveragePacketSize)
+	buf.EncodeUint64(m.BandwidthInBitsPerSecond)
+	buf.EncodeUint32(m.PacketsPerDrop)
 	return buf.Bytes(), nil
 }
 func (m *NsimConfigure) Unmarshal(b []byte) error {
@@ -89,27 +86,24 @@ func (*NsimConfigureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NsimConfigureReply) Size() int {
+func (m *NsimConfigureReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NsimConfigureReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NsimConfigureReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -129,23 +123,20 @@ func (*NsimCrossConnectEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NsimCrossConnectEnableDisable) Size() int {
+func (m *NsimCrossConnectEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.SwIfIndex0
 	size += 4 // m.SwIfIndex1
 	return size
 }
 func (m *NsimCrossConnectEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableDisable)
 	buf.EncodeUint32(uint32(m.SwIfIndex0))
 	buf.EncodeUint32(uint32(m.SwIfIndex1))
@@ -173,27 +164,24 @@ func (*NsimCrossConnectEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NsimCrossConnectEnableDisableReply) Size() int {
+func (m *NsimCrossConnectEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NsimCrossConnectEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NsimCrossConnectEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -212,22 +200,19 @@ func (*NsimOutputFeatureEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NsimOutputFeatureEnableDisable) Size() int {
+func (m *NsimOutputFeatureEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableDisable
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *NsimOutputFeatureEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableDisable)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -253,27 +238,24 @@ func (*NsimOutputFeatureEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NsimOutputFeatureEnableDisableReply) Size() int {
+func (m *NsimOutputFeatureEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NsimOutputFeatureEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NsimOutputFeatureEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

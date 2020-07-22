@@ -44,24 +44,21 @@ func (*SvsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SvsDetails) Size() int {
+func (m *SvsDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.TableID
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Af
 	return size
 }
 func (m *SvsDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Af))
 	return buf.Bytes(), nil
@@ -84,20 +81,17 @@ func (*SvsDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SvsDump) Size() int {
+func (m *SvsDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SvsDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SvsDump) Unmarshal(b []byte) error {
@@ -119,11 +113,10 @@ func (*SvsEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SvsEnableDisable) Size() int {
+func (m *SvsEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsEnable
 	size += 1 // m.Af
 	size += 4 // m.TableID
@@ -131,15 +124,13 @@ func (m *SvsEnableDisable) Size() int {
 	return size
 }
 func (m *SvsEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnable)
 	buf.EncodeUint8(uint8(m.Af))
-	buf.EncodeUint32(uint32(m.TableID))
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -164,27 +155,24 @@ func (*SvsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SvsEnableDisableReply) Size() int {
+func (m *SvsEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SvsEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SvsEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -198,20 +186,17 @@ func (*SvsPluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SvsPluginGetVersion) Size() int {
+func (m *SvsPluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SvsPluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SvsPluginGetVersion) Unmarshal(b []byte) error {
@@ -231,24 +216,21 @@ func (*SvsPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SvsPluginGetVersionReply) Size() int {
+func (m *SvsPluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *SvsPluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *SvsPluginGetVersionReply) Unmarshal(b []byte) error {
@@ -273,11 +255,10 @@ func (*SvsRouteAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SvsRouteAddDel) Size() int {
+func (m *SvsRouteAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.Prefix.Address.Af
 	size += 1 * 16 // m.Prefix.Address.Un
@@ -287,18 +268,16 @@ func (m *SvsRouteAddDel) Size() int {
 	return size
 }
 func (m *SvsRouteAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Prefix.Address.Af))
-	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Prefix.Len))
-	buf.EncodeUint32(uint32(m.TableID))
-	buf.EncodeUint32(uint32(m.SourceTableID))
+	buf.EncodeBytes(m.Prefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Prefix.Len)
+	buf.EncodeUint32(m.TableID)
+	buf.EncodeUint32(m.SourceTableID)
 	return buf.Bytes(), nil
 }
 func (m *SvsRouteAddDel) Unmarshal(b []byte) error {
@@ -324,27 +303,24 @@ func (*SvsRouteAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SvsRouteAddDelReply) Size() int {
+func (m *SvsRouteAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SvsRouteAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SvsRouteAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -362,26 +338,23 @@ func (*SvsTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SvsTableAddDel) Size() int {
+func (m *SvsTableAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Af
 	size += 4 // m.TableID
 	return size
 }
 func (m *SvsTableAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Af))
-	buf.EncodeUint32(uint32(m.TableID))
+	buf.EncodeUint32(m.TableID)
 	return buf.Bytes(), nil
 }
 func (m *SvsTableAddDel) Unmarshal(b []byte) error {
@@ -404,27 +377,24 @@ func (*SvsTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SvsTableAddDelReply) Size() int {
+func (m *SvsTableAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SvsTableAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SvsTableAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

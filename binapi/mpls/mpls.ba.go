@@ -76,11 +76,10 @@ func (*MplsIPBindUnbind) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsIPBindUnbind) Size() int {
+func (m *MplsIPBindUnbind) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.MbMplsTableID
 	size += 4      // m.MbLabel
 	size += 4      // m.MbIPTableID
@@ -91,19 +90,17 @@ func (m *MplsIPBindUnbind) Size() int {
 	return size
 }
 func (m *MplsIPBindUnbind) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MbMplsTableID))
-	buf.EncodeUint32(uint32(m.MbLabel))
-	buf.EncodeUint32(uint32(m.MbIPTableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MbMplsTableID)
+	buf.EncodeUint32(m.MbLabel)
+	buf.EncodeUint32(m.MbIPTableID)
 	buf.EncodeBool(m.MbIsBind)
 	buf.EncodeUint8(uint8(m.MbPrefix.Address.Af))
-	buf.EncodeBytes(m.MbPrefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.MbPrefix.Len))
+	buf.EncodeBytes(m.MbPrefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.MbPrefix.Len)
 	return buf.Bytes(), nil
 }
 func (m *MplsIPBindUnbind) Unmarshal(b []byte) error {
@@ -130,27 +127,24 @@ func (*MplsIPBindUnbindReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsIPBindUnbindReply) Size() int {
+func (m *MplsIPBindUnbindReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MplsIPBindUnbindReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MplsIPBindUnbindReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -168,11 +162,10 @@ func (*MplsRouteAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsRouteAddDel) Size() int {
+func (m *MplsRouteAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.MrIsAdd
 	size += 1 // m.MrIsMultipath
 	size += 4 // m.MrRoute.MrTableID
@@ -201,61 +194,50 @@ func (m *MplsRouteAddDel) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *MplsRouteAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.MrIsAdd)
 	buf.EncodeBool(m.MrIsMultipath)
-	buf.EncodeUint32(uint32(m.MrRoute.MrTableID))
-	buf.EncodeUint32(uint32(m.MrRoute.MrLabel))
-	buf.EncodeUint8(uint8(m.MrRoute.MrEos))
-	buf.EncodeUint8(uint8(m.MrRoute.MrEosProto))
+	buf.EncodeUint32(m.MrRoute.MrTableID)
+	buf.EncodeUint32(m.MrRoute.MrLabel)
+	buf.EncodeUint8(m.MrRoute.MrEos)
+	buf.EncodeUint8(m.MrRoute.MrEosProto)
 	buf.EncodeBool(m.MrRoute.MrIsMulticast)
 	buf.EncodeUint8(uint8(len(m.MrRoute.MrPaths)))
 	for j1 := 0; j1 < len(m.MrRoute.MrPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // MrPaths
 		if j1 < len(m.MrRoute.MrPaths) {
 			v1 = m.MrRoute.MrPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -270,7 +252,7 @@ func (m *MplsRouteAddDel) Unmarshal(b []byte) error {
 	m.MrRoute.MrEosProto = buf.DecodeUint8()
 	m.MrRoute.MrIsMulticast = buf.DecodeBool()
 	m.MrRoute.MrNPaths = buf.DecodeUint8()
-	m.MrRoute.MrPaths = make([]fib_types.FibPath, int(m.MrRoute.MrNPaths))
+	m.MrRoute.MrPaths = make([]fib_types.FibPath, m.MrRoute.MrNPaths)
 	for j1 := 0; j1 < len(m.MrRoute.MrPaths); j1++ {
 		m.MrRoute.MrPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.MrRoute.MrPaths[j1].TableID = buf.DecodeUint32()
@@ -308,29 +290,26 @@ func (*MplsRouteAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsRouteAddDelReply) Size() int {
+func (m *MplsRouteAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.StatsIndex
 	return size
 }
 func (m *MplsRouteAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.StatsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatsIndex)
 	return buf.Bytes(), nil
 }
 func (m *MplsRouteAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StatsIndex = buf.DecodeUint32()
 	return nil
 }
@@ -347,11 +326,10 @@ func (*MplsRouteDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsRouteDetails) Size() int {
+func (m *MplsRouteDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.MrRoute.MrTableID
 	size += 4 // m.MrRoute.MrLabel
 	size += 1 // m.MrRoute.MrEos
@@ -378,59 +356,48 @@ func (m *MplsRouteDetails) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *MplsRouteDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MrRoute.MrTableID))
-	buf.EncodeUint32(uint32(m.MrRoute.MrLabel))
-	buf.EncodeUint8(uint8(m.MrRoute.MrEos))
-	buf.EncodeUint8(uint8(m.MrRoute.MrEosProto))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MrRoute.MrTableID)
+	buf.EncodeUint32(m.MrRoute.MrLabel)
+	buf.EncodeUint8(m.MrRoute.MrEos)
+	buf.EncodeUint8(m.MrRoute.MrEosProto)
 	buf.EncodeBool(m.MrRoute.MrIsMulticast)
 	buf.EncodeUint8(uint8(len(m.MrRoute.MrPaths)))
 	for j1 := 0; j1 < len(m.MrRoute.MrPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // MrPaths
 		if j1 < len(m.MrRoute.MrPaths) {
 			v1 = m.MrRoute.MrPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -443,7 +410,7 @@ func (m *MplsRouteDetails) Unmarshal(b []byte) error {
 	m.MrRoute.MrEosProto = buf.DecodeUint8()
 	m.MrRoute.MrIsMulticast = buf.DecodeBool()
 	m.MrRoute.MrNPaths = buf.DecodeUint8()
-	m.MrRoute.MrPaths = make([]fib_types.FibPath, int(m.MrRoute.MrNPaths))
+	m.MrRoute.MrPaths = make([]fib_types.FibPath, m.MrRoute.MrNPaths)
 	for j1 := 0; j1 < len(m.MrRoute.MrPaths); j1++ {
 		m.MrRoute.MrPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.MrRoute.MrPaths[j1].TableID = buf.DecodeUint32()
@@ -480,23 +447,20 @@ func (*MplsRouteDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsRouteDump) Size() int {
+func (m *MplsRouteDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.Table.MtTableID
 	size += 64 // m.Table.MtName
 	return size
 }
 func (m *MplsRouteDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Table.MtTableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Table.MtTableID)
 	buf.EncodeString(m.Table.MtName, 64)
 	return buf.Bytes(), nil
 }
@@ -520,25 +484,22 @@ func (*MplsTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsTableAddDel) Size() int {
+func (m *MplsTableAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.MtIsAdd
 	size += 4  // m.MtTable.MtTableID
 	size += 64 // m.MtTable.MtName
 	return size
 }
 func (m *MplsTableAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.MtIsAdd)
-	buf.EncodeUint32(uint32(m.MtTable.MtTableID))
+	buf.EncodeUint32(m.MtTable.MtTableID)
 	buf.EncodeString(m.MtTable.MtName, 64)
 	return buf.Bytes(), nil
 }
@@ -562,27 +523,24 @@ func (*MplsTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsTableAddDelReply) Size() int {
+func (m *MplsTableAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MplsTableAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MplsTableAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -598,23 +556,20 @@ func (*MplsTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsTableDetails) Size() int {
+func (m *MplsTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.MtTable.MtTableID
 	size += 64 // m.MtTable.MtName
 	return size
 }
 func (m *MplsTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MtTable.MtTableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MtTable.MtTableID)
 	buf.EncodeString(m.MtTable.MtName, 64)
 	return buf.Bytes(), nil
 }
@@ -635,20 +590,17 @@ func (*MplsTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsTableDump) Size() int {
+func (m *MplsTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MplsTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MplsTableDump) Unmarshal(b []byte) error {
@@ -668,11 +620,10 @@ func (*MplsTunnelAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsTunnelAddDel) Size() int {
+func (m *MplsTunnelAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.MtIsAdd
 	size += 4  // m.MtTunnel.MtSwIfIndex
 	size += 4  // m.MtTunnel.MtTunnelIndex
@@ -700,60 +651,49 @@ func (m *MplsTunnelAddDel) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *MplsTunnelAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.MtIsAdd)
 	buf.EncodeUint32(uint32(m.MtTunnel.MtSwIfIndex))
-	buf.EncodeUint32(uint32(m.MtTunnel.MtTunnelIndex))
+	buf.EncodeUint32(m.MtTunnel.MtTunnelIndex)
 	buf.EncodeBool(m.MtTunnel.MtL2Only)
 	buf.EncodeBool(m.MtTunnel.MtIsMulticast)
 	buf.EncodeString(m.MtTunnel.MtTag, 64)
 	buf.EncodeUint8(uint8(len(m.MtTunnel.MtPaths)))
 	for j1 := 0; j1 < len(m.MtTunnel.MtPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // MtPaths
 		if j1 < len(m.MtTunnel.MtPaths) {
 			v1 = m.MtTunnel.MtPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -767,7 +707,7 @@ func (m *MplsTunnelAddDel) Unmarshal(b []byte) error {
 	m.MtTunnel.MtIsMulticast = buf.DecodeBool()
 	m.MtTunnel.MtTag = buf.DecodeString(64)
 	m.MtTunnel.MtNPaths = buf.DecodeUint8()
-	m.MtTunnel.MtPaths = make([]fib_types.FibPath, int(m.MtTunnel.MtNPaths))
+	m.MtTunnel.MtPaths = make([]fib_types.FibPath, m.MtTunnel.MtNPaths)
 	for j1 := 0; j1 < len(m.MtTunnel.MtPaths); j1++ {
 		m.MtTunnel.MtPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.MtTunnel.MtPaths[j1].TableID = buf.DecodeUint32()
@@ -806,31 +746,28 @@ func (*MplsTunnelAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsTunnelAddDelReply) Size() int {
+func (m *MplsTunnelAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	size += 4 // m.TunnelIndex
 	return size
 }
 func (m *MplsTunnelAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.TunnelIndex))
+	buf.EncodeUint32(m.TunnelIndex)
 	return buf.Bytes(), nil
 }
 func (m *MplsTunnelAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.TunnelIndex = buf.DecodeUint32()
 	return nil
@@ -848,11 +785,10 @@ func (*MplsTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MplsTunnelDetails) Size() int {
+func (m *MplsTunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.MtTunnel.MtSwIfIndex
 	size += 4  // m.MtTunnel.MtTunnelIndex
 	size += 1  // m.MtTunnel.MtL2Only
@@ -879,59 +815,48 @@ func (m *MplsTunnelDetails) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *MplsTunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.MtTunnel.MtSwIfIndex))
-	buf.EncodeUint32(uint32(m.MtTunnel.MtTunnelIndex))
+	buf.EncodeUint32(m.MtTunnel.MtTunnelIndex)
 	buf.EncodeBool(m.MtTunnel.MtL2Only)
 	buf.EncodeBool(m.MtTunnel.MtIsMulticast)
 	buf.EncodeString(m.MtTunnel.MtTag, 64)
 	buf.EncodeUint8(uint8(len(m.MtTunnel.MtPaths)))
 	for j1 := 0; j1 < len(m.MtTunnel.MtPaths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // MtPaths
 		if j1 < len(m.MtTunnel.MtPaths) {
 			v1 = m.MtTunnel.MtPaths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -944,7 +869,7 @@ func (m *MplsTunnelDetails) Unmarshal(b []byte) error {
 	m.MtTunnel.MtIsMulticast = buf.DecodeBool()
 	m.MtTunnel.MtTag = buf.DecodeString(64)
 	m.MtTunnel.MtNPaths = buf.DecodeUint8()
-	m.MtTunnel.MtPaths = make([]fib_types.FibPath, int(m.MtTunnel.MtNPaths))
+	m.MtTunnel.MtPaths = make([]fib_types.FibPath, m.MtTunnel.MtNPaths)
 	for j1 := 0; j1 < len(m.MtTunnel.MtPaths); j1++ {
 		m.MtTunnel.MtPaths[j1].SwIfIndex = buf.DecodeUint32()
 		m.MtTunnel.MtPaths[j1].TableID = buf.DecodeUint32()
@@ -971,7 +896,7 @@ func (m *MplsTunnelDetails) Unmarshal(b []byte) error {
 
 // MplsTunnelDump defines message 'mpls_tunnel_dump'.
 type MplsTunnelDump struct {
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *MplsTunnelDump) Reset()               { *m = MplsTunnelDump{} }
@@ -981,21 +906,18 @@ func (*MplsTunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MplsTunnelDump) Size() int {
+func (m *MplsTunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *MplsTunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -1018,22 +940,19 @@ func (*SwInterfaceSetMplsEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetMplsEnable) Size() int {
+func (m *SwInterfaceSetMplsEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *SwInterfaceSetMplsEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
@@ -1059,27 +978,24 @@ func (*SwInterfaceSetMplsEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetMplsEnableReply) Size() int {
+func (m *SwInterfaceSetMplsEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetMplsEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetMplsEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

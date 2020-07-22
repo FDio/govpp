@@ -44,25 +44,22 @@ func (*LldpConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LldpConfig) Size() int {
+func (m *LldpConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                     // m.TxHold
 	size += 4                     // m.TxInterval
 	size += 4 + len(m.SystemName) // m.SystemName
 	return size
 }
 func (m *LldpConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TxHold))
-	buf.EncodeUint32(uint32(m.TxInterval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TxHold)
+	buf.EncodeUint32(m.TxInterval)
 	buf.EncodeString(m.SystemName, 0)
 	return buf.Bytes(), nil
 }
@@ -86,27 +83,24 @@ func (*LldpConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LldpConfigReply) Size() int {
+func (m *LldpConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LldpConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LldpConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -127,11 +121,10 @@ func (*SwInterfaceSetLldp) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetLldp) Size() int {
+func (m *SwInterfaceSetLldp) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                   // m.SwIfIndex
 	size += 1 * 4               // m.MgmtIP4
 	size += 1 * 16              // m.MgmtIP6
@@ -141,16 +134,14 @@ func (m *SwInterfaceSetLldp) Size() int {
 	return size
 }
 func (m *SwInterfaceSetLldp) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.MgmtIP4[:], 4)
 	buf.EncodeBytes(m.MgmtIP6[:], 16)
-	buf.EncodeBytes(m.MgmtOid[:], 128)
+	buf.EncodeBytes(m.MgmtOid, 128)
 	buf.EncodeBool(m.Enable)
 	buf.EncodeString(m.PortDesc, 0)
 	return buf.Bytes(), nil
@@ -160,7 +151,8 @@ func (m *SwInterfaceSetLldp) Unmarshal(b []byte) error {
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	copy(m.MgmtIP4[:], buf.DecodeBytes(4))
 	copy(m.MgmtIP6[:], buf.DecodeBytes(16))
-	copy(m.MgmtOid[:], buf.DecodeBytes(128))
+	m.MgmtOid = make([]byte, 128)
+	copy(m.MgmtOid, buf.DecodeBytes(len(m.MgmtOid)))
 	m.Enable = buf.DecodeBool()
 	m.PortDesc = buf.DecodeString(0)
 	return nil
@@ -178,27 +170,24 @@ func (*SwInterfaceSetLldpReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetLldpReply) Size() int {
+func (m *SwInterfaceSetLldpReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetLldpReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetLldpReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

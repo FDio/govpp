@@ -34,7 +34,7 @@ const (
 // LbAddDelAs defines message 'lb_add_del_as'.
 type LbAddDelAs struct {
 	Pfx       ip_types.AddressWithPrefix `binapi:"address_with_prefix,name=pfx" json:"pfx,omitempty"`
-	Protocol  uint8                      `binapi:"u8,name=protocol,default=%!s(float64=255)" json:"protocol,omitempty"`
+	Protocol  uint8                      `binapi:"u8,name=protocol,default=255" json:"protocol,omitempty"`
 	Port      uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 	AsAddress ip_types.Address           `binapi:"address,name=as_address" json:"as_address,omitempty"`
 	IsDel     bool                       `binapi:"bool,name=is_del" json:"is_del,omitempty"`
@@ -48,11 +48,10 @@ func (*LbAddDelAs) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbAddDelAs) Size() int {
+func (m *LbAddDelAs) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Pfx.Address.Af
 	size += 1 * 16 // m.Pfx.Address.Un
 	size += 1      // m.Pfx.Len
@@ -65,19 +64,17 @@ func (m *LbAddDelAs) Size() int {
 	return size
 }
 func (m *LbAddDelAs) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Pfx.Address.Af))
-	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Pfx.Len))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Pfx.Len)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	buf.EncodeUint8(uint8(m.AsAddress.Af))
-	buf.EncodeBytes(m.AsAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.AsAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeBool(m.IsDel)
 	buf.EncodeBool(m.IsFlush)
 	return buf.Bytes(), nil
@@ -108,27 +105,24 @@ func (*LbAddDelAsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbAddDelAsReply) Size() int {
+func (m *LbAddDelAsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbAddDelAsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbAddDelAsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -145,22 +139,19 @@ func (*LbAddDelIntfNat4) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbAddDelIntfNat4) Size() int {
+func (m *LbAddDelIntfNat4) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *LbAddDelIntfNat4) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -184,27 +175,24 @@ func (*LbAddDelIntfNat4Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbAddDelIntfNat4Reply) Size() int {
+func (m *LbAddDelIntfNat4Reply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbAddDelIntfNat4Reply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbAddDelIntfNat4Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -221,22 +209,19 @@ func (*LbAddDelIntfNat6) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbAddDelIntfNat6) Size() int {
+func (m *LbAddDelIntfNat6) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *LbAddDelIntfNat6) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -260,41 +245,38 @@ func (*LbAddDelIntfNat6Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbAddDelIntfNat6Reply) Size() int {
+func (m *LbAddDelIntfNat6Reply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbAddDelIntfNat6Reply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbAddDelIntfNat6Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
 // LbAddDelVip defines message 'lb_add_del_vip'.
 type LbAddDelVip struct {
 	Pfx                 ip_types.AddressWithPrefix `binapi:"address_with_prefix,name=pfx" json:"pfx,omitempty"`
-	Protocol            uint8                      `binapi:"u8,name=protocol,default=%!s(float64=255)" json:"protocol,omitempty"`
+	Protocol            uint8                      `binapi:"u8,name=protocol,default=255" json:"protocol,omitempty"`
 	Port                uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 	Encap               lb_types.LbEncapType       `binapi:"lb_encap_type,name=encap" json:"encap,omitempty"`
 	Dscp                uint8                      `binapi:"u8,name=dscp" json:"dscp,omitempty"`
 	Type                lb_types.LbSrvType         `binapi:"lb_srv_type,name=type" json:"type,omitempty"`
 	TargetPort          uint16                     `binapi:"u16,name=target_port" json:"target_port,omitempty"`
 	NodePort            uint16                     `binapi:"u16,name=node_port" json:"node_port,omitempty"`
-	NewFlowsTableLength uint32                     `binapi:"u32,name=new_flows_table_length,default=%!s(float64=1024)" json:"new_flows_table_length,omitempty"`
+	NewFlowsTableLength uint32                     `binapi:"u32,name=new_flows_table_length,default=1024" json:"new_flows_table_length,omitempty"`
 	IsDel               bool                       `binapi:"bool,name=is_del" json:"is_del,omitempty"`
 }
 
@@ -305,11 +287,10 @@ func (*LbAddDelVip) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbAddDelVip) Size() int {
+func (m *LbAddDelVip) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Pfx.Address.Af
 	size += 1 * 16 // m.Pfx.Address.Un
 	size += 1      // m.Pfx.Len
@@ -325,23 +306,21 @@ func (m *LbAddDelVip) Size() int {
 	return size
 }
 func (m *LbAddDelVip) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Pfx.Address.Af))
-	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Pfx.Len))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Pfx.Len)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	buf.EncodeUint32(uint32(m.Encap))
-	buf.EncodeUint8(uint8(m.Dscp))
+	buf.EncodeUint8(m.Dscp)
 	buf.EncodeUint32(uint32(m.Type))
-	buf.EncodeUint16(uint16(m.TargetPort))
-	buf.EncodeUint16(uint16(m.NodePort))
-	buf.EncodeUint32(uint32(m.NewFlowsTableLength))
+	buf.EncodeUint16(m.TargetPort)
+	buf.EncodeUint16(m.NodePort)
+	buf.EncodeUint32(m.NewFlowsTableLength)
 	buf.EncodeBool(m.IsDel)
 	return buf.Bytes(), nil
 }
@@ -374,27 +353,24 @@ func (*LbAddDelVipReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbAddDelVipReply) Size() int {
+func (m *LbAddDelVipReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbAddDelVipReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbAddDelVipReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -413,11 +389,10 @@ func (*LbAsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbAsDetails) Size() int {
+func (m *LbAsDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Vip.Pfx.Address.Af
 	size += 1 * 16 // m.Vip.Pfx.Address.Un
 	size += 1      // m.Vip.Pfx.Len
@@ -430,21 +405,19 @@ func (m *LbAsDetails) Size() int {
 	return size
 }
 func (m *LbAsDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Vip.Pfx.Address.Af))
-	buf.EncodeBytes(m.Vip.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Vip.Pfx.Len))
+	buf.EncodeBytes(m.Vip.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Vip.Pfx.Len)
 	buf.EncodeUint8(uint8(m.Vip.Protocol))
-	buf.EncodeUint16(uint16(m.Vip.Port))
+	buf.EncodeUint16(m.Vip.Port)
 	buf.EncodeUint8(uint8(m.AppSrv.Af))
-	buf.EncodeBytes(m.AppSrv.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint32(uint32(m.InUseSince))
+	buf.EncodeBytes(m.AppSrv.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Flags)
+	buf.EncodeUint32(m.InUseSince)
 	return buf.Bytes(), nil
 }
 func (m *LbAsDetails) Unmarshal(b []byte) error {
@@ -475,11 +448,10 @@ func (*LbAsDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbAsDump) Size() int {
+func (m *LbAsDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Pfx.Address.Af
 	size += 1 * 16 // m.Pfx.Address.Un
 	size += 1      // m.Pfx.Len
@@ -488,17 +460,15 @@ func (m *LbAsDump) Size() int {
 	return size
 }
 func (m *LbAsDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Pfx.Address.Af))
-	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Pfx.Len))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Pfx.Len)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	return buf.Bytes(), nil
 }
 func (m *LbAsDump) Unmarshal(b []byte) error {
@@ -515,8 +485,8 @@ func (m *LbAsDump) Unmarshal(b []byte) error {
 type LbConf struct {
 	IP4SrcAddress        ip_types.IP4Address `binapi:"ip4_address,name=ip4_src_address" json:"ip4_src_address,omitempty"`
 	IP6SrcAddress        ip_types.IP6Address `binapi:"ip6_address,name=ip6_src_address" json:"ip6_src_address,omitempty"`
-	StickyBucketsPerCore uint32              `binapi:"u32,name=sticky_buckets_per_core,default=%!s(float64=4.294967295e+09)" json:"sticky_buckets_per_core,omitempty"`
-	FlowTimeout          uint32              `binapi:"u32,name=flow_timeout,default=%!s(float64=4.294967295e+09)" json:"flow_timeout,omitempty"`
+	StickyBucketsPerCore uint32              `binapi:"u32,name=sticky_buckets_per_core,default=4294967295" json:"sticky_buckets_per_core,omitempty"`
+	FlowTimeout          uint32              `binapi:"u32,name=flow_timeout,default=4294967295" json:"flow_timeout,omitempty"`
 }
 
 func (m *LbConf) Reset()               { *m = LbConf{} }
@@ -526,11 +496,10 @@ func (*LbConf) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbConf) Size() int {
+func (m *LbConf) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4  // m.IP4SrcAddress
 	size += 1 * 16 // m.IP6SrcAddress
 	size += 4      // m.StickyBucketsPerCore
@@ -538,16 +507,14 @@ func (m *LbConf) Size() int {
 	return size
 }
 func (m *LbConf) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP4SrcAddress[:], 4)
 	buf.EncodeBytes(m.IP6SrcAddress[:], 16)
-	buf.EncodeUint32(uint32(m.StickyBucketsPerCore))
-	buf.EncodeUint32(uint32(m.FlowTimeout))
+	buf.EncodeUint32(m.StickyBucketsPerCore)
+	buf.EncodeUint32(m.FlowTimeout)
 	return buf.Bytes(), nil
 }
 func (m *LbConf) Unmarshal(b []byte) error {
@@ -571,27 +538,24 @@ func (*LbConfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbConfReply) Size() int {
+func (m *LbConfReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbConfReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbConfReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -609,11 +573,10 @@ func (*LbFlushVip) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbFlushVip) Size() int {
+func (m *LbFlushVip) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Pfx.Address.Af
 	size += 1 * 16 // m.Pfx.Address.Un
 	size += 1      // m.Pfx.Len
@@ -622,17 +585,15 @@ func (m *LbFlushVip) Size() int {
 	return size
 }
 func (m *LbFlushVip) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Pfx.Address.Af))
-	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Pfx.Len))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Pfx.Len)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	return buf.Bytes(), nil
 }
 func (m *LbFlushVip) Unmarshal(b []byte) error {
@@ -657,27 +618,24 @@ func (*LbFlushVipReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbFlushVipReply) Size() int {
+func (m *LbFlushVipReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LbFlushVipReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LbFlushVipReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -698,11 +656,10 @@ func (*LbVipDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LbVipDetails) Size() int {
+func (m *LbVipDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Vip.Pfx.Address.Af
 	size += 1 * 16 // m.Vip.Pfx.Address.Un
 	size += 1      // m.Vip.Pfx.Len
@@ -716,22 +673,20 @@ func (m *LbVipDetails) Size() int {
 	return size
 }
 func (m *LbVipDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Vip.Pfx.Address.Af))
-	buf.EncodeBytes(m.Vip.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Vip.Pfx.Len))
+	buf.EncodeBytes(m.Vip.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Vip.Pfx.Len)
 	buf.EncodeUint8(uint8(m.Vip.Protocol))
-	buf.EncodeUint16(uint16(m.Vip.Port))
+	buf.EncodeUint16(m.Vip.Port)
 	buf.EncodeUint32(uint32(m.Encap))
 	buf.EncodeUint8(uint8(m.Dscp))
 	buf.EncodeUint32(uint32(m.SrvType))
-	buf.EncodeUint16(uint16(m.TargetPort))
-	buf.EncodeUint16(uint16(m.FlowTableLength))
+	buf.EncodeUint16(m.TargetPort)
+	buf.EncodeUint16(m.FlowTableLength)
 	return buf.Bytes(), nil
 }
 func (m *LbVipDetails) Unmarshal(b []byte) error {
@@ -753,7 +708,7 @@ func (m *LbVipDetails) Unmarshal(b []byte) error {
 type LbVipDump struct {
 	Pfx        ip_types.AddressWithPrefix `binapi:"address_with_prefix,name=pfx" json:"pfx,omitempty"`
 	PfxMatcher ip_types.PrefixMatcher     `binapi:"prefix_matcher,name=pfx_matcher" json:"pfx_matcher,omitempty"`
-	Protocol   uint8                      `binapi:"u8,name=protocol,default=%!s(float64=255)" json:"protocol,omitempty"`
+	Protocol   uint8                      `binapi:"u8,name=protocol,default=255" json:"protocol,omitempty"`
 	Port       uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 }
 
@@ -764,11 +719,10 @@ func (*LbVipDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LbVipDump) Size() int {
+func (m *LbVipDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Pfx.Address.Af
 	size += 1 * 16 // m.Pfx.Address.Un
 	size += 1      // m.Pfx.Len
@@ -779,19 +733,17 @@ func (m *LbVipDump) Size() int {
 	return size
 }
 func (m *LbVipDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Pfx.Address.Af))
-	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Pfx.Len))
-	buf.EncodeUint8(uint8(m.PfxMatcher.Le))
-	buf.EncodeUint8(uint8(m.PfxMatcher.Ge))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeBytes(m.Pfx.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Pfx.Len)
+	buf.EncodeUint8(m.PfxMatcher.Le)
+	buf.EncodeUint8(m.PfxMatcher.Ge)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	return buf.Bytes(), nil
 }
 func (m *LbVipDump) Unmarshal(b []byte) error {

@@ -44,23 +44,20 @@ func (*AfPacketCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AfPacketCreate) Size() int {
+func (m *AfPacketCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 6 // m.HwAddr
 	size += 1     // m.UseRandomHwAddr
 	size += 64    // m.HostIfName
 	return size
 }
 func (m *AfPacketCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.HwAddr[:], 6)
 	buf.EncodeBool(m.UseRandomHwAddr)
 	buf.EncodeString(m.HostIfName, 64)
@@ -87,29 +84,26 @@ func (*AfPacketCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AfPacketCreateReply) Size() int {
+func (m *AfPacketCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *AfPacketCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *AfPacketCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -126,21 +120,18 @@ func (*AfPacketDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AfPacketDelete) Size() int {
+func (m *AfPacketDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.HostIfName
 	return size
 }
 func (m *AfPacketDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.HostIfName, 64)
 	return buf.Bytes(), nil
 }
@@ -162,27 +153,24 @@ func (*AfPacketDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AfPacketDeleteReply) Size() int {
+func (m *AfPacketDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *AfPacketDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *AfPacketDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -199,22 +187,19 @@ func (*AfPacketDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AfPacketDetails) Size() int {
+func (m *AfPacketDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.SwIfIndex
 	size += 64 // m.HostIfName
 	return size
 }
 func (m *AfPacketDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.HostIfName, 64)
 	return buf.Bytes(), nil
@@ -236,20 +221,17 @@ func (*AfPacketDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AfPacketDump) Size() int {
+func (m *AfPacketDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *AfPacketDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *AfPacketDump) Unmarshal(b []byte) error {
@@ -269,22 +251,19 @@ func (*AfPacketSetL4CksumOffload) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AfPacketSetL4CksumOffload) Size() int {
+func (m *AfPacketSetL4CksumOffload) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Set
 	return size
 }
 func (m *AfPacketSetL4CksumOffload) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.Set)
 	return buf.Bytes(), nil
@@ -310,27 +289,24 @@ func (*AfPacketSetL4CksumOffloadReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AfPacketSetL4CksumOffloadReply) Size() int {
+func (m *AfPacketSetL4CksumOffloadReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *AfPacketSetL4CksumOffloadReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *AfPacketSetL4CksumOffloadReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -18,8 +18,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"math"
-	"reflect"
-	"unsafe"
 )
 
 // Buffer provides buffer for encoding and decoding data on wire.
@@ -28,12 +26,14 @@ type Buffer struct {
 	pos int
 }
 
+// NewBuffer creates new buffer using b as data.
 func NewBuffer(b []byte) *Buffer {
 	return &Buffer{
 		buf: b,
 	}
 }
 
+// Bytes returns buffer data up to current position.
 func (b *Buffer) Bytes() []byte {
 	return b.buf[:b.pos]
 }
@@ -68,12 +68,12 @@ func (b *Buffer) DecodeBool() bool {
 }
 
 func (b *Buffer) EncodeUint8(v uint8) {
-	b.buf[b.pos] = v
+	b.buf[b.pos] = byte(v)
 	b.pos += 1
 }
 
 func (b *Buffer) DecodeUint8() uint8 {
-	v := b.buf[b.pos]
+	v := uint8(b.buf[b.pos])
 	b.pos += 1
 	return v
 }
@@ -111,6 +111,50 @@ func (b *Buffer) DecodeUint64() uint64 {
 	return v
 }
 
+func (b *Buffer) EncodeInt8(v int8) {
+	b.buf[b.pos] = byte(v)
+	b.pos += 1
+}
+
+func (b *Buffer) DecodeInt8() int8 {
+	v := int8(b.buf[b.pos])
+	b.pos += 1
+	return v
+}
+
+func (b *Buffer) EncodeInt16(v int16) {
+	binary.BigEndian.PutUint16(b.buf[b.pos:b.pos+2], uint16(v))
+	b.pos += 2
+}
+
+func (b *Buffer) DecodeInt16() int16 {
+	v := int16(binary.BigEndian.Uint16(b.buf[b.pos : b.pos+2]))
+	b.pos += 2
+	return v
+}
+
+func (b *Buffer) EncodeInt32(v int32) {
+	binary.BigEndian.PutUint32(b.buf[b.pos:b.pos+4], uint32(v))
+	b.pos += 4
+}
+
+func (b *Buffer) DecodeInt32() int32 {
+	v := int32(binary.BigEndian.Uint32(b.buf[b.pos : b.pos+4]))
+	b.pos += 4
+	return v
+}
+
+func (b *Buffer) EncodeInt64(v int64) {
+	binary.BigEndian.PutUint64(b.buf[b.pos:b.pos+8], uint64(v))
+	b.pos += 8
+}
+
+func (b *Buffer) DecodeInt64() int64 {
+	v := int64(binary.BigEndian.Uint64(b.buf[b.pos : b.pos+8]))
+	b.pos += 8
+	return v
+}
+
 func (b *Buffer) EncodeFloat64(v float64) {
 	binary.BigEndian.PutUint64(b.buf[b.pos:b.pos+8], math.Float64bits(v))
 	b.pos += 8
@@ -144,22 +188,4 @@ func (b *Buffer) DecodeString(length int) string {
 	}
 	b.pos += length
 	return string(v)
-}
-
-func BytesToString(b []byte) string {
-	sliceHeader := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	stringHeader := reflect.StringHeader{Data: sliceHeader.Data, Len: sliceHeader.Len}
-	return *(*string)(unsafe.Pointer(&stringHeader))
-}
-
-func DecodeString(b []byte) string {
-	return string(b)
-}
-
-func DecodeStringZero(b []byte) string {
-	nul := bytes.Index(b, []byte{0x00})
-	if nul >= 0 {
-		b = b[:nul]
-	}
-	return string(b)
 }

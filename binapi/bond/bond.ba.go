@@ -109,7 +109,7 @@ func (x BondMode) String() string {
 
 // BondCreate defines message 'bond_create'.
 type BondCreate struct {
-	ID           uint32                    `binapi:"u32,name=id,default=%!s(float64=4.294967295e+09)" json:"id,omitempty"`
+	ID           uint32                    `binapi:"u32,name=id,default=4294967295" json:"id,omitempty"`
 	UseCustomMac bool                      `binapi:"bool,name=use_custom_mac" json:"use_custom_mac,omitempty"`
 	MacAddress   ethernet_types.MacAddress `binapi:"mac_address,name=mac_address" json:"mac_address,omitempty"`
 	Mode         BondMode                  `binapi:"bond_mode,name=mode" json:"mode,omitempty"`
@@ -124,11 +124,10 @@ func (*BondCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BondCreate) Size() int {
+func (m *BondCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.ID
 	size += 1     // m.UseCustomMac
 	size += 1 * 6 // m.MacAddress
@@ -138,13 +137,11 @@ func (m *BondCreate) Size() int {
 	return size
 }
 func (m *BondCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ID)
 	buf.EncodeBool(m.UseCustomMac)
 	buf.EncodeBytes(m.MacAddress[:], 6)
 	buf.EncodeUint32(uint32(m.Mode))
@@ -176,29 +173,26 @@ func (*BondCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BondCreateReply) Size() int {
+func (m *BondCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BondCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *BondCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -215,21 +209,18 @@ func (*BondDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BondDelete) Size() int {
+func (m *BondDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BondDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -251,27 +242,24 @@ func (*BondDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BondDeleteReply) Size() int {
+func (m *BondDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BondDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BondDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -287,21 +275,18 @@ func (*BondDetachSlave) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BondDetachSlave) Size() int {
+func (m *BondDetachSlave) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *BondDetachSlave) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -323,27 +308,24 @@ func (*BondDetachSlaveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BondDetachSlaveReply) Size() int {
+func (m *BondDetachSlaveReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BondDetachSlaveReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BondDetachSlaveReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -362,11 +344,10 @@ func (*BondEnslave) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *BondEnslave) Size() int {
+func (m *BondEnslave) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.BondSwIfIndex
 	size += 1 // m.IsPassive
@@ -374,12 +355,10 @@ func (m *BondEnslave) Size() int {
 	return size
 }
 func (m *BondEnslave) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint32(uint32(m.BondSwIfIndex))
 	buf.EncodeBool(m.IsPassive)
@@ -407,27 +386,24 @@ func (*BondEnslaveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *BondEnslaveReply) Size() int {
+func (m *BondEnslaveReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *BondEnslaveReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *BondEnslaveReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -450,11 +426,10 @@ func (*SwInterfaceBondDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceBondDetails) Size() int {
+func (m *SwInterfaceBondDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.SwIfIndex
 	size += 4  // m.ID
 	size += 4  // m.Mode
@@ -466,19 +441,17 @@ func (m *SwInterfaceBondDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceBondDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ID))
+	buf.EncodeUint32(m.ID)
 	buf.EncodeUint32(uint32(m.Mode))
 	buf.EncodeUint32(uint32(m.Lb))
 	buf.EncodeBool(m.NumaOnly)
-	buf.EncodeUint32(uint32(m.ActiveSlaves))
-	buf.EncodeUint32(uint32(m.Slaves))
+	buf.EncodeUint32(m.ActiveSlaves)
+	buf.EncodeUint32(m.Slaves)
 	buf.EncodeString(m.InterfaceName, 64)
 	return buf.Bytes(), nil
 }
@@ -505,20 +478,17 @@ func (*SwInterfaceBondDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceBondDump) Size() int {
+func (m *SwInterfaceBondDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SwInterfaceBondDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceBondDump) Unmarshal(b []byte) error {
@@ -538,24 +508,21 @@ func (*SwInterfaceSetBondWeight) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetBondWeight) Size() int {
+func (m *SwInterfaceSetBondWeight) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.Weight
 	return size
 }
 func (m *SwInterfaceSetBondWeight) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Weight))
+	buf.EncodeUint32(m.Weight)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetBondWeight) Unmarshal(b []byte) error {
@@ -579,27 +546,24 @@ func (*SwInterfaceSetBondWeightReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetBondWeightReply) Size() int {
+func (m *SwInterfaceSetBondWeightReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetBondWeightReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetBondWeightReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -620,11 +584,10 @@ func (*SwInterfaceSlaveDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSlaveDetails) Size() int {
+func (m *SwInterfaceSlaveDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.SwIfIndex
 	size += 64 // m.InterfaceName
 	size += 1  // m.IsPassive
@@ -634,18 +597,16 @@ func (m *SwInterfaceSlaveDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceSlaveDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.InterfaceName, 64)
 	buf.EncodeBool(m.IsPassive)
 	buf.EncodeBool(m.IsLongTimeout)
 	buf.EncodeBool(m.IsLocalNuma)
-	buf.EncodeUint32(uint32(m.Weight))
+	buf.EncodeUint32(m.Weight)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSlaveDetails) Unmarshal(b []byte) error {
@@ -671,21 +632,18 @@ func (*SwInterfaceSlaveDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSlaveDump) Size() int {
+func (m *SwInterfaceSlaveDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *SwInterfaceSlaveDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

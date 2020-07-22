@@ -52,11 +52,10 @@ func (*UDPEncapAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UDPEncapAdd) Size() int {
+func (m *UDPEncapAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.UDPEncap.TableID
 	size += 2      // m.UDPEncap.SrcPort
 	size += 2      // m.UDPEncap.DstPort
@@ -68,20 +67,18 @@ func (m *UDPEncapAdd) Size() int {
 	return size
 }
 func (m *UDPEncapAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.UDPEncap.TableID))
-	buf.EncodeUint16(uint16(m.UDPEncap.SrcPort))
-	buf.EncodeUint16(uint16(m.UDPEncap.DstPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.UDPEncap.TableID)
+	buf.EncodeUint16(m.UDPEncap.SrcPort)
+	buf.EncodeUint16(m.UDPEncap.DstPort)
 	buf.EncodeUint8(uint8(m.UDPEncap.SrcIP.Af))
-	buf.EncodeBytes(m.UDPEncap.SrcIP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.UDPEncap.SrcIP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.UDPEncap.DstIP.Af))
-	buf.EncodeBytes(m.UDPEncap.DstIP.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.UDPEncap.ID))
+	buf.EncodeBytes(m.UDPEncap.DstIP.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.UDPEncap.ID)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapAdd) Unmarshal(b []byte) error {
@@ -110,29 +107,26 @@ func (*UDPEncapAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UDPEncapAddReply) Size() int {
+func (m *UDPEncapAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ID
 	return size
 }
 func (m *UDPEncapAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ID)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ID = buf.DecodeUint32()
 	return nil
 }
@@ -149,22 +143,19 @@ func (*UDPEncapDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UDPEncapDel) Size() int {
+func (m *UDPEncapDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ID
 	return size
 }
 func (m *UDPEncapDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ID)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapDel) Unmarshal(b []byte) error {
@@ -185,27 +176,24 @@ func (*UDPEncapDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UDPEncapDelReply) Size() int {
+func (m *UDPEncapDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *UDPEncapDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -221,11 +209,10 @@ func (*UDPEncapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UDPEncapDetails) Size() int {
+func (m *UDPEncapDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.UDPEncap.TableID
 	size += 2      // m.UDPEncap.SrcPort
 	size += 2      // m.UDPEncap.DstPort
@@ -237,20 +224,18 @@ func (m *UDPEncapDetails) Size() int {
 	return size
 }
 func (m *UDPEncapDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.UDPEncap.TableID))
-	buf.EncodeUint16(uint16(m.UDPEncap.SrcPort))
-	buf.EncodeUint16(uint16(m.UDPEncap.DstPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.UDPEncap.TableID)
+	buf.EncodeUint16(m.UDPEncap.SrcPort)
+	buf.EncodeUint16(m.UDPEncap.DstPort)
 	buf.EncodeUint8(uint8(m.UDPEncap.SrcIP.Af))
-	buf.EncodeBytes(m.UDPEncap.SrcIP.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.UDPEncap.SrcIP.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.UDPEncap.DstIP.Af))
-	buf.EncodeBytes(m.UDPEncap.DstIP.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.UDPEncap.ID))
+	buf.EncodeBytes(m.UDPEncap.DstIP.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.UDPEncap.ID)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapDetails) Unmarshal(b []byte) error {
@@ -276,20 +261,17 @@ func (*UDPEncapDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UDPEncapDump) Size() int {
+func (m *UDPEncapDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *UDPEncapDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *UDPEncapDump) Unmarshal(b []byte) error {

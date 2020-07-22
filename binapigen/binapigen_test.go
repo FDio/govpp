@@ -53,3 +53,20 @@ func TestGenerator(t *testing.T) {
 		})
 	}
 }
+
+func TestSanitize(t *testing.T) {
+	tests := []struct {
+		name     string
+		expected string
+	}{
+		{"interface", "interfaces"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			s := sanitizedName(test.name)
+			if s != test.expected {
+				t.Fatalf("expected: %q, got: %q", test.expected, s)
+			}
+		})
+	}
+}

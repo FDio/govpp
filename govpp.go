@@ -17,22 +17,36 @@ package govpp
 import (
 	"time"
 
+	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/core"
+	"git.fd.io/govpp.git/internal/version"
 )
 
-// Connect connects the govpp core to VPP either using the default VPP Adapter, or using the adapter previously
-// set by SetAdapter (useful mostly just for unit/integration tests with mocked VPP adapter).
-// This call blocks until VPP is connected, or an error occurs. Only one connection attempt will be performed.
-func Connect(shm string) (*core.Connection, error) {
-	return core.Connect(socketclient.NewVppClient(shm))
+// Connect connects to the VPP API using a new adapter instance created with NewVppAPIAdapter.
+//
+// This call blocks until VPP is connected, or an error occurs.
+// Only one connection attempt will be performed.
+func Connect(target string) (*core.Connection, error) {
+	return core.Connect(NewVppAdapter(target))
 }
 
-// AsyncConnect asynchronously connects the govpp core to VPP either using the default VPP Adapter,
-// or using the adapter previously set by SetAdapter.
-// This call does not block until the connection is established, it returns immediately. The caller is
-// supposed to watch the returned ConnectionState channel for Connected/Disconnected events.
-// In case of a disconnect, the library will asynchronously try to reconnect.
-func AsyncConnect(shm string, attempts int, interval time.Duration) (*core.Connection, chan core.ConnectionEvent, error) {
-	return core.AsyncConnect(socketclient.NewVppClient(shm), attempts, interval)
+// AsyncConnect asynchronously connects to the VPP API using a new adapter instance
+// created with NewVppAPIAdapter.
+//
+// This call does not block until connection is established, it returns immediately.
+// The caller is supposed to watch the returned ConnectionState channel for connection events.
+// In case of disconnect, the library will asynchronously try to reconnect.
+func AsyncConnect(target string, attempts int, interval time.Duration) (*core.Connection, chan core.ConnectionEvent, error) {
+	return core.AsyncConnect(NewVppAdapter(target), attempts, interval)
+}
+
+// NewVppAdapter returns new instance of VPP adapter for connecting to VPP API.
+var NewVppAdapter = func(target string) adapter.VppAPI {
+	return socketclient.NewVppClient(target)
+}
+
+// Version returns version of GoVPP.
+func Version() string {
+	return version.String()
 }

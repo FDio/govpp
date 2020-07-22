@@ -86,11 +86,10 @@ func (*LispAddDelAdjacency) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelAdjacency) Size() int {
+func (m *LispAddDelAdjacency) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 4     // m.Vni
 	size += 1     // m.Reid.Type
@@ -100,18 +99,16 @@ func (m *LispAddDelAdjacency) Size() int {
 	return size
 }
 func (m *LispAddDelAdjacency) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Reid.Type))
-	buf.EncodeBytes(m.Reid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Reid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint8(uint8(m.Leid.Type))
-	buf.EncodeBytes(m.Leid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Leid.Address.XXX_UnionData[:], 6)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelAdjacency) Unmarshal(b []byte) error {
@@ -137,27 +134,24 @@ func (*LispAddDelAdjacencyReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelAdjacencyReply) Size() int {
+func (m *LispAddDelAdjacencyReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelAdjacencyReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelAdjacencyReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -177,11 +171,10 @@ func (*LispAddDelLocalEid) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelLocalEid) Size() int {
+func (m *LispAddDelLocalEid) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.Eid.Type
 	size += 1 * 6  // m.Eid.Address
@@ -192,19 +185,17 @@ func (m *LispAddDelLocalEid) Size() int {
 	return size
 }
 func (m *LispAddDelLocalEid) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Eid.Type))
-	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 6)
 	buf.EncodeString(m.LocatorSetName, 64)
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Key.ID))
-	buf.EncodeBytes(m.Key.Key[:], 64)
+	buf.EncodeBytes(m.Key.Key, 64)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelLocalEid) Unmarshal(b []byte) error {
@@ -215,7 +206,8 @@ func (m *LispAddDelLocalEid) Unmarshal(b []byte) error {
 	m.LocatorSetName = buf.DecodeString(64)
 	m.Vni = buf.DecodeUint32()
 	m.Key.ID = lisp_types.HmacKeyID(buf.DecodeUint8())
-	copy(m.Key.Key[:], buf.DecodeBytes(64))
+	m.Key.Key = make([]byte, 64)
+	copy(m.Key.Key, buf.DecodeBytes(len(m.Key.Key)))
 	return nil
 }
 
@@ -231,27 +223,24 @@ func (*LispAddDelLocalEidReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelLocalEidReply) Size() int {
+func (m *LispAddDelLocalEidReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelLocalEidReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelLocalEidReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -271,11 +260,10 @@ func (*LispAddDelLocator) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelLocator) Size() int {
+func (m *LispAddDelLocator) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsAdd
 	size += 64 // m.LocatorSetName
 	size += 4  // m.SwIfIndex
@@ -284,17 +272,15 @@ func (m *LispAddDelLocator) Size() int {
 	return size
 }
 func (m *LispAddDelLocator) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeString(m.LocatorSetName, 64)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint8(uint8(m.Priority))
-	buf.EncodeUint8(uint8(m.Weight))
+	buf.EncodeUint8(m.Priority)
+	buf.EncodeUint8(m.Weight)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelLocator) Unmarshal(b []byte) error {
@@ -319,27 +305,24 @@ func (*LispAddDelLocatorReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelLocatorReply) Size() int {
+func (m *LispAddDelLocatorReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelLocatorReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelLocatorReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -358,11 +341,10 @@ func (*LispAddDelLocatorSet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelLocatorSet) Size() int {
+func (m *LispAddDelLocatorSet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsAdd
 	size += 64 // m.LocatorSetName
 	size += 4  // m.LocatorNum
@@ -379,23 +361,21 @@ func (m *LispAddDelLocatorSet) Size() int {
 	return size
 }
 func (m *LispAddDelLocatorSet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeString(m.LocatorSetName, 64)
 	buf.EncodeUint32(uint32(len(m.Locators)))
 	for j0 := 0; j0 < len(m.Locators); j0++ {
-		var v0 lisp_types.LocalLocator
+		var v0 lisp_types.LocalLocator // Locators
 		if j0 < len(m.Locators) {
 			v0 = m.Locators[j0]
 		}
 		buf.EncodeUint32(uint32(v0.SwIfIndex))
-		buf.EncodeUint8(uint8(v0.Priority))
-		buf.EncodeUint8(uint8(v0.Weight))
+		buf.EncodeUint8(v0.Priority)
+		buf.EncodeUint8(v0.Weight)
 	}
 	return buf.Bytes(), nil
 }
@@ -404,7 +384,7 @@ func (m *LispAddDelLocatorSet) Unmarshal(b []byte) error {
 	m.IsAdd = buf.DecodeBool()
 	m.LocatorSetName = buf.DecodeString(64)
 	m.LocatorNum = buf.DecodeUint32()
-	m.Locators = make([]lisp_types.LocalLocator, int(m.LocatorNum))
+	m.Locators = make([]lisp_types.LocalLocator, m.LocatorNum)
 	for j0 := 0; j0 < len(m.Locators); j0++ {
 		m.Locators[j0].SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 		m.Locators[j0].Priority = buf.DecodeUint8()
@@ -426,29 +406,26 @@ func (*LispAddDelLocatorSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelLocatorSetReply) Size() int {
+func (m *LispAddDelLocatorSetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.LsIndex
 	return size
 }
 func (m *LispAddDelLocatorSetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.LsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.LsIndex)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelLocatorSetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.LsIndex = buf.DecodeUint32()
 	return nil
 }
@@ -468,22 +445,19 @@ func (*LispAddDelMapRequestItrRlocs) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelMapRequestItrRlocs) Size() int {
+func (m *LispAddDelMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsAdd
 	size += 64 // m.LocatorSetName
 	return size
 }
 func (m *LispAddDelMapRequestItrRlocs) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeString(m.LocatorSetName, 64)
 	return buf.Bytes(), nil
@@ -509,27 +483,24 @@ func (*LispAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelMapRequestItrRlocsReply) Size() int {
+func (m *LispAddDelMapRequestItrRlocsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelMapRequestItrRlocsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelMapRequestItrRlocsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -546,26 +517,23 @@ func (*LispAddDelMapResolver) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelMapResolver) Size() int {
+func (m *LispAddDelMapResolver) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	return size
 }
 func (m *LispAddDelMapResolver) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelMapResolver) Unmarshal(b []byte) error {
@@ -588,27 +556,24 @@ func (*LispAddDelMapResolverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelMapResolverReply) Size() int {
+func (m *LispAddDelMapResolverReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelMapResolverReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelMapResolverReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -625,26 +590,23 @@ func (*LispAddDelMapServer) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelMapServer) Size() int {
+func (m *LispAddDelMapServer) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	return size
 }
 func (m *LispAddDelMapServer) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelMapServer) Unmarshal(b []byte) error {
@@ -667,27 +629,24 @@ func (*LispAddDelMapServerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelMapServerReply) Size() int {
+func (m *LispAddDelMapServerReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelMapServerReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelMapServerReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -711,11 +670,10 @@ func (*LispAddDelRemoteMapping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAddDelRemoteMapping) Size() int {
+func (m *LispAddDelRemoteMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.IsSrcDst
 	size += 1     // m.DelAll
@@ -740,31 +698,29 @@ func (m *LispAddDelRemoteMapping) Size() int {
 	return size
 }
 func (m *LispAddDelRemoteMapping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.IsSrcDst)
 	buf.EncodeBool(m.DelAll)
-	buf.EncodeUint32(uint32(m.Vni))
-	buf.EncodeUint8(uint8(m.Action))
+	buf.EncodeUint32(m.Vni)
+	buf.EncodeUint8(m.Action)
 	buf.EncodeUint8(uint8(m.Deid.Type))
-	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint8(uint8(m.Seid.Type))
-	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint32(uint32(len(m.Rlocs)))
 	for j0 := 0; j0 < len(m.Rlocs); j0++ {
-		var v0 lisp_types.RemoteLocator
+		var v0 lisp_types.RemoteLocator // Rlocs
 		if j0 < len(m.Rlocs) {
 			v0 = m.Rlocs[j0]
 		}
-		buf.EncodeUint8(uint8(v0.Priority))
-		buf.EncodeUint8(uint8(v0.Weight))
+		buf.EncodeUint8(v0.Priority)
+		buf.EncodeUint8(v0.Weight)
 		buf.EncodeUint8(uint8(v0.IPAddress.Af))
-		buf.EncodeBytes(v0.IPAddress.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.IPAddress.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
@@ -780,7 +736,7 @@ func (m *LispAddDelRemoteMapping) Unmarshal(b []byte) error {
 	m.Seid.Type = lisp_types.EidType(buf.DecodeUint8())
 	copy(m.Seid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
 	m.RlocNum = buf.DecodeUint32()
-	m.Rlocs = make([]lisp_types.RemoteLocator, int(m.RlocNum))
+	m.Rlocs = make([]lisp_types.RemoteLocator, m.RlocNum)
 	for j0 := 0; j0 < len(m.Rlocs); j0++ {
 		m.Rlocs[j0].Priority = buf.DecodeUint8()
 		m.Rlocs[j0].Weight = buf.DecodeUint8()
@@ -804,27 +760,24 @@ func (*LispAddDelRemoteMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAddDelRemoteMappingReply) Size() int {
+func (m *LispAddDelRemoteMappingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispAddDelRemoteMappingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelRemoteMappingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -840,22 +793,19 @@ func (*LispAdjacenciesGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispAdjacenciesGet) Size() int {
+func (m *LispAdjacenciesGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Vni
 	return size
 }
 func (m *LispAdjacenciesGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
 	return buf.Bytes(), nil
 }
 func (m *LispAdjacenciesGet) Unmarshal(b []byte) error {
@@ -878,11 +828,10 @@ func (*LispAdjacenciesGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispAdjacenciesGetReply) Size() int {
+func (m *LispAdjacenciesGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.Count
 	for j1 := 0; j1 < len(m.Adjacencies); j1++ {
@@ -899,31 +848,29 @@ func (m *LispAdjacenciesGetReply) Size() int {
 	return size
 }
 func (m *LispAdjacenciesGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.Adjacencies)))
 	for j0 := 0; j0 < len(m.Adjacencies); j0++ {
-		var v0 LispAdjacency
+		var v0 LispAdjacency // Adjacencies
 		if j0 < len(m.Adjacencies) {
 			v0 = m.Adjacencies[j0]
 		}
 		buf.EncodeUint8(uint8(v0.Reid.Type))
-		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 6)
 		buf.EncodeUint8(uint8(v0.Leid.Type))
-		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 6)
 	}
 	return buf.Bytes(), nil
 }
 func (m *LispAdjacenciesGetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
-	m.Adjacencies = make([]LispAdjacency, int(m.Count))
+	m.Adjacencies = make([]LispAdjacency, m.Count)
 	for j0 := 0; j0 < len(m.Adjacencies); j0++ {
 		m.Adjacencies[j0].Reid.Type = lisp_types.EidType(buf.DecodeUint8())
 		copy(m.Adjacencies[j0].Reid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
@@ -948,11 +895,10 @@ func (*LispEidTableAddDelMap) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispEidTableAddDelMap) Size() int {
+func (m *LispEidTableAddDelMap) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.Vni
 	size += 4 // m.DpTable
@@ -960,15 +906,13 @@ func (m *LispEidTableAddDelMap) Size() int {
 	return size
 }
 func (m *LispEidTableAddDelMap) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Vni))
-	buf.EncodeUint32(uint32(m.DpTable))
+	buf.EncodeUint32(m.Vni)
+	buf.EncodeUint32(m.DpTable)
 	buf.EncodeBool(m.IsL2)
 	return buf.Bytes(), nil
 }
@@ -993,27 +937,24 @@ func (*LispEidTableAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispEidTableAddDelMapReply) Size() int {
+func (m *LispEidTableAddDelMapReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispEidTableAddDelMapReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispEidTableAddDelMapReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1038,11 +979,10 @@ func (*LispEidTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispEidTableDetails) Size() int {
+func (m *LispEidTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.LocatorSetIndex
 	size += 1      // m.Action
 	size += 1      // m.IsLocal
@@ -1059,25 +999,23 @@ func (m *LispEidTableDetails) Size() int {
 	return size
 }
 func (m *LispEidTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.LocatorSetIndex))
-	buf.EncodeUint8(uint8(m.Action))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.LocatorSetIndex)
+	buf.EncodeUint8(m.Action)
 	buf.EncodeBool(m.IsLocal)
 	buf.EncodeBool(m.IsSrcDst)
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Deid.Type))
-	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint8(uint8(m.Seid.Type))
-	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.TTL))
-	buf.EncodeUint8(uint8(m.Authoritative))
+	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 6)
+	buf.EncodeUint32(m.TTL)
+	buf.EncodeUint8(m.Authoritative)
 	buf.EncodeUint8(uint8(m.Key.ID))
-	buf.EncodeBytes(m.Key.Key[:], 64)
+	buf.EncodeBytes(m.Key.Key, 64)
 	return buf.Bytes(), nil
 }
 func (m *LispEidTableDetails) Unmarshal(b []byte) error {
@@ -1094,7 +1032,8 @@ func (m *LispEidTableDetails) Unmarshal(b []byte) error {
 	m.TTL = buf.DecodeUint32()
 	m.Authoritative = buf.DecodeUint8()
 	m.Key.ID = lisp_types.HmacKeyID(buf.DecodeUint8())
-	copy(m.Key.Key[:], buf.DecodeBytes(64))
+	m.Key.Key = make([]byte, 64)
+	copy(m.Key.Key, buf.DecodeBytes(len(m.Key.Key)))
 	return nil
 }
 
@@ -1114,11 +1053,10 @@ func (*LispEidTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispEidTableDump) Size() int {
+func (m *LispEidTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.EidSet
 	size += 1     // m.PrefixLength
 	size += 4     // m.Vni
@@ -1128,17 +1066,15 @@ func (m *LispEidTableDump) Size() int {
 	return size
 }
 func (m *LispEidTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.EidSet))
-	buf.EncodeUint8(uint8(m.PrefixLength))
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.EidSet)
+	buf.EncodeUint8(m.PrefixLength)
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Eid.Type))
-	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint8(uint8(m.Filter))
 	return buf.Bytes(), nil
 }
@@ -1166,24 +1102,21 @@ func (*LispEidTableMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispEidTableMapDetails) Size() int {
+func (m *LispEidTableMapDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Vni
 	size += 4 // m.DpTable
 	return size
 }
 func (m *LispEidTableMapDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
-	buf.EncodeUint32(uint32(m.DpTable))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
+	buf.EncodeUint32(m.DpTable)
 	return buf.Bytes(), nil
 }
 func (m *LispEidTableMapDetails) Unmarshal(b []byte) error {
@@ -1205,21 +1138,18 @@ func (*LispEidTableMapDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispEidTableMapDump) Size() int {
+func (m *LispEidTableMapDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsL2
 	return size
 }
 func (m *LispEidTableMapDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsL2)
 	return buf.Bytes(), nil
 }
@@ -1241,22 +1171,19 @@ func (*LispEidTableVniDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispEidTableVniDetails) Size() int {
+func (m *LispEidTableVniDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Vni
 	return size
 }
 func (m *LispEidTableVniDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
 	return buf.Bytes(), nil
 }
 func (m *LispEidTableVniDetails) Unmarshal(b []byte) error {
@@ -1275,20 +1202,17 @@ func (*LispEidTableVniDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispEidTableVniDump) Size() int {
+func (m *LispEidTableVniDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *LispEidTableVniDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *LispEidTableVniDump) Unmarshal(b []byte) error {
@@ -1307,21 +1231,18 @@ func (*LispEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispEnableDisable) Size() int {
+func (m *LispEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsEnable
 	return size
 }
 func (m *LispEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnable)
 	return buf.Bytes(), nil
 }
@@ -1343,27 +1264,24 @@ func (*LispEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispEnableDisableReply) Size() int {
+func (m *LispEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1377,20 +1295,17 @@ func (*LispGetMapRequestItrRlocs) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispGetMapRequestItrRlocs) Size() int {
+func (m *LispGetMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *LispGetMapRequestItrRlocs) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *LispGetMapRequestItrRlocs) Unmarshal(b []byte) error {
@@ -1412,29 +1327,26 @@ func (*LispGetMapRequestItrRlocsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispGetMapRequestItrRlocsReply) Size() int {
+func (m *LispGetMapRequestItrRlocsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.Retval
 	size += 64 // m.LocatorSetName
 	return size
 }
 func (m *LispGetMapRequestItrRlocsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeString(m.LocatorSetName, 64)
 	return buf.Bytes(), nil
 }
 func (m *LispGetMapRequestItrRlocsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.LocatorSetName = buf.DecodeString(64)
 	return nil
 }
@@ -1455,11 +1367,10 @@ func (*LispLocatorDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispLocatorDetails) Size() int {
+func (m *LispLocatorDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Local
 	size += 4      // m.SwIfIndex
 	size += 1      // m.IPAddress.Af
@@ -1469,18 +1380,16 @@ func (m *LispLocatorDetails) Size() int {
 	return size
 }
 func (m *LispLocatorDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Local))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Local)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Priority))
-	buf.EncodeUint8(uint8(m.Weight))
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Priority)
+	buf.EncodeUint8(m.Weight)
 	return buf.Bytes(), nil
 }
 func (m *LispLocatorDetails) Unmarshal(b []byte) error {
@@ -1508,26 +1417,23 @@ func (*LispLocatorDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispLocatorDump) Size() int {
+func (m *LispLocatorDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.LsIndex
 	size += 64 // m.LsName
 	size += 1  // m.IsIndexSet
 	return size
 }
 func (m *LispLocatorDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.LsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.LsIndex)
 	buf.EncodeString(m.LsName, 64)
-	buf.EncodeUint8(uint8(m.IsIndexSet))
+	buf.EncodeUint8(m.IsIndexSet)
 	return buf.Bytes(), nil
 }
 func (m *LispLocatorDump) Unmarshal(b []byte) error {
@@ -1551,23 +1457,20 @@ func (*LispLocatorSetDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispLocatorSetDetails) Size() int {
+func (m *LispLocatorSetDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.LsIndex
 	size += 64 // m.LsName
 	return size
 }
 func (m *LispLocatorSetDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.LsIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.LsIndex)
 	buf.EncodeString(m.LsName, 64)
 	return buf.Bytes(), nil
 }
@@ -1590,21 +1493,18 @@ func (*LispLocatorSetDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispLocatorSetDump) Size() int {
+func (m *LispLocatorSetDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Filter
 	return size
 }
 func (m *LispLocatorSetDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Filter))
 	return buf.Bytes(), nil
 }
@@ -1628,21 +1528,18 @@ func (*LispMapRegisterEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispMapRegisterEnableDisable) Size() int {
+func (m *LispMapRegisterEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsEnable
 	return size
 }
 func (m *LispMapRegisterEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnable)
 	return buf.Bytes(), nil
 }
@@ -1666,27 +1563,24 @@ func (*LispMapRegisterEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispMapRegisterEnableDisableReply) Size() int {
+func (m *LispMapRegisterEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispMapRegisterEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispMapRegisterEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1702,21 +1596,18 @@ func (*LispMapRequestMode) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispMapRequestMode) Size() int {
+func (m *LispMapRequestMode) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsSrcDst
 	return size
 }
 func (m *LispMapRequestMode) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsSrcDst)
 	return buf.Bytes(), nil
 }
@@ -1738,27 +1629,24 @@ func (*LispMapRequestModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispMapRequestModeReply) Size() int {
+func (m *LispMapRequestModeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispMapRequestModeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispMapRequestModeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1774,24 +1662,21 @@ func (*LispMapResolverDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispMapResolverDetails) Size() int {
+func (m *LispMapResolverDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	return size
 }
 func (m *LispMapResolverDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *LispMapResolverDetails) Unmarshal(b []byte) error {
@@ -1811,20 +1696,17 @@ func (*LispMapResolverDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispMapResolverDump) Size() int {
+func (m *LispMapResolverDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *LispMapResolverDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *LispMapResolverDump) Unmarshal(b []byte) error {
@@ -1843,24 +1725,21 @@ func (*LispMapServerDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispMapServerDetails) Size() int {
+func (m *LispMapServerDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	return size
 }
 func (m *LispMapServerDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *LispMapServerDetails) Unmarshal(b []byte) error {
@@ -1880,20 +1759,17 @@ func (*LispMapServerDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispMapServerDump) Size() int {
+func (m *LispMapServerDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *LispMapServerDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *LispMapServerDump) Unmarshal(b []byte) error {
@@ -1913,22 +1789,19 @@ func (*LispPitrSetLocatorSet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispPitrSetLocatorSet) Size() int {
+func (m *LispPitrSetLocatorSet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1  // m.IsAdd
 	size += 64 // m.LsName
 	return size
 }
 func (m *LispPitrSetLocatorSet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeString(m.LsName, 64)
 	return buf.Bytes(), nil
@@ -1952,27 +1825,24 @@ func (*LispPitrSetLocatorSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispPitrSetLocatorSetReply) Size() int {
+func (m *LispPitrSetLocatorSetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispPitrSetLocatorSetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispPitrSetLocatorSetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1988,21 +1858,18 @@ func (*LispRlocProbeEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispRlocProbeEnableDisable) Size() int {
+func (m *LispRlocProbeEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsEnable
 	return size
 }
 func (m *LispRlocProbeEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnable)
 	return buf.Bytes(), nil
 }
@@ -2026,27 +1893,24 @@ func (*LispRlocProbeEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispRlocProbeEnableDisableReply) Size() int {
+func (m *LispRlocProbeEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispRlocProbeEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispRlocProbeEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2063,25 +1927,22 @@ func (*LispUsePetr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *LispUsePetr) Size() int {
+func (m *LispUsePetr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	size += 1      // m.IsAdd
 	return size
 }
 func (m *LispUsePetr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -2105,27 +1966,24 @@ func (*LispUsePetrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *LispUsePetrReply) Size() int {
+func (m *LispUsePetrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *LispUsePetrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *LispUsePetrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2139,20 +1997,17 @@ func (*ShowLispMapRegisterState) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispMapRegisterState) Size() int {
+func (m *ShowLispMapRegisterState) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispMapRegisterState) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispMapRegisterState) Unmarshal(b []byte) error {
@@ -2174,29 +2029,26 @@ func (*ShowLispMapRegisterStateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispMapRegisterStateReply) Size() int {
+func (m *ShowLispMapRegisterStateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.IsEnabled
 	return size
 }
 func (m *ShowLispMapRegisterStateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsEnabled)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispMapRegisterStateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsEnabled = buf.DecodeBool()
 	return nil
 }
@@ -2211,20 +2063,17 @@ func (*ShowLispMapRequestMode) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispMapRequestMode) Size() int {
+func (m *ShowLispMapRequestMode) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispMapRequestMode) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispMapRequestMode) Unmarshal(b []byte) error {
@@ -2246,29 +2095,26 @@ func (*ShowLispMapRequestModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispMapRequestModeReply) Size() int {
+func (m *ShowLispMapRequestModeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.IsSrcDst
 	return size
 }
 func (m *ShowLispMapRequestModeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsSrcDst)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispMapRequestModeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsSrcDst = buf.DecodeBool()
 	return nil
 }
@@ -2283,20 +2129,17 @@ func (*ShowLispPitr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispPitr) Size() int {
+func (m *ShowLispPitr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispPitr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispPitr) Unmarshal(b []byte) error {
@@ -2317,31 +2160,28 @@ func (*ShowLispPitrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispPitrReply) Size() int {
+func (m *ShowLispPitrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.Retval
 	size += 1  // m.IsEnabled
 	size += 64 // m.LocatorSetName
 	return size
 }
 func (m *ShowLispPitrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsEnabled)
 	buf.EncodeString(m.LocatorSetName, 64)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispPitrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsEnabled = buf.DecodeBool()
 	m.LocatorSetName = buf.DecodeString(64)
 	return nil
@@ -2357,20 +2197,17 @@ func (*ShowLispRlocProbeState) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispRlocProbeState) Size() int {
+func (m *ShowLispRlocProbeState) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispRlocProbeState) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispRlocProbeState) Unmarshal(b []byte) error {
@@ -2392,29 +2229,26 @@ func (*ShowLispRlocProbeStateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispRlocProbeStateReply) Size() int {
+func (m *ShowLispRlocProbeStateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.IsEnabled
 	return size
 }
 func (m *ShowLispRlocProbeStateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsEnabled)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispRlocProbeStateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsEnabled = buf.DecodeBool()
 	return nil
 }
@@ -2429,20 +2263,17 @@ func (*ShowLispStatus) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispStatus) Size() int {
+func (m *ShowLispStatus) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispStatus) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispStatus) Unmarshal(b []byte) error {
@@ -2463,31 +2294,28 @@ func (*ShowLispStatusReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispStatusReply) Size() int {
+func (m *ShowLispStatusReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.IsLispEnabled
 	size += 1 // m.IsGpeEnabled
 	return size
 }
 func (m *ShowLispStatusReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsLispEnabled)
 	buf.EncodeBool(m.IsGpeEnabled)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispStatusReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsLispEnabled = buf.DecodeBool()
 	m.IsGpeEnabled = buf.DecodeBool()
 	return nil
@@ -2503,20 +2331,17 @@ func (*ShowLispUsePetr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ShowLispUsePetr) Size() int {
+func (m *ShowLispUsePetr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ShowLispUsePetr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispUsePetr) Unmarshal(b []byte) error {
@@ -2537,11 +2362,10 @@ func (*ShowLispUsePetrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ShowLispUsePetrReply) Size() int {
+func (m *ShowLispUsePetrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Retval
 	size += 1      // m.IsPetrEnable
 	size += 1      // m.IPAddress.Af
@@ -2549,21 +2373,19 @@ func (m *ShowLispUsePetrReply) Size() int {
 	return size
 }
 func (m *ShowLispUsePetrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.IsPetrEnable)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *ShowLispUsePetrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.IsPetrEnable = buf.DecodeBool()
 	m.IPAddress.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(m.IPAddress.Un.XXX_UnionData[:], buf.DecodeBytes(16))

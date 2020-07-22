@@ -568,11 +568,11 @@ func AddressUnionIP4(a IP4Address) (u AddressUnion) {
 	return
 }
 func (u *AddressUnion) SetIP4(a IP4Address) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeBytes(a[:], 4)
 }
 func (u *AddressUnion) GetIP4() (a IP4Address) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	copy(a[:], buf.DecodeBytes(4))
 	return
 }
@@ -582,11 +582,11 @@ func AddressUnionIP6(a IP6Address) (u AddressUnion) {
 	return
 }
 func (u *AddressUnion) SetIP6(a IP6Address) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeBytes(a[:], 16)
 }
 func (u *AddressUnion) GetIP6() (a IP6Address) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	copy(a[:], buf.DecodeBytes(16))
 	return
 }

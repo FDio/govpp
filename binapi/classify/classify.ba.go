@@ -125,11 +125,11 @@ func (x PolicerClassifyTable) String() string {
 type ClassifyAddDelSession struct {
 	IsAdd        bool           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 	TableIndex   uint32         `binapi:"u32,name=table_index" json:"table_index,omitempty"`
-	HitNextIndex uint32         `binapi:"u32,name=hit_next_index,default=%!s(float64=4.294967295e+09)" json:"hit_next_index,omitempty"`
-	OpaqueIndex  uint32         `binapi:"u32,name=opaque_index,default=%!s(float64=4.294967295e+09)" json:"opaque_index,omitempty"`
-	Advance      int32          `binapi:"i32,name=advance,default=%!s(float64=0)" json:"advance,omitempty"`
-	Action       ClassifyAction `binapi:"classify_action,name=action,default=%!s(float64=0)" json:"action,omitempty"`
-	Metadata     uint32         `binapi:"u32,name=metadata,default=%!s(float64=0)" json:"metadata,omitempty"`
+	HitNextIndex uint32         `binapi:"u32,name=hit_next_index,default=4294967295" json:"hit_next_index,omitempty"`
+	OpaqueIndex  uint32         `binapi:"u32,name=opaque_index,default=4294967295" json:"opaque_index,omitempty"`
+	Advance      int32          `binapi:"i32,name=advance,default=0" json:"advance,omitempty"`
+	Action       ClassifyAction `binapi:"classify_action,name=action,default=0" json:"action,omitempty"`
+	Metadata     uint32         `binapi:"u32,name=metadata,default=0" json:"metadata,omitempty"`
 	MatchLen     uint32         `binapi:"u32,name=match_len" json:"-"`
 	Match        []byte         `binapi:"u8[match_len],name=match" json:"match,omitempty"`
 }
@@ -141,11 +141,10 @@ func (*ClassifyAddDelSession) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifyAddDelSession) Size() int {
+func (m *ClassifyAddDelSession) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1                // m.IsAdd
 	size += 4                // m.TableIndex
 	size += 4                // m.HitNextIndex
@@ -158,21 +157,19 @@ func (m *ClassifyAddDelSession) Size() int {
 	return size
 }
 func (m *ClassifyAddDelSession) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.TableIndex))
-	buf.EncodeUint32(uint32(m.HitNextIndex))
-	buf.EncodeUint32(uint32(m.OpaqueIndex))
-	buf.EncodeUint32(uint32(m.Advance))
+	buf.EncodeUint32(m.TableIndex)
+	buf.EncodeUint32(m.HitNextIndex)
+	buf.EncodeUint32(m.OpaqueIndex)
+	buf.EncodeInt32(m.Advance)
 	buf.EncodeUint8(uint8(m.Action))
-	buf.EncodeUint32(uint32(m.Metadata))
+	buf.EncodeUint32(m.Metadata)
 	buf.EncodeUint32(uint32(len(m.Match)))
-	buf.EncodeBytes(m.Match[:], 0)
+	buf.EncodeBytes(m.Match, 0)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyAddDelSession) Unmarshal(b []byte) error {
@@ -181,11 +178,12 @@ func (m *ClassifyAddDelSession) Unmarshal(b []byte) error {
 	m.TableIndex = buf.DecodeUint32()
 	m.HitNextIndex = buf.DecodeUint32()
 	m.OpaqueIndex = buf.DecodeUint32()
-	m.Advance = int32(buf.DecodeUint32())
+	m.Advance = buf.DecodeInt32()
 	m.Action = ClassifyAction(buf.DecodeUint8())
 	m.Metadata = buf.DecodeUint32()
 	m.MatchLen = buf.DecodeUint32()
-	copy(m.Match[:], buf.DecodeBytes(0))
+	m.Match = make([]byte, m.MatchLen)
+	copy(m.Match, buf.DecodeBytes(len(m.Match)))
 	return nil
 }
 
@@ -201,27 +199,24 @@ func (*ClassifyAddDelSessionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifyAddDelSessionReply) Size() int {
+func (m *ClassifyAddDelSessionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ClassifyAddDelSessionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyAddDelSessionReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -229,15 +224,15 @@ func (m *ClassifyAddDelSessionReply) Unmarshal(b []byte) error {
 type ClassifyAddDelTable struct {
 	IsAdd             bool   `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 	DelChain          bool   `binapi:"bool,name=del_chain" json:"del_chain,omitempty"`
-	TableIndex        uint32 `binapi:"u32,name=table_index,default=%!s(float64=4.294967295e+09)" json:"table_index,omitempty"`
-	Nbuckets          uint32 `binapi:"u32,name=nbuckets,default=%!s(float64=2)" json:"nbuckets,omitempty"`
-	MemorySize        uint32 `binapi:"u32,name=memory_size,default=%!s(float64=2.097152e+06)" json:"memory_size,omitempty"`
-	SkipNVectors      uint32 `binapi:"u32,name=skip_n_vectors,default=%!s(float64=0)" json:"skip_n_vectors,omitempty"`
-	MatchNVectors     uint32 `binapi:"u32,name=match_n_vectors,default=%!s(float64=1)" json:"match_n_vectors,omitempty"`
-	NextTableIndex    uint32 `binapi:"u32,name=next_table_index,default=%!s(float64=4.294967295e+09)" json:"next_table_index,omitempty"`
-	MissNextIndex     uint32 `binapi:"u32,name=miss_next_index,default=%!s(float64=4.294967295e+09)" json:"miss_next_index,omitempty"`
-	CurrentDataFlag   uint8  `binapi:"u8,name=current_data_flag,default=%!s(float64=0)" json:"current_data_flag,omitempty"`
-	CurrentDataOffset int16  `binapi:"i16,name=current_data_offset,default=%!s(float64=0)" json:"current_data_offset,omitempty"`
+	TableIndex        uint32 `binapi:"u32,name=table_index,default=4294967295" json:"table_index,omitempty"`
+	Nbuckets          uint32 `binapi:"u32,name=nbuckets,default=2" json:"nbuckets,omitempty"`
+	MemorySize        uint32 `binapi:"u32,name=memory_size,default=2097152" json:"memory_size,omitempty"`
+	SkipNVectors      uint32 `binapi:"u32,name=skip_n_vectors,default=0" json:"skip_n_vectors,omitempty"`
+	MatchNVectors     uint32 `binapi:"u32,name=match_n_vectors,default=1" json:"match_n_vectors,omitempty"`
+	NextTableIndex    uint32 `binapi:"u32,name=next_table_index,default=4294967295" json:"next_table_index,omitempty"`
+	MissNextIndex     uint32 `binapi:"u32,name=miss_next_index,default=4294967295" json:"miss_next_index,omitempty"`
+	CurrentDataFlag   uint8  `binapi:"u8,name=current_data_flag,default=0" json:"current_data_flag,omitempty"`
+	CurrentDataOffset int16  `binapi:"i16,name=current_data_offset,default=0" json:"current_data_offset,omitempty"`
 	MaskLen           uint32 `binapi:"u32,name=mask_len" json:"-"`
 	Mask              []byte `binapi:"u8[mask_len],name=mask" json:"mask,omitempty"`
 }
@@ -249,11 +244,10 @@ func (*ClassifyAddDelTable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifyAddDelTable) Size() int {
+func (m *ClassifyAddDelTable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1               // m.IsAdd
 	size += 1               // m.DelChain
 	size += 4               // m.TableIndex
@@ -270,25 +264,23 @@ func (m *ClassifyAddDelTable) Size() int {
 	return size
 }
 func (m *ClassifyAddDelTable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.DelChain)
-	buf.EncodeUint32(uint32(m.TableIndex))
-	buf.EncodeUint32(uint32(m.Nbuckets))
-	buf.EncodeUint32(uint32(m.MemorySize))
-	buf.EncodeUint32(uint32(m.SkipNVectors))
-	buf.EncodeUint32(uint32(m.MatchNVectors))
-	buf.EncodeUint32(uint32(m.NextTableIndex))
-	buf.EncodeUint32(uint32(m.MissNextIndex))
-	buf.EncodeUint8(uint8(m.CurrentDataFlag))
-	buf.EncodeUint16(uint16(m.CurrentDataOffset))
+	buf.EncodeUint32(m.TableIndex)
+	buf.EncodeUint32(m.Nbuckets)
+	buf.EncodeUint32(m.MemorySize)
+	buf.EncodeUint32(m.SkipNVectors)
+	buf.EncodeUint32(m.MatchNVectors)
+	buf.EncodeUint32(m.NextTableIndex)
+	buf.EncodeUint32(m.MissNextIndex)
+	buf.EncodeUint8(m.CurrentDataFlag)
+	buf.EncodeInt16(m.CurrentDataOffset)
 	buf.EncodeUint32(uint32(len(m.Mask)))
-	buf.EncodeBytes(m.Mask[:], 0)
+	buf.EncodeBytes(m.Mask, 0)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyAddDelTable) Unmarshal(b []byte) error {
@@ -303,9 +295,10 @@ func (m *ClassifyAddDelTable) Unmarshal(b []byte) error {
 	m.NextTableIndex = buf.DecodeUint32()
 	m.MissNextIndex = buf.DecodeUint32()
 	m.CurrentDataFlag = buf.DecodeUint8()
-	m.CurrentDataOffset = int16(buf.DecodeUint16())
+	m.CurrentDataOffset = buf.DecodeInt16()
 	m.MaskLen = buf.DecodeUint32()
-	copy(m.Mask[:], buf.DecodeBytes(0))
+	m.Mask = make([]byte, m.MaskLen)
+	copy(m.Mask, buf.DecodeBytes(len(m.Mask)))
 	return nil
 }
 
@@ -324,11 +317,10 @@ func (*ClassifyAddDelTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifyAddDelTableReply) Size() int {
+func (m *ClassifyAddDelTableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.NewTableIndex
 	size += 4 // m.SkipNVectors
@@ -336,21 +328,19 @@ func (m *ClassifyAddDelTableReply) Size() int {
 	return size
 }
 func (m *ClassifyAddDelTableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.NewTableIndex))
-	buf.EncodeUint32(uint32(m.SkipNVectors))
-	buf.EncodeUint32(uint32(m.MatchNVectors))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.NewTableIndex)
+	buf.EncodeUint32(m.SkipNVectors)
+	buf.EncodeUint32(m.MatchNVectors)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyAddDelTableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.NewTableIndex = buf.DecodeUint32()
 	m.SkipNVectors = buf.DecodeUint32()
 	m.MatchNVectors = buf.DecodeUint32()
@@ -375,11 +365,10 @@ func (*ClassifySessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifySessionDetails) Size() int {
+func (m *ClassifySessionDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                // m.Retval
 	size += 4                // m.TableID
 	size += 4                // m.HitNextIndex
@@ -390,30 +379,29 @@ func (m *ClassifySessionDetails) Size() int {
 	return size
 }
 func (m *ClassifySessionDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.TableID))
-	buf.EncodeUint32(uint32(m.HitNextIndex))
-	buf.EncodeUint32(uint32(m.Advance))
-	buf.EncodeUint32(uint32(m.OpaqueIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.TableID)
+	buf.EncodeUint32(m.HitNextIndex)
+	buf.EncodeInt32(m.Advance)
+	buf.EncodeUint32(m.OpaqueIndex)
 	buf.EncodeUint32(uint32(len(m.Match)))
-	buf.EncodeBytes(m.Match[:], 0)
+	buf.EncodeBytes(m.Match, 0)
 	return buf.Bytes(), nil
 }
 func (m *ClassifySessionDetails) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.TableID = buf.DecodeUint32()
 	m.HitNextIndex = buf.DecodeUint32()
-	m.Advance = int32(buf.DecodeUint32())
+	m.Advance = buf.DecodeInt32()
 	m.OpaqueIndex = buf.DecodeUint32()
 	m.MatchLength = buf.DecodeUint32()
-	copy(m.Match[:], buf.DecodeBytes(0))
+	m.Match = make([]byte, m.MatchLength)
+	copy(m.Match, buf.DecodeBytes(len(m.Match)))
 	return nil
 }
 
@@ -429,22 +417,19 @@ func (*ClassifySessionDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifySessionDump) Size() int {
+func (m *ClassifySessionDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.TableID
 	return size
 }
 func (m *ClassifySessionDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TableID)
 	return buf.Bytes(), nil
 }
 func (m *ClassifySessionDump) Unmarshal(b []byte) error {
@@ -467,26 +452,23 @@ func (*ClassifySetInterfaceIPTable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifySetInterfaceIPTable) Size() int {
+func (m *ClassifySetInterfaceIPTable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsIPv6
 	size += 4 // m.SwIfIndex
 	size += 4 // m.TableIndex
 	return size
 }
 func (m *ClassifySetInterfaceIPTable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsIPv6)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.TableIndex))
+	buf.EncodeUint32(m.TableIndex)
 	return buf.Bytes(), nil
 }
 func (m *ClassifySetInterfaceIPTable) Unmarshal(b []byte) error {
@@ -511,27 +493,24 @@ func (*ClassifySetInterfaceIPTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifySetInterfaceIPTableReply) Size() int {
+func (m *ClassifySetInterfaceIPTableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ClassifySetInterfaceIPTableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ClassifySetInterfaceIPTableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -553,11 +532,10 @@ func (*ClassifySetInterfaceL2Tables) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifySetInterfaceL2Tables) Size() int {
+func (m *ClassifySetInterfaceL2Tables) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.IP4TableIndex
 	size += 4 // m.IP6TableIndex
@@ -566,16 +544,14 @@ func (m *ClassifySetInterfaceL2Tables) Size() int {
 	return size
 }
 func (m *ClassifySetInterfaceL2Tables) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.IP4TableIndex))
-	buf.EncodeUint32(uint32(m.IP6TableIndex))
-	buf.EncodeUint32(uint32(m.OtherTableIndex))
+	buf.EncodeUint32(m.IP4TableIndex)
+	buf.EncodeUint32(m.IP6TableIndex)
+	buf.EncodeUint32(m.OtherTableIndex)
 	buf.EncodeBool(m.IsInput)
 	return buf.Bytes(), nil
 }
@@ -603,27 +579,24 @@ func (*ClassifySetInterfaceL2TablesReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifySetInterfaceL2TablesReply) Size() int {
+func (m *ClassifySetInterfaceL2TablesReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ClassifySetInterfaceL2TablesReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ClassifySetInterfaceL2TablesReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -639,21 +612,18 @@ func (*ClassifyTableByInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifyTableByInterface) Size() int {
+func (m *ClassifyTableByInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *ClassifyTableByInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -681,11 +651,10 @@ func (*ClassifyTableByInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifyTableByInterfaceReply) Size() int {
+func (m *ClassifyTableByInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	size += 4 // m.L2TableID
@@ -694,22 +663,20 @@ func (m *ClassifyTableByInterfaceReply) Size() int {
 	return size
 }
 func (m *ClassifyTableByInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.L2TableID))
-	buf.EncodeUint32(uint32(m.IP4TableID))
-	buf.EncodeUint32(uint32(m.IP6TableID))
+	buf.EncodeUint32(m.L2TableID)
+	buf.EncodeUint32(m.IP4TableID)
+	buf.EncodeUint32(m.IP6TableID)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyTableByInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	m.L2TableID = buf.DecodeUint32()
 	m.IP4TableID = buf.DecodeUint32()
@@ -727,20 +694,17 @@ func (*ClassifyTableIds) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifyTableIds) Size() int {
+func (m *ClassifyTableIds) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ClassifyTableIds) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyTableIds) Unmarshal(b []byte) error {
@@ -761,37 +725,34 @@ func (*ClassifyTableIdsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifyTableIdsReply) Size() int {
+func (m *ClassifyTableIdsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4              // m.Retval
 	size += 4              // m.Count
 	size += 4 * len(m.Ids) // m.Ids
 	return size
 }
 func (m *ClassifyTableIdsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.Ids)))
 	for i := 0; i < len(m.Ids); i++ {
 		var x uint32
 		if i < len(m.Ids) {
 			x = uint32(m.Ids[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
 func (m *ClassifyTableIdsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
 	m.Ids = make([]uint32, m.Count)
 	for i := 0; i < len(m.Ids); i++ {
@@ -812,22 +773,19 @@ func (*ClassifyTableInfo) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ClassifyTableInfo) Size() int {
+func (m *ClassifyTableInfo) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.TableID
 	return size
 }
 func (m *ClassifyTableInfo) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TableID)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyTableInfo) Unmarshal(b []byte) error {
@@ -857,11 +815,10 @@ func (*ClassifyTableInfoReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ClassifyTableInfoReply) Size() int {
+func (m *ClassifyTableInfoReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.Retval
 	size += 4               // m.TableID
 	size += 4               // m.Nbuckets
@@ -875,27 +832,25 @@ func (m *ClassifyTableInfoReply) Size() int {
 	return size
 }
 func (m *ClassifyTableInfoReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.TableID))
-	buf.EncodeUint32(uint32(m.Nbuckets))
-	buf.EncodeUint32(uint32(m.MatchNVectors))
-	buf.EncodeUint32(uint32(m.SkipNVectors))
-	buf.EncodeUint32(uint32(m.ActiveSessions))
-	buf.EncodeUint32(uint32(m.NextTableIndex))
-	buf.EncodeUint32(uint32(m.MissNextIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.TableID)
+	buf.EncodeUint32(m.Nbuckets)
+	buf.EncodeUint32(m.MatchNVectors)
+	buf.EncodeUint32(m.SkipNVectors)
+	buf.EncodeUint32(m.ActiveSessions)
+	buf.EncodeUint32(m.NextTableIndex)
+	buf.EncodeUint32(m.MissNextIndex)
 	buf.EncodeUint32(uint32(len(m.Mask)))
-	buf.EncodeBytes(m.Mask[:], 0)
+	buf.EncodeBytes(m.Mask, 0)
 	return buf.Bytes(), nil
 }
 func (m *ClassifyTableInfoReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.TableID = buf.DecodeUint32()
 	m.Nbuckets = buf.DecodeUint32()
 	m.MatchNVectors = buf.DecodeUint32()
@@ -904,7 +859,8 @@ func (m *ClassifyTableInfoReply) Unmarshal(b []byte) error {
 	m.NextTableIndex = buf.DecodeUint32()
 	m.MissNextIndex = buf.DecodeUint32()
 	m.MaskLength = buf.DecodeUint32()
-	copy(m.Mask[:], buf.DecodeBytes(0))
+	m.Mask = make([]byte, m.MaskLength)
+	copy(m.Mask, buf.DecodeBytes(len(m.Mask)))
 	return nil
 }
 
@@ -921,24 +877,21 @@ func (*FlowClassifyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *FlowClassifyDetails) Size() int {
+func (m *FlowClassifyDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.TableIndex
 	return size
 }
 func (m *FlowClassifyDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.TableIndex))
+	buf.EncodeUint32(m.TableIndex)
 	return buf.Bytes(), nil
 }
 func (m *FlowClassifyDetails) Unmarshal(b []byte) error {
@@ -961,22 +914,19 @@ func (*FlowClassifyDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *FlowClassifyDump) Size() int {
+func (m *FlowClassifyDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Type
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *FlowClassifyDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Type))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -1003,11 +953,10 @@ func (*FlowClassifySetInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *FlowClassifySetInterface) Size() int {
+func (m *FlowClassifySetInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.IP4TableIndex
 	size += 4 // m.IP6TableIndex
@@ -1015,15 +964,13 @@ func (m *FlowClassifySetInterface) Size() int {
 	return size
 }
 func (m *FlowClassifySetInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.IP4TableIndex))
-	buf.EncodeUint32(uint32(m.IP6TableIndex))
+	buf.EncodeUint32(m.IP4TableIndex)
+	buf.EncodeUint32(m.IP6TableIndex)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -1050,27 +997,24 @@ func (*FlowClassifySetInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *FlowClassifySetInterfaceReply) Size() int {
+func (m *FlowClassifySetInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *FlowClassifySetInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *FlowClassifySetInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1090,11 +1034,10 @@ func (*InputACLSetInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *InputACLSetInterface) Size() int {
+func (m *InputACLSetInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.IP4TableIndex
 	size += 4 // m.IP6TableIndex
@@ -1103,16 +1046,14 @@ func (m *InputACLSetInterface) Size() int {
 	return size
 }
 func (m *InputACLSetInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.IP4TableIndex))
-	buf.EncodeUint32(uint32(m.IP6TableIndex))
-	buf.EncodeUint32(uint32(m.L2TableIndex))
+	buf.EncodeUint32(m.IP4TableIndex)
+	buf.EncodeUint32(m.IP6TableIndex)
+	buf.EncodeUint32(m.L2TableIndex)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -1138,27 +1079,24 @@ func (*InputACLSetInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *InputACLSetInterfaceReply) Size() int {
+func (m *InputACLSetInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *InputACLSetInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *InputACLSetInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1178,11 +1116,10 @@ func (*OutputACLSetInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *OutputACLSetInterface) Size() int {
+func (m *OutputACLSetInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.IP4TableIndex
 	size += 4 // m.IP6TableIndex
@@ -1191,16 +1128,14 @@ func (m *OutputACLSetInterface) Size() int {
 	return size
 }
 func (m *OutputACLSetInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.IP4TableIndex))
-	buf.EncodeUint32(uint32(m.IP6TableIndex))
-	buf.EncodeUint32(uint32(m.L2TableIndex))
+	buf.EncodeUint32(m.IP4TableIndex)
+	buf.EncodeUint32(m.IP6TableIndex)
+	buf.EncodeUint32(m.L2TableIndex)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -1226,27 +1161,24 @@ func (*OutputACLSetInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *OutputACLSetInterfaceReply) Size() int {
+func (m *OutputACLSetInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *OutputACLSetInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *OutputACLSetInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1263,24 +1195,21 @@ func (*PolicerClassifyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PolicerClassifyDetails) Size() int {
+func (m *PolicerClassifyDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.TableIndex
 	return size
 }
 func (m *PolicerClassifyDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.TableIndex))
+	buf.EncodeUint32(m.TableIndex)
 	return buf.Bytes(), nil
 }
 func (m *PolicerClassifyDetails) Unmarshal(b []byte) error {
@@ -1303,22 +1232,19 @@ func (*PolicerClassifyDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PolicerClassifyDump) Size() int {
+func (m *PolicerClassifyDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Type
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *PolicerClassifyDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Type))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -1346,11 +1272,10 @@ func (*PolicerClassifySetInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PolicerClassifySetInterface) Size() int {
+func (m *PolicerClassifySetInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 4 // m.IP4TableIndex
 	size += 4 // m.IP6TableIndex
@@ -1359,16 +1284,14 @@ func (m *PolicerClassifySetInterface) Size() int {
 	return size
 }
 func (m *PolicerClassifySetInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.IP4TableIndex))
-	buf.EncodeUint32(uint32(m.IP6TableIndex))
-	buf.EncodeUint32(uint32(m.L2TableIndex))
+	buf.EncodeUint32(m.IP4TableIndex)
+	buf.EncodeUint32(m.IP6TableIndex)
+	buf.EncodeUint32(m.L2TableIndex)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -1396,27 +1319,24 @@ func (*PolicerClassifySetInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PolicerClassifySetInterfaceReply) Size() int {
+func (m *PolicerClassifySetInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PolicerClassifySetInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PolicerClassifySetInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

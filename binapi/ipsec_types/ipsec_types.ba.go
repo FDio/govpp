@@ -225,8 +225,8 @@ type IpsecSadEntry struct {
 	TunnelDst          ip_types.Address `binapi:"address,name=tunnel_dst" json:"tunnel_dst,omitempty"`
 	TxTableID          uint32           `binapi:"u32,name=tx_table_id" json:"tx_table_id,omitempty"`
 	Salt               uint32           `binapi:"u32,name=salt" json:"salt,omitempty"`
-	UDPSrcPort         uint16           `binapi:"u16,name=udp_src_port,default=%!s(float64=4500)" json:"udp_src_port,omitempty"`
-	UDPDstPort         uint16           `binapi:"u16,name=udp_dst_port,default=%!s(float64=4500)" json:"udp_dst_port,omitempty"`
+	UDPSrcPort         uint16           `binapi:"u16,name=udp_src_port,default=4500" json:"udp_src_port,omitempty"`
+	UDPDstPort         uint16           `binapi:"u16,name=udp_dst_port,default=4500" json:"udp_dst_port,omitempty"`
 }
 
 // Key defines type 'key'.

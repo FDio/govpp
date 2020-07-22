@@ -19,7 +19,6 @@ import (
 	"bytes"
 	"fmt"
 	"go/ast"
-	"go/format"
 	"go/parser"
 	"go/printer"
 	"go/token"
@@ -86,12 +85,11 @@ func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator
 	logrus.Debugf("adding %d VPP API files to generator", len(gen.apifiles))
 
 	for _, apifile := range gen.apifiles {
-		filename := getFilename(apifile)
-
 		if _, ok := gen.FilesByName[apifile.Name]; ok {
 			return nil, fmt.Errorf("duplicate file: %q", apifile.Name)
 		}
 
+		filename := getFilename(apifile)
 		file, err := newFile(gen, apifile, packageNames[filename], importPaths[filename])
 		if err != nil {
 			return nil, fmt.Errorf("loading file %s failed: %w", apifile.Name, err)
@@ -108,7 +106,7 @@ func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator
 		for _, genfile := range gen.filesToGen {
 			file, ok := gen.FilesByName[genfile]
 			if !ok {
-				return nil, fmt.Errorf("no API file found for: %v", genfile)
+				return nil, fmt.Errorf("nol API file found for: %v", genfile)
 			}
 			file.Generate = true
 			// generate all imported files
@@ -162,6 +160,7 @@ type GenFile struct {
 	packageNames  map[GoImportPath]GoPackageName
 }
 
+// NewGenFile creates new generated file with
 func (g *Generator) NewGenFile(filename string, importPath GoImportPath) *GenFile {
 	f := &GenFile{
 		gen:           g,
@@ -213,6 +212,7 @@ func (g *GenFile) Content() ([]byte, error) {
 	return g.injectImports(g.buf.Bytes())
 }
 
+// injectImports parses source, injects import block declaration with all imports and return formatted
 func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 	// Parse source code
 	fset := token.NewFileSet()
@@ -290,66 +290,6 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 	return out.Bytes(), nil
 }
 
-// GoIdent is a Go identifier, consisting of a name and import path.
-// The name is a single identifier and may not be a dot-qualified selector.
-type GoIdent struct {
-	GoName       string
-	GoImportPath GoImportPath
-}
-
-func (id GoIdent) String() string {
-	return fmt.Sprintf("%q.%v", id.GoImportPath, id.GoName)
-}
-
-func newGoIdent(f *File, fullName string) GoIdent {
-	name := strings.TrimPrefix(fullName, string(f.PackageName)+".")
-	return GoIdent{
-		GoName:       camelCaseName(name),
-		GoImportPath: f.GoImportPath,
-	}
-}
-
-// GoImportPath is a Go import path for a package.
-type GoImportPath string
-
-func (p GoImportPath) String() string {
-	return strconv.Quote(string(p))
-}
-
-func (p GoImportPath) Ident(s string) GoIdent {
-	return GoIdent{GoName: s, GoImportPath: p}
-}
-
-type GoPackageName string
-
-func cleanPackageName(name string) GoPackageName {
-	return GoPackageName(sanitizedName(name))
-}
-
-func sanitizedName(name string) string {
-	switch name {
-	case "interface":
-		return "interfaces"
-	case "map":
-		return "maps"
-	default:
-		return name
-	}
-}
-
-// baseName returns the last path element of the name, with the last dotted suffix removed.
-func baseName(name string) string {
-	// First, find the last element
-	if i := strings.LastIndex(name, "/"); i >= 0 {
-		name = name[i+1:]
-	}
-	// Now drop the suffix
-	if i := strings.LastIndex(name, "."); i >= 0 {
-		name = name[:i]
-	}
-	return name
-}
-
 func writeSourceTo(outputFile string, b []byte) error {
 	// create output directory
 	packageDir := filepath.Dir(outputFile)
@@ -357,20 +297,13 @@ func writeSourceTo(outputFile string, b []byte) error {
 		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
 	}
 
-	// format generated source code
-	gosrc, err := format.Source(b)
-	if err != nil {
-		_ = ioutil.WriteFile(outputFile, b, 0666)
-		return fmt.Errorf("formatting source code failed: %v", err)
-	}
-
 	// write generated code to output file
-	if err := ioutil.WriteFile(outputFile, gosrc, 0666); err != nil {
+	if err := ioutil.WriteFile(outputFile, b, 0666); err != nil {
 		return fmt.Errorf("writing to output file %s failed: %v", outputFile, err)
 	}
 
-	lines := bytes.Count(gosrc, []byte("\n"))
-	logf("wrote %d lines (%d bytes) to: %q", lines, len(gosrc), outputFile)
+	lines := bytes.Count(b, []byte("\n"))
+	logf("wrote %d lines (%d bytes) to: %q", lines, len(b), outputFile)
 
 	return nil
 }

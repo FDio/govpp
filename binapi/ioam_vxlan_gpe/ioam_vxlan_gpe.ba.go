@@ -41,22 +41,19 @@ func (*VxlanGpeIoamDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamDisable) Size() int {
+func (m *VxlanGpeIoamDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.ID
 	return size
 }
 func (m *VxlanGpeIoamDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.ID)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamDisable) Unmarshal(b []byte) error {
@@ -77,27 +74,24 @@ func (*VxlanGpeIoamDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamDisableReply) Size() int {
+func (m *VxlanGpeIoamDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -116,11 +110,10 @@ func (*VxlanGpeIoamEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamEnable) Size() int {
+func (m *VxlanGpeIoamEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.ID
 	size += 1 // m.TracePpc
 	size += 1 // m.PowEnable
@@ -128,14 +121,12 @@ func (m *VxlanGpeIoamEnable) Size() int {
 	return size
 }
 func (m *VxlanGpeIoamEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.ID))
-	buf.EncodeUint8(uint8(m.TracePpc))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.ID)
+	buf.EncodeUint8(m.TracePpc)
 	buf.EncodeBool(m.PowEnable)
 	buf.EncodeBool(m.TraceEnable)
 	return buf.Bytes(), nil
@@ -161,27 +152,24 @@ func (*VxlanGpeIoamEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamEnableReply) Size() int {
+func (m *VxlanGpeIoamEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -198,26 +186,23 @@ func (*VxlanGpeIoamTransitDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamTransitDisable) Size() int {
+func (m *VxlanGpeIoamTransitDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.OuterFibIndex
 	size += 1      // m.DstAddr.Af
 	size += 1 * 16 // m.DstAddr.Un
 	return size
 }
 func (m *VxlanGpeIoamTransitDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.OuterFibIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.OuterFibIndex)
 	buf.EncodeUint8(uint8(m.DstAddr.Af))
-	buf.EncodeBytes(m.DstAddr.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DstAddr.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamTransitDisable) Unmarshal(b []byte) error {
@@ -242,27 +227,24 @@ func (*VxlanGpeIoamTransitDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamTransitDisableReply) Size() int {
+func (m *VxlanGpeIoamTransitDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamTransitDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamTransitDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -279,26 +261,23 @@ func (*VxlanGpeIoamTransitEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamTransitEnable) Size() int {
+func (m *VxlanGpeIoamTransitEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.OuterFibIndex
 	size += 1      // m.DstAddr.Af
 	size += 1 * 16 // m.DstAddr.Un
 	return size
 }
 func (m *VxlanGpeIoamTransitEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.OuterFibIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.OuterFibIndex)
 	buf.EncodeUint8(uint8(m.DstAddr.Af))
-	buf.EncodeBytes(m.DstAddr.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DstAddr.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamTransitEnable) Unmarshal(b []byte) error {
@@ -323,27 +302,24 @@ func (*VxlanGpeIoamTransitEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamTransitEnableReply) Size() int {
+func (m *VxlanGpeIoamTransitEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamTransitEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamTransitEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -361,11 +337,10 @@ func (*VxlanGpeIoamVniDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamVniDisable) Size() int {
+func (m *VxlanGpeIoamVniDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Vni
 	size += 1      // m.Local.Af
 	size += 1 * 16 // m.Local.Un
@@ -374,17 +349,15 @@ func (m *VxlanGpeIoamVniDisable) Size() int {
 	return size
 }
 func (m *VxlanGpeIoamVniDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Local.Af))
-	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Remote.Af))
-	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamVniDisable) Unmarshal(b []byte) error {
@@ -411,27 +384,24 @@ func (*VxlanGpeIoamVniDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamVniDisableReply) Size() int {
+func (m *VxlanGpeIoamVniDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamVniDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamVniDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -449,11 +419,10 @@ func (*VxlanGpeIoamVniEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamVniEnable) Size() int {
+func (m *VxlanGpeIoamVniEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Vni
 	size += 1      // m.Local.Af
 	size += 1 * 16 // m.Local.Un
@@ -462,17 +431,15 @@ func (m *VxlanGpeIoamVniEnable) Size() int {
 	return size
 }
 func (m *VxlanGpeIoamVniEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Local.Af))
-	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Remote.Af))
-	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamVniEnable) Unmarshal(b []byte) error {
@@ -497,27 +464,24 @@ func (*VxlanGpeIoamVniEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamVniEnableReply) Size() int {
+func (m *VxlanGpeIoamVniEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamVniEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamVniEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

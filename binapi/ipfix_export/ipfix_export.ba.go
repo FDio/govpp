@@ -42,24 +42,21 @@ func (*IpfixClassifyStreamDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpfixClassifyStreamDetails) Size() int {
+func (m *IpfixClassifyStreamDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.DomainID
 	size += 2 // m.SrcPort
 	return size
 }
 func (m *IpfixClassifyStreamDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DomainID))
-	buf.EncodeUint16(uint16(m.SrcPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DomainID)
+	buf.EncodeUint16(m.SrcPort)
 	return buf.Bytes(), nil
 }
 func (m *IpfixClassifyStreamDetails) Unmarshal(b []byte) error {
@@ -79,20 +76,17 @@ func (*IpfixClassifyStreamDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpfixClassifyStreamDump) Size() int {
+func (m *IpfixClassifyStreamDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpfixClassifyStreamDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpfixClassifyStreamDump) Unmarshal(b []byte) error {
@@ -114,11 +108,10 @@ func (*IpfixClassifyTableAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpfixClassifyTableAddDel) Size() int {
+func (m *IpfixClassifyTableAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.TableID
 	size += 1 // m.IPVersion
 	size += 1 // m.TransportProtocol
@@ -126,13 +119,11 @@ func (m *IpfixClassifyTableAddDel) Size() int {
 	return size
 }
 func (m *IpfixClassifyTableAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint8(uint8(m.IPVersion))
 	buf.EncodeUint8(uint8(m.TransportProtocol))
 	buf.EncodeBool(m.IsAdd)
@@ -161,27 +152,24 @@ func (*IpfixClassifyTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpfixClassifyTableAddDelReply) Size() int {
+func (m *IpfixClassifyTableAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpfixClassifyTableAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpfixClassifyTableAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -199,24 +187,21 @@ func (*IpfixClassifyTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpfixClassifyTableDetails) Size() int {
+func (m *IpfixClassifyTableDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.TableID
 	size += 1 // m.IPVersion
 	size += 1 // m.TransportProtocol
 	return size
 }
 func (m *IpfixClassifyTableDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.TableID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint8(uint8(m.IPVersion))
 	buf.EncodeUint8(uint8(m.TransportProtocol))
 	return buf.Bytes(), nil
@@ -239,20 +224,17 @@ func (*IpfixClassifyTableDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpfixClassifyTableDump) Size() int {
+func (m *IpfixClassifyTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpfixClassifyTableDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpfixClassifyTableDump) Unmarshal(b []byte) error {
@@ -277,11 +259,10 @@ func (*IpfixExporterDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpfixExporterDetails) Size() int {
+func (m *IpfixExporterDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.CollectorAddress.Af
 	size += 1 * 16 // m.CollectorAddress.Un
 	size += 2      // m.CollectorPort
@@ -294,20 +275,18 @@ func (m *IpfixExporterDetails) Size() int {
 	return size
 }
 func (m *IpfixExporterDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.CollectorAddress.Af))
-	buf.EncodeBytes(m.CollectorAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint16(uint16(m.CollectorPort))
+	buf.EncodeBytes(m.CollectorAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint16(m.CollectorPort)
 	buf.EncodeUint8(uint8(m.SrcAddress.Af))
-	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint32(uint32(m.PathMtu))
-	buf.EncodeUint32(uint32(m.TemplateInterval))
+	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint32(m.PathMtu)
+	buf.EncodeUint32(m.TemplateInterval)
 	buf.EncodeBool(m.UDPChecksum)
 	return buf.Bytes(), nil
 }
@@ -335,20 +314,17 @@ func (*IpfixExporterDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpfixExporterDump) Size() int {
+func (m *IpfixExporterDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpfixExporterDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpfixExporterDump) Unmarshal(b []byte) error {
@@ -365,20 +341,17 @@ func (*IpfixFlush) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IpfixFlush) Size() int {
+func (m *IpfixFlush) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IpfixFlush) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IpfixFlush) Unmarshal(b []byte) error {
@@ -397,27 +370,24 @@ func (*IpfixFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IpfixFlushReply) Size() int {
+func (m *IpfixFlushReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IpfixFlushReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IpfixFlushReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -434,24 +404,21 @@ func (*SetIpfixClassifyStream) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SetIpfixClassifyStream) Size() int {
+func (m *SetIpfixClassifyStream) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.DomainID
 	size += 2 // m.SrcPort
 	return size
 }
 func (m *SetIpfixClassifyStream) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DomainID))
-	buf.EncodeUint16(uint16(m.SrcPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DomainID)
+	buf.EncodeUint16(m.SrcPort)
 	return buf.Bytes(), nil
 }
 func (m *SetIpfixClassifyStream) Unmarshal(b []byte) error {
@@ -473,27 +440,24 @@ func (*SetIpfixClassifyStreamReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SetIpfixClassifyStreamReply) Size() int {
+func (m *SetIpfixClassifyStreamReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SetIpfixClassifyStreamReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SetIpfixClassifyStreamReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -515,11 +479,10 @@ func (*SetIpfixExporter) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SetIpfixExporter) Size() int {
+func (m *SetIpfixExporter) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.CollectorAddress.Af
 	size += 1 * 16 // m.CollectorAddress.Un
 	size += 2      // m.CollectorPort
@@ -532,20 +495,18 @@ func (m *SetIpfixExporter) Size() int {
 	return size
 }
 func (m *SetIpfixExporter) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.CollectorAddress.Af))
-	buf.EncodeBytes(m.CollectorAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint16(uint16(m.CollectorPort))
+	buf.EncodeBytes(m.CollectorAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint16(m.CollectorPort)
 	buf.EncodeUint8(uint8(m.SrcAddress.Af))
-	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint32(uint32(m.PathMtu))
-	buf.EncodeUint32(uint32(m.TemplateInterval))
+	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint32(m.PathMtu)
+	buf.EncodeUint32(m.TemplateInterval)
 	buf.EncodeBool(m.UDPChecksum)
 	return buf.Bytes(), nil
 }
@@ -575,27 +536,24 @@ func (*SetIpfixExporterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SetIpfixExporterReply) Size() int {
+func (m *SetIpfixExporterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SetIpfixExporterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SetIpfixExporterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -45,11 +45,10 @@ func (*MapAddDelRule) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapAddDelRule) Size() int {
+func (m *MapAddDelRule) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Index
 	size += 1      // m.IsAdd
 	size += 1 * 16 // m.IP6Dst
@@ -57,16 +56,14 @@ func (m *MapAddDelRule) Size() int {
 	return size
 }
 func (m *MapAddDelRule) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Index))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Index)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.IP6Dst[:], 16)
-	buf.EncodeUint16(uint16(m.Psid))
+	buf.EncodeUint16(m.Psid)
 	return buf.Bytes(), nil
 }
 func (m *MapAddDelRule) Unmarshal(b []byte) error {
@@ -90,27 +87,24 @@ func (*MapAddDelRuleReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapAddDelRuleReply) Size() int {
+func (m *MapAddDelRuleReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapAddDelRuleReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapAddDelRuleReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -122,7 +116,7 @@ type MapAddDomain struct {
 	EaBitsLen  uint8              `binapi:"u8,name=ea_bits_len" json:"ea_bits_len,omitempty"`
 	PsidOffset uint8              `binapi:"u8,name=psid_offset" json:"psid_offset,omitempty"`
 	PsidLength uint8              `binapi:"u8,name=psid_length" json:"psid_length,omitempty"`
-	Mtu        uint16             `binapi:"u16,name=mtu,default=%!s(float64=1280)" json:"mtu,omitempty"`
+	Mtu        uint16             `binapi:"u16,name=mtu,default=1280" json:"mtu,omitempty"`
 	Tag        string             `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
@@ -133,11 +127,10 @@ func (*MapAddDomain) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapAddDomain) Size() int {
+func (m *MapAddDomain) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.IP6Prefix.Address
 	size += 1      // m.IP6Prefix.Len
 	size += 1 * 4  // m.IP4Prefix.Address
@@ -152,22 +145,20 @@ func (m *MapAddDomain) Size() int {
 	return size
 }
 func (m *MapAddDomain) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP6Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.IP6Prefix.Len))
+	buf.EncodeUint8(m.IP6Prefix.Len)
 	buf.EncodeBytes(m.IP4Prefix.Address[:], 4)
-	buf.EncodeUint8(uint8(m.IP4Prefix.Len))
+	buf.EncodeUint8(m.IP4Prefix.Len)
 	buf.EncodeBytes(m.IP6Src.Address[:], 16)
-	buf.EncodeUint8(uint8(m.IP6Src.Len))
-	buf.EncodeUint8(uint8(m.EaBitsLen))
-	buf.EncodeUint8(uint8(m.PsidOffset))
-	buf.EncodeUint8(uint8(m.PsidLength))
-	buf.EncodeUint16(uint16(m.Mtu))
+	buf.EncodeUint8(m.IP6Src.Len)
+	buf.EncodeUint8(m.EaBitsLen)
+	buf.EncodeUint8(m.PsidOffset)
+	buf.EncodeUint8(m.PsidLength)
+	buf.EncodeUint16(m.Mtu)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -200,30 +191,27 @@ func (*MapAddDomainReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapAddDomainReply) Size() int {
+func (m *MapAddDomainReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Index
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapAddDomainReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Index))
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Index)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapAddDomainReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Index = buf.DecodeUint32()
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -239,22 +227,19 @@ func (*MapDelDomain) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapDelDomain) Size() int {
+func (m *MapDelDomain) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Index
 	return size
 }
 func (m *MapDelDomain) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Index))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Index)
 	return buf.Bytes(), nil
 }
 func (m *MapDelDomain) Unmarshal(b []byte) error {
@@ -275,27 +260,24 @@ func (*MapDelDomainReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapDelDomainReply) Size() int {
+func (m *MapDelDomainReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapDelDomainReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapDelDomainReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -320,11 +302,10 @@ func (*MapDomainDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapDomainDetails) Size() int {
+func (m *MapDomainDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.DomainIndex
 	size += 1 * 16 // m.IP6Prefix.Address
 	size += 1      // m.IP6Prefix.Len
@@ -341,24 +322,22 @@ func (m *MapDomainDetails) Size() int {
 	return size
 }
 func (m *MapDomainDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DomainIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DomainIndex)
 	buf.EncodeBytes(m.IP6Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.IP6Prefix.Len))
+	buf.EncodeUint8(m.IP6Prefix.Len)
 	buf.EncodeBytes(m.IP4Prefix.Address[:], 4)
-	buf.EncodeUint8(uint8(m.IP4Prefix.Len))
+	buf.EncodeUint8(m.IP4Prefix.Len)
 	buf.EncodeBytes(m.IP6Src.Address[:], 16)
-	buf.EncodeUint8(uint8(m.IP6Src.Len))
-	buf.EncodeUint8(uint8(m.EaBitsLen))
-	buf.EncodeUint8(uint8(m.PsidOffset))
-	buf.EncodeUint8(uint8(m.PsidLength))
-	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint16(uint16(m.Mtu))
+	buf.EncodeUint8(m.IP6Src.Len)
+	buf.EncodeUint8(m.EaBitsLen)
+	buf.EncodeUint8(m.PsidOffset)
+	buf.EncodeUint8(m.PsidLength)
+	buf.EncodeUint8(m.Flags)
+	buf.EncodeUint16(m.Mtu)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -390,20 +369,17 @@ func (*MapDomainDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapDomainDump) Size() int {
+func (m *MapDomainDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MapDomainDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MapDomainDump) Unmarshal(b []byte) error {
@@ -424,23 +400,20 @@ func (*MapIfEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapIfEnableDisable) Size() int {
+func (m *MapIfEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.IsEnable
 	size += 1 // m.IsTranslation
 	return size
 }
 func (m *MapIfEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsEnable)
 	buf.EncodeBool(m.IsTranslation)
@@ -466,27 +439,24 @@ func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapIfEnableDisableReply) Size() int {
+func (m *MapIfEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapIfEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapIfEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -504,23 +474,20 @@ func (*MapParamAddDelPreResolve) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamAddDelPreResolve) Size() int {
+func (m *MapParamAddDelPreResolve) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1 * 4  // m.IP4NhAddress
 	size += 1 * 16 // m.IP6NhAddress
 	return size
 }
 func (m *MapParamAddDelPreResolve) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.IP4NhAddress[:], 4)
 	buf.EncodeBytes(m.IP6NhAddress[:], 16)
@@ -548,27 +515,24 @@ func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamAddDelPreResolveReply) Size() int {
+func (m *MapParamAddDelPreResolveReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamAddDelPreResolveReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamAddDelPreResolveReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -582,20 +546,17 @@ func (*MapParamGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamGet) Size() int {
+func (m *MapParamGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MapParamGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MapParamGet) Unmarshal(b []byte) error {
@@ -628,11 +589,10 @@ func (*MapParamGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamGetReply) Size() int {
+func (m *MapParamGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Retval
 	size += 1      // m.FragInner
 	size += 1      // m.FragIgnoreDf
@@ -651,32 +611,30 @@ func (m *MapParamGetReply) Size() int {
 	return size
 }
 func (m *MapParamGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.FragInner))
-	buf.EncodeUint8(uint8(m.FragIgnoreDf))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.FragInner)
+	buf.EncodeUint8(m.FragIgnoreDf)
 	buf.EncodeBytes(m.ICMPIP4ErrRelaySrc[:], 4)
 	buf.EncodeBool(m.ICMP6EnableUnreachable)
 	buf.EncodeBytes(m.IP4NhAddress[:], 4)
 	buf.EncodeBytes(m.IP6NhAddress[:], 16)
-	buf.EncodeUint16(uint16(m.IP4LifetimeMs))
-	buf.EncodeUint16(uint16(m.IP4PoolSize))
-	buf.EncodeUint32(uint32(m.IP4Buffers))
-	buf.EncodeFloat64(float64(m.IP4HtRatio))
+	buf.EncodeUint16(m.IP4LifetimeMs)
+	buf.EncodeUint16(m.IP4PoolSize)
+	buf.EncodeUint32(m.IP4Buffers)
+	buf.EncodeFloat64(m.IP4HtRatio)
 	buf.EncodeBool(m.SecCheckEnable)
 	buf.EncodeBool(m.SecCheckFragments)
 	buf.EncodeBool(m.TcCopy)
-	buf.EncodeUint8(uint8(m.TcClass))
+	buf.EncodeUint8(m.TcClass)
 	return buf.Bytes(), nil
 }
 func (m *MapParamGetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.FragInner = buf.DecodeUint8()
 	m.FragIgnoreDf = buf.DecodeUint8()
 	copy(m.ICMPIP4ErrRelaySrc[:], buf.DecodeBytes(4))
@@ -686,7 +644,7 @@ func (m *MapParamGetReply) Unmarshal(b []byte) error {
 	m.IP4LifetimeMs = buf.DecodeUint16()
 	m.IP4PoolSize = buf.DecodeUint16()
 	m.IP4Buffers = buf.DecodeUint32()
-	m.IP4HtRatio = float64(buf.DecodeFloat64())
+	m.IP4HtRatio = buf.DecodeFloat64()
 	m.SecCheckEnable = buf.DecodeBool()
 	m.SecCheckFragments = buf.DecodeBool()
 	m.TcCopy = buf.DecodeBool()
@@ -707,22 +665,19 @@ func (*MapParamSetFragmentation) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetFragmentation) Size() int {
+func (m *MapParamSetFragmentation) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Inner
 	size += 1 // m.IgnoreDf
 	return size
 }
 func (m *MapParamSetFragmentation) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Inner)
 	buf.EncodeBool(m.IgnoreDf)
 	return buf.Bytes(), nil
@@ -748,27 +703,24 @@ func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetFragmentationReply) Size() int {
+func (m *MapParamSetFragmentationReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetFragmentationReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetFragmentationReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -784,21 +736,18 @@ func (*MapParamSetICMP) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetICMP) Size() int {
+func (m *MapParamSetICMP) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IP4ErrRelaySrc
 	return size
 }
 func (m *MapParamSetICMP) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP4ErrRelaySrc[:], 4)
 	return buf.Bytes(), nil
 }
@@ -820,21 +769,18 @@ func (*MapParamSetICMP6) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetICMP6) Size() int {
+func (m *MapParamSetICMP6) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.EnableUnreachable
 	return size
 }
 func (m *MapParamSetICMP6) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.EnableUnreachable)
 	return buf.Bytes(), nil
 }
@@ -856,27 +802,24 @@ func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetICMP6Reply) Size() int {
+func (m *MapParamSetICMP6Reply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetICMP6Reply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetICMP6Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -892,27 +835,24 @@ func (*MapParamSetICMPReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetICMPReply) Size() int {
+func (m *MapParamSetICMPReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetICMPReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetICMPReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -929,22 +869,19 @@ func (*MapParamSetSecurityCheck) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetSecurityCheck) Size() int {
+func (m *MapParamSetSecurityCheck) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 1 // m.Fragments
 	return size
 }
 func (m *MapParamSetSecurityCheck) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	buf.EncodeBool(m.Fragments)
 	return buf.Bytes(), nil
@@ -970,27 +907,24 @@ func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetSecurityCheckReply) Size() int {
+func (m *MapParamSetSecurityCheckReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetSecurityCheckReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetSecurityCheckReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1006,22 +940,19 @@ func (*MapParamSetTCP) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetTCP) Size() int {
+func (m *MapParamSetTCP) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.TCPMss
 	return size
 }
 func (m *MapParamSetTCP) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.TCPMss))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.TCPMss)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetTCP) Unmarshal(b []byte) error {
@@ -1042,27 +973,24 @@ func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetTCPReply) Size() int {
+func (m *MapParamSetTCPReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetTCPReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetTCPReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1079,24 +1007,21 @@ func (*MapParamSetTrafficClass) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapParamSetTrafficClass) Size() int {
+func (m *MapParamSetTrafficClass) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Copy
 	size += 1 // m.TcClass
 	return size
 }
 func (m *MapParamSetTrafficClass) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Copy)
-	buf.EncodeUint8(uint8(m.TcClass))
+	buf.EncodeUint8(m.TcClass)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetTrafficClass) Unmarshal(b []byte) error {
@@ -1120,27 +1045,24 @@ func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapParamSetTrafficClassReply) Size() int {
+func (m *MapParamSetTrafficClassReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MapParamSetTrafficClassReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MapParamSetTrafficClassReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1157,24 +1079,21 @@ func (*MapRuleDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapRuleDetails) Size() int {
+func (m *MapRuleDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.IP6Dst
 	size += 2      // m.Psid
 	return size
 }
 func (m *MapRuleDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IP6Dst[:], 16)
-	buf.EncodeUint16(uint16(m.Psid))
+	buf.EncodeUint16(m.Psid)
 	return buf.Bytes(), nil
 }
 func (m *MapRuleDetails) Unmarshal(b []byte) error {
@@ -1196,22 +1115,19 @@ func (*MapRuleDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapRuleDump) Size() int {
+func (m *MapRuleDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.DomainIndex
 	return size
 }
 func (m *MapRuleDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DomainIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DomainIndex)
 	return buf.Bytes(), nil
 }
 func (m *MapRuleDump) Unmarshal(b []byte) error {
@@ -1230,20 +1146,17 @@ func (*MapSummaryStats) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MapSummaryStats) Size() int {
+func (m *MapSummaryStats) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MapSummaryStats) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MapSummaryStats) Unmarshal(b []byte) error {
@@ -1267,11 +1180,10 @@ func (*MapSummaryStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MapSummaryStatsReply) Size() int {
+func (m *MapSummaryStatsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 8     // m.TotalBindings
 	size += 8 * 2 // m.TotalPkts
@@ -1281,41 +1193,39 @@ func (m *MapSummaryStatsReply) Size() int {
 	return size
 }
 func (m *MapSummaryStatsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint64(uint64(m.TotalBindings))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint64(m.TotalBindings)
 	for i := 0; i < 2; i++ {
 		var x uint64
 		if i < len(m.TotalPkts) {
 			x = uint64(m.TotalPkts[i])
 		}
-		buf.EncodeUint64(uint64(x))
+		buf.EncodeUint64(x)
 	}
 	for i := 0; i < 2; i++ {
 		var x uint64
 		if i < len(m.TotalBytes) {
 			x = uint64(m.TotalBytes[i])
 		}
-		buf.EncodeUint64(uint64(x))
+		buf.EncodeUint64(x)
 	}
-	buf.EncodeUint64(uint64(m.TotalIP4Fragments))
+	buf.EncodeUint64(m.TotalIP4Fragments)
 	for i := 0; i < 2; i++ {
 		var x uint64
 		if i < len(m.TotalSecurityCheck) {
 			x = uint64(m.TotalSecurityCheck[i])
 		}
-		buf.EncodeUint64(uint64(x))
+		buf.EncodeUint64(x)
 	}
 	return buf.Bytes(), nil
 }
 func (m *MapSummaryStatsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.TotalBindings = buf.DecodeUint64()
 	m.TotalPkts = make([]uint64, 2)
 	for i := 0; i < len(m.TotalPkts); i++ {

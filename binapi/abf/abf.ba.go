@@ -61,11 +61,10 @@ func (*AbfItfAttachAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AbfItfAttachAddDel) Size() int {
+func (m *AbfItfAttachAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.Attach.PolicyID
 	size += 4 // m.Attach.SwIfIndex
@@ -74,16 +73,14 @@ func (m *AbfItfAttachAddDel) Size() int {
 	return size
 }
 func (m *AbfItfAttachAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Attach.PolicyID))
+	buf.EncodeUint32(m.Attach.PolicyID)
 	buf.EncodeUint32(uint32(m.Attach.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Attach.Priority))
+	buf.EncodeUint32(m.Attach.Priority)
 	buf.EncodeBool(m.Attach.IsIPv6)
 	return buf.Bytes(), nil
 }
@@ -109,27 +106,24 @@ func (*AbfItfAttachAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AbfItfAttachAddDelReply) Size() int {
+func (m *AbfItfAttachAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *AbfItfAttachAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *AbfItfAttachAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -145,11 +139,10 @@ func (*AbfItfAttachDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AbfItfAttachDetails) Size() int {
+func (m *AbfItfAttachDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Attach.PolicyID
 	size += 4 // m.Attach.SwIfIndex
 	size += 4 // m.Attach.Priority
@@ -157,15 +150,13 @@ func (m *AbfItfAttachDetails) Size() int {
 	return size
 }
 func (m *AbfItfAttachDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Attach.PolicyID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Attach.PolicyID)
 	buf.EncodeUint32(uint32(m.Attach.SwIfIndex))
-	buf.EncodeUint32(uint32(m.Attach.Priority))
+	buf.EncodeUint32(m.Attach.Priority)
 	buf.EncodeBool(m.Attach.IsIPv6)
 	return buf.Bytes(), nil
 }
@@ -188,20 +179,17 @@ func (*AbfItfAttachDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AbfItfAttachDump) Size() int {
+func (m *AbfItfAttachDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *AbfItfAttachDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *AbfItfAttachDump) Unmarshal(b []byte) error {
@@ -218,20 +206,17 @@ func (*AbfPluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AbfPluginGetVersion) Size() int {
+func (m *AbfPluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *AbfPluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *AbfPluginGetVersion) Unmarshal(b []byte) error {
@@ -251,24 +236,21 @@ func (*AbfPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AbfPluginGetVersionReply) Size() int {
+func (m *AbfPluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *AbfPluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *AbfPluginGetVersionReply) Unmarshal(b []byte) error {
@@ -291,11 +273,10 @@ func (*AbfPolicyAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AbfPolicyAddDel) Size() int {
+func (m *AbfPolicyAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.Policy.PolicyID
 	size += 4 // m.Policy.ACLIndex
@@ -320,57 +301,46 @@ func (m *AbfPolicyAddDel) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *AbfPolicyAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.Policy.PolicyID))
-	buf.EncodeUint32(uint32(m.Policy.ACLIndex))
+	buf.EncodeUint32(m.Policy.PolicyID)
+	buf.EncodeUint32(m.Policy.ACLIndex)
 	buf.EncodeUint8(uint8(len(m.Policy.Paths)))
 	for j1 := 0; j1 < len(m.Policy.Paths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // Paths
 		if j1 < len(m.Policy.Paths) {
 			v1 = m.Policy.Paths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -381,7 +351,7 @@ func (m *AbfPolicyAddDel) Unmarshal(b []byte) error {
 	m.Policy.PolicyID = buf.DecodeUint32()
 	m.Policy.ACLIndex = buf.DecodeUint32()
 	m.Policy.NPaths = buf.DecodeUint8()
-	m.Policy.Paths = make([]fib_types.FibPath, int(m.Policy.NPaths))
+	m.Policy.Paths = make([]fib_types.FibPath, m.Policy.NPaths)
 	for j1 := 0; j1 < len(m.Policy.Paths); j1++ {
 		m.Policy.Paths[j1].SwIfIndex = buf.DecodeUint32()
 		m.Policy.Paths[j1].TableID = buf.DecodeUint32()
@@ -418,27 +388,24 @@ func (*AbfPolicyAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AbfPolicyAddDelReply) Size() int {
+func (m *AbfPolicyAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *AbfPolicyAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *AbfPolicyAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -454,11 +421,10 @@ func (*AbfPolicyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *AbfPolicyDetails) Size() int {
+func (m *AbfPolicyDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Policy.PolicyID
 	size += 4 // m.Policy.ACLIndex
 	size += 1 // m.Policy.NPaths
@@ -482,56 +448,45 @@ func (m *AbfPolicyDetails) Size() int {
 		size += 4      // s2.Nh.ClassifyTableIndex
 		size += 1      // s2.NLabels
 		for j3 := 0; j3 < 16; j3++ {
-			var s3 fib_types.FibMplsLabel
-			_ = s3
-			if j3 < len(s2.LabelStack) {
-				s3 = s2.LabelStack[j3]
-			}
-			size += 1 // s3.IsUniform
-			size += 4 // s3.Label
-			size += 1 // s3.TTL
-			size += 1 // s3.Exp
+			size += 1 // s2.LabelStack[j3].IsUniform
+			size += 4 // s2.LabelStack[j3].Label
+			size += 1 // s2.LabelStack[j3].TTL
+			size += 1 // s2.LabelStack[j3].Exp
 		}
 	}
 	return size
 }
 func (m *AbfPolicyDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Policy.PolicyID))
-	buf.EncodeUint32(uint32(m.Policy.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Policy.PolicyID)
+	buf.EncodeUint32(m.Policy.ACLIndex)
 	buf.EncodeUint8(uint8(len(m.Policy.Paths)))
 	for j1 := 0; j1 < len(m.Policy.Paths); j1++ {
-		var v1 fib_types.FibPath
+		var v1 fib_types.FibPath // Paths
 		if j1 < len(m.Policy.Paths) {
 			v1 = m.Policy.Paths[j1]
 		}
-		buf.EncodeUint32(uint32(v1.SwIfIndex))
-		buf.EncodeUint32(uint32(v1.TableID))
-		buf.EncodeUint32(uint32(v1.RpfID))
-		buf.EncodeUint8(uint8(v1.Weight))
-		buf.EncodeUint8(uint8(v1.Preference))
+		buf.EncodeUint32(v1.SwIfIndex)
+		buf.EncodeUint32(v1.TableID)
+		buf.EncodeUint32(v1.RpfID)
+		buf.EncodeUint8(v1.Weight)
+		buf.EncodeUint8(v1.Preference)
 		buf.EncodeUint32(uint32(v1.Type))
 		buf.EncodeUint32(uint32(v1.Flags))
 		buf.EncodeUint32(uint32(v1.Proto))
-		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v1.Nh.ViaLabel))
-		buf.EncodeUint32(uint32(v1.Nh.ObjID))
-		buf.EncodeUint32(uint32(v1.Nh.ClassifyTableIndex))
-		buf.EncodeUint8(uint8(v1.NLabels))
+		buf.EncodeBytes(v1.Nh.Address.XXX_UnionData[:], 16)
+		buf.EncodeUint32(v1.Nh.ViaLabel)
+		buf.EncodeUint32(v1.Nh.ObjID)
+		buf.EncodeUint32(v1.Nh.ClassifyTableIndex)
+		buf.EncodeUint8(v1.NLabels)
 		for j2 := 0; j2 < 16; j2++ {
-			var v2 fib_types.FibMplsLabel
-			if j2 < len(v1.LabelStack) {
-				v2 = v1.LabelStack[j2]
-			}
-			buf.EncodeUint8(uint8(v2.IsUniform))
-			buf.EncodeUint32(uint32(v2.Label))
-			buf.EncodeUint8(uint8(v2.TTL))
-			buf.EncodeUint8(uint8(v2.Exp))
+			buf.EncodeUint8(v1.LabelStack[j2].IsUniform)
+			buf.EncodeUint32(v1.LabelStack[j2].Label)
+			buf.EncodeUint8(v1.LabelStack[j2].TTL)
+			buf.EncodeUint8(v1.LabelStack[j2].Exp)
 		}
 	}
 	return buf.Bytes(), nil
@@ -541,7 +496,7 @@ func (m *AbfPolicyDetails) Unmarshal(b []byte) error {
 	m.Policy.PolicyID = buf.DecodeUint32()
 	m.Policy.ACLIndex = buf.DecodeUint32()
 	m.Policy.NPaths = buf.DecodeUint8()
-	m.Policy.Paths = make([]fib_types.FibPath, int(m.Policy.NPaths))
+	m.Policy.Paths = make([]fib_types.FibPath, m.Policy.NPaths)
 	for j1 := 0; j1 < len(m.Policy.Paths); j1++ {
 		m.Policy.Paths[j1].SwIfIndex = buf.DecodeUint32()
 		m.Policy.Paths[j1].TableID = buf.DecodeUint32()
@@ -576,20 +531,17 @@ func (*AbfPolicyDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *AbfPolicyDump) Size() int {
+func (m *AbfPolicyDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *AbfPolicyDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *AbfPolicyDump) Unmarshal(b []byte) error {

@@ -143,26 +143,23 @@ func (*FlowprobeParams) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *FlowprobeParams) Size() int {
+func (m *FlowprobeParams) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.RecordFlags
 	size += 4 // m.ActiveTimer
 	size += 4 // m.PassiveTimer
 	return size
 }
 func (m *FlowprobeParams) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.RecordFlags))
-	buf.EncodeUint32(uint32(m.ActiveTimer))
-	buf.EncodeUint32(uint32(m.PassiveTimer))
+	buf.EncodeUint32(m.ActiveTimer)
+	buf.EncodeUint32(m.PassiveTimer)
 	return buf.Bytes(), nil
 }
 func (m *FlowprobeParams) Unmarshal(b []byte) error {
@@ -185,27 +182,24 @@ func (*FlowprobeParamsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *FlowprobeParamsReply) Size() int {
+func (m *FlowprobeParamsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *FlowprobeParamsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *FlowprobeParamsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -223,23 +217,20 @@ func (*FlowprobeTxInterfaceAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *FlowprobeTxInterfaceAddDel) Size() int {
+func (m *FlowprobeTxInterfaceAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Which
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *FlowprobeTxInterfaceAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Which))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
@@ -267,27 +258,24 @@ func (*FlowprobeTxInterfaceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *FlowprobeTxInterfaceAddDelReply) Size() int {
+func (m *FlowprobeTxInterfaceAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *FlowprobeTxInterfaceAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *FlowprobeTxInterfaceAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

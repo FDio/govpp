@@ -163,11 +163,10 @@ func (*Nat44AddDelAddressRange) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddDelAddressRange) Size() int {
+func (m *Nat44AddDelAddressRange) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.FirstIPAddress
 	size += 1 * 4 // m.LastIPAddress
 	size += 4     // m.VrfID
@@ -176,15 +175,13 @@ func (m *Nat44AddDelAddressRange) Size() int {
 	return size
 }
 func (m *Nat44AddDelAddressRange) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.FirstIPAddress[:], 4)
 	buf.EncodeBytes(m.LastIPAddress[:], 4)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	return buf.Bytes(), nil
@@ -213,27 +210,24 @@ func (*Nat44AddDelAddressRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddDelAddressRangeReply) Size() int {
+func (m *Nat44AddDelAddressRangeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44AddDelAddressRangeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddDelAddressRangeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -256,11 +250,10 @@ func (*Nat44AddDelIdentityMapping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddDelIdentityMapping) Size() int {
+func (m *Nat44AddDelIdentityMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.Flags
 	size += 1 * 4 // m.IPAddress
@@ -272,19 +265,17 @@ func (m *Nat44AddDelIdentityMapping) Size() int {
 	return size
 }
 func (m *Nat44AddDelIdentityMapping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -315,27 +306,24 @@ func (*Nat44AddDelIdentityMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddDelIdentityMappingReply) Size() int {
+func (m *Nat44AddDelIdentityMappingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44AddDelIdentityMappingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddDelIdentityMappingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -353,23 +341,20 @@ func (*Nat44AddDelInterfaceAddr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddDelInterfaceAddr) Size() int {
+func (m *Nat44AddDelInterfaceAddr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Flags
 	return size
 }
 func (m *Nat44AddDelInterfaceAddr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Flags))
@@ -397,27 +382,24 @@ func (*Nat44AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddDelInterfaceAddrReply) Size() int {
+func (m *Nat44AddDelInterfaceAddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44AddDelInterfaceAddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddDelInterfaceAddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -441,11 +423,10 @@ func (*Nat44AddDelLbStaticMapping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddDelLbStaticMapping) Size() int {
+func (m *Nat44AddDelLbStaticMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.Flags
 	size += 1 * 4 // m.ExternalAddr
@@ -468,29 +449,27 @@ func (m *Nat44AddDelLbStaticMapping) Size() int {
 	return size
 }
 func (m *Nat44AddDelLbStaticMapping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.ExternalAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExternalPort))
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint32(uint32(m.Affinity))
+	buf.EncodeUint16(m.ExternalPort)
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint32(m.Affinity)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.Locals)))
 	for j0 := 0; j0 < len(m.Locals); j0++ {
-		var v0 Nat44LbAddrPort
+		var v0 Nat44LbAddrPort // Locals
 		if j0 < len(m.Locals) {
 			v0 = m.Locals[j0]
 		}
 		buf.EncodeBytes(v0.Addr[:], 4)
-		buf.EncodeUint16(uint16(v0.Port))
-		buf.EncodeUint8(uint8(v0.Probability))
-		buf.EncodeUint32(uint32(v0.VrfID))
+		buf.EncodeUint16(v0.Port)
+		buf.EncodeUint8(v0.Probability)
+		buf.EncodeUint32(v0.VrfID)
 	}
 	return buf.Bytes(), nil
 }
@@ -504,7 +483,7 @@ func (m *Nat44AddDelLbStaticMapping) Unmarshal(b []byte) error {
 	m.Affinity = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.LocalNum = buf.DecodeUint32()
-	m.Locals = make([]Nat44LbAddrPort, int(m.LocalNum))
+	m.Locals = make([]Nat44LbAddrPort, m.LocalNum)
 	for j0 := 0; j0 < len(m.Locals); j0++ {
 		copy(m.Locals[j0].Addr[:], buf.DecodeBytes(4))
 		m.Locals[j0].Port = buf.DecodeUint16()
@@ -528,27 +507,24 @@ func (*Nat44AddDelLbStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddDelLbStaticMappingReply) Size() int {
+func (m *Nat44AddDelLbStaticMappingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44AddDelLbStaticMappingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddDelLbStaticMappingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -573,11 +549,10 @@ func (*Nat44AddDelStaticMapping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddDelStaticMapping) Size() int {
+func (m *Nat44AddDelStaticMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.Flags
 	size += 1 * 4 // m.LocalIPAddress
@@ -591,21 +566,19 @@ func (m *Nat44AddDelStaticMapping) Size() int {
 	return size
 }
 func (m *Nat44AddDelStaticMapping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.LocalIPAddress[:], 4)
 	buf.EncodeBytes(m.ExternalIPAddress[:], 4)
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.LocalPort))
-	buf.EncodeUint16(uint16(m.ExternalPort))
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.LocalPort)
+	buf.EncodeUint16(m.ExternalPort)
 	buf.EncodeUint32(uint32(m.ExternalSwIfIndex))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -638,27 +611,24 @@ func (*Nat44AddDelStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddDelStaticMappingReply) Size() int {
+func (m *Nat44AddDelStaticMappingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44AddDelStaticMappingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddDelStaticMappingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -676,26 +646,23 @@ func (*Nat44AddressDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44AddressDetails) Size() int {
+func (m *Nat44AddressDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	size += 1     // m.Flags
 	size += 4     // m.VrfID
 	return size
 }
 func (m *Nat44AddressDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
 	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddressDetails) Unmarshal(b []byte) error {
@@ -716,20 +683,17 @@ func (*Nat44AddressDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44AddressDump) Size() int {
+func (m *Nat44AddressDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44AddressDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44AddressDump) Unmarshal(b []byte) error {
@@ -754,11 +718,10 @@ func (*Nat44DelSession) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44DelSession) Size() int {
+func (m *Nat44DelSession) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.Address
 	size += 1     // m.Protocol
 	size += 2     // m.Port
@@ -769,19 +732,17 @@ func (m *Nat44DelSession) Size() int {
 	return size
 }
 func (m *Nat44DelSession) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Address[:], 4)
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.ExtHostAddress[:], 4)
-	buf.EncodeUint16(uint16(m.ExtHostPort))
+	buf.EncodeUint16(m.ExtHostPort)
 	return buf.Bytes(), nil
 }
 func (m *Nat44DelSession) Unmarshal(b []byte) error {
@@ -808,27 +769,24 @@ func (*Nat44DelSessionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44DelSessionReply) Size() int {
+func (m *Nat44DelSessionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44DelSessionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44DelSessionReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -845,24 +803,21 @@ func (*Nat44DelUser) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44DelUser) Size() int {
+func (m *Nat44DelUser) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	size += 4     // m.FibIndex
 	return size
 }
 func (m *Nat44DelUser) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint32(uint32(m.FibIndex))
+	buf.EncodeUint32(m.FibIndex)
 	return buf.Bytes(), nil
 }
 func (m *Nat44DelUser) Unmarshal(b []byte) error {
@@ -884,27 +839,24 @@ func (*Nat44DelUserReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44DelUserReply) Size() int {
+func (m *Nat44DelUserReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44DelUserReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44DelUserReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -922,21 +874,18 @@ func (*Nat44ForwardingEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44ForwardingEnableDisable) Size() int {
+func (m *Nat44ForwardingEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	return size
 }
 func (m *Nat44ForwardingEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -960,27 +909,24 @@ func (*Nat44ForwardingEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44ForwardingEnableDisableReply) Size() int {
+func (m *Nat44ForwardingEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44ForwardingEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44ForwardingEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -994,20 +940,17 @@ func (*Nat44ForwardingIsEnabled) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44ForwardingIsEnabled) Size() int {
+func (m *Nat44ForwardingIsEnabled) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44ForwardingIsEnabled) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44ForwardingIsEnabled) Unmarshal(b []byte) error {
@@ -1028,21 +971,18 @@ func (*Nat44ForwardingIsEnabledReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44ForwardingIsEnabledReply) Size() int {
+func (m *Nat44ForwardingIsEnabledReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enabled
 	return size
 }
 func (m *Nat44ForwardingIsEnabledReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enabled)
 	return buf.Bytes(), nil
 }
@@ -1070,11 +1010,10 @@ func (*Nat44IdentityMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44IdentityMappingDetails) Size() int {
+func (m *Nat44IdentityMappingDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.Flags
 	size += 1 * 4 // m.IPAddress
 	size += 1     // m.Protocol
@@ -1085,18 +1024,16 @@ func (m *Nat44IdentityMappingDetails) Size() int {
 	return size
 }
 func (m *Nat44IdentityMappingDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.Port))
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.Port)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -1122,20 +1059,17 @@ func (*Nat44IdentityMappingDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44IdentityMappingDump) Size() int {
+func (m *Nat44IdentityMappingDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44IdentityMappingDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44IdentityMappingDump) Unmarshal(b []byte) error {
@@ -1156,23 +1090,20 @@ func (*Nat44InterfaceAddDelFeature) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44InterfaceAddDelFeature) Size() int {
+func (m *Nat44InterfaceAddDelFeature) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat44InterfaceAddDelFeature) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
@@ -1200,27 +1131,24 @@ func (*Nat44InterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44InterfaceAddDelFeatureReply) Size() int {
+func (m *Nat44InterfaceAddDelFeatureReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44InterfaceAddDelFeatureReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44InterfaceAddDelFeatureReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1240,23 +1168,20 @@ func (*Nat44InterfaceAddDelOutputFeature) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44InterfaceAddDelOutputFeature) Size() int {
+func (m *Nat44InterfaceAddDelOutputFeature) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat44InterfaceAddDelOutputFeature) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
@@ -1286,27 +1211,24 @@ func (*Nat44InterfaceAddDelOutputFeatureReply) GetMessageType() api.MessageType 
 	return api.ReplyMessage
 }
 
-func (m *Nat44InterfaceAddDelOutputFeatureReply) Size() int {
+func (m *Nat44InterfaceAddDelOutputFeatureReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44InterfaceAddDelOutputFeatureReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44InterfaceAddDelOutputFeatureReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1323,22 +1245,19 @@ func (*Nat44InterfaceAddrDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44InterfaceAddrDetails) Size() int {
+func (m *Nat44InterfaceAddrDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Flags
 	return size
 }
 func (m *Nat44InterfaceAddrDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Flags))
 	return buf.Bytes(), nil
@@ -1360,20 +1279,17 @@ func (*Nat44InterfaceAddrDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44InterfaceAddrDump) Size() int {
+func (m *Nat44InterfaceAddrDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44InterfaceAddrDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44InterfaceAddrDump) Unmarshal(b []byte) error {
@@ -1393,22 +1309,19 @@ func (*Nat44InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44InterfaceDetails) Size() int {
+func (m *Nat44InterfaceDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat44InterfaceDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -1430,20 +1343,17 @@ func (*Nat44InterfaceDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44InterfaceDump) Size() int {
+func (m *Nat44InterfaceDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44InterfaceDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44InterfaceDump) Unmarshal(b []byte) error {
@@ -1465,22 +1375,19 @@ func (*Nat44InterfaceOutputFeatureDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44InterfaceOutputFeatureDetails) Size() int {
+func (m *Nat44InterfaceOutputFeatureDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat44InterfaceOutputFeatureDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -1504,20 +1411,17 @@ func (*Nat44InterfaceOutputFeatureDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44InterfaceOutputFeatureDump) Size() int {
+func (m *Nat44InterfaceOutputFeatureDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44InterfaceOutputFeatureDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44InterfaceOutputFeatureDump) Unmarshal(b []byte) error {
@@ -1542,11 +1446,10 @@ func (*Nat44LbStaticMappingAddDelLocal) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44LbStaticMappingAddDelLocal) Size() int {
+func (m *Nat44LbStaticMappingAddDelLocal) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1 * 4 // m.ExternalAddr
 	size += 2     // m.ExternalPort
@@ -1558,20 +1461,18 @@ func (m *Nat44LbStaticMappingAddDelLocal) Size() int {
 	return size
 }
 func (m *Nat44LbStaticMappingAddDelLocal) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.ExternalAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExternalPort))
-	buf.EncodeUint8(uint8(m.Protocol))
+	buf.EncodeUint16(m.ExternalPort)
+	buf.EncodeUint8(m.Protocol)
 	buf.EncodeBytes(m.Local.Addr[:], 4)
-	buf.EncodeUint16(uint16(m.Local.Port))
-	buf.EncodeUint8(uint8(m.Local.Probability))
-	buf.EncodeUint32(uint32(m.Local.VrfID))
+	buf.EncodeUint16(m.Local.Port)
+	buf.EncodeUint8(m.Local.Probability)
+	buf.EncodeUint32(m.Local.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat44LbStaticMappingAddDelLocal) Unmarshal(b []byte) error {
@@ -1601,27 +1502,24 @@ func (*Nat44LbStaticMappingAddDelLocalReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44LbStaticMappingAddDelLocalReply) Size() int {
+func (m *Nat44LbStaticMappingAddDelLocalReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44LbStaticMappingAddDelLocalReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44LbStaticMappingAddDelLocalReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1644,11 +1542,10 @@ func (*Nat44LbStaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44LbStaticMappingDetails) Size() int {
+func (m *Nat44LbStaticMappingDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.ExternalAddr
 	size += 2     // m.ExternalPort
 	size += 1     // m.Protocol
@@ -1670,28 +1567,26 @@ func (m *Nat44LbStaticMappingDetails) Size() int {
 	return size
 }
 func (m *Nat44LbStaticMappingDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.ExternalAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExternalPort))
-	buf.EncodeUint8(uint8(m.Protocol))
+	buf.EncodeUint16(m.ExternalPort)
+	buf.EncodeUint8(m.Protocol)
 	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint32(uint32(m.Affinity))
+	buf.EncodeUint32(m.Affinity)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.Locals)))
 	for j0 := 0; j0 < len(m.Locals); j0++ {
-		var v0 Nat44LbAddrPort
+		var v0 Nat44LbAddrPort // Locals
 		if j0 < len(m.Locals) {
 			v0 = m.Locals[j0]
 		}
 		buf.EncodeBytes(v0.Addr[:], 4)
-		buf.EncodeUint16(uint16(v0.Port))
-		buf.EncodeUint8(uint8(v0.Probability))
-		buf.EncodeUint32(uint32(v0.VrfID))
+		buf.EncodeUint16(v0.Port)
+		buf.EncodeUint8(v0.Probability)
+		buf.EncodeUint32(v0.VrfID)
 	}
 	return buf.Bytes(), nil
 }
@@ -1704,7 +1599,7 @@ func (m *Nat44LbStaticMappingDetails) Unmarshal(b []byte) error {
 	m.Affinity = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.LocalNum = buf.DecodeUint32()
-	m.Locals = make([]Nat44LbAddrPort, int(m.LocalNum))
+	m.Locals = make([]Nat44LbAddrPort, m.LocalNum)
 	for j0 := 0; j0 < len(m.Locals); j0++ {
 		copy(m.Locals[j0].Addr[:], buf.DecodeBytes(4))
 		m.Locals[j0].Port = buf.DecodeUint16()
@@ -1724,20 +1619,17 @@ func (*Nat44LbStaticMappingDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44LbStaticMappingDump) Size() int {
+func (m *Nat44LbStaticMappingDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44LbStaticMappingDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44LbStaticMappingDump) Unmarshal(b []byte) error {
@@ -1754,20 +1646,17 @@ func (*Nat44SessionCleanup) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44SessionCleanup) Size() int {
+func (m *Nat44SessionCleanup) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44SessionCleanup) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44SessionCleanup) Unmarshal(b []byte) error {
@@ -1786,27 +1675,24 @@ func (*Nat44SessionCleanupReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44SessionCleanupReply) Size() int {
+func (m *Nat44SessionCleanupReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44SessionCleanupReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44SessionCleanupReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1823,24 +1709,21 @@ func (*Nat44SetSessionLimit) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44SetSessionLimit) Size() int {
+func (m *Nat44SetSessionLimit) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SessionLimit
 	size += 4 // m.VrfID
 	return size
 }
 func (m *Nat44SetSessionLimit) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SessionLimit))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SessionLimit)
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat44SetSessionLimit) Unmarshal(b []byte) error {
@@ -1862,27 +1745,24 @@ func (*Nat44SetSessionLimitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44SetSessionLimitReply) Size() int {
+func (m *Nat44SetSessionLimitReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat44SetSessionLimitReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat44SetSessionLimitReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1906,11 +1786,10 @@ func (*Nat44StaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44StaticMappingDetails) Size() int {
+func (m *Nat44StaticMappingDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.Flags
 	size += 1 * 4 // m.LocalIPAddress
 	size += 1 * 4 // m.ExternalIPAddress
@@ -1923,20 +1802,18 @@ func (m *Nat44StaticMappingDetails) Size() int {
 	return size
 }
 func (m *Nat44StaticMappingDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeBytes(m.LocalIPAddress[:], 4)
 	buf.EncodeBytes(m.ExternalIPAddress[:], 4)
-	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint16(uint16(m.LocalPort))
-	buf.EncodeUint16(uint16(m.ExternalPort))
+	buf.EncodeUint8(m.Protocol)
+	buf.EncodeUint16(m.LocalPort)
+	buf.EncodeUint16(m.ExternalPort)
 	buf.EncodeUint32(uint32(m.ExternalSwIfIndex))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeString(m.Tag, 64)
 	return buf.Bytes(), nil
 }
@@ -1964,20 +1841,17 @@ func (*Nat44StaticMappingDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44StaticMappingDump) Size() int {
+func (m *Nat44StaticMappingDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44StaticMappingDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44StaticMappingDump) Unmarshal(b []byte) error {
@@ -1999,11 +1873,10 @@ func (*Nat44UserDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44UserDetails) Size() int {
+func (m *Nat44UserDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.VrfID
 	size += 1 * 4 // m.IPAddress
 	size += 4     // m.Nsessions
@@ -2011,16 +1884,14 @@ func (m *Nat44UserDetails) Size() int {
 	return size
 }
 func (m *Nat44UserDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint32(uint32(m.Nsessions))
-	buf.EncodeUint32(uint32(m.Nstaticsessions))
+	buf.EncodeUint32(m.Nsessions)
+	buf.EncodeUint32(m.Nstaticsessions)
 	return buf.Bytes(), nil
 }
 func (m *Nat44UserDetails) Unmarshal(b []byte) error {
@@ -2042,20 +1913,17 @@ func (*Nat44UserDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44UserDump) Size() int {
+func (m *Nat44UserDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat44UserDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat44UserDump) Unmarshal(b []byte) error {
@@ -2086,11 +1954,10 @@ func (*Nat44UserSessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat44UserSessionDetails) Size() int {
+func (m *Nat44UserSessionDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.OutsideIPAddress
 	size += 2     // m.OutsidePort
 	size += 1 * 4 // m.InsideIPAddress
@@ -2107,25 +1974,23 @@ func (m *Nat44UserSessionDetails) Size() int {
 	return size
 }
 func (m *Nat44UserSessionDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.OutsideIPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.OutsidePort))
+	buf.EncodeUint16(m.OutsidePort)
 	buf.EncodeBytes(m.InsideIPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.InsidePort))
-	buf.EncodeUint16(uint16(m.Protocol))
+	buf.EncodeUint16(m.InsidePort)
+	buf.EncodeUint16(m.Protocol)
 	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint64(uint64(m.LastHeard))
-	buf.EncodeUint64(uint64(m.TotalBytes))
-	buf.EncodeUint32(uint32(m.TotalPkts))
+	buf.EncodeUint64(m.LastHeard)
+	buf.EncodeUint64(m.TotalBytes)
+	buf.EncodeUint32(m.TotalPkts)
 	buf.EncodeBytes(m.ExtHostAddress[:], 4)
-	buf.EncodeUint16(uint16(m.ExtHostPort))
+	buf.EncodeUint16(m.ExtHostPort)
 	buf.EncodeBytes(m.ExtHostNatAddress[:], 4)
-	buf.EncodeUint16(uint16(m.ExtHostNatPort))
+	buf.EncodeUint16(m.ExtHostNatPort)
 	return buf.Bytes(), nil
 }
 func (m *Nat44UserSessionDetails) Unmarshal(b []byte) error {
@@ -2159,24 +2024,21 @@ func (*Nat44UserSessionDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat44UserSessionDump) Size() int {
+func (m *Nat44UserSessionDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	size += 4     // m.VrfID
 	return size
 }
 func (m *Nat44UserSessionDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat44UserSessionDump) Unmarshal(b []byte) error {
@@ -2200,23 +2062,20 @@ func (*Nat64AddDelInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64AddDelInterface) Size() int {
+func (m *Nat64AddDelInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat64AddDelInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
@@ -2243,22 +2102,19 @@ func (*Nat64AddDelInterfaceAddr) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64AddDelInterfaceAddr) Size() int {
+func (m *Nat64AddDelInterfaceAddr) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat64AddDelInterfaceAddr) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -2284,27 +2140,24 @@ func (*Nat64AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64AddDelInterfaceAddrReply) Size() int {
+func (m *Nat64AddDelInterfaceAddrReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat64AddDelInterfaceAddrReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat64AddDelInterfaceAddrReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2320,27 +2173,24 @@ func (*Nat64AddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64AddDelInterfaceReply) Size() int {
+func (m *Nat64AddDelInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat64AddDelInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat64AddDelInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2359,11 +2209,10 @@ func (*Nat64AddDelPoolAddrRange) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64AddDelPoolAddrRange) Size() int {
+func (m *Nat64AddDelPoolAddrRange) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.StartAddr
 	size += 1 * 4 // m.EndAddr
 	size += 4     // m.VrfID
@@ -2371,15 +2220,13 @@ func (m *Nat64AddDelPoolAddrRange) Size() int {
 	return size
 }
 func (m *Nat64AddDelPoolAddrRange) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.StartAddr[:], 4)
 	buf.EncodeBytes(m.EndAddr[:], 4)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -2406,27 +2253,24 @@ func (*Nat64AddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64AddDelPoolAddrRangeReply) Size() int {
+func (m *Nat64AddDelPoolAddrRangeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat64AddDelPoolAddrRangeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat64AddDelPoolAddrRangeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2444,11 +2288,10 @@ func (*Nat64AddDelPrefix) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64AddDelPrefix) Size() int {
+func (m *Nat64AddDelPrefix) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.Prefix.Address
 	size += 1      // m.Prefix.Len
 	size += 4      // m.VrfID
@@ -2456,15 +2299,13 @@ func (m *Nat64AddDelPrefix) Size() int {
 	return size
 }
 func (m *Nat64AddDelPrefix) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.Prefix.Len))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint8(m.Prefix.Len)
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -2489,27 +2330,24 @@ func (*Nat64AddDelPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64AddDelPrefixReply) Size() int {
+func (m *Nat64AddDelPrefixReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat64AddDelPrefixReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat64AddDelPrefixReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2531,11 +2369,10 @@ func (*Nat64AddDelStaticBib) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64AddDelStaticBib) Size() int {
+func (m *Nat64AddDelStaticBib) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.IAddr
 	size += 1 * 4  // m.OAddr
 	size += 2      // m.IPort
@@ -2546,18 +2383,16 @@ func (m *Nat64AddDelStaticBib) Size() int {
 	return size
 }
 func (m *Nat64AddDelStaticBib) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IAddr[:], 16)
 	buf.EncodeBytes(m.OAddr[:], 4)
-	buf.EncodeUint16(uint16(m.IPort))
-	buf.EncodeUint16(uint16(m.OPort))
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint8(uint8(m.Proto))
+	buf.EncodeUint16(m.IPort)
+	buf.EncodeUint16(m.OPort)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint8(m.Proto)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -2585,27 +2420,24 @@ func (*Nat64AddDelStaticBibReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64AddDelStaticBibReply) Size() int {
+func (m *Nat64AddDelStaticBibReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat64AddDelStaticBibReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat64AddDelStaticBibReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -2628,11 +2460,10 @@ func (*Nat64BibDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64BibDetails) Size() int {
+func (m *Nat64BibDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.IAddr
 	size += 1 * 4  // m.OAddr
 	size += 2      // m.IPort
@@ -2644,20 +2475,18 @@ func (m *Nat64BibDetails) Size() int {
 	return size
 }
 func (m *Nat64BibDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IAddr[:], 16)
 	buf.EncodeBytes(m.OAddr[:], 4)
-	buf.EncodeUint16(uint16(m.IPort))
-	buf.EncodeUint16(uint16(m.OPort))
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint8(uint8(m.Proto))
+	buf.EncodeUint16(m.IPort)
+	buf.EncodeUint16(m.OPort)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint8(m.Proto)
 	buf.EncodeUint8(uint8(m.Flags))
-	buf.EncodeUint32(uint32(m.SesNum))
+	buf.EncodeUint32(m.SesNum)
 	return buf.Bytes(), nil
 }
 func (m *Nat64BibDetails) Unmarshal(b []byte) error {
@@ -2685,22 +2514,19 @@ func (*Nat64BibDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64BibDump) Size() int {
+func (m *Nat64BibDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Proto
 	return size
 }
 func (m *Nat64BibDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Proto))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Proto)
 	return buf.Bytes(), nil
 }
 func (m *Nat64BibDump) Unmarshal(b []byte) error {
@@ -2722,22 +2548,19 @@ func (*Nat64InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64InterfaceDetails) Size() int {
+func (m *Nat64InterfaceDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat64InterfaceDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -2759,20 +2582,17 @@ func (*Nat64InterfaceDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64InterfaceDump) Size() int {
+func (m *Nat64InterfaceDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat64InterfaceDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat64InterfaceDump) Unmarshal(b []byte) error {
@@ -2792,24 +2612,21 @@ func (*Nat64PoolAddrDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64PoolAddrDetails) Size() int {
+func (m *Nat64PoolAddrDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.Address
 	size += 4     // m.VrfID
 	return size
 }
 func (m *Nat64PoolAddrDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Address[:], 4)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat64PoolAddrDetails) Unmarshal(b []byte) error {
@@ -2829,20 +2646,17 @@ func (*Nat64PoolAddrDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64PoolAddrDump) Size() int {
+func (m *Nat64PoolAddrDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat64PoolAddrDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat64PoolAddrDump) Unmarshal(b []byte) error {
@@ -2862,26 +2676,23 @@ func (*Nat64PrefixDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64PrefixDetails) Size() int {
+func (m *Nat64PrefixDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.Prefix.Address
 	size += 1      // m.Prefix.Len
 	size += 4      // m.VrfID
 	return size
 }
 func (m *Nat64PrefixDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.Prefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.Prefix.Len))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint8(m.Prefix.Len)
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat64PrefixDetails) Unmarshal(b []byte) error {
@@ -2902,20 +2713,17 @@ func (*Nat64PrefixDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64PrefixDump) Size() int {
+func (m *Nat64PrefixDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat64PrefixDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat64PrefixDump) Unmarshal(b []byte) error {
@@ -2942,11 +2750,10 @@ func (*Nat64StDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat64StDetails) Size() int {
+func (m *Nat64StDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.IlAddr
 	size += 1 * 4  // m.OlAddr
 	size += 2      // m.IlPort
@@ -2959,21 +2766,19 @@ func (m *Nat64StDetails) Size() int {
 	return size
 }
 func (m *Nat64StDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IlAddr[:], 16)
 	buf.EncodeBytes(m.OlAddr[:], 4)
-	buf.EncodeUint16(uint16(m.IlPort))
-	buf.EncodeUint16(uint16(m.OlPort))
+	buf.EncodeUint16(m.IlPort)
+	buf.EncodeUint16(m.OlPort)
 	buf.EncodeBytes(m.IrAddr[:], 16)
 	buf.EncodeBytes(m.OrAddr[:], 4)
-	buf.EncodeUint16(uint16(m.RPort))
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint8(uint8(m.Proto))
+	buf.EncodeUint16(m.RPort)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint8(m.Proto)
 	return buf.Bytes(), nil
 }
 func (m *Nat64StDetails) Unmarshal(b []byte) error {
@@ -3002,22 +2807,19 @@ func (*Nat64StDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat64StDump) Size() int {
+func (m *Nat64StDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Proto
 	return size
 }
 func (m *Nat64StDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Proto))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Proto)
 	return buf.Bytes(), nil
 }
 func (m *Nat64StDump) Unmarshal(b []byte) error {
@@ -3040,23 +2842,20 @@ func (*Nat66AddDelInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat66AddDelInterface) Size() int {
+func (m *Nat66AddDelInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat66AddDelInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
@@ -3082,27 +2881,24 @@ func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat66AddDelInterfaceReply) Size() int {
+func (m *Nat66AddDelInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat66AddDelInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat66AddDelInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -3121,11 +2917,10 @@ func (*Nat66AddDelStaticMapping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat66AddDelStaticMapping) Size() int {
+func (m *Nat66AddDelStaticMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1 * 16 // m.LocalIPAddress
 	size += 1 * 16 // m.ExternalIPAddress
@@ -3133,16 +2928,14 @@ func (m *Nat66AddDelStaticMapping) Size() int {
 	return size
 }
 func (m *Nat66AddDelStaticMapping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.LocalIPAddress[:], 16)
 	buf.EncodeBytes(m.ExternalIPAddress[:], 16)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	return buf.Bytes(), nil
 }
 func (m *Nat66AddDelStaticMapping) Unmarshal(b []byte) error {
@@ -3168,27 +2961,24 @@ func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat66AddDelStaticMappingReply) Size() int {
+func (m *Nat66AddDelStaticMappingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *Nat66AddDelStaticMappingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *Nat66AddDelStaticMappingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -3205,22 +2995,19 @@ func (*Nat66InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat66InterfaceDetails) Size() int {
+func (m *Nat66InterfaceDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Flags
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *Nat66InterfaceDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Flags))
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
@@ -3242,20 +3029,17 @@ func (*Nat66InterfaceDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat66InterfaceDump) Size() int {
+func (m *Nat66InterfaceDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat66InterfaceDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat66InterfaceDump) Unmarshal(b []byte) error {
@@ -3278,11 +3062,10 @@ func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *Nat66StaticMappingDetails) Size() int {
+func (m *Nat66StaticMappingDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 16 // m.LocalIPAddress
 	size += 1 * 16 // m.ExternalIPAddress
 	size += 4      // m.VrfID
@@ -3291,17 +3074,15 @@ func (m *Nat66StaticMappingDetails) Size() int {
 	return size
 }
 func (m *Nat66StaticMappingDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.LocalIPAddress[:], 16)
 	buf.EncodeBytes(m.ExternalIPAddress[:], 16)
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint64(uint64(m.TotalBytes))
-	buf.EncodeUint64(uint64(m.TotalPkts))
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint64(m.TotalBytes)
+	buf.EncodeUint64(m.TotalPkts)
 	return buf.Bytes(), nil
 }
 func (m *Nat66StaticMappingDetails) Unmarshal(b []byte) error {
@@ -3324,20 +3105,17 @@ func (*Nat66StaticMappingDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *Nat66StaticMappingDump) Size() int {
+func (m *Nat66StaticMappingDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *Nat66StaticMappingDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *Nat66StaticMappingDump) Unmarshal(b []byte) error {
@@ -3354,20 +3132,17 @@ func (*NatControlPing) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatControlPing) Size() int {
+func (m *NatControlPing) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatControlPing) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatControlPing) Unmarshal(b []byte) error {
@@ -3388,31 +3163,28 @@ func (*NatControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatControlPingReply) Size() int {
+func (m *NatControlPingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ClientIndex
 	size += 4 // m.VpePID
 	return size
 }
 func (m *NatControlPingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ClientIndex))
-	buf.EncodeUint32(uint32(m.VpePID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ClientIndex)
+	buf.EncodeUint32(m.VpePID)
 	return buf.Bytes(), nil
 }
 func (m *NatControlPingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ClientIndex = buf.DecodeUint32()
 	m.VpePID = buf.DecodeUint32()
 	return nil
@@ -3434,11 +3206,10 @@ func (*NatDetAddDelMap) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetAddDelMap) Size() int {
+func (m *NatDetAddDelMap) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1 * 4 // m.InAddr
 	size += 1     // m.InPlen
@@ -3447,17 +3218,15 @@ func (m *NatDetAddDelMap) Size() int {
 	return size
 }
 func (m *NatDetAddDelMap) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBytes(m.InAddr[:], 4)
-	buf.EncodeUint8(uint8(m.InPlen))
+	buf.EncodeUint8(m.InPlen)
 	buf.EncodeBytes(m.OutAddr[:], 4)
-	buf.EncodeUint8(uint8(m.OutPlen))
+	buf.EncodeUint8(m.OutPlen)
 	return buf.Bytes(), nil
 }
 func (m *NatDetAddDelMap) Unmarshal(b []byte) error {
@@ -3482,27 +3251,24 @@ func (*NatDetAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetAddDelMapReply) Size() int {
+func (m *NatDetAddDelMapReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatDetAddDelMapReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatDetAddDelMapReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -3521,11 +3287,10 @@ func (*NatDetCloseSessionIn) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetCloseSessionIn) Size() int {
+func (m *NatDetCloseSessionIn) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.InAddr
 	size += 2     // m.InPort
 	size += 1 * 4 // m.ExtAddr
@@ -3533,16 +3298,14 @@ func (m *NatDetCloseSessionIn) Size() int {
 	return size
 }
 func (m *NatDetCloseSessionIn) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.InAddr[:], 4)
-	buf.EncodeUint16(uint16(m.InPort))
+	buf.EncodeUint16(m.InPort)
 	buf.EncodeBytes(m.ExtAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExtPort))
+	buf.EncodeUint16(m.ExtPort)
 	return buf.Bytes(), nil
 }
 func (m *NatDetCloseSessionIn) Unmarshal(b []byte) error {
@@ -3566,27 +3329,24 @@ func (*NatDetCloseSessionInReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetCloseSessionInReply) Size() int {
+func (m *NatDetCloseSessionInReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatDetCloseSessionInReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatDetCloseSessionInReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -3605,11 +3365,10 @@ func (*NatDetCloseSessionOut) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetCloseSessionOut) Size() int {
+func (m *NatDetCloseSessionOut) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.OutAddr
 	size += 2     // m.OutPort
 	size += 1 * 4 // m.ExtAddr
@@ -3617,16 +3376,14 @@ func (m *NatDetCloseSessionOut) Size() int {
 	return size
 }
 func (m *NatDetCloseSessionOut) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.OutAddr[:], 4)
-	buf.EncodeUint16(uint16(m.OutPort))
+	buf.EncodeUint16(m.OutPort)
 	buf.EncodeBytes(m.ExtAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExtPort))
+	buf.EncodeUint16(m.ExtPort)
 	return buf.Bytes(), nil
 }
 func (m *NatDetCloseSessionOut) Unmarshal(b []byte) error {
@@ -3650,27 +3407,24 @@ func (*NatDetCloseSessionOutReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetCloseSessionOutReply) Size() int {
+func (m *NatDetCloseSessionOutReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatDetCloseSessionOutReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatDetCloseSessionOutReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -3686,21 +3440,18 @@ func (*NatDetForward) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetForward) Size() int {
+func (m *NatDetForward) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.InAddr
 	return size
 }
 func (m *NatDetForward) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.InAddr[:], 4)
 	return buf.Bytes(), nil
 }
@@ -3725,11 +3476,10 @@ func (*NatDetForwardReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetForwardReply) Size() int {
+func (m *NatDetForwardReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 2     // m.OutPortLo
 	size += 2     // m.OutPortHi
@@ -3737,21 +3487,19 @@ func (m *NatDetForwardReply) Size() int {
 	return size
 }
 func (m *NatDetForwardReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint16(uint16(m.OutPortLo))
-	buf.EncodeUint16(uint16(m.OutPortHi))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint16(m.OutPortLo)
+	buf.EncodeUint16(m.OutPortHi)
 	buf.EncodeBytes(m.OutAddr[:], 4)
 	return buf.Bytes(), nil
 }
 func (m *NatDetForwardReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.OutPortLo = buf.DecodeUint16()
 	m.OutPortHi = buf.DecodeUint16()
 	copy(m.OutAddr[:], buf.DecodeBytes(4))
@@ -3776,11 +3524,10 @@ func (*NatDetMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetMapDetails) Size() int {
+func (m *NatDetMapDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.InAddr
 	size += 1     // m.InPlen
 	size += 1 * 4 // m.OutAddr
@@ -3791,19 +3538,17 @@ func (m *NatDetMapDetails) Size() int {
 	return size
 }
 func (m *NatDetMapDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.InAddr[:], 4)
-	buf.EncodeUint8(uint8(m.InPlen))
+	buf.EncodeUint8(m.InPlen)
 	buf.EncodeBytes(m.OutAddr[:], 4)
-	buf.EncodeUint8(uint8(m.OutPlen))
-	buf.EncodeUint32(uint32(m.SharingRatio))
-	buf.EncodeUint16(uint16(m.PortsPerHost))
-	buf.EncodeUint32(uint32(m.SesNum))
+	buf.EncodeUint8(m.OutPlen)
+	buf.EncodeUint32(m.SharingRatio)
+	buf.EncodeUint16(m.PortsPerHost)
+	buf.EncodeUint32(m.SesNum)
 	return buf.Bytes(), nil
 }
 func (m *NatDetMapDetails) Unmarshal(b []byte) error {
@@ -3828,20 +3573,17 @@ func (*NatDetMapDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetMapDump) Size() int {
+func (m *NatDetMapDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatDetMapDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatDetMapDump) Unmarshal(b []byte) error {
@@ -3861,23 +3603,20 @@ func (*NatDetReverse) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetReverse) Size() int {
+func (m *NatDetReverse) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2     // m.OutPort
 	size += 1 * 4 // m.OutAddr
 	return size
 }
 func (m *NatDetReverse) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.OutPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.OutPort)
 	buf.EncodeBytes(m.OutAddr[:], 4)
 	return buf.Bytes(), nil
 }
@@ -3901,29 +3640,26 @@ func (*NatDetReverseReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetReverseReply) Size() int {
+func (m *NatDetReverseReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 1 * 4 // m.InAddr
 	return size
 }
 func (m *NatDetReverseReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.InAddr[:], 4)
 	return buf.Bytes(), nil
 }
 func (m *NatDetReverseReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.InAddr[:], buf.DecodeBytes(4))
 	return nil
 }
@@ -3945,11 +3681,10 @@ func (*NatDetSessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatDetSessionDetails) Size() int {
+func (m *NatDetSessionDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2     // m.InPort
 	size += 1 * 4 // m.ExtAddr
 	size += 2     // m.ExtPort
@@ -3959,18 +3694,16 @@ func (m *NatDetSessionDetails) Size() int {
 	return size
 }
 func (m *NatDetSessionDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.InPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.InPort)
 	buf.EncodeBytes(m.ExtAddr[:], 4)
-	buf.EncodeUint16(uint16(m.ExtPort))
-	buf.EncodeUint16(uint16(m.OutPort))
-	buf.EncodeUint8(uint8(m.State))
-	buf.EncodeUint32(uint32(m.Expire))
+	buf.EncodeUint16(m.ExtPort)
+	buf.EncodeUint16(m.OutPort)
+	buf.EncodeUint8(m.State)
+	buf.EncodeUint32(m.Expire)
 	return buf.Bytes(), nil
 }
 func (m *NatDetSessionDetails) Unmarshal(b []byte) error {
@@ -3996,21 +3729,18 @@ func (*NatDetSessionDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatDetSessionDump) Size() int {
+func (m *NatDetSessionDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.UserAddr
 	return size
 }
 func (m *NatDetSessionDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.UserAddr[:], 4)
 	return buf.Bytes(), nil
 }
@@ -4030,20 +3760,17 @@ func (*NatGetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatGetAddrAndPortAllocAlg) Size() int {
+func (m *NatGetAddrAndPortAllocAlg) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatGetAddrAndPortAllocAlg) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatGetAddrAndPortAllocAlg) Unmarshal(b []byte) error {
@@ -4070,11 +3797,10 @@ func (*NatGetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatGetAddrAndPortAllocAlgReply) Size() int {
+func (m *NatGetAddrAndPortAllocAlgReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.Alg
 	size += 1 // m.PsidOffset
@@ -4085,24 +3811,22 @@ func (m *NatGetAddrAndPortAllocAlgReply) Size() int {
 	return size
 }
 func (m *NatGetAddrAndPortAllocAlgReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.Alg))
-	buf.EncodeUint8(uint8(m.PsidOffset))
-	buf.EncodeUint8(uint8(m.PsidLength))
-	buf.EncodeUint16(uint16(m.Psid))
-	buf.EncodeUint16(uint16(m.StartPort))
-	buf.EncodeUint16(uint16(m.EndPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.Alg)
+	buf.EncodeUint8(m.PsidOffset)
+	buf.EncodeUint8(m.PsidLength)
+	buf.EncodeUint16(m.Psid)
+	buf.EncodeUint16(m.StartPort)
+	buf.EncodeUint16(m.EndPort)
 	return buf.Bytes(), nil
 }
 func (m *NatGetAddrAndPortAllocAlgReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Alg = buf.DecodeUint8()
 	m.PsidOffset = buf.DecodeUint8()
 	m.PsidLength = buf.DecodeUint8()
@@ -4122,20 +3846,17 @@ func (*NatGetMssClamping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatGetMssClamping) Size() int {
+func (m *NatGetMssClamping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatGetMssClamping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatGetMssClamping) Unmarshal(b []byte) error {
@@ -4156,31 +3877,28 @@ func (*NatGetMssClampingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatGetMssClampingReply) Size() int {
+func (m *NatGetMssClampingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 2 // m.MssValue
 	size += 1 // m.Enable
 	return size
 }
 func (m *NatGetMssClampingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint16(uint16(m.MssValue))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint16(m.MssValue)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
 func (m *NatGetMssClampingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.MssValue = buf.DecodeUint16()
 	m.Enable = buf.DecodeBool()
 	return nil
@@ -4196,20 +3914,17 @@ func (*NatGetTimeouts) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatGetTimeouts) Size() int {
+func (m *NatGetTimeouts) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatGetTimeouts) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatGetTimeouts) Unmarshal(b []byte) error {
@@ -4232,11 +3947,10 @@ func (*NatGetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatGetTimeoutsReply) Size() int {
+func (m *NatGetTimeoutsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.UDP
 	size += 4 // m.TCPEstablished
@@ -4245,22 +3959,20 @@ func (m *NatGetTimeoutsReply) Size() int {
 	return size
 }
 func (m *NatGetTimeoutsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.UDP))
-	buf.EncodeUint32(uint32(m.TCPEstablished))
-	buf.EncodeUint32(uint32(m.TCPTransitory))
-	buf.EncodeUint32(uint32(m.ICMP))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.UDP)
+	buf.EncodeUint32(m.TCPEstablished)
+	buf.EncodeUint32(m.TCPTransitory)
+	buf.EncodeUint32(m.ICMP)
 	return buf.Bytes(), nil
 }
 func (m *NatGetTimeoutsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.UDP = buf.DecodeUint32()
 	m.TCPEstablished = buf.DecodeUint32()
 	m.TCPTransitory = buf.DecodeUint32()
@@ -4278,20 +3990,17 @@ func (*NatHaFlush) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaFlush) Size() int {
+func (m *NatHaFlush) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatHaFlush) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatHaFlush) Unmarshal(b []byte) error {
@@ -4310,27 +4019,24 @@ func (*NatHaFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaFlushReply) Size() int {
+func (m *NatHaFlushReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatHaFlushReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaFlushReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4344,20 +4050,17 @@ func (*NatHaGetFailover) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaGetFailover) Size() int {
+func (m *NatHaGetFailover) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatHaGetFailover) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatHaGetFailover) Unmarshal(b []byte) error {
@@ -4379,11 +4082,10 @@ func (*NatHaGetFailoverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaGetFailoverReply) Size() int {
+func (m *NatHaGetFailoverReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 1 * 4 // m.IPAddress
 	size += 2     // m.Port
@@ -4391,21 +4093,19 @@ func (m *NatHaGetFailoverReply) Size() int {
 	return size
 }
 func (m *NatHaGetFailoverReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.Port))
-	buf.EncodeUint32(uint32(m.SessionRefreshInterval))
+	buf.EncodeUint16(m.Port)
+	buf.EncodeUint32(m.SessionRefreshInterval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaGetFailoverReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.IPAddress[:], buf.DecodeBytes(4))
 	m.Port = buf.DecodeUint16()
 	m.SessionRefreshInterval = buf.DecodeUint32()
@@ -4422,20 +4122,17 @@ func (*NatHaGetListener) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaGetListener) Size() int {
+func (m *NatHaGetListener) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatHaGetListener) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatHaGetListener) Unmarshal(b []byte) error {
@@ -4457,11 +4154,10 @@ func (*NatHaGetListenerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaGetListenerReply) Size() int {
+func (m *NatHaGetListenerReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 1 * 4 // m.IPAddress
 	size += 2     // m.Port
@@ -4469,21 +4165,19 @@ func (m *NatHaGetListenerReply) Size() int {
 	return size
 }
 func (m *NatHaGetListenerReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.Port))
-	buf.EncodeUint32(uint32(m.PathMtu))
+	buf.EncodeUint16(m.Port)
+	buf.EncodeUint32(m.PathMtu)
 	return buf.Bytes(), nil
 }
 func (m *NatHaGetListenerReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.IPAddress[:], buf.DecodeBytes(4))
 	m.Port = buf.DecodeUint16()
 	m.PathMtu = buf.DecodeUint32()
@@ -4503,24 +4197,21 @@ func (*NatHaResync) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaResync) Size() int {
+func (m *NatHaResync) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.WantResyncEvent
 	size += 4 // m.PID
 	return size
 }
 func (m *NatHaResync) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.WantResyncEvent))
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.WantResyncEvent)
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *NatHaResync) Unmarshal(b []byte) error {
@@ -4543,24 +4234,21 @@ func (*NatHaResyncCompletedEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
 
-func (m *NatHaResyncCompletedEvent) Size() int {
+func (m *NatHaResyncCompletedEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.PID
 	size += 4 // m.MissedCount
 	return size
 }
 func (m *NatHaResyncCompletedEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.PID))
-	buf.EncodeUint32(uint32(m.MissedCount))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.PID)
+	buf.EncodeUint32(m.MissedCount)
 	return buf.Bytes(), nil
 }
 func (m *NatHaResyncCompletedEvent) Unmarshal(b []byte) error {
@@ -4582,27 +4270,24 @@ func (*NatHaResyncReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaResyncReply) Size() int {
+func (m *NatHaResyncReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatHaResyncReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaResyncReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4620,26 +4305,23 @@ func (*NatHaSetFailover) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaSetFailover) Size() int {
+func (m *NatHaSetFailover) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	size += 2     // m.Port
 	size += 4     // m.SessionRefreshInterval
 	return size
 }
 func (m *NatHaSetFailover) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.Port))
-	buf.EncodeUint32(uint32(m.SessionRefreshInterval))
+	buf.EncodeUint16(m.Port)
+	buf.EncodeUint32(m.SessionRefreshInterval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaSetFailover) Unmarshal(b []byte) error {
@@ -4662,27 +4344,24 @@ func (*NatHaSetFailoverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaSetFailoverReply) Size() int {
+func (m *NatHaSetFailoverReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatHaSetFailoverReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaSetFailoverReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4700,26 +4379,23 @@ func (*NatHaSetListener) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatHaSetListener) Size() int {
+func (m *NatHaSetListener) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.IPAddress
 	size += 2     // m.Port
 	size += 4     // m.PathMtu
 	return size
 }
 func (m *NatHaSetListener) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.IPAddress[:], 4)
-	buf.EncodeUint16(uint16(m.Port))
-	buf.EncodeUint32(uint32(m.PathMtu))
+	buf.EncodeUint16(m.Port)
+	buf.EncodeUint32(m.PathMtu)
 	return buf.Bytes(), nil
 }
 func (m *NatHaSetListener) Unmarshal(b []byte) error {
@@ -4742,27 +4418,24 @@ func (*NatHaSetListenerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatHaSetListenerReply) Size() int {
+func (m *NatHaSetListenerReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatHaSetListenerReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatHaSetListenerReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4780,25 +4453,22 @@ func (*NatIpfixEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatIpfixEnableDisable) Size() int {
+func (m *NatIpfixEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.DomainID
 	size += 2 // m.SrcPort
 	size += 1 // m.Enable
 	return size
 }
 func (m *NatIpfixEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.DomainID))
-	buf.EncodeUint16(uint16(m.SrcPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.DomainID)
+	buf.EncodeUint16(m.SrcPort)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -4822,27 +4492,24 @@ func (*NatIpfixEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatIpfixEnableDisableReply) Size() int {
+func (m *NatIpfixEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatIpfixEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatIpfixEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4863,11 +4530,10 @@ func (*NatSetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatSetAddrAndPortAllocAlg) Size() int {
+func (m *NatSetAddrAndPortAllocAlg) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Alg
 	size += 1 // m.PsidOffset
 	size += 1 // m.PsidLength
@@ -4877,18 +4543,16 @@ func (m *NatSetAddrAndPortAllocAlg) Size() int {
 	return size
 }
 func (m *NatSetAddrAndPortAllocAlg) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Alg))
-	buf.EncodeUint8(uint8(m.PsidOffset))
-	buf.EncodeUint8(uint8(m.PsidLength))
-	buf.EncodeUint16(uint16(m.Psid))
-	buf.EncodeUint16(uint16(m.StartPort))
-	buf.EncodeUint16(uint16(m.EndPort))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Alg)
+	buf.EncodeUint8(m.PsidOffset)
+	buf.EncodeUint8(m.PsidLength)
+	buf.EncodeUint16(m.Psid)
+	buf.EncodeUint16(m.StartPort)
+	buf.EncodeUint16(m.EndPort)
 	return buf.Bytes(), nil
 }
 func (m *NatSetAddrAndPortAllocAlg) Unmarshal(b []byte) error {
@@ -4916,27 +4580,24 @@ func (*NatSetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatSetAddrAndPortAllocAlgReply) Size() int {
+func (m *NatSetAddrAndPortAllocAlgReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatSetAddrAndPortAllocAlgReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatSetAddrAndPortAllocAlgReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -4952,21 +4613,18 @@ func (*NatSetLogLevel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatSetLogLevel) Size() int {
+func (m *NatSetLogLevel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.LogLevel
 	return size
 }
 func (m *NatSetLogLevel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.LogLevel))
 	return buf.Bytes(), nil
 }
@@ -4988,27 +4646,24 @@ func (*NatSetLogLevelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatSetLogLevelReply) Size() int {
+func (m *NatSetLogLevelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatSetLogLevelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatSetLogLevelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -5025,23 +4680,20 @@ func (*NatSetMssClamping) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatSetMssClamping) Size() int {
+func (m *NatSetMssClamping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 2 // m.MssValue
 	size += 1 // m.Enable
 	return size
 }
 func (m *NatSetMssClamping) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint16(uint16(m.MssValue))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint16(m.MssValue)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -5064,27 +4716,24 @@ func (*NatSetMssClampingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatSetMssClampingReply) Size() int {
+func (m *NatSetMssClampingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatSetMssClampingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatSetMssClampingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -5103,11 +4752,10 @@ func (*NatSetTimeouts) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatSetTimeouts) Size() int {
+func (m *NatSetTimeouts) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.UDP
 	size += 4 // m.TCPEstablished
 	size += 4 // m.TCPTransitory
@@ -5115,16 +4763,14 @@ func (m *NatSetTimeouts) Size() int {
 	return size
 }
 func (m *NatSetTimeouts) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.UDP))
-	buf.EncodeUint32(uint32(m.TCPEstablished))
-	buf.EncodeUint32(uint32(m.TCPTransitory))
-	buf.EncodeUint32(uint32(m.ICMP))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.UDP)
+	buf.EncodeUint32(m.TCPEstablished)
+	buf.EncodeUint32(m.TCPTransitory)
+	buf.EncodeUint32(m.ICMP)
 	return buf.Bytes(), nil
 }
 func (m *NatSetTimeouts) Unmarshal(b []byte) error {
@@ -5148,27 +4794,24 @@ func (*NatSetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatSetTimeoutsReply) Size() int {
+func (m *NatSetTimeoutsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatSetTimeoutsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatSetTimeoutsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -5184,22 +4827,19 @@ func (*NatSetWorkers) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatSetWorkers) Size() int {
+func (m *NatSetWorkers) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 8 // m.WorkerMask
 	return size
 }
 func (m *NatSetWorkers) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint64(uint64(m.WorkerMask))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint64(m.WorkerMask)
 	return buf.Bytes(), nil
 }
 func (m *NatSetWorkers) Unmarshal(b []byte) error {
@@ -5220,27 +4860,24 @@ func (*NatSetWorkersReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatSetWorkersReply) Size() int {
+func (m *NatSetWorkersReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *NatSetWorkersReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *NatSetWorkersReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -5254,20 +4891,17 @@ func (*NatShowConfig) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatShowConfig) Size() int {
+func (m *NatShowConfig) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatShowConfig) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatShowConfig) Unmarshal(b []byte) error {
@@ -5303,11 +4937,10 @@ func (*NatShowConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatShowConfigReply) Size() int {
+func (m *NatShowConfigReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.StaticMappingOnly
 	size += 1 // m.StaticMappingConnectionTracking
@@ -5329,35 +4962,33 @@ func (m *NatShowConfigReply) Size() int {
 	return size
 }
 func (m *NatShowConfigReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBool(m.StaticMappingOnly)
 	buf.EncodeBool(m.StaticMappingConnectionTracking)
 	buf.EncodeBool(m.Deterministic)
 	buf.EncodeBool(m.EndpointDependent)
 	buf.EncodeBool(m.Out2inDpo)
 	buf.EncodeBool(m.DsliteCe)
-	buf.EncodeUint32(uint32(m.TranslationBuckets))
-	buf.EncodeUint32(uint32(m.TranslationMemorySize))
-	buf.EncodeUint32(uint32(m.UserBuckets))
-	buf.EncodeUint64(uint64(m.UserMemorySize))
-	buf.EncodeUint32(uint32(m.MaxTranslationsPerUser))
-	buf.EncodeUint32(uint32(m.OutsideVrfID))
-	buf.EncodeUint32(uint32(m.InsideVrfID))
-	buf.EncodeUint32(uint32(m.Nat64BibBuckets))
-	buf.EncodeUint64(uint64(m.Nat64BibMemorySize))
-	buf.EncodeUint32(uint32(m.Nat64StBuckets))
-	buf.EncodeUint64(uint64(m.Nat64StMemorySize))
+	buf.EncodeUint32(m.TranslationBuckets)
+	buf.EncodeUint32(m.TranslationMemorySize)
+	buf.EncodeUint32(m.UserBuckets)
+	buf.EncodeUint64(m.UserMemorySize)
+	buf.EncodeUint32(m.MaxTranslationsPerUser)
+	buf.EncodeUint32(m.OutsideVrfID)
+	buf.EncodeUint32(m.InsideVrfID)
+	buf.EncodeUint32(m.Nat64BibBuckets)
+	buf.EncodeUint64(m.Nat64BibMemorySize)
+	buf.EncodeUint32(m.Nat64StBuckets)
+	buf.EncodeUint64(m.Nat64StMemorySize)
 	return buf.Bytes(), nil
 }
 func (m *NatShowConfigReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.StaticMappingOnly = buf.DecodeBool()
 	m.StaticMappingConnectionTracking = buf.DecodeBool()
 	m.Deterministic = buf.DecodeBool()
@@ -5392,25 +5023,22 @@ func (*NatWorkerDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NatWorkerDetails) Size() int {
+func (m *NatWorkerDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.WorkerIndex
 	size += 4  // m.LcoreID
 	size += 64 // m.Name
 	return size
 }
 func (m *NatWorkerDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.WorkerIndex))
-	buf.EncodeUint32(uint32(m.LcoreID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.WorkerIndex)
+	buf.EncodeUint32(m.LcoreID)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -5432,20 +5060,17 @@ func (*NatWorkerDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NatWorkerDump) Size() int {
+func (m *NatWorkerDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *NatWorkerDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *NatWorkerDump) Unmarshal(b []byte) error {

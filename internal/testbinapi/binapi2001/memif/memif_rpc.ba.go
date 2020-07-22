@@ -4,83 +4,32 @@ package memif
 
 import (
 	"context"
-	"io"
-
+	"fmt"
 	api "git.fd.io/govpp.git/api"
+	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
+	"io"
 )
 
-// RPCService represents RPC service API for memif module.
+// RPCService defines RPC service  memif.
 type RPCService interface {
-	DumpMemif(ctx context.Context, in *MemifDump) (RPCService_DumpMemifClient, error)
-	DumpMemifSocketFilename(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_DumpMemifSocketFilenameClient, error)
 	MemifCreate(ctx context.Context, in *MemifCreate) (*MemifCreateReply, error)
 	MemifDelete(ctx context.Context, in *MemifDelete) (*MemifDeleteReply, error)
+	MemifDump(ctx context.Context, in *MemifDump) (RPCService_MemifDumpClient, error)
 	MemifSocketFilenameAddDel(ctx context.Context, in *MemifSocketFilenameAddDel) (*MemifSocketFilenameAddDelReply, error)
+	MemifSocketFilenameDump(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_MemifSocketFilenameDumpClient, error)
 }
 
 type serviceClient struct {
-	ch api.Channel
+	conn api.Connection
 }
 
-func NewServiceClient(ch api.Channel) RPCService {
-	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpMemif(ctx context.Context, in *MemifDump) (RPCService_DumpMemifClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpMemifClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpMemifClient interface {
-	Recv() (*MemifDetails, error)
-}
-
-type serviceClient_DumpMemifClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpMemifClient) Recv() (*MemifDetails, error) {
-	m := new(MemifDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
-}
-
-func (c *serviceClient) DumpMemifSocketFilename(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_DumpMemifSocketFilenameClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpMemifSocketFilenameClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpMemifSocketFilenameClient interface {
-	Recv() (*MemifSocketFilenameDetails, error)
-}
-
-type serviceClient_DumpMemifSocketFilenameClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpMemifSocketFilenameClient) Recv() (*MemifSocketFilenameDetails, error) {
-	m := new(MemifSocketFilenameDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
+func NewServiceClient(conn api.Connection) RPCService {
+	return &serviceClient{conn}
 }
 
 func (c *serviceClient) MemifCreate(ctx context.Context, in *MemifCreate) (*MemifCreateReply, error) {
 	out := new(MemifCreateReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -89,23 +38,96 @@ func (c *serviceClient) MemifCreate(ctx context.Context, in *MemifCreate) (*Memi
 
 func (c *serviceClient) MemifDelete(ctx context.Context, in *MemifDelete) (*MemifDeleteReply, error) {
 	out := new(MemifDeleteReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *serviceClient) MemifDump(ctx context.Context, in *MemifDump) (RPCService_MemifDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MemifDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MemifDumpClient interface {
+	Recv() (*MemifDetails, error)
+	api.Stream
+}
+
+type serviceClient_MemifDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MemifDumpClient) Recv() (*MemifDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MemifDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) MemifSocketFilenameAddDel(ctx context.Context, in *MemifSocketFilenameAddDel) (*MemifSocketFilenameAddDelReply, error) {
 	out := new(MemifSocketFilenameAddDelReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = api.RegisterMessage
-var _ = context.Background
-var _ = io.Copy
+func (c *serviceClient) MemifSocketFilenameDump(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_MemifSocketFilenameDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MemifSocketFilenameDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MemifSocketFilenameDumpClient interface {
+	Recv() (*MemifSocketFilenameDetails, error)
+	api.Stream
+}
+
+type serviceClient_MemifSocketFilenameDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MemifSocketFilenameDumpClient) Recv() (*MemifSocketFilenameDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MemifSocketFilenameDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}

@@ -1,0 +1,15 @@
+{
+    "types": [],
+    "messages": [],
+    "unions": [],
+    "enums": [],
+    "services": {},
+    "options": {},
+    "aliases": {
+        "mac_address": {
+            "type": "u8",
+            "length": 6
+        }
+    },
+    "vl_api_version": "0xd4ff2808"
+}

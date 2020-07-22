@@ -45,23 +45,20 @@ func (*VxlanGpeIoamExportEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeIoamExportEnableDisable) Size() int {
+func (m *VxlanGpeIoamExportEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsDisable
 	size += 1 * 4 // m.CollectorAddress
 	size += 1 * 4 // m.SrcAddress
 	return size
 }
 func (m *VxlanGpeIoamExportEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsDisable)
 	buf.EncodeBytes(m.CollectorAddress[:], 4)
 	buf.EncodeBytes(m.SrcAddress[:], 4)
@@ -89,27 +86,24 @@ func (*VxlanGpeIoamExportEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeIoamExportEnableDisableReply) Size() int {
+func (m *VxlanGpeIoamExportEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *VxlanGpeIoamExportEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeIoamExportEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

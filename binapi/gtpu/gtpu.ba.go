@@ -48,11 +48,10 @@ func (*GtpuAddDelTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GtpuAddDelTunnel) Size() int {
+func (m *GtpuAddDelTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.SrcAddress.Af
 	size += 1 * 16 // m.SrcAddress.Un
@@ -65,21 +64,19 @@ func (m *GtpuAddDelTunnel) Size() int {
 	return size
 }
 func (m *GtpuAddDelTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.SrcAddress.Af))
-	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.DstAddress.Af))
-	buf.EncodeBytes(m.DstAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DstAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.McastSwIfIndex))
-	buf.EncodeUint32(uint32(m.EncapVrfID))
-	buf.EncodeUint32(uint32(m.DecapNextIndex))
-	buf.EncodeUint32(uint32(m.Teid))
+	buf.EncodeUint32(m.EncapVrfID)
+	buf.EncodeUint32(m.DecapNextIndex)
+	buf.EncodeUint32(m.Teid)
 	return buf.Bytes(), nil
 }
 func (m *GtpuAddDelTunnel) Unmarshal(b []byte) error {
@@ -109,29 +106,26 @@ func (*GtpuAddDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GtpuAddDelTunnelReply) Size() int {
+func (m *GtpuAddDelTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *GtpuAddDelTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *GtpuAddDelTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -150,26 +144,23 @@ func (*GtpuOffloadRx) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GtpuOffloadRx) Size() int {
+func (m *GtpuOffloadRx) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.HwIfIndex
 	size += 4 // m.SwIfIndex
 	size += 1 // m.Enable
 	return size
 }
 func (m *GtpuOffloadRx) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.HwIfIndex))
-	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint8(uint8(m.Enable))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.HwIfIndex)
+	buf.EncodeUint32(m.SwIfIndex)
+	buf.EncodeUint8(m.Enable)
 	return buf.Bytes(), nil
 }
 func (m *GtpuOffloadRx) Unmarshal(b []byte) error {
@@ -192,27 +183,24 @@ func (*GtpuOffloadRxReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GtpuOffloadRxReply) Size() int {
+func (m *GtpuOffloadRxReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *GtpuOffloadRxReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *GtpuOffloadRxReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -234,11 +222,10 @@ func (*GtpuTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GtpuTunnelDetails) Size() int {
+func (m *GtpuTunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1      // m.SrcAddress.Af
 	size += 1 * 16 // m.SrcAddress.Un
@@ -251,21 +238,19 @@ func (m *GtpuTunnelDetails) Size() int {
 	return size
 }
 func (m *GtpuTunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.SrcAddress.Af))
-	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.SrcAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.DstAddress.Af))
-	buf.EncodeBytes(m.DstAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.DstAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.McastSwIfIndex))
-	buf.EncodeUint32(uint32(m.EncapVrfID))
-	buf.EncodeUint32(uint32(m.DecapNextIndex))
-	buf.EncodeUint32(uint32(m.Teid))
+	buf.EncodeUint32(m.EncapVrfID)
+	buf.EncodeUint32(m.DecapNextIndex)
+	buf.EncodeUint32(m.Teid)
 	return buf.Bytes(), nil
 }
 func (m *GtpuTunnelDetails) Unmarshal(b []byte) error {
@@ -294,21 +279,18 @@ func (*GtpuTunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GtpuTunnelDump) Size() int {
+func (m *GtpuTunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *GtpuTunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -332,23 +314,20 @@ func (*SwInterfaceSetGtpuBypass) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetGtpuBypass) Size() int {
+func (m *SwInterfaceSetGtpuBypass) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.IsIPv6
 	size += 1 // m.Enable
 	return size
 }
 func (m *SwInterfaceSetGtpuBypass) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsIPv6)
 	buf.EncodeBool(m.Enable)
@@ -376,27 +355,24 @@ func (*SwInterfaceSetGtpuBypassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetGtpuBypassReply) Size() int {
+func (m *SwInterfaceSetGtpuBypassReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetGtpuBypassReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetGtpuBypassReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -60,11 +60,10 @@ func (*SwInterfaceLacpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceLacpDetails) Size() int {
+func (m *SwInterfaceLacpDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 64    // m.InterfaceName
 	size += 4     // m.RxState
@@ -87,31 +86,29 @@ func (m *SwInterfaceLacpDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceLacpDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.InterfaceName, 64)
-	buf.EncodeUint32(uint32(m.RxState))
-	buf.EncodeUint32(uint32(m.TxState))
-	buf.EncodeUint32(uint32(m.MuxState))
-	buf.EncodeUint32(uint32(m.PtxState))
+	buf.EncodeUint32(m.RxState)
+	buf.EncodeUint32(m.TxState)
+	buf.EncodeUint32(m.MuxState)
+	buf.EncodeUint32(m.PtxState)
 	buf.EncodeString(m.BondInterfaceName, 64)
-	buf.EncodeUint16(uint16(m.ActorSystemPriority))
+	buf.EncodeUint16(m.ActorSystemPriority)
 	buf.EncodeBytes(m.ActorSystem[:], 6)
-	buf.EncodeUint16(uint16(m.ActorKey))
-	buf.EncodeUint16(uint16(m.ActorPortPriority))
-	buf.EncodeUint16(uint16(m.ActorPortNumber))
-	buf.EncodeUint8(uint8(m.ActorState))
-	buf.EncodeUint16(uint16(m.PartnerSystemPriority))
+	buf.EncodeUint16(m.ActorKey)
+	buf.EncodeUint16(m.ActorPortPriority)
+	buf.EncodeUint16(m.ActorPortNumber)
+	buf.EncodeUint8(m.ActorState)
+	buf.EncodeUint16(m.PartnerSystemPriority)
 	buf.EncodeBytes(m.PartnerSystem[:], 6)
-	buf.EncodeUint16(uint16(m.PartnerKey))
-	buf.EncodeUint16(uint16(m.PartnerPortPriority))
-	buf.EncodeUint16(uint16(m.PartnerPortNumber))
-	buf.EncodeUint8(uint8(m.PartnerState))
+	buf.EncodeUint16(m.PartnerKey)
+	buf.EncodeUint16(m.PartnerPortPriority)
+	buf.EncodeUint16(m.PartnerPortNumber)
+	buf.EncodeUint8(m.PartnerState)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceLacpDetails) Unmarshal(b []byte) error {
@@ -148,20 +145,17 @@ func (*SwInterfaceLacpDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceLacpDump) Size() int {
+func (m *SwInterfaceLacpDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SwInterfaceLacpDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceLacpDump) Unmarshal(b []byte) error {

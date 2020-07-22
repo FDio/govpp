@@ -44,23 +44,20 @@ func (*DHCP6PdClientEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *DHCP6PdClientEnableDisable) Size() int {
+func (m *DHCP6PdClientEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.SwIfIndex
 	size += 64 // m.PrefixGroup
 	size += 1  // m.Enable
 	return size
 }
 func (m *DHCP6PdClientEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.PrefixGroup, 64)
 	buf.EncodeBool(m.Enable)
@@ -88,27 +85,24 @@ func (*DHCP6PdClientEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *DHCP6PdClientEnableDisableReply) Size() int {
+func (m *DHCP6PdClientEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *DHCP6PdClientEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *DHCP6PdClientEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -129,11 +123,10 @@ func (*IP6AddDelAddressUsingPrefix) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IP6AddDelAddressUsingPrefix) Size() int {
+func (m *IP6AddDelAddressUsingPrefix) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 64     // m.PrefixGroup
 	size += 1 * 16 // m.AddressWithPrefix.Address
@@ -142,16 +135,14 @@ func (m *IP6AddDelAddressUsingPrefix) Size() int {
 	return size
 }
 func (m *IP6AddDelAddressUsingPrefix) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeString(m.PrefixGroup, 64)
 	buf.EncodeBytes(m.AddressWithPrefix.Address[:], 16)
-	buf.EncodeUint8(uint8(m.AddressWithPrefix.Len))
+	buf.EncodeUint8(m.AddressWithPrefix.Len)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -179,27 +170,24 @@ func (*IP6AddDelAddressUsingPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IP6AddDelAddressUsingPrefixReply) Size() int {
+func (m *IP6AddDelAddressUsingPrefixReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IP6AddDelAddressUsingPrefixReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IP6AddDelAddressUsingPrefixReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

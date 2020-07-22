@@ -46,23 +46,20 @@ func (*SwInterfaceSetVxlanGpeBypass) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSetVxlanGpeBypass) Size() int {
+func (m *SwInterfaceSetVxlanGpeBypass) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	size += 1 // m.IsIPv6
 	size += 1 // m.Enable
 	return size
 }
 func (m *SwInterfaceSetVxlanGpeBypass) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsIPv6)
 	buf.EncodeBool(m.Enable)
@@ -90,27 +87,24 @@ func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSetVxlanGpeBypassReply) Size() int {
+func (m *SwInterfaceSetVxlanGpeBypassReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSetVxlanGpeBypassReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSetVxlanGpeBypassReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -133,11 +127,10 @@ func (*VxlanGpeAddDelTunnel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeAddDelTunnel) Size() int {
+func (m *VxlanGpeAddDelTunnel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Local.Af
 	size += 1 * 16 // m.Local.Un
 	size += 1      // m.Remote.Af
@@ -151,21 +144,19 @@ func (m *VxlanGpeAddDelTunnel) Size() int {
 	return size
 }
 func (m *VxlanGpeAddDelTunnel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Local.Af))
-	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Remote.Af))
-	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.McastSwIfIndex))
-	buf.EncodeUint32(uint32(m.EncapVrfID))
-	buf.EncodeUint32(uint32(m.DecapVrfID))
+	buf.EncodeUint32(m.EncapVrfID)
+	buf.EncodeUint32(m.DecapVrfID)
 	buf.EncodeUint8(uint8(m.Protocol))
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
 }
@@ -197,29 +188,26 @@ func (*VxlanGpeAddDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeAddDelTunnelReply) Size() int {
+func (m *VxlanGpeAddDelTunnelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *VxlanGpeAddDelTunnelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *VxlanGpeAddDelTunnelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -244,11 +232,10 @@ func (*VxlanGpeTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *VxlanGpeTunnelDetails) Size() int {
+func (m *VxlanGpeTunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.SwIfIndex
 	size += 1      // m.Local.Af
 	size += 1 * 16 // m.Local.Un
@@ -263,22 +250,20 @@ func (m *VxlanGpeTunnelDetails) Size() int {
 	return size
 }
 func (m *VxlanGpeTunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Local.Af))
-	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Local.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Remote.Af))
-	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeBytes(m.Remote.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Protocol))
 	buf.EncodeUint32(uint32(m.McastSwIfIndex))
-	buf.EncodeUint32(uint32(m.EncapVrfID))
-	buf.EncodeUint32(uint32(m.DecapVrfID))
+	buf.EncodeUint32(m.EncapVrfID)
+	buf.EncodeUint32(m.DecapVrfID)
 	buf.EncodeBool(m.IsIPv6)
 	return buf.Bytes(), nil
 }
@@ -310,21 +295,18 @@ func (*VxlanGpeTunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *VxlanGpeTunnelDump) Size() int {
+func (m *VxlanGpeTunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *VxlanGpeTunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

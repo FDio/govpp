@@ -4,56 +4,31 @@ package af_packet
 
 import (
 	"context"
-	"io"
-
+	"fmt"
 	api "git.fd.io/govpp.git/api"
+	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
+	"io"
 )
 
-// RPCService represents RPC service API for af_packet module.
+// RPCService defines RPC service  af_packet.
 type RPCService interface {
-	DumpAfPacket(ctx context.Context, in *AfPacketDump) (RPCService_DumpAfPacketClient, error)
 	AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error)
 	AfPacketDelete(ctx context.Context, in *AfPacketDelete) (*AfPacketDeleteReply, error)
+	AfPacketDump(ctx context.Context, in *AfPacketDump) (RPCService_AfPacketDumpClient, error)
 	AfPacketSetL4CksumOffload(ctx context.Context, in *AfPacketSetL4CksumOffload) (*AfPacketSetL4CksumOffloadReply, error)
 }
 
 type serviceClient struct {
-	ch api.Channel
+	conn api.Connection
 }
 
-func NewServiceClient(ch api.Channel) RPCService {
-	return &serviceClient{ch}
-}
-
-func (c *serviceClient) DumpAfPacket(ctx context.Context, in *AfPacketDump) (RPCService_DumpAfPacketClient, error) {
-	stream := c.ch.SendMultiRequest(in)
-	x := &serviceClient_DumpAfPacketClient{stream}
-	return x, nil
-}
-
-type RPCService_DumpAfPacketClient interface {
-	Recv() (*AfPacketDetails, error)
-}
-
-type serviceClient_DumpAfPacketClient struct {
-	api.MultiRequestCtx
-}
-
-func (c *serviceClient_DumpAfPacketClient) Recv() (*AfPacketDetails, error) {
-	m := new(AfPacketDetails)
-	stop, err := c.MultiRequestCtx.ReceiveReply(m)
-	if err != nil {
-		return nil, err
-	}
-	if stop {
-		return nil, io.EOF
-	}
-	return m, nil
+func NewServiceClient(conn api.Connection) RPCService {
+	return &serviceClient{conn}
 }
 
 func (c *serviceClient) AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error) {
 	out := new(AfPacketCreateReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
@@ -62,23 +37,57 @@ func (c *serviceClient) AfPacketCreate(ctx context.Context, in *AfPacketCreate) 
 
 func (c *serviceClient) AfPacketDelete(ctx context.Context, in *AfPacketDelete) (*AfPacketDeleteReply, error) {
 	out := new(AfPacketDeleteReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
+}
+
+func (c *serviceClient) AfPacketDump(ctx context.Context, in *AfPacketDump) (RPCService_AfPacketDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_AfPacketDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_AfPacketDumpClient interface {
+	Recv() (*AfPacketDetails, error)
+	api.Stream
+}
+
+type serviceClient_AfPacketDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_AfPacketDumpClient) Recv() (*AfPacketDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *AfPacketDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) AfPacketSetL4CksumOffload(ctx context.Context, in *AfPacketSetL4CksumOffload) (*AfPacketSetL4CksumOffloadReply, error) {
 	out := new(AfPacketSetL4CksumOffloadReply)
-	err := c.ch.SendRequest(in).ReceiveReply(out)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ = api.RegisterMessage
-var _ = context.Background
-var _ = io.Copy

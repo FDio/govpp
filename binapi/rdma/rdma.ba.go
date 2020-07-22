@@ -65,10 +65,10 @@ func (x RdmaMode) String() string {
 type RdmaCreate struct {
 	HostIf  string   `binapi:"string[64],name=host_if" json:"host_if,omitempty"`
 	Name    string   `binapi:"string[64],name=name" json:"name,omitempty"`
-	RxqNum  uint16   `binapi:"u16,name=rxq_num,default=%!s(float64=1)" json:"rxq_num,omitempty"`
-	RxqSize uint16   `binapi:"u16,name=rxq_size,default=%!s(float64=1024)" json:"rxq_size,omitempty"`
-	TxqSize uint16   `binapi:"u16,name=txq_size,default=%!s(float64=1024)" json:"txq_size,omitempty"`
-	Mode    RdmaMode `binapi:"rdma_mode,name=mode,default=%!s(float64=0)" json:"mode,omitempty"`
+	RxqNum  uint16   `binapi:"u16,name=rxq_num,default=1" json:"rxq_num,omitempty"`
+	RxqSize uint16   `binapi:"u16,name=rxq_size,default=1024" json:"rxq_size,omitempty"`
+	TxqSize uint16   `binapi:"u16,name=txq_size,default=1024" json:"txq_size,omitempty"`
+	Mode    RdmaMode `binapi:"rdma_mode,name=mode,default=0" json:"mode,omitempty"`
 }
 
 func (m *RdmaCreate) Reset()               { *m = RdmaCreate{} }
@@ -78,11 +78,10 @@ func (*RdmaCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *RdmaCreate) Size() int {
+func (m *RdmaCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.HostIf
 	size += 64 // m.Name
 	size += 2  // m.RxqNum
@@ -92,17 +91,15 @@ func (m *RdmaCreate) Size() int {
 	return size
 }
 func (m *RdmaCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.HostIf, 64)
 	buf.EncodeString(m.Name, 64)
-	buf.EncodeUint16(uint16(m.RxqNum))
-	buf.EncodeUint16(uint16(m.RxqSize))
-	buf.EncodeUint16(uint16(m.TxqSize))
+	buf.EncodeUint16(m.RxqNum)
+	buf.EncodeUint16(m.RxqSize)
+	buf.EncodeUint16(m.TxqSize)
 	buf.EncodeUint32(uint32(m.Mode))
 	return buf.Bytes(), nil
 }
@@ -130,29 +127,26 @@ func (*RdmaCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *RdmaCreateReply) Size() int {
+func (m *RdmaCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *RdmaCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *RdmaCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -169,21 +163,18 @@ func (*RdmaDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *RdmaDelete) Size() int {
+func (m *RdmaDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *RdmaDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -205,27 +196,24 @@ func (*RdmaDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *RdmaDeleteReply) Size() int {
+func (m *RdmaDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *RdmaDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *RdmaDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

@@ -90,11 +90,10 @@ func (*GreTunnelAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GreTunnelAddDel) Size() int {
+func (m *GreTunnelAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 1      // m.Tunnel.Type
 	size += 1      // m.Tunnel.Mode
@@ -110,24 +109,22 @@ func (m *GreTunnelAddDel) Size() int {
 	return size
 }
 func (m *GreTunnelAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Tunnel.Type))
 	buf.EncodeUint8(uint8(m.Tunnel.Mode))
 	buf.EncodeUint8(uint8(m.Tunnel.Flags))
-	buf.EncodeUint16(uint16(m.Tunnel.SessionID))
-	buf.EncodeUint32(uint32(m.Tunnel.Instance))
-	buf.EncodeUint32(uint32(m.Tunnel.OuterTableID))
+	buf.EncodeUint16(m.Tunnel.SessionID)
+	buf.EncodeUint32(m.Tunnel.Instance)
+	buf.EncodeUint32(m.Tunnel.OuterTableID)
 	buf.EncodeUint32(uint32(m.Tunnel.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Tunnel.Src.Af))
-	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Tunnel.Dst.Af))
-	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *GreTunnelAddDel) Unmarshal(b []byte) error {
@@ -160,29 +157,26 @@ func (*GreTunnelAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GreTunnelAddDelReply) Size() int {
+func (m *GreTunnelAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *GreTunnelAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *GreTunnelAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -199,11 +193,10 @@ func (*GreTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GreTunnelDetails) Size() int {
+func (m *GreTunnelDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.Tunnel.Type
 	size += 1      // m.Tunnel.Mode
 	size += 1      // m.Tunnel.Flags
@@ -218,23 +211,21 @@ func (m *GreTunnelDetails) Size() int {
 	return size
 }
 func (m *GreTunnelDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.Tunnel.Type))
 	buf.EncodeUint8(uint8(m.Tunnel.Mode))
 	buf.EncodeUint8(uint8(m.Tunnel.Flags))
-	buf.EncodeUint16(uint16(m.Tunnel.SessionID))
-	buf.EncodeUint32(uint32(m.Tunnel.Instance))
-	buf.EncodeUint32(uint32(m.Tunnel.OuterTableID))
+	buf.EncodeUint16(m.Tunnel.SessionID)
+	buf.EncodeUint32(m.Tunnel.Instance)
+	buf.EncodeUint32(m.Tunnel.OuterTableID)
 	buf.EncodeUint32(uint32(m.Tunnel.SwIfIndex))
 	buf.EncodeUint8(uint8(m.Tunnel.Src.Af))
-	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Src.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(uint8(m.Tunnel.Dst.Af))
-	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Tunnel.Dst.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *GreTunnelDetails) Unmarshal(b []byte) error {
@@ -265,21 +256,18 @@ func (*GreTunnelDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GreTunnelDump) Size() int {
+func (m *GreTunnelDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *GreTunnelDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

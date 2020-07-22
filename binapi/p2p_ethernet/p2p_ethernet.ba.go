@@ -44,25 +44,22 @@ func (*P2pEthernetAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *P2pEthernetAdd) Size() int {
+func (m *P2pEthernetAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.ParentIfIndex
 	size += 4     // m.SubifID
 	size += 1 * 6 // m.RemoteMac
 	return size
 }
 func (m *P2pEthernetAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.ParentIfIndex))
-	buf.EncodeUint32(uint32(m.SubifID))
+	buf.EncodeUint32(m.SubifID)
 	buf.EncodeBytes(m.RemoteMac[:], 6)
 	return buf.Bytes(), nil
 }
@@ -87,29 +84,26 @@ func (*P2pEthernetAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *P2pEthernetAddReply) Size() int {
+func (m *P2pEthernetAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *P2pEthernetAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *P2pEthernetAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -127,22 +121,19 @@ func (*P2pEthernetDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *P2pEthernetDel) Size() int {
+func (m *P2pEthernetDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.ParentIfIndex
 	size += 1 * 6 // m.RemoteMac
 	return size
 }
 func (m *P2pEthernetDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.ParentIfIndex))
 	buf.EncodeBytes(m.RemoteMac[:], 6)
 	return buf.Bytes(), nil
@@ -166,27 +157,24 @@ func (*P2pEthernetDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *P2pEthernetDelReply) Size() int {
+func (m *P2pEthernetDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *P2pEthernetDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *P2pEthernetDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

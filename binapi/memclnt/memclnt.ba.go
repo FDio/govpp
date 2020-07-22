@@ -53,20 +53,17 @@ func (*APIVersions) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *APIVersions) Size() int {
+func (m *APIVersions) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *APIVersions) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *APIVersions) Unmarshal(b []byte) error {
@@ -87,11 +84,10 @@ func (*APIVersionsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *APIVersionsReply) Size() int {
+func (m *APIVersionsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.Count
 	for j1 := 0; j1 < len(m.APIVersions); j1++ {
@@ -108,31 +104,29 @@ func (m *APIVersionsReply) Size() int {
 	return size
 }
 func (m *APIVersionsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.APIVersions)))
 	for j0 := 0; j0 < len(m.APIVersions); j0++ {
-		var v0 ModuleVersion
+		var v0 ModuleVersion // APIVersions
 		if j0 < len(m.APIVersions) {
 			v0 = m.APIVersions[j0]
 		}
-		buf.EncodeUint32(uint32(v0.Major))
-		buf.EncodeUint32(uint32(v0.Minor))
-		buf.EncodeUint32(uint32(v0.Patch))
+		buf.EncodeUint32(v0.Major)
+		buf.EncodeUint32(v0.Minor)
+		buf.EncodeUint32(v0.Patch)
 		buf.EncodeString(v0.Name, 64)
 	}
 	return buf.Bytes(), nil
 }
 func (m *APIVersionsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
-	m.APIVersions = make([]ModuleVersion, int(m.Count))
+	m.APIVersions = make([]ModuleVersion, m.Count)
 	for j0 := 0; j0 < len(m.APIVersions); j0++ {
 		m.APIVersions[j0].Major = buf.DecodeUint32()
 		m.APIVersions[j0].Minor = buf.DecodeUint32()
@@ -154,21 +148,18 @@ func (*GetFirstMsgID) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GetFirstMsgID) Size() int {
+func (m *GetFirstMsgID) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	return size
 }
 func (m *GetFirstMsgID) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -191,29 +182,26 @@ func (*GetFirstMsgIDReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GetFirstMsgIDReply) Size() int {
+func (m *GetFirstMsgIDReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 2 // m.FirstMsgID
 	return size
 }
 func (m *GetFirstMsgIDReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint16(uint16(m.FirstMsgID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint16(m.FirstMsgID)
 	return buf.Bytes(), nil
 }
 func (m *GetFirstMsgIDReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.FirstMsgID = buf.DecodeUint16()
 	return nil
 }
@@ -233,11 +221,10 @@ func (*MemclntCreate) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemclntCreate) Size() int {
+func (m *MemclntCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.CtxQuota
 	size += 8     // m.InputQueue
 	size += 64    // m.Name
@@ -245,27 +232,25 @@ func (m *MemclntCreate) Size() int {
 	return size
 }
 func (m *MemclntCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.CtxQuota))
-	buf.EncodeUint64(uint64(m.InputQueue))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.CtxQuota)
+	buf.EncodeUint64(m.InputQueue)
 	buf.EncodeString(m.Name, 64)
 	for i := 0; i < 8; i++ {
 		var x uint32
 		if i < len(m.APIVersions) {
 			x = uint32(m.APIVersions[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
 func (m *MemclntCreate) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.CtxQuota = int32(buf.DecodeUint32())
+	m.CtxQuota = buf.DecodeInt32()
 	m.InputQueue = buf.DecodeUint64()
 	m.Name = buf.DecodeString(64)
 	m.APIVersions = make([]uint32, 8)
@@ -290,11 +275,10 @@ func (*MemclntCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemclntCreateReply) Size() int {
+func (m *MemclntCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Response
 	size += 8 // m.Handle
 	size += 4 // m.Index
@@ -302,21 +286,19 @@ func (m *MemclntCreateReply) Size() int {
 	return size
 }
 func (m *MemclntCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Response))
-	buf.EncodeUint64(uint64(m.Handle))
-	buf.EncodeUint32(uint32(m.Index))
-	buf.EncodeUint64(uint64(m.MessageTable))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Response)
+	buf.EncodeUint64(m.Handle)
+	buf.EncodeUint32(m.Index)
+	buf.EncodeUint64(m.MessageTable)
 	return buf.Bytes(), nil
 }
 func (m *MemclntCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Response = int32(buf.DecodeUint32())
+	m.Response = buf.DecodeInt32()
 	m.Handle = buf.DecodeUint64()
 	m.Index = buf.DecodeUint32()
 	m.MessageTable = buf.DecodeUint64()
@@ -337,25 +319,22 @@ func (*MemclntDelete) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *MemclntDelete) Size() int {
+func (m *MemclntDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Index
 	size += 8 // m.Handle
 	size += 1 // m.DoCleanup
 	return size
 }
 func (m *MemclntDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Index))
-	buf.EncodeUint64(uint64(m.Handle))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Index)
+	buf.EncodeUint64(m.Handle)
 	buf.EncodeBool(m.DoCleanup)
 	return buf.Bytes(), nil
 }
@@ -380,29 +359,26 @@ func (*MemclntDeleteReply) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *MemclntDeleteReply) Size() int {
+func (m *MemclntDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Response
 	size += 8 // m.Handle
 	return size
 }
 func (m *MemclntDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Response))
-	buf.EncodeUint64(uint64(m.Handle))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Response)
+	buf.EncodeUint64(m.Handle)
 	return buf.Bytes(), nil
 }
 func (m *MemclntDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Response = int32(buf.DecodeUint32())
+	m.Response = buf.DecodeInt32()
 	m.Handle = buf.DecodeUint64()
 	return nil
 }
@@ -417,20 +393,17 @@ func (*MemclntKeepalive) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemclntKeepalive) Size() int {
+func (m *MemclntKeepalive) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MemclntKeepalive) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MemclntKeepalive) Unmarshal(b []byte) error {
@@ -449,27 +422,24 @@ func (*MemclntKeepaliveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemclntKeepaliveReply) Size() int {
+func (m *MemclntKeepaliveReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MemclntKeepaliveReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MemclntKeepaliveReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -485,22 +455,19 @@ func (*MemclntReadTimeout) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *MemclntReadTimeout) Size() int {
+func (m *MemclntReadTimeout) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Dummy
 	return size
 }
 func (m *MemclntReadTimeout) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Dummy))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Dummy)
 	return buf.Bytes(), nil
 }
 func (m *MemclntReadTimeout) Unmarshal(b []byte) error {
@@ -521,22 +488,19 @@ func (*MemclntRxThreadSuspend) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *MemclntRxThreadSuspend) Size() int {
+func (m *MemclntRxThreadSuspend) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Dummy
 	return size
 }
 func (m *MemclntRxThreadSuspend) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Dummy))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Dummy)
 	return buf.Bytes(), nil
 }
 func (m *MemclntRxThreadSuspend) Unmarshal(b []byte) error {
@@ -562,11 +526,10 @@ func (*RPCCall) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *RPCCall) Size() int {
+func (m *RPCCall) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 8               // m.Function
 	size += 1               // m.Multicast
 	size += 1               // m.NeedBarrierSync
@@ -576,18 +539,16 @@ func (m *RPCCall) Size() int {
 	return size
 }
 func (m *RPCCall) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint64(uint64(m.Function))
-	buf.EncodeUint8(uint8(m.Multicast))
-	buf.EncodeUint8(uint8(m.NeedBarrierSync))
-	buf.EncodeUint8(uint8(m.SendReply))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint64(m.Function)
+	buf.EncodeUint8(m.Multicast)
+	buf.EncodeUint8(m.NeedBarrierSync)
+	buf.EncodeUint8(m.SendReply)
 	buf.EncodeUint32(uint32(len(m.Data)))
-	buf.EncodeBytes(m.Data[:], 0)
+	buf.EncodeBytes(m.Data, 0)
 	return buf.Bytes(), nil
 }
 func (m *RPCCall) Unmarshal(b []byte) error {
@@ -597,7 +558,8 @@ func (m *RPCCall) Unmarshal(b []byte) error {
 	m.NeedBarrierSync = buf.DecodeUint8()
 	m.SendReply = buf.DecodeUint8()
 	m.DataLen = buf.DecodeUint32()
-	copy(m.Data[:], buf.DecodeBytes(0))
+	m.Data = make([]byte, m.DataLen)
+	copy(m.Data, buf.DecodeBytes(len(m.Data)))
 	return nil
 }
 
@@ -613,27 +575,24 @@ func (*RPCCallReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *RPCCallReply) Size() int {
+func (m *RPCCallReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *RPCCallReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *RPCCallReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -649,22 +608,19 @@ func (*RxThreadExit) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *RxThreadExit) Size() int {
+func (m *RxThreadExit) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Dummy
 	return size
 }
 func (m *RxThreadExit) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Dummy))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Dummy)
 	return buf.Bytes(), nil
 }
 func (m *RxThreadExit) Unmarshal(b []byte) error {
@@ -687,31 +643,28 @@ func (*SockInitShm) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SockInitShm) Size() int {
+func (m *SockInitShm) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                  // m.RequestedSize
 	size += 1                  // m.Nitems
 	size += 8 * len(m.Configs) // m.Configs
 	return size
 }
 func (m *SockInitShm) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.RequestedSize))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.RequestedSize)
 	buf.EncodeUint8(uint8(len(m.Configs)))
 	for i := 0; i < len(m.Configs); i++ {
 		var x uint64
 		if i < len(m.Configs) {
 			x = uint64(m.Configs[i])
 		}
-		buf.EncodeUint64(uint64(x))
+		buf.EncodeUint64(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -738,27 +691,24 @@ func (*SockInitShmReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SockInitShmReply) Size() int {
+func (m *SockInitShmReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SockInitShmReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SockInitShmReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -774,21 +724,18 @@ func (*SockclntCreate) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SockclntCreate) Size() int {
+func (m *SockclntCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Name
 	return size
 }
 func (m *SockclntCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Name, 64)
 	return buf.Bytes(), nil
 }
@@ -813,11 +760,10 @@ func (*SockclntCreateReply) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SockclntCreateReply) Size() int {
+func (m *SockclntCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Response
 	size += 4 // m.Index
 	size += 2 // m.Count
@@ -833,31 +779,29 @@ func (m *SockclntCreateReply) Size() int {
 	return size
 }
 func (m *SockclntCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Response))
-	buf.EncodeUint32(uint32(m.Index))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Response)
+	buf.EncodeUint32(m.Index)
 	buf.EncodeUint16(uint16(len(m.MessageTable)))
 	for j0 := 0; j0 < len(m.MessageTable); j0++ {
-		var v0 MessageTableEntry
+		var v0 MessageTableEntry // MessageTable
 		if j0 < len(m.MessageTable) {
 			v0 = m.MessageTable[j0]
 		}
-		buf.EncodeUint16(uint16(v0.Index))
+		buf.EncodeUint16(v0.Index)
 		buf.EncodeString(v0.Name, 64)
 	}
 	return buf.Bytes(), nil
 }
 func (m *SockclntCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Response = int32(buf.DecodeUint32())
+	m.Response = buf.DecodeInt32()
 	m.Index = buf.DecodeUint32()
 	m.Count = buf.DecodeUint16()
-	m.MessageTable = make([]MessageTableEntry, int(m.Count))
+	m.MessageTable = make([]MessageTableEntry, m.Count)
 	for j0 := 0; j0 < len(m.MessageTable); j0++ {
 		m.MessageTable[j0].Index = buf.DecodeUint16()
 		m.MessageTable[j0].Name = buf.DecodeString(64)
@@ -877,22 +821,19 @@ func (*SockclntDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SockclntDelete) Size() int {
+func (m *SockclntDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Index
 	return size
 }
 func (m *SockclntDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Index))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Index)
 	return buf.Bytes(), nil
 }
 func (m *SockclntDelete) Unmarshal(b []byte) error {
@@ -913,27 +854,24 @@ func (*SockclntDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SockclntDeleteReply) Size() int {
+func (m *SockclntDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Response
 	return size
 }
 func (m *SockclntDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Response))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Response)
 	return buf.Bytes(), nil
 }
 func (m *SockclntDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Response = int32(buf.DecodeUint32())
+	m.Response = buf.DecodeInt32()
 	return nil
 }
 
@@ -951,26 +889,23 @@ func (*TracePluginMsgIds) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *TracePluginMsgIds) Size() int {
+func (m *TracePluginMsgIds) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 128 // m.PluginName
 	size += 2   // m.FirstMsgID
 	size += 2   // m.LastMsgID
 	return size
 }
 func (m *TracePluginMsgIds) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.PluginName, 128)
-	buf.EncodeUint16(uint16(m.FirstMsgID))
-	buf.EncodeUint16(uint16(m.LastMsgID))
+	buf.EncodeUint16(m.FirstMsgID)
+	buf.EncodeUint16(m.LastMsgID)
 	return buf.Bytes(), nil
 }
 func (m *TracePluginMsgIds) Unmarshal(b []byte) error {

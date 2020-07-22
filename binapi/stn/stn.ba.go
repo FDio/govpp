@@ -44,11 +44,10 @@ func (*StnAddDelRule) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *StnAddDelRule) Size() int {
+func (m *StnAddDelRule) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	size += 4      // m.SwIfIndex
@@ -56,14 +55,12 @@ func (m *StnAddDelRule) Size() int {
 	return size
 }
 func (m *StnAddDelRule) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBool(m.IsAdd)
 	return buf.Bytes(), nil
@@ -89,27 +86,24 @@ func (*StnAddDelRuleReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *StnAddDelRuleReply) Size() int {
+func (m *StnAddDelRuleReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *StnAddDelRuleReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *StnAddDelRuleReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -126,25 +120,22 @@ func (*StnRulesDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *StnRulesDetails) Size() int {
+func (m *StnRulesDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IPAddress.Af
 	size += 1 * 16 // m.IPAddress.Un
 	size += 4      // m.SwIfIndex
 	return size
 }
 func (m *StnRulesDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint8(uint8(m.IPAddress.Af))
-	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.IPAddress.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -166,20 +157,17 @@ func (*StnRulesDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *StnRulesDump) Size() int {
+func (m *StnRulesDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *StnRulesDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *StnRulesDump) Unmarshal(b []byte) error {

@@ -106,11 +106,11 @@ func PuntUnionException(a PuntException) (u PuntUnion) {
 	return
 }
 func (u *PuntUnion) SetException(a PuntException) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
-	buf.EncodeUint32(uint32(a.ID))
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeUint32(a.ID)
 }
 func (u *PuntUnion) GetException() (a PuntException) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.ID = buf.DecodeUint32()
 	return
 }
@@ -120,13 +120,13 @@ func PuntUnionL4(a PuntL4) (u PuntUnion) {
 	return
 }
 func (u *PuntUnion) SetL4(a PuntL4) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeUint8(uint8(a.Af))
 	buf.EncodeUint8(uint8(a.Protocol))
-	buf.EncodeUint16(uint16(a.Port))
+	buf.EncodeUint16(a.Port)
 }
 func (u *PuntUnion) GetL4() (a PuntL4) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	a.Protocol = ip_types.IPProto(buf.DecodeUint8())
 	a.Port = buf.DecodeUint16()
@@ -138,12 +138,12 @@ func PuntUnionIPProto(a PuntIPProto) (u PuntUnion) {
 	return
 }
 func (u *PuntUnion) SetIPProto(a PuntIPProto) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeUint8(uint8(a.Af))
 	buf.EncodeUint8(uint8(a.Protocol))
 }
 func (u *PuntUnion) GetIPProto() (a PuntIPProto) {
-	var buf = codec.NewBuffer(u.XXX_UnionData[:])
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	a.Protocol = ip_types.IPProto(buf.DecodeUint8())
 	return
@@ -161,23 +161,20 @@ func (*PuntReasonDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PuntReasonDetails) Size() int {
+func (m *PuntReasonDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                      // m.Reason.ID
 	size += 4 + len(m.Reason.Name) // m.Reason.Name
 	return size
 }
 func (m *PuntReasonDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Reason.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Reason.ID)
 	buf.EncodeString(m.Reason.Name, 0)
 	return buf.Bytes(), nil
 }
@@ -200,23 +197,20 @@ func (*PuntReasonDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PuntReasonDump) Size() int {
+func (m *PuntReasonDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                      // m.Reason.ID
 	size += 4 + len(m.Reason.Name) // m.Reason.Name
 	return size
 }
 func (m *PuntReasonDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Reason.ID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Reason.ID)
 	buf.EncodeString(m.Reason.Name, 0)
 	return buf.Bytes(), nil
 }
@@ -239,24 +233,21 @@ func (*PuntSocketDeregister) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PuntSocketDeregister) Size() int {
+func (m *PuntSocketDeregister) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Punt.Type
 	size += 1 * 4 // m.Punt.Punt
 	return size
 }
 func (m *PuntSocketDeregister) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Punt.Type))
-	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 4)
 	return buf.Bytes(), nil
 }
 func (m *PuntSocketDeregister) Unmarshal(b []byte) error {
@@ -278,27 +269,24 @@ func (*PuntSocketDeregisterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PuntSocketDeregisterReply) Size() int {
+func (m *PuntSocketDeregisterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PuntSocketDeregisterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PuntSocketDeregisterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -315,25 +303,22 @@ func (*PuntSocketDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PuntSocketDetails) Size() int {
+func (m *PuntSocketDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Punt.Type
 	size += 1 * 4 // m.Punt.Punt
 	size += 108   // m.Pathname
 	return size
 }
 func (m *PuntSocketDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Punt.Type))
-	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 4)
 	buf.EncodeString(m.Pathname, 108)
 	return buf.Bytes(), nil
 }
@@ -357,21 +342,18 @@ func (*PuntSocketDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PuntSocketDump) Size() int {
+func (m *PuntSocketDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Type
 	return size
 }
 func (m *PuntSocketDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Type))
 	return buf.Bytes(), nil
 }
@@ -395,11 +377,10 @@ func (*PuntSocketRegister) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PuntSocketRegister) Size() int {
+func (m *PuntSocketRegister) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.HeaderVersion
 	size += 4     // m.Punt.Type
 	size += 1 * 4 // m.Punt.Punt
@@ -407,15 +388,13 @@ func (m *PuntSocketRegister) Size() int {
 	return size
 }
 func (m *PuntSocketRegister) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.HeaderVersion))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.HeaderVersion)
 	buf.EncodeUint32(uint32(m.Punt.Type))
-	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 4)
 	buf.EncodeString(m.Pathname, 108)
 	return buf.Bytes(), nil
 }
@@ -441,29 +420,26 @@ func (*PuntSocketRegisterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PuntSocketRegisterReply) Size() int {
+func (m *PuntSocketRegisterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.Retval
 	size += 108 // m.Pathname
 	return size
 }
 func (m *PuntSocketRegisterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeString(m.Pathname, 108)
 	return buf.Bytes(), nil
 }
 func (m *PuntSocketRegisterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Pathname = buf.DecodeString(108)
 	return nil
 }
@@ -481,26 +457,23 @@ func (*SetPunt) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SetPunt) Size() int {
+func (m *SetPunt) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 4     // m.Punt.Type
 	size += 1 * 4 // m.Punt.Punt
 	return size
 }
 func (m *SetPunt) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.Punt.Type))
-	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.Punt.Punt.XXX_UnionData[:], 4)
 	return buf.Bytes(), nil
 }
 func (m *SetPunt) Unmarshal(b []byte) error {
@@ -523,27 +496,24 @@ func (*SetPuntReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SetPuntReply) Size() int {
+func (m *SetPuntReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SetPuntReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SetPuntReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

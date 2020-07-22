@@ -86,20 +86,17 @@ func (*SyslogGetFilter) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SyslogGetFilter) Size() int {
+func (m *SyslogGetFilter) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SyslogGetFilter) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SyslogGetFilter) Unmarshal(b []byte) error {
@@ -119,29 +116,26 @@ func (*SyslogGetFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SyslogGetFilterReply) Size() int {
+func (m *SyslogGetFilterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.Severity
 	return size
 }
 func (m *SyslogGetFilterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.Severity))
 	return buf.Bytes(), nil
 }
 func (m *SyslogGetFilterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Severity = SyslogSeverity(buf.DecodeUint32())
 	return nil
 }
@@ -156,20 +150,17 @@ func (*SyslogGetSender) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SyslogGetSender) Size() int {
+func (m *SyslogGetSender) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *SyslogGetSender) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *SyslogGetSender) Unmarshal(b []byte) error {
@@ -193,11 +184,10 @@ func (*SyslogGetSenderReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SyslogGetSenderReply) Size() int {
+func (m *SyslogGetSenderReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Retval
 	size += 1 * 4 // m.SrcAddress
 	size += 1 * 4 // m.CollectorAddress
@@ -207,23 +197,21 @@ func (m *SyslogGetSenderReply) Size() int {
 	return size
 }
 func (m *SyslogGetSenderReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeBytes(m.SrcAddress[:], 4)
 	buf.EncodeBytes(m.CollectorAddress[:], 4)
-	buf.EncodeUint16(uint16(m.CollectorPort))
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint32(uint32(m.MaxMsgSize))
+	buf.EncodeUint16(m.CollectorPort)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint32(m.MaxMsgSize)
 	return buf.Bytes(), nil
 }
 func (m *SyslogGetSenderReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	copy(m.SrcAddress[:], buf.DecodeBytes(4))
 	copy(m.CollectorAddress[:], buf.DecodeBytes(4))
 	m.CollectorPort = buf.DecodeUint16()
@@ -244,21 +232,18 @@ func (*SyslogSetFilter) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SyslogSetFilter) Size() int {
+func (m *SyslogSetFilter) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Severity
 	return size
 }
 func (m *SyslogSetFilter) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Severity))
 	return buf.Bytes(), nil
 }
@@ -280,27 +265,24 @@ func (*SyslogSetFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SyslogSetFilterReply) Size() int {
+func (m *SyslogSetFilterReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SyslogSetFilterReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SyslogSetFilterReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -308,9 +290,9 @@ func (m *SyslogSetFilterReply) Unmarshal(b []byte) error {
 type SyslogSetSender struct {
 	SrcAddress       ip_types.IP4Address `binapi:"ip4_address,name=src_address" json:"src_address,omitempty"`
 	CollectorAddress ip_types.IP4Address `binapi:"ip4_address,name=collector_address" json:"collector_address,omitempty"`
-	CollectorPort    uint16              `binapi:"u16,name=collector_port,default=%!s(float64=514)" json:"collector_port,omitempty"`
+	CollectorPort    uint16              `binapi:"u16,name=collector_port,default=514" json:"collector_port,omitempty"`
 	VrfID            uint32              `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
-	MaxMsgSize       uint32              `binapi:"u32,name=max_msg_size,default=%!s(float64=480)" json:"max_msg_size,omitempty"`
+	MaxMsgSize       uint32              `binapi:"u32,name=max_msg_size,default=480" json:"max_msg_size,omitempty"`
 }
 
 func (m *SyslogSetSender) Reset()               { *m = SyslogSetSender{} }
@@ -320,11 +302,10 @@ func (*SyslogSetSender) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SyslogSetSender) Size() int {
+func (m *SyslogSetSender) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 * 4 // m.SrcAddress
 	size += 1 * 4 // m.CollectorAddress
 	size += 2     // m.CollectorPort
@@ -333,17 +314,15 @@ func (m *SyslogSetSender) Size() int {
 	return size
 }
 func (m *SyslogSetSender) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBytes(m.SrcAddress[:], 4)
 	buf.EncodeBytes(m.CollectorAddress[:], 4)
-	buf.EncodeUint16(uint16(m.CollectorPort))
-	buf.EncodeUint32(uint32(m.VrfID))
-	buf.EncodeUint32(uint32(m.MaxMsgSize))
+	buf.EncodeUint16(m.CollectorPort)
+	buf.EncodeUint32(m.VrfID)
+	buf.EncodeUint32(m.MaxMsgSize)
 	return buf.Bytes(), nil
 }
 func (m *SyslogSetSender) Unmarshal(b []byte) error {
@@ -368,27 +347,24 @@ func (*SyslogSetSenderReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SyslogSetSenderReply) Size() int {
+func (m *SyslogSetSenderReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SyslogSetSenderReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SyslogSetSenderReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

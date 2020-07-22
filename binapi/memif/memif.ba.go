@@ -111,11 +111,10 @@ func (*MemifCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemifCreate) Size() int {
+func (m *MemifCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Role
 	size += 4     // m.Mode
 	size += 1     // m.RxQueues
@@ -130,20 +129,18 @@ func (m *MemifCreate) Size() int {
 	return size
 }
 func (m *MemifCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Role))
 	buf.EncodeUint32(uint32(m.Mode))
-	buf.EncodeUint8(uint8(m.RxQueues))
-	buf.EncodeUint8(uint8(m.TxQueues))
-	buf.EncodeUint32(uint32(m.ID))
-	buf.EncodeUint32(uint32(m.SocketID))
-	buf.EncodeUint32(uint32(m.RingSize))
-	buf.EncodeUint16(uint16(m.BufferSize))
+	buf.EncodeUint8(m.RxQueues)
+	buf.EncodeUint8(m.TxQueues)
+	buf.EncodeUint32(m.ID)
+	buf.EncodeUint32(m.SocketID)
+	buf.EncodeUint32(m.RingSize)
+	buf.EncodeUint16(m.BufferSize)
 	buf.EncodeBool(m.NoZeroCopy)
 	buf.EncodeBytes(m.HwAddr[:], 6)
 	buf.EncodeString(m.Secret, 24)
@@ -178,29 +175,26 @@ func (*MemifCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemifCreateReply) Size() int {
+func (m *MemifCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *MemifCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
 func (m *MemifCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	return nil
 }
@@ -217,21 +211,18 @@ func (*MemifDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemifDelete) Size() int {
+func (m *MemifDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *MemifDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -253,27 +244,24 @@ func (*MemifDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemifDeleteReply) Size() int {
+func (m *MemifDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MemifDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MemifDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -299,11 +287,10 @@ func (*MemifDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemifDetails) Size() int {
+func (m *MemifDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 1 * 6 // m.HwAddr
 	size += 4     // m.ID
@@ -318,21 +305,19 @@ func (m *MemifDetails) Size() int {
 	return size
 }
 func (m *MemifDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.HwAddr[:], 6)
-	buf.EncodeUint32(uint32(m.ID))
+	buf.EncodeUint32(m.ID)
 	buf.EncodeUint32(uint32(m.Role))
 	buf.EncodeUint32(uint32(m.Mode))
 	buf.EncodeBool(m.ZeroCopy)
-	buf.EncodeUint32(uint32(m.SocketID))
-	buf.EncodeUint32(uint32(m.RingSize))
-	buf.EncodeUint16(uint16(m.BufferSize))
+	buf.EncodeUint32(m.SocketID)
+	buf.EncodeUint32(m.RingSize)
+	buf.EncodeUint16(m.BufferSize)
 	buf.EncodeUint32(uint32(m.Flags))
 	buf.EncodeString(m.IfName, 64)
 	return buf.Bytes(), nil
@@ -363,20 +348,17 @@ func (*MemifDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemifDump) Size() int {
+func (m *MemifDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MemifDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MemifDump) Unmarshal(b []byte) error {
@@ -397,25 +379,22 @@ func (*MemifSocketFilenameAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemifSocketFilenameAddDel) Size() int {
+func (m *MemifSocketFilenameAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1   // m.IsAdd
 	size += 4   // m.SocketID
 	size += 108 // m.SocketFilename
 	return size
 }
 func (m *MemifSocketFilenameAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.SocketID))
+	buf.EncodeUint32(m.SocketID)
 	buf.EncodeString(m.SocketFilename, 108)
 	return buf.Bytes(), nil
 }
@@ -441,27 +420,24 @@ func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemifSocketFilenameAddDelReply) Size() int {
+func (m *MemifSocketFilenameAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MemifSocketFilenameAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MemifSocketFilenameAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -478,23 +454,20 @@ func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MemifSocketFilenameDetails) Size() int {
+func (m *MemifSocketFilenameDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4   // m.SocketID
 	size += 108 // m.SocketFilename
 	return size
 }
 func (m *MemifSocketFilenameDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.SocketID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.SocketID)
 	buf.EncodeString(m.SocketFilename, 108)
 	return buf.Bytes(), nil
 }
@@ -515,20 +488,17 @@ func (*MemifSocketFilenameDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MemifSocketFilenameDump) Size() int {
+func (m *MemifSocketFilenameDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MemifSocketFilenameDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MemifSocketFilenameDump) Unmarshal(b []byte) error {

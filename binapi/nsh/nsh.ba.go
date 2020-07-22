@@ -53,11 +53,10 @@ func (*NshAddDelEntry) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NshAddDelEntry) Size() int {
+func (m *NshAddDelEntry) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1       // m.IsAdd
 	size += 4       // m.NspNsi
 	size += 1       // m.MdType
@@ -74,25 +73,23 @@ func (m *NshAddDelEntry) Size() int {
 	return size
 }
 func (m *NshAddDelEntry) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.NspNsi))
-	buf.EncodeUint8(uint8(m.MdType))
-	buf.EncodeUint8(uint8(m.VerOC))
-	buf.EncodeUint8(uint8(m.TTL))
-	buf.EncodeUint8(uint8(m.Length))
-	buf.EncodeUint8(uint8(m.NextProtocol))
-	buf.EncodeUint32(uint32(m.C1))
-	buf.EncodeUint32(uint32(m.C2))
-	buf.EncodeUint32(uint32(m.C3))
-	buf.EncodeUint32(uint32(m.C4))
-	buf.EncodeUint8(uint8(m.TlvLength))
-	buf.EncodeBytes(m.Tlv[:], 248)
+	buf.EncodeUint32(m.NspNsi)
+	buf.EncodeUint8(m.MdType)
+	buf.EncodeUint8(m.VerOC)
+	buf.EncodeUint8(m.TTL)
+	buf.EncodeUint8(m.Length)
+	buf.EncodeUint8(m.NextProtocol)
+	buf.EncodeUint32(m.C1)
+	buf.EncodeUint32(m.C2)
+	buf.EncodeUint32(m.C3)
+	buf.EncodeUint32(m.C4)
+	buf.EncodeUint8(m.TlvLength)
+	buf.EncodeBytes(m.Tlv, 248)
 	return buf.Bytes(), nil
 }
 func (m *NshAddDelEntry) Unmarshal(b []byte) error {
@@ -109,7 +106,8 @@ func (m *NshAddDelEntry) Unmarshal(b []byte) error {
 	m.C3 = buf.DecodeUint32()
 	m.C4 = buf.DecodeUint32()
 	m.TlvLength = buf.DecodeUint8()
-	copy(m.Tlv[:], buf.DecodeBytes(248))
+	m.Tlv = make([]byte, 248)
+	copy(m.Tlv, buf.DecodeBytes(len(m.Tlv)))
 	return nil
 }
 
@@ -126,29 +124,26 @@ func (*NshAddDelEntryReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NshAddDelEntryReply) Size() int {
+func (m *NshAddDelEntryReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.EntryIndex
 	return size
 }
 func (m *NshAddDelEntryReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.EntryIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.EntryIndex)
 	return buf.Bytes(), nil
 }
 func (m *NshAddDelEntryReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.EntryIndex = buf.DecodeUint32()
 	return nil
 }
@@ -171,11 +166,10 @@ func (*NshAddDelMap) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NshAddDelMap) Size() int {
+func (m *NshAddDelMap) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.NspNsi
 	size += 4 // m.MappedNspNsi
@@ -186,19 +180,17 @@ func (m *NshAddDelMap) Size() int {
 	return size
 }
 func (m *NshAddDelMap) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.NspNsi))
-	buf.EncodeUint32(uint32(m.MappedNspNsi))
-	buf.EncodeUint32(uint32(m.NshAction))
+	buf.EncodeUint32(m.NspNsi)
+	buf.EncodeUint32(m.MappedNspNsi)
+	buf.EncodeUint32(m.NshAction)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
-	buf.EncodeUint32(uint32(m.NextNode))
+	buf.EncodeUint32(m.NextNode)
 	return buf.Bytes(), nil
 }
 func (m *NshAddDelMap) Unmarshal(b []byte) error {
@@ -226,29 +218,26 @@ func (*NshAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NshAddDelMapReply) Size() int {
+func (m *NshAddDelMapReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.MapIndex
 	return size
 }
 func (m *NshAddDelMapReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.MapIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.MapIndex)
 	return buf.Bytes(), nil
 }
 func (m *NshAddDelMapReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.MapIndex = buf.DecodeUint32()
 	return nil
 }
@@ -277,11 +266,10 @@ func (*NshEntryDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NshEntryDetails) Size() int {
+func (m *NshEntryDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4       // m.EntryIndex
 	size += 4       // m.NspNsi
 	size += 1       // m.MdType
@@ -298,25 +286,23 @@ func (m *NshEntryDetails) Size() int {
 	return size
 }
 func (m *NshEntryDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.EntryIndex))
-	buf.EncodeUint32(uint32(m.NspNsi))
-	buf.EncodeUint8(uint8(m.MdType))
-	buf.EncodeUint8(uint8(m.VerOC))
-	buf.EncodeUint8(uint8(m.TTL))
-	buf.EncodeUint8(uint8(m.Length))
-	buf.EncodeUint8(uint8(m.NextProtocol))
-	buf.EncodeUint32(uint32(m.C1))
-	buf.EncodeUint32(uint32(m.C2))
-	buf.EncodeUint32(uint32(m.C3))
-	buf.EncodeUint32(uint32(m.C4))
-	buf.EncodeUint8(uint8(m.TlvLength))
-	buf.EncodeBytes(m.Tlv[:], 248)
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.EntryIndex)
+	buf.EncodeUint32(m.NspNsi)
+	buf.EncodeUint8(m.MdType)
+	buf.EncodeUint8(m.VerOC)
+	buf.EncodeUint8(m.TTL)
+	buf.EncodeUint8(m.Length)
+	buf.EncodeUint8(m.NextProtocol)
+	buf.EncodeUint32(m.C1)
+	buf.EncodeUint32(m.C2)
+	buf.EncodeUint32(m.C3)
+	buf.EncodeUint32(m.C4)
+	buf.EncodeUint8(m.TlvLength)
+	buf.EncodeBytes(m.Tlv, 248)
 	return buf.Bytes(), nil
 }
 func (m *NshEntryDetails) Unmarshal(b []byte) error {
@@ -333,7 +319,8 @@ func (m *NshEntryDetails) Unmarshal(b []byte) error {
 	m.C3 = buf.DecodeUint32()
 	m.C4 = buf.DecodeUint32()
 	m.TlvLength = buf.DecodeUint8()
-	copy(m.Tlv[:], buf.DecodeBytes(248))
+	m.Tlv = make([]byte, 248)
+	copy(m.Tlv, buf.DecodeBytes(len(m.Tlv)))
 	return nil
 }
 
@@ -349,22 +336,19 @@ func (*NshEntryDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NshEntryDump) Size() int {
+func (m *NshEntryDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.EntryIndex
 	return size
 }
 func (m *NshEntryDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.EntryIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.EntryIndex)
 	return buf.Bytes(), nil
 }
 func (m *NshEntryDump) Unmarshal(b []byte) error {
@@ -391,11 +375,10 @@ func (*NshMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *NshMapDetails) Size() int {
+func (m *NshMapDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.MapIndex
 	size += 4 // m.NspNsi
 	size += 4 // m.MappedNspNsi
@@ -406,19 +389,17 @@ func (m *NshMapDetails) Size() int {
 	return size
 }
 func (m *NshMapDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MapIndex))
-	buf.EncodeUint32(uint32(m.NspNsi))
-	buf.EncodeUint32(uint32(m.MappedNspNsi))
-	buf.EncodeUint32(uint32(m.NshAction))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MapIndex)
+	buf.EncodeUint32(m.NspNsi)
+	buf.EncodeUint32(m.MappedNspNsi)
+	buf.EncodeUint32(m.NshAction)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint32(uint32(m.RxSwIfIndex))
-	buf.EncodeUint32(uint32(m.NextNode))
+	buf.EncodeUint32(m.NextNode)
 	return buf.Bytes(), nil
 }
 func (m *NshMapDetails) Unmarshal(b []byte) error {
@@ -445,22 +426,19 @@ func (*NshMapDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *NshMapDump) Size() int {
+func (m *NshMapDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.MapIndex
 	return size
 }
 func (m *NshMapDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.MapIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.MapIndex)
 	return buf.Bytes(), nil
 }
 func (m *NshMapDump) Unmarshal(b []byte) error {

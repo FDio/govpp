@@ -47,11 +47,10 @@ func (*ACLAddReplace) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLAddReplace) Size() int {
+func (m *ACLAddReplace) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.ACLIndex
 	size += 64 // m.Tag
 	size += 4  // m.Count
@@ -79,34 +78,32 @@ func (m *ACLAddReplace) Size() int {
 	return size
 }
 func (m *ACLAddReplace) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.R)))
 	for j0 := 0; j0 < len(m.R); j0++ {
-		var v0 acl_types.ACLRule
+		var v0 acl_types.ACLRule // R
 		if j0 < len(m.R) {
 			v0 = m.R[j0]
 		}
 		buf.EncodeUint8(uint8(v0.IsPermit))
 		buf.EncodeUint8(uint8(v0.SrcPrefix.Address.Af))
-		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.SrcPrefix.Len))
+		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.SrcPrefix.Len)
 		buf.EncodeUint8(uint8(v0.DstPrefix.Address.Af))
-		buf.EncodeBytes(v0.DstPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.DstPrefix.Len))
+		buf.EncodeBytes(v0.DstPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.DstPrefix.Len)
 		buf.EncodeUint8(uint8(v0.Proto))
-		buf.EncodeUint16(uint16(v0.SrcportOrIcmptypeFirst))
-		buf.EncodeUint16(uint16(v0.SrcportOrIcmptypeLast))
-		buf.EncodeUint16(uint16(v0.DstportOrIcmpcodeFirst))
-		buf.EncodeUint16(uint16(v0.DstportOrIcmpcodeLast))
-		buf.EncodeUint8(uint8(v0.TCPFlagsMask))
-		buf.EncodeUint8(uint8(v0.TCPFlagsValue))
+		buf.EncodeUint16(v0.SrcportOrIcmptypeFirst)
+		buf.EncodeUint16(v0.SrcportOrIcmptypeLast)
+		buf.EncodeUint16(v0.DstportOrIcmpcodeFirst)
+		buf.EncodeUint16(v0.DstportOrIcmpcodeLast)
+		buf.EncodeUint8(v0.TCPFlagsMask)
+		buf.EncodeUint8(v0.TCPFlagsValue)
 	}
 	return buf.Bytes(), nil
 }
@@ -115,7 +112,7 @@ func (m *ACLAddReplace) Unmarshal(b []byte) error {
 	m.ACLIndex = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.R = make([]acl_types.ACLRule, int(m.Count))
+	m.R = make([]acl_types.ACLRule, m.Count)
 	for j0 := 0; j0 < len(m.R); j0++ {
 		m.R[j0].IsPermit = acl_types.ACLAction(buf.DecodeUint8())
 		m.R[j0].SrcPrefix.Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
@@ -148,30 +145,27 @@ func (*ACLAddReplaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLAddReplaceReply) Size() int {
+func (m *ACLAddReplaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLAddReplaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLAddReplaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.ACLIndex = buf.DecodeUint32()
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -187,22 +181,19 @@ func (*ACLDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLDel) Size() int {
+func (m *ACLDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	return size
 }
 func (m *ACLDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *ACLDel) Unmarshal(b []byte) error {
@@ -223,27 +214,24 @@ func (*ACLDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLDelReply) Size() int {
+func (m *ACLDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -262,11 +250,10 @@ func (*ACLDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLDetails) Size() int {
+func (m *ACLDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.ACLIndex
 	size += 64 // m.Tag
 	size += 4  // m.Count
@@ -294,34 +281,32 @@ func (m *ACLDetails) Size() int {
 	return size
 }
 func (m *ACLDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.R)))
 	for j0 := 0; j0 < len(m.R); j0++ {
-		var v0 acl_types.ACLRule
+		var v0 acl_types.ACLRule // R
 		if j0 < len(m.R) {
 			v0 = m.R[j0]
 		}
 		buf.EncodeUint8(uint8(v0.IsPermit))
 		buf.EncodeUint8(uint8(v0.SrcPrefix.Address.Af))
-		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.SrcPrefix.Len))
+		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.SrcPrefix.Len)
 		buf.EncodeUint8(uint8(v0.DstPrefix.Address.Af))
-		buf.EncodeBytes(v0.DstPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.DstPrefix.Len))
+		buf.EncodeBytes(v0.DstPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.DstPrefix.Len)
 		buf.EncodeUint8(uint8(v0.Proto))
-		buf.EncodeUint16(uint16(v0.SrcportOrIcmptypeFirst))
-		buf.EncodeUint16(uint16(v0.SrcportOrIcmptypeLast))
-		buf.EncodeUint16(uint16(v0.DstportOrIcmpcodeFirst))
-		buf.EncodeUint16(uint16(v0.DstportOrIcmpcodeLast))
-		buf.EncodeUint8(uint8(v0.TCPFlagsMask))
-		buf.EncodeUint8(uint8(v0.TCPFlagsValue))
+		buf.EncodeUint16(v0.SrcportOrIcmptypeFirst)
+		buf.EncodeUint16(v0.SrcportOrIcmptypeLast)
+		buf.EncodeUint16(v0.DstportOrIcmpcodeFirst)
+		buf.EncodeUint16(v0.DstportOrIcmpcodeLast)
+		buf.EncodeUint8(v0.TCPFlagsMask)
+		buf.EncodeUint8(v0.TCPFlagsValue)
 	}
 	return buf.Bytes(), nil
 }
@@ -330,7 +315,7 @@ func (m *ACLDetails) Unmarshal(b []byte) error {
 	m.ACLIndex = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.R = make([]acl_types.ACLRule, int(m.Count))
+	m.R = make([]acl_types.ACLRule, m.Count)
 	for j0 := 0; j0 < len(m.R); j0++ {
 		m.R[j0].IsPermit = acl_types.ACLAction(buf.DecodeUint8())
 		m.R[j0].SrcPrefix.Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
@@ -362,22 +347,19 @@ func (*ACLDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLDump) Size() int {
+func (m *ACLDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	return size
 }
 func (m *ACLDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *ACLDump) Unmarshal(b []byte) error {
@@ -401,11 +383,10 @@ func (*ACLInterfaceAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLInterfaceAddDel) Size() int {
+func (m *ACLInterfaceAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.IsInput
 	size += 4 // m.SwIfIndex
@@ -413,16 +394,14 @@ func (m *ACLInterfaceAddDel) Size() int {
 	return size
 }
 func (m *ACLInterfaceAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.IsInput)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *ACLInterfaceAddDel) Unmarshal(b []byte) error {
@@ -446,27 +425,24 @@ func (*ACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLInterfaceAddDelReply) Size() int {
+func (m *ACLInterfaceAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLInterfaceAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLInterfaceAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -487,11 +463,10 @@ func (*ACLInterfaceEtypeWhitelistDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLInterfaceEtypeWhitelistDetails) Size() int {
+func (m *ACLInterfaceEtypeWhitelistDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                    // m.SwIfIndex
 	size += 1                    // m.Count
 	size += 1                    // m.NInput
@@ -499,21 +474,19 @@ func (m *ACLInterfaceEtypeWhitelistDetails) Size() int {
 	return size
 }
 func (m *ACLInterfaceEtypeWhitelistDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(len(m.Whitelist)))
-	buf.EncodeUint8(uint8(m.NInput))
+	buf.EncodeUint8(m.NInput)
 	for i := 0; i < len(m.Whitelist); i++ {
 		var x uint16
 		if i < len(m.Whitelist) {
 			x = uint16(m.Whitelist[i])
 		}
-		buf.EncodeUint16(uint16(x))
+		buf.EncodeUint16(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -543,21 +516,18 @@ func (*ACLInterfaceEtypeWhitelistDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLInterfaceEtypeWhitelistDump) Size() int {
+func (m *ACLInterfaceEtypeWhitelistDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *ACLInterfaceEtypeWhitelistDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -582,11 +552,10 @@ func (*ACLInterfaceListDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLInterfaceListDetails) Size() int {
+func (m *ACLInterfaceListDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.SwIfIndex
 	size += 1               // m.Count
 	size += 1               // m.NInput
@@ -594,21 +563,19 @@ func (m *ACLInterfaceListDetails) Size() int {
 	return size
 }
 func (m *ACLInterfaceListDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(len(m.Acls)))
-	buf.EncodeUint8(uint8(m.NInput))
+	buf.EncodeUint8(m.NInput)
 	for i := 0; i < len(m.Acls); i++ {
 		var x uint32
 		if i < len(m.Acls) {
 			x = uint32(m.Acls[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -626,7 +593,7 @@ func (m *ACLInterfaceListDetails) Unmarshal(b []byte) error {
 
 // ACLInterfaceListDump defines message 'acl_interface_list_dump'.
 type ACLInterfaceListDump struct {
-	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=%!s(float64=4.294967295e+09)" json:"sw_if_index,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
 func (m *ACLInterfaceListDump) Reset()               { *m = ACLInterfaceListDump{} }
@@ -636,21 +603,18 @@ func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLInterfaceListDump) Size() int {
+func (m *ACLInterfaceListDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *ACLInterfaceListDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -675,11 +639,10 @@ func (*ACLInterfaceSetACLList) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLInterfaceSetACLList) Size() int {
+func (m *ACLInterfaceSetACLList) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.SwIfIndex
 	size += 1               // m.Count
 	size += 1               // m.NInput
@@ -687,21 +650,19 @@ func (m *ACLInterfaceSetACLList) Size() int {
 	return size
 }
 func (m *ACLInterfaceSetACLList) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(len(m.Acls)))
-	buf.EncodeUint8(uint8(m.NInput))
+	buf.EncodeUint8(m.NInput)
 	for i := 0; i < len(m.Acls); i++ {
 		var x uint32
 		if i < len(m.Acls) {
 			x = uint32(m.Acls[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -731,27 +692,24 @@ func (*ACLInterfaceSetACLListReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLInterfaceSetACLListReply) Size() int {
+func (m *ACLInterfaceSetACLListReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLInterfaceSetACLListReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLInterfaceSetACLListReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -772,11 +730,10 @@ func (*ACLInterfaceSetEtypeWhitelist) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLInterfaceSetEtypeWhitelist) Size() int {
+func (m *ACLInterfaceSetEtypeWhitelist) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4                    // m.SwIfIndex
 	size += 1                    // m.Count
 	size += 1                    // m.NInput
@@ -784,21 +741,19 @@ func (m *ACLInterfaceSetEtypeWhitelist) Size() int {
 	return size
 }
 func (m *ACLInterfaceSetEtypeWhitelist) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(len(m.Whitelist)))
-	buf.EncodeUint8(uint8(m.NInput))
+	buf.EncodeUint8(m.NInput)
 	for i := 0; i < len(m.Whitelist); i++ {
 		var x uint16
 		if i < len(m.Whitelist) {
 			x = uint16(m.Whitelist[i])
 		}
-		buf.EncodeUint16(uint16(x))
+		buf.EncodeUint16(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -828,27 +783,24 @@ func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLInterfaceSetEtypeWhitelistReply) Size() int {
+func (m *ACLInterfaceSetEtypeWhitelistReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLInterfaceSetEtypeWhitelistReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLInterfaceSetEtypeWhitelistReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -862,20 +814,17 @@ func (*ACLPluginControlPing) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLPluginControlPing) Size() int {
+func (m *ACLPluginControlPing) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ACLPluginControlPing) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginControlPing) Unmarshal(b []byte) error {
@@ -896,31 +845,28 @@ func (*ACLPluginControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLPluginControlPingReply) Size() int {
+func (m *ACLPluginControlPingReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.ClientIndex
 	size += 4 // m.VpePID
 	return size
 }
 func (m *ACLPluginControlPingReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.ClientIndex))
-	buf.EncodeUint32(uint32(m.VpePID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.ClientIndex)
+	buf.EncodeUint32(m.VpePID)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginControlPingReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.ClientIndex = buf.DecodeUint32()
 	m.VpePID = buf.DecodeUint32()
 	return nil
@@ -938,20 +884,17 @@ func (*ACLPluginGetConnTableMaxEntries) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLPluginGetConnTableMaxEntries) Size() int {
+func (m *ACLPluginGetConnTableMaxEntries) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ACLPluginGetConnTableMaxEntries) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginGetConnTableMaxEntries) Unmarshal(b []byte) error {
@@ -972,22 +915,19 @@ func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLPluginGetConnTableMaxEntriesReply) Size() int {
+func (m *ACLPluginGetConnTableMaxEntriesReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 8 // m.ConnTableMaxEntries
 	return size
 }
 func (m *ACLPluginGetConnTableMaxEntriesReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint64(uint64(m.ConnTableMaxEntries))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint64(m.ConnTableMaxEntries)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginGetConnTableMaxEntriesReply) Unmarshal(b []byte) error {
@@ -1006,20 +946,17 @@ func (*ACLPluginGetVersion) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLPluginGetVersion) Size() int {
+func (m *ACLPluginGetVersion) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *ACLPluginGetVersion) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginGetVersion) Unmarshal(b []byte) error {
@@ -1039,24 +976,21 @@ func (*ACLPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLPluginGetVersionReply) Size() int {
+func (m *ACLPluginGetVersionReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Major
 	size += 4 // m.Minor
 	return size
 }
 func (m *ACLPluginGetVersionReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Major))
-	buf.EncodeUint32(uint32(m.Minor))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Major)
+	buf.EncodeUint32(m.Minor)
 	return buf.Bytes(), nil
 }
 func (m *ACLPluginGetVersionReply) Unmarshal(b []byte) error {
@@ -1078,21 +1012,18 @@ func (*ACLStatsIntfCountersEnable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *ACLStatsIntfCountersEnable) Size() int {
+func (m *ACLStatsIntfCountersEnable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	return size
 }
 func (m *ACLStatsIntfCountersEnable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
 	return buf.Bytes(), nil
 }
@@ -1116,27 +1047,24 @@ func (*ACLStatsIntfCountersEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *ACLStatsIntfCountersEnableReply) Size() int {
+func (m *ACLStatsIntfCountersEnableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *ACLStatsIntfCountersEnableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *ACLStatsIntfCountersEnableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1154,11 +1082,10 @@ func (*MacipACLAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLAdd) Size() int {
+func (m *MacipACLAdd) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 64 // m.Tag
 	size += 4  // m.Count
 	for j1 := 0; j1 < len(m.R); j1++ {
@@ -1177,16 +1104,14 @@ func (m *MacipACLAdd) Size() int {
 	return size
 }
 func (m *MacipACLAdd) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.R)))
 	for j0 := 0; j0 < len(m.R); j0++ {
-		var v0 acl_types.MacipACLRule
+		var v0 acl_types.MacipACLRule // R
 		if j0 < len(m.R) {
 			v0 = m.R[j0]
 		}
@@ -1194,8 +1119,8 @@ func (m *MacipACLAdd) Marshal(b []byte) ([]byte, error) {
 		buf.EncodeBytes(v0.SrcMac[:], 6)
 		buf.EncodeBytes(v0.SrcMacMask[:], 6)
 		buf.EncodeUint8(uint8(v0.SrcPrefix.Address.Af))
-		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.SrcPrefix.Len))
+		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.SrcPrefix.Len)
 	}
 	return buf.Bytes(), nil
 }
@@ -1203,7 +1128,7 @@ func (m *MacipACLAdd) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Tag = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.R = make([]acl_types.MacipACLRule, int(m.Count))
+	m.R = make([]acl_types.MacipACLRule, m.Count)
 	for j0 := 0; j0 < len(m.R); j0++ {
 		m.R[j0].IsPermit = acl_types.ACLAction(buf.DecodeUint8())
 		copy(m.R[j0].SrcMac[:], buf.DecodeBytes(6))
@@ -1217,7 +1142,7 @@ func (m *MacipACLAdd) Unmarshal(b []byte) error {
 
 // MacipACLAddReplace defines message 'macip_acl_add_replace'.
 type MacipACLAddReplace struct {
-	ACLIndex uint32                   `binapi:"u32,name=acl_index,default=%!s(float64=4.294967295e+09)" json:"acl_index,omitempty"`
+	ACLIndex uint32                   `binapi:"u32,name=acl_index,default=4294967295" json:"acl_index,omitempty"`
 	Tag      string                   `binapi:"string[64],name=tag" json:"tag,omitempty"`
 	Count    uint32                   `binapi:"u32,name=count" json:"-"`
 	R        []acl_types.MacipACLRule `binapi:"macip_acl_rule[count],name=r" json:"r,omitempty"`
@@ -1230,11 +1155,10 @@ func (*MacipACLAddReplace) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLAddReplace) Size() int {
+func (m *MacipACLAddReplace) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.ACLIndex
 	size += 64 // m.Tag
 	size += 4  // m.Count
@@ -1254,17 +1178,15 @@ func (m *MacipACLAddReplace) Size() int {
 	return size
 }
 func (m *MacipACLAddReplace) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.R)))
 	for j0 := 0; j0 < len(m.R); j0++ {
-		var v0 acl_types.MacipACLRule
+		var v0 acl_types.MacipACLRule // R
 		if j0 < len(m.R) {
 			v0 = m.R[j0]
 		}
@@ -1272,8 +1194,8 @@ func (m *MacipACLAddReplace) Marshal(b []byte) ([]byte, error) {
 		buf.EncodeBytes(v0.SrcMac[:], 6)
 		buf.EncodeBytes(v0.SrcMacMask[:], 6)
 		buf.EncodeUint8(uint8(v0.SrcPrefix.Address.Af))
-		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.SrcPrefix.Len))
+		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.SrcPrefix.Len)
 	}
 	return buf.Bytes(), nil
 }
@@ -1282,7 +1204,7 @@ func (m *MacipACLAddReplace) Unmarshal(b []byte) error {
 	m.ACLIndex = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.R = make([]acl_types.MacipACLRule, int(m.Count))
+	m.R = make([]acl_types.MacipACLRule, m.Count)
 	for j0 := 0; j0 < len(m.R); j0++ {
 		m.R[j0].IsPermit = acl_types.ACLAction(buf.DecodeUint8())
 		copy(m.R[j0].SrcMac[:], buf.DecodeBytes(6))
@@ -1307,30 +1229,27 @@ func (*MacipACLAddReplaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLAddReplaceReply) Size() int {
+func (m *MacipACLAddReplaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	size += 4 // m.Retval
 	return size
 }
 func (m *MacipACLAddReplaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLAddReplaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.ACLIndex = buf.DecodeUint32()
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1347,30 +1266,27 @@ func (*MacipACLAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLAddReply) Size() int {
+func (m *MacipACLAddReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	size += 4 // m.Retval
 	return size
 }
 func (m *MacipACLAddReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLAddReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.ACLIndex = buf.DecodeUint32()
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1386,22 +1302,19 @@ func (*MacipACLDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLDel) Size() int {
+func (m *MacipACLDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	return size
 }
 func (m *MacipACLDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLDel) Unmarshal(b []byte) error {
@@ -1422,27 +1335,24 @@ func (*MacipACLDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLDelReply) Size() int {
+func (m *MacipACLDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MacipACLDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1461,11 +1371,10 @@ func (*MacipACLDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLDetails) Size() int {
+func (m *MacipACLDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4  // m.ACLIndex
 	size += 64 // m.Tag
 	size += 4  // m.Count
@@ -1485,17 +1394,15 @@ func (m *MacipACLDetails) Size() int {
 	return size
 }
 func (m *MacipACLDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	buf.EncodeString(m.Tag, 64)
 	buf.EncodeUint32(uint32(len(m.R)))
 	for j0 := 0; j0 < len(m.R); j0++ {
-		var v0 acl_types.MacipACLRule
+		var v0 acl_types.MacipACLRule // R
 		if j0 < len(m.R) {
 			v0 = m.R[j0]
 		}
@@ -1503,8 +1410,8 @@ func (m *MacipACLDetails) Marshal(b []byte) ([]byte, error) {
 		buf.EncodeBytes(v0.SrcMac[:], 6)
 		buf.EncodeBytes(v0.SrcMacMask[:], 6)
 		buf.EncodeUint8(uint8(v0.SrcPrefix.Address.Af))
-		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 0)
-		buf.EncodeUint8(uint8(v0.SrcPrefix.Len))
+		buf.EncodeBytes(v0.SrcPrefix.Address.Un.XXX_UnionData[:], 16)
+		buf.EncodeUint8(v0.SrcPrefix.Len)
 	}
 	return buf.Bytes(), nil
 }
@@ -1513,7 +1420,7 @@ func (m *MacipACLDetails) Unmarshal(b []byte) error {
 	m.ACLIndex = buf.DecodeUint32()
 	m.Tag = buf.DecodeString(64)
 	m.Count = buf.DecodeUint32()
-	m.R = make([]acl_types.MacipACLRule, int(m.Count))
+	m.R = make([]acl_types.MacipACLRule, m.Count)
 	for j0 := 0; j0 < len(m.R); j0++ {
 		m.R[j0].IsPermit = acl_types.ACLAction(buf.DecodeUint8())
 		copy(m.R[j0].SrcMac[:], buf.DecodeBytes(6))
@@ -1527,7 +1434,7 @@ func (m *MacipACLDetails) Unmarshal(b []byte) error {
 
 // MacipACLDump defines message 'macip_acl_dump'.
 type MacipACLDump struct {
-	ACLIndex uint32 `binapi:"u32,name=acl_index,default=%!s(float64=4.294967295e+09)" json:"acl_index,omitempty"`
+	ACLIndex uint32 `binapi:"u32,name=acl_index,default=4294967295" json:"acl_index,omitempty"`
 }
 
 func (m *MacipACLDump) Reset()               { *m = MacipACLDump{} }
@@ -1537,22 +1444,19 @@ func (*MacipACLDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLDump) Size() int {
+func (m *MacipACLDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.ACLIndex
 	return size
 }
 func (m *MacipACLDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLDump) Unmarshal(b []byte) error {
@@ -1575,26 +1479,23 @@ func (*MacipACLInterfaceAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLInterfaceAddDel) Size() int {
+func (m *MacipACLInterfaceAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 4 // m.SwIfIndex
 	size += 4 // m.ACLIndex
 	return size
 }
 func (m *MacipACLInterfaceAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
-	buf.EncodeUint32(uint32(m.ACLIndex))
+	buf.EncodeUint32(m.ACLIndex)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLInterfaceAddDel) Unmarshal(b []byte) error {
@@ -1619,27 +1520,24 @@ func (*MacipACLInterfaceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLInterfaceAddDelReply) Size() int {
+func (m *MacipACLInterfaceAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *MacipACLInterfaceAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLInterfaceAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -1653,20 +1551,17 @@ func (*MacipACLInterfaceGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLInterfaceGet) Size() int {
+func (m *MacipACLInterfaceGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *MacipACLInterfaceGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *MacipACLInterfaceGet) Unmarshal(b []byte) error {
@@ -1686,29 +1581,26 @@ func (*MacipACLInterfaceGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLInterfaceGetReply) Size() int {
+func (m *MacipACLInterfaceGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.Count
 	size += 4 * len(m.Acls) // m.Acls
 	return size
 }
 func (m *MacipACLInterfaceGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(len(m.Acls)))
 	for i := 0; i < len(m.Acls); i++ {
 		var x uint32
 		if i < len(m.Acls) {
 			x = uint32(m.Acls[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -1738,23 +1630,20 @@ func (*MacipACLInterfaceListDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *MacipACLInterfaceListDetails) Size() int {
+func (m *MacipACLInterfaceListDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.SwIfIndex
 	size += 1               // m.Count
 	size += 4 * len(m.Acls) // m.Acls
 	return size
 }
 func (m *MacipACLInterfaceListDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint8(uint8(len(m.Acls)))
 	for i := 0; i < len(m.Acls); i++ {
@@ -1762,7 +1651,7 @@ func (m *MacipACLInterfaceListDetails) Marshal(b []byte) ([]byte, error) {
 		if i < len(m.Acls) {
 			x = uint32(m.Acls[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
@@ -1789,21 +1678,18 @@ func (*MacipACLInterfaceListDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *MacipACLInterfaceListDump) Size() int {
+func (m *MacipACLInterfaceListDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *MacipACLInterfaceListDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }

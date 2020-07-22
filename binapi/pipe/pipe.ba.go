@@ -42,24 +42,21 @@ func (*PipeCreate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PipeCreate) Size() int {
+func (m *PipeCreate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsSpecified
 	size += 4 // m.UserInstance
 	return size
 }
 func (m *PipeCreate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsSpecified)
-	buf.EncodeUint32(uint32(m.UserInstance))
+	buf.EncodeUint32(m.UserInstance)
 	return buf.Bytes(), nil
 }
 func (m *PipeCreate) Unmarshal(b []byte) error {
@@ -83,44 +80,32 @@ func (*PipeCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PipeCreateReply) Size() int {
+func (m *PipeCreateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.SwIfIndex
 	for j1 := 0; j1 < 2; j1++ {
-		var s1 interface_types.InterfaceIndex
-		_ = s1
-		if j1 < len(m.PipeSwIfIndex) {
-			s1 = m.PipeSwIfIndex[j1]
-		}
-		size += 4 // s1
+		size += 4 // m.PipeSwIfIndex[j1]
 	}
 	return size
 }
 func (m *PipeCreateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	for j0 := 0; j0 < 2; j0++ {
-		var v0 interface_types.InterfaceIndex
-		if j0 < len(m.PipeSwIfIndex) {
-			v0 = m.PipeSwIfIndex[j0]
-		}
-		buf.EncodeUint32(uint32(v0))
+		buf.EncodeUint32(uint32(m.PipeSwIfIndex[j0]))
 	}
 	return buf.Bytes(), nil
 }
 func (m *PipeCreateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	for j0 := 0; j0 < 2; j0++ {
 		m.PipeSwIfIndex[j0] = interface_types.InterfaceIndex(buf.DecodeUint32())
@@ -140,21 +125,18 @@ func (*PipeDelete) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PipeDelete) Size() int {
+func (m *PipeDelete) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *PipeDelete) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -176,27 +158,24 @@ func (*PipeDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PipeDeleteReply) Size() int {
+func (m *PipeDeleteReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *PipeDeleteReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *PipeDeleteReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -214,39 +193,27 @@ func (*PipeDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *PipeDetails) Size() int {
+func (m *PipeDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	for j1 := 0; j1 < 2; j1++ {
-		var s1 interface_types.InterfaceIndex
-		_ = s1
-		if j1 < len(m.PipeSwIfIndex) {
-			s1 = m.PipeSwIfIndex[j1]
-		}
-		size += 4 // s1
+		size += 4 // m.PipeSwIfIndex[j1]
 	}
 	size += 4 // m.Instance
 	return size
 }
 func (m *PipeDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	for j0 := 0; j0 < 2; j0++ {
-		var v0 interface_types.InterfaceIndex
-		if j0 < len(m.PipeSwIfIndex) {
-			v0 = m.PipeSwIfIndex[j0]
-		}
-		buf.EncodeUint32(uint32(v0))
+		buf.EncodeUint32(uint32(m.PipeSwIfIndex[j0]))
 	}
-	buf.EncodeUint32(uint32(m.Instance))
+	buf.EncodeUint32(m.Instance)
 	return buf.Bytes(), nil
 }
 func (m *PipeDetails) Unmarshal(b []byte) error {
@@ -269,20 +236,17 @@ func (*PipeDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *PipeDump) Size() int {
+func (m *PipeDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *PipeDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *PipeDump) Unmarshal(b []byte) error {

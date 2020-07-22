@@ -19,11 +19,14 @@ import (
 	"reflect"
 )
 
-// MessageType represents the type of a VPP message.
-// Note: this is currently derived from the message header (fields),
-// and in many cases it does not represent the actual type of VPP message.
-// This means that some replies can be identified as requests, etc.
-// TODO: use services to identify type of message
+// GoVppAPIPackageIsVersionX is referenced from generated binapi files
+// to assert that that code is compatible with this version of the GoVPP api package.
+const (
+	GoVppAPIPackageIsVersion1 = true
+	GoVppAPIPackageIsVersion2 = true
+)
+
+// MessageType represents the type of a VPP message derived from message header fields.
 type MessageType int
 
 const (
@@ -80,8 +83,3 @@ func GetRegisteredMessages() map[string]Message {
 func GetRegisteredMessageTypes() map[reflect.Type]string {
 	return registeredMessageTypes
 }
-
-// GoVppAPIPackageIsVersionX is referenced from generated binapi files
-// to assert that that code is compatible with this version of the GoVPP api package.
-const GoVppAPIPackageIsVersion1 = true
-const GoVppAPIPackageIsVersion2 = true

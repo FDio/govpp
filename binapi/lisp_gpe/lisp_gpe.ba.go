@@ -75,11 +75,10 @@ func (*GpeAddDelFwdEntry) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeAddDelFwdEntry) Size() int {
+func (m *GpeAddDelFwdEntry) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1     // m.IsAdd
 	size += 1     // m.RmtEid.Type
 	size += 1 * 6 // m.RmtEid.Address
@@ -102,29 +101,27 @@ func (m *GpeAddDelFwdEntry) Size() int {
 	return size
 }
 func (m *GpeAddDelFwdEntry) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.RmtEid.Type))
-	buf.EncodeBytes(m.RmtEid.Address.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.RmtEid.Address.XXX_UnionData[:], 6)
 	buf.EncodeUint8(uint8(m.LclEid.Type))
-	buf.EncodeBytes(m.LclEid.Address.XXX_UnionData[:], 0)
-	buf.EncodeUint32(uint32(m.Vni))
-	buf.EncodeUint32(uint32(m.DpTable))
-	buf.EncodeUint8(uint8(m.Action))
+	buf.EncodeBytes(m.LclEid.Address.XXX_UnionData[:], 6)
+	buf.EncodeUint32(m.Vni)
+	buf.EncodeUint32(m.DpTable)
+	buf.EncodeUint8(m.Action)
 	buf.EncodeUint32(uint32(len(m.Locs)))
 	for j0 := 0; j0 < len(m.Locs); j0++ {
-		var v0 GpeLocator
+		var v0 GpeLocator // Locs
 		if j0 < len(m.Locs) {
 			v0 = m.Locs[j0]
 		}
-		buf.EncodeUint8(uint8(v0.Weight))
+		buf.EncodeUint8(v0.Weight)
 		buf.EncodeUint8(uint8(v0.Addr.Af))
-		buf.EncodeBytes(v0.Addr.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.Addr.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
@@ -139,7 +136,7 @@ func (m *GpeAddDelFwdEntry) Unmarshal(b []byte) error {
 	m.DpTable = buf.DecodeUint32()
 	m.Action = buf.DecodeUint8()
 	m.LocNum = buf.DecodeUint32()
-	m.Locs = make([]GpeLocator, int(m.LocNum))
+	m.Locs = make([]GpeLocator, m.LocNum)
 	for j0 := 0; j0 < len(m.Locs); j0++ {
 		m.Locs[j0].Weight = buf.DecodeUint8()
 		m.Locs[j0].Addr.Af = ip_types.AddressFamily(buf.DecodeUint8())
@@ -161,29 +158,26 @@ func (*GpeAddDelFwdEntryReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeAddDelFwdEntryReply) Size() int {
+func (m *GpeAddDelFwdEntryReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.FwdEntryIndex
 	return size
 }
 func (m *GpeAddDelFwdEntryReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint32(uint32(m.FwdEntryIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.FwdEntryIndex)
 	return buf.Bytes(), nil
 }
 func (m *GpeAddDelFwdEntryReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.FwdEntryIndex = buf.DecodeUint32()
 	return nil
 }
@@ -203,11 +197,10 @@ func (*GpeAddDelIface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeAddDelIface) Size() int {
+func (m *GpeAddDelIface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsAdd
 	size += 1 // m.IsL2
 	size += 4 // m.DpTable
@@ -215,16 +208,14 @@ func (m *GpeAddDelIface) Size() int {
 	return size
 }
 func (m *GpeAddDelIface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeBool(m.IsL2)
-	buf.EncodeUint32(uint32(m.DpTable))
-	buf.EncodeUint32(uint32(m.Vni))
+	buf.EncodeUint32(m.DpTable)
+	buf.EncodeUint32(m.Vni)
 	return buf.Bytes(), nil
 }
 func (m *GpeAddDelIface) Unmarshal(b []byte) error {
@@ -248,27 +239,24 @@ func (*GpeAddDelIfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeAddDelIfaceReply) Size() int {
+func (m *GpeAddDelIfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *GpeAddDelIfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *GpeAddDelIfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -287,11 +275,10 @@ func (*GpeAddDelNativeFwdRpath) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeAddDelNativeFwdRpath) Size() int {
+func (m *GpeAddDelNativeFwdRpath) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.IsAdd
 	size += 4      // m.TableID
 	size += 4      // m.NhSwIfIndex
@@ -300,17 +287,15 @@ func (m *GpeAddDelNativeFwdRpath) Size() int {
 	return size
 }
 func (m *GpeAddDelNativeFwdRpath) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
-	buf.EncodeUint32(uint32(m.TableID))
+	buf.EncodeUint32(m.TableID)
 	buf.EncodeUint32(uint32(m.NhSwIfIndex))
 	buf.EncodeUint8(uint8(m.NhAddr.Af))
-	buf.EncodeBytes(m.NhAddr.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.NhAddr.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *GpeAddDelNativeFwdRpath) Unmarshal(b []byte) error {
@@ -337,27 +322,24 @@ func (*GpeAddDelNativeFwdRpathReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeAddDelNativeFwdRpathReply) Size() int {
+func (m *GpeAddDelNativeFwdRpathReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *GpeAddDelNativeFwdRpathReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *GpeAddDelNativeFwdRpathReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -373,21 +355,18 @@ func (*GpeEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeEnableDisable) Size() int {
+func (m *GpeEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsEnable
 	return size
 }
 func (m *GpeEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsEnable)
 	return buf.Bytes(), nil
 }
@@ -409,27 +388,24 @@ func (*GpeEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeEnableDisableReply) Size() int {
+func (m *GpeEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *GpeEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *GpeEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -445,22 +421,19 @@ func (*GpeFwdEntriesGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeFwdEntriesGet) Size() int {
+func (m *GpeFwdEntriesGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Vni
 	return size
 }
 func (m *GpeFwdEntriesGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Vni))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Vni)
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntriesGet) Unmarshal(b []byte) error {
@@ -483,11 +456,10 @@ func (*GpeFwdEntriesGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeFwdEntriesGetReply) Size() int {
+func (m *GpeFwdEntriesGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.Count
 	for j1 := 0; j1 < len(m.Entries); j1++ {
@@ -508,35 +480,33 @@ func (m *GpeFwdEntriesGetReply) Size() int {
 	return size
 }
 func (m *GpeFwdEntriesGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.Entries)))
 	for j0 := 0; j0 < len(m.Entries); j0++ {
-		var v0 GpeFwdEntry
+		var v0 GpeFwdEntry // Entries
 		if j0 < len(m.Entries) {
 			v0 = m.Entries[j0]
 		}
-		buf.EncodeUint32(uint32(v0.FwdEntryIndex))
-		buf.EncodeUint32(uint32(v0.DpTable))
+		buf.EncodeUint32(v0.FwdEntryIndex)
+		buf.EncodeUint32(v0.DpTable)
 		buf.EncodeUint8(uint8(v0.Leid.Type))
-		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 6)
 		buf.EncodeUint8(uint8(v0.Reid.Type))
-		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 0)
-		buf.EncodeUint32(uint32(v0.Vni))
-		buf.EncodeUint8(uint8(v0.Action))
+		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 6)
+		buf.EncodeUint32(v0.Vni)
+		buf.EncodeUint8(v0.Action)
 	}
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntriesGetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
-	m.Entries = make([]GpeFwdEntry, int(m.Count))
+	m.Entries = make([]GpeFwdEntry, m.Count)
 	for j0 := 0; j0 < len(m.Entries); j0++ {
 		m.Entries[j0].FwdEntryIndex = buf.DecodeUint32()
 		m.Entries[j0].DpTable = buf.DecodeUint32()
@@ -563,11 +533,10 @@ func (*GpeFwdEntryPathDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeFwdEntryPathDetails) Size() int {
+func (m *GpeFwdEntryPathDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1      // m.LclLoc.Weight
 	size += 1      // m.LclLoc.Addr.Af
 	size += 1 * 16 // m.LclLoc.Addr.Un
@@ -577,18 +546,16 @@ func (m *GpeFwdEntryPathDetails) Size() int {
 	return size
 }
 func (m *GpeFwdEntryPathDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.LclLoc.Weight))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.LclLoc.Weight)
 	buf.EncodeUint8(uint8(m.LclLoc.Addr.Af))
-	buf.EncodeBytes(m.LclLoc.Addr.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.RmtLoc.Weight))
+	buf.EncodeBytes(m.LclLoc.Addr.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.RmtLoc.Weight)
 	buf.EncodeUint8(uint8(m.RmtLoc.Addr.Af))
-	buf.EncodeBytes(m.RmtLoc.Addr.Un.XXX_UnionData[:], 0)
+	buf.EncodeBytes(m.RmtLoc.Addr.Un.XXX_UnionData[:], 16)
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntryPathDetails) Unmarshal(b []byte) error {
@@ -614,22 +581,19 @@ func (*GpeFwdEntryPathDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeFwdEntryPathDump) Size() int {
+func (m *GpeFwdEntryPathDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.FwdEntryIndex
 	return size
 }
 func (m *GpeFwdEntryPathDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.FwdEntryIndex))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.FwdEntryIndex)
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntryPathDump) Unmarshal(b []byte) error {
@@ -648,20 +612,17 @@ func (*GpeFwdEntryVnisGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeFwdEntryVnisGet) Size() int {
+func (m *GpeFwdEntryVnisGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *GpeFwdEntryVnisGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntryVnisGet) Unmarshal(b []byte) error {
@@ -682,37 +643,34 @@ func (*GpeFwdEntryVnisGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeFwdEntryVnisGetReply) Size() int {
+func (m *GpeFwdEntryVnisGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4               // m.Retval
 	size += 4               // m.Count
 	size += 4 * len(m.Vnis) // m.Vnis
 	return size
 }
 func (m *GpeFwdEntryVnisGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.Vnis)))
 	for i := 0; i < len(m.Vnis); i++ {
 		var x uint32
 		if i < len(m.Vnis) {
 			x = uint32(m.Vnis[i])
 		}
-		buf.EncodeUint32(uint32(x))
+		buf.EncodeUint32(x)
 	}
 	return buf.Bytes(), nil
 }
 func (m *GpeFwdEntryVnisGetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
 	m.Vnis = make([]uint32, m.Count)
 	for i := 0; i < len(m.Vnis); i++ {
@@ -731,20 +689,17 @@ func (*GpeGetEncapMode) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeGetEncapMode) Size() int {
+func (m *GpeGetEncapMode) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *GpeGetEncapMode) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *GpeGetEncapMode) Unmarshal(b []byte) error {
@@ -764,29 +719,26 @@ func (*GpeGetEncapModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeGetEncapModeReply) Size() int {
+func (m *GpeGetEncapModeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 1 // m.EncapMode
 	return size
 }
 func (m *GpeGetEncapModeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
-	buf.EncodeUint8(uint8(m.EncapMode))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint8(m.EncapMode)
 	return buf.Bytes(), nil
 }
 func (m *GpeGetEncapModeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.EncapMode = buf.DecodeUint8()
 	return nil
 }
@@ -803,21 +755,18 @@ func (*GpeNativeFwdRpathsGet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeNativeFwdRpathsGet) Size() int {
+func (m *GpeNativeFwdRpathsGet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsIP4
 	return size
 }
 func (m *GpeNativeFwdRpathsGet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsIP4)
 	return buf.Bytes(), nil
 }
@@ -841,11 +790,10 @@ func (*GpeNativeFwdRpathsGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeNativeFwdRpathsGetReply) Size() int {
+func (m *GpeNativeFwdRpathsGetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	size += 4 // m.Count
 	for j1 := 0; j1 < len(m.Entries); j1++ {
@@ -862,31 +810,29 @@ func (m *GpeNativeFwdRpathsGetReply) Size() int {
 	return size
 }
 func (m *GpeNativeFwdRpathsGetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	buf.EncodeUint32(uint32(len(m.Entries)))
 	for j0 := 0; j0 < len(m.Entries); j0++ {
-		var v0 GpeNativeFwdRpath
+		var v0 GpeNativeFwdRpath // Entries
 		if j0 < len(m.Entries) {
 			v0 = m.Entries[j0]
 		}
-		buf.EncodeUint32(uint32(v0.FibIndex))
+		buf.EncodeUint32(v0.FibIndex)
 		buf.EncodeUint32(uint32(v0.NhSwIfIndex))
 		buf.EncodeUint8(uint8(v0.NhAddr.Af))
-		buf.EncodeBytes(v0.NhAddr.Un.XXX_UnionData[:], 0)
+		buf.EncodeBytes(v0.NhAddr.Un.XXX_UnionData[:], 16)
 	}
 	return buf.Bytes(), nil
 }
 func (m *GpeNativeFwdRpathsGetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	m.Count = buf.DecodeUint32()
-	m.Entries = make([]GpeNativeFwdRpath, int(m.Count))
+	m.Entries = make([]GpeNativeFwdRpath, m.Count)
 	for j0 := 0; j0 < len(m.Entries); j0++ {
 		m.Entries[j0].FibIndex = buf.DecodeUint32()
 		m.Entries[j0].NhSwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
@@ -908,21 +854,18 @@ func (*GpeSetEncapMode) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *GpeSetEncapMode) Size() int {
+func (m *GpeSetEncapMode) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsVxlan
 	return size
 }
 func (m *GpeSetEncapMode) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsVxlan)
 	return buf.Bytes(), nil
 }
@@ -944,27 +887,24 @@ func (*GpeSetEncapModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *GpeSetEncapModeReply) Size() int {
+func (m *GpeSetEncapModeReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *GpeSetEncapModeReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *GpeSetEncapModeReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

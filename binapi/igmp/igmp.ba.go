@@ -114,21 +114,18 @@ func (*IgmpClearInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpClearInterface) Size() int {
+func (m *IgmpClearInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IgmpClearInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -150,27 +147,24 @@ func (*IgmpClearInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpClearInterfaceReply) Size() int {
+func (m *IgmpClearInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpClearInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpClearInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -188,23 +182,20 @@ func (*IgmpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpDetails) Size() int {
+func (m *IgmpDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 1 * 4 // m.Saddr
 	size += 1 * 4 // m.Gaddr
 	return size
 }
 func (m *IgmpDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeBytes(m.Saddr[:], 4)
 	buf.EncodeBytes(m.Gaddr[:], 4)
@@ -230,21 +221,18 @@ func (*IgmpDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpDump) Size() int {
+func (m *IgmpDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IgmpDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -268,25 +256,22 @@ func (*IgmpEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpEnableDisable) Size() int {
+func (m *IgmpEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Enable
 	size += 1 // m.Mode
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IgmpEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Enable)
-	buf.EncodeUint8(uint8(m.Mode))
+	buf.EncodeUint8(m.Mode)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -310,27 +295,24 @@ func (*IgmpEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpEnableDisableReply) Size() int {
+func (m *IgmpEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -349,11 +331,10 @@ func (*IgmpEvent) GetMessageType() api.MessageType {
 	return api.OtherMessage
 }
 
-func (m *IgmpEvent) Size() int {
+func (m *IgmpEvent) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.SwIfIndex
 	size += 4     // m.Filter
 	size += 1 * 4 // m.Saddr
@@ -361,12 +342,10 @@ func (m *IgmpEvent) Size() int {
 	return size
 }
 func (m *IgmpEvent) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	buf.EncodeUint32(uint32(m.Filter))
 	buf.EncodeBytes(m.Saddr[:], 4)
@@ -394,11 +373,10 @@ func (*IgmpGroupPrefixDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpGroupPrefixDetails) Size() int {
+func (m *IgmpGroupPrefixDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Gp.Type
 	size += 1      // m.Gp.Prefix.Address.Af
 	size += 1 * 16 // m.Gp.Prefix.Address.Un
@@ -406,16 +384,14 @@ func (m *IgmpGroupPrefixDetails) Size() int {
 	return size
 }
 func (m *IgmpGroupPrefixDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Gp.Type))
 	buf.EncodeUint8(uint8(m.Gp.Prefix.Address.Af))
-	buf.EncodeBytes(m.Gp.Prefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Gp.Prefix.Len))
+	buf.EncodeBytes(m.Gp.Prefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Gp.Prefix.Len)
 	return buf.Bytes(), nil
 }
 func (m *IgmpGroupPrefixDetails) Unmarshal(b []byte) error {
@@ -437,20 +413,17 @@ func (*IgmpGroupPrefixDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpGroupPrefixDump) Size() int {
+func (m *IgmpGroupPrefixDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	return size
 }
 func (m *IgmpGroupPrefixDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	return buf.Bytes(), nil
 }
 func (m *IgmpGroupPrefixDump) Unmarshal(b []byte) error {
@@ -469,11 +442,10 @@ func (*IgmpGroupPrefixSet) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpGroupPrefixSet) Size() int {
+func (m *IgmpGroupPrefixSet) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4      // m.Gp.Type
 	size += 1      // m.Gp.Prefix.Address.Af
 	size += 1 * 16 // m.Gp.Prefix.Address.Un
@@ -481,16 +453,14 @@ func (m *IgmpGroupPrefixSet) Size() int {
 	return size
 }
 func (m *IgmpGroupPrefixSet) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Gp.Type))
 	buf.EncodeUint8(uint8(m.Gp.Prefix.Address.Af))
-	buf.EncodeBytes(m.Gp.Prefix.Address.Un.XXX_UnionData[:], 0)
-	buf.EncodeUint8(uint8(m.Gp.Prefix.Len))
+	buf.EncodeBytes(m.Gp.Prefix.Address.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.Gp.Prefix.Len)
 	return buf.Bytes(), nil
 }
 func (m *IgmpGroupPrefixSet) Unmarshal(b []byte) error {
@@ -514,27 +484,24 @@ func (*IgmpGroupPrefixSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpGroupPrefixSetReply) Size() int {
+func (m *IgmpGroupPrefixSetReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpGroupPrefixSetReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpGroupPrefixSetReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -550,11 +517,10 @@ func (*IgmpListen) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpListen) Size() int {
+func (m *IgmpListen) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4     // m.Group.Filter
 	size += 1     // m.Group.NSrcs
 	size += 4     // m.Group.SwIfIndex
@@ -570,18 +536,16 @@ func (m *IgmpListen) Size() int {
 	return size
 }
 func (m *IgmpListen) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.Group.Filter))
 	buf.EncodeUint8(uint8(len(m.Group.Saddrs)))
 	buf.EncodeUint32(uint32(m.Group.SwIfIndex))
 	buf.EncodeBytes(m.Group.Gaddr[:], 4)
 	for j1 := 0; j1 < len(m.Group.Saddrs); j1++ {
-		var v1 ip_types.IP4Address
+		var v1 ip_types.IP4Address // Saddrs
 		if j1 < len(m.Group.Saddrs) {
 			v1 = m.Group.Saddrs[j1]
 		}
@@ -595,7 +559,7 @@ func (m *IgmpListen) Unmarshal(b []byte) error {
 	m.Group.NSrcs = buf.DecodeUint8()
 	m.Group.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
 	copy(m.Group.Gaddr[:], buf.DecodeBytes(4))
-	m.Group.Saddrs = make([]ip_types.IP4Address, int(m.Group.NSrcs))
+	m.Group.Saddrs = make([]ip_types.IP4Address, m.Group.NSrcs)
 	for j1 := 0; j1 < len(m.Group.Saddrs); j1++ {
 		copy(m.Group.Saddrs[j1][:], buf.DecodeBytes(4))
 	}
@@ -614,27 +578,24 @@ func (*IgmpListenReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpListenReply) Size() int {
+func (m *IgmpListenReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpListenReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpListenReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -652,25 +613,22 @@ func (*IgmpProxyDeviceAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpProxyDeviceAddDel) Size() int {
+func (m *IgmpProxyDeviceAddDel) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Add
 	size += 4 // m.VrfID
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IgmpProxyDeviceAddDel) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint8(uint8(m.Add))
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint8(m.Add)
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -698,25 +656,22 @@ func (*IgmpProxyDeviceAddDelInterface) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *IgmpProxyDeviceAddDelInterface) Size() int {
+func (m *IgmpProxyDeviceAddDelInterface) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.Add
 	size += 4 // m.VrfID
 	size += 4 // m.SwIfIndex
 	return size
 }
 func (m *IgmpProxyDeviceAddDelInterface) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.Add)
-	buf.EncodeUint32(uint32(m.VrfID))
+	buf.EncodeUint32(m.VrfID)
 	buf.EncodeUint32(uint32(m.SwIfIndex))
 	return buf.Bytes(), nil
 }
@@ -742,27 +697,24 @@ func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpProxyDeviceAddDelInterfaceReply) Size() int {
+func (m *IgmpProxyDeviceAddDelInterfaceReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpProxyDeviceAddDelInterfaceReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpProxyDeviceAddDelInterfaceReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -778,27 +730,24 @@ func (*IgmpProxyDeviceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *IgmpProxyDeviceAddDelReply) Size() int {
+func (m *IgmpProxyDeviceAddDelReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *IgmpProxyDeviceAddDelReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *IgmpProxyDeviceAddDelReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
@@ -815,24 +764,21 @@ func (*WantIgmpEvents) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *WantIgmpEvents) Size() int {
+func (m *WantIgmpEvents) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Enable
 	size += 4 // m.PID
 	return size
 }
 func (m *WantIgmpEvents) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Enable))
-	buf.EncodeUint32(uint32(m.PID))
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(m.Enable)
+	buf.EncodeUint32(m.PID)
 	return buf.Bytes(), nil
 }
 func (m *WantIgmpEvents) Unmarshal(b []byte) error {
@@ -854,27 +800,24 @@ func (*WantIgmpEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *WantIgmpEventsReply) Size() int {
+func (m *WantIgmpEventsReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *WantIgmpEventsReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *WantIgmpEventsReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

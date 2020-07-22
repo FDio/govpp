@@ -144,7 +144,9 @@ func interfaceDump(ch api.Channel) {
 	fmt.Println("Dumping interfaces")
 
 	n := 0
-	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
+	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{
+		SwIfIndex: ^interface_types.InterfaceIndex(0),
+	})
 	for {
 		msg := &interfaces.SwInterfaceDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)

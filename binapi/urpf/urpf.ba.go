@@ -78,11 +78,10 @@ func (*UrpfUpdate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *UrpfUpdate) Size() int {
+func (m *UrpfUpdate) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsInput
 	size += 1 // m.Mode
 	size += 1 // m.Af
@@ -90,12 +89,10 @@ func (m *UrpfUpdate) Size() int {
 	return size
 }
 func (m *UrpfUpdate) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsInput)
 	buf.EncodeUint8(uint8(m.Mode))
 	buf.EncodeUint8(uint8(m.Af))
@@ -123,27 +120,24 @@ func (*UrpfUpdateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *UrpfUpdateReply) Size() int {
+func (m *UrpfUpdateReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *UrpfUpdateReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *UrpfUpdateReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 

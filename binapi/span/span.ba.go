@@ -79,11 +79,10 @@ func (*SwInterfaceSpanDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSpanDetails) Size() int {
+func (m *SwInterfaceSpanDetails) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndexFrom
 	size += 4 // m.SwIfIndexTo
 	size += 4 // m.State
@@ -91,12 +90,10 @@ func (m *SwInterfaceSpanDetails) Size() int {
 	return size
 }
 func (m *SwInterfaceSpanDetails) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndexFrom))
 	buf.EncodeUint32(uint32(m.SwIfIndexTo))
 	buf.EncodeUint32(uint32(m.State))
@@ -124,21 +121,18 @@ func (*SwInterfaceSpanDump) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSpanDump) Size() int {
+func (m *SwInterfaceSpanDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 1 // m.IsL2
 	return size
 }
 func (m *SwInterfaceSpanDump) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsL2)
 	return buf.Bytes(), nil
 }
@@ -165,11 +159,10 @@ func (*SwInterfaceSpanEnableDisable) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
 
-func (m *SwInterfaceSpanEnableDisable) Size() int {
+func (m *SwInterfaceSpanEnableDisable) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.SwIfIndexFrom
 	size += 4 // m.SwIfIndexTo
 	size += 4 // m.State
@@ -177,12 +170,10 @@ func (m *SwInterfaceSpanEnableDisable) Size() int {
 	return size
 }
 func (m *SwInterfaceSpanEnableDisable) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
+	buf := codec.NewBuffer(b)
 	buf.EncodeUint32(uint32(m.SwIfIndexFrom))
 	buf.EncodeUint32(uint32(m.SwIfIndexTo))
 	buf.EncodeUint32(uint32(m.State))
@@ -212,27 +203,24 @@ func (*SwInterfaceSpanEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
 
-func (m *SwInterfaceSpanEnableDisableReply) Size() int {
+func (m *SwInterfaceSpanEnableDisableReply) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	var size int
 	size += 4 // m.Retval
 	return size
 }
 func (m *SwInterfaceSpanEnableDisableReply) Marshal(b []byte) ([]byte, error) {
-	var buf *codec.Buffer
 	if b == nil {
-		buf = codec.NewBuffer(make([]byte, m.Size()))
-	} else {
-		buf = codec.NewBuffer(b)
+		b = make([]byte, m.Size())
 	}
-	buf.EncodeUint32(uint32(m.Retval))
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
 	return buf.Bytes(), nil
 }
 func (m *SwInterfaceSpanEnableDisableReply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
-	m.Retval = int32(buf.DecodeUint32())
+	m.Retval = buf.DecodeInt32()
 	return nil
 }
 
