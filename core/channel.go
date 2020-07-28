@@ -80,6 +80,7 @@ type multiRequestCtx struct {
 // subscriptionCtx is a context of subscription for delivery of specific notification messages.
 type subscriptionCtx struct {
 	ch         *Channel
+	notifFn    func(api.Message)  // callback to invoke upon notification message receipt
 	notifChan  chan api.Message   // channel where notification messages will be delivered to
 	msgID      uint16             // message ID for the subscribed event message
 	event      api.Message        // event message that this subscription is for
@@ -170,6 +171,14 @@ func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
 }
 
 func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {
+	return ch.subscribeNotification(nil, notifChan, event)
+}
+
+func (ch *Channel) SubscribeNotificationFn(notifFn func(api.Message), event api.Message) (api.SubscriptionCtx, error) {
+	return ch.subscribeNotification(notifFn, nil, event)
+}
+
+func (ch *Channel) subscribeNotification(notifFn func(api.Message), notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {
 	msgID, err := ch.msgIdentifier.GetMessageID(event)
 	if err != nil {
 		log.WithFields(logrus.Fields{
@@ -181,6 +190,7 @@ func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.M
 
 	sub := &subscriptionCtx{
 		ch:         ch,
+		notifFn:    notifFn,
 		notifChan:  notifChan,
 		msgID:      msgID,
 		event:      event,

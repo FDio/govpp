@@ -331,7 +331,6 @@ func (c *Connection) isNotificationMessage(msgID uint16) bool {
 // sendNotifications send a notification message to all subscribers subscribed for that message.
 func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 	c.subscriptionsLock.RLock()
-	defer c.subscriptionsLock.RUnlock()
 
 	matched := false
 
@@ -354,6 +353,13 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 			continue
 		}
 
+		matched = true
+
+		if sub.notifFn != nil {
+			defer sub.notifFn(event) // defer until the lock is released
+			continue
+		}
+
 		// send the message into the go channel of the subscription
 		select {
 		case sub.notifChan <- event:
@@ -366,8 +372,6 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 				"msg_size": len(data),
 			}).Warn("Unable to deliver the notification, reciever end not ready.")
 		}
-
-		matched = true
 	}
 
 	if !matched {
@@ -376,6 +380,8 @@ func (c *Connection) sendNotifications(msgID uint16, data []byte) {
 			"msg_size": len(data),
 		}).Info("No subscription found for the notification message.")
 	}
+
+	c.subscriptionsLock.RUnlock()
 }
 
 // +------------------+-------------------+-----------------------+

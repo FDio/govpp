@@ -84,6 +84,11 @@ type Channel interface {
 	// buffer is full, the notifications will not be delivered into it.
 	SubscribeNotification(notifChan chan Message, event Message) (SubscriptionCtx, error)
 
+	// SubscribeNotificationFn subscribes for receiving of the specified notification
+	// messages via provided callback function.  During callback invocation VPP
+	// responses aren't processed, take care to avoid deadlock.
+	SubscribeNotificationFn(notifFn func(Message), event Message) (SubscriptionCtx, error)
+
 	// SetReplyTimeout sets the timeout for replies from VPP. It represents the maximum time the API waits for a reply
 	// from VPP before returning an error.
 	SetReplyTimeout(timeout time.Duration)
