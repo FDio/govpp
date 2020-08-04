@@ -42,6 +42,10 @@ of linking the GoVPP core and all its dependencies into them.
     +--------------+
 ```
 
+## Prerequisites
+
+- [Go 1.13](https://golang.org/dl)
+
 ## Quick Start
 
 Make sure that $GOPATH, $GOROOT, and $PATH are set. If you cloned the

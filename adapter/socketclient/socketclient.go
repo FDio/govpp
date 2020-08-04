@@ -56,16 +56,21 @@ var (
 	debug       = strings.Contains(os.Getenv("DEBUG_GOVPP"), "socketclient")
 	debugMsgIds = strings.Contains(os.Getenv("DEBUG_GOVPP"), "msgtable")
 
-	logger = logrus.New()
-	log    = logger.WithField("logger", "govpp/socketclient")
+	log logrus.FieldLogger
 )
 
-// init initializes global logger
+// SetLogger sets global logger.
+func SetLogger(logger logrus.FieldLogger) {
+	log = logger
+}
+
 func init() {
+	logger := logrus.New()
 	if debug {
 		logger.Level = logrus.DebugLevel
-		log.Debug("govpp: debug level enabled for socketclient")
+		logger.Debug("govpp: debug level enabled for socketclient")
 	}
+	log = logger.WithField("logger", "govpp/socketclient")
 }
 
 const socketMissing = `

@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash -o pipefail
 
 VERSION ?= $(shell git describe --always --tags --dirty)
 COMMIT ?= $(shell git rev-parse HEAD)
-BUILD_STAMP ?= $(shell git log -1 --format="%ct")
+BUILD_STAMP ?= $(shell git log -1 --format='%ct')
 BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 
 BUILD_HOST ?= $(shell hostname)
@@ -10,7 +10,7 @@ BUILD_USER ?= $(shell id -un)
 
 GO ?= go
 
-GOVPP_PKG := $(shell go list)
+GOVPP_PKG := git.fd.io/govpp.git
 LDFLAGS = \
 	-X ${GOVPP_PKG}/version.version=$(VERSION) \
 	-X ${GOVPP_PKG}/version.commitHash=$(COMMIT) \
