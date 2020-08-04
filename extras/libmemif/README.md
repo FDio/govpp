@@ -9,7 +9,7 @@ labels `Go-libmemif` and `C-libmemif` are used in the documentation.
 
 libmemif for Golang is build on the top of the original, C-written
 libmemif library using `cgo`. It is therefore necessary to have C-libmemif
-header files and the library itself installed in locations known
+header files, and the library itself installed in locations known
 to the compiler.
 
 For example, to install C-libmemif system-wide into the standard
@@ -17,9 +17,10 @@ locations, execute:
 ```
 $ git clone https://gerrit.fd.io/r/vpp
 $ cd vpp/extras/libmemif
-$ ./bootstrap
-$ ./configure
-$ make install
+$ mkdir build
+$ cd build
+$ cmake ..
+$ sudo make install
 ```
 
 ### Build
@@ -77,7 +78,7 @@ Available callbacks are:
 **libmemif** was designed for a maximum possible performance. Packets
 are sent and received in bulks, rather than one-by-one, using
 `Memif.TxBurst(queueID, packets)` and `Memif.RxBurst(queueID, count)`,
-respectively. Memif connection can consists of multiple queues in both
+respectively. Memif connection can consist of multiple queues in both
 directions. A queue is one-directional wait-free ring buffer.
 It is the unit of parallelism for data transmission. The maximum possible
 lock-free granularity is therefore one go routine for one queue.
@@ -121,7 +122,7 @@ The examples can be found in the subdirectory [examples](./examples).
 
 *raw-data* is a basic example showing how to create a memif interface,
 handle events through callbacks and perform Rx/Tx of raw data. Before
-handling an actual packets it is important to understand the skeleton
+handling an actual packet it is important to understand the skeleton
 of libmemif-based applications.
 
 Since VPP expects proper packet data, it is not very useful to connect
