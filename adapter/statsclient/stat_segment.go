@@ -122,8 +122,12 @@ func (c *statSegment) connect(sockName string) error {
 
 	Log.Debugf("successfuly mmapped shared memory segment (size: %v) %v", size, len(data))
 
+	return c.load(data)
+}
+
+func (c *statSegment) load(data []byte) error {
 	c.sharedHeader = data
-	c.memorySize = size
+	c.memorySize = int64(len(data))
 
 	hdr := loadSharedHeader(c.sharedHeader)
 	Log.Debugf("stat segment header: %+v", hdr)
@@ -193,6 +197,10 @@ func (c *statSegment) getStatDirIndex(p unsafe.Pointer, index uint32) *statSegDi
 }
 
 func (c *statSegment) copyEntryData(dirEntry *statSegDirectoryEntry) adapter.Stat {
+	return c.copyEntryDataLimit(dirEntry, ^uint32(0))
+}
+
+func (c *statSegment) copyEntryDataLimit(dirEntry *statSegDirectoryEntry, limit uint32) adapter.Stat {
 	dirType := adapter.StatType(dirEntry.directoryType)
 
 	switch dirType {
@@ -247,6 +255,9 @@ func (c *statSegment) copyEntryData(dirEntry *statSegDirectoryEntry) adapter.Sta
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
 			counterVec := unsafe.Pointer(&c.sharedHeader[uintptr(cb)])
 			vecLen2 := uint32(vectorLen(counterVec))
+			if vecLen2 > limit {
+				vecLen2 = limit
+			}
 			data[i] = make([]adapter.Counter, vecLen2)
 			for j := uint32(0); j < vecLen2; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
@@ -273,6 +284,9 @@ func (c *statSegment) copyEntryData(dirEntry *statSegDirectoryEntry) adapter.Sta
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
 			counterVec := unsafe.Pointer(&c.sharedHeader[uintptr(cb)])
 			vecLen2 := uint32(vectorLen(counterVec))
+			if vecLen2 > limit {
+				vecLen2 = limit
+			}
 			data[i] = make([]adapter.CombinedCounter, vecLen2)
 			for j := uint32(0); j < vecLen2; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
@@ -294,6 +308,9 @@ func (c *statSegment) copyEntryData(dirEntry *statSegDirectoryEntry) adapter.Sta
 		vecLen := uint32(vectorLen(unsafe.Pointer(&c.sharedHeader[dirEntry.unionData])))
 		offsetVector := statSegPointer(unsafe.Pointer(&c.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
+		if vecLen > limit {
+			vecLen = limit
+		}
 		data := make([]adapter.Name, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
