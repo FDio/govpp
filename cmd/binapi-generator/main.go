@@ -32,6 +32,7 @@ import (
 func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [OPTION] API_FILES\n", os.Args[0])
+		fmt.Fprintln(os.Stderr, "Provide API_FILES by file name, or with full path including extension.")
 		fmt.Fprintln(os.Stderr, "Parse API_FILES and generate Go bindings based on the options given:")
 		flag.PrintDefaults()
 	}

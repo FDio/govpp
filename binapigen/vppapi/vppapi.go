@@ -24,6 +24,9 @@ import (
 const (
 	// DefaultDir is default location of API files.
 	DefaultDir = "/usr/share/vpp/api"
+
+	// APIFileExtension is a VPP API file extension suffix
+	APIFileExtension = ".api.json"
 )
 
 // FindFiles finds API files located in dir or in a nested directory that is not nested deeper than deep.
@@ -40,7 +43,7 @@ func FindFiles(dir string, deep int) (files []string, err error) {
 			} else {
 				files = append(files, nested...)
 			}
-		} else if !e.IsDir() && strings.HasSuffix(e.Name(), ".api.json") {
+		} else if !e.IsDir() && strings.HasSuffix(e.Name(), APIFileExtension) {
 			files = append(files, filepath.Join(dir, e.Name()))
 		}
 	}
@@ -54,13 +57,13 @@ func Parse() ([]*File, error) {
 
 // ParseDir finds and parses API files in given directory and returns parsed files.
 // Supports API files in JSON format (.api.json) only.
-func ParseDir(apidir string) ([]*File, error) {
-	list, err := FindFiles(apidir, 1)
+func ParseDir(apiDir string) ([]*File, error) {
+	list, err := FindFiles(apiDir, 1)
 	if err != nil {
 		return nil, err
 	}
 
-	logf("found %d files in API dir %q", len(list), apidir)
+	logf("found %d files in API dir %q", len(list), apiDir)
 
 	var files []*File
 	for _, file := range list {
@@ -74,17 +77,17 @@ func ParseDir(apidir string) ([]*File, error) {
 }
 
 // ParseFile parses API file and returns File.
-func ParseFile(apifile string) (*File, error) {
-	if !strings.HasSuffix(apifile, ".api.json") {
-		return nil, fmt.Errorf("unsupported file format: %q", apifile)
+func ParseFile(apiFile string) (*File, error) {
+	if !strings.HasSuffix(apiFile, APIFileExtension) {
+		return nil, fmt.Errorf("unsupported file format: %q", apiFile)
 	}
 
-	data, err := ioutil.ReadFile(apifile)
+	data, err := ioutil.ReadFile(apiFile)
 	if err != nil {
-		return nil, fmt.Errorf("reading file %s failed: %v", apifile, err)
+		return nil, fmt.Errorf("reading file %s failed: %v", apiFile, err)
 	}
 
-	base := filepath.Base(apifile)
+	base := filepath.Base(apiFile)
 	name := base[:strings.Index(base, ".")]
 
 	logf("parsing file %q", base)
@@ -94,7 +97,7 @@ func ParseFile(apifile string) (*File, error) {
 		return nil, fmt.Errorf("parsing file %s failed: %v", base, err)
 	}
 	module.Name = name
-	module.Path = apifile
+	module.Path = apiFile
 
 	return module, nil
 }

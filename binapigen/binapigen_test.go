@@ -40,11 +40,11 @@ func TestGenerator(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			RegisterTestingT(t)
 
-			apifiles := []*vppapi.File{test.file}
+			apiFiles := []*vppapi.File{test.file}
 
 			gen, err := New(Options{
 				ImportPrefix: "test",
-			}, apifiles, nil)
+			}, apiFiles, nil)
 			Expect(err).ToNot(HaveOccurred(), "unexpected generator error: %v", err)
 
 			Expect(gen.Files).To(HaveLen(1))

@@ -38,6 +38,7 @@ import (
 type Generator struct {
 	Files       []*File
 	FilesByName map[string]*File
+	FilesByPath map[string]*File
 
 	opts       Options
 	apifiles   []*vppapi.File
@@ -53,11 +54,12 @@ type Generator struct {
 	messagesByName map[string]*Message
 }
 
-func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator, error) {
+func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator, error) {
 	gen := &Generator{
 		FilesByName:    make(map[string]*File),
+		FilesByPath:    make(map[string]*File),
 		opts:           opts,
-		apifiles:       apifiles,
+		apifiles:       apiFiles,
 		filesToGen:     filesToGen,
 		enumsByName:    map[string]*Enum{},
 		aliasesByName:  map[string]*Alias{},
@@ -68,9 +70,9 @@ func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator
 
 	// Normalize API files
 	SortFilesByImports(gen.apifiles)
-	for _, apifile := range apifiles {
-		RemoveImportedTypes(gen.apifiles, apifile)
-		SortFileObjectsByName(apifile)
+	for _, apiFile := range apiFiles {
+		RemoveImportedTypes(gen.apifiles, apiFile)
+		SortFileObjectsByName(apiFile)
 	}
 
 	// prepare package names and import paths
@@ -96,6 +98,7 @@ func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator
 		}
 		gen.Files = append(gen.Files, file)
 		gen.FilesByName[apifile.Name] = file
+		gen.FilesByPath[apifile.Path] = file
 
 		logrus.Debugf("added file %q (path: %v)", apifile.Name, apifile.Path)
 	}
@@ -103,16 +106,24 @@ func New(opts Options, apifiles []*vppapi.File, filesToGen []string) (*Generator
 	// mark files for generation
 	if len(gen.filesToGen) > 0 {
 		logrus.Debugf("Checking %d files to generate: %v", len(gen.filesToGen), gen.filesToGen)
-		for _, genfile := range gen.filesToGen {
-			file, ok := gen.FilesByName[genfile]
-			if !ok {
-				return nil, fmt.Errorf("nol API file found for: %v", genfile)
+		for _, genFile := range gen.filesToGen {
+			markGen := func(file *File) {
+				file.Generate = true
+				// generate all imported files
+				for _, impFile := range file.importedFiles(gen) {
+					impFile.Generate = true
+				}
 			}
-			file.Generate = true
-			// generate all imported files
-			for _, impFile := range file.importedFiles(gen) {
-				impFile.Generate = true
+			if file, ok := gen.FilesByName[genFile]; ok {
+				markGen(file)
+				continue
 			}
+			logrus.Debugf("File %s was not found by name", genFile)
+			if file, ok := gen.FilesByPath[genFile]; ok {
+				markGen(file)
+				continue
+			}
+			return nil, fmt.Errorf("no API file found for: %v", genFile)
 		}
 	} else {
 		logrus.Debugf("Files to generate not specified, marking all %d files for generate", len(gen.Files))
@@ -233,7 +244,7 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 	var importPaths []Import
 	for importPath := range g.packageNames {
 		importPaths = append(importPaths, Import{
-			Name: string(g.packageNames[GoImportPath(importPath)]),
+			Name: string(g.packageNames[importPath]),
 			Path: string(importPath),
 		})
 	}

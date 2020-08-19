@@ -43,7 +43,7 @@ func Run(apiDir string, filesToGenerate []string, opts Options, f func(*Generato
 }
 
 func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generator) error) error {
-	apifiles, err := vppapi.ParseDir(apiDir)
+	apiFiles, err := vppapi.ParseDir(apiDir)
 	if err != nil {
 		return err
 	}
@@ -56,7 +56,7 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 		logrus.Infof("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
-	gen, err := New(opts, apifiles, filesToGenerate)
+	gen, err := New(opts, apiFiles, filesToGenerate)
 	if err != nil {
 		return err
 	}
