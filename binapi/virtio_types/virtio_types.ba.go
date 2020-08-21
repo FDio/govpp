@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/virtio_types.api.json
 
 // Package virtio_types contains generated bindings for API file virtio_types.api.
 //
@@ -12,8 +11,9 @@
 package virtio_types
 
 import (
-	api "git.fd.io/govpp.git/api"
 	"strconv"
+
+	api "git.fd.io/govpp.git/api"
 )
 
 // This is a compile-time assertion to ensure that this generated file

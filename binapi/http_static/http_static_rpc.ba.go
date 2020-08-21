@@ -4,6 +4,7 @@ package http_static
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

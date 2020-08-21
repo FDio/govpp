@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/ethernet_types.api.json
 
 // Package ethernet_types contains generated bindings for API file ethernet_types.api.
 //
@@ -12,8 +11,9 @@
 package ethernet_types
 
 import (
-	api "git.fd.io/govpp.git/api"
 	"net"
+
+	api "git.fd.io/govpp.git/api"
 )
 
 // This is a compile-time assertion to ensure that this generated file

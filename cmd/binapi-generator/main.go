@@ -31,20 +31,34 @@ import (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Usage: %s [OPTION] API_FILES\n", os.Args[0])
-		fmt.Fprintln(os.Stderr, "Provide API_FILES by file name, or with full path including extension.")
-		fmt.Fprintln(os.Stderr, "Parse API_FILES and generate Go bindings based on the options given:")
+		fmt.Fprintf(os.Stderr, "USAGE\n")
+		fmt.Fprintf(os.Stderr, "  Parse API_FILES and generate Go bindings\n")
+		fmt.Fprintf(os.Stderr, "  Provide API_FILES by file name, or with full path including extension.\n")
+		fmt.Fprintf(os.Stderr, "  %s [OPTION] API_FILES\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "OPTIONS\n")
 		flag.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "\nEXAMPLES:\n")
+		fmt.Fprintf(os.Stderr, "  %s \\\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "    --input-dir=$VPP/build-root/install-vpp-native/vpp/share/vpp/api/ \\\n")
+		fmt.Fprintf(os.Stderr, "    --output-dir=~/output \\\n")
+		fmt.Fprintf(os.Stderr, "    interface ip\n")
+		fmt.Fprintf(os.Stderr, "  Assuming --input-dir contains interface.api.json & ip.api.json\n")
 	}
+}
+
+func printErrorAndExit(msg string) {
+	fmt.Fprintf(os.Stderr, "Error: %s\n\n", msg)
+	flag.Usage()
+	os.Exit(1)
 }
 
 func main() {
 	var (
-		theApiDir        = flag.String("input-dir", vppapi.DefaultDir, "Input directory containing API files.")
-		theInputFile     = flag.String("input-file", "", "DEPRECATED: Use program arguments to define files to generate.")
+		theApiDir        = flag.String("input-dir", vppapi.DefaultDir, "Input directory containing API files. (e.g. )")
 		theOutputDir     = flag.String("output-dir", "binapi", "Output directory where code will be generated.")
-		importPrefix     = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
+		importPrefix     = flag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
 		generatorPlugins = flag.String("gen", "rpc", "List of generator plugins to run for files.")
+		theInputFile     = flag.String("input-file", "", "DEPRECATED: Use program arguments to define files to generate.")
 
 		printVersion     = flag.Bool("version", false, "Prints version and exits.")
 		debugLog         = flag.Bool("debug", false, "Enable verbose logging.")
@@ -65,8 +79,7 @@ func main() {
 	var filesToGenerate []string
 	if *theInputFile != "" {
 		if flag.NArg() > 0 {
-			fmt.Fprintln(os.Stderr, "input-file cannot be combined with files to generate in arguments")
-			os.Exit(1)
+			printErrorAndExit("input-file cannot be combined with files to generate in arguments")
 		}
 		filesToGenerate = append(filesToGenerate, *theInputFile)
 	} else {

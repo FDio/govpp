@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/nsim.api.json
 
 // Package nsim contains generated bindings for API file nsim.api.
 //

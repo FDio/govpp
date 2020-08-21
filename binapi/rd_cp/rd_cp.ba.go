@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/rd_cp.api.json
 
 // Package rd_cp contains generated bindings for API file rd_cp.api.
 //

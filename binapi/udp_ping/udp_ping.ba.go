@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/udp_ping.api.json
 
 // Package udp_ping contains generated bindings for API file udp_ping.api.
 //

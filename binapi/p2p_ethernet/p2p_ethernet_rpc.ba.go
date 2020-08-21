@@ -4,6 +4,7 @@ package p2p_ethernet
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

@@ -4,6 +4,7 @@ package trace
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

@@ -4,6 +4,7 @@ package udp_ping
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

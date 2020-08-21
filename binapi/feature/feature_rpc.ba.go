@@ -4,6 +4,7 @@ package feature
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

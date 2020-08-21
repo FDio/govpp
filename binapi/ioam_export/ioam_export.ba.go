@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/ioam_export.api.json
 
 // Package ioam_export contains generated bindings for API file ioam_export.api.
 //

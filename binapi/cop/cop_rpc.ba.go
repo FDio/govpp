@@ -4,6 +4,7 @@ package cop
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

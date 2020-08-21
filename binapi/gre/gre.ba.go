@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/gre.api.json
 
 // Package gre contains generated bindings for API file gre.api.
 //
@@ -14,12 +13,13 @@
 package gre
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	interface_types "git.fd.io/govpp.git/binapi/interface_types"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
 	tunnel_types "git.fd.io/govpp.git/binapi/tunnel_types"
 	codec "git.fd.io/govpp.git/codec"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

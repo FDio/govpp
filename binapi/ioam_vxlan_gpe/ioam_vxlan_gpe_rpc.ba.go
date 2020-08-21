@@ -4,6 +4,7 @@ package ioam_vxlan_gpe
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

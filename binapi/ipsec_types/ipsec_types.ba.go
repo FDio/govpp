@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/ipsec_types.api.json
 
 // Package ipsec_types contains generated bindings for API file ipsec_types.api.
 //
@@ -13,9 +12,10 @@
 package ipsec_types
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

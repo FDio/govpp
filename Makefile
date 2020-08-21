@@ -35,10 +35,16 @@ ifeq ($(V),1)
 GO_BUILD_ARGS += -v
 endif
 
-VPP_VERSION	= $(shell dpkg-query -f '\${Version}' -W vpp)
+VPP_VERSION	?= $(shell dpkg-query -f '\${Version}' -W vpp)
 
-VPP_IMG 	?= ligato/vpp-base:latest
-BINAPI_DIR	?= ./binapi
+# VPP Docker image to use for api generation (gen-binapi-docker)
+VPP_IMG 	      ?= ligato/vpp-base:latest
+# Local VPP directory used for binary api generation (gen-binapi-from-code)
+VPP_DIR           ?=
+# Target directory for generated go api bindings
+BINAPI_DIR	      ?= ./binapi
+# Binapi generator path
+BINAPI_GENERATOR  = ./bin/binapi-generator
 
 bin:
 	mkdir -p bin
@@ -46,6 +52,9 @@ bin:
 build: ## Build all
 	@echo "# building ${VERSION}"
 	$(GO) build ${GO_BUILD_ARGS} ./...
+
+cmd-binapi-generator: bin ## Build commands
+	$(GO) build ${GO_BUILD_ARGS} -o bin ./cmd/binapi-generator
 
 cmd: bin ## Build commands
 	$(GO) build ${GO_BUILD_ARGS} -o bin ./cmd/...
@@ -87,6 +96,19 @@ generate: ## Generate all
 generate-binapi: install-generator ## Generate binapi code
 	@echo "# generating binapi VPP $(VPP_VERSION)"
 	$(GO) generate -x "$(BINAPI_DIR)"
+
+gen-binapi-from-code: cmd-binapi-generator
+	$(eval VPP_API_DIR := ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api/)
+	@echo "Generating vpp API.json and go bindings"
+	@echo "Vpp Directory ${VPP_DIR}"
+	@echo "Vpp API files ${VPP_API_DIR}"
+	@echo "Go bindings   ${BINAPI_DIR}"
+	@cd ${VPP_DIR} && make json-api-files
+	@${BINAPI_GENERATOR} \
+		--input-dir=${VPP_API_DIR} \
+	    --output-dir=${BINAPI_DIR} \
+	    --gen rpc,rest \
+	    --no-source-path-info
 
 gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 	@echo "# generating binapi in docker image ${VPP_IMG}"

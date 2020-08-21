@@ -5,8 +5,9 @@ package vpe
 import (
 	"context"
 	"fmt"
-	api "git.fd.io/govpp.git/api"
 	"io"
+
+	api "git.fd.io/govpp.git/api"
 )
 
 // RPCService defines RPC service  vpe.

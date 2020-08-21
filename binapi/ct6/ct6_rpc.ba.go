@@ -4,6 +4,7 @@ package ct6
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

@@ -5,9 +5,10 @@ package ip
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/binapi/vpe"
-	"io"
 )
 
 // RPCService defines RPC service  ip.

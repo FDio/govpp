@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/ipfix_export.api.json
 
 // Package ipfix_export contains generated bindings for API file ipfix_export.api.
 //

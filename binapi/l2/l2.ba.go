@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/l2.api.json
 
 // Package l2 contains generated bindings for API file l2.api.
 //
@@ -14,12 +13,13 @@
 package l2
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	ethernet_types "git.fd.io/govpp.git/binapi/ethernet_types"
 	interface_types "git.fd.io/govpp.git/binapi/interface_types"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
 	codec "git.fd.io/govpp.git/codec"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/ip6_nd.api.json
 
 // Package ip6_nd contains generated bindings for API file ip6_nd.api.
 //

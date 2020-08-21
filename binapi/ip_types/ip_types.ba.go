@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/ip_types.api.json
 
 // Package ip_types contains generated bindings for API file ip_types.api.
 //
@@ -16,11 +15,12 @@ package ip_types
 
 import (
 	"fmt"
-	api "git.fd.io/govpp.git/api"
-	codec "git.fd.io/govpp.git/codec"
 	"net"
 	"strconv"
 	"strings"
+
+	api "git.fd.io/govpp.git/api"
+	codec "git.fd.io/govpp.git/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

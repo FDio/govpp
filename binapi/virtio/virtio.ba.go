@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/virtio.api.json
 
 // Package virtio contains generated bindings for API file virtio.api.
 //

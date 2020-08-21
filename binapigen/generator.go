@@ -223,6 +223,13 @@ func (g *GenFile) Content() ([]byte, error) {
 	return g.injectImports(g.buf.Bytes())
 }
 
+func getImportClass(importPath string) int {
+	if !strings.Contains(importPath, ".") {
+		return 0 /* std */
+	}
+	return 1 /* External */
+}
+
 // injectImports parses source, injects import block declaration with all imports and return formatted
 func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 	// Parse source code
@@ -259,7 +266,12 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 	}
 	// Sort imports by import path
 	sort.Slice(importPaths, func(i, j int) bool {
-		return importPaths[i].Path < importPaths[j].Path
+		ci := getImportClass(importPaths[i].Path)
+		cj := getImportClass(importPaths[j].Path)
+		if ci == cj {
+			return importPaths[i].Path < importPaths[j].Path
+		}
+		return ci < cj
 	})
 	// Inject new import block into parsed AST
 	if len(importPaths) > 0 {
@@ -275,14 +287,20 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 		}
 		// Prepare the import block
 		impDecl := &ast.GenDecl{Tok: token.IMPORT, TokPos: pos, Lparen: pos, Rparen: pos}
-		for _, importPath := range importPaths {
+		for i, importPath := range importPaths {
 			var name *ast.Ident
 			if importPath.Name == "_" || strings.Contains(importPath.Path, ".") {
 				name = &ast.Ident{Name: importPath.Name, NamePos: pos}
 			}
+			value := strconv.Quote(importPath.Path)
+			if i < len(importPaths)-1 {
+				if getImportClass(importPath.Path) != getImportClass(importPaths[i+1].Path) {
+					value += "\n"
+				}
+			}
 			impDecl.Specs = append(impDecl.Specs, &ast.ImportSpec{
 				Name:   name,
-				Path:   &ast.BasicLit{Kind: token.STRING, Value: strconv.Quote(importPath.Path), ValuePos: pos},
+				Path:   &ast.BasicLit{Kind: token.STRING, Value: value, ValuePos: pos},
 				EndPos: pos,
 			})
 		}

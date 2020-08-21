@@ -4,6 +4,7 @@ package avf
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 

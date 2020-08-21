@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/vrrp.api.json
 
 // Package vrrp contains generated bindings for API file vrrp.api.
 //
@@ -14,12 +13,13 @@
 package vrrp
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	ethernet_types "git.fd.io/govpp.git/binapi/ethernet_types"
 	interface_types "git.fd.io/govpp.git/binapi/interface_types"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
 	codec "git.fd.io/govpp.git/codec"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

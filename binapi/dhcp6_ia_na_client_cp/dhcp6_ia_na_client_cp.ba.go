@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/dhcp6_ia_na_client_cp.api.json
 
 // Package dhcp6_ia_na_client_cp contains generated bindings for API file dhcp6_ia_na_client_cp.api.
 //

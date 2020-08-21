@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/plugins/urpf.api.json
 
 // Package urpf contains generated bindings for API file urpf.api.
 //
@@ -13,12 +12,13 @@
 package urpf
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	_ "git.fd.io/govpp.git/binapi/fib_types"
 	interface_types "git.fd.io/govpp.git/binapi/interface_types"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
 	codec "git.fd.io/govpp.git/codec"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

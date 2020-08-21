@@ -2,7 +2,6 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
-// source: /usr/share/vpp/api/core/lisp.api.json
 
 // Package lisp contains generated bindings for API file lisp.api.
 //
@@ -14,13 +13,14 @@
 package lisp
 
 import (
+	"strconv"
+
 	api "git.fd.io/govpp.git/api"
 	_ "git.fd.io/govpp.git/binapi/ethernet_types"
 	interface_types "git.fd.io/govpp.git/binapi/interface_types"
 	ip_types "git.fd.io/govpp.git/binapi/ip_types"
 	lisp_types "git.fd.io/govpp.git/binapi/lisp_types"
 	codec "git.fd.io/govpp.git/codec"
-	"strconv"
 )
 
 // This is a compile-time assertion to ensure that this generated file

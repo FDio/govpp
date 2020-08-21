@@ -26,7 +26,9 @@ import (
 )
 
 const (
-	VPPVersionEnvVar = "VPP_VERSION"
+	VPPVersionEnvVar  = "VPP_VERSION"
+	VPPDirEnvVar      = "VPP_DIR"
+	versionScriptPath = "./src/scripts/version"
 )
 
 // ResolveVPPVersion resolves version of the VPP for target directory.
@@ -35,7 +37,7 @@ const (
 func ResolveVPPVersion(apidir string) string {
 	// check env variable override
 	if ver := os.Getenv(VPPVersionEnvVar); ver != "" {
-		logrus.Debugf("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
+		logrus.Infof("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
 		return ver
 	}
 
@@ -60,7 +62,7 @@ func ResolveVPPVersion(apidir string) string {
 		if err != nil {
 			logrus.Warnf("resolving VPP version from version script failed: %v", err)
 		} else {
-			logrus.Debugf("resolved VPP version from version script: %v", version)
+			logrus.Infof("resolved VPP version from version script: %v", version)
 			return version
 		}
 	}
@@ -85,14 +87,13 @@ func GetVPPVersionInstalled() (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-const versionScriptPath = "./src/scripts/version"
-
 // GetVPPVersionRepo retrieves VPP version using script in repo directory.
 func GetVPPVersionRepo(repoDir string) (string, error) {
-	if _, err := os.Stat(versionScriptPath); err != nil {
+	scriptPath := path.Join(repoDir, versionScriptPath)
+	if _, err := os.Stat(scriptPath); err != nil {
 		return "", err
 	}
-	cmd := exec.Command(versionScriptPath)
+	cmd := exec.Command(scriptPath)
 	cmd.Dir = repoDir
 	out, err := cmd.CombinedOutput()
 	if err != nil {
@@ -102,6 +103,10 @@ func GetVPPVersionRepo(repoDir string) (string, error) {
 }
 
 func findGitRepoRootDir(dir string) (string, error) {
+	if conf := os.Getenv(VPPDirEnvVar); conf != "" {
+		logrus.Infof("VPP directory was manually set to %q via %s env var", conf, VPPDirEnvVar)
+		return conf, nil
+	}
 	cmd := exec.Command("git", "rev-parse", "--show-toplevel")
 	cmd.Dir = dir
 	out, err := cmd.CombinedOutput()

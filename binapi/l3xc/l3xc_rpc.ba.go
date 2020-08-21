@@ -5,9 +5,10 @@ package l3xc
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/binapi/vpe"
-	"io"
 )
 
 // RPCService defines RPC service  l3xc.
