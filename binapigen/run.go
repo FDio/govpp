@@ -29,9 +29,10 @@ import (
 )
 
 type Options struct {
-	OutputDir     string // output directory for generated files
-	ImportPrefix  string // prefix for import paths
-	NoVersionInfo bool   // disables generating version info
+	OutputDir        string // output directory for generated files
+	ImportPrefix     string // prefix for import paths
+	NoVersionInfo    bool   // disables generating version info
+	NoSourcePathInfo bool   // disables the 'source: /path' comment
 }
 
 func Run(apiDir string, filesToGenerate []string, opts Options, f func(*Generator) error) {

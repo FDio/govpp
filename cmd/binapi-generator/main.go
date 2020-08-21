@@ -45,8 +45,10 @@ func main() {
 		importPrefix     = flag.String("import-prefix", "", "Define import path prefix to be used to import types.")
 		generatorPlugins = flag.String("gen", "rpc", "List of generator plugins to run for files.")
 
-		printVersion = flag.Bool("version", false, "Prints version and exits.")
-		debugLog     = flag.Bool("debug", false, "Enable verbose logging.")
+		printVersion     = flag.Bool("version", false, "Prints version and exits.")
+		debugLog         = flag.Bool("debug", false, "Enable verbose logging.")
+		noVersionInfo    = flag.Bool("no-version-info", false, "Disable version info in generated files.")
+		noSourcePathInfo = flag.Bool("no-source-path-info", false, "Disable source path info in generated files.")
 	)
 	flag.Parse()
 
@@ -71,8 +73,10 @@ func main() {
 	}
 
 	opts := binapigen.Options{
-		ImportPrefix: *importPrefix,
-		OutputDir:    *theOutputDir,
+		ImportPrefix:     *importPrefix,
+		OutputDir:        *theOutputDir,
+		NoVersionInfo:    *noVersionInfo,
+		NoSourcePathInfo: *noSourcePathInfo,
 	}
 	if opts.OutputDir == "binapi" {
 		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {

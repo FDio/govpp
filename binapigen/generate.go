@@ -55,7 +55,9 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 		g.P("// versions:")
 		g.P("//  binapi-generator: ", version.Version())
 		g.P("//  VPP:              ", g.gen.vppVersion)
-		g.P("// source: ", g.file.Desc.Path)
+		if !gen.opts.NoSourcePathInfo {
+			g.P("// source: ", g.file.Desc.Path)
+		}
 	}
 	g.P()
 
