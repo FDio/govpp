@@ -252,7 +252,10 @@ func (a *VppAdapter) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 
 // SendMsg emulates sending a binary-encoded message to VPP.
 func (a *VppAdapter) SendMsg(clientID uint32, data []byte) error {
-	switch a.mode {
+	a.repliesLock.Lock()
+	mode := a.mode
+	a.repliesLock.Unlock()
+	switch mode {
 	case useReplyHandlers:
 		for i := len(a.replyHandlers) - 1; i >= 0; i-- {
 			replyHandler := a.replyHandlers[i]
