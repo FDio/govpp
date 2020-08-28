@@ -285,8 +285,10 @@ func genUnion(g *GenFile, union *Union) {
 
 	g.P("type ", union.GoName, " struct {")
 
+	// generate field comments
+	g.P("// ", union.GoName, " can be one of:")
 	for _, field := range union.Fields {
-		g.P("// ", field.GoName, " *", getFieldType(g, field))
+		g.P("// - ", field.GoName, " *", getFieldType(g, field))
 	}
 
 	// generate data field
@@ -299,22 +301,23 @@ func genUnion(g *GenFile, union *Union) {
 
 	// generate methods for fields
 	for _, field := range union.Fields {
-		genUnionFieldMethods(g, union.GoName, field)
+		genUnionField(g, union, field)
 	}
 	g.P()
 }
 
-func genUnionFieldMethods(g *GenFile, structName string, field *Field) {
-	getterStruct := fieldGoType(g, field)
+func genUnionField(g *GenFile, union *Union, field *Field) {
+	fieldType := fieldGoType(g, field)
+	constructorName := union.GoName + field.GoName
 
 	// Constructor
-	g.P("func ", structName, field.GoName, "(a ", getterStruct, ") (u ", structName, ") {")
+	g.P("func ", constructorName, "(a ", fieldType, ") (u ", union.GoName, ") {")
 	g.P("	u.Set", field.GoName, "(a)")
 	g.P("	return")
 	g.P("}")
 
 	// Setter
-	g.P("func (u *", structName, ") Set", field.GoName, "(a ", getterStruct, ") {")
+	g.P("func (u *", union.GoName, ") Set", field.GoName, "(a ", fieldType, ") {")
 	g.P("	buf := ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
 	encodeField(g, field, "a", func(name string) string {
 		return "a." + name
@@ -322,14 +325,22 @@ func genUnionFieldMethods(g *GenFile, structName string, field *Field) {
 	g.P("}")
 
 	// Getter
-	g.P("func (u *", structName, ") Get", field.GoName, "() (a ", getterStruct, ") {")
+	g.P("func (u *", union.GoName, ") Get", field.GoName, "() (a ", fieldType, ") {")
 	g.P("	buf := ", govppCodecPkg.Ident("NewBuffer"), "(u.", fieldUnionData, "[:])")
 	decodeField(g, field, "a", func(name string) string {
 		return "a." + name
 	}, 0)
 	g.P("	return")
 	g.P("}")
+
 	g.P()
+}
+
+func withSuffix(s string, suffix string) string {
+	if strings.HasSuffix(s, suffix) {
+		return s
+	}
+	return s + suffix
 }
 
 func genField(g *GenFile, fields []*Field, i int) {

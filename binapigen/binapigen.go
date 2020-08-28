@@ -271,7 +271,7 @@ func newUnion(gen *Generator, file *File, apitype vppapi.UnionType) *Union {
 	typ := &Union{
 		UnionType: apitype,
 		GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
+			GoName:       withSuffix(camelCaseName(apitype.Name), "Union"),
 			GoImportPath: file.GoImportPath,
 		},
 	}
