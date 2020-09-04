@@ -15,7 +15,6 @@
 package statsclient
 
 import (
-	"fmt"
 	"sync/atomic"
 	"unsafe"
 
@@ -65,7 +64,7 @@ func (ss *statSegmentV2) loadSharedHeader(b []byte) (header sharedHeaderV2) {
 	}
 }
 
-func (ss *statSegmentV2) GetDirectoryVector() (unsafe.Pointer, error) {
+func (ss *statSegmentV2) GetDirectoryVector() unsafe.Pointer {
 	header := ss.loadSharedHeader(ss.sharedHeader)
 	return ss.adjust(unsafe.Pointer(&header.dirVector))
 }
@@ -100,8 +99,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.ScalarStat(dirEntry.unionData)
 
 	case statDirErrorIndex:
-		dirVector, err := ss.getErrorVector()
-		if err != nil {
+		dirVector := ss.getErrorVector()
+		if dirVector == nil {
 			debugf("error vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -109,8 +108,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		var errData adapter.Counter
 		for i := uint32(0); i < vecLen; i++ {
 			cb := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			cbVal, err := ss.adjust(vectorLen(cb))
-			if err != nil {
+			cbVal := ss.adjust(vectorLen(cb))
+			if cbVal == nil {
 				debugf("error counter pointer out of range")
 				continue
 			}
@@ -121,8 +120,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.ErrorStat(errData)
 
 	case statDirCounterVectorSimple:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -130,8 +129,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		data := make([][]adapter.Counter, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			counterVector, err := ss.adjust(vectorLen(counterVectorOffset))
-			if err != nil {
+			counterVector := ss.adjust(vectorLen(counterVectorOffset))
+			if counterVector == nil {
 				debugf("counter (vector simple) pointer out of range")
 				continue
 			}
@@ -146,8 +145,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.SimpleCounterStat(data)
 
 	case statDirCounterVectorCombined:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -155,8 +154,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		data := make([][]adapter.CombinedCounter, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			counterVector, err := ss.adjust(vectorLen(counterVectorOffset))
-			if err != nil {
+			counterVector := ss.adjust(vectorLen(counterVectorOffset))
+			if counterVector == nil {
 				debugf("counter (vector combined) pointer out of range")
 				continue
 			}
@@ -171,8 +170,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.CombinedCounterStat(data)
 
 	case statDirNameVector:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -184,8 +183,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 				debugf("name vector out of range for %s (%v)", dirEntry.name, i)
 				continue
 			}
-			nameVector, err := ss.adjust(vectorLen(nameVectorOffset))
-			if err != nil {
+			nameVector := ss.adjust(vectorLen(nameVectorOffset))
+			if nameVector == nil {
 				debugf("name data pointer out of range")
 				continue
 			}
@@ -219,8 +218,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		*stat = adapter.ScalarStat(dirEntry.unionData)
 
 	case adapter.ErrorStat:
-		dirVector, err := ss.getErrorVector()
-		if err != nil {
+		dirVector := ss.getErrorVector()
+		if dirVector == nil {
 			debugf("error vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -228,8 +227,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		var errData adapter.Counter
 		for i := uint32(0); i < vecLen; i++ {
 			cb := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			cbVal, err := ss.adjust(vectorLen(cb))
-			if err != nil {
+			cbVal := ss.adjust(vectorLen(cb))
+			if cbVal == nil {
 				debugf("error counter pointer out of range")
 				continue
 			}
@@ -240,8 +239,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		*stat = adapter.ErrorStat(errData)
 
 	case adapter.SimpleCounterStat:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -252,8 +251,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 		for i := uint32(0); i < vecLen; i++ {
 			counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			counterVector, err := ss.adjust(vectorLen(counterVectorOffset))
-			if err != nil {
+			counterVector := ss.adjust(vectorLen(counterVectorOffset))
+			if counterVector == nil {
 				debugf("counter (vector simple) pointer out of range")
 				continue
 			}
@@ -267,8 +266,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.CombinedCounterStat:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -276,8 +275,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		data := (*stat).(adapter.CombinedCounterStat)
 		for i := uint32(0); i < vecLen; i++ {
 			counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
-			counterVector, err := ss.adjust(vectorLen(counterVectorOffset))
-			if err != nil {
+			counterVector := ss.adjust(vectorLen(counterVectorOffset))
+			if counterVector == nil {
 				debugf("counter (vector combined) pointer out of range")
 				continue
 			}
@@ -291,8 +290,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.NameStat:
-		dirVector, err := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
-		if err != nil {
+		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
@@ -304,8 +303,8 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 				debugf("name vector out of range for %s (%v)", dirEntry.name, i)
 				continue
 			}
-			nameVector, err := ss.adjust(vectorLen(nameVectorOffset))
-			if err != nil {
+			nameVector := ss.adjust(vectorLen(nameVectorOffset))
+			if nameVector == nil {
 				debugf("name data pointer out of range")
 				continue
 			}
@@ -334,18 +333,18 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 
 // Adjust data pointer using shared header and base and return
 // the pointer to a data segment
-func (ss *statSegmentV2) adjust(data unsafe.Pointer) (unsafe.Pointer, error) {
+func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
 	header := ss.loadSharedHeader(ss.sharedHeader)
 	adjusted := unsafe.Pointer(uintptr(unsafe.Pointer(&ss.sharedHeader[0])) +
 		uintptr(*(*uint64)(data)) - uintptr(*(*uint64)(unsafe.Pointer(&header.base))))
 	if uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) <= uintptr(adjusted) ||
 		uintptr(unsafe.Pointer(&ss.sharedHeader[0])) >= uintptr(adjusted) {
-		return nil, fmt.Errorf("adjusted data out of range for %v", data)
+		return nil
 	}
-	return adjusted, nil
+	return adjusted
 }
 
-func (ss *statSegmentV2) getErrorVector() (unsafe.Pointer, error) {
+func (ss *statSegmentV2) getErrorVector() unsafe.Pointer {
 	header := ss.loadSharedHeader(ss.sharedHeader)
 	return ss.adjust(unsafe.Pointer(&header.errorVector))
 }

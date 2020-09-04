@@ -66,9 +66,9 @@ func (ss *statSegmentV1) loadSharedHeader(b []byte) (header sharedHeaderV1) {
 	}
 }
 
-func (ss *statSegmentV1) GetDirectoryVector() (unsafe.Pointer, error) {
+func (ss *statSegmentV1) GetDirectoryVector() unsafe.Pointer {
 	dirOffset, _, _ := ss.getOffsets()
-	return unsafe.Pointer(&ss.sharedHeader[dirOffset]), nil
+	return unsafe.Pointer(&ss.sharedHeader[dirOffset])
 }
 
 func (ss *statSegmentV1) GetErrorVector() (unsafe.Pointer, error) {

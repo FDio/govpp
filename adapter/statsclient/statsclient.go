@@ -138,8 +138,8 @@ func (sc *StatsClient) ListStats(patterns ...string) ([]string, error) {
 		return nil, err
 	}
 
-	dirVector, err := sc.GetDirectoryVector()
-	if err != nil {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
 		return nil, fmt.Errorf("failed to list stats: %v", err)
 	}
 	vecLen := *(*uint32)(vectorLen(dirVector))
@@ -171,8 +171,8 @@ func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntr
 		return nil, err
 	}
 
-	dirVector, err := sc.GetDirectoryVector()
-	if err != nil {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
 		return nil, err
 	}
 	dirLen := *(*uint32)(vectorLen(dirVector))
@@ -217,8 +217,8 @@ func (sc *StatsClient) PrepareDir(patterns ...string) (*adapter.StatDir, error) 
 	}
 	dir.Indexes = indexes
 
-	dirVector, err := sc.GetDirectoryVector()
-	if err != nil {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
 		return nil, err
 	}
 	dirLen := *(*uint32)(vectorLen(dirVector))
@@ -263,8 +263,8 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 		return adapter.ErrStatsAccessFailed
 	}
 
-	dirVector, err := sc.GetDirectoryVector()
-	if err != nil {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
 		return err
 	}
 	for i, index := range dir.Indexes {
@@ -412,8 +412,8 @@ func (sc *StatsClient) listIndexesFunc(f func(name []byte) bool) (indexes []uint
 		indexes = make([]uint32, 0, 3200)
 	}
 
-	dirVector, err := sc.GetDirectoryVector()
-	if err != nil {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
 		return nil, err
 	}
 	vecLen := *(*uint32)(vectorLen(dirVector))

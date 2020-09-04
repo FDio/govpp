@@ -55,8 +55,8 @@ type statDirectoryName []byte
 // statSegment represents common API for every stats API version
 type statSegment interface {
 	// GetDirectoryVector returns pointer to memory where the beginning
-	// of the data directory is located
-	GetDirectoryVector() (unsafe.Pointer, error)
+	// of the data directory is located.
+	GetDirectoryVector() unsafe.Pointer
 
 	// GetStatDirOnIndex accepts directory vector and particular index.
 	// Returns pointer to the beginning of the segment. Also the directory
