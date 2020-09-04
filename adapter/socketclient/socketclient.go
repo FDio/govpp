@@ -83,7 +83,7 @@ const socketMissing = `
 
  To enable it add following section to your VPP config:
    socksvr {
-     default
+     socket-name /run/vpp/api.sock
    }
 ------------------------------------------------------------
 `

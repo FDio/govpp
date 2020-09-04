@@ -43,7 +43,7 @@ const socketMissing = `
 
  To enable it add following section to your VPP config:
    statseg {
-     default
+     socket-name /run/vpp/stats.sock
    }
 ------------------------------------------------------------
 `

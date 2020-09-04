@@ -84,7 +84,7 @@ func NewStatsRPC(stats adapter.StatsAPI) (*StatsRPC, error) {
 func (s *StatsRPC) watchConnection() {
 	heartbeatTicker := time.NewTicker(10 * time.Second).C
 	atomic.StoreUint32(&s.available, 1)
-	log.Println("enabling statsRPC service")
+	log.Debugln("enabling statsRPC service")
 
 	count := 0
 	prev := new(api.SystemStats)
@@ -263,7 +263,7 @@ func (s *BinapiRPC) watchConnection() {
 			case core.Connected:
 				if !s.serviceAvailable() {
 					atomic.StoreUint32(&s.available, 1)
-					log.Println("enabling binapiRPC service")
+					log.Debugln("enabling binapiRPC service")
 				}
 			case core.Disconnected:
 				if s.serviceAvailable() {
