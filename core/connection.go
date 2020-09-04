@@ -42,8 +42,8 @@ var (
 
 var (
 	HealthCheckProbeInterval = time.Second            // default health check probe interval
-	HealthCheckReplyTimeout  = time.Millisecond * 100 // timeout for reply to a health check probe
-	HealthCheckThreshold     = 1                      // number of failed health checks until the error is reported
+	HealthCheckReplyTimeout  = time.Millisecond * 250 // timeout for reply to a health check probe
+	HealthCheckThreshold     = 2                      // number of failed health checks until the error is reported
 	DefaultReplyTimeout      = time.Second            // default timeout for replies from VPP
 )
 
