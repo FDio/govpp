@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/vpe.api.json
 
 // Package vpe contains generated bindings for API file vpe.api.
 //

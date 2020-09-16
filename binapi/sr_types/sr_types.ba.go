@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/sr_types.api.json
 
 // Package sr_types contains generated bindings for API file sr_types.api.
 //

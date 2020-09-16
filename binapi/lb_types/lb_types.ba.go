@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/plugins/lb_types.api.json
 
 // Package lb_types contains generated bindings for API file lb_types.api.
 //

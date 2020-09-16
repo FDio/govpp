@@ -128,45 +128,59 @@ func getFieldType(g *GenFile, field *Field) string {
 	return gotype
 }
 
-func getSizeOfBinapiTypeLength(typ string, length int) (size int) {
+func getUnionSize(union *Union) (maxSize int) {
+	for _, field := range union.Fields {
+		if size, isBaseType := getSizeOfField(field); isBaseType {
+			logrus.Panicf("union %s field %s has unexpected type %q", union.Name, field.Name, field.Type)
+		} else if size > maxSize {
+			maxSize = size
+		}
+	}
+	//logf("getUnionSize: %s %+v max=%v", union.Name, union.Fields, maxSize)
+	return
+}
+
+func getSizeOfField(field *Field) (size int, isBaseType bool) {
+	if alias := field.TypeAlias; alias != nil {
+		size = getSizeOfBinapiBaseType(alias.Type, alias.Length)
+		return
+	}
+	if enum := field.TypeEnum; enum != nil {
+		size = getSizeOfBinapiBaseType(enum.Type, field.Length)
+		return
+	}
+	if structType := field.TypeStruct; structType != nil {
+		size = getSizeOfStruct(structType)
+		return
+	}
+	if union := field.TypeUnion; union != nil {
+		size = getUnionSize(union)
+		return
+	}
+	return size, true
+}
+
+func getSizeOfStruct(typ *Struct) (size int) {
+	for _, field := range typ.Fields {
+		fieldSize, isBaseType := getSizeOfField(field)
+		if isBaseType {
+			size += getSizeOfBinapiBaseType(field.Type, field.Length)
+			continue
+		}
+		size += fieldSize
+	}
+	return size
+}
+
+// Returns size of base type multiplied by length. Length equal to zero
+// returns base type size.
+func getSizeOfBinapiBaseType(typ string, length int) (size int) {
 	if n := BaseTypeSizes[typ]; n > 0 {
-		if length > 0 {
+		if length > 1 {
 			return n * length
 		} else {
 			return n
 		}
 	}
-	return
-}
-
-func getSizeOfType(typ *Struct) (size int) {
-	for _, field := range typ.Fields {
-		if enum := field.TypeEnum; enum != nil {
-			size += getSizeOfBinapiTypeLength(enum.Type, field.Length)
-			continue
-		}
-		size += getSizeOfBinapiTypeLength(field.Type, field.Length)
-	}
-	return size
-}
-
-func getUnionSize(union *Union) (maxSize int) {
-	for _, field := range union.Fields {
-		if typ := field.TypeStruct; typ != nil {
-			if size := getSizeOfType(typ); size > maxSize {
-				maxSize = size
-			}
-			continue
-		}
-		if alias := field.TypeAlias; alias != nil {
-			if size := getSizeOfBinapiTypeLength(alias.Type, alias.Length); size > maxSize {
-				maxSize = size
-			}
-			continue
-		} else {
-			logrus.Panicf("no type or alias found for union %s field type %q", union.Name, field.Type)
-		}
-	}
-	//logf("getUnionSize: %s %+v max=%v", union.Name, union.Fields, maxSize)
 	return
 }

@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/ethernet_types.api.json
 
 // Package ethernet_types contains generated bindings for API file ethernet_types.api.
 //

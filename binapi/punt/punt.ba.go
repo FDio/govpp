@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/punt.api.json
 
 // Package punt contains generated bindings for API file punt.api.
 //
@@ -95,9 +96,10 @@ type PuntReason struct {
 
 // PuntUnion defines union 'punt_union'.
 type PuntUnion struct {
-	// Exception *PuntException
-	// L4 *PuntL4
-	// IPProto *PuntIPProto
+	// PuntUnion can be one of:
+	// - Exception *PuntException
+	// - L4 *PuntL4
+	// - IPProto *PuntIPProto
 	XXX_UnionData [4]byte
 }
 

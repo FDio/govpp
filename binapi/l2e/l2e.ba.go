@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/plugins/l2e.api.json
 
 // Package l2e contains generated bindings for API file l2e.api.
 //

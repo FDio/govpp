@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/vhost_user.api.json
 
 // Package vhost_user contains generated bindings for API file vhost_user.api.
 //

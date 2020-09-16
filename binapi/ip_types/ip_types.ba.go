@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/ip_types.api.json
 
 // Package ip_types contains generated bindings for API file ip_types.api.
 //
@@ -558,8 +559,9 @@ type PrefixMatcher struct {
 
 // AddressUnion defines union 'address_union'.
 type AddressUnion struct {
-	// IP4 *IP4Address
-	// IP6 *IP6Address
+	// AddressUnion can be one of:
+	// - IP4 *IP4Address
+	// - IP6 *IP6Address
 	XXX_UnionData [16]byte
 }
 

@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/lisp_gpe.api.json
 
 // Package lisp_gpe contains generated bindings for API file lisp_gpe.api.
 //
@@ -78,15 +79,15 @@ func (m *GpeAddDelFwdEntry) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	size += 1     // m.IsAdd
-	size += 1     // m.RmtEid.Type
-	size += 1 * 6 // m.RmtEid.Address
-	size += 1     // m.LclEid.Type
-	size += 1 * 6 // m.LclEid.Address
-	size += 4     // m.Vni
-	size += 4     // m.DpTable
-	size += 1     // m.Action
-	size += 4     // m.LocNum
+	size += 1      // m.IsAdd
+	size += 1      // m.RmtEid.Type
+	size += 1 * 18 // m.RmtEid.Address
+	size += 1      // m.LclEid.Type
+	size += 1 * 18 // m.LclEid.Address
+	size += 4      // m.Vni
+	size += 4      // m.DpTable
+	size += 1      // m.Action
+	size += 4      // m.LocNum
 	for j1 := 0; j1 < len(m.Locs); j1++ {
 		var s1 GpeLocator
 		_ = s1
@@ -106,9 +107,9 @@ func (m *GpeAddDelFwdEntry) Marshal(b []byte) ([]byte, error) {
 	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.RmtEid.Type))
-	buf.EncodeBytes(m.RmtEid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.RmtEid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint8(uint8(m.LclEid.Type))
-	buf.EncodeBytes(m.LclEid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.LclEid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint32(m.DpTable)
 	buf.EncodeUint8(m.Action)
@@ -128,9 +129,9 @@ func (m *GpeAddDelFwdEntry) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.IsAdd = buf.DecodeBool()
 	m.RmtEid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.RmtEid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.RmtEid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.LclEid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.LclEid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.LclEid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.Vni = buf.DecodeUint32()
 	m.DpTable = buf.DecodeUint32()
 	m.Action = buf.DecodeUint8()
@@ -467,14 +468,14 @@ func (m *GpeFwdEntriesGetReply) Size() (size int) {
 		if j1 < len(m.Entries) {
 			s1 = m.Entries[j1]
 		}
-		size += 4     // s1.FwdEntryIndex
-		size += 4     // s1.DpTable
-		size += 1     // s1.Leid.Type
-		size += 1 * 6 // s1.Leid.Address
-		size += 1     // s1.Reid.Type
-		size += 1 * 6 // s1.Reid.Address
-		size += 4     // s1.Vni
-		size += 1     // s1.Action
+		size += 4      // s1.FwdEntryIndex
+		size += 4      // s1.DpTable
+		size += 1      // s1.Leid.Type
+		size += 1 * 18 // s1.Leid.Address
+		size += 1      // s1.Reid.Type
+		size += 1 * 18 // s1.Reid.Address
+		size += 4      // s1.Vni
+		size += 1      // s1.Action
 	}
 	return size
 }
@@ -493,9 +494,9 @@ func (m *GpeFwdEntriesGetReply) Marshal(b []byte) ([]byte, error) {
 		buf.EncodeUint32(v0.FwdEntryIndex)
 		buf.EncodeUint32(v0.DpTable)
 		buf.EncodeUint8(uint8(v0.Leid.Type))
-		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 6)
+		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 18)
 		buf.EncodeUint8(uint8(v0.Reid.Type))
-		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 6)
+		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 18)
 		buf.EncodeUint32(v0.Vni)
 		buf.EncodeUint8(v0.Action)
 	}
@@ -510,9 +511,9 @@ func (m *GpeFwdEntriesGetReply) Unmarshal(b []byte) error {
 		m.Entries[j0].FwdEntryIndex = buf.DecodeUint32()
 		m.Entries[j0].DpTable = buf.DecodeUint32()
 		m.Entries[j0].Leid.Type = lisp_types.EidType(buf.DecodeUint8())
-		copy(m.Entries[j0].Leid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+		copy(m.Entries[j0].Leid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 		m.Entries[j0].Reid.Type = lisp_types.EidType(buf.DecodeUint8())
-		copy(m.Entries[j0].Reid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+		copy(m.Entries[j0].Reid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 		m.Entries[j0].Vni = buf.DecodeUint32()
 		m.Entries[j0].Action = buf.DecodeUint8()
 	}

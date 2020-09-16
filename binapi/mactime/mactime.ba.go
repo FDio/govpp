@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/plugins/mactime.api.json
 
 // Package mactime contains generated bindings for API file mactime.api.
 //

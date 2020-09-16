@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/lisp.api.json
 
 // Package lisp contains generated bindings for API file lisp.api.
 //
@@ -90,12 +91,12 @@ func (m *LispAddDelAdjacency) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	size += 1     // m.IsAdd
-	size += 4     // m.Vni
-	size += 1     // m.Reid.Type
-	size += 1 * 6 // m.Reid.Address
-	size += 1     // m.Leid.Type
-	size += 1 * 6 // m.Leid.Address
+	size += 1      // m.IsAdd
+	size += 4      // m.Vni
+	size += 1      // m.Reid.Type
+	size += 1 * 18 // m.Reid.Address
+	size += 1      // m.Leid.Type
+	size += 1 * 18 // m.Leid.Address
 	return size
 }
 func (m *LispAddDelAdjacency) Marshal(b []byte) ([]byte, error) {
@@ -106,9 +107,9 @@ func (m *LispAddDelAdjacency) Marshal(b []byte) ([]byte, error) {
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Reid.Type))
-	buf.EncodeBytes(m.Reid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Reid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint8(uint8(m.Leid.Type))
-	buf.EncodeBytes(m.Leid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Leid.Address.XXX_UnionData[:], 18)
 	return buf.Bytes(), nil
 }
 func (m *LispAddDelAdjacency) Unmarshal(b []byte) error {
@@ -116,9 +117,9 @@ func (m *LispAddDelAdjacency) Unmarshal(b []byte) error {
 	m.IsAdd = buf.DecodeBool()
 	m.Vni = buf.DecodeUint32()
 	m.Reid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Reid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Reid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.Leid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Leid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Leid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	return nil
 }
 
@@ -177,7 +178,7 @@ func (m *LispAddDelLocalEid) Size() (size int) {
 	}
 	size += 1      // m.IsAdd
 	size += 1      // m.Eid.Type
-	size += 1 * 6  // m.Eid.Address
+	size += 1 * 18 // m.Eid.Address
 	size += 64     // m.LocatorSetName
 	size += 4      // m.Vni
 	size += 1      // m.Key.ID
@@ -191,7 +192,7 @@ func (m *LispAddDelLocalEid) Marshal(b []byte) ([]byte, error) {
 	buf := codec.NewBuffer(b)
 	buf.EncodeBool(m.IsAdd)
 	buf.EncodeUint8(uint8(m.Eid.Type))
-	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 18)
 	buf.EncodeString(m.LocatorSetName, 64)
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Key.ID))
@@ -202,7 +203,7 @@ func (m *LispAddDelLocalEid) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.IsAdd = buf.DecodeBool()
 	m.Eid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Eid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Eid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.LocatorSetName = buf.DecodeString(64)
 	m.Vni = buf.DecodeUint32()
 	m.Key.ID = lisp_types.HmacKeyID(buf.DecodeUint8())
@@ -674,16 +675,16 @@ func (m *LispAddDelRemoteMapping) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	size += 1     // m.IsAdd
-	size += 1     // m.IsSrcDst
-	size += 1     // m.DelAll
-	size += 4     // m.Vni
-	size += 1     // m.Action
-	size += 1     // m.Deid.Type
-	size += 1 * 6 // m.Deid.Address
-	size += 1     // m.Seid.Type
-	size += 1 * 6 // m.Seid.Address
-	size += 4     // m.RlocNum
+	size += 1      // m.IsAdd
+	size += 1      // m.IsSrcDst
+	size += 1      // m.DelAll
+	size += 4      // m.Vni
+	size += 1      // m.Action
+	size += 1      // m.Deid.Type
+	size += 1 * 18 // m.Deid.Address
+	size += 1      // m.Seid.Type
+	size += 1 * 18 // m.Seid.Address
+	size += 4      // m.RlocNum
 	for j1 := 0; j1 < len(m.Rlocs); j1++ {
 		var s1 lisp_types.RemoteLocator
 		_ = s1
@@ -708,9 +709,9 @@ func (m *LispAddDelRemoteMapping) Marshal(b []byte) ([]byte, error) {
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(m.Action)
 	buf.EncodeUint8(uint8(m.Deid.Type))
-	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint8(uint8(m.Seid.Type))
-	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint32(uint32(len(m.Rlocs)))
 	for j0 := 0; j0 < len(m.Rlocs); j0++ {
 		var v0 lisp_types.RemoteLocator // Rlocs
@@ -732,9 +733,9 @@ func (m *LispAddDelRemoteMapping) Unmarshal(b []byte) error {
 	m.Vni = buf.DecodeUint32()
 	m.Action = buf.DecodeUint8()
 	m.Deid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Deid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Deid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.Seid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Seid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Seid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.RlocNum = buf.DecodeUint32()
 	m.Rlocs = make([]lisp_types.RemoteLocator, m.RlocNum)
 	for j0 := 0; j0 < len(m.Rlocs); j0++ {
@@ -840,10 +841,10 @@ func (m *LispAdjacenciesGetReply) Size() (size int) {
 		if j1 < len(m.Adjacencies) {
 			s1 = m.Adjacencies[j1]
 		}
-		size += 1     // s1.Reid.Type
-		size += 1 * 6 // s1.Reid.Address
-		size += 1     // s1.Leid.Type
-		size += 1 * 6 // s1.Leid.Address
+		size += 1      // s1.Reid.Type
+		size += 1 * 18 // s1.Reid.Address
+		size += 1      // s1.Leid.Type
+		size += 1 * 18 // s1.Leid.Address
 	}
 	return size
 }
@@ -860,9 +861,9 @@ func (m *LispAdjacenciesGetReply) Marshal(b []byte) ([]byte, error) {
 			v0 = m.Adjacencies[j0]
 		}
 		buf.EncodeUint8(uint8(v0.Reid.Type))
-		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 6)
+		buf.EncodeBytes(v0.Reid.Address.XXX_UnionData[:], 18)
 		buf.EncodeUint8(uint8(v0.Leid.Type))
-		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 6)
+		buf.EncodeBytes(v0.Leid.Address.XXX_UnionData[:], 18)
 	}
 	return buf.Bytes(), nil
 }
@@ -873,9 +874,9 @@ func (m *LispAdjacenciesGetReply) Unmarshal(b []byte) error {
 	m.Adjacencies = make([]LispAdjacency, m.Count)
 	for j0 := 0; j0 < len(m.Adjacencies); j0++ {
 		m.Adjacencies[j0].Reid.Type = lisp_types.EidType(buf.DecodeUint8())
-		copy(m.Adjacencies[j0].Reid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+		copy(m.Adjacencies[j0].Reid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 		m.Adjacencies[j0].Leid.Type = lisp_types.EidType(buf.DecodeUint8())
-		copy(m.Adjacencies[j0].Leid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+		copy(m.Adjacencies[j0].Leid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	}
 	return nil
 }
@@ -989,9 +990,9 @@ func (m *LispEidTableDetails) Size() (size int) {
 	size += 1      // m.IsSrcDst
 	size += 4      // m.Vni
 	size += 1      // m.Deid.Type
-	size += 1 * 6  // m.Deid.Address
+	size += 1 * 18 // m.Deid.Address
 	size += 1      // m.Seid.Type
-	size += 1 * 6  // m.Seid.Address
+	size += 1 * 18 // m.Seid.Address
 	size += 4      // m.TTL
 	size += 1      // m.Authoritative
 	size += 1      // m.Key.ID
@@ -1009,9 +1010,9 @@ func (m *LispEidTableDetails) Marshal(b []byte) ([]byte, error) {
 	buf.EncodeBool(m.IsSrcDst)
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Deid.Type))
-	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Deid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint8(uint8(m.Seid.Type))
-	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Seid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint32(m.TTL)
 	buf.EncodeUint8(m.Authoritative)
 	buf.EncodeUint8(uint8(m.Key.ID))
@@ -1026,9 +1027,9 @@ func (m *LispEidTableDetails) Unmarshal(b []byte) error {
 	m.IsSrcDst = buf.DecodeBool()
 	m.Vni = buf.DecodeUint32()
 	m.Deid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Deid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Deid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.Seid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Seid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Seid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.TTL = buf.DecodeUint32()
 	m.Authoritative = buf.DecodeUint8()
 	m.Key.ID = lisp_types.HmacKeyID(buf.DecodeUint8())
@@ -1057,12 +1058,12 @@ func (m *LispEidTableDump) Size() (size int) {
 	if m == nil {
 		return 0
 	}
-	size += 1     // m.EidSet
-	size += 1     // m.PrefixLength
-	size += 4     // m.Vni
-	size += 1     // m.Eid.Type
-	size += 1 * 6 // m.Eid.Address
-	size += 1     // m.Filter
+	size += 1      // m.EidSet
+	size += 1      // m.PrefixLength
+	size += 4      // m.Vni
+	size += 1      // m.Eid.Type
+	size += 1 * 18 // m.Eid.Address
+	size += 1      // m.Filter
 	return size
 }
 func (m *LispEidTableDump) Marshal(b []byte) ([]byte, error) {
@@ -1074,7 +1075,7 @@ func (m *LispEidTableDump) Marshal(b []byte) ([]byte, error) {
 	buf.EncodeUint8(m.PrefixLength)
 	buf.EncodeUint32(m.Vni)
 	buf.EncodeUint8(uint8(m.Eid.Type))
-	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 6)
+	buf.EncodeBytes(m.Eid.Address.XXX_UnionData[:], 18)
 	buf.EncodeUint8(uint8(m.Filter))
 	return buf.Bytes(), nil
 }
@@ -1084,7 +1085,7 @@ func (m *LispEidTableDump) Unmarshal(b []byte) error {
 	m.PrefixLength = buf.DecodeUint8()
 	m.Vni = buf.DecodeUint32()
 	m.Eid.Type = lisp_types.EidType(buf.DecodeUint8())
-	copy(m.Eid.Address.XXX_UnionData[:], buf.DecodeBytes(6))
+	copy(m.Eid.Address.XXX_UnionData[:], buf.DecodeBytes(18))
 	m.Filter = LispLocatorSetFilter(buf.DecodeUint8())
 	return nil
 }

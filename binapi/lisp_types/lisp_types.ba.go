@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/lisp_types.api.json
 
 // Package lisp_types contains generated bindings for API file lisp_types.api.
 //
@@ -90,8 +91,8 @@ func (x HmacKeyID) String() string {
 
 // Eid defines type 'eid'.
 type Eid struct {
-	Type    EidType    `binapi:"eid_type,name=type" json:"type,omitempty"`
-	Address EidAddress `binapi:"eid_address,name=address" json:"address,omitempty"`
+	Type    EidType         `binapi:"eid_type,name=type" json:"type,omitempty"`
+	Address EidAddressUnion `binapi:"eid_address,name=address" json:"address,omitempty"`
 }
 
 // HmacKey defines type 'hmac_key'.
@@ -120,25 +121,26 @@ type RemoteLocator struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-// EidAddress defines union 'eid_address'.
-type EidAddress struct {
-	// Prefix *ip_types.Prefix
-	// Mac *ethernet_types.MacAddress
-	// Nsh *Nsh
-	XXX_UnionData [6]byte
+// EidAddressUnion defines union 'eid_address'.
+type EidAddressUnion struct {
+	// EidAddressUnion can be one of:
+	// - Prefix *ip_types.Prefix
+	// - Mac *ethernet_types.MacAddress
+	// - Nsh *Nsh
+	XXX_UnionData [18]byte
 }
 
-func EidAddressPrefix(a ip_types.Prefix) (u EidAddress) {
+func EidAddressUnionPrefix(a ip_types.Prefix) (u EidAddressUnion) {
 	u.SetPrefix(a)
 	return
 }
-func (u *EidAddress) SetPrefix(a ip_types.Prefix) {
+func (u *EidAddressUnion) SetPrefix(a ip_types.Prefix) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeUint8(uint8(a.Address.Af))
 	buf.EncodeBytes(a.Address.Un.XXX_UnionData[:], 16)
 	buf.EncodeUint8(a.Len)
 }
-func (u *EidAddress) GetPrefix() (a ip_types.Prefix) {
+func (u *EidAddressUnion) GetPrefix() (a ip_types.Prefix) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Address.Af = ip_types.AddressFamily(buf.DecodeUint8())
 	copy(a.Address.Un.XXX_UnionData[:], buf.DecodeBytes(16))
@@ -146,30 +148,30 @@ func (u *EidAddress) GetPrefix() (a ip_types.Prefix) {
 	return
 }
 
-func EidAddressMac(a ethernet_types.MacAddress) (u EidAddress) {
+func EidAddressUnionMac(a ethernet_types.MacAddress) (u EidAddressUnion) {
 	u.SetMac(a)
 	return
 }
-func (u *EidAddress) SetMac(a ethernet_types.MacAddress) {
+func (u *EidAddressUnion) SetMac(a ethernet_types.MacAddress) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeBytes(a[:], 6)
 }
-func (u *EidAddress) GetMac() (a ethernet_types.MacAddress) {
+func (u *EidAddressUnion) GetMac() (a ethernet_types.MacAddress) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	copy(a[:], buf.DecodeBytes(6))
 	return
 }
 
-func EidAddressNsh(a Nsh) (u EidAddress) {
+func EidAddressUnionNsh(a Nsh) (u EidAddressUnion) {
 	u.SetNsh(a)
 	return
 }
-func (u *EidAddress) SetNsh(a Nsh) {
+func (u *EidAddressUnion) SetNsh(a Nsh) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	buf.EncodeUint32(a.Spi)
 	buf.EncodeUint8(a.Si)
 }
-func (u *EidAddress) GetNsh() (a Nsh) {
+func (u *EidAddressUnion) GetNsh() (a Nsh) {
 	buf := codec.NewBuffer(u.XXX_UnionData[:])
 	a.Spi = buf.DecodeUint32()
 	a.Si = buf.DecodeUint8()

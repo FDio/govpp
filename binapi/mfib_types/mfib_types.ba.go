@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/mfib_types.api.json
 
 // Package mfib_types contains generated bindings for API file mfib_types.api.
 //

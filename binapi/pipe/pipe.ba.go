@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/pipe.api.json
 
 // Package pipe contains generated bindings for API file pipe.api.
 //

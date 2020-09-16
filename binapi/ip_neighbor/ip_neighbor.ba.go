@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/ip_neighbor.api.json
 
 // Package ip_neighbor contains generated bindings for API file ip_neighbor.api.
 //

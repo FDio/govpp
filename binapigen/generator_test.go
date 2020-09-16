@@ -15,6 +15,9 @@
 package binapigen
 
 import (
+	"fmt"
+	"git.fd.io/govpp.git/binapigen/vppapi"
+	. "github.com/onsi/gomega"
 	"testing"
 )
 
@@ -45,10 +48,111 @@ func TestBinapiTypeSizes(t *testing.T) {
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-			size := getSizeOfBinapiTypeLength(test.input, 1)
+			size := getSizeOfBinapiBaseType(test.input, 1)
 			if size != test.expsize {
 				t.Errorf("expected %d, got %d", test.expsize, size)
 			}
 		})
 	}
+}
+
+func TestBinapiUnionSizes(t *testing.T) {
+	RegisterTestingT(t)
+	tests := []struct {
+		testName string
+		input    *Union
+		expsize  int
+	}{
+		{testName: "union_alias", input: typeTestData{
+			typ: "union", fields: []*typeTestData{{typ: "alias", value: U16},
+			}}.getUnion("union1"), expsize: 2},
+		{testName: "union_enum", input: typeTestData{
+			typ: "union", fields: []*typeTestData{{typ: "enum", value: U32},
+			}}.getUnion("union2"), expsize: 4},
+		{testName: "union_struct", input: typeTestData{
+			typ: "union", fields: []*typeTestData{
+				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: U16}, {value: U32}}},
+			}}.getUnion("union3"), expsize: 7},
+		{testName: "union_structs", input: typeTestData{
+			typ: "union", fields: []*typeTestData{
+				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: BOOL}}},
+				{typ: "struct", fields: []*typeTestData{{value: U16}, {value: U32}}},
+				{typ: "struct", fields: []*typeTestData{{value: U32}, {value: U64}}},
+			}}.getUnion("union4"), expsize: 12},
+		{testName: "union_unions", input: typeTestData{
+			typ: "union", fields: []*typeTestData{
+				{typ: "union", fields: []*typeTestData{
+					{typ: "struct", fields: []*typeTestData{{value: STRING}}},
+				}},
+				{typ: "union", fields: []*typeTestData{
+					{typ: "struct", fields: []*typeTestData{{value: U32}}},
+				}},
+				{typ: "union", fields: []*typeTestData{
+					{typ: "struct", fields: []*typeTestData{{value: U64}}},
+				}},
+			}}.getUnion("union5"), expsize: 8},
+		{testName: "union_combined", input: typeTestData{
+			typ: "union", fields: []*typeTestData{
+				{typ: "alias", value: U8},
+				{typ: "enum", value: U16},
+				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: U16}, {value: U32}}}, // <-
+				{typ: "union", fields: []*typeTestData{
+					{typ: "alias", value: U16},
+					{typ: "enum", value: U16},
+					{typ: "struct", fields: []*typeTestData{{value: U32}}},
+				}},
+			}}.getUnion("union6"), expsize: 7},
+	}
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			size := getUnionSize(test.input)
+			Expect(size).To(Equal(test.expsize))
+		})
+	}
+}
+
+// Typed data used for union size evaluation testing.
+type typeTestData struct {
+	typ    string
+	value  string
+	fields []*typeTestData
+}
+
+func (t typeTestData) getUnion(name string) *Union {
+	return &Union{
+		UnionType: vppapi.UnionType{Name: name},
+		Fields:    t.getUnionFields(name),
+	}
+}
+
+func (t typeTestData) getUnionFields(parentName string) (fields []*Field) {
+	for i, field := range t.fields {
+		var (
+			dataType   string
+			aliasType  *Alias
+			enumType   *Enum
+			structType *Struct
+			unionType  *Union
+		)
+		switch field.typ {
+		case "alias":
+			aliasType = &Alias{AliasType: vppapi.AliasType{Name: fmt.Sprintf("%s_alias_%d", parentName, i), Type: field.value}}
+		case "enum":
+			enumType = &Enum{EnumType: vppapi.EnumType{Name: fmt.Sprintf("%s_enum_%d", parentName, i), Type: field.value}}
+		case "struct":
+			structType = &Struct{Fields: field.getUnionFields(fmt.Sprintf("%s_struct_%d", parentName, i))}
+		case "union":
+			unionType = field.getUnion(parentName)
+		default:
+			dataType = field.value
+		}
+		fields = append(fields, &Field{
+			Field:      vppapi.Field{Name: fmt.Sprintf("%s_field_%d", parentName, i), Type: dataType},
+			TypeAlias:  aliasType,
+			TypeEnum:   enumType,
+			TypeStruct: structType,
+			TypeUnion:  unionType,
+		})
+	}
+	return fields
 }

@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/p2p_ethernet.api.json
 
 // Package p2p_ethernet contains generated bindings for API file p2p_ethernet.api.
 //

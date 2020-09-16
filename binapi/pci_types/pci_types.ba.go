@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/pci_types.api.json
 
 // Package pci_types contains generated bindings for API file pci_types.api.
 //

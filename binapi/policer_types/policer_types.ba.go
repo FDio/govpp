@@ -2,6 +2,7 @@
 // versions:
 //  binapi-generator: v0.4.0-dev
 //  VPP:              20.05-release
+// source: /usr/share/vpp/api/core/policer_types.api.json
 
 // Package policer_types contains generated bindings for API file policer_types.api.
 //
