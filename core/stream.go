@@ -62,8 +62,22 @@ func (c *Connection) NewStream(ctx context.Context) (api.Stream, error) {
 }
 
 func (c *Connection) Invoke(ctx context.Context, req api.Message, reply api.Message) error {
-	// TODO: implement invoke
-	panic("not implemented")
+	stream, err := c.NewStream(ctx)
+	if err != nil {
+		return err
+	}
+	if err := stream.SendMsg(req); err != nil {
+		return err
+	}
+	s := stream.(*Stream)
+	rep, err := s.recvReply()
+	if err != nil {
+		return err
+	}
+	if err := s.channel.msgCodec.DecodeMsg(rep.data, reply); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *Stream) Context() context.Context {
@@ -91,6 +105,25 @@ func (s *Stream) SendMsg(msg api.Message) error {
 }
 
 func (s *Stream) RecvMsg() (api.Message, error) {
+	reply, err := s.recvReply()
+	if err != nil {
+		return nil, err
+	}
+	// resolve message type
+	msg, err := s.channel.msgIdentifier.LookupByID(reply.msgID)
+	if err != nil {
+		return nil, err
+	}
+	// allocate message instance
+	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+	// decode message data
+	if err := s.channel.msgCodec.DecodeMsg(reply.data, msg); err != nil {
+		return nil, err
+	}
+	return msg, nil
+}
+
+func (s *Stream) recvReply() (*vppReply, error) {
 	if s.conn == nil {
 		return nil, errors.New("stream closed")
 	}
@@ -105,18 +138,7 @@ func (s *Stream) RecvMsg() (api.Message, error) {
 			// and stream does not use it
 			return nil, reply.err
 		}
-		// resolve message type
-		msg, err := s.channel.msgIdentifier.LookupByID(reply.msgID)
-		if err != nil {
-			return nil, err
-		}
-		// allocate message instance
-		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-		// decode message data
-		if err := s.channel.msgCodec.DecodeMsg(reply.data, msg); err != nil {
-			return nil, err
-		}
-		return msg, nil
+		return reply, nil
 
 	case <-s.ctx.Done():
 		return nil, s.ctx.Err()

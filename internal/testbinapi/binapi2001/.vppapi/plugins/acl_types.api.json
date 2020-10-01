@@ -1,0 +1,98 @@
+{
+    "types": [
+        [
+            "acl_rule",
+            [
+                "u8",
+                "is_permit"
+            ],
+            [
+                "u8",
+                "is_ipv6"
+            ],
+            [
+                "u8",
+                "src_ip_addr",
+                16
+            ],
+            [
+                "u8",
+                "src_ip_prefix_len"
+            ],
+            [
+                "u8",
+                "dst_ip_addr",
+                16
+            ],
+            [
+                "u8",
+                "dst_ip_prefix_len"
+            ],
+            [
+                "u8",
+                "proto"
+            ],
+            [
+                "u16",
+                "srcport_or_icmptype_first"
+            ],
+            [
+                "u16",
+                "srcport_or_icmptype_last"
+            ],
+            [
+                "u16",
+                "dstport_or_icmpcode_first"
+            ],
+            [
+                "u16",
+                "dstport_or_icmpcode_last"
+            ],
+            [
+                "u8",
+                "tcp_flags_mask"
+            ],
+            [
+                "u8",
+                "tcp_flags_value"
+            ]
+        ],
+        [
+            "macip_acl_rule",
+            [
+                "u8",
+                "is_permit"
+            ],
+            [
+                "u8",
+                "is_ipv6"
+            ],
+            [
+                "u8",
+                "src_mac",
+                6
+            ],
+            [
+                "u8",
+                "src_mac_mask",
+                6
+            ],
+            [
+                "u8",
+                "src_ip_addr",
+                16
+            ],
+            [
+                "u8",
+                "src_ip_prefix_len"
+            ]
+        ]
+    ],
+    "messages": [],
+    "unions": [],
+    "enums": [],
+    "services": {},
+    "options": {},
+    "aliases": {},
+    "vl_api_version": "0x1803336d"
+}

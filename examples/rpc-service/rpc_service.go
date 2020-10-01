@@ -27,8 +27,8 @@ import (
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/vpe"
 )
 
 var (
@@ -47,20 +47,13 @@ func main() {
 	}
 	defer conn.Disconnect()
 
-	// create a channel
-	ch, err := conn.NewAPIChannel()
-	if err != nil {
-		log.Fatalln("ERROR: creating channel failed:", err)
-	}
-	defer ch.Close()
-
-	showVersion(ch)
-	interfaceDump(ch)
+	showVersion(conn)
+	interfaceDump(conn)
 }
 
 // showVersion shows an example of simple request with services.
-func showVersion(ch api.Channel) {
-	c := vpe.NewServiceClient(ch)
+func showVersion(conn api.Connection) {
+	c := vpe.NewServiceClient(conn)
 
 	version, err := c.ShowVersion(context.Background(), &vpe.ShowVersion{})
 	if err != nil {
@@ -71,10 +64,10 @@ func showVersion(ch api.Channel) {
 }
 
 // interfaceDump shows an example of multi request with services.
-func interfaceDump(ch api.Channel) {
-	c := interfaces.NewServiceClient(ch)
+func interfaceDump(conn api.Connection) {
+	c := interfaces.NewServiceClient(conn)
 
-	stream, err := c.DumpSwInterface(context.Background(), &interfaces.SwInterfaceDump{})
+	stream, err := c.SwInterfaceDump(context.Background(), &interfaces.SwInterfaceDump{})
 	if err != nil {
 		log.Fatalln("ERROR: DumpSwInterface failed:", err)
 	}

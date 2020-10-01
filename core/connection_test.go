@@ -21,10 +21,12 @@ import (
 
 	"git.fd.io/govpp.git/adapter/mock"
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/binapi/ethernet_types"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 type testCtx struct {
@@ -95,14 +97,14 @@ func TestCodec(t *testing.T) {
 	var msgCodec = codec.DefaultCodec
 
 	// request
-	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: interfaces.MacAddress{1, 2, 3, 4, 5, 6}}, 11)
+	data, err := msgCodec.EncodeMsg(&interfaces.CreateLoopback{MacAddress: ethernet_types.MacAddress{1, 2, 3, 4, 5, 6}}, 11)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
 	msg1 := &interfaces.CreateLoopback{}
 	err = msgCodec.DecodeMsg(data, msg1)
 	Expect(err).ShouldNot(HaveOccurred())
-	Expect(msg1.MacAddress).To(BeEquivalentTo(interfaces.MacAddress{1, 2, 3, 4, 5, 6}))
+	Expect(msg1.MacAddress).To(BeEquivalentTo(ethernet_types.MacAddress{1, 2, 3, 4, 5, 6}))
 
 	// reply
 	data, err = msgCodec.EncodeMsg(&vpe.ControlPingReply{Retval: 55}, 22)
@@ -161,7 +163,7 @@ func TestMultiRequestsWithSequenceNumbers(t *testing.T) {
 
 	var msgs []api.Message
 	for i := 0; i < 10; i++ {
-		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interfaces.InterfaceIndex(i)})
+		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)})
 	}
 	ctx.mockVpp.MockReply(msgs...)
 	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
@@ -280,7 +282,7 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 	}
 	for i := 0; i < 10; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
-			Msg:       &interfaces.SwInterfaceDetails{SwIfIndex: interfaces.InterfaceIndex(i)},
+			Msg:       &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)},
 			SeqNum:    1,
 			Multipart: true,
 		})

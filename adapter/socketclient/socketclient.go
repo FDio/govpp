@@ -31,6 +31,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"git.fd.io/govpp.git/adapter"
+	"git.fd.io/govpp.git/binapi/memclnt"
 	"git.fd.io/govpp.git/codec"
 )
 
@@ -55,16 +56,21 @@ var (
 	debug       = strings.Contains(os.Getenv("DEBUG_GOVPP"), "socketclient")
 	debugMsgIds = strings.Contains(os.Getenv("DEBUG_GOVPP"), "msgtable")
 
-	logger = logrus.New()
-	log    = logger.WithField("logger", "govpp/socketclient")
+	log logrus.FieldLogger
 )
 
-// init initializes global logger
+// SetLogger sets global logger.
+func SetLogger(logger logrus.FieldLogger) {
+	log = logger
+}
+
 func init() {
+	logger := logrus.New()
 	if debug {
 		logger.Level = logrus.DebugLevel
-		log.Debug("govpp: debug level enabled for socketclient")
+		logger.Debug("govpp: debug level enabled for socketclient")
 	}
+	log = logger.WithField("logger", "govpp/socketclient")
 }
 
 const socketMissing = `
@@ -77,7 +83,7 @@ const socketMissing = `
 
  To enable it add following section to your VPP config:
    socksvr {
-     default
+     socket-name /run/vpp/api.sock
    }
 ------------------------------------------------------------
 `
@@ -265,9 +271,8 @@ func (c *socketClient) Disconnect() error {
 	// wait for readerLoop to return
 	c.wg.Wait()
 
-	if err := c.close(); err != nil {
-		log.Debugf("closing failed: %v", err)
-	}
+	// Don't bother sending a vl_api_sockclnt_delete_t message,
+	// just close the socket.
 
 	if err := c.disconnect(); err != nil {
 		return err
@@ -325,7 +330,7 @@ func (c *socketClient) open() error {
 	var msgCodec = codec.DefaultCodec
 
 	// Request socket client create
-	req := &SockclntCreate{
+	req := &memclnt.SockclntCreate{
 		Name: c.clientName,
 	}
 	msg, err := msgCodec.EncodeMsg(req, sockCreateMsgId)
@@ -346,7 +351,7 @@ func (c *socketClient) open() error {
 		return err
 	}
 
-	reply := new(SockclntCreateReply)
+	reply := new(memclnt.SockclntCreateReply)
 	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
 		log.Println("Decoding sockclnt_create_reply failed:", err)
 		return err
@@ -369,48 +374,6 @@ func (c *socketClient) open() error {
 		if debugMsgIds {
 			log.Debugf(" - %4d: %q", x.Index, name)
 		}
-	}
-
-	return nil
-}
-
-func (c *socketClient) close() error {
-	var msgCodec = codec.DefaultCodec
-
-	req := &SockclntDelete{
-		Index: c.clientIndex,
-	}
-	msg, err := msgCodec.EncodeMsg(req, c.sockDelMsgId)
-	if err != nil {
-		log.Debugln("Encode error:", err)
-		return err
-	}
-	// set non-0 context
-	msg[5] = deleteMsgContext
-
-	log.Debugf("sending socklntDel (%d bytes): % 0X", len(msg), msg)
-
-	if err := c.writeMsg(msg); err != nil {
-		log.Debugln("Write error: ", err)
-		return err
-	}
-
-	msgReply, err := c.readMsgTimeout(nil, c.disconnectTimeout)
-	if err != nil {
-		if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
-			// we accept timeout for reply
-			return nil
-		}
-		log.Debugln("Read error:", err)
-		return err
-	}
-
-	reply := new(SockclntDeleteReply)
-	if err := msgCodec.DecodeMsg(msgReply, reply); err != nil {
-		log.Debugln("Decoding sockclnt_delete_reply failed:", err)
-		return err
-	} else if reply.Response != 0 {
-		return fmt.Errorf("sockclnt_delete_reply: response error (%d)", reply.Response)
 	}
 
 	return nil

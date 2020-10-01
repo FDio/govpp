@@ -16,9 +16,9 @@ package libmemif
 
 import (
 	"github.com/google/gopacket"
-	"time"
-	"sync"
 	"io"
+	"sync"
+	"time"
 )
 
 type memoizedPacket struct {
@@ -55,7 +55,7 @@ func (memif *Memif) NewPacketHandle(queueId uint8, rxCount uint16) *MemifPacketH
 	}
 }
 
-// Reads packet data from memif in bursts, based on previously configured rxCount parameterer. Then caches the
+// Reads packet data from memif in bursts, based on previously configured rxCount parameter. Then caches the
 // resulting packets and returns them 1 by 1 from this method until queue is empty then tries to call new rx burst
 // to read more data. If no data is returned, io.EOF error is thrown and caller should stop reading.
 func (handle *MemifPacketHandle) ReadPacketData() (data []byte, ci gopacket.CaptureInfo, err error) {

@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -26,13 +27,13 @@ import (
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/api"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/interface_types"
+	"git.fd.io/govpp.git/binapi/ip"
+	"git.fd.io/govpp.git/binapi/ip_types"
+	"git.fd.io/govpp.git/binapi/mactime"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
-	"git.fd.io/govpp.git/examples/binapi/mactime"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 var (
@@ -119,7 +120,7 @@ func vppVersion(ch api.Channel) {
 }
 
 // createLoopback sends request to create loopback interface.
-func createLoopback(ch api.Channel) interfaces.InterfaceIndex {
+func createLoopback(ch api.Channel) interface_types.InterfaceIndex {
 	fmt.Println("Creating loopback interface")
 
 	req := &interfaces.CreateLoopback{}
@@ -143,7 +144,9 @@ func interfaceDump(ch api.Channel) {
 	fmt.Println("Dumping interfaces")
 
 	n := 0
-	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
+	reqCtx := ch.SendMultiRequest(&interfaces.SwInterfaceDump{
+		SwIfIndex: ^interface_types.InterfaceIndex(0),
+	})
 	for {
 		msg := &interfaces.SwInterfaceDetails{}
 		stop, err := reqCtx.ReceiveReply(msg)
@@ -156,6 +159,7 @@ func interfaceDump(ch api.Channel) {
 		}
 		n++
 		fmt.Printf(" - interface #%d: %+v\n", n, msg)
+		marshal(msg)
 	}
 
 	fmt.Println("OK")
@@ -163,20 +167,21 @@ func interfaceDump(ch api.Channel) {
 }
 
 // addIPAddress sends request to add IP address to interface.
-func addIPAddress(ch api.Channel, index interfaces.InterfaceIndex) {
+func addIPAddress(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Adding IP address to interface to interface index %d\n", index)
 
 	req := &interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex: index,
 		IsAdd:     true,
-		Prefix: interfaces.AddressWithPrefix{
-			Address: interfaces.Address{
+		Prefix: ip_types.AddressWithPrefix{
+			Address: ip_types.Address{
 				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(interfaces.IP4Address{10, 10, 0, uint8(index)}),
+				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{10, 10, 0, uint8(index)}),
 			},
 			Len: 32,
 		},
 	}
+	marshal(req)
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
 	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
@@ -189,11 +194,11 @@ func addIPAddress(ch api.Channel, index interfaces.InterfaceIndex) {
 	fmt.Println()
 }
 
-func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
+func ipAddressDump(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Dumping IP addresses for interface index %d\n", index)
 
 	req := &ip.IPAddressDump{
-		SwIfIndex: ip.InterfaceIndex(index),
+		SwIfIndex: index,
 	}
 	reqCtx := ch.SendMultiRequest(req)
 
@@ -208,6 +213,7 @@ func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
 			break
 		}
 		fmt.Printf(" - ip address: %+v\n", msg)
+		marshal(msg)
 	}
 
 	fmt.Println("OK")
@@ -217,7 +223,7 @@ func ipAddressDump(ch api.Channel, index interfaces.InterfaceIndex) {
 // interfaceNotifications shows the usage of notification API. Note that for notifications,
 // you are supposed to create your own Go channel with your preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
-func interfaceNotifications(ch api.Channel, index interfaces.InterfaceIndex) {
+func interfaceNotifications(ch api.Channel, index interface_types.InterfaceIndex) {
 	fmt.Printf("Subscribing to notificaiton events for interface index %d\n", index)
 
 	notifChan := make(chan api.Message, 100)
@@ -242,7 +248,9 @@ func interfaceNotifications(ch api.Channel, index interfaces.InterfaceIndex) {
 	// receive notifications
 	go func() {
 		for notif := range notifChan {
-			fmt.Printf("incoming event: %+v\n", notif.(*interfaces.SwInterfaceEvent))
+			e := notif.(*interfaces.SwInterfaceEvent)
+			fmt.Printf("incoming event: %+v\n", e)
+			marshal(e)
 		}
 	}()
 
@@ -325,4 +333,13 @@ Loop:
 
 	fmt.Println("OK")
 	fmt.Println()
+}
+
+func marshal(v interface{}) {
+	fmt.Printf("GO: %#v\n", v)
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("JSON: %s\n", b)
 }

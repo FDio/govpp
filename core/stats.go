@@ -198,6 +198,9 @@ func (c *StatsConnection) GetSystemStats(sysStats *api.SystemStats) (err error) 
 			if ss, ok := stat.Data.(adapter.SimpleCounterStat); ok {
 				vals = make([]uint64, len(ss))
 				for w := range ss {
+					if ss[w] == nil {
+						continue
+					}
 					vals[w] = uint64(ss[w][0])
 				}
 			}

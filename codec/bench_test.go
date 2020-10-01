@@ -14,6 +14,7 @@
 
 package codec_test
 
+/*
 import (
 	"testing"
 
@@ -71,3 +72,4 @@ func BenchmarkEncodeHard(b *testing.B) {
 	}
 	Data = data
 }
+*/

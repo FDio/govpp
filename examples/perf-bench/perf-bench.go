@@ -30,8 +30,8 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
+	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 )
 
 const (

@@ -50,7 +50,7 @@ memif_cancel_poll_event ()
 // are much easier to work with in cgo.
 typedef struct
 {
-	char *socket_filename;
+	memif_socket_handle_t socket;
 	char *secret;
 	uint8_t num_s2m_rings;
 	uint8_t num_m2s_rings;
@@ -108,7 +108,7 @@ govpp_memif_create (memif_conn_handle_t *conn, govpp_memif_conn_args_t *go_args,
 {
 	memif_conn_args_t args;
 	memset (&args, 0, sizeof (args));
-	args.socket_filename = (char *)go_args->socket_filename;
+	args.socket = (char *)go_args->socket;
 	if (go_args->secret != NULL)
 	{
 		strncpy ((char *)args.secret, go_args->secret,
@@ -130,6 +130,12 @@ govpp_memif_create (memif_conn_handle_t *conn, govpp_memif_conn_args_t *go_args,
 	return memif_create(conn, &args, govpp_on_connect_callback,
 						govpp_on_disconnect_callback, NULL,
 						private_ctx);
+}
+
+static int
+govpp_memif_create_socket (memif_socket_handle_t *sock, char *filename)
+{
+	return memif_create_socket(sock, filename, NULL);
 }
 
 // govpp_memif_get_details keeps reallocating buffer until it is large enough.
@@ -365,8 +371,9 @@ type Memif struct {
 	MemifMeta
 
 	// Per-library references
-	ifIndex int                   // index used in the Go-libmemif context (Context.memifs)
-	cHandle C.memif_conn_handle_t // handle used in C-libmemif
+	ifIndex int                     // index used in the Go-libmemif context (Context.memifs)
+	cHandle C.memif_conn_handle_t   // connection handle used in C-libmemif
+	sHandle C.memif_socket_handle_t // socket handle used in C-libmemif
 
 	// Callbacks
 	callbacks *MemifCallbacks
@@ -589,9 +596,13 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 	args := &C.govpp_memif_conn_args_t{}
 	// - socket file name
 	if config.SocketFilename != "" {
-		args.socket_filename = C.CString(config.SocketFilename)
-		defer C.free(unsafe.Pointer(args.socket_filename))
+		log.WithField("name", config.SocketFilename).Debug("A new memif socket was created")
+		errCode := C.govpp_memif_create_socket(&memif.sHandle, C.CString(config.SocketFilename))
+		if getMemifError(int(errCode)) != nil {
+			return nil, err
+		}
 	}
+	args.socket = memif.sHandle
 	// - interface ID
 	args.interface_id = C.uint32_t(config.ConnID)
 	// - interface name
@@ -632,8 +643,7 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 
 	// Create memif in C-libmemif.
 	errCode := C.govpp_memif_create(&memif.cHandle, args, unsafe.Pointer(uintptr(memif.ifIndex)))
-	err = getMemifError(int(errCode))
-	if err != nil {
+	if getMemifError(int(errCode)) != nil {
 		return nil, err
 	}
 
@@ -771,7 +781,7 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 	}
 
 	var bufCount int
-	var buffers []*txPacketBuffer
+	buffers := make([]*txPacketBuffer, 0)
 	cQueueID := C.uint16_t(queueID)
 
 	for _, packet := range packets {
@@ -916,6 +926,7 @@ func (memif *Memif) TxBurst(queueID uint8, packets []RawPacketData) (count uint1
 // Rx queue.
 func (memif *Memif) RxBurst(queueID uint8, count uint16) (packets []RawPacketData, err error) {
 	var recvCount C.uint16_t
+	packets = make([]RawPacketData, 0)
 
 	if count == 0 {
 		return packets, nil

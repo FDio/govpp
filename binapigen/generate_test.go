@@ -20,35 +20,30 @@ import (
 
 	. "github.com/onsi/gomega"
 
+	"git.fd.io/govpp.git/binapi/ip_types"
 	"git.fd.io/govpp.git/binapigen/vppapi"
 )
 
-const testOutputDir = "test_output_directory"
+const testOutputDir = "test_output_dir"
 
-func GenerateFromFile(file, outputDir string, opts Options) error {
+func GenerateFromFile(file string, opts Options) error {
 	apifile, err := vppapi.ParseFile(file)
 	if err != nil {
 		return err
 	}
-
-	g, err := New(opts, []*vppapi.File{apifile})
+	gen, err := New(opts, []*vppapi.File{apifile}, nil)
 	if err != nil {
 		return err
 	}
-	for _, file := range g.Files {
+	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
 		}
-		GenerateBinapi(g, file, outputDir)
-		if file.Service != nil {
-			GenerateRPC(g, file, outputDir)
-		}
+		GenerateAPI(gen, file)
 	}
-
-	if err = g.Generate(); err != nil {
+	if err = gen.Generate(); err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -58,7 +53,8 @@ func TestGenerateFromFile(t *testing.T) {
 	// remove directory created during test
 	defer os.RemoveAll(testOutputDir)
 
-	err := GenerateFromFile("vppapi/testdata/acl.api.json", testOutputDir, Options{FilesToGenerate: []string{"acl"}})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/acl.api.json", opts)
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(testOutputDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -69,7 +65,8 @@ func TestGenerateFromFile(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("vppapi/testdata/nonexisting.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/nonexisting.json", opts)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
@@ -77,7 +74,8 @@ func TestGenerateFromFileInputError(t *testing.T) {
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 
-	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", opts)
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
@@ -93,8 +91,23 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		os.RemoveAll(testOutputDir)
 	}()
 
-	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", testOutputDir, Options{})
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", opts)
 	Expect(err).Should(HaveOccurred())
+}
+
+func TestAddress(t *testing.T) {
+	RegisterTestingT(t)
+
+	addr := ip_types.AddressUnionIP4(ip_types.IP4Address{10, 20, 0, 1})
+	t.Logf("addr: %v (%#v)", addr, addr)
+
+	ip4 := addr.GetIP4()
+	t.Logf("ip4: %v", ip4)
+	addr.SetIP4(ip_types.IP4Address{192, 168, 1, 1})
+	t.Logf("ip4: %v", addr.GetIP4())
+
+	Expect(addr.GetIP4()).To(Equal(ip_types.IP4Address{192, 168, 1, 1}))
 }
 
 /*func TestGetContext(t *testing.T) {
@@ -146,7 +159,7 @@ func TestGetContextInterfaceJson(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	err = generateFileBinapi(testCtx, writer)
+	err = GenerateFileBinapi(testCtx, writer)
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
@@ -172,7 +185,7 @@ func TestGenerateMessageType(t *testing.T) {
 	writer := bufio.NewWriter(outFile)
 
 	for _, msg := range testCtx.file.Messages {
-		generateMessage(testCtx, writer, &msg)
+		genMessage(testCtx, writer, &msg)
 		Expect(writer.Buffered()).ToNot(BeZero())
 	}
 }*/
@@ -201,7 +214,7 @@ func TestGenerateMessageType(t *testing.T) {
 	for i := 0; i < types.Len(); i++ {
 		typ := types.At(i)
 		Expect(writer.Buffered()).To(BeZero())
-		err := generateMessage(testCtx, writer, typ, false)
+		err := genMessage(testCtx, writer, typ, false)
 		Expect(err).ShouldNot(HaveOccurred())
 		Expect(writer.Buffered()).ToNot(BeZero())
 
@@ -312,7 +325,7 @@ func TestGeneratePackageHeader(t *testing.T) {
 	// prepare writer
 	writer := bufio.NewWriter(outFile)
 	Expect(writer.Buffered()).To(BeZero())
-	generatePackageHeader(testCtx, writer, inFile)
+	genPackageComment(testCtx, writer, inFile)
 	Expect(writer.Buffered()).ToNot(BeZero())
 }
 

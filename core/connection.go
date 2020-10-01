@@ -42,8 +42,8 @@ var (
 
 var (
 	HealthCheckProbeInterval = time.Second            // default health check probe interval
-	HealthCheckReplyTimeout  = time.Millisecond * 100 // timeout for reply to a health check probe
-	HealthCheckThreshold     = 1                      // number of failed health checks until the error is reported
+	HealthCheckReplyTimeout  = time.Millisecond * 250 // timeout for reply to a health check probe
+	HealthCheckThreshold     = 2                      // number of failed health checks until the error is reported
 	DefaultReplyTimeout      = time.Second            // default timeout for replies from VPP
 )
 
@@ -58,7 +58,11 @@ const (
 	// Connected represents state in which the connection has been successfully established.
 	Connected ConnectionState = iota
 
-	// Disconnected represents state in which the connection has been dropped.
+	// NotResponding represents a state where the VPP socket accepts messages but replies are received with delay,
+	// or not at all. GoVPP treats this state internally the same as disconnected.
+	NotResponding
+
+	// Disconnected represents state in which the VPP socket is closed and the connection is considered dropped.
 	Disconnected
 
 	// Failed represents state in which the reconnecting failed after exceeding maximum number of attempts.
@@ -69,6 +73,8 @@ func (s ConnectionState) String() string {
 	switch s {
 	case Connected:
 		return "Connected"
+	case NotResponding:
+		return "NotResponding"
 	case Disconnected:
 		return "Disconnected"
 	case Failed:
@@ -98,6 +104,8 @@ type Connection struct {
 	recInterval time.Duration // maximum number of reconnect attempts
 
 	vppConnected uint32 // non-zero if the adapter is connected to VPP
+
+	connChan chan ConnectionEvent // connection status events are sent to this channel
 
 	codec  MessageCodec           // message codec
 	msgIDs map[string]uint16      // map of message IDs indexed by message name + CRC
@@ -132,6 +140,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) 
 		vppClient:           binapi,
 		maxAttempts:         attempts,
 		recInterval:         interval,
+		connChan:            make(chan ConnectionEvent, NotificationChanBufSize),
 		codec:               codec.DefaultCodec,
 		msgIDs:              make(map[string]uint16),
 		msgMap:              make(map[uint16]api.Message),
@@ -168,10 +177,9 @@ func AsyncConnect(binapi adapter.VppAPI, attempts int, interval time.Duration) (
 	c := newConnection(binapi, attempts, interval)
 
 	// asynchronously attempt to connect to VPP
-	connChan := make(chan ConnectionEvent, NotificationChanBufSize)
-	go c.connectLoop(connChan)
+	go c.connectLoop()
 
-	return c, connChan, nil
+	return c, c.connChan, nil
 }
 
 // connectVPP performs blocking attempt to connect to VPP.
@@ -263,7 +271,7 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 
 // connectLoop attempts to connect to VPP until it succeeds.
 // Then it continues with healthCheckLoop.
-func (c *Connection) connectLoop(connChan chan ConnectionEvent) {
+func (c *Connection) connectLoop() {
 	var reconnectAttempts int
 
 	// loop until connected
@@ -273,26 +281,26 @@ func (c *Connection) connectLoop(connChan chan ConnectionEvent) {
 		}
 		if err := c.connectVPP(); err == nil {
 			// signal connected event
-			connChan <- ConnectionEvent{Timestamp: time.Now(), State: Connected}
+			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Connected})
 			break
 		} else if reconnectAttempts < c.maxAttempts {
 			reconnectAttempts++
 			log.Warnf("connecting failed (attempt %d/%d): %v", reconnectAttempts, c.maxAttempts, err)
 			time.Sleep(c.recInterval)
 		} else {
-			connChan <- ConnectionEvent{Timestamp: time.Now(), State: Failed, Error: err}
-			close(connChan)
+			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Failed, Error: err})
+			close(c.connChan)
 			return
 		}
 	}
 
 	// we are now connected, continue with health check loop
-	c.healthCheckLoop(connChan)
+	c.healthCheckLoop()
 }
 
 // healthCheckLoop checks whether connection to VPP is alive. In case of disconnect,
 // it continues with connectLoop and tries to reconnect.
-func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
+func (c *Connection) healthCheckLoop() {
 	// create a separate API channel for health check probes
 	ch, err := c.newAPIChannel(1, 1)
 	if err != nil {
@@ -353,15 +361,15 @@ func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
 			failedChecks++
 			log.Warnf("VPP health check probe timed out after %v (%d. timeout)", HealthCheckReplyTimeout, failedChecks)
 			if failedChecks > HealthCheckThreshold {
-				// in case of exceeded failed check treshold, assume VPP disconnected
-				log.Errorf("VPP health check exceeded treshold for timeouts (>%d), assuming disconnect", HealthCheckThreshold)
-				connChan <- ConnectionEvent{Timestamp: time.Now(), State: Disconnected}
+				// in case of exceeded failed check threshold, assume VPP unresponsive
+				log.Errorf("VPP does not responding, the health check exceeded threshold for timeouts (>%d)", HealthCheckThreshold)
+				c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: NotResponding})
 				break
 			}
 		} else if err != nil {
 			// in case of error, assume VPP disconnected
 			log.Errorf("VPP health check probe failed: %v", err)
-			connChan <- ConnectionEvent{Timestamp: time.Now(), State: Disconnected, Error: err}
+			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Disconnected, Error: err})
 			break
 		} else if failedChecks > 0 {
 			// in case of success after failed checks, clear failed check counter
@@ -376,10 +384,10 @@ func (c *Connection) healthCheckLoop(connChan chan ConnectionEvent) {
 
 	// we are now disconnected, start connect loop
 	if AutoReconnect {
-		c.connectLoop(connChan)
+		c.connectLoop()
 	}
 
-	close(connChan)
+	close(c.connChan)
 }
 
 func getMsgNameWithCrc(x api.Message) string {
@@ -466,4 +474,12 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 		Debugf("retrieved IDs for %d messages (registered %d)", n, len(msgs))
 
 	return nil
+}
+
+func (c *Connection) sendConnEvent(event ConnectionEvent) {
+	select {
+	case c.connChan <- event:
+	default:
+		log.Warn("Connection state channel is full, discarding value.")
+	}
 }

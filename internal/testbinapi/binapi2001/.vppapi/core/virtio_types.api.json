@@ -1,0 +1,93 @@
+{
+    "types": [],
+    "messages": [],
+    "unions": [],
+    "enums": [
+        [
+            "virtio_net_features_first_32",
+            [
+                "VIRTIO_NET_F_API_CSUM",
+                1
+            ],
+            [
+                "VIRTIO_NET_F_API_GUEST_CSUM",
+                2
+            ],
+            [
+                "VIRTIO_NET_F_API_GUEST_TSO4",
+                128
+            ],
+            [
+                "VIRTIO_NET_F_API_GUEST_TSO6",
+                256
+            ],
+            [
+                "VIRTIO_NET_F_API_GUEST_UFO",
+                1024
+            ],
+            [
+                "VIRTIO_NET_F_API_HOST_TSO4",
+                2048
+            ],
+            [
+                "VIRTIO_NET_F_API_HOST_TSO6",
+                4096
+            ],
+            [
+                "VIRTIO_NET_F_API_HOST_UFO",
+                16384
+            ],
+            [
+                "VIRTIO_NET_F_API_MRG_RXBUF",
+                32768
+            ],
+            [
+                "VIRTIO_NET_F_API_CTRL_VQ",
+                131072
+            ],
+            [
+                "VIRTIO_NET_F_API_GUEST_ANNOUNCE",
+                2097152
+            ],
+            [
+                "VIRTIO_NET_F_API_MQ",
+                4194304
+            ],
+            [
+                "VHOST_F_API_LOG_ALL",
+                67108864
+            ],
+            [
+                "VIRTIO_F_API_ANY_LAYOUT",
+                134217728
+            ],
+            [
+                "VIRTIO_F_API_INDIRECT_DESC",
+                268435456
+            ],
+            [
+                "VHOST_USER_F_API_PROTOCOL_FEATURES",
+                1073741824
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "virtio_net_features_last_32",
+            [
+                "VIRTIO_F_API_VERSION_1",
+                1
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ]
+    ],
+    "services": {},
+    "options": {
+        "version": "1.0.0"
+    },
+    "aliases": {},
+    "vl_api_version": "0x7a70a44e"
+}

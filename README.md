@@ -1,6 +1,6 @@
 # GoVPP
 
-The GoVPP projects provides the API for communication with VPP from Go. 
+The GoVPP projects provides the API for communication with VPP from Go.
 
 It consists of the following packages:
 - [adapter](adapter/): adapter between GoVPP core and the VPP binary/stats API
@@ -12,10 +12,10 @@ It consists of the following packages:
 - [extras](extras/): contains Go implementation for libmemif library
 - [govpp](govpp.go): provides the entry point to GoVPP functionality
 
-The design with separated GoVPP [API package](api/) and the GoVPP [core package](core/) enables 
-plugin-based infrastructure, where one entity acts as a master responsible for talking with VPP and multiple 
-entities act as clients that are using the master for the communication with VPP. 
-The clients can be built into standalone shared libraries without the need 
+The design with separated GoVPP [API package](api/) and the GoVPP [core package](core/) enables
+plugin-based infrastructure, where one entity acts as a master responsible for talking with VPP and multiple
+entities act as clients that are using the master for the communication with VPP.
+The clients can be built into standalone shared libraries without the need
 of linking the GoVPP core and all its dependencies into them.
 
 ```
@@ -42,26 +42,66 @@ of linking the GoVPP core and all its dependencies into them.
     +--------------+
 ```
 
+## Prerequisites
+
+- [Go 1.13](https://golang.org/dl)
+
 ## Quick Start
 
-#### Generate binapi (Go bindings)
+Make sure that $GOPATH, $GOROOT, and $PATH are set. If you cloned the
+govpp repo manually, you'll probably regret it.
 
-Generating Go bindings for VPP binary API from the JSON files located in the
-`/usr/share/vpp/api/` directory into the Go packages that will be created
-inside of the `binapi` directory:
+Instead:
 
 ```
-binapi-generator --input-dir=/usr/share/vpp/api/ --output-dir=binapi
+    go get git.fd.io/govpp.git
 ```
+
+### Build and install the govpp binary api generator
+
+```
+    $ cd $GOPATH/src/git.fd.io/govpp.git/cmd/binapi-generator
+    $ go install
+    $ binapi-generator -version
+    govpp v0.4.0-dev  # or some such
+```
+### Install vpp binary artifacts (including the "vpp-dev" package)
+
+Build locally, or download from packagecloud. Beyond the scope of
+README.md.
+
+### Generate binapi (Go bindings)
+
+Generating Go bindings for VPP binary API from the JSON files
+installed with the vpp binary artifacts.
+
+```
+    $ cd $GOPATH/src/git.fd.io/govpp.git
+    $ binapi-generator --output-dir=binapi
+    INFO[0000] found 110 files in API dir "/usr/share/vpp/api"
+    INFO[0000] Generating 203 files
+```
+
+The golang binding files land here: $GOPATH/src/git.fd.io/govpp.git/binapi
 
 #### Example Usage
 
-Here is a usage sample of the generated binapi messages:
+Here's a simple sample program which prints vpp version info, and
+creates a loopback interface.
 
 ```go
+package main
+
+import (
+	"fmt"
+	"git.fd.io/govpp.git"
+	"git.fd.io/govpp.git/binapi/interfaces"
+	"git.fd.io/govpp.git/binapi/vpe"
+)
+
 func main() {
-    // Connect to VPP
-	conn, _ := govpp.Connect()
+	// Connect to VPP
+	conn, _ := govpp.Connect("/run/vpp/api.sock")
 	defer conn.Disconnect()
 
 	// Open channel
@@ -74,12 +114,50 @@ func main() {
 
 	// Send the request
 	err := ch.SendRequest(req).ReceiveReply(reply)
+
+	if err != nil {
+		fmt.Errorf("SendRequest: %w\n", err)
+	}
+
+	fmt.Printf("Program: %s\nVersion: %s\nBuildDate: %s\n",
+		reply.Program, reply.Version, reply.BuildDate)
+
+	loop_create := &interfaces.CreateLoopback{}
+	loop_create_reply := &interfaces.CreateLoopbackReply{}
+
+	err = ch.SendRequest(loop_create).ReceiveReply(loop_create_reply)
+
+	if err != nil {
+		fmt.Errorf("create_loopback: %w\n", err)
+	}
+
+	fmt.Printf("create_loopback: sw_if_index %d",
+		int(loop_create_reply.SwIfIndex))
 }
 ```
 
-The example above uses GoVPP API to communicate over underlying go channels, 
-see [example client](examples/simple-client/simple_client.go) 
+The example above uses GoVPP API to communicate over underlying go channels,
+see [example client](examples/simple-client/simple_client.go)
 for more examples, including the example on how to use the Go channels directly.
+
+### Tracking down generated go code for a specific binary API
+
+Golang uses capitalization to indicate exported names, so you'll have
+to divide through by binapi-generator transformations. Example:
+
+```
+    define create_loopback  -> type CreateLoopback struct ...
+      vpp binapi definition      govpp exported type definition
+```
+The droids you're looking for will be in a file named
+<something>.ba.go.  Suggest:
+
+```
+    find git.fd.io/govpp/binapi -name "*.ba.go" | xargs grep -n GoTypeName
+```
+
+Look at the indicated <something>.ba.go file, deduce the package name
+and import it. See the example above.
 
 ## Build & Install
 
@@ -124,7 +202,7 @@ make install
 Once you have `binapi-generator` installed, you can use it to generate Go bindings for VPP binary API
 using VPP APIs in JSON format. The JSON input can be specified as a single file (`input-file` argument), or
 as a directory that will be scanned for all `.json` files (`input-dir`). The generated Go bindings will
-be placed into `output-dir` (by default current working directory), where each Go package will be placed into 
+be placed into `output-dir` (by default current working directory), where each Go package will be placed into
 a separated directory, e.g.:
 
 ```sh
@@ -134,7 +212,7 @@ binapi-generator --input-dir=/usr/share/vpp/api/core --output-dir=binapi
 
 In Go, [go generate](https://blog.golang.org/generate) tool can be leveraged to ease the code generation
 process. It allows to specify generator instructions in any one of the regular (non-generated) `.go` files
-that are dependent on generated code using special comments, e.g. the one from 
+that are dependent on generated code using special comments, e.g. the one from
 [example client](examples/simple-client/simple_client.go):
 
 ```go

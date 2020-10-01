@@ -15,18 +15,16 @@
 package main
 
 import (
-	"context"
 	"encoding/gob"
 	"flag"
-	"io"
 	"log"
 
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
+	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/vpe"
 	_ "git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
 	"git.fd.io/govpp.git/proxy"
 )
 
@@ -93,30 +91,12 @@ func runClient() {
 		panic(err)
 	}
 
-	// - using binapi message directly
 	req := &vpe.CliInband{Cmd: "show version"}
 	reply := new(vpe.CliInbandReply)
 	if err := binapiChannel.SendRequest(req).ReceiveReply(reply); err != nil {
 		log.Fatalln("binapi request failed:", err)
 	}
 	log.Printf("VPP version: %+v", reply.Reply)
-
-	// - or using generated rpc service
-	svc := interfaces.NewServiceClient(binapiChannel)
-	stream, err := svc.DumpSwInterface(context.Background(), &interfaces.SwInterfaceDump{})
-	if err != nil {
-		log.Fatalln("binapi request failed:", err)
-	}
-	for {
-		iface, err := stream.Recv()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatalln(err)
-		}
-		log.Printf("- interface: %+v", iface)
-	}
 }
 
 func runServer() {

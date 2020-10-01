@@ -155,7 +155,7 @@ func IcmpResponder(memif *libmemif.Memif, queueID uint8) {
 					break
 				}
 				// Generate response for each supported request.
-				responses := []libmemif.RawPacketData{}
+				var responses []libmemif.RawPacketData
 				for _, packet := range packets {
 					fmt.Println("Received new packet:")
 					DumpPacket(packet)
@@ -325,7 +325,7 @@ func main() {
 
 	hwAddr, err = net.ParseMAC(MAC)
 	if err != nil {
-		fmt.Println("Failed to parse the MAC address: %v", err)
+		fmt.Printf("Failed to parse the MAC address: %v", err)
 		return
 	}
 
@@ -334,7 +334,7 @@ func main() {
 		ipAddr = ip.To4()
 	}
 	if ipAddr == nil {
-		fmt.Println("Failed to parse the IP address: %v", err)
+		fmt.Printf("Failed to parse the IP address: %v", err)
 		return
 	}
 

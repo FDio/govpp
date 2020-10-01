@@ -15,6 +15,7 @@
 package binapigen
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -24,88 +25,6 @@ import (
 const (
 	defineApiPrefix = "vl_api_"
 	defineApiSuffix = "_t"
-)
-
-// BaseType represents base types in VPP binary API.
-type BaseType int
-
-const (
-	U8 BaseType = iota + 1
-	I8
-	U16
-	I16
-	U32
-	I32
-	U64
-	I64
-	F64
-	BOOL
-	STRING
-)
-
-var (
-	BaseTypes = map[BaseType]string{
-		U8:     "u8",
-		I8:     "i8",
-		U16:    "u16",
-		I16:    "i16",
-		U32:    "u32",
-		I32:    "i32",
-		U64:    "u64",
-		I64:    "i64",
-		F64:    "f64",
-		BOOL:   "bool",
-		STRING: "string",
-	}
-	BaseTypeNames = map[string]BaseType{
-		"u8":     U8,
-		"i8":     I8,
-		"u16":    U16,
-		"i16":    I16,
-		"u32":    U32,
-		"i32":    I32,
-		"u64":    U64,
-		"i64":    I64,
-		"f64":    F64,
-		"bool":   BOOL,
-		"string": STRING,
-	}
-)
-
-var BaseTypeSizes = map[BaseType]int{
-	U8:     1,
-	I8:     1,
-	U16:    2,
-	I16:    2,
-	U32:    4,
-	I32:    4,
-	U64:    8,
-	I64:    8,
-	F64:    8,
-	BOOL:   1,
-	STRING: 1,
-}
-
-type Kind int
-
-const (
-	_ = iota
-	Uint8Kind
-	Int8Kind
-	Uint16Kind
-	Int16Kind
-	Uint32Kind
-	Int32Kind
-	Uint64Kind
-	Int64Kind
-	Float64Kind
-	BoolKind
-	StringKind
-	EnumKind
-	AliasKind
-	StructKind
-	UnionKind
-	MessageKind
 )
 
 // toApiType returns name that is used as type reference in VPP binary API
@@ -120,72 +39,35 @@ func fromApiType(typ string) string {
 	return name
 }
 
-func getSizeOfType(module *File, typ *Struct) (size int) {
-	for _, field := range typ.Fields {
-		enum := getEnumByRef(module, field.Type)
-		if enum != nil {
-			size += getSizeOfBinapiTypeLength(enum.Type, field.Length)
-			continue
-		}
-		size += getSizeOfBinapiTypeLength(field.Type, field.Length)
-	}
-	return size
+const (
+	U8     = "u8"
+	I8     = "i8"
+	U16    = "u16"
+	I16    = "i16"
+	U32    = "u32"
+	I32    = "i32"
+	U64    = "u64"
+	I64    = "i64"
+	F64    = "f64"
+	BOOL   = "bool"
+	STRING = "string"
+)
+
+var BaseTypeSizes = map[string]int{
+	U8:     1,
+	I8:     1,
+	U16:    2,
+	I16:    2,
+	U32:    4,
+	I32:    4,
+	U64:    8,
+	I64:    8,
+	F64:    8,
+	BOOL:   1,
+	STRING: 1,
 }
 
-func getEnumByRef(file *File, ref string) *Enum {
-	for _, typ := range file.Enums {
-		if ref == toApiType(typ.Name) {
-			return typ
-		}
-	}
-	return nil
-}
-
-func getTypeByRef(file *File, ref string) *Struct {
-	for _, typ := range file.Structs {
-		if ref == toApiType(typ.Name) {
-			return typ
-		}
-	}
-	return nil
-}
-
-func getAliasByRef(file *File, ref string) *Alias {
-	for _, alias := range file.Aliases {
-		if ref == toApiType(alias.Name) {
-			return alias
-		}
-	}
-	return nil
-}
-
-func getUnionByRef(file *File, ref string) *Union {
-	for _, union := range file.Unions {
-		if ref == toApiType(union.Name) {
-			return union
-		}
-	}
-	return nil
-}
-
-func getBinapiTypeSize(binapiType string) (size int) {
-	typName := BaseTypeNames[binapiType]
-	return BaseTypeSizes[typName]
-}
-
-// binapiTypes is a set of types used VPP binary API for translation to Go types
-var binapiTypes = map[string]string{
-	"u8":  "uint8",
-	"i8":  "int8",
-	"u16": "uint16",
-	"i16": "int16",
-	"u32": "uint32",
-	"i32": "int32",
-	"u64": "uint64",
-	"i64": "int64",
-	"f64": "float64",
-}
-var BaseTypesGo = map[BaseType]string{
+var BaseTypesGo = map[string]string{
 	U8:     "uint8",
 	I8:     "int8",
 	U16:    "uint16",
@@ -199,73 +81,106 @@ var BaseTypesGo = map[BaseType]string{
 	STRING: "string",
 }
 
-func getActualType(file *File, typ string) (actual string) {
-	for _, enum := range file.Enums {
-		if enum.GoName == typ {
-			return enum.Type
-		}
+func fieldActualType(field *Field) (actual string) {
+	switch {
+	case field.TypeAlias != nil:
+		actual = field.TypeAlias.Type
+	case field.TypeEnum != nil:
+		actual = field.TypeEnum.Type
+	default:
+		actual = field.Type
 	}
-	for _, alias := range file.Aliases {
-		if alias.GoName == typ {
-			return alias.Type
-		}
-	}
-	return typ
+	return
 }
 
-// convertToGoType translates the VPP binary API type into Go type
-func convertToGoType(file *File, binapiType string) (typ string) {
-	if t, ok := binapiTypes[binapiType]; ok {
-		// basic types
-		typ = t
-	} else if r, ok := file.refmap[binapiType]; ok {
-		// specific types (enums/types/unions)
-		typ = camelCaseName(r)
-	} else {
-		switch binapiType {
-		case "bool", "string":
-			typ = binapiType
-		default:
-			// fallback type
-			logrus.Warnf("found unknown VPP binary API type %q, using byte", binapiType)
-			typ = "byte"
-		}
+func fieldGoType(g *GenFile, field *Field) string {
+	switch {
+	case field.TypeAlias != nil:
+		return g.GoIdent(field.TypeAlias.GoIdent)
+	case field.TypeEnum != nil:
+		return g.GoIdent(field.TypeEnum.GoIdent)
+	case field.TypeStruct != nil:
+		return g.GoIdent(field.TypeStruct.GoIdent)
+	case field.TypeUnion != nil:
+		return g.GoIdent(field.TypeUnion.GoIdent)
 	}
-	return typ
+	t, ok := BaseTypesGo[field.Type]
+	if !ok {
+		logrus.Panicf("type %s is not base type", field.Type)
+	}
+	return t
 }
 
-func getSizeOfBinapiTypeLength(typ string, length int) (size int) {
-	if n := getBinapiTypeSize(typ); n > 0 {
-		if length > 0 {
+func getFieldType(g *GenFile, field *Field) string {
+	gotype := fieldGoType(g, field)
+	if field.Array {
+		switch gotype {
+		case "uint8":
+			return "[]byte"
+		case "string":
+			return "string"
+		}
+		if _, ok := BaseTypesGo[field.Type]; !ok && field.Length > 0 {
+			return fmt.Sprintf("[%d]%s", field.Length, gotype)
+		}
+		return "[]" + gotype
+	}
+	return gotype
+}
+
+func getUnionSize(union *Union) (maxSize int) {
+	for _, field := range union.Fields {
+		if size, isBaseType := getSizeOfField(field); isBaseType {
+			logrus.Panicf("union %s field %s has unexpected type %q", union.Name, field.Name, field.Type)
+		} else if size > maxSize {
+			maxSize = size
+		}
+	}
+	//logf("getUnionSize: %s %+v max=%v", union.Name, union.Fields, maxSize)
+	return
+}
+
+func getSizeOfField(field *Field) (size int, isBaseType bool) {
+	if alias := field.TypeAlias; alias != nil {
+		size = getSizeOfBinapiBaseType(alias.Type, alias.Length)
+		return
+	}
+	if enum := field.TypeEnum; enum != nil {
+		size = getSizeOfBinapiBaseType(enum.Type, field.Length)
+		return
+	}
+	if structType := field.TypeStruct; structType != nil {
+		size = getSizeOfStruct(structType)
+		return
+	}
+	if union := field.TypeUnion; union != nil {
+		size = getUnionSize(union)
+		return
+	}
+	return size, true
+}
+
+func getSizeOfStruct(typ *Struct) (size int) {
+	for _, field := range typ.Fields {
+		fieldSize, isBaseType := getSizeOfField(field)
+		if isBaseType {
+			size += getSizeOfBinapiBaseType(field.Type, field.Length)
+			continue
+		}
+		size += fieldSize
+	}
+	return size
+}
+
+// Returns size of base type multiplied by length. Length equal to zero
+// returns base type size.
+func getSizeOfBinapiBaseType(typ string, length int) (size int) {
+	if n := BaseTypeSizes[typ]; n > 0 {
+		if length > 1 {
 			return n * length
 		} else {
 			return n
 		}
 	}
-
-	return
-}
-
-func getUnionSize(file *File, union *Union) (maxSize int) {
-	for _, field := range union.Fields {
-		typ := getTypeByRef(file, field.Type)
-		if typ != nil {
-			if size := getSizeOfType(file, typ); size > maxSize {
-				maxSize = size
-			}
-			continue
-		}
-		alias := getAliasByRef(file, field.Type)
-		if alias != nil {
-			if size := getSizeOfBinapiTypeLength(alias.Type, alias.Length); size > maxSize {
-				maxSize = size
-			}
-			continue
-		} else {
-			logf("no type or alias found for union %s field type %q", union.Name, field.Type)
-			continue
-		}
-	}
-	logf("getUnionSize: %s %+v max=%v", union.Name, union.Fields, maxSize)
 	return
 }
