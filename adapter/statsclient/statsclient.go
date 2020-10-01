@@ -185,7 +185,7 @@ func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntr
 		entry := adapter.StatEntry{
 			Name: append([]byte(nil), dirName...),
 			Type: adapter.StatType(dirType),
-			Data: sc.CopyEntryData(dirPtr),
+			Data: sc.CopyEntryData(dirPtr, copyLimitNone),
 		}
 		entries = append(entries, entry)
 	}
@@ -231,7 +231,7 @@ func (sc *StatsClient) PrepareDir(patterns ...string) (*adapter.StatDir, error) 
 		entry := adapter.StatEntry{
 			Name: append([]byte(nil), dirName...),
 			Type: adapter.StatType(dirType),
-			Data: sc.CopyEntryData(dirPtr),
+			Data: sc.CopyEntryData(dirPtr, copyLimitNone),
 		}
 		entries = append(entries, entry)
 	}

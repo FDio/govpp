@@ -73,12 +73,14 @@ type statSegment interface {
 
 	// CopyEntryData accepts pointer to a directory segment and returns adapter.Stat
 	// based on directory type populated with data
-	CopyEntryData(segment unsafe.Pointer) adapter.Stat
+	CopyEntryData(segment unsafe.Pointer, limit uint32) adapter.Stat
 
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update
 	UpdateEntryData(segment unsafe.Pointer, s *adapter.Stat) error
 }
+
+const copyLimitNone = ^uint32(0)
 
 // vecHeader represents a vector header
 type vecHeader struct {

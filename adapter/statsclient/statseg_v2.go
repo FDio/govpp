@@ -87,7 +87,7 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
+func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV2)(statSegDir)
 	if dirEntry.unionData == 0 {
 		debugf("data value or pointer not defined for %s", dirEntry.name)
@@ -134,7 +134,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 				debugf("counter (vector simple) pointer out of range")
 				continue
 			}
-			counterVectorLength := *(*uint32)(vectorLen(counterVector))
+			counterVectorLength := applyLimit(*(*uint32)(vectorLen(counterVector)), limit)
 			data[i] = make([]adapter.Counter, counterVectorLength)
 			for j := uint32(0); j < counterVectorLength; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
@@ -159,7 +159,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 				debugf("counter (vector combined) pointer out of range")
 				continue
 			}
-			counterVectorLength := *(*uint32)(vectorLen(counterVector))
+			counterVectorLength := applyLimit(*(*uint32)(vectorLen(counterVector)), limit)
 			data[i] = make([]adapter.CombinedCounter, counterVectorLength)
 			for j := uint32(0); j < counterVectorLength; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
@@ -175,7 +175,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
-		vecLen := *(*uint32)(vectorLen(dirVector))
+		vecLen := applyLimit(*(*uint32)(vectorLen(dirVector)), limit)
 		data := make([]adapter.Name, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			nameVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
@@ -347,4 +347,11 @@ func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
 func (ss *statSegmentV2) getErrorVector() unsafe.Pointer {
 	header := ss.loadSharedHeader(ss.sharedHeader)
 	return ss.adjust(unsafe.Pointer(&header.errorVector))
+}
+
+func applyLimit(val, limit uint32) uint32 {
+	if val > limit {
+		return limit
+	}
+	return val
 }

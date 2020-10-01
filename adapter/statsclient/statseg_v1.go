@@ -93,7 +93,7 @@ func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
+func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV1)(statSegDir)
 	dirType := adapter.StatType(dirEntry.directoryType)
 

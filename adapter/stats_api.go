@@ -28,6 +28,9 @@ var (
 	ErrStatsDataBusy     = errors.New("stats data busy")
 	ErrStatsDirStale     = errors.New("stats dir stale")
 	ErrStatsAccessFailed = errors.New("stats access failed")
+
+	ErrStatsDisconnected    = errors.New("stats segment disconnected")
+	ErrStatsBadServerReply  = errors.New("bad stats server reply")
 )
 
 // StatsAPI provides connection to VPP stats API.
