@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  pot.
+// RPCService defines RPC service pot.
 type RPCService interface {
 	PotProfileActivate(ctx context.Context, in *PotProfileActivate) (*PotProfileActivateReply, error)
 	PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*PotProfileAddReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) PotProfileActivate(ctx context.Context, in *PotProfileAc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*PotProfileAddReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileDel(ctx context.Context, in *PotProfileDel) (*PotProfileDelReply, error) {
@@ -51,7 +51,7 @@ func (c *serviceClient) PotProfileDel(ctx context.Context, in *PotProfileDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileShowConfigDump(ctx context.Context, in *PotProfileShowConfigDump) (RPCService_PotProfileShowConfigDumpClient, error) {

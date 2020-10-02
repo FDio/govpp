@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  lb.
+// RPCService defines RPC service lb.
 type RPCService interface {
 	LbAddDelAs(ctx context.Context, in *LbAddDelAs) (*LbAddDelAsReply, error)
 	LbAddDelIntfNat4(ctx context.Context, in *LbAddDelIntfNat4) (*LbAddDelIntfNat4Reply, error)
@@ -37,7 +37,7 @@ func (c *serviceClient) LbAddDelAs(ctx context.Context, in *LbAddDelAs) (*LbAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbAddDelIntfNat4(ctx context.Context, in *LbAddDelIntfNat4) (*LbAddDelIntfNat4Reply, error) {
@@ -46,7 +46,7 @@ func (c *serviceClient) LbAddDelIntfNat4(ctx context.Context, in *LbAddDelIntfNa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbAddDelIntfNat6(ctx context.Context, in *LbAddDelIntfNat6) (*LbAddDelIntfNat6Reply, error) {
@@ -55,7 +55,7 @@ func (c *serviceClient) LbAddDelIntfNat6(ctx context.Context, in *LbAddDelIntfNa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbAddDelVip(ctx context.Context, in *LbAddDelVip) (*LbAddDelVipReply, error) {
@@ -64,7 +64,7 @@ func (c *serviceClient) LbAddDelVip(ctx context.Context, in *LbAddDelVip) (*LbAd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbAsDump(ctx context.Context, in *LbAsDump) (RPCService_LbAsDumpClient, error) {
@@ -112,7 +112,7 @@ func (c *serviceClient) LbConf(ctx context.Context, in *LbConf) (*LbConfReply, e
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbFlushVip(ctx context.Context, in *LbFlushVip) (*LbFlushVipReply, error) {
@@ -121,7 +121,7 @@ func (c *serviceClient) LbFlushVip(ctx context.Context, in *LbFlushVip) (*LbFlus
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LbVipDump(ctx context.Context, in *LbVipDump) (RPCService_LbVipDumpClient, error) {

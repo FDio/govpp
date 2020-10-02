@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  lisp.
+// RPCService defines RPC service lisp.
 type RPCService interface {
 	LispAddDelAdjacency(ctx context.Context, in *LispAddDelAdjacency) (*LispAddDelAdjacencyReply, error)
 	LispAddDelLocalEid(ctx context.Context, in *LispAddDelLocalEid) (*LispAddDelLocalEidReply, error)
@@ -59,7 +59,7 @@ func (c *serviceClient) LispAddDelAdjacency(ctx context.Context, in *LispAddDelA
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelLocalEid(ctx context.Context, in *LispAddDelLocalEid) (*LispAddDelLocalEidReply, error) {
@@ -68,7 +68,7 @@ func (c *serviceClient) LispAddDelLocalEid(ctx context.Context, in *LispAddDelLo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelLocator(ctx context.Context, in *LispAddDelLocator) (*LispAddDelLocatorReply, error) {
@@ -77,7 +77,7 @@ func (c *serviceClient) LispAddDelLocator(ctx context.Context, in *LispAddDelLoc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelLocatorSet(ctx context.Context, in *LispAddDelLocatorSet) (*LispAddDelLocatorSetReply, error) {
@@ -86,7 +86,7 @@ func (c *serviceClient) LispAddDelLocatorSet(ctx context.Context, in *LispAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelMapRequestItrRlocs(ctx context.Context, in *LispAddDelMapRequestItrRlocs) (*LispAddDelMapRequestItrRlocsReply, error) {
@@ -95,7 +95,7 @@ func (c *serviceClient) LispAddDelMapRequestItrRlocs(ctx context.Context, in *Li
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelMapResolver(ctx context.Context, in *LispAddDelMapResolver) (*LispAddDelMapResolverReply, error) {
@@ -104,7 +104,7 @@ func (c *serviceClient) LispAddDelMapResolver(ctx context.Context, in *LispAddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelMapServer(ctx context.Context, in *LispAddDelMapServer) (*LispAddDelMapServerReply, error) {
@@ -113,7 +113,7 @@ func (c *serviceClient) LispAddDelMapServer(ctx context.Context, in *LispAddDelM
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAddDelRemoteMapping(ctx context.Context, in *LispAddDelRemoteMapping) (*LispAddDelRemoteMappingReply, error) {
@@ -122,7 +122,7 @@ func (c *serviceClient) LispAddDelRemoteMapping(ctx context.Context, in *LispAdd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispAdjacenciesGet(ctx context.Context, in *LispAdjacenciesGet) (*LispAdjacenciesGetReply, error) {
@@ -131,7 +131,7 @@ func (c *serviceClient) LispAdjacenciesGet(ctx context.Context, in *LispAdjacenc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispEidTableAddDelMap(ctx context.Context, in *LispEidTableAddDelMap) (*LispEidTableAddDelMapReply, error) {
@@ -140,7 +140,7 @@ func (c *serviceClient) LispEidTableAddDelMap(ctx context.Context, in *LispEidTa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispEidTableDump(ctx context.Context, in *LispEidTableDump) (RPCService_LispEidTableDumpClient, error) {
@@ -266,7 +266,7 @@ func (c *serviceClient) LispEnableDisable(ctx context.Context, in *LispEnableDis
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispGetMapRequestItrRlocs(ctx context.Context, in *LispGetMapRequestItrRlocs) (*LispGetMapRequestItrRlocsReply, error) {
@@ -275,7 +275,7 @@ func (c *serviceClient) LispGetMapRequestItrRlocs(ctx context.Context, in *LispG
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispLocatorDump(ctx context.Context, in *LispLocatorDump) (RPCService_LispLocatorDumpClient, error) {
@@ -362,7 +362,7 @@ func (c *serviceClient) LispMapRegisterEnableDisable(ctx context.Context, in *Li
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispMapRequestMode(ctx context.Context, in *LispMapRequestMode) (*LispMapRequestModeReply, error) {
@@ -371,7 +371,7 @@ func (c *serviceClient) LispMapRequestMode(ctx context.Context, in *LispMapReque
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispMapResolverDump(ctx context.Context, in *LispMapResolverDump) (RPCService_LispMapResolverDumpClient, error) {
@@ -458,7 +458,7 @@ func (c *serviceClient) LispPitrSetLocatorSet(ctx context.Context, in *LispPitrS
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispRlocProbeEnableDisable(ctx context.Context, in *LispRlocProbeEnableDisable) (*LispRlocProbeEnableDisableReply, error) {
@@ -467,7 +467,7 @@ func (c *serviceClient) LispRlocProbeEnableDisable(ctx context.Context, in *Lisp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LispUsePetr(ctx context.Context, in *LispUsePetr) (*LispUsePetrReply, error) {
@@ -476,7 +476,7 @@ func (c *serviceClient) LispUsePetr(ctx context.Context, in *LispUsePetr) (*Lisp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispMapRegisterState(ctx context.Context, in *ShowLispMapRegisterState) (*ShowLispMapRegisterStateReply, error) {
@@ -485,7 +485,7 @@ func (c *serviceClient) ShowLispMapRegisterState(ctx context.Context, in *ShowLi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispMapRequestMode(ctx context.Context, in *ShowLispMapRequestMode) (*ShowLispMapRequestModeReply, error) {
@@ -494,7 +494,7 @@ func (c *serviceClient) ShowLispMapRequestMode(ctx context.Context, in *ShowLisp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispPitr(ctx context.Context, in *ShowLispPitr) (*ShowLispPitrReply, error) {
@@ -503,7 +503,7 @@ func (c *serviceClient) ShowLispPitr(ctx context.Context, in *ShowLispPitr) (*Sh
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispRlocProbeState(ctx context.Context, in *ShowLispRlocProbeState) (*ShowLispRlocProbeStateReply, error) {
@@ -512,7 +512,7 @@ func (c *serviceClient) ShowLispRlocProbeState(ctx context.Context, in *ShowLisp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispStatus(ctx context.Context, in *ShowLispStatus) (*ShowLispStatusReply, error) {
@@ -521,7 +521,7 @@ func (c *serviceClient) ShowLispStatus(ctx context.Context, in *ShowLispStatus) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowLispUsePetr(ctx context.Context, in *ShowLispUsePetr) (*ShowLispUsePetrReply, error) {
@@ -530,5 +530,5 @@ func (c *serviceClient) ShowLispUsePetr(ctx context.Context, in *ShowLispUsePetr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

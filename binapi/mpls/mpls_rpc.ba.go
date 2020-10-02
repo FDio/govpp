@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  mpls.
+// RPCService defines RPC service mpls.
 type RPCService interface {
 	MplsIPBindUnbind(ctx context.Context, in *MplsIPBindUnbind) (*MplsIPBindUnbindReply, error)
 	MplsRouteAddDel(ctx context.Context, in *MplsRouteAddDel) (*MplsRouteAddDelReply, error)
@@ -37,7 +37,7 @@ func (c *serviceClient) MplsIPBindUnbind(ctx context.Context, in *MplsIPBindUnbi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MplsRouteAddDel(ctx context.Context, in *MplsRouteAddDel) (*MplsRouteAddDelReply, error) {
@@ -46,7 +46,7 @@ func (c *serviceClient) MplsRouteAddDel(ctx context.Context, in *MplsRouteAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MplsRouteDump(ctx context.Context, in *MplsRouteDump) (RPCService_MplsRouteDumpClient, error) {
@@ -94,7 +94,7 @@ func (c *serviceClient) MplsTableAddDel(ctx context.Context, in *MplsTableAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MplsTableDump(ctx context.Context, in *MplsTableDump) (RPCService_MplsTableDumpClient, error) {
@@ -142,7 +142,7 @@ func (c *serviceClient) MplsTunnelAddDel(ctx context.Context, in *MplsTunnelAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MplsTunnelDump(ctx context.Context, in *MplsTunnelDump) (RPCService_MplsTunnelDumpClient, error) {
@@ -190,5 +190,5 @@ func (c *serviceClient) SwInterfaceSetMplsEnable(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

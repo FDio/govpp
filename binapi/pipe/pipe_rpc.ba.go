@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  pipe.
+// RPCService defines RPC service pipe.
 type RPCService interface {
 	PipeCreate(ctx context.Context, in *PipeCreate) (*PipeCreateReply, error)
 	PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDeleteReply, error)
@@ -32,7 +32,7 @@ func (c *serviceClient) PipeCreate(ctx context.Context, in *PipeCreate) (*PipeCr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDeleteReply, error) {
@@ -41,7 +41,7 @@ func (c *serviceClient) PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PipeDump(ctx context.Context, in *PipeDump) (RPCService_PipeDumpClient, error) {

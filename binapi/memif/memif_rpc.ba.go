@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  memif.
+// RPCService defines RPC service memif.
 type RPCService interface {
 	MemifCreate(ctx context.Context, in *MemifCreate) (*MemifCreateReply, error)
 	MemifDelete(ctx context.Context, in *MemifDelete) (*MemifDeleteReply, error)
@@ -34,7 +34,7 @@ func (c *serviceClient) MemifCreate(ctx context.Context, in *MemifCreate) (*Memi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MemifDelete(ctx context.Context, in *MemifDelete) (*MemifDeleteReply, error) {
@@ -43,7 +43,7 @@ func (c *serviceClient) MemifDelete(ctx context.Context, in *MemifDelete) (*Memi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MemifDump(ctx context.Context, in *MemifDump) (RPCService_MemifDumpClient, error) {
@@ -91,7 +91,7 @@ func (c *serviceClient) MemifSocketFilenameAddDel(ctx context.Context, in *Memif
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MemifSocketFilenameDump(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_MemifSocketFilenameDumpClient, error) {

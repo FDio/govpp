@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  dslite.
+// RPCService defines RPC service dslite.
 type RPCService interface {
 	DsliteAddDelPoolAddrRange(ctx context.Context, in *DsliteAddDelPoolAddrRange) (*DsliteAddDelPoolAddrRangeReply, error)
 	DsliteAddressDump(ctx context.Context, in *DsliteAddressDump) (RPCService_DsliteAddressDumpClient, error)
@@ -35,7 +35,7 @@ func (c *serviceClient) DsliteAddDelPoolAddrRange(ctx context.Context, in *Dslit
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteAddressDump(ctx context.Context, in *DsliteAddressDump) (RPCService_DsliteAddressDumpClient, error) {
@@ -83,7 +83,7 @@ func (c *serviceClient) DsliteGetAftrAddr(ctx context.Context, in *DsliteGetAftr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteGetB4Addr(ctx context.Context, in *DsliteGetB4Addr) (*DsliteGetB4AddrReply, error) {
@@ -92,7 +92,7 @@ func (c *serviceClient) DsliteGetB4Addr(ctx context.Context, in *DsliteGetB4Addr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteSetAftrAddr(ctx context.Context, in *DsliteSetAftrAddr) (*DsliteSetAftrAddrReply, error) {
@@ -101,7 +101,7 @@ func (c *serviceClient) DsliteSetAftrAddr(ctx context.Context, in *DsliteSetAftr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteSetB4Addr(ctx context.Context, in *DsliteSetB4Addr) (*DsliteSetB4AddrReply, error) {
@@ -110,5 +110,5 @@ func (c *serviceClient) DsliteSetB4Addr(ctx context.Context, in *DsliteSetB4Addr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

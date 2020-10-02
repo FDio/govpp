@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  session.
+// RPCService defines RPC service session.
 type RPCService interface {
 	AppAddCertKeyPair(ctx context.Context, in *AppAddCertKeyPair) (*AppAddCertKeyPairReply, error)
 	AppAttach(ctx context.Context, in *AppAttach) (*AppAttachReply, error)
@@ -40,7 +40,7 @@ func (c *serviceClient) AppAddCertKeyPair(ctx context.Context, in *AppAddCertKey
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppAttach(ctx context.Context, in *AppAttach) (*AppAttachReply, error) {
@@ -49,7 +49,7 @@ func (c *serviceClient) AppAttach(ctx context.Context, in *AppAttach) (*AppAttac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppDelCertKeyPair(ctx context.Context, in *AppDelCertKeyPair) (*AppDelCertKeyPairReply, error) {
@@ -58,7 +58,7 @@ func (c *serviceClient) AppDelCertKeyPair(ctx context.Context, in *AppDelCertKey
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppNamespaceAddDel(ctx context.Context, in *AppNamespaceAddDel) (*AppNamespaceAddDelReply, error) {
@@ -67,7 +67,7 @@ func (c *serviceClient) AppNamespaceAddDel(ctx context.Context, in *AppNamespace
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppWorkerAddDel(ctx context.Context, in *AppWorkerAddDel) (*AppWorkerAddDelReply, error) {
@@ -76,7 +76,7 @@ func (c *serviceClient) AppWorkerAddDel(ctx context.Context, in *AppWorkerAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationDetach(ctx context.Context, in *ApplicationDetach) (*ApplicationDetachReply, error) {
@@ -85,7 +85,7 @@ func (c *serviceClient) ApplicationDetach(ctx context.Context, in *ApplicationDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationTLSCertAdd(ctx context.Context, in *ApplicationTLSCertAdd) (*ApplicationTLSCertAddReply, error) {
@@ -94,7 +94,7 @@ func (c *serviceClient) ApplicationTLSCertAdd(ctx context.Context, in *Applicati
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationTLSKeyAdd(ctx context.Context, in *ApplicationTLSKeyAdd) (*ApplicationTLSKeyAddReply, error) {
@@ -103,7 +103,7 @@ func (c *serviceClient) ApplicationTLSKeyAdd(ctx context.Context, in *Applicatio
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionEnableDisable(ctx context.Context, in *SessionEnableDisable) (*SessionEnableDisableReply, error) {
@@ -112,7 +112,7 @@ func (c *serviceClient) SessionEnableDisable(ctx context.Context, in *SessionEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionRuleAddDel(ctx context.Context, in *SessionRuleAddDel) (*SessionRuleAddDelReply, error) {
@@ -121,7 +121,7 @@ func (c *serviceClient) SessionRuleAddDel(ctx context.Context, in *SessionRuleAd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionRulesDump(ctx context.Context, in *SessionRulesDump) (RPCService_SessionRulesDumpClient, error) {

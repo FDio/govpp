@@ -20,7 +20,7 @@ import (
 )
 
 func init() {
-	RegisterPlugin("rest", GenerateREST)
+	RegisterPlugin("http", GenerateHTTP)
 }
 
 // library dependencies
@@ -30,16 +30,16 @@ const (
 	jsonPkg   = GoImportPath("encoding/json")
 )
 
-func GenerateREST(gen *Generator, file *File) *GenFile {
+func GenerateHTTP(gen *Generator, file *File) *GenFile {
 	if file.Service == nil {
 		return nil
 	}
 
 	logf("----------------------------")
-	logf(" Generate REST - %s", file.Desc.Name)
+	logf(" Generate HTTP - %s", file.Desc.Name)
 	logf("----------------------------")
 
-	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_rest.ba.go")
+	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_http.ba.go")
 	g := gen.NewGenFile(filename, file.GoImportPath)
 	g.file = file
 
@@ -51,15 +51,15 @@ func GenerateREST(gen *Generator, file *File) *GenFile {
 
 	// generate RPC service
 	if len(file.Service.RPCs) > 0 {
-		genRESTHandler(g, file.Service)
+		genHTTPHandler(g, file.Service)
 	}
 
 	return g
 }
 
-func genRESTHandler(g *GenFile, svc *Service) {
+func genHTTPHandler(g *GenFile, svc *Service) {
 	// generate handler constructor
-	g.P("func RESTHandler(rpc ", serviceApiName, ") ", httpPkg.Ident("Handler"), " {")
+	g.P("func HTTPHandler(rpc ", serviceApiName, ") ", httpPkg.Ident("Handler"), " {")
 	g.P("	mux := ", httpPkg.Ident("NewServeMux"), "()")
 
 	// generate http handlers for rpc

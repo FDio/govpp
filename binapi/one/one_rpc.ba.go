@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  one.
+// RPCService defines RPC service one.
 type RPCService interface {
 	OneAddDelAdjacency(ctx context.Context, in *OneAddDelAdjacency) (*OneAddDelAdjacencyReply, error)
 	OneAddDelL2ArpEntry(ctx context.Context, in *OneAddDelL2ArpEntry) (*OneAddDelL2ArpEntryReply, error)
@@ -83,7 +83,7 @@ func (c *serviceClient) OneAddDelAdjacency(ctx context.Context, in *OneAddDelAdj
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelL2ArpEntry(ctx context.Context, in *OneAddDelL2ArpEntry) (*OneAddDelL2ArpEntryReply, error) {
@@ -92,7 +92,7 @@ func (c *serviceClient) OneAddDelL2ArpEntry(ctx context.Context, in *OneAddDelL2
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelLocalEid(ctx context.Context, in *OneAddDelLocalEid) (*OneAddDelLocalEidReply, error) {
@@ -101,7 +101,7 @@ func (c *serviceClient) OneAddDelLocalEid(ctx context.Context, in *OneAddDelLoca
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelLocator(ctx context.Context, in *OneAddDelLocator) (*OneAddDelLocatorReply, error) {
@@ -110,7 +110,7 @@ func (c *serviceClient) OneAddDelLocator(ctx context.Context, in *OneAddDelLocat
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelLocatorSet(ctx context.Context, in *OneAddDelLocatorSet) (*OneAddDelLocatorSetReply, error) {
@@ -119,7 +119,7 @@ func (c *serviceClient) OneAddDelLocatorSet(ctx context.Context, in *OneAddDelLo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelMapRequestItrRlocs(ctx context.Context, in *OneAddDelMapRequestItrRlocs) (*OneAddDelMapRequestItrRlocsReply, error) {
@@ -128,7 +128,7 @@ func (c *serviceClient) OneAddDelMapRequestItrRlocs(ctx context.Context, in *One
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelMapResolver(ctx context.Context, in *OneAddDelMapResolver) (*OneAddDelMapResolverReply, error) {
@@ -137,7 +137,7 @@ func (c *serviceClient) OneAddDelMapResolver(ctx context.Context, in *OneAddDelM
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelMapServer(ctx context.Context, in *OneAddDelMapServer) (*OneAddDelMapServerReply, error) {
@@ -146,7 +146,7 @@ func (c *serviceClient) OneAddDelMapServer(ctx context.Context, in *OneAddDelMap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelNdpEntry(ctx context.Context, in *OneAddDelNdpEntry) (*OneAddDelNdpEntryReply, error) {
@@ -155,7 +155,7 @@ func (c *serviceClient) OneAddDelNdpEntry(ctx context.Context, in *OneAddDelNdpE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAddDelRemoteMapping(ctx context.Context, in *OneAddDelRemoteMapping) (*OneAddDelRemoteMappingReply, error) {
@@ -164,7 +164,7 @@ func (c *serviceClient) OneAddDelRemoteMapping(ctx context.Context, in *OneAddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneAdjacenciesGet(ctx context.Context, in *OneAdjacenciesGet) (*OneAdjacenciesGetReply, error) {
@@ -173,7 +173,7 @@ func (c *serviceClient) OneAdjacenciesGet(ctx context.Context, in *OneAdjacencie
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneEidTableAddDelMap(ctx context.Context, in *OneEidTableAddDelMap) (*OneEidTableAddDelMapReply, error) {
@@ -182,7 +182,7 @@ func (c *serviceClient) OneEidTableAddDelMap(ctx context.Context, in *OneEidTabl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneEidTableDump(ctx context.Context, in *OneEidTableDump) (RPCService_OneEidTableDumpClient, error) {
@@ -308,7 +308,7 @@ func (c *serviceClient) OneEnableDisable(ctx context.Context, in *OneEnableDisab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneEnableDisablePetrMode(ctx context.Context, in *OneEnableDisablePetrMode) (*OneEnableDisablePetrModeReply, error) {
@@ -317,7 +317,7 @@ func (c *serviceClient) OneEnableDisablePetrMode(ctx context.Context, in *OneEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneEnableDisablePitrMode(ctx context.Context, in *OneEnableDisablePitrMode) (*OneEnableDisablePitrModeReply, error) {
@@ -326,7 +326,7 @@ func (c *serviceClient) OneEnableDisablePitrMode(ctx context.Context, in *OneEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneEnableDisableXtrMode(ctx context.Context, in *OneEnableDisableXtrMode) (*OneEnableDisableXtrModeReply, error) {
@@ -335,7 +335,7 @@ func (c *serviceClient) OneEnableDisableXtrMode(ctx context.Context, in *OneEnab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneGetMapRequestItrRlocs(ctx context.Context, in *OneGetMapRequestItrRlocs) (*OneGetMapRequestItrRlocsReply, error) {
@@ -344,7 +344,7 @@ func (c *serviceClient) OneGetMapRequestItrRlocs(ctx context.Context, in *OneGet
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneGetTransportProtocol(ctx context.Context, in *OneGetTransportProtocol) (*OneGetTransportProtocolReply, error) {
@@ -353,7 +353,7 @@ func (c *serviceClient) OneGetTransportProtocol(ctx context.Context, in *OneGetT
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneL2ArpBdGet(ctx context.Context, in *OneL2ArpBdGet) (*OneL2ArpBdGetReply, error) {
@@ -362,7 +362,7 @@ func (c *serviceClient) OneL2ArpBdGet(ctx context.Context, in *OneL2ArpBdGet) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneL2ArpEntriesGet(ctx context.Context, in *OneL2ArpEntriesGet) (*OneL2ArpEntriesGetReply, error) {
@@ -371,7 +371,7 @@ func (c *serviceClient) OneL2ArpEntriesGet(ctx context.Context, in *OneL2ArpEntr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneLocatorDump(ctx context.Context, in *OneLocatorDump) (RPCService_OneLocatorDumpClient, error) {
@@ -458,7 +458,7 @@ func (c *serviceClient) OneMapRegisterEnableDisable(ctx context.Context, in *One
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneMapRegisterFallbackThreshold(ctx context.Context, in *OneMapRegisterFallbackThreshold) (*OneMapRegisterFallbackThresholdReply, error) {
@@ -467,7 +467,7 @@ func (c *serviceClient) OneMapRegisterFallbackThreshold(ctx context.Context, in 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneMapRegisterSetTTL(ctx context.Context, in *OneMapRegisterSetTTL) (*OneMapRegisterSetTTLReply, error) {
@@ -476,7 +476,7 @@ func (c *serviceClient) OneMapRegisterSetTTL(ctx context.Context, in *OneMapRegi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneMapRequestMode(ctx context.Context, in *OneMapRequestMode) (*OneMapRequestModeReply, error) {
@@ -485,7 +485,7 @@ func (c *serviceClient) OneMapRequestMode(ctx context.Context, in *OneMapRequest
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneMapResolverDump(ctx context.Context, in *OneMapResolverDump) (RPCService_OneMapResolverDumpClient, error) {
@@ -572,7 +572,7 @@ func (c *serviceClient) OneNdpBdGet(ctx context.Context, in *OneNdpBdGet) (*OneN
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneNdpEntriesGet(ctx context.Context, in *OneNdpEntriesGet) (*OneNdpEntriesGetReply, error) {
@@ -581,7 +581,7 @@ func (c *serviceClient) OneNdpEntriesGet(ctx context.Context, in *OneNdpEntriesG
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneNshSetLocatorSet(ctx context.Context, in *OneNshSetLocatorSet) (*OneNshSetLocatorSetReply, error) {
@@ -590,7 +590,7 @@ func (c *serviceClient) OneNshSetLocatorSet(ctx context.Context, in *OneNshSetLo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OnePitrSetLocatorSet(ctx context.Context, in *OnePitrSetLocatorSet) (*OnePitrSetLocatorSetReply, error) {
@@ -599,7 +599,7 @@ func (c *serviceClient) OnePitrSetLocatorSet(ctx context.Context, in *OnePitrSet
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneRlocProbeEnableDisable(ctx context.Context, in *OneRlocProbeEnableDisable) (*OneRlocProbeEnableDisableReply, error) {
@@ -608,7 +608,7 @@ func (c *serviceClient) OneRlocProbeEnableDisable(ctx context.Context, in *OneRl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneSetTransportProtocol(ctx context.Context, in *OneSetTransportProtocol) (*OneSetTransportProtocolReply, error) {
@@ -617,7 +617,7 @@ func (c *serviceClient) OneSetTransportProtocol(ctx context.Context, in *OneSetT
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneShowPetrMode(ctx context.Context, in *OneShowPetrMode) (*OneShowPetrModeReply, error) {
@@ -626,7 +626,7 @@ func (c *serviceClient) OneShowPetrMode(ctx context.Context, in *OneShowPetrMode
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneShowPitrMode(ctx context.Context, in *OneShowPitrMode) (*OneShowPitrModeReply, error) {
@@ -635,7 +635,7 @@ func (c *serviceClient) OneShowPitrMode(ctx context.Context, in *OneShowPitrMode
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneShowXtrMode(ctx context.Context, in *OneShowXtrMode) (*OneShowXtrModeReply, error) {
@@ -644,7 +644,7 @@ func (c *serviceClient) OneShowXtrMode(ctx context.Context, in *OneShowXtrMode) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneStatsDump(ctx context.Context, in *OneStatsDump) (RPCService_OneStatsDumpClient, error) {
@@ -692,7 +692,7 @@ func (c *serviceClient) OneStatsEnableDisable(ctx context.Context, in *OneStatsE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneStatsFlush(ctx context.Context, in *OneStatsFlush) (*OneStatsFlushReply, error) {
@@ -701,7 +701,7 @@ func (c *serviceClient) OneStatsFlush(ctx context.Context, in *OneStatsFlush) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OneUsePetr(ctx context.Context, in *OneUsePetr) (*OneUsePetrReply, error) {
@@ -710,7 +710,7 @@ func (c *serviceClient) OneUsePetr(ctx context.Context, in *OneUsePetr) (*OneUse
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneMapRegisterFallbackThreshold(ctx context.Context, in *ShowOneMapRegisterFallbackThreshold) (*ShowOneMapRegisterFallbackThresholdReply, error) {
@@ -719,7 +719,7 @@ func (c *serviceClient) ShowOneMapRegisterFallbackThreshold(ctx context.Context,
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneMapRegisterState(ctx context.Context, in *ShowOneMapRegisterState) (*ShowOneMapRegisterStateReply, error) {
@@ -728,7 +728,7 @@ func (c *serviceClient) ShowOneMapRegisterState(ctx context.Context, in *ShowOne
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneMapRegisterTTL(ctx context.Context, in *ShowOneMapRegisterTTL) (*ShowOneMapRegisterTTLReply, error) {
@@ -737,7 +737,7 @@ func (c *serviceClient) ShowOneMapRegisterTTL(ctx context.Context, in *ShowOneMa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneMapRequestMode(ctx context.Context, in *ShowOneMapRequestMode) (*ShowOneMapRequestModeReply, error) {
@@ -746,7 +746,7 @@ func (c *serviceClient) ShowOneMapRequestMode(ctx context.Context, in *ShowOneMa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneNshMapping(ctx context.Context, in *ShowOneNshMapping) (*ShowOneNshMappingReply, error) {
@@ -755,7 +755,7 @@ func (c *serviceClient) ShowOneNshMapping(ctx context.Context, in *ShowOneNshMap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOnePitr(ctx context.Context, in *ShowOnePitr) (*ShowOnePitrReply, error) {
@@ -764,7 +764,7 @@ func (c *serviceClient) ShowOnePitr(ctx context.Context, in *ShowOnePitr) (*Show
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneRlocProbeState(ctx context.Context, in *ShowOneRlocProbeState) (*ShowOneRlocProbeStateReply, error) {
@@ -773,7 +773,7 @@ func (c *serviceClient) ShowOneRlocProbeState(ctx context.Context, in *ShowOneRl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneStatsEnableDisable(ctx context.Context, in *ShowOneStatsEnableDisable) (*ShowOneStatsEnableDisableReply, error) {
@@ -782,7 +782,7 @@ func (c *serviceClient) ShowOneStatsEnableDisable(ctx context.Context, in *ShowO
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneStatus(ctx context.Context, in *ShowOneStatus) (*ShowOneStatusReply, error) {
@@ -791,7 +791,7 @@ func (c *serviceClient) ShowOneStatus(ctx context.Context, in *ShowOneStatus) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowOneUsePetr(ctx context.Context, in *ShowOneUsePetr) (*ShowOneUsePetrReply, error) {
@@ -800,5 +800,5 @@ func (c *serviceClient) ShowOneUsePetr(ctx context.Context, in *ShowOneUsePetr) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

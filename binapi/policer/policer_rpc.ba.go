@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  policer.
+// RPCService defines RPC service policer.
 type RPCService interface {
 	PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*PolicerAddDelReply, error)
 	PolicerDump(ctx context.Context, in *PolicerDump) (RPCService_PolicerDumpClient, error)
@@ -31,7 +31,7 @@ func (c *serviceClient) PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PolicerDump(ctx context.Context, in *PolicerDump) (RPCService_PolicerDumpClient, error) {

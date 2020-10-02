@@ -53,7 +53,7 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 		if err != nil {
 			return fmt.Errorf("cannot resolve import path for output dir %s: %w", opts.OutputDir, err)
 		}
-		logrus.Infof("resolved import path prefix: %s", opts.ImportPrefix)
+		logrus.Debugf("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
 	gen, err := New(opts, apiFiles, filesToGenerate)
@@ -73,7 +73,6 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 			return err
 		}
 	}
-
 	if err = gen.Generate(); err != nil {
 		return err
 	}

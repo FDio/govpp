@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  abf.
+// RPCService defines RPC service abf.
 type RPCService interface {
 	AbfItfAttachAddDel(ctx context.Context, in *AbfItfAttachAddDel) (*AbfItfAttachAddDelReply, error)
 	AbfItfAttachDump(ctx context.Context, in *AbfItfAttachDump) (RPCService_AbfItfAttachDumpClient, error)
@@ -34,7 +34,7 @@ func (c *serviceClient) AbfItfAttachAddDel(ctx context.Context, in *AbfItfAttach
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AbfItfAttachDump(ctx context.Context, in *AbfItfAttachDump) (RPCService_AbfItfAttachDumpClient, error) {
@@ -91,7 +91,7 @@ func (c *serviceClient) AbfPolicyAddDel(ctx context.Context, in *AbfPolicyAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AbfPolicyDump(ctx context.Context, in *AbfPolicyDump) (RPCService_AbfPolicyDumpClient, error) {

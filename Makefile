@@ -1,23 +1,26 @@
 SHELL := /usr/bin/env bash -o pipefail
 
-VERSION ?= $(shell git describe --always --tags --dirty)
-COMMIT ?= $(shell git rev-parse HEAD)
-BUILD_STAMP ?= $(shell git log -1 --format='%ct')
+PROJECT := govpp
+
+VERSION      ?= $(shell git describe --always --tags --dirty)
+COMMIT       ?= $(shell git rev-parse HEAD)
+BUILD_STAMP  ?= $(shell git log -1 --format='%ct')
 BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 
 BUILD_HOST ?= $(shell hostname)
 BUILD_USER ?= $(shell id -un)
 
-GO ?= go
-
 GOVPP_PKG := git.fd.io/govpp.git
+
+VERSION_PKG := $(GOVPP_PKG)/internal/version
 LDFLAGS = \
-	-X ${GOVPP_PKG}/version.version=$(VERSION) \
-	-X ${GOVPP_PKG}/version.commitHash=$(COMMIT) \
-	-X ${GOVPP_PKG}/version.buildStamp=$(BUILD_STAMP) \
-	-X ${GOVPP_PKG}/version.buildBranch=$(BUILD_BRANCH) \
-	-X ${GOVPP_PKG}/version.buildUser=$(BUILD_USER) \
-	-X ${GOVPP_PKG}/version.buildHost=$(BUILD_HOST)
+	-X $(VERSION_PKG).version=$(VERSION) \
+	-X $(VERSION_PKG).commitHash=$(COMMIT) \
+	-X $(VERSION_PKG).buildStamp=$(BUILD_STAMP) \
+	-X $(VERSION_PKG).buildBranch=$(BUILD_BRANCH) \
+	-X $(VERSION_PKG).buildUser=$(BUILD_USER) \
+	-X $(VERSION_PKG).buildHost=$(BUILD_HOST)
+
 ifeq ($(NOSTRIP),)
 LDFLAGS += -w -s
 endif
@@ -35,8 +38,6 @@ ifeq ($(V),1)
 GO_BUILD_ARGS += -v
 endif
 
-VPP_VERSION	?= $(shell dpkg-query -f '\${Version}' -W vpp)
-
 # VPP Docker image to use for api generation (gen-binapi-docker)
 VPP_IMG 	      ?= ligato/vpp-base:latest
 # Local VPP directory used for binary api generation (gen-binapi-from-code)
@@ -46,34 +47,28 @@ BINAPI_DIR	      ?= ./binapi
 # Binapi generator path
 BINAPI_GENERATOR  = ./bin/binapi-generator
 
+.DEFAULT_GOAL = help
+
 bin:
 	mkdir -p bin
 
 build: ## Build all
 	@echo "# building ${VERSION}"
-	$(GO) build ${GO_BUILD_ARGS} ./...
-
-cmd-binapi-generator: bin ## Build commands
-	$(GO) build ${GO_BUILD_ARGS} -o bin ./cmd/binapi-generator
+	go build ${GO_BUILD_ARGS} ./...
 
 cmd: bin ## Build commands
-	$(GO) build ${GO_BUILD_ARGS} -o bin ./cmd/...
+	go build ${GO_BUILD_ARGS} -o bin ./cmd/...
 
 examples: bin ## Build examples
-	$(GO) build ${GO_BUILD_ARGS} -o bin ./examples/...
-
-clean: ## Clean all
-	@echo "# cleaning"
-	$(GO) clean -v ./...
+	go build ${GO_BUILD_ARGS} -o bin ./examples/...
 
 test: ## Run unit tests
-	$(GO) version
 	@echo "# running tests"
-	$(GO) test -tags="${GO_BUILD_TAGS}" ./...
+	go test -tags="${GO_BUILD_TAGS}" ./...
 
-integration: ## Run integration tests
+test-integration: ## Run integration tests
 	@echo "# running integration tests"
-	$(GO) test -tags="integration ${GO_BUILD_TAGS}" ./test/integration
+	go test -tags="integration ${GO_BUILD_TAGS}" ./test/integration
 
 lint: ## Run code linter
 	@echo "# running linter"
@@ -83,19 +78,17 @@ install: install-generator install-proxy ## Install all
 
 install-generator: ## Install binapi-generator
 	@echo "# installing binapi-generator ${VERSION}"
-	@$(GO) install ${GO_BUILD_ARGS} ./cmd/binapi-generator
+	@go install ${GO_BUILD_ARGS} ./cmd/binapi-generator
 
 install-proxy: ## Install vpp-proxy
 	@echo "# installing vpp-proxy ${VERSION}"
-	$(GO) install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
+	go install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
 
-generate: ## Generate all
-	@echo "# generating code"
-	$(GO) generate -x ./...
+generate: generate-binapi ## Generate all
 
 generate-binapi: install-generator ## Generate binapi code
-	@echo "# generating binapi VPP $(VPP_VERSION)"
-	$(GO) generate -x "$(BINAPI_DIR)"
+	@echo "# generating binapi"
+	go generate -x "$(BINAPI_DIR)"
 
 gen-binapi-from-code: cmd-binapi-generator
 	$(eval VPP_API_DIR := ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api/)
@@ -122,14 +115,8 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 		"${VPP_IMG}" \
 	  sh -ec "cd $(BINAPI_DIR) && $(cmds)"
 
-extras:
-	@make -C extras
-
 help:
-	@echo "List of make targets:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
-
-.DEFAULT_GOAL = help
 
 .PHONY: help \
     build cmd examples clean \

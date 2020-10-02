@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  ioam_export.
+// RPCService defines RPC service ioam_export.
 type RPCService interface {
 	IoamExportIP6EnableDisable(ctx context.Context, in *IoamExportIP6EnableDisable) (*IoamExportIP6EnableDisableReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) IoamExportIP6EnableDisable(ctx context.Context, in *Ioam
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

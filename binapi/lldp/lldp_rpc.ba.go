@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  lldp.
+// RPCService defines RPC service lldp.
 type RPCService interface {
 	LldpConfig(ctx context.Context, in *LldpConfig) (*LldpConfigReply, error)
 	SwInterfaceSetLldp(ctx context.Context, in *SwInterfaceSetLldp) (*SwInterfaceSetLldpReply, error)
@@ -28,7 +28,7 @@ func (c *serviceClient) LldpConfig(ctx context.Context, in *LldpConfig) (*LldpCo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetLldp(ctx context.Context, in *SwInterfaceSetLldp) (*SwInterfaceSetLldpReply, error) {
@@ -37,5 +37,5 @@ func (c *serviceClient) SwInterfaceSetLldp(ctx context.Context, in *SwInterfaceS
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

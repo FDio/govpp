@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  pg.
+// RPCService defines RPC service pg.
 type RPCService interface {
 	PgCapture(ctx context.Context, in *PgCapture) (*PgCaptureReply, error)
 	PgCreateInterface(ctx context.Context, in *PgCreateInterface) (*PgCreateInterfaceReply, error)
@@ -29,7 +29,7 @@ func (c *serviceClient) PgCapture(ctx context.Context, in *PgCapture) (*PgCaptur
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PgCreateInterface(ctx context.Context, in *PgCreateInterface) (*PgCreateInterfaceReply, error) {
@@ -38,7 +38,7 @@ func (c *serviceClient) PgCreateInterface(ctx context.Context, in *PgCreateInter
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PgEnableDisable(ctx context.Context, in *PgEnableDisable) (*PgEnableDisableReply, error) {
@@ -47,5 +47,5 @@ func (c *serviceClient) PgEnableDisable(ctx context.Context, in *PgEnableDisable
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

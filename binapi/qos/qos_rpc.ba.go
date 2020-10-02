@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  qos.
+// RPCService defines RPC service qos.
 type RPCService interface {
 	QosEgressMapDelete(ctx context.Context, in *QosEgressMapDelete) (*QosEgressMapDeleteReply, error)
 	QosEgressMapDump(ctx context.Context, in *QosEgressMapDump) (RPCService_QosEgressMapDumpClient, error)
@@ -38,7 +38,7 @@ func (c *serviceClient) QosEgressMapDelete(ctx context.Context, in *QosEgressMap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) QosEgressMapDump(ctx context.Context, in *QosEgressMapDump) (RPCService_QosEgressMapDumpClient, error) {
@@ -86,7 +86,7 @@ func (c *serviceClient) QosEgressMapUpdate(ctx context.Context, in *QosEgressMap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) QosMarkDump(ctx context.Context, in *QosMarkDump) (RPCService_QosMarkDumpClient, error) {
@@ -134,7 +134,7 @@ func (c *serviceClient) QosMarkEnableDisable(ctx context.Context, in *QosMarkEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) QosRecordDump(ctx context.Context, in *QosRecordDump) (RPCService_QosRecordDumpClient, error) {
@@ -182,7 +182,7 @@ func (c *serviceClient) QosRecordEnableDisable(ctx context.Context, in *QosRecor
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) QosStoreDump(ctx context.Context, in *QosStoreDump) (RPCService_QosStoreDumpClient, error) {
@@ -230,5 +230,5 @@ func (c *serviceClient) QosStoreEnableDisable(ctx context.Context, in *QosStoreE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

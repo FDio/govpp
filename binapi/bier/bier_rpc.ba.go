@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  bier.
+// RPCService defines RPC service bier.
 type RPCService interface {
 	BierDispEntryAddDel(ctx context.Context, in *BierDispEntryAddDel) (*BierDispEntryAddDelReply, error)
 	BierDispEntryDump(ctx context.Context, in *BierDispEntryDump) (RPCService_BierDispEntryDumpClient, error)
@@ -40,7 +40,7 @@ func (c *serviceClient) BierDispEntryAddDel(ctx context.Context, in *BierDispEnt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierDispEntryDump(ctx context.Context, in *BierDispEntryDump) (RPCService_BierDispEntryDumpClient, error) {
@@ -88,7 +88,7 @@ func (c *serviceClient) BierDispTableAddDel(ctx context.Context, in *BierDispTab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierDispTableDump(ctx context.Context, in *BierDispTableDump) (RPCService_BierDispTableDumpClient, error) {
@@ -136,7 +136,7 @@ func (c *serviceClient) BierImpAdd(ctx context.Context, in *BierImpAdd) (*BierIm
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierImpDel(ctx context.Context, in *BierImpDel) (*BierImpDelReply, error) {
@@ -145,7 +145,7 @@ func (c *serviceClient) BierImpDel(ctx context.Context, in *BierImpDel) (*BierIm
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierImpDump(ctx context.Context, in *BierImpDump) (RPCService_BierImpDumpClient, error) {
@@ -193,7 +193,7 @@ func (c *serviceClient) BierRouteAddDel(ctx context.Context, in *BierRouteAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierRouteDump(ctx context.Context, in *BierRouteDump) (RPCService_BierRouteDumpClient, error) {
@@ -241,7 +241,7 @@ func (c *serviceClient) BierTableAddDel(ctx context.Context, in *BierTableAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierTableDump(ctx context.Context, in *BierTableDump) (RPCService_BierTableDumpClient, error) {

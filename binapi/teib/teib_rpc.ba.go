@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  teib.
+// RPCService defines RPC service teib.
 type RPCService interface {
 	TeibDump(ctx context.Context, in *TeibDump) (RPCService_TeibDumpClient, error)
 	TeibEntryAddDel(ctx context.Context, in *TeibEntryAddDel) (*TeibEntryAddDelReply, error)
@@ -70,5 +70,5 @@ func (c *serviceClient) TeibEntryAddDel(ctx context.Context, in *TeibEntryAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

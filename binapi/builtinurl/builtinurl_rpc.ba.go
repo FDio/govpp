@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  builtinurl.
+// RPCService defines RPC service builtinurl.
 type RPCService interface {
 	BuiltinurlEnable(ctx context.Context, in *BuiltinurlEnable) (*BuiltinurlEnableReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) BuiltinurlEnable(ctx context.Context, in *BuiltinurlEnab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

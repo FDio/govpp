@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  l2tp.
+// RPCService defines RPC service l2tp.
 type RPCService interface {
 	L2tpv3CreateTunnel(ctx context.Context, in *L2tpv3CreateTunnel) (*L2tpv3CreateTunnelReply, error)
 	L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2tpv3InterfaceEnableDisable) (*L2tpv3InterfaceEnableDisableReply, error)
@@ -34,7 +34,7 @@ func (c *serviceClient) L2tpv3CreateTunnel(ctx context.Context, in *L2tpv3Create
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2tpv3InterfaceEnableDisable) (*L2tpv3InterfaceEnableDisableReply, error) {
@@ -43,7 +43,7 @@ func (c *serviceClient) L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3SetLookupKey(ctx context.Context, in *L2tpv3SetLookupKey) (*L2tpv3SetLookupKeyReply, error) {
@@ -52,7 +52,7 @@ func (c *serviceClient) L2tpv3SetLookupKey(ctx context.Context, in *L2tpv3SetLoo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3SetTunnelCookies(ctx context.Context, in *L2tpv3SetTunnelCookies) (*L2tpv3SetTunnelCookiesReply, error) {
@@ -61,7 +61,7 @@ func (c *serviceClient) L2tpv3SetTunnelCookies(ctx context.Context, in *L2tpv3Se
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwIfL2tpv3TunnelDump(ctx context.Context, in *SwIfL2tpv3TunnelDump) (RPCService_SwIfL2tpv3TunnelDumpClient, error) {

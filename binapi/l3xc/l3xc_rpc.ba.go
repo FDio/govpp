@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  l3xc.
+// RPCService defines RPC service l3xc.
 type RPCService interface {
 	L3xcDel(ctx context.Context, in *L3xcDel) (*L3xcDelReply, error)
 	L3xcDump(ctx context.Context, in *L3xcDump) (RPCService_L3xcDumpClient, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) L3xcDel(ctx context.Context, in *L3xcDel) (*L3xcDelReply
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L3xcDump(ctx context.Context, in *L3xcDump) (RPCService_L3xcDumpClient, error) {
@@ -90,5 +90,5 @@ func (c *serviceClient) L3xcUpdate(ctx context.Context, in *L3xcUpdate) (*L3xcUp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

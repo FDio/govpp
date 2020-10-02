@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  vhost_user.
+// RPCService defines RPC service vhost_user.
 type RPCService interface {
 	CreateVhostUserIf(ctx context.Context, in *CreateVhostUserIf) (*CreateVhostUserIfReply, error)
 	DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) CreateVhostUserIf(ctx context.Context, in *CreateVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUserIf) (*ModifyVhostUserIfReply, error) {
@@ -51,7 +51,7 @@ func (c *serviceClient) ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceVhostUserDump(ctx context.Context, in *SwInterfaceVhostUserDump) (RPCService_SwInterfaceVhostUserDumpClient, error) {

@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  gre.
+// RPCService defines RPC service gre.
 type RPCService interface {
 	GreTunnelAddDel(ctx context.Context, in *GreTunnelAddDel) (*GreTunnelAddDelReply, error)
 	GreTunnelDump(ctx context.Context, in *GreTunnelDump) (RPCService_GreTunnelDumpClient, error)
@@ -31,7 +31,7 @@ func (c *serviceClient) GreTunnelAddDel(ctx context.Context, in *GreTunnelAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GreTunnelDump(ctx context.Context, in *GreTunnelDump) (RPCService_GreTunnelDumpClient, error) {

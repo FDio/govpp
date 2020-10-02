@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  stn.
+// RPCService defines RPC service stn.
 type RPCService interface {
 	StnAddDelRule(ctx context.Context, in *StnAddDelRule) (*StnAddDelRuleReply, error)
 	StnRulesDump(ctx context.Context, in *StnRulesDump) (RPCService_StnRulesDumpClient, error)
@@ -31,7 +31,7 @@ func (c *serviceClient) StnAddDelRule(ctx context.Context, in *StnAddDelRule) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) StnRulesDump(ctx context.Context, in *StnRulesDump) (RPCService_StnRulesDumpClient, error) {

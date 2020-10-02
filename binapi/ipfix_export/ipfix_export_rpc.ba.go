@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  ipfix_export.
+// RPCService defines RPC service ipfix_export.
 type RPCService interface {
 	IpfixClassifyStreamDump(ctx context.Context, in *IpfixClassifyStreamDump) (RPCService_IpfixClassifyStreamDumpClient, error)
 	IpfixClassifyTableAddDel(ctx context.Context, in *IpfixClassifyTableAddDel) (*IpfixClassifyTableAddDelReply, error)
@@ -75,7 +75,7 @@ func (c *serviceClient) IpfixClassifyTableAddDel(ctx context.Context, in *IpfixC
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IpfixClassifyTableDump(ctx context.Context, in *IpfixClassifyTableDump) (RPCService_IpfixClassifyTableDumpClient, error) {
@@ -162,7 +162,7 @@ func (c *serviceClient) IpfixFlush(ctx context.Context, in *IpfixFlush) (*IpfixF
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SetIpfixClassifyStream(ctx context.Context, in *SetIpfixClassifyStream) (*SetIpfixClassifyStreamReply, error) {
@@ -171,7 +171,7 @@ func (c *serviceClient) SetIpfixClassifyStream(ctx context.Context, in *SetIpfix
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SetIpfixExporter(ctx context.Context, in *SetIpfixExporter) (*SetIpfixExporterReply, error) {
@@ -180,5 +180,5 @@ func (c *serviceClient) SetIpfixExporter(ctx context.Context, in *SetIpfixExport
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

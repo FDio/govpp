@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  nsh.
+// RPCService defines RPC service nsh.
 type RPCService interface {
 	NshAddDelEntry(ctx context.Context, in *NshAddDelEntry) (*NshAddDelEntryReply, error)
 	NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*NshAddDelMapReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) NshAddDelEntry(ctx context.Context, in *NshAddDelEntry) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*NshAddDelMapReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*Ns
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NshEntryDump(ctx context.Context, in *NshEntryDump) (RPCService_NshEntryDumpClient, error) {

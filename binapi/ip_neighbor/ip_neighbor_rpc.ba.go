@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  ip_neighbor.
+// RPCService defines RPC service ip_neighbor.
 type RPCService interface {
 	IPNeighborAddDel(ctx context.Context, in *IPNeighborAddDel) (*IPNeighborAddDelReply, error)
 	IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error)
@@ -36,7 +36,7 @@ func (c *serviceClient) IPNeighborAddDel(ctx context.Context, in *IPNeighborAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error) {
@@ -45,7 +45,7 @@ func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConf
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborDump(ctx context.Context, in *IPNeighborDump) (RPCService_IPNeighborDumpClient, error) {
@@ -93,7 +93,7 @@ func (c *serviceClient) IPNeighborFlush(ctx context.Context, in *IPNeighborFlush
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborReplaceBegin(ctx context.Context, in *IPNeighborReplaceBegin) (*IPNeighborReplaceBeginReply, error) {
@@ -102,7 +102,7 @@ func (c *serviceClient) IPNeighborReplaceBegin(ctx context.Context, in *IPNeighb
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborReplaceEnd(ctx context.Context, in *IPNeighborReplaceEnd) (*IPNeighborReplaceEndReply, error) {
@@ -111,7 +111,7 @@ func (c *serviceClient) IPNeighborReplaceEnd(ctx context.Context, in *IPNeighbor
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantIPNeighborEvents(ctx context.Context, in *WantIPNeighborEvents) (*WantIPNeighborEventsReply, error) {
@@ -120,5 +120,5 @@ func (c *serviceClient) WantIPNeighborEvents(ctx context.Context, in *WantIPNeig
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

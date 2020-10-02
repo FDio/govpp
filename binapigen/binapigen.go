@@ -243,8 +243,8 @@ func newStruct(gen *Generator, file *File, apitype vppapi.StructType) *Struct {
 		},
 	}
 	gen.structsByName[typ.Name] = typ
-	for _, fieldType := range apitype.Fields {
-		field := newField(gen, file, typ, fieldType)
+	for i, fieldType := range apitype.Fields {
+		field := newField(gen, file, typ, fieldType, i)
 		typ.Fields = append(typ.Fields, field)
 	}
 	return typ
@@ -276,8 +276,8 @@ func newUnion(gen *Generator, file *File, apitype vppapi.UnionType) *Union {
 		},
 	}
 	gen.unionsByName[typ.Name] = typ
-	for _, fieldType := range apitype.Fields {
-		field := newField(gen, file, typ, fieldType)
+	for i, fieldType := range apitype.Fields {
+		field := newField(gen, file, typ, fieldType, i)
 		typ.Fields = append(typ.Fields, field)
 	}
 	return typ
@@ -302,11 +302,12 @@ const (
 	msgTypeEvent                  // msg_id, client_index
 )
 
-// message fields
+// common message fields
 const (
 	fieldMsgID       = "_vl_msg_id"
 	fieldClientIndex = "client_index"
 	fieldContext     = "context"
+	fieldRetval      = "retval"
 )
 
 // field options
@@ -343,7 +344,7 @@ func newMessage(gen *Generator, file *File, apitype vppapi.Message) *Message {
 			}
 		}
 		n++
-		field := newField(gen, file, msg, fieldType)
+		field := newField(gen, file, msg, fieldType, n)
 		msg.Fields = append(msg.Fields, field)
 	}
 	return msg
@@ -394,11 +395,23 @@ func getMsgType(m vppapi.Message) (msgType, error) {
 	return typ, nil
 }
 
+func getRetvalField(m *Message) *Field {
+	for _, field := range m.Fields {
+		if field.Name == fieldRetval {
+			return field
+		}
+	}
+	return nil
+}
+
 // Field represents a field for message or struct/union types.
 type Field struct {
 	vppapi.Field
 
 	GoName string
+
+	// Index defines field index in parent.
+	Index int
 
 	// DefaultValue is a default value of field or
 	// nil if default value is not defined for field.
@@ -423,10 +436,11 @@ type Field struct {
 	FieldSizeFrom *Field
 }
 
-func newField(gen *Generator, file *File, parent interface{}, apitype vppapi.Field) *Field {
+func newField(gen *Generator, file *File, parent interface{}, apitype vppapi.Field, index int) *Field {
 	typ := &Field{
 		Field:  apitype,
 		GoName: camelCaseName(apitype.Name),
+		Index:  index,
 	}
 	switch p := parent.(type) {
 	case *Message:

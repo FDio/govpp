@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  arp.
+// RPCService defines RPC service arp.
 type RPCService interface {
 	ProxyArpAddDel(ctx context.Context, in *ProxyArpAddDel) (*ProxyArpAddDelReply, error)
 	ProxyArpDump(ctx context.Context, in *ProxyArpDump) (RPCService_ProxyArpDumpClient, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) ProxyArpAddDel(ctx context.Context, in *ProxyArpAddDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ProxyArpDump(ctx context.Context, in *ProxyArpDump) (RPCService_ProxyArpDumpClient, error) {
@@ -120,5 +120,5 @@ func (c *serviceClient) ProxyArpIntfcEnableDisable(ctx context.Context, in *Prox
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
