@@ -63,6 +63,7 @@ This file lists changes for the GoVPP releases.
 - improved [simple client](examples/simple-client) example to work properly even with multiple runs
 - added [multi-vpp](examples/multi-vpp) example displaying management of two VPP instances from single
   application
+- added [stream-client](examples/stream-client) example showing usage of the new stream API  
 
 #### Dependencies
 - updated `github.com/sirupsen/logrus` dep to `v1.6.0`
