@@ -17,11 +17,13 @@ package binapigen
 import (
 	"strings"
 	"testing"
+	"time"
 
 	. "github.com/onsi/gomega"
 
 	"git.fd.io/govpp.git/binapi/ethernet_types"
 	"git.fd.io/govpp.git/binapi/ip_types"
+	"git.fd.io/govpp.git/binapi/vpe_types"
 )
 
 func TestGeneratedParseAddress(t *testing.T) {
@@ -153,4 +155,29 @@ func TestGeneratedParseMACError(t *testing.T) {
 
 	_, err := ethernet_types.ParseMacAddress("malformed_mac")
 	Expect(err).Should(HaveOccurred())
+}
+
+func TestGeneratedParseTimestamp(t *testing.T) {
+	RegisterTestingT(t)
+
+	var data = []struct {
+		input  time.Time
+		result vpe_types.Timestamp
+	}{
+		{time.Unix(0, 0), vpe_types.Timestamp(0)},
+		{time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC),
+			vpe_types.Timestamp(9.466848e+08)},
+	}
+
+	for _, entry := range data {
+		t.Run(entry.input.String(), func(t *testing.T) {
+			ts := vpe_types.NewTimestamp(entry.input)
+			Expect(ts).To(Equal(entry.result))
+
+			Expect(entry.input.Equal(ts.ToTime())).To(BeTrue())
+
+			originTime := ts.String()
+			Expect(originTime).To(Equal(entry.input.Local().String()))
+		})
+	}
 }

@@ -84,6 +84,7 @@ func main() {
 
 	// use request/reply (channel API)
 	getVppVersion(ch)
+	getSystemTime(ch)
 	idx := createLoopback(ch)
 	interfaceDump(ch)
 	addIPAddress(ch, idx)
@@ -103,6 +104,22 @@ func getVppVersion(ch api.Channel) {
 	}
 
 	fmt.Printf("VPP version: %q\n", reply.Version)
+	fmt.Println("OK")
+	fmt.Println()
+}
+
+func getSystemTime(ch api.Channel) {
+	fmt.Println("Retrieving system time..")
+
+	req := &vpe.ShowVpeSystemTime{}
+	reply := &vpe.ShowVpeSystemTimeReply{}
+
+	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+		logError(err, "retrieving system time")
+		return
+	}
+
+	fmt.Printf("system time: %v\n", reply.VpeSystemTime)
 	fmt.Println("OK")
 	fmt.Println()
 }
