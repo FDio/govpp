@@ -350,7 +350,15 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 	if strings.HasSuffix(msg.GetMessageName(), "_reply") {
 		// TODO: use categories for messages to avoid checking message name
 		if f := reflect.Indirect(reflect.ValueOf(msg)).FieldByName("Retval"); f.IsValid() {
-			retval := int32(f.Int())
+			var retval int32
+			switch f.Kind() {
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+				retval = int32(f.Int())
+			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+				retval = int32(f.Uint())
+			default:
+				logrus.Warnf("invalid kind (%v) for Retval field of message %v", f.Kind(), msg.GetMessageName())
+			}
 			err = api.RetvalToVPPApiError(retval)
 		}
 	}
