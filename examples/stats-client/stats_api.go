@@ -43,7 +43,7 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|poll|errors|interfaces|nodes|system|buffers] <patterns>...\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|poll|errors|interfaces|nodes|system|buffers|memory] <patterns>...\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -128,6 +128,13 @@ func main() {
 			log.Fatalln("getting buffer stats failed:", err)
 		}
 		fmt.Printf("Buffer stats: %+v\n", stats)
+
+	case "memory":
+		stats := new(api.MemoryStats)
+		if err := c.GetMemoryStats(stats); err != nil {
+			log.Fatalln("getting memory stats failed:", err)
+		}
+		fmt.Printf("Memory stats: %+v\n", stats)
 
 	case "dump":
 		fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))

@@ -41,15 +41,15 @@ var (
 	statsSockAddrVpp2  = flag.String("stats-sock-2", statsclient.DefaultSocketName, "Path to stats socket file of the VPP2")
 )
 
-var Errors []error
+var errors []error
 
 func main() {
 	flag.Parse()
 	fmt.Println("Starting multi-vpp example")
 
 	defer func() {
-		if len(Errors) > 0 {
-			logInfo("Finished with %d errors\n", len(Errors))
+		if len(errors) > 0 {
+			logInfo("Finished with %d errors\n", len(errors))
 			os.Exit(1)
 		} else {
 			logInfo("Finished successfully\n")
@@ -347,5 +347,5 @@ func logInfo(format string, a ...interface{}) {
 // logError prints error message
 func logError(err error, msg string) {
 	fmt.Printf("[ERROR]: %s: %v\n", msg, err)
-	Errors = append(Errors, err)
+	errors = append(errors, err)
 }

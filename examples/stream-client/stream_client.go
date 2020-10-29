@@ -76,8 +76,8 @@ func main() {
 
 	// process errors encountered during the example
 	defer func() {
-		if len(Errors) > 0 {
-			fmt.Printf("finished with %d errors\n", len(Errors))
+		if len(errors) > 0 {
+			fmt.Printf("finished with %d errors\n", len(errors))
 			os.Exit(1)
 		} else {
 			fmt.Println("finished successfully")
@@ -294,9 +294,9 @@ Loop:
 	fmt.Println()
 }
 
-var Errors []error
+var errors []error
 
 func logError(err error, msg string) {
 	fmt.Printf("ERROR: %s: %v\n", msg, err)
-	Errors = append(Errors, err)
+	errors = append(errors, err)
 }

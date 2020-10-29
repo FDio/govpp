@@ -55,6 +55,7 @@ type StatsResponse struct {
 	IfaceStats *api.InterfaceStats
 	ErrStats   *api.ErrorStats
 	BufStats   *api.BufferStats
+	MemStats   *api.MemoryStats
 }
 
 // StatsRPC is a RPC server for proxying client request to api.StatsProvider.
@@ -200,6 +201,9 @@ func (s *StatsRPC) GetStats(req StatsRequest, resp *StatsResponse) error {
 	case "buffer":
 		resp.BufStats = new(api.BufferStats)
 		return s.statsConn.GetBufferStats(resp.BufStats)
+	case "memory":
+		resp.MemStats = new(api.MemoryStats)
+		return s.statsConn.GetMemoryStats(resp.MemStats)
 	default:
 		return fmt.Errorf("unknown stats type: %s", req.StatsType)
 	}

@@ -39,6 +39,10 @@ const (
 
 	CounterStatsPrefix = "/err/"
 
+	MemoryStatPrefix  = "/mem/statseg"
+	MemoryStats_Total = "total"
+	MemoryStats_Used  = "used"
+
 	InterfaceStatsPrefix         = "/if/"
 	InterfaceStats_Names         = InterfaceStatsPrefix + "names"
 	InterfaceStats_Drops         = InterfaceStatsPrefix + "drops"
@@ -80,6 +84,7 @@ type StatsConnection struct {
 	ifaceStatsData *adapter.StatDir
 	sysStatsData   *adapter.StatDir
 	bufStatsData   *adapter.StatDir
+	memStatsData   *adapter.StatDir
 }
 
 func newStatsConnection(stats adapter.StatsAPI) *StatsConnection {
@@ -469,5 +474,27 @@ func (c *StatsConnection) GetBufferStats(bufStats *api.BufferStats) (err error) 
 		bufStats.Buffer[name] = b
 	}
 
+	return nil
+}
+
+func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) {
+	if err := c.updateStats(&c.memStatsData, MemoryStatPrefix); err != nil {
+		return err
+	}
+
+	for _, stat := range c.memStatsData.Entries {
+		_, f := path.Split(string(stat.Name))
+		var val float64
+		m, ok := stat.Data.(adapter.ScalarStat)
+		if ok {
+			val = float64(m)
+		}
+		switch f {
+		case MemoryStats_Total:
+			memStats.Total = val
+		case MemoryStats_Used:
+			memStats.Used = val
+		}
+	}
 	return nil
 }

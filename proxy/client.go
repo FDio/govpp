@@ -117,6 +117,16 @@ func (s *StatsClient) GetBufferStats(bufStats *api.BufferStats) error {
 	return nil
 }
 
+func (s *StatsClient) GetMemoryStats(memStats *api.MemoryStats) error {
+	req := StatsRequest{StatsType: "memory"}
+	resp := StatsResponse{MemStats: new(api.MemoryStats)}
+	if err := s.rpc.Call("StatsRPC.GetStats", req, &resp); err != nil {
+		return err
+	}
+	*memStats = *resp.MemStats
+	return nil
+}
+
 type BinapiClient struct {
 	rpc     *rpc.Client
 	timeout time.Duration
