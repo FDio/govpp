@@ -29,17 +29,19 @@ This file lists changes for the GoVPP releases.
 - generated code now contains comment with information about versions of VPP and binapi-generator
 - in addition to the file name, the binapi generator now accepts full path (including extension, e.g. `/usr/share/vpp/api/core/vpe.api.json`)
 - dependency on `github.com/lunixbochs/struc` was removed
+- generated helper methods for `vpe_types.Timestamp`
 
 ### Features
 - [socketclient](adapter/socketclient) received a new method to add client name
 - added list of compatible messages to `CompatibilityError`
-- removed global binary API adapter - this change allows GoVPP to manage multiple VPP connections with different 
+- removed global binary API adapter - this change allows GoVPP to manage multiple VPP connections with different
   sockets simultaneously
 - added support for the stats v2. The statsclient adapter recognized the version automatically so the `StatsAPI`
   remained unchanged. In relation to this change, the legacy support (i.e. stat segment v0) for VPP <=19.04 was dropped.
 - GoVPP now recognizes VPP state `NotResponding` which can be used to prevent disconnecting in case the VPP hangs
   or is overloaded
-- added method `SetLogger` for setting the global logger
+- added method `SetLogger()` for setting the global logger
+- `StatsAPI` has a new method `GetMemory()` retrieving values related to the statseg memory heap
 
 ### Fixes
 - `MsgCodec` will recover panic occurring during a message decoding
@@ -50,6 +52,7 @@ This file lists changes for the GoVPP releases.
 - fixed name conflict in generated union field constructors
 - size of unions composed of another unions is now calculated correctly
 - fixed race condition in the VPP adapter mock
+- fixed crash caused by return value of uint kind
 
 ### Other
 - improved log messages to provide more relevant info
@@ -58,12 +61,12 @@ This file lists changes for the GoVPP releases.
   threshold was increased to 2 (up from 1)
 
 #### Examples
-- added more code samples of working with unions in [union example](examples/union-example)
+- added more code samples of working with unions in [binapi-types](examples/binapi-types)
 - added profiling mode to [perf bench](examples/perf-bench) example
 - improved [simple client](examples/simple-client) example to work properly even with multiple runs
 - added [multi-vpp](examples/multi-vpp) example displaying management of two VPP instances from single
   application
-- added [stream-client](examples/stream-client) example showing usage of the new stream API  
+- added [stream-client](examples/stream-client) example showing usage of the new stream API
 
 #### Dependencies
 - updated `github.com/sirupsen/logrus` dep to `v1.6.0`

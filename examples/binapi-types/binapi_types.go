@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// union-example is an example to show how to use unions in VPP binary API.
+// binapi-types is an example showing how to use and convert data with
+// helper methods from *-types packages in VPP binary API.
 package main
 
 import (
