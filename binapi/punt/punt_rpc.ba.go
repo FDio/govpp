@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  punt.
+// RPCService defines RPC service punt.
 type RPCService interface {
 	PuntReasonDump(ctx context.Context, in *PuntReasonDump) (RPCService_PuntReasonDumpClient, error)
 	PuntSocketDeregister(ctx context.Context, in *PuntSocketDeregister) (*PuntSocketDeregisterReply, error)
@@ -73,7 +73,7 @@ func (c *serviceClient) PuntSocketDeregister(ctx context.Context, in *PuntSocket
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PuntSocketDump(ctx context.Context, in *PuntSocketDump) (RPCService_PuntSocketDumpClient, error) {
@@ -121,7 +121,7 @@ func (c *serviceClient) PuntSocketRegister(ctx context.Context, in *PuntSocketRe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SetPunt(ctx context.Context, in *SetPunt) (*SetPuntReply, error) {
@@ -130,5 +130,5 @@ func (c *serviceClient) SetPunt(ctx context.Context, in *SetPunt) (*SetPuntReply
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

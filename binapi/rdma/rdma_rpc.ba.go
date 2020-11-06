@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  rdma.
+// RPCService defines RPC service rdma.
 type RPCService interface {
 	RdmaCreate(ctx context.Context, in *RdmaCreate) (*RdmaCreateReply, error)
 	RdmaDelete(ctx context.Context, in *RdmaDelete) (*RdmaDeleteReply, error)
@@ -28,7 +28,7 @@ func (c *serviceClient) RdmaCreate(ctx context.Context, in *RdmaCreate) (*RdmaCr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) RdmaDelete(ctx context.Context, in *RdmaDelete) (*RdmaDeleteReply, error) {
@@ -37,5 +37,5 @@ func (c *serviceClient) RdmaDelete(ctx context.Context, in *RdmaDelete) (*RdmaDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

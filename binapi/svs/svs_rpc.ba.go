@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  svs.
+// RPCService defines RPC service svs.
 type RPCService interface {
 	SvsDump(ctx context.Context, in *SvsDump) (RPCService_SvsDumpClient, error)
 	SvsEnableDisable(ctx context.Context, in *SvsEnableDisable) (*SvsEnableDisableReply, error)
@@ -73,7 +73,7 @@ func (c *serviceClient) SvsEnableDisable(ctx context.Context, in *SvsEnableDisab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SvsPluginGetVersion(ctx context.Context, in *SvsPluginGetVersion) (*SvsPluginGetVersionReply, error) {
@@ -91,7 +91,7 @@ func (c *serviceClient) SvsRouteAddDel(ctx context.Context, in *SvsRouteAddDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SvsTableAddDel(ctx context.Context, in *SvsTableAddDel) (*SvsTableAddDelReply, error) {
@@ -100,5 +100,5 @@ func (c *serviceClient) SvsTableAddDel(ctx context.Context, in *SvsTableAddDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

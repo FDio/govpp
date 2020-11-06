@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  span.
+// RPCService defines RPC service span.
 type RPCService interface {
 	SwInterfaceSpanDump(ctx context.Context, in *SwInterfaceSpanDump) (RPCService_SwInterfaceSpanDumpClient, error)
 	SwInterfaceSpanEnableDisable(ctx context.Context, in *SwInterfaceSpanEnableDisable) (*SwInterfaceSpanEnableDisableReply, error)
@@ -70,5 +70,5 @@ func (c *serviceClient) SwInterfaceSpanEnableDisable(ctx context.Context, in *Sw
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

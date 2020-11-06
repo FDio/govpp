@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  syslog.
+// RPCService defines RPC service syslog.
 type RPCService interface {
 	SyslogGetFilter(ctx context.Context, in *SyslogGetFilter) (*SyslogGetFilterReply, error)
 	SyslogGetSender(ctx context.Context, in *SyslogGetSender) (*SyslogGetSenderReply, error)
@@ -30,7 +30,7 @@ func (c *serviceClient) SyslogGetFilter(ctx context.Context, in *SyslogGetFilter
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SyslogGetSender(ctx context.Context, in *SyslogGetSender) (*SyslogGetSenderReply, error) {
@@ -39,7 +39,7 @@ func (c *serviceClient) SyslogGetSender(ctx context.Context, in *SyslogGetSender
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SyslogSetFilter(ctx context.Context, in *SyslogSetFilter) (*SyslogSetFilterReply, error) {
@@ -48,7 +48,7 @@ func (c *serviceClient) SyslogSetFilter(ctx context.Context, in *SyslogSetFilter
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SyslogSetSender(ctx context.Context, in *SyslogSetSender) (*SyslogSetSenderReply, error) {
@@ -57,5 +57,5 @@ func (c *serviceClient) SyslogSetSender(ctx context.Context, in *SyslogSetSender
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

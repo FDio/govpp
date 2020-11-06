@@ -156,12 +156,12 @@ func (b *Buffer) DecodeInt64() int64 {
 }
 
 func (b *Buffer) EncodeFloat64(v float64) {
-	binary.BigEndian.PutUint64(b.buf[b.pos:b.pos+8], math.Float64bits(v))
+	binary.LittleEndian.PutUint64(b.buf[b.pos:b.pos+8], math.Float64bits(v))
 	b.pos += 8
 }
 
 func (b *Buffer) DecodeFloat64() float64 {
-	v := math.Float64frombits(binary.BigEndian.Uint64(b.buf[b.pos : b.pos+8]))
+	v := math.Float64frombits(binary.LittleEndian.Uint64(b.buf[b.pos : b.pos+8]))
 	b.pos += 8
 	return v
 }

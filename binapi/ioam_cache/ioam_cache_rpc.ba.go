@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  ioam_cache.
+// RPCService defines RPC service ioam_cache.
 type RPCService interface {
 	IoamCacheIP6EnableDisable(ctx context.Context, in *IoamCacheIP6EnableDisable) (*IoamCacheIP6EnableDisableReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) IoamCacheIP6EnableDisable(ctx context.Context, in *IoamC
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

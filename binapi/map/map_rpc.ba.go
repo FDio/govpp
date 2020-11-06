@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  map.
+// RPCService defines RPC service map.
 type RPCService interface {
 	MapAddDelRule(ctx context.Context, in *MapAddDelRule) (*MapAddDelRuleReply, error)
 	MapAddDomain(ctx context.Context, in *MapAddDomain) (*MapAddDomainReply, error)
@@ -44,7 +44,7 @@ func (c *serviceClient) MapAddDelRule(ctx context.Context, in *MapAddDelRule) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapAddDomain(ctx context.Context, in *MapAddDomain) (*MapAddDomainReply, error) {
@@ -53,7 +53,7 @@ func (c *serviceClient) MapAddDomain(ctx context.Context, in *MapAddDomain) (*Ma
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapDelDomain(ctx context.Context, in *MapDelDomain) (*MapDelDomainReply, error) {
@@ -62,7 +62,7 @@ func (c *serviceClient) MapDelDomain(ctx context.Context, in *MapDelDomain) (*Ma
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapDomainDump(ctx context.Context, in *MapDomainDump) (RPCService_MapDomainDumpClient, error) {
@@ -110,7 +110,7 @@ func (c *serviceClient) MapIfEnableDisable(ctx context.Context, in *MapIfEnableD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamAddDelPreResolve(ctx context.Context, in *MapParamAddDelPreResolve) (*MapParamAddDelPreResolveReply, error) {
@@ -119,7 +119,7 @@ func (c *serviceClient) MapParamAddDelPreResolve(ctx context.Context, in *MapPar
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamGet(ctx context.Context, in *MapParamGet) (*MapParamGetReply, error) {
@@ -128,7 +128,7 @@ func (c *serviceClient) MapParamGet(ctx context.Context, in *MapParamGet) (*MapP
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetFragmentation(ctx context.Context, in *MapParamSetFragmentation) (*MapParamSetFragmentationReply, error) {
@@ -137,7 +137,7 @@ func (c *serviceClient) MapParamSetFragmentation(ctx context.Context, in *MapPar
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetICMP(ctx context.Context, in *MapParamSetICMP) (*MapParamSetICMPReply, error) {
@@ -146,7 +146,7 @@ func (c *serviceClient) MapParamSetICMP(ctx context.Context, in *MapParamSetICMP
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetICMP6(ctx context.Context, in *MapParamSetICMP6) (*MapParamSetICMP6Reply, error) {
@@ -155,7 +155,7 @@ func (c *serviceClient) MapParamSetICMP6(ctx context.Context, in *MapParamSetICM
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetSecurityCheck(ctx context.Context, in *MapParamSetSecurityCheck) (*MapParamSetSecurityCheckReply, error) {
@@ -164,7 +164,7 @@ func (c *serviceClient) MapParamSetSecurityCheck(ctx context.Context, in *MapPar
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetTCP(ctx context.Context, in *MapParamSetTCP) (*MapParamSetTCPReply, error) {
@@ -173,7 +173,7 @@ func (c *serviceClient) MapParamSetTCP(ctx context.Context, in *MapParamSetTCP) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapParamSetTrafficClass(ctx context.Context, in *MapParamSetTrafficClass) (*MapParamSetTrafficClassReply, error) {
@@ -182,7 +182,7 @@ func (c *serviceClient) MapParamSetTrafficClass(ctx context.Context, in *MapPara
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapRuleDump(ctx context.Context, in *MapRuleDump) (RPCService_MapRuleDumpClient, error) {
@@ -230,5 +230,5 @@ func (c *serviceClient) MapSummaryStats(ctx context.Context, in *MapSummaryStats
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

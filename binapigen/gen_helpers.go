@@ -22,6 +22,7 @@ func init() {
 const (
 	fmtPkg     = GoImportPath("fmt")
 	netPkg     = GoImportPath("net")
+	timePkg    = GoImportPath("time")
 	stringsPkg = GoImportPath("strings")
 )
 
@@ -185,13 +186,6 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	ip := x.Address.String()")
 	g.P("	return ip + \"/\" + ", strconvPkg.Ident("Itoa"), "(int(x.Len))")
-	/*if ipv == 4 {
-	  	g.P("	mask := ", netPkg.Ident("CIDRMask"), "(int(x.Len), 32)")
-	  } else {
-	  	g.P("	mask := ", netPkg.Ident("CIDRMask"), "(int(x.Len), 128)")
-	  }
-	  g.P("	ipnet := &", netPkg.Ident("IPNet"), "{IP: x.Address.ToIP(), Mask: mask}")
-	  g.P("	return ipnet.String()")*/
 	g.P("}")
 
 	// MarshalText method
@@ -342,6 +336,45 @@ func genMacAddressConversion(g *GenFile, structName string) {
 	g.P("		return err")
 	g.P("	}")
 	g.P("	*x = mac")
+	g.P("	return nil")
+	g.P("}")
+	g.P()
+}
+
+func genTimestampConversion(g *GenFile, structName string) {
+	// NewTimestamp method
+	g.P("func New", structName, "(t ", timePkg.Ident("Time"), ") ", structName, " {")
+	g.P("	sec := int64(t.Unix())")
+	g.P("	nsec := int32(t.Nanosecond())")
+	g.P("	ns := float64(sec) + float64(nsec / 1e9)")
+	g.P("	return ", structName, "(ns)")
+	g.P("}")
+
+	// ToTime method
+	g.P("func (x ", structName, ") ToTime() ", timePkg.Ident("Time"), " {")
+	g.P("	ns := int64(x * 1e9)")
+	g.P("	sec := ns / 1e9")
+	g.P("	nsec := ns % 1e9")
+	g.P("	return ", timePkg.Ident("Unix"), "(sec, nsec)")
+	g.P("}")
+
+	// String method
+	g.P("func (x ", structName, ") String() string {")
+	g.P("	return x.ToTime().String()")
+	g.P("}")
+
+	// MarshalText method
+	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
+	g.P("	return []byte(x.ToTime().Format(", timePkg.Ident("RFC3339Nano"), ")), nil")
+	g.P("}")
+
+	// UnmarshalText method
+	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
+	g.P("	t, err := ", timePkg.Ident("Parse"), "(", timePkg.Ident("RFC3339Nano"), ", string(text))")
+	g.P("	if err != nil {")
+	g.P("		return err")
+	g.P("	}")
+	g.P("	*x = New", structName, "(t)")
 	g.P("	return nil")
 	g.P("}")
 	g.P()

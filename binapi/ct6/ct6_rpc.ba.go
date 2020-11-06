@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  ct6.
+// RPCService defines RPC service ct6.
 type RPCService interface {
 	Ct6EnableDisable(ctx context.Context, in *Ct6EnableDisable) (*Ct6EnableDisableReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) Ct6EnableDisable(ctx context.Context, in *Ct6EnableDisab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

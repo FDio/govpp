@@ -12,42 +12,49 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// union-example is an example to show how to use unions in VPP binary API.
+// binapi-types is an example showing how to use and convert data with
+// helper methods from *-types packages in VPP binary API.
 package main
 
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"git.fd.io/govpp.git/binapi/ethernet_types"
 	"git.fd.io/govpp.git/binapi/ip"
 	"git.fd.io/govpp.git/binapi/ip_types"
+	"git.fd.io/govpp.git/binapi/vpe_types"
 	"git.fd.io/govpp.git/codec"
 )
 
 func init() {
-	log.SetFlags(0)
 }
 
 func main() {
-	addressUnionExample()
-	ipAddressExample()
+	log.SetFlags(0)
 
-	// convert IP from string form into Address type containing union
-	convertIP("10.10.1.1")
-	convertIP("ff80::1")
+	usageUnion()
+	usageAddress()
 
-	// convert IP from string form into Prefix type
+	// convert IP address in string form into ip_types.Address
+	convertIPAddress("10.10.1.1")
+	convertIPAddress("ff80::1")
+
+	// convert IP address / CIDR in string form into ip_types.Prefix
 	convertIPPrefix("20.10.1.1/24")
 	convertIPPrefix("21.10.1.1")
 	convertIPPrefix("ff90::1/64")
 	convertIPPrefix("ff91::1")
 
-	// convert MAC address from string into MacAddress
+	// convert MAC address in string form into ethernet_types.MacAddress
 	convertToMacAddress("00:10:ab:4f:00:01")
+
+	// convert time.Time into vpe_types.Timestamp
+	convertToTimestamp(time.Now())
 }
 
-func addressUnionExample() {
+func usageUnion() {
 	var union ip_types.AddressUnion
 
 	// initialize union using constructors
@@ -63,21 +70,17 @@ func addressUnionExample() {
 	union.SetIP6(ip6)
 }
 
-func ipAddressExample() {
+func usageAddress() {
 	// parse string into IP address
-	addrIP4, err := ip_types.ParseAddress("192.168.1.10")
+	addr, err := ip_types.ParseAddress("192.168.1.10")
 	if err != nil {
 		panic(err)
 	}
-	/*addrIP6, err := ip_types.ParseAddress("ff:2::2")
-	if err != nil {
-		panic(err)
-	}*/
 
 	var msg = ip.IPPuntRedirect{
 		IsAdd: true,
 		Punt: ip.PuntRedirect{
-			Nh: addrIP4,
+			Nh: addr,
 		},
 	}
 
@@ -103,7 +106,7 @@ func ipAddressExample() {
 	}
 }
 
-func convertIP(ip string) {
+func convertIPAddress(ip string) {
 	addr, err := ip_types.ParseAddress(ip)
 	if err != nil {
 		log.Printf("error converting IP to Address: %v", err)
@@ -134,4 +137,11 @@ func convertToMacAddress(mac string) {
 	fmt.Printf("converted mac %q to: %#v\n", mac, parsedMac)
 
 	fmt.Printf("MacAddress converted back to string %#v to: %s\n", parsedMac, parsedMac)
+}
+
+func convertToTimestamp(t time.Time) {
+	timestamp := vpe_types.NewTimestamp(t)
+	fmt.Printf("converted time %v to: %#v\n", t, timestamp)
+
+	fmt.Printf("Timestamp converted back to string %#v to: %s\n", timestamp, timestamp)
 }

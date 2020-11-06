@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  lacp.
+// RPCService defines RPC service lacp.
 type RPCService interface {
 	SwInterfaceLacpDump(ctx context.Context, in *SwInterfaceLacpDump) (RPCService_SwInterfaceLacpDumpClient, error)
 }

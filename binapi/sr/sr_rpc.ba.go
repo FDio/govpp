@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  sr.
+// RPCService defines RPC service sr.
 type RPCService interface {
 	SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error)
 	SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error)
@@ -39,7 +39,7 @@ func (c *serviceClient) SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error) {
@@ -126,7 +126,7 @@ func (c *serviceClient) SrPolicyAdd(ctx context.Context, in *SrPolicyAdd) (*SrPo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPolicyDelReply, error) {
@@ -135,7 +135,7 @@ func (c *serviceClient) SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPolicyModReply, error) {
@@ -144,7 +144,7 @@ func (c *serviceClient) SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrSetEncapHopLimit(ctx context.Context, in *SrSetEncapHopLimit) (*SrSetEncapHopLimitReply, error) {
@@ -153,7 +153,7 @@ func (c *serviceClient) SrSetEncapHopLimit(ctx context.Context, in *SrSetEncapHo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrSetEncapSource(ctx context.Context, in *SrSetEncapSource) (*SrSetEncapSourceReply, error) {
@@ -162,7 +162,7 @@ func (c *serviceClient) SrSetEncapSource(ctx context.Context, in *SrSetEncapSour
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrSteeringAddDel(ctx context.Context, in *SrSteeringAddDel) (*SrSteeringAddDelReply, error) {
@@ -171,7 +171,7 @@ func (c *serviceClient) SrSteeringAddDel(ctx context.Context, in *SrSteeringAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrSteeringPolDump(ctx context.Context, in *SrSteeringPolDump) (RPCService_SrSteeringPolDumpClient, error) {

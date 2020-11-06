@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  gtpu.
+// RPCService defines RPC service gtpu.
 type RPCService interface {
 	GtpuAddDelTunnel(ctx context.Context, in *GtpuAddDelTunnel) (*GtpuAddDelTunnelReply, error)
 	GtpuOffloadRx(ctx context.Context, in *GtpuOffloadRx) (*GtpuOffloadRxReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) GtpuAddDelTunnel(ctx context.Context, in *GtpuAddDelTunn
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GtpuOffloadRx(ctx context.Context, in *GtpuOffloadRx) (*GtpuOffloadRxReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) GtpuOffloadRx(ctx context.Context, in *GtpuOffloadRx) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GtpuTunnelDump(ctx context.Context, in *GtpuTunnelDump) (RPCService_GtpuTunnelDumpClient, error) {
@@ -90,5 +90,5 @@ func (c *serviceClient) SwInterfaceSetGtpuBypass(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

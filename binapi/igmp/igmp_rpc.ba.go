@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  igmp.
+// RPCService defines RPC service igmp.
 type RPCService interface {
 	IgmpClearInterface(ctx context.Context, in *IgmpClearInterface) (*IgmpClearInterfaceReply, error)
 	IgmpDump(ctx context.Context, in *IgmpDump) (RPCService_IgmpDumpClient, error)
@@ -38,7 +38,7 @@ func (c *serviceClient) IgmpClearInterface(ctx context.Context, in *IgmpClearInt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IgmpDump(ctx context.Context, in *IgmpDump) (RPCService_IgmpDumpClient, error) {
@@ -86,7 +86,7 @@ func (c *serviceClient) IgmpEnableDisable(ctx context.Context, in *IgmpEnableDis
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IgmpGroupPrefixDump(ctx context.Context, in *IgmpGroupPrefixDump) (RPCService_IgmpGroupPrefixDumpClient, error) {
@@ -134,7 +134,7 @@ func (c *serviceClient) IgmpGroupPrefixSet(ctx context.Context, in *IgmpGroupPre
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IgmpListen(ctx context.Context, in *IgmpListen) (*IgmpListenReply, error) {
@@ -143,7 +143,7 @@ func (c *serviceClient) IgmpListen(ctx context.Context, in *IgmpListen) (*IgmpLi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IgmpProxyDeviceAddDel(ctx context.Context, in *IgmpProxyDeviceAddDel) (*IgmpProxyDeviceAddDelReply, error) {
@@ -152,7 +152,7 @@ func (c *serviceClient) IgmpProxyDeviceAddDel(ctx context.Context, in *IgmpProxy
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IgmpProxyDeviceAddDelInterface(ctx context.Context, in *IgmpProxyDeviceAddDelInterface) (*IgmpProxyDeviceAddDelInterfaceReply, error) {
@@ -161,7 +161,7 @@ func (c *serviceClient) IgmpProxyDeviceAddDelInterface(ctx context.Context, in *
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantIgmpEvents(ctx context.Context, in *WantIgmpEvents) (*WantIgmpEventsReply, error) {
@@ -170,5 +170,5 @@ func (c *serviceClient) WantIgmpEvents(ctx context.Context, in *WantIgmpEvents) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

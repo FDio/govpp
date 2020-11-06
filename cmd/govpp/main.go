@@ -174,7 +174,7 @@ func runServer(apifiles []*vppapi.File, addr string) {
 	}
 
 	vpeRPC := vpe.NewServiceClient(conn)
-	c := vpe.RESTHandler(vpeRPC)
+	c := vpe.HTTPHandler(vpeRPC)
 
 	http.Handle("/", c)
 

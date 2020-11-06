@@ -21,6 +21,7 @@ type StatsProvider interface {
 	GetInterfaceStats(*InterfaceStats) error
 	GetErrorStats(*ErrorStats) error
 	GetBufferStats(*BufferStats) error
+	GetMemoryStats(*MemoryStats) error
 }
 
 // SystemStats represents global system statistics.
@@ -112,4 +113,10 @@ type BufferPool struct {
 	Cached    float64
 	Used      float64
 	Available float64
+}
+
+// MemoryStats represents memory stats segment counters.
+type MemoryStats struct {
+	Total float64
+	Used  float64
 }

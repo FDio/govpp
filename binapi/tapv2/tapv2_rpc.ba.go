@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  tapv2.
+// RPCService defines RPC service tapv2.
 type RPCService interface {
 	SwInterfaceTapV2Dump(ctx context.Context, in *SwInterfaceTapV2Dump) (RPCService_SwInterfaceTapV2DumpClient, error)
 	TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapCreateV2Reply, error)
@@ -71,7 +71,7 @@ func (c *serviceClient) TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapC
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) TapDeleteV2(ctx context.Context, in *TapDeleteV2) (*TapDeleteV2Reply, error) {
@@ -80,5 +80,5 @@ func (c *serviceClient) TapDeleteV2(ctx context.Context, in *TapDeleteV2) (*TapD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

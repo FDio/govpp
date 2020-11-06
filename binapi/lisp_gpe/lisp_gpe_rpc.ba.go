@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  lisp_gpe.
+// RPCService defines RPC service lisp_gpe.
 type RPCService interface {
 	GpeAddDelFwdEntry(ctx context.Context, in *GpeAddDelFwdEntry) (*GpeAddDelFwdEntryReply, error)
 	GpeAddDelIface(ctx context.Context, in *GpeAddDelIface) (*GpeAddDelIfaceReply, error)
@@ -39,7 +39,7 @@ func (c *serviceClient) GpeAddDelFwdEntry(ctx context.Context, in *GpeAddDelFwdE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeAddDelIface(ctx context.Context, in *GpeAddDelIface) (*GpeAddDelIfaceReply, error) {
@@ -48,7 +48,7 @@ func (c *serviceClient) GpeAddDelIface(ctx context.Context, in *GpeAddDelIface) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeAddDelNativeFwdRpath(ctx context.Context, in *GpeAddDelNativeFwdRpath) (*GpeAddDelNativeFwdRpathReply, error) {
@@ -57,7 +57,7 @@ func (c *serviceClient) GpeAddDelNativeFwdRpath(ctx context.Context, in *GpeAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeEnableDisable(ctx context.Context, in *GpeEnableDisable) (*GpeEnableDisableReply, error) {
@@ -66,7 +66,7 @@ func (c *serviceClient) GpeEnableDisable(ctx context.Context, in *GpeEnableDisab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeFwdEntriesGet(ctx context.Context, in *GpeFwdEntriesGet) (*GpeFwdEntriesGetReply, error) {
@@ -75,7 +75,7 @@ func (c *serviceClient) GpeFwdEntriesGet(ctx context.Context, in *GpeFwdEntriesG
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeFwdEntryPathDump(ctx context.Context, in *GpeFwdEntryPathDump) (RPCService_GpeFwdEntryPathDumpClient, error) {
@@ -123,7 +123,7 @@ func (c *serviceClient) GpeFwdEntryVnisGet(ctx context.Context, in *GpeFwdEntryV
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeGetEncapMode(ctx context.Context, in *GpeGetEncapMode) (*GpeGetEncapModeReply, error) {
@@ -132,7 +132,7 @@ func (c *serviceClient) GpeGetEncapMode(ctx context.Context, in *GpeGetEncapMode
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeNativeFwdRpathsGet(ctx context.Context, in *GpeNativeFwdRpathsGet) (*GpeNativeFwdRpathsGetReply, error) {
@@ -141,7 +141,7 @@ func (c *serviceClient) GpeNativeFwdRpathsGet(ctx context.Context, in *GpeNative
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GpeSetEncapMode(ctx context.Context, in *GpeSetEncapMode) (*GpeSetEncapModeReply, error) {
@@ -150,5 +150,5 @@ func (c *serviceClient) GpeSetEncapMode(ctx context.Context, in *GpeSetEncapMode
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

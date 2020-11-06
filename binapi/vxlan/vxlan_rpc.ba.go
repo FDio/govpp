@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  vxlan.
+// RPCService defines RPC service vxlan.
 type RPCService interface {
 	SwInterfaceSetVxlanBypass(ctx context.Context, in *SwInterfaceSetVxlanBypass) (*SwInterfaceSetVxlanBypassReply, error)
 	VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTunnel) (*VxlanAddDelTunnelReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) SwInterfaceSetVxlanBypass(ctx context.Context, in *SwInt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTunnel) (*VxlanAddDelTunnelReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTu
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanOffloadRx(ctx context.Context, in *VxlanOffloadRx) (*VxlanOffloadRxReply, error) {
@@ -51,7 +51,7 @@ func (c *serviceClient) VxlanOffloadRx(ctx context.Context, in *VxlanOffloadRx) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanTunnelDump(ctx context.Context, in *VxlanTunnelDump) (RPCService_VxlanTunnelDumpClient, error) {

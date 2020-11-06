@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  p2p_ethernet.
+// RPCService defines RPC service p2p_ethernet.
 type RPCService interface {
 	P2pEthernetAdd(ctx context.Context, in *P2pEthernetAdd) (*P2pEthernetAddReply, error)
 	P2pEthernetDel(ctx context.Context, in *P2pEthernetDel) (*P2pEthernetDelReply, error)
@@ -28,7 +28,7 @@ func (c *serviceClient) P2pEthernetAdd(ctx context.Context, in *P2pEthernetAdd) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) P2pEthernetDel(ctx context.Context, in *P2pEthernetDel) (*P2pEthernetDelReply, error) {
@@ -37,5 +37,5 @@ func (c *serviceClient) P2pEthernetDel(ctx context.Context, in *P2pEthernetDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

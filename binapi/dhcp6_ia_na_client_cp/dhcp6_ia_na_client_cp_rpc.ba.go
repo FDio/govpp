@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  dhcp6_ia_na_client_cp.
+// RPCService defines RPC service dhcp6_ia_na_client_cp.
 type RPCService interface {
 	DHCP6ClientEnableDisable(ctx context.Context, in *DHCP6ClientEnableDisable) (*DHCP6ClientEnableDisableReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) DHCP6ClientEnableDisable(ctx context.Context, in *DHCP6C
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

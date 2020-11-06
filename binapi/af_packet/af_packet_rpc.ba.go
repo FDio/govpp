@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  af_packet.
+// RPCService defines RPC service af_packet.
 type RPCService interface {
 	AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error)
 	AfPacketDelete(ctx context.Context, in *AfPacketDelete) (*AfPacketDeleteReply, error)
@@ -33,7 +33,7 @@ func (c *serviceClient) AfPacketCreate(ctx context.Context, in *AfPacketCreate) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AfPacketDelete(ctx context.Context, in *AfPacketDelete) (*AfPacketDeleteReply, error) {
@@ -42,7 +42,7 @@ func (c *serviceClient) AfPacketDelete(ctx context.Context, in *AfPacketDelete) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AfPacketDump(ctx context.Context, in *AfPacketDump) (RPCService_AfPacketDumpClient, error) {
@@ -90,5 +90,5 @@ func (c *serviceClient) AfPacketSetL4CksumOffload(ctx context.Context, in *AfPac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

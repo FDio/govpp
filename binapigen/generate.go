@@ -246,6 +246,8 @@ func genAlias(g *GenFile, alias *Alias) {
 		genAddressWithPrefixConversion(g, alias.GoName)
 	case "mac_address":
 		genMacAddressConversion(g, alias.GoName)
+	case "timestamp":
+		genTimestampConversion(g, alias.GoName)
 	}
 }
 

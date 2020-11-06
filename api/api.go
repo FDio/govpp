@@ -25,7 +25,7 @@ import (
 type Connection interface {
 	// NewStream creates a new stream for sending and receiving messages.
 	// Context can be used to close the stream using cancel or timeout.
-	NewStream(ctx context.Context) (Stream, error)
+	NewStream(ctx context.Context, options ...StreamOption) (Stream, error)
 
 	// Invoke can be used for a simple request-reply RPC.
 	// It creates stream and calls SendMsg with req and RecvMsg with reply.
@@ -56,6 +56,12 @@ type Stream interface {
 	// after closing stream.
 	Close() error
 }
+
+// StreamOption allows customizing a Stream. Available options are:
+// - WithRequestSize
+// - WithReplySize
+// - WithReplyTimeout
+type StreamOption func(Stream)
 
 // ChannelProvider provides the communication channel with govpp core.
 type ChannelProvider interface {

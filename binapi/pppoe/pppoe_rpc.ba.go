@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  pppoe.
+// RPCService defines RPC service pppoe.
 type RPCService interface {
 	PppoeAddDelSession(ctx context.Context, in *PppoeAddDelSession) (*PppoeAddDelSessionReply, error)
 	PppoeSessionDump(ctx context.Context, in *PppoeSessionDump) (RPCService_PppoeSessionDumpClient, error)
@@ -31,7 +31,7 @@ func (c *serviceClient) PppoeAddDelSession(ctx context.Context, in *PppoeAddDelS
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PppoeSessionDump(ctx context.Context, in *PppoeSessionDump) (RPCService_PppoeSessionDumpClient, error) {

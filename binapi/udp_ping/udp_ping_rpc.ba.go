@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  udp_ping.
+// RPCService defines RPC service udp_ping.
 type RPCService interface {
 	UDPPingAddDel(ctx context.Context, in *UDPPingAddDel) (*UDPPingAddDelReply, error)
 	UDPPingExport(ctx context.Context, in *UDPPingExport) (*UDPPingExportReply, error)
@@ -28,7 +28,7 @@ func (c *serviceClient) UDPPingAddDel(ctx context.Context, in *UDPPingAddDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UDPPingExport(ctx context.Context, in *UDPPingExport) (*UDPPingExportReply, error) {
@@ -37,5 +37,5 @@ func (c *serviceClient) UDPPingExport(ctx context.Context, in *UDPPingExport) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

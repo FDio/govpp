@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  vmxnet3.
+// RPCService defines RPC service vmxnet3.
 type RPCService interface {
 	Vmxnet3Create(ctx context.Context, in *Vmxnet3Create) (*Vmxnet3CreateReply, error)
 	Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*Vmxnet3DeleteReply, error)
@@ -32,7 +32,7 @@ func (c *serviceClient) Vmxnet3Create(ctx context.Context, in *Vmxnet3Create) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*Vmxnet3DeleteReply, error) {
@@ -41,7 +41,7 @@ func (c *serviceClient) Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Vmxnet3Dump(ctx context.Context, in *Vmxnet3Dump) (RPCService_Vmxnet3DumpClient, error) {

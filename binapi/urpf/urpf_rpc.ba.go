@@ -8,7 +8,7 @@ import (
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  urpf.
+// RPCService defines RPC service urpf.
 type RPCService interface {
 	UrpfUpdate(ctx context.Context, in *UrpfUpdate) (*UrpfUpdateReply, error)
 }
@@ -27,5 +27,5 @@ func (c *serviceClient) UrpfUpdate(ctx context.Context, in *UrpfUpdate) (*UrpfUp
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

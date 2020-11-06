@@ -71,7 +71,7 @@ func GenerateRPC(gen *Generator, file *File) *GenFile {
 
 func genService(g *GenFile, svc *Service) {
 	// generate comment
-	g.P("// ", serviceApiName, " defines RPC service  ", g.file.Desc.Name, ".")
+	g.P("// ", serviceApiName, " defines RPC service ", g.file.Desc.Name, ".")
 
 	// generate service interface
 	g.P("type ", serviceApiName, " interface {")
@@ -160,7 +160,15 @@ func genService(g *GenFile, svc *Service) {
 			g.P("out := new(", rpc.MsgReply.GoIdent, ")")
 			g.P("err := c.conn.Invoke(ctx, in, out)")
 			g.P("if err != nil { return nil, err }")
-			g.P("return out, nil")
+			if retvalField := getRetvalField(rpc.MsgReply); retvalField != nil {
+				if fieldType := getFieldType(g, retvalField); fieldType == "int32" {
+					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(out.", retvalField.GoName, ")")
+				} else {
+					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(int32(out.", retvalField.GoName, "))")
+				}
+			} else {
+				g.P("return out, nil")
+			}
 		} else {
 			g.P("stream, err := c.conn.NewStream(ctx)")
 			g.P("if err != nil { return err }")

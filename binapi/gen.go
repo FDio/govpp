@@ -18,4 +18,5 @@ package binapi
 //
 //     go generate ./binapi
 //
-//go:generate binapi-generator -input-dir=/usr/share/vpp/api -output-dir=. -gen=rpc,rest
+//go:generate binapi-generator -input-dir=/usr/share/vpp/api -output-dir=. -gen=rpc
+//go:generate binapi-generator -input-file=/usr/share/vpp/api/core/vpe.api.json -output-dir=. -gen=http

@@ -11,7 +11,7 @@ import (
 	vpe "git.fd.io/govpp.git/binapi/vpe"
 )
 
-// RPCService defines RPC service  mactime.
+// RPCService defines RPC service mactime.
 type RPCService interface {
 	MactimeAddDelRange(ctx context.Context, in *MactimeAddDelRange) (*MactimeAddDelRangeReply, error)
 	MactimeDump(ctx context.Context, in *MactimeDump) (RPCService_MactimeDumpClient, error)
@@ -32,7 +32,7 @@ func (c *serviceClient) MactimeAddDelRange(ctx context.Context, in *MactimeAddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MactimeDump(ctx context.Context, in *MactimeDump) (RPCService_MactimeDumpClient, error) {
@@ -80,5 +80,5 @@ func (c *serviceClient) MactimeEnableDisable(ctx context.Context, in *MactimeEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
