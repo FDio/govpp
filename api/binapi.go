@@ -15,7 +15,7 @@
 package api
 
 import (
-	"fmt"
+	"path"
 	"reflect"
 )
 
@@ -59,27 +59,27 @@ type DataType interface {
 }
 
 var (
-	registeredMessageTypes = make(map[reflect.Type]string)
-	registeredMessages     = make(map[string]Message)
+	registeredMessages     = make(map[string]map[string]Message)
+	registeredMessageTypes = make(map[string]map[reflect.Type]string)
 )
 
 // RegisterMessage is called from generated code to register message.
 func RegisterMessage(x Message, name string) {
-	typ := reflect.TypeOf(x)
-	namecrc := x.GetMessageName() + "_" + x.GetCrcString()
-	if _, ok := registeredMessageTypes[typ]; ok {
-		panic(fmt.Errorf("govpp: message type %v already registered as %s (%s)", typ, name, namecrc))
+	binapiPath := path.Dir(reflect.TypeOf(x).Elem().PkgPath())
+	if _, ok := registeredMessages[binapiPath]; !ok {
+		registeredMessages[binapiPath] = make(map[string]Message)
+		registeredMessageTypes[binapiPath] = make(map[reflect.Type]string)
 	}
-	registeredMessages[namecrc] = x
-	registeredMessageTypes[typ] = name
+	registeredMessages[binapiPath][x.GetMessageName()+"_"+x.GetCrcString()] = x
+	registeredMessageTypes[binapiPath][reflect.TypeOf(x)] = name
 }
 
 // GetRegisteredMessages returns list of all registered messages.
-func GetRegisteredMessages() map[string]Message {
+func GetRegisteredMessages() map[string]map[string]Message {
 	return registeredMessages
 }
 
 // GetRegisteredMessageTypes returns list of all registered message types.
-func GetRegisteredMessageTypes() map[reflect.Type]string {
+func GetRegisteredMessageTypes() map[string]map[reflect.Type]string {
 	return registeredMessageTypes
 }

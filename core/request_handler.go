@@ -210,9 +210,9 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		return
 	}
 
-	msg, ok := c.msgMap[msgID]
-	if !ok {
-		log.Warnf("Unknown message received, ID: %d", msgID)
+	msg, err := c.getMessageByID(msgID)
+	if err != nil {
+		log.Warnln(err)
 		return
 	}
 
@@ -418,4 +418,20 @@ func compareSeqNumbers(seqNum1, seqNum2 uint16) int {
 		return -1
 	}
 	return 1
+}
+
+// Returns first message from any package where the message ID matches
+// Note: the msg is further used only for its MessageType which is not
+// affected by the message's package
+func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
+	var ok bool
+	for _, msgs := range c.msgMapByPath {
+		if msg, ok = msgs[msgID]; ok {
+			break
+		}
+	}
+	if !ok {
+		return nil, fmt.Errorf("unknown message received, ID: %d", msgID)
+	}
+	return msg, nil
 }

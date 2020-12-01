@@ -35,8 +35,10 @@ var (
 )
 
 func init() {
-	for _, msg := range api.GetRegisteredMessages() {
-		gob.Register(msg)
+	for _, msgList := range api.GetRegisteredMessages() {
+		for _, msg := range msgList {
+			gob.Register(msg)
+		}
 	}
 }
 

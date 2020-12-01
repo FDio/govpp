@@ -45,8 +45,10 @@ type MessageCodec interface {
 type MessageIdentifier interface {
 	// GetMessageID returns message identifier of given API message.
 	GetMessageID(msg api.Message) (uint16, error)
+	// GetMessagePath returns path for the given message
+	GetMessagePath(msg api.Message) string
 	// LookupByID looks up message name and crc by ID
-	LookupByID(msgID uint16) (api.Message, error)
+	LookupByID(path string, msgID uint16) (api.Message, error)
 }
 
 // vppRequest is a request that will be sent to VPP.
@@ -329,7 +331,8 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 
 	if reply.msgID != expMsgID {
 		var msgNameCrc string
-		if replyMsg, err := ch.msgIdentifier.LookupByID(reply.msgID); err != nil {
+		pkgPath := ch.msgIdentifier.GetMessagePath(msg)
+		if replyMsg, err := ch.msgIdentifier.LookupByID(pkgPath, reply.msgID); err != nil {
 			msgNameCrc = err.Error()
 		} else {
 			msgNameCrc = getMsgNameWithCrc(replyMsg)

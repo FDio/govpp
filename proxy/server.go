@@ -226,8 +226,8 @@ type BinapiCompatibilityRequest struct {
 }
 
 type BinapiCompatibilityResponse struct {
-	CompatibleMsgs   []string
-	IncompatibleMsgs []string
+	CompatibleMsgs   map[string][]string
+	IncompatibleMsgs map[string][]string
 }
 
 // BinapiRPC is a RPC server for proxying client request to api.Channel.
@@ -379,25 +379,33 @@ func (s *BinapiRPC) Compatibility(req BinapiCompatibilityRequest, resp *BinapiCo
 	}
 	defer ch.Close()
 
-	resp.CompatibleMsgs = make([]string, 0, len(req.MsgNameCrcs))
-	resp.IncompatibleMsgs = make([]string, 0, len(req.MsgNameCrcs))
+	resp.CompatibleMsgs = make(map[string][]string)
+	resp.IncompatibleMsgs = make(map[string][]string)
 
-	for _, msg := range req.MsgNameCrcs {
-		val, ok := api.GetRegisteredMessages()[msg]
-		if !ok {
-			resp.IncompatibleMsgs = append(resp.IncompatibleMsgs, msg)
-			continue
+	for path, messages := range api.GetRegisteredMessages() {
+		if resp.IncompatibleMsgs[path] == nil {
+			resp.IncompatibleMsgs[path] = make([]string, 0, len(req.MsgNameCrcs))
 		}
-
-		if err = ch.CheckCompatiblity(val); err != nil {
-			resp.IncompatibleMsgs = append(resp.IncompatibleMsgs, msg)
-		} else {
-			resp.CompatibleMsgs = append(resp.CompatibleMsgs, msg)
+		if resp.CompatibleMsgs[path] == nil {
+			resp.CompatibleMsgs[path] = make([]string, 0, len(req.MsgNameCrcs))
+		}
+		for _, msg := range req.MsgNameCrcs {
+			val, ok := messages[msg]
+			if !ok {
+				resp.IncompatibleMsgs[path] = append(resp.IncompatibleMsgs[path], msg)
+				continue
+			}
+			if err = ch.CheckCompatiblity(val); err != nil {
+				resp.IncompatibleMsgs[path] = append(resp.IncompatibleMsgs[path], msg)
+			} else {
+				resp.CompatibleMsgs[path] = append(resp.CompatibleMsgs[path], msg)
+			}
 		}
 	}
-
-	if len(resp.IncompatibleMsgs) > 0 {
-		return fmt.Errorf("compatibility check failed for messages: %v", resp.IncompatibleMsgs)
+	for _, messages := range resp.IncompatibleMsgs {
+		if len(messages) > 0 {
+			return fmt.Errorf("compatibility check failed for messages: %v", resp.IncompatibleMsgs)
+		}
 	}
 
 	return nil
