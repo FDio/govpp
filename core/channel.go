@@ -37,8 +37,8 @@ type MessageCodec interface {
 	EncodeMsg(msg api.Message, msgID uint16) ([]byte, error)
 	// DecodeMsg decodes binary-encoded data of a message into provided Message structure.
 	DecodeMsg(data []byte, msg api.Message) error
-	// DecodeMsgContext decodes context from message data.
-	DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error)
+	// DecodeMsgContext decodes context from message data and type.
+	DecodeMsgContext(data []byte, msgType api.MessageType) (context uint32, err error)
 }
 
 // MessageIdentifier provides identification of generated API messages.

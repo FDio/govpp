@@ -17,7 +17,6 @@ package core
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"sync/atomic"
 	"time"
 
@@ -210,7 +209,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		return
 	}
 
-	msg, err := c.getMessageByID(msgID)
+	msgType, name, crc, err := c.getMessageDataByID(msgID)
 	if err != nil {
 		log.Warnln(err)
 		return
@@ -221,7 +220,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	// - replies that don't have context as first field (comes as zero)
 	// - events that don't have context at all (comes as non zero)
 	//
-	context, err := c.codec.DecodeMsgContext(data, msg)
+	context, err := c.codec.DecodeMsgContext(data, msgType)
 	if err != nil {
 		log.WithField("msg_id", msgID).Warnf("Unable to decode message context: %v", err)
 		return
@@ -230,14 +229,6 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	chanID, isMulti, seqNum := unpackRequestContext(context)
 
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
-		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-
-		// decode the message
-		if err = c.codec.DecodeMsg(data, msg); err != nil {
-			err = fmt.Errorf("decoding message failed: %w", err)
-			return
-		}
-
 		log.WithFields(logger.Fields{
 			"context":  context,
 			"msg_id":   msgID,
@@ -245,8 +236,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			"channel":  chanID,
 			"is_multi": isMulti,
 			"seq_num":  seqNum,
-			"msg_crc":  msg.GetCrcString(),
-		}).Debugf("<-- govpp RECEIVE: %s %+v", msg.GetMessageName(), msg)
+			"msg_crc":  crc,
+		}).Debugf("<-- govpp RECEIVE: %s %+v", name)
 	}
 
 	if context == 0 || c.isNotificationMessage(msgID) {
@@ -420,18 +411,12 @@ func compareSeqNumbers(seqNum1, seqNum2 uint16) int {
 	return 1
 }
 
-// Returns first message from any package where the message ID matches
-// Note: the msg is further used only for its MessageType which is not
-// affected by the message's package
-func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
-	var ok bool
+// Returns message data based on the message ID not depending on the message path
+func (c *Connection) getMessageDataByID(msgID uint16) (typ api.MessageType, name, crc string, err error) {
 	for _, msgs := range c.msgMapByPath {
-		if msg, ok = msgs[msgID]; ok {
-			break
+		if msg, ok := msgs[msgID]; ok {
+			return msg.GetMessageType(), msg.GetMessageName(), msg.GetCrcString(), nil
 		}
 	}
-	if !ok {
-		return nil, fmt.Errorf("unknown message received, ID: %d", msgID)
-	}
-	return msg, nil
+	return typ, name, crc, fmt.Errorf("unknown message received, ID: %d", msgID)
 }
