@@ -1,0 +1,56 @@
+---
+project: 'govpp'
+project_creation_date: '2017-4-27'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &govpp_ptl
+  name: 'Ondrej Fabry'
+  email: 'ofabry@cisco.com'
+  id: 'ofabry'
+primary_contact: *govpp_ptl
+issue_tracking:
+  type: 'jira'
+  url: 'https://jira.fd.io/projects/GOVPP'
+  key: 'GOVPP'
+mailing_list:
+  type: 'groups.io'
+  url: 'https://lists.fd.io/g/govpp-dev'
+  tag: '<[sub-project_name]>'
+realtime_discussion:
+  type: ''
+  server: ''
+  channel: ''
+repositories:
+  - 'govpp'
+committers:
+  - <<: *govpp_ptl
+  - name: 'Ondrej Fabry'
+    company: 'cisco'
+    email: 'ofabry@cisco.com'
+    id: 'ofabry'
+  - name: 'Jan Medved'
+    company: 'cisco'
+    email: 'jmedved@cisco.com'
+    id: 'jmedved'
+  - name: 'Rastislav Szabo'
+    company: 'cisco'
+    email: 'raszabo@cisco.com'
+    id: 'raszabo'
+  - name: 'Nikos Bregiannis'
+    company: 'cisco'
+    email: 'nbregian@cisco.com'
+    id: 'nbregian'
+  - name: 'Vladimir Lavor'
+    company: 'cisco'
+    email: 'vlavor@cisco.com'
+    id: 'vlavor'
+tsc:
+  # yamllint disable rule:line-length
+  approval: ''
+  changes:
+    - type: 'removal'
+      name: ''
+      link: ''
+    - type: 'promotion'
+      name: 'Vladimir Lavor'
+      link: 'https://lists.fd.io/g/govpp-dev/topic/77726308#64,https://lists.fd.io/g/govpp-dev/message/69'
