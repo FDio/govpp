@@ -24,30 +24,17 @@ import (
 	"syscall"
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
 	"github.com/fsnotify/fsnotify"
 	"github.com/ftrvxmtrx/fd"
 	logger "github.com/sirupsen/logrus"
+
+	"git.fd.io/govpp.git/adapter"
 )
 
 const (
 	// DefaultSocketName is default VPP stats socket file path.
 	DefaultSocketName = adapter.DefaultStatsSocket
 )
-
-const socketMissing = `
-------------------------------------------------------------
- VPP stats socket file %s is missing!
-
-  - is VPP running with stats segment enabled?
-  - is the correct socket name configured?
-
- To enable it add following section to your VPP config:
-   statseg {
-     socket-name /run/vpp/stats.sock
-   }
-------------------------------------------------------------
-`
 
 var (
 	// Debug is global variable that determines debug mode
@@ -77,7 +64,8 @@ var _ adapter.StatsAPI = (*StatsClient)(nil)
 
 // StatsClient is the pure Go implementation for VPP stats API.
 type StatsClient struct {
-	sockAddr    string
+	socketPath string
+
 	headerData  []byte
 	isConnected bool
 
@@ -87,13 +75,14 @@ type StatsClient struct {
 	statSegment
 }
 
-// NewStatsClient returns new VPP stats API client.
-func NewStatsClient(sockAddr string) *StatsClient {
-	if sockAddr == "" {
-		sockAddr = DefaultSocketName
+// NewStatsClient returns a new StatsClient using socket.
+// If socket is empty string DefaultSocketName is used.
+func NewStatsClient(socket string) *StatsClient {
+	if socket == "" {
+		socket = DefaultSocketName
 	}
 	return &StatsClient{
-		sockAddr: sockAddr,
+		socketPath: socket,
 	}
 }
 
@@ -103,20 +92,25 @@ func (sc *StatsClient) Connect() (err error) {
 	if sc.isConnected {
 		return fmt.Errorf("already connected")
 	}
-	if err := sc.validate(); err != nil {
+	if err := sc.checkSocketValid(); err != nil {
 		return err
 	}
 	sc.done = make(chan struct{})
-	sc.monitorSocket()
 	if sc.statSegment, err = sc.connect(); err != nil {
 		return err
 	}
+	sc.monitorSocket()
+	sc.isConnected = true
 	return nil
 }
 
 // Disconnect from the socket, unmap shared memory and terminate
 // socket monitor
 func (sc *StatsClient) Disconnect() error {
+	if !sc.isConnected {
+		return nil // not connected
+	}
+	sc.isConnected = false
 	close(sc.done)
 	return sc.disconnect()
 }
@@ -287,11 +281,9 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	return nil
 }
 
-// validate file presence by retrieving its file info
-func (sc *StatsClient) validate() error {
-	if _, err := os.Stat(sc.sockAddr); os.IsNotExist(err) {
-		fmt.Fprintf(os.Stderr, socketMissing, sc.sockAddr)
-		return fmt.Errorf("stats socket file %s does not exist", sc.sockAddr)
+func (sc *StatsClient) checkSocketValid() error {
+	if _, err := os.Stat(sc.socketPath); os.IsNotExist(err) {
+		return fmt.Errorf("stats socket file %s does not exist", sc.socketPath)
 	} else if err != nil {
 		return fmt.Errorf("stats socket error: %v", err)
 	}
@@ -303,7 +295,7 @@ func (sc *StatsClient) validate() error {
 func (sc *StatsClient) connect() (ss statSegment, err error) {
 	addr := net.UnixAddr{
 		Net:  "unixpacket",
-		Name: sc.sockAddr,
+		Name: sc.socketPath,
 	}
 	Log.Debugf("connecting to: %v", addr)
 
@@ -357,7 +349,7 @@ func (sc *StatsClient) connect() (ss statSegment, err error) {
 		return nil, fmt.Errorf("stat segment version is not supported: %v (min: %v, max: %v)",
 			version, minVersion, maxVersion)
 	}
-	sc.isConnected = true
+
 	return ss, nil
 }
 
@@ -367,7 +359,7 @@ func (sc *StatsClient) reconnect() (err error) {
 	if err = sc.disconnect(); err != nil {
 		return fmt.Errorf("error disconnecting socket: %v", err)
 	}
-	if err = sc.validate(); err != nil {
+	if err = sc.checkSocketValid(); err != nil {
 		return fmt.Errorf("error validating socket: %v", err)
 	}
 	if sc.statSegment, err = sc.connect(); err != nil {
@@ -378,7 +370,6 @@ func (sc *StatsClient) reconnect() (err error) {
 
 // disconnect unmaps socket data from the memory and resets the header
 func (sc *StatsClient) disconnect() error {
-	sc.isConnected = false
 	if sc.headerData == nil {
 		return nil
 	}
@@ -408,7 +399,7 @@ func (sc *StatsClient) monitorSocket() {
 						Log.Errorf("error occurred during socket reconnect: %v", err)
 					}
 					// path must be re-added to the watcher
-					if err = watcher.Add(sc.sockAddr); err != nil {
+					if err = watcher.Add(sc.socketPath); err != nil {
 						Log.Errorf("failed to add socket address to the watcher: %v", err)
 					}
 				}
@@ -422,7 +413,7 @@ func (sc *StatsClient) monitorSocket() {
 		}
 	}()
 
-	if err := watcher.Add(sc.sockAddr); err != nil {
+	if err := watcher.Add(sc.socketPath); err != nil {
 		Log.Errorf("failed to add socket address to the watcher: %v", err)
 	}
 }

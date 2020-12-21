@@ -73,29 +73,8 @@ func init() {
 	log = logger.WithField("logger", "govpp/socketclient")
 }
 
-const socketMissing = `
-------------------------------------------------------------
- No socket file found at: %s
- VPP binary API socket file is missing!
-
-  - is VPP running with socket for binapi enabled?
-  - is the correct socket name configured?
-
- To enable it add following section to your VPP config:
-   socksvr {
-     socket-name /run/vpp/api.sock
-   }
-------------------------------------------------------------
-`
-
-var warnOnce sync.Once
-
-func (c *socketClient) printMissingSocketMsg() {
-	fmt.Fprintf(os.Stderr, socketMissing, c.sockAddr)
-}
-
-type socketClient struct {
-	sockAddr   string
+type Client struct {
+	socketPath string
 	clientName string
 
 	conn   *net.UnixConn
@@ -117,12 +96,14 @@ type socketClient struct {
 	wg   sync.WaitGroup
 }
 
-func NewVppClient(sockAddr string) *socketClient {
-	if sockAddr == "" {
-		sockAddr = DefaultSocketName
+// NewVppClient returns a new Client using socket.
+// If socket is empty string DefaultSocketName is used.
+func NewVppClient(socket string) *Client {
+	if socket == "" {
+		socket = DefaultSocketName
 	}
-	return &socketClient{
-		sockAddr:          sockAddr,
+	return &Client{
+		socketPath:        socket,
 		clientName:        DefaultClientName,
 		connectTimeout:    DefaultConnectTimeout,
 		disconnectTimeout: DefaultDisconnectTimeout,
@@ -136,59 +117,32 @@ func NewVppClient(sockAddr string) *socketClient {
 }
 
 // SetClientName sets a client name used for identification.
-func (c *socketClient) SetClientName(name string) {
+func (c *Client) SetClientName(name string) {
 	c.clientName = name
 }
 
 // SetConnectTimeout sets timeout used during connecting.
-func (c *socketClient) SetConnectTimeout(t time.Duration) {
+func (c *Client) SetConnectTimeout(t time.Duration) {
 	c.connectTimeout = t
 }
 
 // SetDisconnectTimeout sets timeout used during disconnecting.
-func (c *socketClient) SetDisconnectTimeout(t time.Duration) {
+func (c *Client) SetDisconnectTimeout(t time.Duration) {
 	c.disconnectTimeout = t
 }
 
-func (c *socketClient) SetMsgCallback(cb adapter.MsgCallback) {
+func (c *Client) SetMsgCallback(cb adapter.MsgCallback) {
 	log.Debug("SetMsgCallback")
 	c.msgCallback = cb
 }
 
-const legacySocketName = "/run/vpp-api.sock"
-
-func (c *socketClient) checkLegacySocket() bool {
-	if c.sockAddr == legacySocketName {
-		return false
-	}
-	log.Debugf("checking legacy socket: %s", legacySocketName)
-	// check if socket exists
-	if _, err := os.Stat(c.sockAddr); err == nil {
-		return false // socket exists
-	} else if !os.IsNotExist(err) {
-		return false // some other error occurred
-	}
-	// check if legacy socket exists
-	if _, err := os.Stat(legacySocketName); err == nil {
-		// legacy socket exists, update sockAddr
-		c.sockAddr = legacySocketName
-		return true
-	}
-	// no socket socket found
-	return false
-}
-
 // WaitReady checks socket file existence and waits for it if necessary
-func (c *socketClient) WaitReady() error {
+func (c *Client) WaitReady() error {
 	// check if socket already exists
-	if _, err := os.Stat(c.sockAddr); err == nil {
+	if _, err := os.Stat(c.socketPath); err == nil {
 		return nil // socket exists, we are ready
 	} else if !os.IsNotExist(err) {
 		return err // some other error occurred
-	}
-
-	if c.checkLegacySocket() {
-		return nil
 	}
 
 	// socket does not exist, watch for it
@@ -203,7 +157,7 @@ func (c *socketClient) WaitReady() error {
 	}()
 
 	// start directory watcher
-	if err := watcher.Add(filepath.Dir(c.sockAddr)); err != nil {
+	if err := watcher.Add(filepath.Dir(c.socketPath)); err != nil {
 		return err
 	}
 
@@ -211,17 +165,14 @@ func (c *socketClient) WaitReady() error {
 	for {
 		select {
 		case <-timeout.C:
-			if c.checkLegacySocket() {
-				return nil
-			}
-			return fmt.Errorf("timeout waiting (%s) for socket file: %s", MaxWaitReady, c.sockAddr)
+			return fmt.Errorf("timeout waiting (%s) for socket file: %s", MaxWaitReady, c.socketPath)
 
 		case e := <-watcher.Errors:
 			return e
 
 		case ev := <-watcher.Events:
 			log.Debugf("watcher event: %+v", ev)
-			if ev.Name == c.sockAddr && (ev.Op&fsnotify.Create) == fsnotify.Create {
+			if ev.Name == c.socketPath && (ev.Op&fsnotify.Create) == fsnotify.Create {
 				// socket created, we are ready
 				return nil
 			}
@@ -229,18 +180,15 @@ func (c *socketClient) WaitReady() error {
 	}
 }
 
-func (c *socketClient) Connect() error {
-	c.checkLegacySocket()
-
+func (c *Client) Connect() error {
 	// check if socket exists
-	if _, err := os.Stat(c.sockAddr); os.IsNotExist(err) {
-		warnOnce.Do(c.printMissingSocketMsg)
-		return fmt.Errorf("VPP API socket file %s does not exist", c.sockAddr)
+	if _, err := os.Stat(c.socketPath); os.IsNotExist(err) {
+		return fmt.Errorf("VPP API socket file %s does not exist", c.socketPath)
 	} else if err != nil {
 		return fmt.Errorf("VPP API socket error: %v", err)
 	}
 
-	if err := c.connect(c.sockAddr); err != nil {
+	if err := c.connect(c.socketPath); err != nil {
 		return err
 	}
 
@@ -256,7 +204,7 @@ func (c *socketClient) Connect() error {
 	return nil
 }
 
-func (c *socketClient) Disconnect() error {
+func (c *Client) Disconnect() error {
 	if c.conn == nil {
 		return nil
 	}
@@ -273,7 +221,6 @@ func (c *socketClient) Disconnect() error {
 
 	// Don't bother sending a vl_api_sockclnt_delete_t message,
 	// just close the socket.
-
 	if err := c.disconnect(); err != nil {
 		return err
 	}
@@ -283,10 +230,10 @@ func (c *socketClient) Disconnect() error {
 
 const defaultBufferSize = 4096
 
-func (c *socketClient) connect(sockAddr string) error {
+func (c *Client) connect(sockAddr string) error {
 	addr := &net.UnixAddr{Name: sockAddr, Net: "unix"}
 
-	log.Debugf("Connecting to: %v", c.sockAddr)
+	log.Debugf("Connecting to: %v", c.socketPath)
 
 	conn, err := net.DialUnix("unix", nil, addr)
 	if err != nil {
@@ -311,7 +258,7 @@ func (c *socketClient) connect(sockAddr string) error {
 	return nil
 }
 
-func (c *socketClient) disconnect() error {
+func (c *Client) disconnect() error {
 	log.Debugf("Closing socket")
 	if err := c.conn.Close(); err != nil {
 		log.Debugln("Closing socket failed:", err)
@@ -326,7 +273,7 @@ const (
 	deleteMsgContext = byte(124)
 )
 
-func (c *socketClient) open() error {
+func (c *Client) open() error {
 	var msgCodec = codec.DefaultCodec
 
 	// Request socket client create
@@ -379,7 +326,7 @@ func (c *socketClient) open() error {
 	return nil
 }
 
-func (c *socketClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+func (c *Client) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	if msgID, ok := c.msgTable[msgName+"_"+msgCrc]; ok {
 		return msgID, nil
 	}
@@ -389,7 +336,7 @@ func (c *socketClient) GetMsgID(msgName string, msgCrc string) (uint16, error) {
 	}
 }
 
-func (c *socketClient) SendMsg(context uint32, data []byte) error {
+func (c *Client) SendMsg(context uint32, data []byte) error {
 	if len(data) < 10 {
 		return fmt.Errorf("invalid message data, length must be at least 10 bytes")
 	}
@@ -423,7 +370,7 @@ func setMsgRequestHeader(data []byte, clientIndex, context uint32) {
 	binary.BigEndian.PutUint32(data[6:10], context)
 }
 
-func (c *socketClient) writeMsg(msg []byte) error {
+func (c *Client) writeMsg(msg []byte) error {
 	// we lock to prevent mixing multiple message writes
 	c.writeMu.Lock()
 	defer c.writeMu.Unlock()
@@ -482,7 +429,7 @@ func writeMsgData(w io.Writer, msg []byte, writerSize int) error {
 	return nil
 }
 
-func (c *socketClient) readerLoop() {
+func (c *Client) readerLoop() {
 	defer c.wg.Done()
 	defer log.Debugf("reader loop done")
 
@@ -528,7 +475,7 @@ func getMsgReplyHeader(msg []byte) (msgID uint16, context uint32) {
 	return
 }
 
-func (c *socketClient) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte, error) {
+func (c *Client) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte, error) {
 	// set read deadline
 	readDeadline := time.Now().Add(timeout)
 	if err := c.conn.SetReadDeadline(readDeadline); err != nil {
@@ -549,7 +496,7 @@ func (c *socketClient) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte
 	return msgReply, nil
 }
 
-func (c *socketClient) readMsg(buf []byte) ([]byte, error) {
+func (c *Client) readMsg(buf []byte) ([]byte, error) {
 	log.Debug("reading msg..")
 
 	header := c.headerPool.Get().([]byte)
