@@ -237,7 +237,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			"is_multi": isMulti,
 			"seq_num":  seqNum,
 			"msg_crc":  crc,
-		}).Debugf("<-- govpp RECEIVE: %s %+v", name)
+		}).Debugf("<-- govpp RECEIVE: %s", name)
 	}
 
 	if context == 0 || c.isNotificationMessage(msgID) {
