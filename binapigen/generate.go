@@ -178,7 +178,7 @@ func genEnum(g *GenFile, enum *Enum) {
 	g.P(")")
 	g.P()
 
-	if isEnumFlag(enum) {
+	if enum.IsFlag || isEnumFlag(enum) {
 		size := BaseTypeSizes[enum.Type] * 8
 		g.P("func (x ", enum.GoName, ") String() string {")
 		g.P("	s, ok := ", enum.GoName, "_name[", gotype, "(x)]")

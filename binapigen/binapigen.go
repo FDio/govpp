@@ -71,7 +71,10 @@ func newFile(gen *Generator, apifile *vppapi.File, packageName GoPackageName, im
 	}
 
 	for _, enumType := range apifile.EnumTypes {
-		file.Enums = append(file.Enums, newEnum(gen, file, enumType))
+		file.Enums = append(file.Enums, newEnum(gen, file, enumType, false))
+	}
+	for _, enumflagType := range apifile.EnumflagTypes {
+		file.Enums = append(file.Enums, newEnum(gen, file, enumflagType, true))
 	}
 	for _, aliasType := range apifile.AliasTypes {
 		file.Aliases = append(file.Aliases, newAlias(gen, file, aliasType))
@@ -167,15 +170,18 @@ type Enum struct {
 	vppapi.EnumType
 
 	GoIdent
+
+	IsFlag bool
 }
 
-func newEnum(gen *Generator, file *File, apitype vppapi.EnumType) *Enum {
+func newEnum(gen *Generator, file *File, apitype vppapi.EnumType, isFlag bool) *Enum {
 	typ := &Enum{
 		EnumType: apitype,
 		GoIdent: GoIdent{
 			GoName:       camelCaseName(apitype.Name),
 			GoImportPath: file.GoImportPath,
 		},
+		IsFlag: isFlag,
 	}
 	gen.enumsByName[typ.Name] = typ
 	return typ

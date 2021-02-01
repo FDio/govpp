@@ -28,6 +28,9 @@ func SortFileObjectsByName(file *vppapi.File) {
 	sort.SliceStable(file.EnumTypes, func(i, j int) bool {
 		return file.EnumTypes[i].Name < file.EnumTypes[j].Name
 	})
+	sort.SliceStable(file.EnumflagTypes, func(i, j int) bool {
+		return file.EnumflagTypes[i].Name < file.EnumflagTypes[j].Name
+	})
 	sort.Slice(file.AliasTypes, func(i, j int) bool {
 		return file.AliasTypes[i].Name < file.AliasTypes[j].Name
 	})
@@ -151,6 +154,22 @@ func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 			}
 		}
 	}
+	for _, t := range file.EnumflagTypes {
+		var imported bool
+		for _, imp := range typeFiles {
+			for _, at := range imp.EnumflagTypes {
+				if at.Name != t.Name {
+					continue
+				}
+				importedTypes = append(importedTypes, t.Name)
+				imported = true
+				break
+			}
+			if imported {
+				break
+			}
+		}
+	}
 	for _, t := range file.UnionTypes {
 		var imported bool
 		for _, imp := range typeFiles {
@@ -186,6 +205,12 @@ func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
 			enums = append(enums, enumType)
 		}
 	}
+	var enumflags []vppapi.EnumType
+	for _, enumflagType := range apifile.EnumflagTypes {
+		if !isImportedType(enumflagType.Name) {
+			enumflags = append(enumflags, enumflagType)
+		}
+	}
 	var aliases []vppapi.AliasType
 	for _, aliasType := range apifile.AliasTypes {
 		if !isImportedType(aliasType.Name) {
@@ -205,6 +230,7 @@ func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
 		}
 	}
 	apifile.EnumTypes = enums
+	apifile.EnumflagTypes = enumflags
 	apifile.AliasTypes = aliases
 	apifile.StructTypes = structs
 	apifile.UnionTypes = unions

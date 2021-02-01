@@ -122,8 +122,8 @@ func showVPPAPI(out io.Writer, apifiles []*vppapi.File) {
 		}
 		imports := fmt.Sprintf("%d apis, %2d types", len(apifile.Imports), len(importedTypes))
 		path := strings.TrimPrefix(apifile.Path, vppapi.DefaultDir+"/")
-		types := fmt.Sprintf("%2d enum, %2d alias, %2d struct, %2d union, %2d msg",
-			len(apifile.EnumTypes), len(apifile.AliasTypes), len(apifile.StructTypes), len(apifile.UnionTypes), len(apifile.Messages))
+		types := fmt.Sprintf("%2d enum, %2d enumflag, %2d alias, %2d struct, %2d union, %2d msg",
+			len(apifile.EnumTypes), len(apifile.EnumflagTypes), len(apifile.AliasTypes), len(apifile.StructTypes), len(apifile.UnionTypes), len(apifile.Messages))
 		fmt.Fprintf(w, " %s\t%s\t%s\t%s\t%v\t%s\t\n",
 			apifile.Name, strings.Join(options, " "), apifile.CRC, path, imports, types)
 	}

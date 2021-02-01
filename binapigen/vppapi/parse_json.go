@@ -41,6 +41,7 @@ const (
 	fileMessages   = "messages"
 	fileUnions     = "unions"
 	fileEnums      = "enums"
+	fileEnumflags  = "enumflags"
 	fileAliases    = "aliases"
 	fileServices   = "services"
 	fileImports    = "imports"
@@ -127,6 +128,20 @@ func parseJSON(data []byte) (module *File, err error) {
 			continue
 		}
 		module.EnumTypes = append(module.EnumTypes, *enum)
+	}
+
+	// parse enumflags types
+	enumflagsNode := jsonRoot.Map(fileEnumflags)
+	module.EnumflagTypes = make([]EnumType, 0)
+	for i := 0; i < enumflagsNode.Len(); i++ {
+		enumflag, err := parseEnum(enumflagsNode.At(i))
+		if err != nil {
+			return nil, err
+		}
+		if exists(enumflag.Name) {
+			continue
+		}
+		module.EnumflagTypes = append(module.EnumflagTypes, *enumflag)
 	}
 
 	// parse alias types
