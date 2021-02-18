@@ -27,6 +27,7 @@ const (
 var (
 	ErrStatsDataBusy     = errors.New("stats data busy")
 	ErrStatsDirStale     = errors.New("stats dir stale")
+	ErrStatsDisconnected = errors.New("stats disconnected")
 	ErrStatsAccessFailed = errors.New("stats access failed")
 )
 

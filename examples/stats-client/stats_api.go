@@ -39,6 +39,7 @@ var (
 	statsSocket = flag.String("socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	dumpAll     = flag.Bool("all", false, "Dump all stats including ones with zero values")
 	pollPeriod  = flag.Duration("period", time.Second*5, "Polling interval period")
+	async       = flag.Bool("async", false, "Use asynchronous connection")
 )
 
 func init() {
@@ -58,11 +59,33 @@ func main() {
 		patterns = flag.Args()[1:]
 	}
 
-	client := statsclient.NewStatsClient(*statsSocket)
+	var (
+		client *statsclient.StatsClient
+		c      *core.StatsConnection
+		err    error
+	)
 
-	c, err := core.ConnectStats(client)
-	if err != nil {
-		log.Fatalln("Connecting failed:", err)
+	if *async {
+		var statsChan chan core.ConnectionEvent
+		client = statsclient.NewStatsClient(*statsSocket)
+		c, statsChan, err = core.AsyncConnectStats(client, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
+		if err != nil {
+			log.Fatalln("Asynchronous connecting failed:", err)
+		}
+		select {
+		case e := <-statsChan:
+			if e.State == core.Connected {
+				// OK
+			} else {
+				log.Fatalf("VPP stats asynchronous connection failed: %s\n", e.State.String())
+			}
+		}
+	} else {
+		client = statsclient.NewStatsClient(*statsSocket)
+		c, err = core.ConnectStats(client)
+		if err != nil {
+			log.Fatalln("Connecting failed:", err)
+		}
 	}
 	defer c.Disconnect()
 
