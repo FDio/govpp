@@ -113,7 +113,7 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		_, errOffset, _ := ss.getOffsets()
 		offsetVector := unsafe.Pointer(&ss.sharedHeader[errOffset])
 
-		var errData adapter.Counter
+		var errData []adapter.Counter
 
 		vecLen := *(*uint32)(vectorLen(offsetVector))
 		for i := uint32(0); i < vecLen; i++ {
@@ -121,7 +121,7 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			offset := uintptr(cb) + uintptr(dirEntry.unionData)*unsafe.Sizeof(adapter.Counter(0))
 			debugf("error index, cb: %d, offset: %d", cb, offset)
 			val := *(*adapter.Counter)(statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), offset))
-			errData += val
+			errData = append(errData, val)
 		}
 		return adapter.ErrorStat(errData)
 
@@ -239,14 +239,14 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		_, errOffset, _ := ss.getOffsets()
 		offsetVector := unsafe.Pointer(&ss.sharedHeader[errOffset])
 
-		var errData adapter.Counter
+		var errData []adapter.Counter
 
 		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[errOffset])))
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
 			offset := uintptr(cb) + uintptr(dirEntry.unionData)*unsafe.Sizeof(adapter.Counter(0))
 			val := *(*adapter.Counter)(statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), offset))
-			errData += val
+			errData = append(errData, val)
 		}
 		*stat = adapter.ErrorStat(errData)
 

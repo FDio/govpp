@@ -137,10 +137,15 @@ func main() {
 		}
 		n := 0
 		for _, counter := range stats.Errors {
-			if skipZeros && counter.Value == 0 {
+			var sum uint32
+			for _, valuePerWorker := range counter.Values {
+				sum += uint32(valuePerWorker)
+			}
+
+			if skipZeros && sum == 0 {
 				continue
 			}
-			fmt.Printf(" - %v\n", counter)
+			fmt.Printf(" - %v %d (per worker: %v)\n", counter.CounterName, sum, counter.Values)
 			n++
 		}
 		fmt.Printf("Listed %d (%d) error counters\n", n, len(stats.Errors))

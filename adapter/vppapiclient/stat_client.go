@@ -130,7 +130,7 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 			stat.Data = adapter.ScalarStat(C.govpp_stat_segment_data_get_scalar_value(&v))
 
 		case adapter.ErrorIndex:
-			stat.Data = adapter.ErrorStat(C.govpp_stat_segment_data_get_error_value(&v))
+			stat.Data = adapter.ErrorStat([]adapter.Counter{adapter.Counter(C.govpp_stat_segment_data_get_error_value(&v))})
 
 		case adapter.SimpleCounterVector:
 			length := int(C.govpp_stat_segment_vec_len(unsafe.Pointer(C.govpp_stat_segment_data_get_simple_counter(&v))))

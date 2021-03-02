@@ -126,8 +126,8 @@ type Stat interface {
 // ScalarStat represents stat for ScalarIndex.
 type ScalarStat float64
 
-// ErrorStat represents stat for ErrorIndex.
-type ErrorStat Counter
+// ErrorStat represents stat for ErrorIndex. The array represents workers.
+type ErrorStat []Counter
 
 // SimpleCounterStat represents stat for SimpleCounterVector.
 // The outer array represents workers and the inner array represents interface/node/.. indexes.
@@ -154,7 +154,15 @@ func (s ScalarStat) IsZero() bool {
 	return s == 0
 }
 func (s ErrorStat) IsZero() bool {
-	return s == 0
+	if s == nil {
+		return true
+	}
+	for _, ss := range s {
+		if ss != 0 {
+			return false
+		}
+	}
+	return true
 }
 func (s SimpleCounterStat) IsZero() bool {
 	if s == nil {
