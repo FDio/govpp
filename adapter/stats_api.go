@@ -60,6 +60,7 @@ const (
 	CombinedCounterVector StatType = 3
 	ErrorIndex            StatType = 4
 	NameVector            StatType = 5
+	Empty                 StatType = 6
 )
 
 func (d StatType) String() string {
@@ -74,6 +75,8 @@ func (d StatType) String() string {
 		return "ErrorIndex"
 	case NameVector:
 		return "NameVector"
+	case Empty:
+		return "Empty"
 	}
 	return fmt.Sprintf("UnknownStatType(%d)", d)
 }
@@ -144,11 +147,15 @@ type CombinedCounterStat [][]CombinedCounter
 // NameStat represents stat for NameVector.
 type NameStat []Name
 
+// EmptyStat represents removed counter directory
+type EmptyStat string
+
 func (ScalarStat) isStat()          {}
 func (ErrorStat) isStat()           {}
 func (SimpleCounterStat) isStat()   {}
 func (CombinedCounterStat) isStat() {}
 func (NameStat) isStat()            {}
+func (EmptyStat) isStat()           {}
 
 func (s ScalarStat) IsZero() bool {
 	return s == 0
@@ -202,6 +209,9 @@ func (s NameStat) IsZero() bool {
 			return false
 		}
 	}
+	return true
+}
+func (s EmptyStat) IsZero() bool {
 	return true
 }
 

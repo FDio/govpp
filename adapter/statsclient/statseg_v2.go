@@ -202,6 +202,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.NameStat(data)
 
 	case statDirEmpty:
+		return adapter.EmptyStat("<none>")
 		// no-op
 
 	default:
