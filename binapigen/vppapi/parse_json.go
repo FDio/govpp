@@ -46,10 +46,11 @@ const (
 	fileServices   = "services"
 	fileImports    = "imports"
 	// type keys
-	messageCrc  = "crc"
-	enumType    = "enumtype"
-	aliasLength = "length"
-	aliasType   = "type"
+	messageCrc     = "crc"
+	messageOptions = "options"
+	enumType       = "enumtype"
+	aliasLength    = "length"
+	aliasType      = "type"
 	// service
 	serviceReply     = "reply"
 	serviceStream    = "stream"
@@ -375,10 +376,30 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 	if !ok {
 		return nil, fmt.Errorf("message crc invalid or missing")
 	}
+	var msgOpts map[string]string
+	msgOptsNode := msgNode.At(msgNode.Len() - 1).Map(messageOptions)
+	if msgOptsNode.GetType() == jsongo.TypeMap {
+		msgOpts = make(map[string]string)
+		for _, opt := range msgOptsNode.GetKeys() {
+			if _, ok := opt.(string); !ok {
+				logf("invalid message option key, expected string")
+				continue
+			}
+			msgOpts[opt.(string)] = ""
+			if msgOptsNode.At(opt).Get() != nil {
+				if optMsgStr, ok := msgOptsNode.At(opt).Get().(string); ok {
+					msgOpts[opt.(string)] = optMsgStr
+				} else {
+					logf("invalid message option value, expected string")
+				}
+			}
+		}
+	}
 
 	msg := Message{
-		Name: msgName,
-		CRC:  msgCRC,
+		Name:    msgName,
+		CRC:     msgCRC,
+		Options: msgOpts,
 	}
 
 	// loop through message fields, skip first (name) and last (crc)
