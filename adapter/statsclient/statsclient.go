@@ -162,6 +162,43 @@ func (sc *StatsClient) ListStats(patterns ...string) ([]string, error) {
 	return names, nil
 }
 
+var vpcDirName = [2]string{"/vpc/rx", "/vpc/tx"}
+
+func (sc *StatsClient) DumpVPCStats() (entries []adapter.StatEntry, err error) {
+	if !sc.isConnected() {
+		return nil, adapter.ErrStatsDisconnected
+	}
+	accessEpoch := sc.accessStart()
+	if accessEpoch == 0 {
+		return nil, adapter.ErrStatsAccessFailed
+	}
+	indexes,err := sc.ListVPCIndexes()
+	if err != nil {
+		return nil,err
+	}
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
+		return nil, err
+	}
+	dirLen := *(*uint32)(vectorLen(dirVector))
+	for _, index := range indexes {
+		if index >= dirLen {
+			return nil, fmt.Errorf("stat entry index %d out of dir vector length (%d)", index, dirLen)
+		}
+		dirPtr, dirName, dirType := sc.GetStatDirOnIndex(dirVector, index)
+		if len(dirName) == 0 {
+			continue
+		}
+		entry := adapter.StatEntry{
+			Name: append([]byte(nil), dirName...),
+			Type: adapter.StatType(dirType),
+			Data: sc.CopyEntryData(dirPtr),
+		}
+		entries = append(entries, entry)
+	}
+	return entries,nil
+}
+
 func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntry, err error) {
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
@@ -506,6 +543,28 @@ func (sc *StatsClient) listIndexes(patterns ...string) (indexes []uint32, err er
 		return false
 	}
 	return sc.listIndexesFunc(nameMatches)
+}
+
+var (
+	vpcRxMatch = regexp.MustCompile(`/vpc/rx`)
+	vpcTxMatch = regexp.MustCompile(`/vpc/tx`)
+)
+
+func (sc *StatsClient) ListVPCIndexes() (indexes []uint32, err error) {
+	dirVector := sc.GetDirectoryVector()
+	if dirVector == nil {
+		return nil, err
+	}
+	vecLen := *(*uint32)(vectorLen(dirVector))
+	for i := uint32(0); i < vecLen; i++ {
+		_, dirName, _ := sc.GetStatDirOnIndex(dirVector, i)
+		if len(dirName) == 0 || vpcRxMatch.Match(dirName) || vpcTxMatch.Match(dirName) {
+			continue
+		}
+		indexes = append(indexes, i)
+	}
+
+	return indexes, nil
 }
 
 // listIndexesFunc lists stats indexes. The optional function

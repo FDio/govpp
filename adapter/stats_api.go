@@ -42,6 +42,7 @@ type StatsAPI interface {
 	ListStats(patterns ...string) (names []string, err error)
 	// DumpStats dumps all stat entries.
 	DumpStats(patterns ...string) (entries []StatEntry, err error)
+	DumpVPCStats() (entries []StatEntry, err error)
 
 	// PrepareDir prepares new stat dir for entries that match any of prefixes.
 	PrepareDir(patterns ...string) (*StatDir, error)

@@ -179,6 +179,9 @@ func main() {
 
 		listStats(client, patterns)
 
+	case "xing":
+		dumpVPCStats(client)
+		
 	default:
 		fmt.Printf("invalid command: %q\n", cmd)
 	}
@@ -213,6 +216,19 @@ func dumpStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
 	}
 
 	fmt.Printf("Dumped %d (%d) stats\n", n, len(stats))
+}
+
+func dumpVPCStats(client adapter.StatsAPI) {
+	ret, err := client.DumpVPCStats()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	for _, stat := range ret {
+		if stat.Data == nil {
+			continue
+		}
+		fmt.Printf(" - %-50s %25v %+v\n", stat.Name, stat.Type, stat.Data)
+	}
 }
 
 func pollStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
