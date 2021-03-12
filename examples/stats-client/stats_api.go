@@ -181,7 +181,7 @@ func main() {
 
 	case "xing":
 		dumpVPCStats(client)
-		
+
 	default:
 		fmt.Printf("invalid command: %q\n", cmd)
 	}
