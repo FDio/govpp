@@ -36,7 +36,7 @@ func (*stubStatClient) Disconnect() error {
 	return nil
 }
 
-func (*stubStatClient) ListStats(patterns ...string) (statNames []string, err error) {
+func (*stubStatClient) ListStats(patterns ...string) (indexes []adapter.StatIdentifier, err error) {
 	return nil, adapter.ErrNotImplemented
 }
 
@@ -45,6 +45,10 @@ func (*stubStatClient) DumpStats(patterns ...string) ([]adapter.StatEntry, error
 }
 
 func (*stubStatClient) PrepareDir(prefixes ...string) (*adapter.StatDir, error) {
+	return nil, adapter.ErrNotImplemented
+}
+
+func (*stubStatClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, error) {
 	return nil, adapter.ErrNotImplemented
 }
 

@@ -37,7 +37,7 @@ type sharedHeaderV1 struct {
 }
 
 type statSegDirectoryEntryV1 struct {
-	directoryType statDirectoryType
+	directoryType dirType
 	// unionData can represent:
 	// - offset
 	// - index
@@ -66,17 +66,17 @@ func (ss *statSegmentV1) loadSharedHeader(b []byte) (header sharedHeaderV1) {
 	}
 }
 
-func (ss *statSegmentV1) GetDirectoryVector() unsafe.Pointer {
+func (ss *statSegmentV1) GetDirectoryVector() dirVector {
 	dirOffset, _, _ := ss.getOffsets()
-	return unsafe.Pointer(&ss.sharedHeader[dirOffset])
+	return dirVector(&ss.sharedHeader[dirOffset])
 }
 
-func (ss *statSegmentV1) GetErrorVector() (unsafe.Pointer, error) {
+func (ss *statSegmentV1) getErrorVector() (unsafe.Pointer, error) {
 	return nil, fmt.Errorf("error vector is not defined for stats API v1")
 }
 
-func (ss *statSegmentV1) GetStatDirOnIndex(p unsafe.Pointer, index uint32) (unsafe.Pointer, statDirectoryName, statDirectoryType) {
-	statSegDir := unsafe.Pointer(uintptr(p) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV1{}))
+func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {
+	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV1{}))
 	dir := (*statSegDirectoryEntryV1)(statSegDir)
 	var name []byte
 	for n := 0; n < len(dir.name); n++ {
@@ -85,7 +85,7 @@ func (ss *statSegmentV1) GetStatDirOnIndex(p unsafe.Pointer, index uint32) (unsa
 			break
 		}
 	}
-	return statSegDir, name, dir.directoryType
+	return statSegDir, dirName(name), dir.directoryType
 }
 
 func (ss *statSegmentV1) GetEpoch() (int64, bool) {
@@ -93,8 +93,8 @@ func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
-	dirEntry := (*statSegDirectoryEntryV1)(statSegDir)
+func (ss *statSegmentV1) CopyEntryData(segment dirSegment) adapter.Stat {
+	dirEntry := (*statSegDirectoryEntryV1)(segment)
 	dirType := adapter.StatType(dirEntry.directoryType)
 
 	switch dirType {
@@ -111,7 +111,7 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		}
 
 		_, errOffset, _ := ss.getOffsets()
-		offsetVector := unsafe.Pointer(&ss.sharedHeader[errOffset])
+		offsetVector := dirVector(&ss.sharedHeader[errOffset])
 
 		var errData []adapter.Counter
 
@@ -120,7 +120,7 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
 			offset := uintptr(cb) + uintptr(dirEntry.unionData)*unsafe.Sizeof(adapter.Counter(0))
 			debugf("error index, cb: %d, offset: %d", cb, offset)
-			val := *(*adapter.Counter)(statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), offset))
+			val := *(*adapter.Counter)(statSegPointer(dirVector(&ss.sharedHeader[0]), offset))
 			errData = append(errData, val)
 		}
 		return adapter.ErrorStat(errData)
@@ -134,13 +134,13 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := make([][]adapter.Counter, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
-			counterVec := unsafe.Pointer(&ss.sharedHeader[uintptr(cb)])
+			counterVec := dirVector(&ss.sharedHeader[uintptr(cb)])
 			vecLen2 := *(*uint32)(vectorLen(counterVec))
 			data[i] = make([]adapter.Counter, vecLen2)
 			for j := uint32(0); j < vecLen2; j++ {
@@ -160,13 +160,13 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := make([][]adapter.CombinedCounter, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
-			counterVec := unsafe.Pointer(&ss.sharedHeader[uintptr(cb)])
+			counterVec := dirVector(&ss.sharedHeader[uintptr(cb)])
 			vecLen2 := *(*uint32)(vectorLen(counterVec))
 			data[i] = make([]adapter.CombinedCounter, vecLen2)
 			for j := uint32(0); j < vecLen2; j++ {
@@ -186,8 +186,8 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := make([]adapter.Name, vecLen)
 		for i := uint32(0); i < vecLen; i++ {
@@ -196,7 +196,7 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 				debugf("name vector out of range for %s (%v)", dirEntry.name, i)
 				continue
 			}
-			nameVec := unsafe.Pointer(&ss.sharedHeader[cb])
+			nameVec := dirVector(&ss.sharedHeader[cb])
 			vecLen2 := *(*uint32)(vectorLen(nameVec))
 
 			nameStr := make([]byte, 0, vecLen2)
@@ -221,8 +221,8 @@ func (ss *statSegmentV1) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 	return nil
 }
 
-func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapter.Stat) error {
-	dirEntry := (*statSegDirectoryEntryV1)(statSegDir)
+func (ss *statSegmentV1) UpdateEntryData(segment dirSegment, stat *adapter.Stat) error {
+	dirEntry := (*statSegDirectoryEntryV1)(segment)
 	switch (*stat).(type) {
 	case adapter.ScalarStat:
 		*stat = adapter.ScalarStat(dirEntry.unionData)
@@ -237,15 +237,15 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 		_, errOffset, _ := ss.getOffsets()
-		offsetVector := unsafe.Pointer(&ss.sharedHeader[errOffset])
+		offsetVector := dirVector(&ss.sharedHeader[errOffset])
 
 		var errData []adapter.Counter
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[errOffset])))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[errOffset])))
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
 			offset := uintptr(cb) + uintptr(dirEntry.unionData)*unsafe.Sizeof(adapter.Counter(0))
-			val := *(*adapter.Counter)(statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), offset))
+			val := *(*adapter.Counter)(statSegPointer(dirVector(&ss.sharedHeader[0]), offset))
 			errData = append(errData, val)
 		}
 		*stat = adapter.ErrorStat(errData)
@@ -259,8 +259,8 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := (*stat).(adapter.SimpleCounterStat)
 		if uint32(len(data)) != vecLen {
@@ -268,7 +268,7 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
-			counterVec := unsafe.Pointer(&ss.sharedHeader[uintptr(cb)])
+			counterVec := dirVector(&ss.sharedHeader[uintptr(cb)])
 			vecLen2 := *(*uint32)(vectorLen(counterVec))
 			simpleData := data[i]
 			if uint32(len(simpleData)) != vecLen2 {
@@ -290,8 +290,8 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := (*stat).(adapter.CombinedCounterStat)
 		if uint32(len(data)) != vecLen {
@@ -299,7 +299,7 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 		for i := uint32(0); i < vecLen; i++ {
 			cb := *(*uint64)(statSegPointer(offsetVector, uintptr(i)*unsafe.Sizeof(uint64(0))))
-			counterVec := unsafe.Pointer(&ss.sharedHeader[uintptr(cb)])
+			counterVec := dirVector(&ss.sharedHeader[uintptr(cb)])
 			vecLen2 := *(*uint32)(vectorLen(counterVec))
 			combData := data[i]
 			if uint32(len(combData)) != vecLen2 {
@@ -321,8 +321,8 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			break
 		}
 
-		vecLen := *(*uint32)(vectorLen(unsafe.Pointer(&ss.sharedHeader[dirEntry.unionData])))
-		offsetVector := statSegPointer(unsafe.Pointer(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
+		vecLen := *(*uint32)(vectorLen(dirVector(&ss.sharedHeader[dirEntry.unionData])))
+		offsetVector := statSegPointer(dirVector(&ss.sharedHeader[0]), uintptr(dirEntry.offsetVector))
 
 		data := (*stat).(adapter.NameStat)
 		if uint32(len(data)) != vecLen {
@@ -333,7 +333,7 @@ func (ss *statSegmentV1) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			if cb == 0 {
 				continue
 			}
-			nameVec := unsafe.Pointer(&ss.sharedHeader[cb])
+			nameVec := dirVector(&ss.sharedHeader[cb])
 			vecLen2 := *(*uint32)(vectorLen(nameVec))
 
 			nameData := data[i]

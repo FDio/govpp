@@ -48,15 +48,18 @@ const (
 	statDirEmpty                 = 6
 )
 
-type statDirectoryType int32
-
-type statDirectoryName []byte
+type (
+	dirVector  unsafe.Pointer
+	dirSegment unsafe.Pointer
+	dirName    []byte
+	dirType    int32
+)
 
 // statSegment represents common API for every stats API version
 type statSegment interface {
 	// GetDirectoryVector returns pointer to memory where the beginning
 	// of the data directory is located.
-	GetDirectoryVector() unsafe.Pointer
+	GetDirectoryVector() dirVector
 
 	// GetStatDirOnIndex accepts directory vector and particular index.
 	// Returns pointer to the beginning of the segment. Also the directory
@@ -65,7 +68,7 @@ type statSegment interface {
 	//
 	// Note that if the index is equal to 0, the result pointer points to
 	// the same memory address as the argument.
-	GetStatDirOnIndex(directory unsafe.Pointer, index uint32) (unsafe.Pointer, statDirectoryName, statDirectoryType)
+	GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType)
 
 	// GetEpoch re-loads stats header and returns current epoch
 	//and 'inProgress' value
@@ -73,11 +76,11 @@ type statSegment interface {
 
 	// CopyEntryData accepts pointer to a directory segment and returns adapter.Stat
 	// based on directory type populated with data
-	CopyEntryData(segment unsafe.Pointer) adapter.Stat
+	CopyEntryData(segment dirSegment) adapter.Stat
 
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update
-	UpdateEntryData(segment unsafe.Pointer, s *adapter.Stat) error
+	UpdateEntryData(segment dirSegment, s *adapter.Stat) error
 }
 
 // vecHeader represents a vector header
@@ -86,7 +89,7 @@ type vecHeader struct {
 	vectorData [0]uint8
 }
 
-func (t statDirectoryType) String() string {
+func (t dirType) String() string {
 	return adapter.StatType(t).String()
 }
 
@@ -102,12 +105,12 @@ func getVersion(data []byte) uint64 {
 	return version.value
 }
 
-func vectorLen(v unsafe.Pointer) unsafe.Pointer {
+func vectorLen(v dirVector) dirVector {
 	vec := *(*vecHeader)(unsafe.Pointer(uintptr(v) - unsafe.Sizeof(uint64(0))))
-	return unsafe.Pointer(&vec.length)
+	return dirVector(&vec.length)
 }
 
 //go:nosplit
-func statSegPointer(p unsafe.Pointer, offset uintptr) unsafe.Pointer {
-	return unsafe.Pointer(uintptr(p) + offset)
+func statSegPointer(v dirVector, offset uintptr) dirVector {
+	return dirVector(uintptr(v) + offset)
 }

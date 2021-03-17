@@ -83,7 +83,7 @@ func (c *statClient) Disconnect() error {
 	return nil
 }
 
-func (c *statClient) ListStats(patterns ...string) (stats []string, err error) {
+func (c *statClient) ListStats(patterns ...string) (indexes []adapter.StatIdentifier, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 	if dir == nil {
 		return nil, adapter.ErrStatsDataBusy
@@ -93,11 +93,14 @@ func (c *statClient) ListStats(patterns ...string) (stats []string, err error) {
 	l := C.govpp_stat_segment_vec_len(unsafe.Pointer(dir))
 	for i := 0; i < int(l); i++ {
 		nameChar := C.govpp_stat_segment_dir_index_to_name(dir, C.uint32_t(i))
-		stats = append(stats, C.GoString(nameChar))
+		indexes = append(indexes, adapter.StatIdentifier{
+			Name:  []byte(C.GoString(nameChar)),
+			Index: uint32(i),
+		})
 		C.free(unsafe.Pointer(nameChar))
 	}
 
-	return stats, nil
+	return indexes, nil
 }
 
 func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, err error) {
@@ -121,7 +124,10 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 		typ := adapter.StatType(C.govpp_stat_segment_data_type(&v))
 
 		stat := adapter.StatEntry{
-			Name: []byte(name),
+			StatIdentifier: adapter.StatIdentifier{
+				Name:  []byte(name),
+				Index: uint32(i),
+			},
 			Type: typ,
 		}
 
@@ -181,6 +187,10 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 }
 
 func (c *statClient) PrepareDir(prefixes ...string) (*adapter.StatDir, error) {
+	return nil, adapter.ErrNotImplemented
+}
+
+func (c *statClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, error) {
 	return nil, adapter.ErrNotImplemented
 }
 

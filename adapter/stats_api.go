@@ -38,13 +38,15 @@ type StatsAPI interface {
 	// Disconnect terminates client connection.
 	Disconnect() error
 
-	// ListStats lists names for stats matching patterns.
-	ListStats(patterns ...string) (names []string, err error)
+	// ListStats lists indexed names for stats matching patterns.
+	ListStats(patterns ...string) (indexes []StatIdentifier, err error)
 	// DumpStats dumps all stat entries.
 	DumpStats(patterns ...string) (entries []StatEntry, err error)
 
 	// PrepareDir prepares new stat dir for entries that match any of prefixes.
 	PrepareDir(patterns ...string) (*StatDir, error)
+	// PrepareDirOnIndex prepares new stat dir for entries that match any of indexes.
+	PrepareDirOnIndex(indexes ...uint32) (*StatDir, error)
 	// UpdateDir updates stat dir and all of their entries.
 	UpdateDir(dir *StatDir) error
 }
@@ -84,14 +86,19 @@ func (d StatType) String() string {
 // StatDir defines directory of stats entries created by PrepareDir.
 type StatDir struct {
 	Epoch   int64
-	Indexes []uint32
 	Entries []StatEntry
+}
+
+// StatIdentifier holds a stat entry name and index
+type StatIdentifier struct {
+	Index uint32
+	Name  []byte
 }
 
 // StatEntry represents single stat entry. The type of stat stored in Data
 // is defined by Type.
 type StatEntry struct {
-	Name []byte
+	StatIdentifier
 	Type StatType
 	Data Stat
 }
@@ -103,11 +110,11 @@ type Counter uint64
 type CombinedCounter [2]uint64
 
 func (s CombinedCounter) Packets() uint64 {
-	return uint64(s[0])
+	return s[0]
 }
 
 func (s CombinedCounter) Bytes() uint64 {
-	return uint64(s[1])
+	return s[1]
 }
 
 // Name represents string value stored under name vector.
@@ -228,8 +235,8 @@ func ReduceSimpleCounterStatIndex(s SimpleCounterStat, i int) uint64 {
 func ReduceCombinedCounterStatIndex(s CombinedCounterStat, i int) [2]uint64 {
 	var val [2]uint64
 	for _, w := range s {
-		val[0] += uint64(w[i][0])
-		val[1] += uint64(w[i][1])
+		val[0] += w[i][0]
+		val[1] += w[i][1]
 	}
 	return val
 }

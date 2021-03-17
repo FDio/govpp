@@ -46,10 +46,13 @@ func (a *StatsAdapter) Disconnect() error {
 }
 
 // ListStats mocks name listing for all stats.
-func (a *StatsAdapter) ListStats(patterns ...string) ([]string, error) {
-	var statNames []string
+func (a *StatsAdapter) ListStats(patterns ...string) ([]adapter.StatIdentifier, error) {
+	var statNames []adapter.StatIdentifier
 	for _, stat := range a.entries {
-		statNames = append(statNames, string(stat.Name))
+		statNames = append(statNames, adapter.StatIdentifier{
+			Name:  stat.Name,
+			Index: stat.Index,
+		})
 	}
 	return statNames, nil
 }
@@ -60,6 +63,10 @@ func (a *StatsAdapter) DumpStats(patterns ...string) ([]adapter.StatEntry, error
 }
 
 func (a *StatsAdapter) PrepareDir(prefixes ...string) (*adapter.StatDir, error) {
+	return a.dir, nil
+}
+
+func (a *StatsAdapter) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, error) {
 	return a.dir, nil
 }
 

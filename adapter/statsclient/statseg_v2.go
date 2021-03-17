@@ -36,7 +36,7 @@ type sharedHeaderV2 struct {
 }
 
 type statSegDirectoryEntryV2 struct {
-	directoryType statDirectoryType
+	directoryType dirType
 	// unionData can represent:
 	// - index
 	// - value
@@ -64,13 +64,13 @@ func (ss *statSegmentV2) loadSharedHeader(b []byte) (header sharedHeaderV2) {
 	}
 }
 
-func (ss *statSegmentV2) GetDirectoryVector() unsafe.Pointer {
+func (ss *statSegmentV2) GetDirectoryVector() dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	return ss.adjust(unsafe.Pointer(&header.dirVector))
+	return ss.adjust(dirVector(&header.dirVector))
 }
 
-func (ss *statSegmentV2) GetStatDirOnIndex(p unsafe.Pointer, index uint32) (unsafe.Pointer, statDirectoryName, statDirectoryType) {
-	statSegDir := unsafe.Pointer(uintptr(p) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
+func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {
+	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
 	dir := (*statSegDirectoryEntryV2)(statSegDir)
 	var name []byte
 	for n := 0; n < len(dir.name); n++ {
@@ -87,8 +87,8 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
-	dirEntry := (*statSegDirectoryEntryV2)(statSegDir)
+func (ss *statSegmentV2) CopyEntryData(segment dirSegment) adapter.Stat {
+	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	if dirEntry.unionData == 0 {
 		debugf("data value or pointer not defined for %s", dirEntry.name)
 		return nil
@@ -120,7 +120,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.ErrorStat(errData)
 
 	case statDirCounterVectorSimple:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -145,7 +145,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.SimpleCounterStat(data)
 
 	case statDirCounterVectorCombined:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -170,7 +170,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 		return adapter.CombinedCounterStat(data)
 
 	case statDirNameVector:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -212,8 +212,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer) adapter.Stat {
 	return nil
 }
 
-func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapter.Stat) error {
-	dirEntry := (*statSegDirectoryEntryV2)(statSegDir)
+func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat) error {
+	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	switch (*stat).(type) {
 	case adapter.ScalarStat:
 		*stat = adapter.ScalarStat(dirEntry.unionData)
@@ -240,7 +240,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		*stat = adapter.ErrorStat(errData)
 
 	case adapter.SimpleCounterStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -267,7 +267,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.CombinedCounterStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -291,7 +291,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.NameStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -334,9 +334,9 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 
 // Adjust data pointer using shared header and base and return
 // the pointer to a data segment
-func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
+func (ss *statSegmentV2) adjust(data dirVector) dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	adjusted := unsafe.Pointer(uintptr(unsafe.Pointer(&ss.sharedHeader[0])) +
+	adjusted := dirVector(uintptr(unsafe.Pointer(&ss.sharedHeader[0])) +
 		uintptr(*(*uint64)(data)) - uintptr(*(*uint64)(unsafe.Pointer(&header.base))))
 	if uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) <= uintptr(adjusted) ||
 		uintptr(unsafe.Pointer(&ss.sharedHeader[0])) >= uintptr(adjusted) {
@@ -345,7 +345,7 @@ func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
 	return adjusted
 }
 
-func (ss *statSegmentV2) getErrorVector() unsafe.Pointer {
+func (ss *statSegmentV2) getErrorVector() dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	return ss.adjust(unsafe.Pointer(&header.errorVector))
+	return ss.adjust(dirVector(&header.errorVector))
 }
