@@ -36,12 +36,12 @@ const (
 	// DefaultSocketName is default VPP stats socket file path.
 	DefaultSocketName = adapter.DefaultStatsSocket
 
-	// SocketRetryPeriod is the time period after the socket availability
+	// DefaultSocketRetryPeriod is the time period after the socket availability
 	// will be re-checked
-	SocketRetryPeriod = 50 * time.Millisecond
+	DefaultSocketRetryPeriod = 50 * time.Millisecond
 
-	// SocketRetryTimeout is the maximum time for the stats socket
-	SocketRetryTimeout = 3 * time.Second
+	// DefaultSocketRetryTimeout is the maximum time for the stats socket
+	DefaultSocketRetryTimeout = 3 * time.Second
 )
 
 var (
@@ -72,7 +72,9 @@ var _ adapter.StatsAPI = (*StatsClient)(nil)
 
 // StatsClient is the pure Go implementation for VPP stats API.
 type StatsClient struct {
-	socket string
+	socket       string
+	retryPeriod  time.Duration
+	retryTimeout time.Duration
 
 	headerData []byte
 
@@ -85,15 +87,44 @@ type StatsClient struct {
 	statSegment
 }
 
+// Option is a StatsClient option
+type Option func(*StatsClient)
+
+// SetSocketRetryPeriod is and optional parameter to define a custom
+// retry period while waiting for the VPP socket
+func SetSocketRetryPeriod(t time.Duration) Option {
+	return func(c *StatsClient) {
+		c.retryPeriod = t
+	}
+}
+
+// SetSocketRetryTimeout is and optional parameter to define a custom
+// timeout while waiting for the VPP socket
+func SetSocketRetryTimeout(t time.Duration) Option {
+	return func(c *StatsClient) {
+		c.retryTimeout = t
+	}
+}
+
 // NewStatsClient returns a new StatsClient using socket.
 // If socket is empty string DefaultSocketName is used.
-func NewStatsClient(socket string) *StatsClient {
+func NewStatsClient(socket string, options ...Option) *StatsClient {
 	if socket == "" {
 		socket = DefaultSocketName
 	}
-	return &StatsClient{
+	s := &StatsClient{
 		socket: socket,
 	}
+	for _, option := range options {
+		option(s)
+	}
+	if s.retryPeriod == 0 {
+		s.retryPeriod = DefaultSocketRetryPeriod
+	}
+	if s.retryTimeout == 0 {
+		s.retryTimeout = DefaultSocketRetryTimeout
+	}
+	return s
 }
 
 // Connect to validated VPP stats socket and start monitoring
@@ -309,15 +340,18 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 func (sc *StatsClient) waitForSocket() error {
 	if _, err := os.Stat(sc.socket); err != nil {
 		if os.IsNotExist(err) {
-			ticker := time.NewTicker(SocketRetryPeriod)
+			n := time.Now()
+			ticker := time.NewTicker(sc.retryPeriod)
+			timeout := time.After(sc.retryTimeout)
 			for {
 				select {
 				case <-ticker.C:
 					if _, err := os.Stat(sc.socket); err == nil {
 						return nil
 					}
-				case <-time.After(SocketRetryTimeout):
-					return fmt.Errorf("stats socket file %s is not ready within timeout ", sc.socket)
+				case <-timeout:
+					return fmt.Errorf("stats socket file %s is not ready within timeout (after %.2f s) ",
+						sc.socket, time.Since(n).Seconds())
 				}
 			}
 		} else {

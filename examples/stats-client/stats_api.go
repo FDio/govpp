@@ -67,7 +67,8 @@ func main() {
 
 	if *async {
 		var statsChan chan core.ConnectionEvent
-		client = statsclient.NewStatsClient(*statsSocket)
+		client = statsclient.NewStatsClient(*statsSocket, statsclient.SetSocketRetryPeriod(1*time.Second),
+			statsclient.SetSocketRetryTimeout(10*time.Second))
 		c, statsChan, err = core.AsyncConnectStats(client, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 		if err != nil {
 			log.Fatalln("Asynchronous connecting failed:", err)
