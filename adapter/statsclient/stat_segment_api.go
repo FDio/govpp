@@ -46,6 +46,7 @@ const (
 	statDirErrorIndex            = 4
 	statDirNameVector            = 5
 	statDirEmpty                 = 6
+	statDirSymlink               = 7
 )
 
 type (
@@ -75,8 +76,10 @@ type statSegment interface {
 	GetEpoch() (int64, bool)
 
 	// CopyEntryData accepts pointer to a directory segment and returns adapter.Stat
-	// based on directory type populated with data
-	CopyEntryData(segment dirSegment) adapter.Stat
+	// based on directory type populated with data. The index is an optional parameter
+	// (used by symlinks) returning stats for item on the given index only.
+	// Use ^uint32(0) as an empty index (since 0 is a valid value).
+	CopyEntryData(segment dirSegment, index uint32) adapter.Stat
 
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update

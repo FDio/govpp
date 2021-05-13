@@ -153,10 +153,10 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 			vector := make([][]adapter.CombinedCounter, length)
 			for k := 0; k < length; k++ {
 				for j := 0; j < int(C.govpp_stat_segment_vec_len(unsafe.Pointer(C.govpp_stat_segment_data_get_combined_counter_index(&v, C.int(k))))); j++ {
-					vector[k] = append(vector[k], adapter.CombinedCounter([2]uint64{
+					vector[k] = append(vector[k], [2]uint64{
 						uint64(C.govpp_stat_segment_data_get_combined_counter_index_packets(&v, C.int(k), C.int(j))),
 						uint64(C.govpp_stat_segment_data_get_combined_counter_index_bytes(&v, C.int(k), C.int(j))),
-					}))
+					})
 				}
 			}
 			stat.Data = adapter.CombinedCounterStat(vector)
@@ -186,15 +186,15 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 	return stats, nil
 }
 
-func (c *statClient) PrepareDir(prefixes ...string) (*adapter.StatDir, error) {
+func (c *statClient) PrepareDir(_ ...string) (*adapter.StatDir, error) {
 	return nil, adapter.ErrNotImplemented
 }
 
-func (c *statClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, error) {
+func (c *statClient) PrepareDirOnIndex(_ ...uint32) (*adapter.StatDir, error) {
 	return nil, adapter.ErrNotImplemented
 }
 
-func (c *statClient) UpdateDir(dir *adapter.StatDir) error {
+func (c *statClient) UpdateDir(_ *adapter.StatDir) error {
 	return adapter.ErrNotImplemented
 }
 

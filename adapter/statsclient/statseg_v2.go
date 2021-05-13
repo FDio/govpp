@@ -15,6 +15,8 @@
 package statsclient
 
 import (
+	"bytes"
+	"encoding/binary"
 	"sync/atomic"
 	"unsafe"
 
@@ -38,6 +40,7 @@ type sharedHeaderV2 struct {
 type statSegDirectoryEntryV2 struct {
 	directoryType dirType
 	// unionData can represent:
+	// - symlink indexes
 	// - index
 	// - value
 	// - pointer to data
@@ -87,7 +90,7 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV2) CopyEntryData(segment dirSegment) adapter.Stat {
+func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	if dirEntry.unionData == 0 {
 		debugf("data value or pointer not defined for %s", dirEntry.name)
@@ -135,11 +138,21 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment) adapter.Stat {
 				continue
 			}
 			counterVectorLength := *(*uint32)(vectorLen(counterVector))
-			data[i] = make([]adapter.Counter, counterVectorLength)
-			for j := uint32(0); j < counterVectorLength; j++ {
-				offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
-				val := *(*adapter.Counter)(statSegPointer(counterVector, offset))
-				data[i][j] = val
+			if index == ^uint32(0) {
+				data[i] = make([]adapter.Counter, counterVectorLength)
+				for j := uint32(0); j < counterVectorLength; j++ {
+					offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
+					data[i][j] = *(*adapter.Counter)(statSegPointer(counterVector, offset))
+				}
+			} else {
+				data[i] = make([]adapter.Counter, 1) // expect single value
+				for j := uint32(0); j < counterVectorLength; j++ {
+					offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
+					if index == j {
+						data[i][0] = *(*adapter.Counter)(statSegPointer(counterVector, offset))
+						break
+					}
+				}
 			}
 		}
 		return adapter.SimpleCounterStat(data)
@@ -160,11 +173,21 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment) adapter.Stat {
 				continue
 			}
 			counterVectorLength := *(*uint32)(vectorLen(counterVector))
-			data[i] = make([]adapter.CombinedCounter, counterVectorLength)
-			for j := uint32(0); j < counterVectorLength; j++ {
-				offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
-				val := *(*adapter.CombinedCounter)(statSegPointer(counterVector, offset))
-				data[i][j] = val
+			if index == ^uint32(0) {
+				data[i] = make([]adapter.CombinedCounter, counterVectorLength)
+				for j := uint32(0); j < counterVectorLength; j++ {
+					offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
+					data[i][j] = *(*adapter.CombinedCounter)(statSegPointer(counterVector, offset))
+				}
+			} else {
+				data[i] = make([]adapter.CombinedCounter, 1) // expect single value pair
+				for j := uint32(0); j < counterVectorLength; j++ {
+					offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
+					if index == j {
+						data[i][0] = *(*adapter.CombinedCounter)(statSegPointer(counterVector, offset))
+						break
+					}
+				}
 			}
 		}
 		return adapter.CombinedCounterStat(data)
@@ -204,6 +227,22 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment) adapter.Stat {
 	case statDirEmpty:
 		return adapter.EmptyStat("<none>")
 		// no-op
+
+	case statDirSymlink:
+		// prevent recursion loops
+		if index != ^uint32(0) {
+			debugf("received symlink with defined item index")
+			return nil
+		}
+		i1, i2 := ss.getSymlinkIndexes(dirEntry)
+		// use first index to get the stats directory the symlink points to
+		header := ss.loadSharedHeader(ss.sharedHeader)
+		dirVector := ss.adjust(dirVector(&header.dirVector))
+		statSegDir2 := dirSegment(uintptr(dirVector) + uintptr(i1)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
+
+		// retry with actual stats segment and use second index to get
+		// stats for the required item
+		return ss.CopyEntryData(statSegDir2, i2)
 
 	default:
 		// TODO: monitor occurrences with metrics
@@ -348,4 +387,23 @@ func (ss *statSegmentV2) adjust(data dirVector) dirVector {
 func (ss *statSegmentV2) getErrorVector() dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
 	return ss.adjust(dirVector(&header.errorVector))
+}
+
+func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (index1, index2 uint32) {
+	var b bytes.Buffer
+	if err := binary.Write(&b, binary.LittleEndian, dirEntry.unionData); err != nil {
+		debugf("error getting symlink indexes for %s: %v", dirEntry.name, err)
+		return
+	}
+	if len(b.Bytes()) != 8 {
+		debugf("incorrect symlink union data length for %s: expected 8, got %d", dirEntry.name, len(b.Bytes()))
+		return
+	}
+	for i := range b.Bytes()[:4] {
+		index1 += uint32(b.Bytes()[i]) << (uint32(i) * 8)
+	}
+	for i := range b.Bytes()[4:] {
+		index2 += uint32(b.Bytes()[i+4]) << (uint32(i) * 8)
+	}
+	return
 }

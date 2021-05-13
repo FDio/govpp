@@ -93,7 +93,7 @@ func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV1) CopyEntryData(segment dirSegment) adapter.Stat {
+func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV1)(segment)
 	dirType := adapter.StatType(dirEntry.directoryType)
 
@@ -213,6 +213,9 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment) adapter.Stat {
 
 	case statDirEmpty:
 		// no-op
+
+	case statDirSymlink:
+		debugf("Symlinks are not supported for stats v1")
 
 	default:
 		// TODO: monitor occurrences with metrics

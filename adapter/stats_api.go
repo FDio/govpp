@@ -63,6 +63,7 @@ const (
 	ErrorIndex            StatType = 4
 	NameVector            StatType = 5
 	Empty                 StatType = 6
+	Symlink               StatType = 7
 )
 
 func (d StatType) String() string {
@@ -79,6 +80,8 @@ func (d StatType) String() string {
 		return "NameVector"
 	case Empty:
 		return "Empty"
+	case Symlink:
+		return "Symlink"
 	}
 	return fmt.Sprintf("UnknownStatType(%d)", d)
 }
@@ -99,8 +102,9 @@ type StatIdentifier struct {
 // is defined by Type.
 type StatEntry struct {
 	StatIdentifier
-	Type StatType
-	Data Stat
+	Type    StatType
+	Data    Stat
+	Symlink bool
 }
 
 // Counter represents simple counter with single value, which is usually packet count.
@@ -129,6 +133,9 @@ type Stat interface {
 	// IsZero returns true if all of its values equal to zero.
 	IsZero() bool
 
+	// Type returns underlying type of a stat
+	Type() StatType
+
 	// isStat is intentionally  unexported to limit implementations of interface to this package,
 	isStat()
 }
@@ -139,13 +146,13 @@ type ScalarStat float64
 // ErrorStat represents stat for ErrorIndex. The array represents workers.
 type ErrorStat []Counter
 
-// SimpleCounterStat represents stat for SimpleCounterVector.
+// SimpleCounterStat represents indexed stat for SimpleCounterVector.
 // The outer array represents workers and the inner array represents interface/node/.. indexes.
 // Values should be aggregated per interface/node for every worker.
 // ReduceSimpleCounterStatIndex can be used to reduce specific index.
 type SimpleCounterStat [][]Counter
 
-// CombinedCounterStat represents stat for CombinedCounterVector.
+// CombinedCounterStat represents indexed stat for CombinedCounterVector.
 // The outer array represents workers and the inner array represents interface/node/.. indexes.
 // Values should be aggregated per interface/node for every worker.
 // ReduceCombinedCounterStatIndex can be used to reduce specific index.
@@ -167,6 +174,11 @@ func (EmptyStat) isStat()           {}
 func (s ScalarStat) IsZero() bool {
 	return s == 0
 }
+
+func (s ScalarStat) Type() StatType {
+	return ScalarIndex
+}
+
 func (s ErrorStat) IsZero() bool {
 	if s == nil {
 		return true
@@ -178,6 +190,11 @@ func (s ErrorStat) IsZero() bool {
 	}
 	return true
 }
+
+func (s ErrorStat) Type() StatType {
+	return ErrorIndex
+}
+
 func (s SimpleCounterStat) IsZero() bool {
 	if s == nil {
 		return true
@@ -191,6 +208,11 @@ func (s SimpleCounterStat) IsZero() bool {
 	}
 	return true
 }
+
+func (s SimpleCounterStat) Type() StatType {
+	return SimpleCounterVector
+}
+
 func (s CombinedCounterStat) IsZero() bool {
 	if s == nil {
 		return true
@@ -207,6 +229,11 @@ func (s CombinedCounterStat) IsZero() bool {
 	}
 	return true
 }
+
+func (s CombinedCounterStat) Type() StatType {
+	return CombinedCounterVector
+}
+
 func (s NameStat) IsZero() bool {
 	if s == nil {
 		return true
@@ -218,8 +245,17 @@ func (s NameStat) IsZero() bool {
 	}
 	return true
 }
+
+func (s NameStat) Type() StatType {
+	return NameVector
+}
+
 func (s EmptyStat) IsZero() bool {
 	return true
+}
+
+func (s EmptyStat) Type() StatType {
+	return Empty
 }
 
 // ReduceSimpleCounterStatIndex returns reduced SimpleCounterStat s for index i.
