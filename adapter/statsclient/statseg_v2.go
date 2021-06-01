@@ -92,12 +92,14 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 
 func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
-	if dirEntry.unionData == 0 {
-		debugf("data value or pointer not defined for %s", dirEntry.name)
+	typ := adapter.StatType(dirEntry.directoryType)
+	// skip zero pointer value
+	if typ != statDirScalarIndex && typ != statDirEmpty && dirEntry.unionData == 0 {
+		debugf("data pointer not defined for %s", dirEntry.name)
 		return nil
 	}
 
-	switch adapter.StatType(dirEntry.directoryType) {
+	switch typ {
 	case statDirScalarIndex:
 		return adapter.ScalarStat(dirEntry.unionData)
 

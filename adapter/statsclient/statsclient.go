@@ -505,13 +505,17 @@ func (sc *StatsClient) getStatEntriesOnIndex(vector dirVector, indexes ...uint32
 		if len(dirName) == 0 {
 			return
 		}
+		var t adapter.StatType
 		d := sc.CopyEntryData(dirPtr, ^uint32(0))
+		if d != nil {
+			t = d.Type()
+		}
 		entries = append(entries, adapter.StatEntry{
 			StatIdentifier: adapter.StatIdentifier{
 				Index: index,
 				Name:  dirName,
 			},
-			Type:    d.Type(),
+			Type:    t,
 			Data:    d,
 			Symlink: adapter.StatType(dirType) == adapter.Symlink,
 		})
