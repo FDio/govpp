@@ -1157,6 +1157,11 @@ func pollRxQueue(memif *Memif, queueID uint8) {
 	for {
 		_, err := syscall.EpollWait(epFd, event[:], -1)
 		if err != nil {
+			errno, _ := err.(syscall.Errno)
+			//EINTR and EAGAIN should not be considered as a fatal error, try again
+			if errno == syscall.EINTR || errno == syscall.EAGAIN {
+				continue
+			}
 			log.WithField("err", err).Error("epoll_wait() failed")
 			return
 		}
