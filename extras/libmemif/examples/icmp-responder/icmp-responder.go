@@ -399,5 +399,13 @@ func main() {
 	// Wait until an interrupt signal is received.
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
-	<-sigChan
+	var intErrch = memif.GetInterruptErrorChan()
+	select {
+	case err = <-intErrch:
+		fmt.Printf("Exit due to interface error: %v\n", err)
+		return
+	case <-sigChan:
+		fmt.Printf("Exit by os.Interrupt")
+		return
+	}
 }
