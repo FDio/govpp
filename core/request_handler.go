@@ -17,6 +17,7 @@ package core
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"sync/atomic"
 	"time"
 
@@ -51,51 +52,6 @@ func (c *Connection) watchRequests(ch *Channel) {
 			}
 		}
 	}
-}
-
-// processRequest processes a single request received on the request channel.
-func (c *Connection) sendMessage(context uint32, msg api.Message) error {
-	// check whether we are connected to VPP
-	if atomic.LoadUint32(&c.vppConnected) == 0 {
-		return ErrNotConnected
-	}
-
-	/*log := log.WithFields(logger.Fields{
-		"context":  context,
-		"msg_name": msg.GetMessageName(),
-		"msg_crc":  msg.GetCrcString(),
-	})*/
-
-	// retrieve message ID
-	msgID, err := c.GetMessageID(msg)
-	if err != nil {
-		//log.WithError(err).Debugf("unable to retrieve message ID: %#v", msg)
-		return err
-	}
-
-	//log = log.WithField("msg_id", msgID)
-
-	// encode the message
-	data, err := c.codec.EncodeMsg(msg, msgID)
-	if err != nil {
-		log.WithError(err).Debugf("unable to encode message: %#v", msg)
-		return err
-	}
-
-	//log = log.WithField("msg_length", len(data))
-
-	if log.Level >= logger.DebugLevel {
-		log.Debugf("--> SEND: MSG %T %+v", msg, msg)
-	}
-
-	// send message to VPP
-	err = c.vppClient.SendMsg(context, data)
-	if err != nil {
-		log.WithError(err).Debugf("unable to send message: %#v", msg)
-		return err
-	}
-
-	return nil
 }
 
 // processRequest processes a single request received on the request channel.
@@ -156,6 +112,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 	}
 
 	// send the request to VPP
+	t := time.Now()
 	err = c.vppClient.SendMsg(context, data)
 	if err != nil {
 		log.WithFields(logger.Fields{
@@ -171,6 +128,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}).Warnf("Unable to send message")
 		return err
 	}
+	c.trace(req.msg, ch.id, t, false)
 
 	if req.multi {
 		// send a control ping to determine end of the multipart response
@@ -188,6 +146,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 			}).Debugf(" -> SEND MSG: %T", c.msgControlPing)
 		}
 
+		t = time.Now()
 		if err := c.vppClient.SendMsg(context, pingData); err != nil {
 			log.WithFields(logger.Fields{
 				"context": context,
@@ -195,6 +154,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				"error":   err,
 			}).Warnf("unable to send control ping")
 		}
+		c.trace(c.msgControlPing, ch.id, t, false)
 	}
 
 	return nil
@@ -209,7 +169,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		return
 	}
 
-	msgType, name, crc, err := c.getMessageDataByID(msgID)
+	msg, err := c.getMessageByID(msgID)
 	if err != nil {
 		log.Warnln(err)
 		return
@@ -220,13 +180,21 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	// - replies that don't have context as first field (comes as zero)
 	// - events that don't have context at all (comes as non zero)
 	//
-	context, err := c.codec.DecodeMsgContext(data, msgType)
+	context, err := c.codec.DecodeMsgContext(data, msg.GetMessageType())
 	if err != nil {
 		log.WithField("msg_id", msgID).Warnf("Unable to decode message context: %v", err)
 		return
 	}
 
 	chanID, isMulti, seqNum := unpackRequestContext(context)
+
+	// decode and trace the message
+	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
+	if err = c.codec.DecodeMsg(data, msg); err != nil {
+		log.WithField("msg", msg).Warnf("Unable to decode message: %v", err)
+		return
+	}
+	c.trace(msg, chanID, time.Now(), true)
 
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		log.WithFields(logger.Fields{
@@ -236,8 +204,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			"channel":  chanID,
 			"is_multi": isMulti,
 			"seq_num":  seqNum,
-			"msg_crc":  crc,
-		}).Debugf("<-- govpp RECEIVE: %s", name)
+			"msg_crc":  msg.GetCrcString(),
+		}).Debugf("<-- govpp RECEIVE: %s", msg.GetMessageName())
 	}
 
 	if context == 0 || c.isNotificationMessage(msgID) {
@@ -411,12 +379,13 @@ func compareSeqNumbers(seqNum1, seqNum2 uint16) int {
 	return 1
 }
 
-// Returns message data based on the message ID not depending on the message path
-func (c *Connection) getMessageDataByID(msgID uint16) (typ api.MessageType, name, crc string, err error) {
-	for _, msgs := range c.msgMapByPath {
-		if msg, ok := msgs[msgID]; ok {
-			return msg.GetMessageType(), msg.GetMessageName(), msg.GetCrcString(), nil
+// Returns message based on the message ID not depending on message path
+func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
+	var ok bool
+	for _, messages := range c.msgMapByPath {
+		if msg, ok = messages[msgID]; ok {
+			return msg, nil
 		}
 	}
-	return typ, name, crc, fmt.Errorf("unknown message received, ID: %d", msgID)
+	return nil, fmt.Errorf("unknown message received, ID: %d", msgID)
 }
