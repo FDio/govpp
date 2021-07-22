@@ -1,4 +1,4 @@
-//  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2021 Cisco and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ type Connection interface {
 	NewStream(ctx context.Context, options ...StreamOption) (Stream, error)
 
 	// Invoke can be used for a simple request-reply RPC.
-	// It creates stream and calls SendMsg with req and RecvMsg with reply.
+	// It creates stream and calls SendMsg with req and RecvMsg which returns
+	// reply.
 	Invoke(ctx context.Context, req Message, reply Message) error
 }
 
