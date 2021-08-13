@@ -82,7 +82,7 @@ The droids you're looking for will be in a file named
 <something>.ba.go.  Suggest:
 
 ```
-find git.fd.io/govpp/binapi -name "*.ba.go" | xargs grep -n GoTypeName
+find go.fd.io/govpp/binapi -name "*.ba.go" | xargs grep -n GoTypeName
 ```
 
 Look at the indicated <something>.ba.go file, deduce the package name

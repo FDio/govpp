@@ -13,3 +13,7 @@
 //  limitations under the License.
 
 package plugins
+
+import (
+	_ "go.fd.io/govpp/binapigen/plugins/gen_vpplink"
+)
