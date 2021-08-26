@@ -74,6 +74,10 @@ func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, error) {
 	case *TraceDetails:
 		return m, nil
 	case *TraceDumpReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

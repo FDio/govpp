@@ -114,6 +114,10 @@ func (c *serviceClient_Nat64BibDumpClient) Recv() (*Nat64BibDetails, error) {
 	case *Nat64BibDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -162,6 +166,10 @@ func (c *serviceClient_Nat64InterfaceDumpClient) Recv() (*Nat64InterfaceDetails,
 	case *Nat64InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -210,6 +218,10 @@ func (c *serviceClient_Nat64PoolAddrDumpClient) Recv() (*Nat64PoolAddrDetails, e
 	case *Nat64PoolAddrDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -249,6 +261,10 @@ func (c *serviceClient_Nat64PrefixDumpClient) Recv() (*Nat64PrefixDetails, error
 	case *Nat64PrefixDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -297,6 +313,10 @@ func (c *serviceClient_Nat64StDumpClient) Recv() (*Nat64StDetails, error) {
 	case *Nat64StDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

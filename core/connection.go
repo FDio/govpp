@@ -245,14 +245,7 @@ func (c *Connection) newAPIChannel(reqChanBufSize, replyChanBufSize int) (*Chann
 		return nil, errors.New("nil connection passed in")
 	}
 
-	// create new channel
-	chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
-	channel := newChannel(chID, c, c.codec, c, reqChanBufSize, replyChanBufSize)
-
-	// store API channel within the client
-	c.channelsLock.Lock()
-	c.channels[chID] = channel
-	c.channelsLock.Unlock()
+	channel := c.newChannel(reqChanBufSize, replyChanBufSize)
 
 	// start watching on the request channel
 	go c.watchRequests(channel)

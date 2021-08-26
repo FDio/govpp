@@ -99,6 +99,10 @@ func (c *serviceClient_MapDomainDumpClient) Recv() (*MapDomainDetails, error) {
 	case *MapDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -135,6 +139,10 @@ func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, error) {
 	case *MapDomainDetails:
 		return m, nil
 	case *MapDomainsGetReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -255,6 +263,10 @@ func (c *serviceClient_MapRuleDumpClient) Recv() (*MapRuleDetails, error) {
 	case *MapRuleDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

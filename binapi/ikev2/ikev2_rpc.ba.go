@@ -81,6 +81,10 @@ func (c *serviceClient_Ikev2ChildSaDumpClient) Recv() (*Ikev2ChildSaDetails, err
 	case *Ikev2ChildSaDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -192,6 +196,10 @@ func (c *serviceClient_Ikev2ProfileDumpClient) Recv() (*Ikev2ProfileDetails, err
 	case *Ikev2ProfileDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -285,6 +293,10 @@ func (c *serviceClient_Ikev2SaDumpClient) Recv() (*Ikev2SaDetails, error) {
 	case *Ikev2SaDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -387,6 +399,10 @@ func (c *serviceClient_Ikev2TrafficSelectorDumpClient) Recv() (*Ikev2TrafficSele
 	case *Ikev2TrafficSelectorDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

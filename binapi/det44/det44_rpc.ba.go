@@ -129,6 +129,10 @@ func (c *serviceClient_Det44InterfaceDumpClient) Recv() (*Det44InterfaceDetails,
 	case *Det44InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -168,6 +172,10 @@ func (c *serviceClient_Det44MapDumpClient) Recv() (*Det44MapDetails, error) {
 	case *Det44MapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -225,6 +233,10 @@ func (c *serviceClient_Det44SessionDumpClient) Recv() (*Det44SessionDetails, err
 	case *Det44SessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -309,6 +321,10 @@ func (c *serviceClient_NatDetMapDumpClient) Recv() (*NatDetMapDetails, error) {
 	case *NatDetMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -357,6 +373,10 @@ func (c *serviceClient_NatDetSessionDumpClient) Recv() (*NatDetSessionDetails, e
 	case *NatDetSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

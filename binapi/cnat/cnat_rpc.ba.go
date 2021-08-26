@@ -75,6 +75,10 @@ func (c *serviceClient_CnatSessionDumpClient) Recv() (*CnatSessionDetails, error
 	case *CnatSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -168,6 +172,10 @@ func (c *serviceClient_CnatTranslationDumpClient) Recv() (*CnatTranslationDetail
 	case *CnatTranslationDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

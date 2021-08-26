@@ -53,6 +53,10 @@ func (c *serviceClient_GraphNodeGetClient) Recv() (*GraphNodeDetails, error) {
 	case *GraphNodeDetails:
 		return m, nil
 	case *GraphNodeGetReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

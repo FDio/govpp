@@ -79,6 +79,10 @@ func (c *serviceClient_Nat66InterfaceDumpClient) Recv() (*Nat66InterfaceDetails,
 	case *Nat66InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -127,6 +131,10 @@ func (c *serviceClient_Nat66StaticMappingDumpClient) Recv() (*Nat66StaticMapping
 	case *Nat66StaticMappingDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

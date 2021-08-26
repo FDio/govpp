@@ -79,6 +79,10 @@ func (c *serviceClient_BfdAuthKeysDumpClient) Recv() (*BfdAuthKeysDetails, error
 	case *BfdAuthKeysDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -190,6 +194,10 @@ func (c *serviceClient_BfdUDPSessionDumpClient) Recv() (*BfdUDPSessionDetails, e
 	case *BfdUDPSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

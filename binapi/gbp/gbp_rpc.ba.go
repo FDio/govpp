@@ -97,6 +97,10 @@ func (c *serviceClient_GbpBridgeDomainDumpClient) Recv() (*GbpBridgeDomainDetail
 	case *GbpBridgeDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -145,6 +149,10 @@ func (c *serviceClient_GbpContractDumpClient) Recv() (*GbpContractDetails, error
 	case *GbpContractDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -202,6 +210,10 @@ func (c *serviceClient_GbpEndpointDumpClient) Recv() (*GbpEndpointDetails, error
 	case *GbpEndpointDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -259,6 +271,10 @@ func (c *serviceClient_GbpEndpointGroupDumpClient) Recv() (*GbpEndpointGroupDeta
 	case *GbpEndpointGroupDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -307,6 +323,10 @@ func (c *serviceClient_GbpExtItfDumpClient) Recv() (*GbpExtItfDetails, error) {
 	case *GbpExtItfDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -355,6 +375,10 @@ func (c *serviceClient_GbpRecircDumpClient) Recv() (*GbpRecircDetails, error) {
 	case *GbpRecircDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -412,6 +436,10 @@ func (c *serviceClient_GbpRouteDomainDumpClient) Recv() (*GbpRouteDomainDetails,
 	case *GbpRouteDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -460,6 +488,10 @@ func (c *serviceClient_GbpSubnetDumpClient) Recv() (*GbpSubnetDetails, error) {
 	case *GbpSubnetDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -517,6 +549,10 @@ func (c *serviceClient_GbpVxlanTunnelDumpClient) Recv() (*GbpVxlanTunnelDetails,
 	case *GbpVxlanTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
