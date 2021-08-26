@@ -14,6 +14,7 @@ import (
 // RPCService defines RPC service geneve.
 type RPCService interface {
 	GeneveAddDelTunnel(ctx context.Context, in *GeneveAddDelTunnel) (*GeneveAddDelTunnelReply, error)
+	GeneveAddDelTunnel2(ctx context.Context, in *GeneveAddDelTunnel2) (*GeneveAddDelTunnel2Reply, error)
 	GeneveTunnelDump(ctx context.Context, in *GeneveTunnelDump) (RPCService_GeneveTunnelDumpClient, error)
 	SwInterfaceSetGeneveBypass(ctx context.Context, in *SwInterfaceSetGeneveBypass) (*SwInterfaceSetGeneveBypassReply, error)
 }
@@ -28,6 +29,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) GeneveAddDelTunnel(ctx context.Context, in *GeneveAddDelTunnel) (*GeneveAddDelTunnelReply, error) {
 	out := new(GeneveAddDelTunnelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) GeneveAddDelTunnel2(ctx context.Context, in *GeneveAddDelTunnel2) (*GeneveAddDelTunnel2Reply, error) {
+	out := new(GeneveAddDelTunnel2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

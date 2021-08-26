@@ -14,7 +14,9 @@ import (
 // RPCService defines RPC service policer.
 type RPCService interface {
 	PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*PolicerAddDelReply, error)
+	PolicerBind(ctx context.Context, in *PolicerBind) (*PolicerBindReply, error)
 	PolicerDump(ctx context.Context, in *PolicerDump) (RPCService_PolicerDumpClient, error)
+	PolicerInput(ctx context.Context, in *PolicerInput) (*PolicerInputReply, error)
 }
 
 type serviceClient struct {
@@ -27,6 +29,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*PolicerAddDelReply, error) {
 	out := new(PolicerAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PolicerBind(ctx context.Context, in *PolicerBind) (*PolicerBindReply, error) {
+	out := new(PolicerBindReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -71,4 +82,13 @@ func (c *serviceClient_PolicerDumpClient) Recv() (*PolicerDetails, error) {
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) PolicerInput(ctx context.Context, in *PolicerInput) (*PolicerInputReply, error) {
+	out := new(PolicerInputReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

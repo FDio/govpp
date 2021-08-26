@@ -18,6 +18,8 @@ type RPCService interface {
 	BdIPMacFlush(ctx context.Context, in *BdIPMacFlush) (*BdIPMacFlushReply, error)
 	BridgeDomainAddDel(ctx context.Context, in *BridgeDomainAddDel) (*BridgeDomainAddDelReply, error)
 	BridgeDomainDump(ctx context.Context, in *BridgeDomainDump) (RPCService_BridgeDomainDumpClient, error)
+	BridgeDomainSetDefaultLearnLimit(ctx context.Context, in *BridgeDomainSetDefaultLearnLimit) (*BridgeDomainSetDefaultLearnLimitReply, error)
+	BridgeDomainSetLearnLimit(ctx context.Context, in *BridgeDomainSetLearnLimit) (*BridgeDomainSetLearnLimitReply, error)
 	BridgeDomainSetMacAge(ctx context.Context, in *BridgeDomainSetMacAge) (*BridgeDomainSetMacAgeReply, error)
 	BridgeFlags(ctx context.Context, in *BridgeFlags) (*BridgeFlagsReply, error)
 	BviCreate(ctx context.Context, in *BviCreate) (*BviCreateReply, error)
@@ -34,11 +36,13 @@ type RPCService interface {
 	L2fibFlushAll(ctx context.Context, in *L2fibFlushAll) (*L2fibFlushAllReply, error)
 	L2fibFlushBd(ctx context.Context, in *L2fibFlushBd) (*L2fibFlushBdReply, error)
 	L2fibFlushInt(ctx context.Context, in *L2fibFlushInt) (*L2fibFlushIntReply, error)
+	L2fibSetScanDelay(ctx context.Context, in *L2fibSetScanDelay) (*L2fibSetScanDelayReply, error)
 	SwInterfaceSetL2Bridge(ctx context.Context, in *SwInterfaceSetL2Bridge) (*SwInterfaceSetL2BridgeReply, error)
 	SwInterfaceSetL2Xconnect(ctx context.Context, in *SwInterfaceSetL2Xconnect) (*SwInterfaceSetL2XconnectReply, error)
 	SwInterfaceSetVpath(ctx context.Context, in *SwInterfaceSetVpath) (*SwInterfaceSetVpathReply, error)
 	WantL2ArpTermEvents(ctx context.Context, in *WantL2ArpTermEvents) (*WantL2ArpTermEventsReply, error)
 	WantL2MacsEvents(ctx context.Context, in *WantL2MacsEvents) (*WantL2MacsEventsReply, error)
+	WantL2MacsEvents2(ctx context.Context, in *WantL2MacsEvents2) (*WantL2MacsEvents2Reply, error)
 }
 
 type serviceClient struct {
@@ -152,6 +156,24 @@ func (c *serviceClient_BridgeDomainDumpClient) Recv() (*BridgeDomainDetails, err
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) BridgeDomainSetDefaultLearnLimit(ctx context.Context, in *BridgeDomainSetDefaultLearnLimit) (*BridgeDomainSetDefaultLearnLimitReply, error) {
+	out := new(BridgeDomainSetDefaultLearnLimitReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) BridgeDomainSetLearnLimit(ctx context.Context, in *BridgeDomainSetLearnLimit) (*BridgeDomainSetLearnLimitReply, error) {
+	out := new(BridgeDomainSetLearnLimitReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BridgeDomainSetMacAge(ctx context.Context, in *BridgeDomainSetMacAge) (*BridgeDomainSetMacAgeReply, error) {
@@ -358,6 +380,15 @@ func (c *serviceClient) L2fibFlushInt(ctx context.Context, in *L2fibFlushInt) (*
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) L2fibSetScanDelay(ctx context.Context, in *L2fibSetScanDelay) (*L2fibSetScanDelayReply, error) {
+	out := new(L2fibSetScanDelayReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) SwInterfaceSetL2Bridge(ctx context.Context, in *SwInterfaceSetL2Bridge) (*SwInterfaceSetL2BridgeReply, error) {
 	out := new(SwInterfaceSetL2BridgeReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -396,6 +427,15 @@ func (c *serviceClient) WantL2ArpTermEvents(ctx context.Context, in *WantL2ArpTe
 
 func (c *serviceClient) WantL2MacsEvents(ctx context.Context, in *WantL2MacsEvents) (*WantL2MacsEventsReply, error) {
 	out := new(WantL2MacsEventsReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) WantL2MacsEvents2(ctx context.Context, in *WantL2MacsEvents2) (*WantL2MacsEvents2Reply, error) {
+	out := new(WantL2MacsEvents2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

@@ -20,6 +20,7 @@ type RPCService interface {
 	IPNeighborReplaceBegin(ctx context.Context, in *IPNeighborReplaceBegin) (*IPNeighborReplaceBeginReply, error)
 	IPNeighborReplaceEnd(ctx context.Context, in *IPNeighborReplaceEnd) (*IPNeighborReplaceEndReply, error)
 	WantIPNeighborEvents(ctx context.Context, in *WantIPNeighborEvents) (*WantIPNeighborEventsReply, error)
+	WantIPNeighborEventsV2(ctx context.Context, in *WantIPNeighborEventsV2) (*WantIPNeighborEventsV2Reply, error)
 }
 
 type serviceClient struct {
@@ -116,6 +117,15 @@ func (c *serviceClient) IPNeighborReplaceEnd(ctx context.Context, in *IPNeighbor
 
 func (c *serviceClient) WantIPNeighborEvents(ctx context.Context, in *WantIPNeighborEvents) (*WantIPNeighborEventsReply, error) {
 	out := new(WantIPNeighborEventsReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) WantIPNeighborEventsV2(ctx context.Context, in *WantIPNeighborEventsV2) (*WantIPNeighborEventsV2Reply, error) {
+	out := new(WantIPNeighborEventsV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

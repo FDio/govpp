@@ -35,6 +35,7 @@ type RPCService interface {
 	SwInterfaceSetIPDirectedBroadcast(ctx context.Context, in *SwInterfaceSetIPDirectedBroadcast) (*SwInterfaceSetIPDirectedBroadcastReply, error)
 	SwInterfaceSetMacAddress(ctx context.Context, in *SwInterfaceSetMacAddress) (*SwInterfaceSetMacAddressReply, error)
 	SwInterfaceSetMtu(ctx context.Context, in *SwInterfaceSetMtu) (*SwInterfaceSetMtuReply, error)
+	SwInterfaceSetPromisc(ctx context.Context, in *SwInterfaceSetPromisc) (*SwInterfaceSetPromiscReply, error)
 	SwInterfaceSetRxMode(ctx context.Context, in *SwInterfaceSetRxMode) (*SwInterfaceSetRxModeReply, error)
 	SwInterfaceSetRxPlacement(ctx context.Context, in *SwInterfaceSetRxPlacement) (*SwInterfaceSetRxPlacementReply, error)
 	SwInterfaceSetTable(ctx context.Context, in *SwInterfaceSetTable) (*SwInterfaceSetTableReply, error)
@@ -302,6 +303,15 @@ func (c *serviceClient) SwInterfaceSetMacAddress(ctx context.Context, in *SwInte
 
 func (c *serviceClient) SwInterfaceSetMtu(ctx context.Context, in *SwInterfaceSetMtu) (*SwInterfaceSetMtuReply, error) {
 	out := new(SwInterfaceSetMtuReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SwInterfaceSetPromisc(ctx context.Context, in *SwInterfaceSetPromisc) (*SwInterfaceSetPromiscReply, error) {
+	out := new(SwInterfaceSetPromiscReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

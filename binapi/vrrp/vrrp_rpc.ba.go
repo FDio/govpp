@@ -20,6 +20,7 @@ type RPCService interface {
 	VrrpVrStartStop(ctx context.Context, in *VrrpVrStartStop) (*VrrpVrStartStopReply, error)
 	VrrpVrTrackIfAddDel(ctx context.Context, in *VrrpVrTrackIfAddDel) (*VrrpVrTrackIfAddDelReply, error)
 	VrrpVrTrackIfDump(ctx context.Context, in *VrrpVrTrackIfDump) (RPCService_VrrpVrTrackIfDumpClient, error)
+	WantVrrpVrEvents(ctx context.Context, in *WantVrrpVrEvents) (*WantVrrpVrEventsReply, error)
 }
 
 type serviceClient struct {
@@ -181,4 +182,13 @@ func (c *serviceClient_VrrpVrTrackIfDumpClient) Recv() (*VrrpVrTrackIfDetails, e
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) WantVrrpVrEvents(ctx context.Context, in *WantVrrpVrEvents) (*WantVrrpVrEventsReply, error) {
+	out := new(WantVrrpVrEventsReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

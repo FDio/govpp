@@ -15,12 +15,18 @@ import (
 type RPCService interface {
 	ClassifyAddDelSession(ctx context.Context, in *ClassifyAddDelSession) (*ClassifyAddDelSessionReply, error)
 	ClassifyAddDelTable(ctx context.Context, in *ClassifyAddDelTable) (*ClassifyAddDelTableReply, error)
+	ClassifyPcapGetTables(ctx context.Context, in *ClassifyPcapGetTables) (*ClassifyPcapGetTablesReply, error)
+	ClassifyPcapLookupTable(ctx context.Context, in *ClassifyPcapLookupTable) (*ClassifyPcapLookupTableReply, error)
+	ClassifyPcapSetTable(ctx context.Context, in *ClassifyPcapSetTable) (*ClassifyPcapSetTableReply, error)
 	ClassifySessionDump(ctx context.Context, in *ClassifySessionDump) (RPCService_ClassifySessionDumpClient, error)
 	ClassifySetInterfaceIPTable(ctx context.Context, in *ClassifySetInterfaceIPTable) (*ClassifySetInterfaceIPTableReply, error)
 	ClassifySetInterfaceL2Tables(ctx context.Context, in *ClassifySetInterfaceL2Tables) (*ClassifySetInterfaceL2TablesReply, error)
 	ClassifyTableByInterface(ctx context.Context, in *ClassifyTableByInterface) (*ClassifyTableByInterfaceReply, error)
 	ClassifyTableIds(ctx context.Context, in *ClassifyTableIds) (*ClassifyTableIdsReply, error)
 	ClassifyTableInfo(ctx context.Context, in *ClassifyTableInfo) (*ClassifyTableInfoReply, error)
+	ClassifyTraceGetTables(ctx context.Context, in *ClassifyTraceGetTables) (*ClassifyTraceGetTablesReply, error)
+	ClassifyTraceLookupTable(ctx context.Context, in *ClassifyTraceLookupTable) (*ClassifyTraceLookupTableReply, error)
+	ClassifyTraceSetTable(ctx context.Context, in *ClassifyTraceSetTable) (*ClassifyTraceSetTableReply, error)
 	FlowClassifyDump(ctx context.Context, in *FlowClassifyDump) (RPCService_FlowClassifyDumpClient, error)
 	FlowClassifySetInterface(ctx context.Context, in *FlowClassifySetInterface) (*FlowClassifySetInterfaceReply, error)
 	InputACLSetInterface(ctx context.Context, in *InputACLSetInterface) (*InputACLSetInterfaceReply, error)
@@ -48,6 +54,33 @@ func (c *serviceClient) ClassifyAddDelSession(ctx context.Context, in *ClassifyA
 
 func (c *serviceClient) ClassifyAddDelTable(ctx context.Context, in *ClassifyAddDelTable) (*ClassifyAddDelTableReply, error) {
 	out := new(ClassifyAddDelTableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyPcapGetTables(ctx context.Context, in *ClassifyPcapGetTables) (*ClassifyPcapGetTablesReply, error) {
+	out := new(ClassifyPcapGetTablesReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyPcapLookupTable(ctx context.Context, in *ClassifyPcapLookupTable) (*ClassifyPcapLookupTableReply, error) {
+	out := new(ClassifyPcapLookupTableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyPcapSetTable(ctx context.Context, in *ClassifyPcapSetTable) (*ClassifyPcapSetTableReply, error) {
+	out := new(ClassifyPcapSetTableReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -132,6 +165,33 @@ func (c *serviceClient) ClassifyTableIds(ctx context.Context, in *ClassifyTableI
 
 func (c *serviceClient) ClassifyTableInfo(ctx context.Context, in *ClassifyTableInfo) (*ClassifyTableInfoReply, error) {
 	out := new(ClassifyTableInfoReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyTraceGetTables(ctx context.Context, in *ClassifyTraceGetTables) (*ClassifyTraceGetTablesReply, error) {
+	out := new(ClassifyTraceGetTablesReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyTraceLookupTable(ctx context.Context, in *ClassifyTraceLookupTable) (*ClassifyTraceLookupTableReply, error) {
+	out := new(ClassifyTraceLookupTableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ClassifyTraceSetTable(ctx context.Context, in *ClassifyTraceSetTable) (*ClassifyTraceSetTableReply, error) {
+	out := new(ClassifyTraceSetTableReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

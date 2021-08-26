@@ -17,6 +17,7 @@ type RPCService interface {
 	MapAddDomain(ctx context.Context, in *MapAddDomain) (*MapAddDomainReply, error)
 	MapDelDomain(ctx context.Context, in *MapDelDomain) (*MapDelDomainReply, error)
 	MapDomainDump(ctx context.Context, in *MapDomainDump) (RPCService_MapDomainDumpClient, error)
+	MapDomainsGet(ctx context.Context, in *MapDomainsGet) (RPCService_MapDomainsGetClient, error)
 	MapIfEnableDisable(ctx context.Context, in *MapIfEnableDisable) (*MapIfEnableDisableReply, error)
 	MapParamAddDelPreResolve(ctx context.Context, in *MapParamAddDelPreResolve) (*MapParamAddDelPreResolveReply, error)
 	MapParamGet(ctx context.Context, in *MapParamGet) (*MapParamGetReply, error)
@@ -98,6 +99,42 @@ func (c *serviceClient_MapDomainDumpClient) Recv() (*MapDomainDetails, error) {
 	case *MapDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) MapDomainsGet(ctx context.Context, in *MapDomainsGet) (RPCService_MapDomainsGetClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MapDomainsGetClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MapDomainsGetClient interface {
+	Recv() (*MapDomainDetails, error)
+	api.Stream
+}
+
+type serviceClient_MapDomainsGetClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MapDomainDetails:
+		return m, nil
+	case *MapDomainsGetReply:
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

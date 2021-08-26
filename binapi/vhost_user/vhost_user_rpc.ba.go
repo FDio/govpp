@@ -14,8 +14,10 @@ import (
 // RPCService defines RPC service vhost_user.
 type RPCService interface {
 	CreateVhostUserIf(ctx context.Context, in *CreateVhostUserIf) (*CreateVhostUserIfReply, error)
+	CreateVhostUserIfV2(ctx context.Context, in *CreateVhostUserIfV2) (*CreateVhostUserIfV2Reply, error)
 	DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error)
 	ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUserIf) (*ModifyVhostUserIfReply, error)
+	ModifyVhostUserIfV2(ctx context.Context, in *ModifyVhostUserIfV2) (*ModifyVhostUserIfV2Reply, error)
 	SwInterfaceVhostUserDump(ctx context.Context, in *SwInterfaceVhostUserDump) (RPCService_SwInterfaceVhostUserDumpClient, error)
 }
 
@@ -36,6 +38,15 @@ func (c *serviceClient) CreateVhostUserIf(ctx context.Context, in *CreateVhostUs
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) CreateVhostUserIfV2(ctx context.Context, in *CreateVhostUserIfV2) (*CreateVhostUserIfV2Reply, error) {
+	out := new(CreateVhostUserIfV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error) {
 	out := new(DeleteVhostUserIfReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -47,6 +58,15 @@ func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUs
 
 func (c *serviceClient) ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUserIf) (*ModifyVhostUserIfReply, error) {
 	out := new(ModifyVhostUserIfReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ModifyVhostUserIfV2(ctx context.Context, in *ModifyVhostUserIfV2) (*ModifyVhostUserIfV2Reply, error) {
+	out := new(ModifyVhostUserIfV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
