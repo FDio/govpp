@@ -42,12 +42,12 @@ func ResolveVPPVersion(apidir string) string {
 	}
 
 	// assuming VPP package is installed
-	if path.Clean(apidir) == DefaultDir {
+	if _, err := exec.LookPath("vpp"); err == nil {
 		version, err := GetVPPVersionInstalled()
 		if err != nil {
 			logrus.Warnf("resolving VPP version from installed package failed: %v", err)
 		} else {
-			logrus.Debugf("resolved VPP version from installed package: %v", version)
+			logrus.Infof("resolved VPP version from installed package: %v", version)
 			return version
 		}
 	}
