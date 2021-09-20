@@ -15,9 +15,12 @@
 package binapigen
 
 import (
+	"bufio"
 	"fmt"
 	"git.fd.io/govpp.git/binapigen/vppapi"
 	. "github.com/onsi/gomega"
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -58,57 +61,40 @@ func TestBinapiTypeSizes(t *testing.T) {
 
 func TestBinapiUnionSizes(t *testing.T) {
 	RegisterTestingT(t)
-	tests := []struct {
-		testName string
-		input    *Union
-		expsize  int
-	}{
-		{testName: "union_alias", input: typeTestData{
-			typ: "union", fields: []*typeTestData{{typ: "alias", value: U16},
-			}}.getUnion("union1"), expsize: 2},
-		{testName: "union_enum", input: typeTestData{
-			typ: "union", fields: []*typeTestData{{typ: "enum", value: U32},
-			}}.getUnion("union2"), expsize: 4},
-		{testName: "union_struct", input: typeTestData{
-			typ: "union", fields: []*typeTestData{
-				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: U16}, {value: U32}}},
-			}}.getUnion("union3"), expsize: 7},
-		{testName: "union_structs", input: typeTestData{
-			typ: "union", fields: []*typeTestData{
-				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: BOOL}}},
-				{typ: "struct", fields: []*typeTestData{{value: U16}, {value: U32}}},
-				{typ: "struct", fields: []*typeTestData{{value: U32}, {value: U64}}},
-			}}.getUnion("union4"), expsize: 12},
-		{testName: "union_unions", input: typeTestData{
-			typ: "union", fields: []*typeTestData{
-				{typ: "union", fields: []*typeTestData{
-					{typ: "struct", fields: []*typeTestData{{value: STRING}}},
-				}},
-				{typ: "union", fields: []*typeTestData{
-					{typ: "struct", fields: []*typeTestData{{value: U32}}},
-				}},
-				{typ: "union", fields: []*typeTestData{
-					{typ: "struct", fields: []*typeTestData{{value: U64}}},
-				}},
-			}}.getUnion("union5"), expsize: 8},
-		{testName: "union_combined", input: typeTestData{
-			typ: "union", fields: []*typeTestData{
-				{typ: "alias", value: U8},
-				{typ: "enum", value: U16},
-				{typ: "struct", fields: []*typeTestData{{value: U8}, {value: U16}, {value: U32}}}, // <-
-				{typ: "union", fields: []*typeTestData{
-					{typ: "alias", value: U16},
-					{typ: "enum", value: U16},
-					{typ: "struct", fields: []*typeTestData{{value: U32}}},
-				}},
-			}}.getUnion("union6"), expsize: 7},
+
+	// order of the union sizes in file generated from union.api.json
+	var sizes = []int{16, 4, 32, 16, 64, 111}
+
+	// remove directory created during test
+	defer func() {
+		err := os.RemoveAll(testOutputDir)
+		Expect(err).ToNot(HaveOccurred())
+	}()
+
+	err := GenerateFromFile("vppapi/testdata/union.api.json", Options{OutputDir: testOutputDir})
+	Expect(err).ShouldNot(HaveOccurred())
+
+	file, err := os.Open(testOutputDir + "/union/union.ba.go")
+	Expect(err).ShouldNot(HaveOccurred())
+	defer func() {
+		err := file.Close()
+		Expect(err).ToNot(HaveOccurred())
+	}()
+
+	// the generated line with union size is in format XXX_UnionData [<size>]byte
+	// the prefix identifies these lines (the starting tab is important)
+	prefix := fmt.Sprintf("\t%s", "XXX_UnionData [")
+
+	index := 0
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		if strings.HasPrefix(scanner.Text(), prefix) {
+			Expect(scanner.Text()).To(Equal(prefix + fmt.Sprintf("%d]byte", sizes[index])))
+			index++
+		}
 	}
-	for _, test := range tests {
-		t.Run(test.testName, func(t *testing.T) {
-			size := getUnionSize(test.input)
-			Expect(size).To(Equal(test.expsize))
-		})
-	}
+	// ensure all union sizes were found and tested
+	Expect(index).To(Equal(len(sizes)))
 }
 
 // Typed data used for union size evaluation testing.

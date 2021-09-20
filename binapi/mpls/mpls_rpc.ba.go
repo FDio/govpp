@@ -82,6 +82,10 @@ func (c *serviceClient_MplsRouteDumpClient) Recv() (*MplsRouteDetails, error) {
 	case *MplsRouteDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -130,6 +134,10 @@ func (c *serviceClient_MplsTableDumpClient) Recv() (*MplsTableDetails, error) {
 	case *MplsTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -178,6 +186,10 @@ func (c *serviceClient_MplsTunnelDumpClient) Recv() (*MplsTunnelDetails, error) 
 	case *MplsTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

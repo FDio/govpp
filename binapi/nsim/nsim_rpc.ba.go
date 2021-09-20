@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service nsim.
 type RPCService interface {
 	NsimConfigure(ctx context.Context, in *NsimConfigure) (*NsimConfigureReply, error)
+	NsimConfigure2(ctx context.Context, in *NsimConfigure2) (*NsimConfigure2Reply, error)
 	NsimCrossConnectEnableDisable(ctx context.Context, in *NsimCrossConnectEnableDisable) (*NsimCrossConnectEnableDisableReply, error)
 	NsimOutputFeatureEnableDisable(ctx context.Context, in *NsimOutputFeatureEnableDisable) (*NsimOutputFeatureEnableDisableReply, error)
 }
@@ -25,6 +26,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) NsimConfigure(ctx context.Context, in *NsimConfigure) (*NsimConfigureReply, error) {
 	out := new(NsimConfigureReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) NsimConfigure2(ctx context.Context, in *NsimConfigure2) (*NsimConfigure2Reply, error) {
+	out := new(NsimConfigure2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

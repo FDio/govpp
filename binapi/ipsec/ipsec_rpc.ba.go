@@ -15,16 +15,22 @@ import (
 type RPCService interface {
 	IpsecBackendDump(ctx context.Context, in *IpsecBackendDump) (RPCService_IpsecBackendDumpClient, error)
 	IpsecInterfaceAddDelSpd(ctx context.Context, in *IpsecInterfaceAddDelSpd) (*IpsecInterfaceAddDelSpdReply, error)
+	IpsecItfCreate(ctx context.Context, in *IpsecItfCreate) (*IpsecItfCreateReply, error)
+	IpsecItfDelete(ctx context.Context, in *IpsecItfDelete) (*IpsecItfDeleteReply, error)
+	IpsecItfDump(ctx context.Context, in *IpsecItfDump) (RPCService_IpsecItfDumpClient, error)
 	IpsecSaDump(ctx context.Context, in *IpsecSaDump) (RPCService_IpsecSaDumpClient, error)
+	IpsecSaV2Dump(ctx context.Context, in *IpsecSaV2Dump) (RPCService_IpsecSaV2DumpClient, error)
+	IpsecSaV3Dump(ctx context.Context, in *IpsecSaV3Dump) (RPCService_IpsecSaV3DumpClient, error)
 	IpsecSadEntryAddDel(ctx context.Context, in *IpsecSadEntryAddDel) (*IpsecSadEntryAddDelReply, error)
+	IpsecSadEntryAddDelV2(ctx context.Context, in *IpsecSadEntryAddDelV2) (*IpsecSadEntryAddDelV2Reply, error)
+	IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadEntryAddDelV3) (*IpsecSadEntryAddDelV3Reply, error)
 	IpsecSelectBackend(ctx context.Context, in *IpsecSelectBackend) (*IpsecSelectBackendReply, error)
+	IpsecSetAsyncMode(ctx context.Context, in *IpsecSetAsyncMode) (*IpsecSetAsyncModeReply, error)
 	IpsecSpdAddDel(ctx context.Context, in *IpsecSpdAddDel) (*IpsecSpdAddDelReply, error)
 	IpsecSpdDump(ctx context.Context, in *IpsecSpdDump) (RPCService_IpsecSpdDumpClient, error)
 	IpsecSpdEntryAddDel(ctx context.Context, in *IpsecSpdEntryAddDel) (*IpsecSpdEntryAddDelReply, error)
 	IpsecSpdInterfaceDump(ctx context.Context, in *IpsecSpdInterfaceDump) (RPCService_IpsecSpdInterfaceDumpClient, error)
 	IpsecSpdsDump(ctx context.Context, in *IpsecSpdsDump) (RPCService_IpsecSpdsDumpClient, error)
-	IpsecTunnelIfAddDel(ctx context.Context, in *IpsecTunnelIfAddDel) (*IpsecTunnelIfAddDelReply, error)
-	IpsecTunnelIfSetSa(ctx context.Context, in *IpsecTunnelIfSetSa) (*IpsecTunnelIfSetSaReply, error)
 	IpsecTunnelProtectDel(ctx context.Context, in *IpsecTunnelProtectDel) (*IpsecTunnelProtectDelReply, error)
 	IpsecTunnelProtectDump(ctx context.Context, in *IpsecTunnelProtectDump) (RPCService_IpsecTunnelProtectDumpClient, error)
 	IpsecTunnelProtectUpdate(ctx context.Context, in *IpsecTunnelProtectUpdate) (*IpsecTunnelProtectUpdateReply, error)
@@ -71,6 +77,10 @@ func (c *serviceClient_IpsecBackendDumpClient) Recv() (*IpsecBackendDetails, err
 	case *IpsecBackendDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -84,6 +94,67 @@ func (c *serviceClient) IpsecInterfaceAddDelSpd(ctx context.Context, in *IpsecIn
 		return nil, err
 	}
 	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecItfCreate(ctx context.Context, in *IpsecItfCreate) (*IpsecItfCreateReply, error) {
+	out := new(IpsecItfCreateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecItfDelete(ctx context.Context, in *IpsecItfDelete) (*IpsecItfDeleteReply, error) {
+	out := new(IpsecItfDeleteReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecItfDump(ctx context.Context, in *IpsecItfDump) (RPCService_IpsecItfDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IpsecItfDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IpsecItfDumpClient interface {
+	Recv() (*IpsecItfDetails, error)
+	api.Stream
+}
+
+type serviceClient_IpsecItfDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IpsecItfDumpClient) Recv() (*IpsecItfDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IpsecItfDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) IpsecSaDump(ctx context.Context, in *IpsecSaDump) (RPCService_IpsecSaDumpClient, error) {
@@ -119,6 +190,96 @@ func (c *serviceClient_IpsecSaDumpClient) Recv() (*IpsecSaDetails, error) {
 	case *IpsecSaDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) IpsecSaV2Dump(ctx context.Context, in *IpsecSaV2Dump) (RPCService_IpsecSaV2DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IpsecSaV2DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IpsecSaV2DumpClient interface {
+	Recv() (*IpsecSaV2Details, error)
+	api.Stream
+}
+
+type serviceClient_IpsecSaV2DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IpsecSaV2DumpClient) Recv() (*IpsecSaV2Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IpsecSaV2Details:
+		return m, nil
+	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) IpsecSaV3Dump(ctx context.Context, in *IpsecSaV3Dump) (RPCService_IpsecSaV3DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IpsecSaV3DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IpsecSaV3DumpClient interface {
+	Recv() (*IpsecSaV3Details, error)
+	api.Stream
+}
+
+type serviceClient_IpsecSaV3DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IpsecSaV3DumpClient) Recv() (*IpsecSaV3Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IpsecSaV3Details:
+		return m, nil
+	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -134,8 +295,35 @@ func (c *serviceClient) IpsecSadEntryAddDel(ctx context.Context, in *IpsecSadEnt
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) IpsecSadEntryAddDelV2(ctx context.Context, in *IpsecSadEntryAddDelV2) (*IpsecSadEntryAddDelV2Reply, error) {
+	out := new(IpsecSadEntryAddDelV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadEntryAddDelV3) (*IpsecSadEntryAddDelV3Reply, error) {
+	out := new(IpsecSadEntryAddDelV3Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) IpsecSelectBackend(ctx context.Context, in *IpsecSelectBackend) (*IpsecSelectBackendReply, error) {
 	out := new(IpsecSelectBackendReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecSetAsyncMode(ctx context.Context, in *IpsecSetAsyncMode) (*IpsecSetAsyncModeReply, error) {
+	out := new(IpsecSetAsyncModeReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -185,6 +373,10 @@ func (c *serviceClient_IpsecSpdDumpClient) Recv() (*IpsecSpdDetails, error) {
 	case *IpsecSpdDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -233,6 +425,10 @@ func (c *serviceClient_IpsecSpdInterfaceDumpClient) Recv() (*IpsecSpdInterfaceDe
 	case *IpsecSpdInterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -272,28 +468,14 @@ func (c *serviceClient_IpsecSpdsDumpClient) Recv() (*IpsecSpdsDetails, error) {
 	case *IpsecSpdsDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
-}
-
-func (c *serviceClient) IpsecTunnelIfAddDel(ctx context.Context, in *IpsecTunnelIfAddDel) (*IpsecTunnelIfAddDelReply, error) {
-	out := new(IpsecTunnelIfAddDelReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) IpsecTunnelIfSetSa(ctx context.Context, in *IpsecTunnelIfSetSa) (*IpsecTunnelIfSetSaReply, error) {
-	out := new(IpsecTunnelIfSetSaReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IpsecTunnelProtectDel(ctx context.Context, in *IpsecTunnelProtectDel) (*IpsecTunnelProtectDelReply, error) {
@@ -338,6 +520,10 @@ func (c *serviceClient_IpsecTunnelProtectDumpClient) Recv() (*IpsecTunnelProtect
 	case *IpsecTunnelProtectDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

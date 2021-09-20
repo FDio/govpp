@@ -247,9 +247,11 @@ func (c *StatsClient2) dumpStats(
 		}
 
 		entry := adapter.StatEntry{
-			Name: append([]byte(nil), dirName...),
+			StatIdentifier: adapter.StatIdentifier{
+				Name: append([]byte(nil), dirName...),
+			},
 			Type: adapter.StatType(dirType),
-			Data: c.sc.CopyEntryData(dirPtr, d.limit),
+			Data: c.sc.CopyEntryData(dirPtr, 0, d.limit),
 		}
 		entries = append(entries, entry)
 	}

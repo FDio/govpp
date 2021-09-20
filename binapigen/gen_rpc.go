@@ -152,6 +152,8 @@ func genService(g *GenFile, svc *Service) {
 			g.P("	case *", msgDetails.GoIdent, ":")
 			g.P("		return m, nil")
 			g.P("	case *", msgReply.GoIdent, ":")
+			g.P("		err = c.Stream.Close()")
+			g.P("		if err != nil { return nil, err }")
 			g.P("		return nil, ", ioPkg.Ident("EOF"))
 			g.P("	default:")
 			g.P("		return nil, ", fmtPkg.Ident("Errorf"), "(\"unexpected message: %T %v\", m, m)")
@@ -173,6 +175,8 @@ func genService(g *GenFile, svc *Service) {
 			g.P("stream, err := c.conn.NewStream(ctx)")
 			g.P("if err != nil { return err }")
 			g.P("err = stream.SendMsg(in)")
+			g.P("if err != nil { return err }")
+			g.P("err = stream.Close()")
 			g.P("if err != nil { return err }")
 			g.P("return nil")
 		}

@@ -24,10 +24,11 @@ type (
 		Options map[string]string `json:",omitempty"`
 		Imports []string          `json:",omitempty"`
 
-		AliasTypes  []AliasType  `json:",omitempty"`
-		EnumTypes   []EnumType   `json:",omitempty"`
-		StructTypes []StructType `json:",omitempty"`
-		UnionTypes  []UnionType  `json:",omitempty"`
+		AliasTypes    []AliasType  `json:",omitempty"`
+		EnumTypes     []EnumType   `json:",omitempty"`
+		EnumflagTypes []EnumType   `json:",omitempty"`
+		StructTypes   []StructType `json:",omitempty"`
+		UnionTypes    []UnionType  `json:",omitempty"`
 
 		Messages []Message `json:",omitempty"`
 		Service  *Service  `json:",omitempty"`
@@ -61,9 +62,10 @@ type (
 	}
 
 	Message struct {
-		Name   string
-		Fields []Field
-		CRC    string
+		Name    string
+		Fields  []Field
+		CRC     string
+		Options map[string]string
 	}
 
 	Field struct {

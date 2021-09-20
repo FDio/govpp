@@ -83,7 +83,7 @@ func (c *statClient) Disconnect() error {
 	return nil
 }
 
-func (c *statClient) ListStats(patterns ...string) (stats []string, err error) {
+func (c *statClient) ListStats(patterns ...string) (indexes []adapter.StatIdentifier, err error) {
 	dir := C.govpp_stat_segment_ls(convertStringSlice(patterns))
 	if dir == nil {
 		return nil, adapter.ErrStatsDataBusy
@@ -93,11 +93,14 @@ func (c *statClient) ListStats(patterns ...string) (stats []string, err error) {
 	l := C.govpp_stat_segment_vec_len(unsafe.Pointer(dir))
 	for i := 0; i < int(l); i++ {
 		nameChar := C.govpp_stat_segment_dir_index_to_name(dir, C.uint32_t(i))
-		stats = append(stats, C.GoString(nameChar))
+		indexes = append(indexes, adapter.StatIdentifier{
+			Name:  []byte(C.GoString(nameChar)),
+			Index: uint32(i),
+		})
 		C.free(unsafe.Pointer(nameChar))
 	}
 
-	return stats, nil
+	return indexes, nil
 }
 
 func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, err error) {
@@ -121,7 +124,10 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 		typ := adapter.StatType(C.govpp_stat_segment_data_type(&v))
 
 		stat := adapter.StatEntry{
-			Name: []byte(name),
+			StatIdentifier: adapter.StatIdentifier{
+				Name:  []byte(name),
+				Index: uint32(i),
+			},
 			Type: typ,
 		}
 
@@ -130,7 +136,7 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 			stat.Data = adapter.ScalarStat(C.govpp_stat_segment_data_get_scalar_value(&v))
 
 		case adapter.ErrorIndex:
-			stat.Data = adapter.ErrorStat(C.govpp_stat_segment_data_get_error_value(&v))
+			stat.Data = adapter.ErrorStat([]adapter.Counter{adapter.Counter(C.govpp_stat_segment_data_get_error_value(&v))})
 
 		case adapter.SimpleCounterVector:
 			length := int(C.govpp_stat_segment_vec_len(unsafe.Pointer(C.govpp_stat_segment_data_get_simple_counter(&v))))
@@ -147,10 +153,10 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 			vector := make([][]adapter.CombinedCounter, length)
 			for k := 0; k < length; k++ {
 				for j := 0; j < int(C.govpp_stat_segment_vec_len(unsafe.Pointer(C.govpp_stat_segment_data_get_combined_counter_index(&v, C.int(k))))); j++ {
-					vector[k] = append(vector[k], adapter.CombinedCounter([2]uint64{
+					vector[k] = append(vector[k], [2]uint64{
 						uint64(C.govpp_stat_segment_data_get_combined_counter_index_packets(&v, C.int(k), C.int(j))),
 						uint64(C.govpp_stat_segment_data_get_combined_counter_index_bytes(&v, C.int(k), C.int(j))),
-					}))
+					})
 				}
 			}
 			stat.Data = adapter.CombinedCounterStat(vector)
@@ -180,11 +186,15 @@ func (c *statClient) DumpStats(patterns ...string) (stats []adapter.StatEntry, e
 	return stats, nil
 }
 
-func (c *statClient) PrepareDir(prefixes ...string) (*adapter.StatDir, error) {
+func (c *statClient) PrepareDir(_ ...string) (*adapter.StatDir, error) {
 	return nil, adapter.ErrNotImplemented
 }
 
-func (c *statClient) UpdateDir(dir *adapter.StatDir) error {
+func (c *statClient) PrepareDirOnIndex(_ ...uint32) (*adapter.StatDir, error) {
+	return nil, adapter.ErrNotImplemented
+}
+
+func (c *statClient) UpdateDir(_ *adapter.StatDir) error {
 	return adapter.ErrNotImplemented
 }
 

@@ -21,10 +21,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func init() {
-	//RegisterPlugin("encoding", GenerateEncoding)
-}
-
 func genMessageSize(g *GenFile, name string, fields []*Field) {
 	g.P("func (m *", name, ") Size() (size int) {")
 	g.P("if m == nil { return 0 }")
@@ -230,7 +226,7 @@ func encodeBaseType(g *GenFile, typ, orig, name string, length int, sizefrom str
 				g.P("buf.EncodeBytes(", name, "[:], ", length, ")")
 			}
 			return
-		case I8, I16, U16, I32, U32, I64, U64, F64:
+		case I8, I16, U16, I32, U32, I64, U64, F64, BOOL:
 			gotype := BaseTypesGo[typ]
 			if length != 0 {
 				g.P("for i := 0; i < ", length, "; i++ {")
@@ -268,7 +264,7 @@ func encodeBaseType(g *GenFile, typ, orig, name string, length int, sizefrom str
 	}
 	if isArray {
 		switch typ {
-		case I8, U8, I16, U16, I32, U32, I64, U64, F64:
+		case I8, U8, I16, U16, I32, U32, I64, U64, F64, BOOL:
 			g.P("}")
 		}
 	}
@@ -369,7 +365,7 @@ func decodeBaseType(g *GenFile, typ, orig, name string, length int, sizefrom str
 				g.P("copy(", name, "[:], buf.DecodeBytes(", size, "))")
 			}
 			return
-		case I8, I16, U16, I32, U32, I64, U64, F64:
+		case I8, I16, U16, I32, U32, I64, U64, F64, BOOL:
 			if alloc {
 				g.P(name, " = make([]", orig, ", ", size, ")")
 			}
@@ -401,7 +397,7 @@ func decodeBaseType(g *GenFile, typ, orig, name string, length int, sizefrom str
 	}
 	if isArray {
 		switch typ {
-		case I8, U8, I16, U16, I32, U32, I64, U64, F64:
+		case I8, U8, I16, U16, I32, U32, I64, U64, F64, BOOL:
 			g.P("}")
 		}
 	}

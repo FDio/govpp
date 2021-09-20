@@ -16,6 +16,7 @@ type RPCService interface {
 	SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error)
 	SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error)
 	SrPoliciesDump(ctx context.Context, in *SrPoliciesDump) (RPCService_SrPoliciesDumpClient, error)
+	SrPoliciesWithSlIndexDump(ctx context.Context, in *SrPoliciesWithSlIndexDump) (RPCService_SrPoliciesWithSlIndexDumpClient, error)
 	SrPolicyAdd(ctx context.Context, in *SrPolicyAdd) (*SrPolicyAddReply, error)
 	SrPolicyDel(ctx context.Context, in *SrPolicyDel) (*SrPolicyDelReply, error)
 	SrPolicyMod(ctx context.Context, in *SrPolicyMod) (*SrPolicyModReply, error)
@@ -75,6 +76,10 @@ func (c *serviceClient_SrLocalsidsDumpClient) Recv() (*SrLocalsidsDetails, error
 	case *SrLocalsidsDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -114,6 +119,53 @@ func (c *serviceClient_SrPoliciesDumpClient) Recv() (*SrPoliciesDetails, error) 
 	case *SrPoliciesDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) SrPoliciesWithSlIndexDump(ctx context.Context, in *SrPoliciesWithSlIndexDump) (RPCService_SrPoliciesWithSlIndexDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_SrPoliciesWithSlIndexDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_SrPoliciesWithSlIndexDumpClient interface {
+	Recv() (*SrPoliciesWithSlIndexDetails, error)
+	api.Stream
+}
+
+type serviceClient_SrPoliciesWithSlIndexDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_SrPoliciesWithSlIndexDumpClient) Recv() (*SrPoliciesWithSlIndexDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *SrPoliciesWithSlIndexDetails:
+		return m, nil
+	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -207,6 +259,10 @@ func (c *serviceClient_SrSteeringPolDumpClient) Recv() (*SrSteeringPolDetails, e
 	case *SrSteeringPolDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

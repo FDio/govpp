@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -37,16 +38,18 @@ type MessageCodec interface {
 	EncodeMsg(msg api.Message, msgID uint16) ([]byte, error)
 	// DecodeMsg decodes binary-encoded data of a message into provided Message structure.
 	DecodeMsg(data []byte, msg api.Message) error
-	// DecodeMsgContext decodes context from message data.
-	DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error)
+	// DecodeMsgContext decodes context from message data and type.
+	DecodeMsgContext(data []byte, msgType api.MessageType) (context uint32, err error)
 }
 
 // MessageIdentifier provides identification of generated API messages.
 type MessageIdentifier interface {
 	// GetMessageID returns message identifier of given API message.
 	GetMessageID(msg api.Message) (uint16, error)
+	// GetMessagePath returns path for the given message
+	GetMessagePath(msg api.Message) string
 	// LookupByID looks up message name and crc by ID
-	LookupByID(msgID uint16) (api.Message, error)
+	LookupByID(path string, msgID uint16) (api.Message, error)
 }
 
 // vppRequest is a request that will be sent to VPP.
@@ -108,17 +111,26 @@ type Channel struct {
 	receiveReplyTimeout time.Duration // maximum time that we wait for receiver to consume reply
 }
 
-func newChannel(id uint16, conn *Connection, codec MessageCodec, identifier MessageIdentifier, reqSize, replySize int) *Channel {
-	return &Channel{
-		id:                  id,
-		conn:                conn,
-		msgCodec:            codec,
-		msgIdentifier:       identifier,
-		reqChan:             make(chan *vppRequest, reqSize),
-		replyChan:           make(chan *vppReply, replySize),
+func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) *Channel {
+	// create new channel
+	chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
+	channel := &Channel{
+		id:                  chID,
+		conn:                c,
+		msgCodec:            c.codec,
+		msgIdentifier:       c,
+		reqChan:             make(chan *vppRequest, reqChanBufSize),
+		replyChan:           make(chan *vppReply, replyChanBufSize),
 		replyTimeout:        DefaultReplyTimeout,
 		receiveReplyTimeout: ReplyChannelTimeout,
 	}
+
+	// store API channel within the client
+	c.channelsLock.Lock()
+	c.channels[chID] = channel
+	c.channelsLock.Unlock()
+
+	return channel
 }
 
 func (ch *Channel) GetID() uint16 {
@@ -339,7 +351,8 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 
 	if reply.msgID != expMsgID {
 		var msgNameCrc string
-		if replyMsg, err := ch.msgIdentifier.LookupByID(reply.msgID); err != nil {
+		pkgPath := ch.msgIdentifier.GetMessagePath(msg)
+		if replyMsg, err := ch.msgIdentifier.LookupByID(pkgPath, reply.msgID); err != nil {
 			msgNameCrc = err.Error()
 		} else {
 			msgNameCrc = getMsgNameWithCrc(replyMsg)

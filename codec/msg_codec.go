@@ -30,8 +30,8 @@ func EncodeMsg(msg api.Message, msgID uint16) (data []byte, err error) {
 func DecodeMsg(data []byte, msg api.Message) (err error) {
 	return DefaultCodec.DecodeMsg(data, msg)
 }
-func DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error) {
-	return DefaultCodec.DecodeMsgContext(data, msg)
+func DecodeMsgContext(data []byte, msgType api.MessageType) (context uint32, err error) {
+	return DefaultCodec.DecodeMsgContext(data, msgType)
 }
 
 // MsgCodec provides encoding and decoding functionality of `api.Message` structs into/from
@@ -106,12 +106,8 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) (err error) {
 	return nil
 }
 
-func (*MsgCodec) DecodeMsgContext(data []byte, msg api.Message) (context uint32, err error) {
-	if msg == nil {
-		return 0, errors.New("nil message passed in")
-	}
-
-	switch msg.GetMessageType() {
+func (*MsgCodec) DecodeMsgContext(data []byte, msgType api.MessageType) (context uint32, err error) {
+	switch msgType {
 	case api.RequestMessage:
 		return binary.BigEndian.Uint32(data[6:10]), nil
 	case api.ReplyMessage:

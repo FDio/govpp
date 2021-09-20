@@ -176,6 +176,10 @@ func (c *serviceClient_LispEidTableDumpClient) Recv() (*LispEidTableDetails, err
 	case *LispEidTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -215,6 +219,10 @@ func (c *serviceClient_LispEidTableMapDumpClient) Recv() (*LispEidTableMapDetail
 	case *LispEidTableMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -254,6 +262,10 @@ func (c *serviceClient_LispEidTableVniDumpClient) Recv() (*LispEidTableVniDetail
 	case *LispEidTableVniDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -311,6 +323,10 @@ func (c *serviceClient_LispLocatorDumpClient) Recv() (*LispLocatorDetails, error
 	case *LispLocatorDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -350,6 +366,10 @@ func (c *serviceClient_LispLocatorSetDumpClient) Recv() (*LispLocatorSetDetails,
 	case *LispLocatorSetDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -407,6 +427,10 @@ func (c *serviceClient_LispMapResolverDumpClient) Recv() (*LispMapResolverDetail
 	case *LispMapResolverDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -446,6 +470,10 @@ func (c *serviceClient_LispMapServerDumpClient) Recv() (*LispMapServerDetails, e
 	case *LispMapServerDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

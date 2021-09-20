@@ -100,6 +100,10 @@ func (c *serviceClient_LbAsDumpClient) Recv() (*LbAsDetails, error) {
 	case *LbAsDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -157,6 +161,10 @@ func (c *serviceClient_LbVipDumpClient) Recv() (*LbVipDetails, error) {
 	case *LbVipDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

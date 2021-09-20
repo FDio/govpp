@@ -98,7 +98,7 @@ type ErrorStats struct {
 type ErrorCounter struct {
 	CounterName string
 
-	Value uint64
+	Values []uint64
 }
 
 // BufferStats represents statistics per buffer pool.

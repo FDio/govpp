@@ -74,6 +74,10 @@ func (c *serviceClient_QosEgressMapDumpClient) Recv() (*QosEgressMapDetails, err
 	case *QosEgressMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -122,6 +126,10 @@ func (c *serviceClient_QosMarkDumpClient) Recv() (*QosMarkDetails, error) {
 	case *QosMarkDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -170,6 +178,10 @@ func (c *serviceClient_QosRecordDumpClient) Recv() (*QosRecordDetails, error) {
 	case *QosRecordDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -218,6 +230,10 @@ func (c *serviceClient_QosStoreDumpClient) Recv() (*QosStoreDetails, error) {
 	case *QosStoreDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

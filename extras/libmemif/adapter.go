@@ -380,6 +380,7 @@ type Memif struct {
 
 	// Interrupt
 	intCh      chan uint8      // memif-global interrupt channel (value = queue ID)
+	intErrCh   chan error      // triggered when interrupt error occurs
 	queueIntCh []chan struct{} // per RX queue interrupt channel
 
 	// Rx/Tx queues
@@ -585,6 +586,7 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 
 	// Initialize memif-global interrupt channel.
 	memif.intCh = make(chan uint8, 1<<6)
+	memif.intErrCh = make(chan error, 1<<6)
 
 	// Initialize event file descriptor for stopping Rx/Tx queue polling.
 	memif.stopQPollFd = int(C.eventfd(0, C.EFD_NONBLOCK))
@@ -665,6 +667,12 @@ func CreateInterface(config *MemifConfig, callbacks *MemifCallbacks) (memif *Mem
 // The method is thread-safe.
 func (memif *Memif) GetInterruptChan() (ch <-chan uint8 /* queue ID */) {
 	return memif.intCh
+}
+
+// GetInterruptErrorChan returns an Error channel
+// which fires if there are errors occurred while read data.
+func (memif *Memif) GetInterruptErrorChan() (ch <-chan error /* The error */) {
+	return memif.intErrCh
 }
 
 // GetQueueInterruptChan returns an empty-data channel which fires every time
@@ -1022,6 +1030,7 @@ func (memif *Memif) Close() error {
 	if err != nil {
 		// Close memif-global interrupt channel.
 		close(memif.intCh)
+		close(memif.intErrCh)
 		// Close file descriptor stopQPollFd.
 		C.close(C.int(memif.stopQPollFd))
 	}
@@ -1157,7 +1166,13 @@ func pollRxQueue(memif *Memif, queueID uint8) {
 	for {
 		_, err := syscall.EpollWait(epFd, event[:], -1)
 		if err != nil {
+			errno, _ := err.(syscall.Errno)
+			//EINTR and EAGAIN should not be considered as a fatal error, try again
+			if errno == syscall.EINTR || errno == syscall.EAGAIN {
+				continue
+			}
 			log.WithField("err", err).Error("epoll_wait() failed")
+			memif.intErrCh <- err
 			return
 		}
 

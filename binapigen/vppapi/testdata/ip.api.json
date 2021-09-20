@@ -1,187 +1,562 @@
 {
-    "services": [
-        {
-            "ip_source_and_port_range_check_add_del": {
-                "reply": "ip_source_and_port_range_check_add_del_reply"
-            }
-        },
-        {
-            "ip6_fib_dump": {
-                "reply": "ip6_fib_details",
-                "stream": true
-            }
-        },
-        {
-            "want_ip6_nd_events": {
-                "reply": "want_ip6_nd_events_reply"
-            }
-        },
-        {
-            "ip_punt_police": {
-                "reply": "ip_punt_police_reply"
-            }
-        },
-        {
-            "set_arp_neighbor_limit": {
-                "reply": "set_arp_neighbor_limit_reply"
-            }
-        },
-        {
-            "ip6nd_proxy_add_del": {
-                "reply": "ip6nd_proxy_add_del_reply"
-            }
-        },
-        {
-            "ioam_disable": {
-                "reply": "ioam_disable_reply"
-            }
-        },
-        {
-            "ip_table_add_del": {
-                "reply": "ip_table_add_del_reply"
-            }
-        },
-        {
-            "ip_neighbor_dump": {
-                "reply": "ip_neighbor_details",
-                "stream": true
-            }
-        },
-        {
-            "ip4_arp_event": {
-                "reply": null
-            }
-        },
-        {
-            "ip_punt_redirect": {
-                "reply": "ip_punt_redirect_reply"
-            }
-        },
-        {
-            "sw_interface_ip6nd_ra_prefix": {
-                "reply": "sw_interface_ip6nd_ra_prefix_reply"
-            }
-        },
-        {
-            "reset_fib": {
-                "reply": "reset_fib_reply"
-            }
-        },
-        {
-            "ip6_mfib_dump": {
-                "reply": "ip6_mfib_details",
-                "stream": true
-            }
-        },
-        {
-            "sw_interface_ip6nd_ra_config": {
-                "reply": "sw_interface_ip6nd_ra_config_reply"
-            }
-        },
-        {
-            "sw_interface_ip6_enable_disable": {
-                "reply": "sw_interface_ip6_enable_disable_reply"
-            }
-        },
-        {
-            "sw_interface_ip6_set_link_local_address": {
-                "reply": "sw_interface_ip6_set_link_local_address_reply"
-            }
-        },
-        {
-            "mfib_signal_dump": {
-                "reply": "mfib_signal_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_container_proxy_add_del": {
-                "reply": "ip_container_proxy_add_del_reply"
-            }
-        },
-        {
-            "ip_mfib_dump": {
-                "reply": "ip_mfib_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_address_dump": {
-                "reply": "ip_address_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_dump": {
-                "reply": "ip_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_neighbor_add_del": {
-                "reply": "ip_neighbor_add_del_reply"
-            }
-        },
-        {
-            "proxy_arp_intfc_enable_disable": {
-                "reply": "proxy_arp_intfc_enable_disable_reply"
-            }
-        },
-        {
-            "proxy_arp_add_del": {
-                "reply": "proxy_arp_add_del_reply"
-            }
-        },
-        {
-            "ip_add_del_route": {
-                "reply": "ip_add_del_route_reply"
-            }
-        },
-        {
-            "ip6nd_proxy_dump": {
-                "reply": "ip6nd_proxy_details",
-                "stream": true
-            }
-        },
-        {
-            "ip_fib_dump": {
-                "reply": "ip_fib_details",
-                "stream": true
-            }
-        },
-        {
-            "want_ip4_arp_events": {
-                "reply": "want_ip4_arp_events_reply"
-            }
-        },
-        {
-            "ioam_enable": {
-                "reply": "ioam_enable_reply"
-            }
-        },
-        {
-            "ip6_nd_event": {
-                "reply": null
-            }
-        },
-        {
-            "ip_mroute_add_del": {
-                "reply": "ip_mroute_add_del_reply"
-            }
-        },
-        {
-            "ip_source_and_port_range_check_interface_add_del": {
-                "reply": "ip_source_and_port_range_check_interface_add_del_reply"
-            }
-        },
-        {
-            "set_ip_flow_hash": {
-                "reply": "set_ip_flow_hash_reply"
-            }
-        }
+    "types": [
+        [
+            "address",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "vl_api_address_union_t",
+                "un"
+            ]
+        ],
+        [
+            "prefix",
+            [
+                "vl_api_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_address_and_mask",
+            [
+                "vl_api_ip4_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip4_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "ip6_address_and_mask",
+            [
+                "vl_api_ip6_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip6_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "mprefix",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "u16",
+                "grp_address_length"
+            ],
+            [
+                "vl_api_address_union_t",
+                "grp_address"
+            ],
+            [
+                "vl_api_address_union_t",
+                "src_address"
+            ]
+        ],
+        [
+            "ip6_prefix",
+            [
+                "vl_api_ip6_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_prefix",
+            [
+                "vl_api_ip4_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "prefix_matcher",
+            [
+                "u8",
+                "le"
+            ],
+            [
+                "u8",
+                "ge"
+            ]
+        ],
+        [
+            "fib_mpls_label",
+            [
+                "u8",
+                "is_uniform"
+            ],
+            [
+                "u32",
+                "label"
+            ],
+            [
+                "u8",
+                "ttl"
+            ],
+            [
+                "u8",
+                "exp"
+            ]
+        ],
+        [
+            "fib_path_nh",
+            [
+                "vl_api_address_union_t",
+                "address"
+            ],
+            [
+                "u32",
+                "via_label"
+            ],
+            [
+                "u32",
+                "obj_id"
+            ],
+            [
+                "u32",
+                "classify_table_index"
+            ]
+        ],
+        [
+            "fib_path",
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "u32",
+                "rpf_id"
+            ],
+            [
+                "u8",
+                "weight"
+            ],
+            [
+                "u8",
+                "preference"
+            ],
+            [
+                "vl_api_fib_path_type_t",
+                "type"
+            ],
+            [
+                "vl_api_fib_path_flags_t",
+                "flags"
+            ],
+            [
+                "vl_api_fib_path_nh_proto_t",
+                "proto"
+            ],
+            [
+                "vl_api_fib_path_nh_t",
+                "nh"
+            ],
+            [
+                "u8",
+                "n_labels"
+            ],
+            [
+                "vl_api_fib_mpls_label_t",
+                "label_stack",
+                16
+            ]
+        ],
+        [
+            "address",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "vl_api_address_union_t",
+                "un"
+            ]
+        ],
+        [
+            "prefix",
+            [
+                "vl_api_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_address_and_mask",
+            [
+                "vl_api_ip4_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip4_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "ip6_address_and_mask",
+            [
+                "vl_api_ip6_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip6_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "mprefix",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "u16",
+                "grp_address_length"
+            ],
+            [
+                "vl_api_address_union_t",
+                "grp_address"
+            ],
+            [
+                "vl_api_address_union_t",
+                "src_address"
+            ]
+        ],
+        [
+            "ip6_prefix",
+            [
+                "vl_api_ip6_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_prefix",
+            [
+                "vl_api_ip4_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "prefix_matcher",
+            [
+                "u8",
+                "le"
+            ],
+            [
+                "u8",
+                "ge"
+            ]
+        ],
+        [
+            "fib_mpls_label",
+            [
+                "u8",
+                "is_uniform"
+            ],
+            [
+                "u32",
+                "label"
+            ],
+            [
+                "u8",
+                "ttl"
+            ],
+            [
+                "u8",
+                "exp"
+            ]
+        ],
+        [
+            "fib_path_nh",
+            [
+                "vl_api_address_union_t",
+                "address"
+            ],
+            [
+                "u32",
+                "via_label"
+            ],
+            [
+                "u32",
+                "obj_id"
+            ],
+            [
+                "u32",
+                "classify_table_index"
+            ]
+        ],
+        [
+            "fib_path",
+            [
+                "u32",
+                "sw_if_index"
+            ],
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "u32",
+                "rpf_id"
+            ],
+            [
+                "u8",
+                "weight"
+            ],
+            [
+                "u8",
+                "preference"
+            ],
+            [
+                "vl_api_fib_path_type_t",
+                "type"
+            ],
+            [
+                "vl_api_fib_path_flags_t",
+                "flags"
+            ],
+            [
+                "vl_api_fib_path_nh_proto_t",
+                "proto"
+            ],
+            [
+                "vl_api_fib_path_nh_t",
+                "nh"
+            ],
+            [
+                "u8",
+                "n_labels"
+            ],
+            [
+                "vl_api_fib_mpls_label_t",
+                "label_stack",
+                16
+            ]
+        ],
+        [
+            "address",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "vl_api_address_union_t",
+                "un"
+            ]
+        ],
+        [
+            "prefix",
+            [
+                "vl_api_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_address_and_mask",
+            [
+                "vl_api_ip4_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip4_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "ip6_address_and_mask",
+            [
+                "vl_api_ip6_address_t",
+                "addr"
+            ],
+            [
+                "vl_api_ip6_address_t",
+                "mask"
+            ]
+        ],
+        [
+            "mprefix",
+            [
+                "vl_api_address_family_t",
+                "af"
+            ],
+            [
+                "u16",
+                "grp_address_length"
+            ],
+            [
+                "vl_api_address_union_t",
+                "grp_address"
+            ],
+            [
+                "vl_api_address_union_t",
+                "src_address"
+            ]
+        ],
+        [
+            "ip6_prefix",
+            [
+                "vl_api_ip6_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "ip4_prefix",
+            [
+                "vl_api_ip4_address_t",
+                "address"
+            ],
+            [
+                "u8",
+                "len"
+            ]
+        ],
+        [
+            "prefix_matcher",
+            [
+                "u8",
+                "le"
+            ],
+            [
+                "u8",
+                "ge"
+            ]
+        ],
+        [
+            "mfib_path",
+            [
+                "vl_api_mfib_itf_flags_t",
+                "itf_flags"
+            ],
+            [
+                "vl_api_fib_path_t",
+                "path"
+            ]
+        ],
+        [
+            "ip_table",
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "bool",
+                "is_ip6"
+            ],
+            [
+                "string",
+                "name",
+                64
+            ]
+        ],
+        [
+            "ip_route",
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "u32",
+                "stats_index"
+            ],
+            [
+                "vl_api_prefix_t",
+                "prefix"
+            ],
+            [
+                "u8",
+                "n_paths"
+            ],
+            [
+                "vl_api_fib_path_t",
+                "paths",
+                0,
+                "n_paths"
+            ]
+        ],
+        [
+            "ip_mroute",
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "vl_api_mfib_entry_flags_t",
+                "entry_flags"
+            ],
+            [
+                "u32",
+                "rpf_id"
+            ],
+            [
+                "vl_api_mprefix_t",
+                "prefix"
+            ],
+            [
+                "u8",
+                "n_paths"
+            ],
+            [
+                "vl_api_mfib_path_t",
+                "paths",
+                0,
+                "n_paths"
+            ]
+        ],
+        [
+            "punt_redirect",
+            [
+                "vl_api_interface_index_t",
+                "rx_sw_if_index"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "tx_sw_if_index"
+            ],
+            [
+                "vl_api_address_t",
+                "nh"
+            ]
+        ]
     ],
-    "vl_api_version": "0xb395c625",
-    "enums": [],
     "messages": [
         [
             "ip_table_add_del",
@@ -198,24 +573,18 @@
                 "context"
             ],
             [
-                "u32",
-                "table_id"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "name",
-                64
+                "vl_api_ip_table_t",
+                "table"
             ],
             {
-                "crc": "0x0240c89d"
+                "crc": "0x0ffdaec0"
             }
         ],
         [
@@ -237,7 +606,7 @@
             }
         ],
         [
-            "ip_fib_dump",
+            "ip_table_dump",
             [
                 "u16",
                 "_vl_msg_id"
@@ -255,109 +624,7 @@
             }
         ],
         [
-            "ip_fib_details",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "table_id"
-            ],
-            [
-                "u8",
-                "table_name",
-                64
-            ],
-            [
-                "u8",
-                "address_length"
-            ],
-            [
-                "u8",
-                "address",
-                4
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "vl_api_fib_path_t",
-                "path",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0x99dfd73b"
-            }
-        ],
-        [
-            "ip6_fib_dump",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            {
-                "crc": "0x51077d14"
-            }
-        ],
-        [
-            "ip6_fib_details",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "table_id"
-            ],
-            [
-                "u8",
-                "table_name",
-                64
-            ],
-            [
-                "u8",
-                "address_length"
-            ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "vl_api_fib_path_t",
-                "path",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0xabd0060e"
-            }
-        ],
-        [
-            "ip_neighbor_dump",
+            "ip_table_replace_begin",
             [
                 "u16",
                 "_vl_msg_id"
@@ -371,103 +638,15 @@
                 "context"
             ],
             [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "is_ipv6"
+                "vl_api_ip_table_t",
+                "table"
             ],
             {
-                "crc": "0x6b7bcd0a"
+                "crc": "0xb9d2e09e"
             }
         ],
         [
-            "ip_neighbor_details",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "is_static"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u8",
-                "mac_address",
-                6
-            ],
-            [
-                "u8",
-                "ip_address",
-                16
-            ],
-            {
-                "crc": "0x85e32a72"
-            }
-        ],
-        [
-            "ip_neighbor_add_del",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u8",
-                "is_static"
-            ],
-            [
-                "u8",
-                "is_no_adj_fib"
-            ],
-            [
-                "u8",
-                "mac_address",
-                6
-            ],
-            [
-                "u8",
-                "dst_address",
-                16
-            ],
-            {
-                "crc": "0x4711eb25"
-            }
-        ],
-        [
-            "ip_neighbor_add_del_reply",
+            "ip_table_replace_begin_reply",
             [
                 "u16",
                 "_vl_msg_id"
@@ -482,6 +661,251 @@
             ],
             {
                 "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_table_replace_end",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_ip_table_t",
+                "table"
+            ],
+            {
+                "crc": "0xb9d2e09e"
+            }
+        ],
+        [
+            "ip_table_replace_end_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_table_flush",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_ip_table_t",
+                "table"
+            ],
+            {
+                "crc": "0xb9d2e09e"
+            }
+        ],
+        [
+            "ip_table_flush_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_table_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_ip_table_t",
+                "table"
+            ],
+            {
+                "crc": "0xc79fca0f"
+            }
+        ],
+        [
+            "ip_route_add_del",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
+            ],
+            [
+                "bool",
+                "is_multipath"
+            ],
+            [
+                "vl_api_ip_route_t",
+                "route"
+            ],
+            {
+                "crc": "0xc1ff832d"
+            }
+        ],
+        [
+            "ip_route_add_del_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "u32",
+                "stats_index"
+            ],
+            {
+                "crc": "0x1992deab"
+            }
+        ],
+        [
+            "ip_route_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_ip_table_t",
+                "table"
+            ],
+            {
+                "crc": "0xb9d2e09e"
+            }
+        ],
+        [
+            "ip_route_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_ip_route_t",
+                "route"
+            ],
+            {
+                "crc": "0xd1ffaae1"
+            }
+        ],
+        [
+            "ip_route_lookup",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "table_id"
+            ],
+            [
+                "u8",
+                "exact"
+            ],
+            [
+                "vl_api_prefix_t",
+                "prefix"
+            ],
+            {
+                "crc": "0xe2986185"
+            }
+        ],
+        [
+            "ip_route_lookup_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "vl_api_ip_route_t",
+                "route"
+            ],
+            {
+                "crc": "0xae99de8e"
             }
         ],
         [
@@ -503,35 +927,39 @@
                 "vrf_id"
             ],
             [
-                "u8",
+                "bool",
                 "is_ipv6"
             ],
             [
-                "u8",
+                "bool",
                 "src"
             ],
             [
-                "u8",
+                "bool",
                 "dst"
             ],
             [
-                "u8",
+                "bool",
                 "sport"
             ],
             [
-                "u8",
+                "bool",
                 "dport"
             ],
             [
-                "u8",
+                "bool",
                 "proto"
             ],
             [
-                "u8",
+                "bool",
                 "reverse"
             ],
+            [
+                "bool",
+                "symmetric"
+            ],
             {
-                "crc": "0x32ebf737"
+                "crc": "0x084ee09e"
             }
         ],
         [
@@ -553,7 +981,7 @@
             }
         ],
         [
-            "sw_interface_ip6nd_ra_config",
+            "set_ip_flow_hash_v2",
             [
                 "u16",
                 "_vl_msg_id"
@@ -568,66 +996,22 @@
             ],
             [
                 "u32",
-                "sw_if_index"
+                "table_id"
             ],
             [
-                "u8",
-                "suppress"
+                "vl_api_address_family_t",
+                "af"
             ],
             [
-                "u8",
-                "managed"
-            ],
-            [
-                "u8",
-                "other"
-            ],
-            [
-                "u8",
-                "ll_option"
-            ],
-            [
-                "u8",
-                "send_unicast"
-            ],
-            [
-                "u8",
-                "cease"
-            ],
-            [
-                "u8",
-                "is_no"
-            ],
-            [
-                "u8",
-                "default_router"
-            ],
-            [
-                "u32",
-                "max_interval"
-            ],
-            [
-                "u32",
-                "min_interval"
-            ],
-            [
-                "u32",
-                "lifetime"
-            ],
-            [
-                "u32",
-                "initial_count"
-            ],
-            [
-                "u32",
-                "initial_interval"
+                "vl_api_ip_flow_hash_config_t",
+                "flow_hash_config"
             ],
             {
-                "crc": "0xc3f02daa"
+                "crc": "0x6d132100"
             }
         ],
         [
-            "sw_interface_ip6nd_ra_config_reply",
+            "set_ip_flow_hash_v2_reply",
             [
                 "u16",
                 "_vl_msg_id"
@@ -645,7 +1029,7 @@
             }
         ],
         [
-            "sw_interface_ip6nd_ra_prefix",
+            "set_ip_flow_hash_router_id",
             [
                 "u16",
                 "_vl_msg_id"
@@ -660,55 +1044,14 @@
             ],
             [
                 "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            [
-                "u8",
-                "address_length"
-            ],
-            [
-                "u8",
-                "use_default"
-            ],
-            [
-                "u8",
-                "no_advertise"
-            ],
-            [
-                "u8",
-                "off_link"
-            ],
-            [
-                "u8",
-                "no_autoconfig"
-            ],
-            [
-                "u8",
-                "no_onlink"
-            ],
-            [
-                "u8",
-                "is_no"
-            ],
-            [
-                "u32",
-                "val_lifetime"
-            ],
-            [
-                "u32",
-                "pref_lifetime"
+                "router_id"
             ],
             {
-                "crc": "0xca763c9a"
+                "crc": "0x03e4f48e"
             }
         ],
         [
-            "sw_interface_ip6nd_ra_prefix_reply",
+            "set_ip_flow_hash_router_id_reply",
             [
                 "u16",
                 "_vl_msg_id"
@@ -723,100 +1066,6 @@
             ],
             {
                 "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "ip6nd_proxy_add_del",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "is_del"
-            ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            {
-                "crc": "0xd95f0fa0"
-            }
-        ],
-        [
-            "ip6nd_proxy_add_del_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "ip6nd_proxy_details",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            {
-                "crc": "0xd73bf1ab"
-            }
-        ],
-        [
-            "ip6nd_proxy_dump",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            {
-                "crc": "0x51077d14"
             }
         ],
         [
@@ -834,15 +1083,15 @@
                 "context"
             ],
             [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
-                "u8",
+                "bool",
                 "enable"
             ],
             {
-                "crc": "0xa36fadc0"
+                "crc": "0xae6cfcfb"
             }
         ],
         [
@@ -864,7 +1113,25 @@
             }
         ],
         [
-            "sw_interface_ip6_set_link_local_address",
+            "ip_mtable_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "ip_mtable_details",
             [
                 "u16",
                 "_vl_msg_id"
@@ -878,182 +1145,11 @@
                 "context"
             ],
             [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "address",
-                16
+                "vl_api_ip_table_t",
+                "table"
             ],
             {
-                "crc": "0xd73bf1ab"
-            }
-        ],
-        [
-            "sw_interface_ip6_set_link_local_address_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "ip_add_del_route",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "next_hop_sw_if_index"
-            ],
-            [
-                "u32",
-                "table_id"
-            ],
-            [
-                "u32",
-                "classify_table_index"
-            ],
-            [
-                "u32",
-                "next_hop_table_id"
-            ],
-            [
-                "u32",
-                "next_hop_id"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "is_drop"
-            ],
-            [
-                "u8",
-                "is_unreach"
-            ],
-            [
-                "u8",
-                "is_prohibit"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u8",
-                "is_local"
-            ],
-            [
-                "u8",
-                "is_classify"
-            ],
-            [
-                "u8",
-                "is_multipath"
-            ],
-            [
-                "u8",
-                "is_resolve_host"
-            ],
-            [
-                "u8",
-                "is_resolve_attached"
-            ],
-            [
-                "u8",
-                "is_dvr"
-            ],
-            [
-                "u8",
-                "is_source_lookup"
-            ],
-            [
-                "u8",
-                "is_udp_encap"
-            ],
-            [
-                "u8",
-                "next_hop_weight"
-            ],
-            [
-                "u8",
-                "next_hop_preference"
-            ],
-            [
-                "u8",
-                "next_hop_proto"
-            ],
-            [
-                "u8",
-                "dst_address_length"
-            ],
-            [
-                "u8",
-                "dst_address",
-                16
-            ],
-            [
-                "u8",
-                "next_hop_address",
-                16
-            ],
-            [
-                "u8",
-                "next_hop_n_out_labels"
-            ],
-            [
-                "u32",
-                "next_hop_via_label"
-            ],
-            [
-                "u32",
-                "next_hop_out_label_stack",
-                0,
-                "next_hop_n_out_labels"
-            ],
-            {
-                "crc": "0xc85f8290"
-            }
-        ],
-        [
-            "ip_add_del_route_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
+                "crc": "0xb9d2e09e"
             }
         ],
         [
@@ -1071,61 +1167,22 @@
                 "context"
             ],
             [
-                "u32",
-                "next_hop_sw_if_index"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             [
-                "u32",
-                "table_id"
+                "bool",
+                "is_multipath"
             ],
             [
-                "u32",
-                "entry_flags"
-            ],
-            [
-                "u32",
-                "itf_flags"
-            ],
-            [
-                "u32",
-                "rpf_id"
-            ],
-            [
-                "u32",
-                "bier_imp"
-            ],
-            [
-                "u16",
-                "grp_address_length"
-            ],
-            [
-                "u8",
-                "next_hop_afi"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u8",
-                "is_local"
-            ],
-            [
-                "u8",
-                "grp_address",
-                16
-            ],
-            [
-                "u8",
-                "src_address",
-                16
+                "vl_api_ip_mroute_t",
+                "route"
             ],
             {
-                "crc": "0xc37112f7"
+                "crc": "0x0dd7e790"
             }
         ],
         [
@@ -1142,12 +1199,16 @@
                 "i32",
                 "retval"
             ],
+            [
+                "u32",
+                "stats_index"
+            ],
             {
-                "crc": "0xe8d4e804"
+                "crc": "0x1992deab"
             }
         ],
         [
-            "ip_mfib_dump",
+            "ip_mroute_dump",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1160,12 +1221,16 @@
                 "u32",
                 "context"
             ],
+            [
+                "vl_api_ip_table_t",
+                "table"
+            ],
             {
-                "crc": "0x51077d14"
+                "crc": "0xb9d2e09e"
             }
         ],
         [
-            "ip_mfib_details",
+            "ip_mroute_details",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1175,103 +1240,11 @@
                 "context"
             ],
             [
-                "u32",
-                "table_id"
-            ],
-            [
-                "u32",
-                "entry_flags"
-            ],
-            [
-                "u32",
-                "rpf_id"
-            ],
-            [
-                "u8",
-                "address_length"
-            ],
-            [
-                "u8",
-                "grp_address",
-                4
-            ],
-            [
-                "u8",
-                "src_address",
-                4
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "vl_api_fib_path_t",
-                "path",
-                0,
-                "count"
+                "vl_api_ip_mroute_t",
+                "route"
             ],
             {
-                "crc": "0x5e530d5e"
-            }
-        ],
-        [
-            "ip6_mfib_dump",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            {
-                "crc": "0x51077d14"
-            }
-        ],
-        [
-            "ip6_mfib_details",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "table_id"
-            ],
-            [
-                "u8",
-                "address_length"
-            ],
-            [
-                "u8",
-                "grp_address",
-                16
-            ],
-            [
-                "u8",
-                "src_address",
-                16
-            ],
-            [
-                "u32",
-                "count"
-            ],
-            [
-                "vl_api_fib_path_t",
-                "path",
-                0,
-                "count"
-            ],
-            {
-                "crc": "0xe02dcb4b"
+                "crc": "0xc5cb23fc"
             }
         ],
         [
@@ -1282,31 +1255,18 @@
             ],
             [
                 "u32",
-                "client_index"
-            ],
-            [
-                "u32",
                 "context"
             ],
             [
-                "u8",
-                "ip",
-                16
-            ],
-            [
-                "u8",
-                "prefix_length"
-            ],
-            [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
-                "u8",
-                "is_ipv6"
+                "vl_api_address_with_prefix_t",
+                "prefix"
             ],
             {
-                "crc": "0xbc7442f2"
+                "crc": "0xb1199745"
             }
         ],
         [
@@ -1324,15 +1284,62 @@
                 "context"
             ],
             [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
-                "u8",
+                "bool",
                 "is_ipv6"
             ],
             {
-                "crc": "0x6b7bcd0a"
+                "crc": "0x2d033de4"
+            }
+        ],
+        [
+            "ip_unnumbered_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "sw_if_index"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "ip_sw_if_index"
+            ],
+            {
+                "crc": "0xaa12a483"
+            }
+        ],
+        [
+            "ip_unnumbered_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "sw_if_index",
+                {
+                    "default": 4294967295
+                }
+            ],
+            {
+                "crc": "0xf9e6675e"
             }
         ],
         [
@@ -1343,18 +1350,18 @@
             ],
             [
                 "u32",
-                "sw_if_index"
-            ],
-            [
-                "u32",
                 "context"
             ],
             [
-                "u8",
+                "vl_api_interface_index_t",
+                "sw_if_index"
+            ],
+            [
+                "bool",
                 "is_ipv6"
             ],
             {
-                "crc": "0x452ffc5a"
+                "crc": "0xeb152d07"
             }
         ],
         [
@@ -1372,11 +1379,11 @@
                 "context"
             ],
             [
-                "u8",
+                "bool",
                 "is_ipv6"
             ],
             {
-                "crc": "0xde883da4"
+                "crc": "0x98d231ca"
             }
         ],
         [
@@ -1405,14 +1412,10 @@
             ],
             [
                 "u32",
-                "client_index"
-            ],
-            [
-                "u32",
                 "context"
             ],
             [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
@@ -1420,18 +1423,8 @@
                 "table_id"
             ],
             [
-                "u16",
-                "grp_address_len"
-            ],
-            [
-                "u8",
-                "grp_address",
-                16
-            ],
-            [
-                "u8",
-                "src_address",
-                16
+                "vl_api_mprefix_t",
+                "prefix"
             ],
             [
                 "u16",
@@ -1443,7 +1436,7 @@
                 256
             ],
             {
-                "crc": "0x791bbeab"
+                "crc": "0x64398a9a"
             }
         ],
         [
@@ -1465,15 +1458,18 @@
                 "policer_index"
             ],
             [
-                "u8",
-                "is_add"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             [
-                "u8",
+                "bool",
                 "is_ip6"
             ],
             {
-                "crc": "0x38691592"
+                "crc": "0xdb867cea"
             }
         ],
         [
@@ -1509,28 +1505,18 @@
                 "context"
             ],
             [
-                "u32",
-                "rx_sw_if_index"
+                "vl_api_punt_redirect_t",
+                "punt"
             ],
             [
-                "u32",
-                "tx_sw_if_index"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "is_ip6"
-            ],
-            [
-                "u8",
-                "nh",
-                16
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             {
-                "crc": "0x996b6603"
+                "crc": "0xa9a5592c"
             }
         ],
         [
@@ -1552,6 +1538,50 @@
             }
         ],
         [
+            "ip_punt_redirect_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "sw_if_index"
+            ],
+            [
+                "bool",
+                "is_ipv6"
+            ],
+            {
+                "crc": "0x2d033de4"
+            }
+        ],
+        [
+            "ip_punt_redirect_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_punt_redirect_t",
+                "punt"
+            ],
+            {
+                "crc": "0x3924f5d3"
+            }
+        ],
+        [
             "ip_container_proxy_add_del",
             [
                 "u16",
@@ -1566,28 +1596,22 @@
                 "context"
             ],
             [
-                "u8",
-                "ip",
-                16
+                "vl_api_prefix_t",
+                "pfx"
             ],
             [
-                "u8",
-                "is_ip4"
-            ],
-            [
-                "u8",
-                "plen"
-            ],
-            [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
-                "u8",
-                "is_add"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             {
-                "crc": "0x0a355d39"
+                "crc": "0x91189f40"
             }
         ],
         [
@@ -1609,6 +1633,46 @@
             }
         ],
         [
+            "ip_container_proxy_dump",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            {
+                "crc": "0x51077d14"
+            }
+        ],
+        [
+            "ip_container_proxy_details",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_interface_index_t",
+                "sw_if_index"
+            ],
+            [
+                "vl_api_prefix_t",
+                "prefix"
+            ],
+            {
+                "crc": "0x0ee460e8"
+            }
+        ],
+        [
             "ip_source_and_port_range_check_add_del",
             [
                 "u16",
@@ -1623,21 +1687,15 @@
                 "context"
             ],
             [
-                "u8",
-                "is_ipv6"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "mask_length"
-            ],
-            [
-                "u8",
-                "address",
-                16
+                "vl_api_prefix_t",
+                "prefix"
             ],
             [
                 "u8",
@@ -1658,7 +1716,7 @@
                 "vrf_id"
             ],
             {
-                "crc": "0x03d6b03a"
+                "crc": "0x8bfc76f2"
             }
         ],
         [
@@ -1694,11 +1752,14 @@
                 "context"
             ],
             [
-                "u8",
-                "is_add"
+                "bool",
+                "is_add",
+                {
+                    "default": "true"
+                }
             ],
             [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
@@ -1718,7 +1779,7 @@
                 "udp_out_vrf_id"
             ],
             {
-                "crc": "0x6966bc44"
+                "crc": "0xe1ba8987"
             }
         ],
         [
@@ -1740,7 +1801,7 @@
             }
         ],
         [
-            "want_ip4_arp_events",
+            "sw_interface_ip6_set_link_local_address",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1754,107 +1815,19 @@
                 "context"
             ],
             [
-                "u8",
-                "enable_disable"
-            ],
-            [
-                "u32",
-                "pid"
-            ],
-            [
-                "u32",
-                "address"
-            ],
-            {
-                "crc": "0x77e06379"
-            }
-        ],
-        [
-            "want_ip4_arp_events_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "ip4_arp_event",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "address"
-            ],
-            [
-                "u32",
-                "pid"
-            ],
-            [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
-                "u8",
-                "new_mac",
-                6
-            ],
-            [
-                "u8",
-                "mac_ip"
+                "vl_api_ip6_address_t",
+                "ip"
             ],
             {
-                "crc": "0xef7235f7"
+                "crc": "0x2931d9fa"
             }
         ],
         [
-            "want_ip6_nd_events",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u8",
-                "enable_disable"
-            ],
-            [
-                "u32",
-                "pid"
-            ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            {
-                "crc": "0x1cf65fbb"
-            }
-        ],
-        [
-            "want_ip6_nd_events_reply",
+            "sw_interface_ip6_set_link_local_address_reply",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1872,7 +1845,7 @@
             }
         ],
         [
-            "ip6_nd_event",
+            "sw_interface_ip6_get_link_local_address",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1883,68 +1856,18 @@
             ],
             [
                 "u32",
-                "pid"
+                "context"
             ],
             [
-                "u32",
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
-            [
-                "u8",
-                "address",
-                16
-            ],
-            [
-                "u8",
-                "new_mac",
-                6
-            ],
-            [
-                "u8",
-                "mac_ip"
-            ],
             {
-                "crc": "0x96ab2fdd"
+                "crc": "0xf9e6675e"
             }
         ],
         [
-            "proxy_arp_add_del",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "vrf_id"
-            ],
-            [
-                "u8",
-                "is_add"
-            ],
-            [
-                "u8",
-                "low_address",
-                4
-            ],
-            [
-                "u8",
-                "hi_address",
-                4
-            ],
-            {
-                "crc": "0xc2442918"
-            }
-        ],
-        [
-            "proxy_arp_add_del_reply",
+            "sw_interface_ip6_get_link_local_address_reply",
             [
                 "u16",
                 "_vl_msg_id"
@@ -1957,140 +1880,12 @@
                 "i32",
                 "retval"
             ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "proxy_arp_intfc_enable_disable",
             [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "sw_if_index"
-            ],
-            [
-                "u8",
-                "enable_disable"
+                "vl_api_ip6_address_t",
+                "ip"
             ],
             {
-                "crc": "0x69d24598"
-            }
-        ],
-        [
-            "proxy_arp_intfc_enable_disable_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "reset_fib",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u32",
-                "vrf_id"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            {
-                "crc": "0x8553ebd9"
-            }
-        ],
-        [
-            "reset_fib_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
-            }
-        ],
-        [
-            "set_arp_neighbor_limit",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "client_index"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "u8",
-                "is_ipv6"
-            ],
-            [
-                "u32",
-                "arp_neighbor_limit"
-            ],
-            {
-                "crc": "0x97d01fd6"
-            }
-        ],
-        [
-            "set_arp_neighbor_limit_reply",
-            [
-                "u16",
-                "_vl_msg_id"
-            ],
-            [
-                "u32",
-                "context"
-            ],
-            [
-                "i32",
-                "retval"
-            ],
-            {
-                "crc": "0xe8d4e804"
+                "crc": "0xd16b7130"
             }
         ],
         [
@@ -2112,19 +1907,19 @@
                 "id"
             ],
             [
-                "u8",
+                "bool",
                 "seqno"
             ],
             [
-                "u8",
+                "bool",
                 "analyse"
             ],
             [
-                "u8",
+                "bool",
                 "pot_enable"
             ],
             [
-                "u8",
+                "bool",
                 "trace_enable"
             ],
             [
@@ -2132,7 +1927,7 @@
                 "node_id"
             ],
             {
-                "crc": "0x9392e032"
+                "crc": "0x51ccd868"
             }
         ],
         [
@@ -2192,55 +1987,1592 @@
             {
                 "crc": "0xe8d4e804"
             }
-        ]
-    ],
-    "types": [
+        ],
         [
-            "fib_path",
+            "ip_reassembly_set",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
             [
                 "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "u32",
+                "timeout_ms"
+            ],
+            [
+                "u32",
+                "max_reassemblies"
+            ],
+            [
+                "u32",
+                "max_reassembly_length"
+            ],
+            [
+                "u32",
+                "expire_walk_interval_ms"
+            ],
+            [
+                "bool",
+                "is_ip6"
+            ],
+            [
+                "vl_api_ip_reass_type_t",
+                "type"
+            ],
+            {
+                "crc": "0x16467d25"
+            }
+        ],
+        [
+            "ip_reassembly_set_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ],
+        [
+            "ip_reassembly_get",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "bool",
+                "is_ip6"
+            ],
+            [
+                "vl_api_ip_reass_type_t",
+                "type"
+            ],
+            {
+                "crc": "0xea13ff63"
+            }
+        ],
+        [
+            "ip_reassembly_get_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "i32",
+                "retval"
+            ],
+            [
+                "u32",
+                "timeout_ms"
+            ],
+            [
+                "u32",
+                "max_reassemblies"
+            ],
+            [
+                "u32",
+                "max_reassembly_length"
+            ],
+            [
+                "u32",
+                "expire_walk_interval_ms"
+            ],
+            [
+                "bool",
+                "is_ip6"
+            ],
+            {
+                "crc": "0xd5eb8d34"
+            }
+        ],
+        [
+            "ip_reassembly_enable_disable",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
+                "u32",
+                "client_index"
+            ],
+            [
+                "u32",
+                "context"
+            ],
+            [
+                "vl_api_interface_index_t",
                 "sw_if_index"
             ],
             [
+                "bool",
+                "enable_ip4"
+            ],
+            [
+                "bool",
+                "enable_ip6"
+            ],
+            [
+                "vl_api_ip_reass_type_t",
+                "type"
+            ],
+            {
+                "crc": "0x885c85a6"
+            }
+        ],
+        [
+            "ip_reassembly_enable_disable_reply",
+            [
+                "u16",
+                "_vl_msg_id"
+            ],
+            [
                 "u32",
-                "table_id"
+                "context"
             ],
             [
-                "u8",
-                "weight"
+                "i32",
+                "retval"
+            ],
+            {
+                "crc": "0xe8d4e804"
+            }
+        ]
+    ],
+    "unions": [
+        [
+            "address_union",
+            [
+                "vl_api_ip4_address_t",
+                "ip4"
             ],
             [
-                "u8",
-                "preference"
+                "vl_api_ip6_address_t",
+                "ip6"
+            ]
+        ],
+        [
+            "address_union",
+            [
+                "vl_api_ip4_address_t",
+                "ip4"
             ],
             [
-                "u8",
-                "is_local"
+                "vl_api_ip6_address_t",
+                "ip6"
+            ]
+        ],
+        [
+            "address_union",
+            [
+                "vl_api_ip4_address_t",
+                "ip4"
             ],
             [
-                "u8",
-                "is_drop"
+                "vl_api_ip6_address_t",
+                "ip6"
+            ]
+        ]
+    ],
+    "enums": [
+        [
+            "if_status_flags",
+            [
+                "IF_STATUS_API_FLAG_ADMIN_UP",
+                1
             ],
             [
-                "u8",
-                "is_unreach"
+                "IF_STATUS_API_FLAG_LINK_UP",
+                2
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "mtu_proto",
+            [
+                "MTU_PROTO_API_L3",
+                0
             ],
             [
-                "u8",
-                "is_prohibit"
+                "MTU_PROTO_API_IP4",
+                1
             ],
             [
-                "u8",
-                "afi"
+                "MTU_PROTO_API_IP6",
+                2
             ],
             [
-                "u8",
-                "next_hop",
+                "MTU_PROTO_API_MPLS",
+                3
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "link_duplex",
+            [
+                "LINK_DUPLEX_API_UNKNOWN",
+                0
+            ],
+            [
+                "LINK_DUPLEX_API_HALF",
+                1
+            ],
+            [
+                "LINK_DUPLEX_API_FULL",
+                2
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "sub_if_flags",
+            [
+                "SUB_IF_API_FLAG_NO_TAGS",
+                1
+            ],
+            [
+                "SUB_IF_API_FLAG_ONE_TAG",
+                2
+            ],
+            [
+                "SUB_IF_API_FLAG_TWO_TAGS",
+                4
+            ],
+            [
+                "SUB_IF_API_FLAG_DOT1AD",
+                8
+            ],
+            [
+                "SUB_IF_API_FLAG_EXACT_MATCH",
+                16
+            ],
+            [
+                "SUB_IF_API_FLAG_DEFAULT",
+                32
+            ],
+            [
+                "SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY",
+                64
+            ],
+            [
+                "SUB_IF_API_FLAG_INNER_VLAN_ID_ANY",
+                128
+            ],
+            [
+                "SUB_IF_API_FLAG_MASK_VNET",
+                254
+            ],
+            [
+                "SUB_IF_API_FLAG_DOT1AH",
+                256
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "rx_mode",
+            [
+                "RX_MODE_API_UNKNOWN",
+                0
+            ],
+            [
+                "RX_MODE_API_POLLING",
+                1
+            ],
+            [
+                "RX_MODE_API_INTERRUPT",
+                2
+            ],
+            [
+                "RX_MODE_API_ADAPTIVE",
+                3
+            ],
+            [
+                "RX_MODE_API_DEFAULT",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "if_type",
+            [
+                "IF_API_TYPE_HARDWARE",
+                0
+            ],
+            [
+                "IF_API_TYPE_SUB",
+                1
+            ],
+            [
+                "IF_API_TYPE_P2P",
+                2
+            ],
+            [
+                "IF_API_TYPE_PIPE",
+                3
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "address_family",
+            [
+                "ADDRESS_IP4",
+                0
+            ],
+            [
+                "ADDRESS_IP6",
+                1
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_feature_location",
+            [
+                "IP_API_FEATURE_INPUT",
+                0
+            ],
+            [
+                "IP_API_FEATURE_OUTPUT",
+                1
+            ],
+            [
+                "IP_API_FEATURE_LOCAL",
+                2
+            ],
+            [
+                "IP_API_FEATURE_PUNT",
+                3
+            ],
+            [
+                "IP_API_FEATURE_DROP",
+                4
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_ecn",
+            [
+                "IP_API_ECN_NONE",
+                0
+            ],
+            [
+                "IP_API_ECN_ECT0",
+                1
+            ],
+            [
+                "IP_API_ECN_ECT1",
+                2
+            ],
+            [
+                "IP_API_ECN_CE",
+                3
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_dscp",
+            [
+                "IP_API_DSCP_CS0",
+                0
+            ],
+            [
+                "IP_API_DSCP_CS1",
+                8
+            ],
+            [
+                "IP_API_DSCP_AF11",
+                10
+            ],
+            [
+                "IP_API_DSCP_AF12",
+                12
+            ],
+            [
+                "IP_API_DSCP_AF13",
+                14
+            ],
+            [
+                "IP_API_DSCP_CS2",
+                16
+            ],
+            [
+                "IP_API_DSCP_AF21",
+                18
+            ],
+            [
+                "IP_API_DSCP_AF22",
+                20
+            ],
+            [
+                "IP_API_DSCP_AF23",
+                22
+            ],
+            [
+                "IP_API_DSCP_CS3",
+                24
+            ],
+            [
+                "IP_API_DSCP_AF31",
+                26
+            ],
+            [
+                "IP_API_DSCP_AF32",
+                28
+            ],
+            [
+                "IP_API_DSCP_AF33",
+                30
+            ],
+            [
+                "IP_API_DSCP_CS4",
+                32
+            ],
+            [
+                "IP_API_DSCP_AF41",
+                34
+            ],
+            [
+                "IP_API_DSCP_AF42",
+                36
+            ],
+            [
+                "IP_API_DSCP_AF43",
+                38
+            ],
+            [
+                "IP_API_DSCP_CS5",
+                40
+            ],
+            [
+                "IP_API_DSCP_EF",
+                46
+            ],
+            [
+                "IP_API_DSCP_CS6",
+                48
+            ],
+            [
+                "IP_API_DSCP_CS7",
+                50
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_proto",
+            [
+                "IP_API_PROTO_HOPOPT",
+                0
+            ],
+            [
+                "IP_API_PROTO_ICMP",
+                1
+            ],
+            [
+                "IP_API_PROTO_IGMP",
+                2
+            ],
+            [
+                "IP_API_PROTO_TCP",
+                6
+            ],
+            [
+                "IP_API_PROTO_UDP",
+                17
+            ],
+            [
+                "IP_API_PROTO_GRE",
+                47
+            ],
+            [
+                "IP_API_PROTO_ESP",
+                50
+            ],
+            [
+                "IP_API_PROTO_AH",
+                51
+            ],
+            [
+                "IP_API_PROTO_ICMP6",
+                58
+            ],
+            [
+                "IP_API_PROTO_EIGRP",
+                88
+            ],
+            [
+                "IP_API_PROTO_OSPF",
+                89
+            ],
+            [
+                "IP_API_PROTO_SCTP",
+                132
+            ],
+            [
+                "IP_API_PROTO_RESERVED",
+                255
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "fib_path_nh_proto",
+            [
+                "FIB_API_PATH_NH_PROTO_IP4",
+                0
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_IP6",
+                1
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_MPLS",
+                2
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_ETHERNET",
+                3
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_BIER",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "fib_path_flags",
+            [
+                "FIB_API_PATH_FLAG_NONE",
+                0
+            ],
+            [
+                "FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED",
+                1
+            ],
+            [
+                "FIB_API_PATH_FLAG_RESOLVE_VIA_HOST",
+                2
+            ],
+            [
+                "FIB_API_PATH_FLAG_POP_PW_CW",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "fib_path_type",
+            [
+                "FIB_API_PATH_TYPE_NORMAL",
+                0
+            ],
+            [
+                "FIB_API_PATH_TYPE_LOCAL",
+                1
+            ],
+            [
+                "FIB_API_PATH_TYPE_DROP",
+                2
+            ],
+            [
+                "FIB_API_PATH_TYPE_UDP_ENCAP",
+                3
+            ],
+            [
+                "FIB_API_PATH_TYPE_BIER_IMP",
+                4
+            ],
+            [
+                "FIB_API_PATH_TYPE_ICMP_UNREACH",
+                5
+            ],
+            [
+                "FIB_API_PATH_TYPE_ICMP_PROHIBIT",
+                6
+            ],
+            [
+                "FIB_API_PATH_TYPE_SOURCE_LOOKUP",
+                7
+            ],
+            [
+                "FIB_API_PATH_TYPE_DVR",
+                8
+            ],
+            [
+                "FIB_API_PATH_TYPE_INTERFACE_RX",
+                9
+            ],
+            [
+                "FIB_API_PATH_TYPE_CLASSIFY",
+                10
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "address_family",
+            [
+                "ADDRESS_IP4",
+                0
+            ],
+            [
+                "ADDRESS_IP6",
+                1
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_feature_location",
+            [
+                "IP_API_FEATURE_INPUT",
+                0
+            ],
+            [
+                "IP_API_FEATURE_OUTPUT",
+                1
+            ],
+            [
+                "IP_API_FEATURE_LOCAL",
+                2
+            ],
+            [
+                "IP_API_FEATURE_PUNT",
+                3
+            ],
+            [
+                "IP_API_FEATURE_DROP",
+                4
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_ecn",
+            [
+                "IP_API_ECN_NONE",
+                0
+            ],
+            [
+                "IP_API_ECN_ECT0",
+                1
+            ],
+            [
+                "IP_API_ECN_ECT1",
+                2
+            ],
+            [
+                "IP_API_ECN_CE",
+                3
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_dscp",
+            [
+                "IP_API_DSCP_CS0",
+                0
+            ],
+            [
+                "IP_API_DSCP_CS1",
+                8
+            ],
+            [
+                "IP_API_DSCP_AF11",
+                10
+            ],
+            [
+                "IP_API_DSCP_AF12",
+                12
+            ],
+            [
+                "IP_API_DSCP_AF13",
+                14
+            ],
+            [
+                "IP_API_DSCP_CS2",
+                16
+            ],
+            [
+                "IP_API_DSCP_AF21",
+                18
+            ],
+            [
+                "IP_API_DSCP_AF22",
+                20
+            ],
+            [
+                "IP_API_DSCP_AF23",
+                22
+            ],
+            [
+                "IP_API_DSCP_CS3",
+                24
+            ],
+            [
+                "IP_API_DSCP_AF31",
+                26
+            ],
+            [
+                "IP_API_DSCP_AF32",
+                28
+            ],
+            [
+                "IP_API_DSCP_AF33",
+                30
+            ],
+            [
+                "IP_API_DSCP_CS4",
+                32
+            ],
+            [
+                "IP_API_DSCP_AF41",
+                34
+            ],
+            [
+                "IP_API_DSCP_AF42",
+                36
+            ],
+            [
+                "IP_API_DSCP_AF43",
+                38
+            ],
+            [
+                "IP_API_DSCP_CS5",
+                40
+            ],
+            [
+                "IP_API_DSCP_EF",
+                46
+            ],
+            [
+                "IP_API_DSCP_CS6",
+                48
+            ],
+            [
+                "IP_API_DSCP_CS7",
+                50
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_proto",
+            [
+                "IP_API_PROTO_HOPOPT",
+                0
+            ],
+            [
+                "IP_API_PROTO_ICMP",
+                1
+            ],
+            [
+                "IP_API_PROTO_IGMP",
+                2
+            ],
+            [
+                "IP_API_PROTO_TCP",
+                6
+            ],
+            [
+                "IP_API_PROTO_UDP",
+                17
+            ],
+            [
+                "IP_API_PROTO_GRE",
+                47
+            ],
+            [
+                "IP_API_PROTO_ESP",
+                50
+            ],
+            [
+                "IP_API_PROTO_AH",
+                51
+            ],
+            [
+                "IP_API_PROTO_ICMP6",
+                58
+            ],
+            [
+                "IP_API_PROTO_EIGRP",
+                88
+            ],
+            [
+                "IP_API_PROTO_OSPF",
+                89
+            ],
+            [
+                "IP_API_PROTO_SCTP",
+                132
+            ],
+            [
+                "IP_API_PROTO_RESERVED",
+                255
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "fib_path_nh_proto",
+            [
+                "FIB_API_PATH_NH_PROTO_IP4",
+                0
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_IP6",
+                1
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_MPLS",
+                2
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_ETHERNET",
+                3
+            ],
+            [
+                "FIB_API_PATH_NH_PROTO_BIER",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "fib_path_flags",
+            [
+                "FIB_API_PATH_FLAG_NONE",
+                0
+            ],
+            [
+                "FIB_API_PATH_FLAG_RESOLVE_VIA_ATTACHED",
+                1
+            ],
+            [
+                "FIB_API_PATH_FLAG_RESOLVE_VIA_HOST",
+                2
+            ],
+            [
+                "FIB_API_PATH_FLAG_POP_PW_CW",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "fib_path_type",
+            [
+                "FIB_API_PATH_TYPE_NORMAL",
+                0
+            ],
+            [
+                "FIB_API_PATH_TYPE_LOCAL",
+                1
+            ],
+            [
+                "FIB_API_PATH_TYPE_DROP",
+                2
+            ],
+            [
+                "FIB_API_PATH_TYPE_UDP_ENCAP",
+                3
+            ],
+            [
+                "FIB_API_PATH_TYPE_BIER_IMP",
+                4
+            ],
+            [
+                "FIB_API_PATH_TYPE_ICMP_UNREACH",
+                5
+            ],
+            [
+                "FIB_API_PATH_TYPE_ICMP_PROHIBIT",
+                6
+            ],
+            [
+                "FIB_API_PATH_TYPE_SOURCE_LOOKUP",
+                7
+            ],
+            [
+                "FIB_API_PATH_TYPE_DVR",
+                8
+            ],
+            [
+                "FIB_API_PATH_TYPE_INTERFACE_RX",
+                9
+            ],
+            [
+                "FIB_API_PATH_TYPE_CLASSIFY",
+                10
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "address_family",
+            [
+                "ADDRESS_IP4",
+                0
+            ],
+            [
+                "ADDRESS_IP6",
+                1
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_feature_location",
+            [
+                "IP_API_FEATURE_INPUT",
+                0
+            ],
+            [
+                "IP_API_FEATURE_OUTPUT",
+                1
+            ],
+            [
+                "IP_API_FEATURE_LOCAL",
+                2
+            ],
+            [
+                "IP_API_FEATURE_PUNT",
+                3
+            ],
+            [
+                "IP_API_FEATURE_DROP",
+                4
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_ecn",
+            [
+                "IP_API_ECN_NONE",
+                0
+            ],
+            [
+                "IP_API_ECN_ECT0",
+                1
+            ],
+            [
+                "IP_API_ECN_ECT1",
+                2
+            ],
+            [
+                "IP_API_ECN_CE",
+                3
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_dscp",
+            [
+                "IP_API_DSCP_CS0",
+                0
+            ],
+            [
+                "IP_API_DSCP_CS1",
+                8
+            ],
+            [
+                "IP_API_DSCP_AF11",
+                10
+            ],
+            [
+                "IP_API_DSCP_AF12",
+                12
+            ],
+            [
+                "IP_API_DSCP_AF13",
+                14
+            ],
+            [
+                "IP_API_DSCP_CS2",
+                16
+            ],
+            [
+                "IP_API_DSCP_AF21",
+                18
+            ],
+            [
+                "IP_API_DSCP_AF22",
+                20
+            ],
+            [
+                "IP_API_DSCP_AF23",
+                22
+            ],
+            [
+                "IP_API_DSCP_CS3",
+                24
+            ],
+            [
+                "IP_API_DSCP_AF31",
+                26
+            ],
+            [
+                "IP_API_DSCP_AF32",
+                28
+            ],
+            [
+                "IP_API_DSCP_AF33",
+                30
+            ],
+            [
+                "IP_API_DSCP_CS4",
+                32
+            ],
+            [
+                "IP_API_DSCP_AF41",
+                34
+            ],
+            [
+                "IP_API_DSCP_AF42",
+                36
+            ],
+            [
+                "IP_API_DSCP_AF43",
+                38
+            ],
+            [
+                "IP_API_DSCP_CS5",
+                40
+            ],
+            [
+                "IP_API_DSCP_EF",
+                46
+            ],
+            [
+                "IP_API_DSCP_CS6",
+                48
+            ],
+            [
+                "IP_API_DSCP_CS7",
+                50
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "ip_proto",
+            [
+                "IP_API_PROTO_HOPOPT",
+                0
+            ],
+            [
+                "IP_API_PROTO_ICMP",
+                1
+            ],
+            [
+                "IP_API_PROTO_IGMP",
+                2
+            ],
+            [
+                "IP_API_PROTO_TCP",
+                6
+            ],
+            [
+                "IP_API_PROTO_UDP",
+                17
+            ],
+            [
+                "IP_API_PROTO_GRE",
+                47
+            ],
+            [
+                "IP_API_PROTO_ESP",
+                50
+            ],
+            [
+                "IP_API_PROTO_AH",
+                51
+            ],
+            [
+                "IP_API_PROTO_ICMP6",
+                58
+            ],
+            [
+                "IP_API_PROTO_EIGRP",
+                88
+            ],
+            [
+                "IP_API_PROTO_OSPF",
+                89
+            ],
+            [
+                "IP_API_PROTO_SCTP",
+                132
+            ],
+            [
+                "IP_API_PROTO_RESERVED",
+                255
+            ],
+            {
+                "enumtype": "u8"
+            }
+        ],
+        [
+            "mfib_entry_flags",
+            [
+                "MFIB_API_ENTRY_FLAG_NONE",
+                0
+            ],
+            [
+                "MFIB_API_ENTRY_FLAG_SIGNAL",
+                1
+            ],
+            [
+                "MFIB_API_ENTRY_FLAG_DROP",
+                2
+            ],
+            [
+                "MFIB_API_ENTRY_FLAG_CONNECTED",
+                4
+            ],
+            [
+                "MFIB_API_ENTRY_FLAG_ACCEPT_ALL_ITF",
+                8
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "mfib_itf_flags",
+            [
+                "MFIB_API_ITF_FLAG_NONE",
+                0
+            ],
+            [
+                "MFIB_API_ITF_FLAG_NEGATE_SIGNAL",
+                1
+            ],
+            [
+                "MFIB_API_ITF_FLAG_ACCEPT",
+                2
+            ],
+            [
+                "MFIB_API_ITF_FLAG_FORWARD",
+                4
+            ],
+            [
+                "MFIB_API_ITF_FLAG_SIGNAL_PRESENT",
+                8
+            ],
+            [
+                "MFIB_API_ITF_FLAG_DONT_PRESERVE",
                 16
             ],
             {
-                "crc": "0xcd899e0a"
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "if_status_flags",
+            [
+                "IF_STATUS_API_FLAG_ADMIN_UP",
+                1
+            ],
+            [
+                "IF_STATUS_API_FLAG_LINK_UP",
+                2
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "mtu_proto",
+            [
+                "MTU_PROTO_API_L3",
+                0
+            ],
+            [
+                "MTU_PROTO_API_IP4",
+                1
+            ],
+            [
+                "MTU_PROTO_API_IP6",
+                2
+            ],
+            [
+                "MTU_PROTO_API_MPLS",
+                3
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "link_duplex",
+            [
+                "LINK_DUPLEX_API_UNKNOWN",
+                0
+            ],
+            [
+                "LINK_DUPLEX_API_HALF",
+                1
+            ],
+            [
+                "LINK_DUPLEX_API_FULL",
+                2
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "sub_if_flags",
+            [
+                "SUB_IF_API_FLAG_NO_TAGS",
+                1
+            ],
+            [
+                "SUB_IF_API_FLAG_ONE_TAG",
+                2
+            ],
+            [
+                "SUB_IF_API_FLAG_TWO_TAGS",
+                4
+            ],
+            [
+                "SUB_IF_API_FLAG_DOT1AD",
+                8
+            ],
+            [
+                "SUB_IF_API_FLAG_EXACT_MATCH",
+                16
+            ],
+            [
+                "SUB_IF_API_FLAG_DEFAULT",
+                32
+            ],
+            [
+                "SUB_IF_API_FLAG_OUTER_VLAN_ID_ANY",
+                64
+            ],
+            [
+                "SUB_IF_API_FLAG_INNER_VLAN_ID_ANY",
+                128
+            ],
+            [
+                "SUB_IF_API_FLAG_MASK_VNET",
+                254
+            ],
+            [
+                "SUB_IF_API_FLAG_DOT1AH",
+                256
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "rx_mode",
+            [
+                "RX_MODE_API_UNKNOWN",
+                0
+            ],
+            [
+                "RX_MODE_API_POLLING",
+                1
+            ],
+            [
+                "RX_MODE_API_INTERRUPT",
+                2
+            ],
+            [
+                "RX_MODE_API_ADAPTIVE",
+                3
+            ],
+            [
+                "RX_MODE_API_DEFAULT",
+                4
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "if_type",
+            [
+                "IF_API_TYPE_HARDWARE",
+                0
+            ],
+            [
+                "IF_API_TYPE_SUB",
+                1
+            ],
+            [
+                "IF_API_TYPE_P2P",
+                2
+            ],
+            [
+                "IF_API_TYPE_PIPE",
+                3
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ],
+        [
+            "ip_reass_type",
+            [
+                "IP_REASS_TYPE_FULL",
+                0
+            ],
+            [
+                "IP_REASS_TYPE_SHALLOW_VIRTUAL",
+                1
+            ],
+            {
+                "enumtype": "u32"
             }
         ]
-    ]
+    ],
+    "enumflags": [
+        [
+            "ip_flow_hash_config",
+            [
+                "IP_API_FLOW_HASH_SRC_IP",
+                1
+            ],
+            [
+                "IP_API_FLOW_HASH_DST_IP",
+                2
+            ],
+            [
+                "IP_API_FLOW_HASH_SRC_PORT",
+                4
+            ],
+            [
+                "IP_API_FLOW_HASH_DST_PORT",
+                8
+            ],
+            [
+                "IP_API_FLOW_HASH_PROTO",
+                16
+            ],
+            [
+                "IP_API_FLOW_HASH_REVERSE",
+                32
+            ],
+            [
+                "IP_API_FLOW_HASH_SYMETRIC",
+                64
+            ],
+            [
+                "IP_API_FLOW_HASH_FLOW_LABEL",
+                128
+            ],
+            {
+                "enumtype": "u32"
+            }
+        ]
+    ],
+    "services": {
+        "ip_table_add_del": {
+            "reply": "ip_table_add_del_reply"
+        },
+        "ip_table_dump": {
+            "reply": "ip_table_details",
+            "stream": true
+        },
+        "ip_table_replace_begin": {
+            "reply": "ip_table_replace_begin_reply"
+        },
+        "ip_table_replace_end": {
+            "reply": "ip_table_replace_end_reply"
+        },
+        "ip_table_flush": {
+            "reply": "ip_table_flush_reply"
+        },
+        "ip_route_add_del": {
+            "reply": "ip_route_add_del_reply"
+        },
+        "ip_route_dump": {
+            "reply": "ip_route_details",
+            "stream": true
+        },
+        "ip_route_lookup": {
+            "reply": "ip_route_lookup_reply"
+        },
+        "set_ip_flow_hash": {
+            "reply": "set_ip_flow_hash_reply"
+        },
+        "set_ip_flow_hash_v2": {
+            "reply": "set_ip_flow_hash_v2_reply"
+        },
+        "set_ip_flow_hash_router_id": {
+            "reply": "set_ip_flow_hash_router_id_reply"
+        },
+        "sw_interface_ip6_enable_disable": {
+            "reply": "sw_interface_ip6_enable_disable_reply"
+        },
+        "ip_mtable_dump": {
+            "reply": "ip_mtable_details",
+            "stream": true
+        },
+        "ip_mroute_add_del": {
+            "reply": "ip_mroute_add_del_reply"
+        },
+        "ip_mroute_dump": {
+            "reply": "ip_mroute_details",
+            "stream": true
+        },
+        "ip_address_dump": {
+            "reply": "ip_address_details",
+            "stream": true
+        },
+        "ip_unnumbered_dump": {
+            "reply": "ip_unnumbered_details",
+            "stream": true
+        },
+        "ip_dump": {
+            "reply": "ip_details",
+            "stream": true
+        },
+        "mfib_signal_dump": {
+            "reply": "mfib_signal_details",
+            "stream": true
+        },
+        "ip_punt_police": {
+            "reply": "ip_punt_police_reply"
+        },
+        "ip_punt_redirect": {
+            "reply": "ip_punt_redirect_reply"
+        },
+        "ip_punt_redirect_dump": {
+            "reply": "ip_punt_redirect_details",
+            "stream": true
+        },
+        "ip_container_proxy_add_del": {
+            "reply": "ip_container_proxy_add_del_reply"
+        },
+        "ip_container_proxy_dump": {
+            "reply": "ip_container_proxy_details",
+            "stream": true
+        },
+        "ip_source_and_port_range_check_add_del": {
+            "reply": "ip_source_and_port_range_check_add_del_reply"
+        },
+        "ip_source_and_port_range_check_interface_add_del": {
+            "reply": "ip_source_and_port_range_check_interface_add_del_reply"
+        },
+        "sw_interface_ip6_set_link_local_address": {
+            "reply": "sw_interface_ip6_set_link_local_address_reply"
+        },
+        "sw_interface_ip6_get_link_local_address": {
+            "reply": "sw_interface_ip6_get_link_local_address_reply"
+        },
+        "ioam_enable": {
+            "reply": "ioam_enable_reply"
+        },
+        "ioam_disable": {
+            "reply": "ioam_disable_reply"
+        },
+        "ip_reassembly_set": {
+            "reply": "ip_reassembly_set_reply"
+        },
+        "ip_reassembly_get": {
+            "reply": "ip_reassembly_get_reply"
+        },
+        "ip_reassembly_enable_disable": {
+            "reply": "ip_reassembly_enable_disable_reply"
+        }
+    },
+    "options": {
+        "version": "3.0.3"
+    },
+    "aliases": {
+        "interface_index": {
+            "type": "u32"
+        },
+        "ip4_address": {
+            "type": "u8",
+            "length": 4
+        },
+        "ip6_address": {
+            "type": "u8",
+            "length": 16
+        },
+        "address_with_prefix": {
+            "type": "vl_api_prefix_t"
+        },
+        "ip4_address_with_prefix": {
+            "type": "vl_api_ip4_prefix_t"
+        },
+        "ip6_address_with_prefix": {
+            "type": "vl_api_ip6_prefix_t"
+        },
+        "mac_address": {
+            "type": "u8",
+            "length": 6
+        }
+    },
+    "vl_api_version": "0xf2f5f4e"
 }

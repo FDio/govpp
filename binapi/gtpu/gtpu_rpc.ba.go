@@ -16,6 +16,7 @@ type RPCService interface {
 	GtpuAddDelTunnel(ctx context.Context, in *GtpuAddDelTunnel) (*GtpuAddDelTunnelReply, error)
 	GtpuOffloadRx(ctx context.Context, in *GtpuOffloadRx) (*GtpuOffloadRxReply, error)
 	GtpuTunnelDump(ctx context.Context, in *GtpuTunnelDump) (RPCService_GtpuTunnelDumpClient, error)
+	GtpuTunnelUpdateTteid(ctx context.Context, in *GtpuTunnelUpdateTteid) (*GtpuTunnelUpdateTteidReply, error)
 	SwInterfaceSetGtpuBypass(ctx context.Context, in *SwInterfaceSetGtpuBypass) (*SwInterfaceSetGtpuBypassReply, error)
 }
 
@@ -78,10 +79,23 @@ func (c *serviceClient_GtpuTunnelDumpClient) Recv() (*GtpuTunnelDetails, error) 
 	case *GtpuTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) GtpuTunnelUpdateTteid(ctx context.Context, in *GtpuTunnelUpdateTteid) (*GtpuTunnelUpdateTteidReply, error) {
+	out := new(GtpuTunnelUpdateTteidReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetGtpuBypass(ctx context.Context, in *SwInterfaceSetGtpuBypass) (*SwInterfaceSetGtpuBypassReply, error) {

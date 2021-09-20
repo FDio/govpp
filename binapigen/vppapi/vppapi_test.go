@@ -27,7 +27,7 @@ func TestGetInputFiles(t *testing.T) {
 
 	result, err := FindFiles("testdata", 1)
 	Expect(err).ShouldNot(HaveOccurred())
-	Expect(result).To(HaveLen(5))
+	Expect(result).To(HaveLen(6))
 	for _, file := range result {
 		Expect(file).To(BeAnExistingFile())
 	}

@@ -15,6 +15,8 @@
 package statsclient
 
 import (
+	"bytes"
+	"encoding/binary"
 	"sync/atomic"
 	"unsafe"
 
@@ -36,8 +38,9 @@ type sharedHeaderV2 struct {
 }
 
 type statSegDirectoryEntryV2 struct {
-	directoryType statDirectoryType
+	directoryType dirType
 	// unionData can represent:
+	// - symlink indexes
 	// - index
 	// - value
 	// - pointer to data
@@ -64,13 +67,13 @@ func (ss *statSegmentV2) loadSharedHeader(b []byte) (header sharedHeaderV2) {
 	}
 }
 
-func (ss *statSegmentV2) GetDirectoryVector() unsafe.Pointer {
+func (ss *statSegmentV2) GetDirectoryVector() dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	return ss.adjust(unsafe.Pointer(&header.dirVector))
+	return ss.adjust(dirVector(&header.dirVector))
 }
 
-func (ss *statSegmentV2) GetStatDirOnIndex(p unsafe.Pointer, index uint32) (unsafe.Pointer, statDirectoryName, statDirectoryType) {
-	statSegDir := unsafe.Pointer(uintptr(p) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
+func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {
+	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
 	dir := (*statSegDirectoryEntryV2)(statSegDir)
 	var name []byte
 	for n := 0; n < len(dir.name); n++ {
@@ -87,14 +90,16 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
-func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) adapter.Stat {
-	dirEntry := (*statSegDirectoryEntryV2)(statSegDir)
-	if dirEntry.unionData == 0 {
-		debugf("data value or pointer not defined for %s", dirEntry.name)
+func (ss *statSegmentV2) CopyEntryData(segment dirSegment, imin uint32, imax uint32) adapter.Stat {
+	dirEntry := (*statSegDirectoryEntryV2)(segment)
+	typ := adapter.StatType(dirEntry.directoryType)
+	// skip zero pointer value
+	if typ != statDirScalarIndex && typ != statDirEmpty && dirEntry.unionData == 0 {
+		debugf("data pointer not defined for %s", dirEntry.name)
 		return nil
 	}
 
-	switch adapter.StatType(dirEntry.directoryType) {
+	switch typ {
 	case statDirScalarIndex:
 		return adapter.ScalarStat(dirEntry.unionData)
 
@@ -105,7 +110,7 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 			return nil
 		}
 		vecLen := *(*uint32)(vectorLen(dirVector))
-		var errData adapter.Counter
+		var errData []adapter.Counter
 		for i := uint32(0); i < vecLen; i++ {
 			cb := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
 			cbVal := ss.adjust(vectorLen(cb))
@@ -115,12 +120,12 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 			}
 			offset := uintptr(dirEntry.unionData) * unsafe.Sizeof(adapter.Counter(0))
 			val := *(*adapter.Counter)(statSegPointer(cbVal, offset))
-			errData += val
+			errData = append(errData, val)
 		}
 		return adapter.ErrorStat(errData)
 
 	case statDirCounterVectorSimple:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -134,18 +139,18 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 				debugf("counter (vector simple) pointer out of range")
 				continue
 			}
-			counterVectorLength := applyLimit(*(*uint32)(vectorLen(counterVector)), limit)
-			data[i] = make([]adapter.Counter, counterVectorLength)
-			for j := uint32(0); j < counterVectorLength; j++ {
+			imax = applyLimit(imax, *(*uint32)(vectorLen(counterVector)))
+			imin = applyLimit(imin, imax)
+			data[i] = make([]adapter.Counter, imax-imin)
+			for j := imin; j < imax; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.Counter(0))
-				val := *(*adapter.Counter)(statSegPointer(counterVector, offset))
-				data[i][j] = val
+				data[i][j-imin] = *(*adapter.Counter)(statSegPointer(counterVector, offset))
 			}
 		}
 		return adapter.SimpleCounterStat(data)
 
 	case statDirCounterVectorCombined:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -159,25 +164,26 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 				debugf("counter (vector combined) pointer out of range")
 				continue
 			}
-			counterVectorLength := applyLimit(*(*uint32)(vectorLen(counterVector)), limit)
-			data[i] = make([]adapter.CombinedCounter, counterVectorLength)
-			for j := uint32(0); j < counterVectorLength; j++ {
+			imax = applyLimit(imax, *(*uint32)(vectorLen(counterVector)))
+			imin = applyLimit(imin, imax)
+			data[i] = make([]adapter.CombinedCounter, imax-imin)
+			for j := imin; j < imax; j++ {
 				offset := uintptr(j) * unsafe.Sizeof(adapter.CombinedCounter{})
-				val := *(*adapter.CombinedCounter)(statSegPointer(counterVector, offset))
-				data[i][j] = val
+				data[i][j-imin] = *(*adapter.CombinedCounter)(statSegPointer(counterVector, offset))
 			}
 		}
 		return adapter.CombinedCounterStat(data)
 
 	case statDirNameVector:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
 		}
-		vecLen := applyLimit(*(*uint32)(vectorLen(dirVector)), limit)
-		data := make([]adapter.Name, vecLen)
-		for i := uint32(0); i < vecLen; i++ {
+		imax = applyLimit(imax, *(*uint32)(vectorLen(dirVector)))
+		imin = applyLimit(imin, imax)
+		data := make([]adapter.Name, imax-imin)
+		for i := imin; i < imax; i++ {
 			nameVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
 			if uintptr(nameVectorOffset) == 0 {
 				debugf("name vector out of range for %s (%v)", dirEntry.name, i)
@@ -197,12 +203,29 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 					name = append(name, value)
 				}
 			}
-			data[i] = name
+			data[i-imin] = name
 		}
 		return adapter.NameStat(data)
 
 	case statDirEmpty:
+		return adapter.EmptyStat("<none>")
 		// no-op
+
+	case statDirSymlink:
+		// prevent recursion loops
+		if imin != 0 || imax != ^uint32(0) {
+			debugf("received symlink with defined item index")
+			return nil
+		}
+		i1, i2 := ss.getSymlinkIndexes(dirEntry)
+		// use first index to get the stats directory the symlink points to
+		header := ss.loadSharedHeader(ss.sharedHeader)
+		dirVector := ss.adjust(dirVector(&header.dirVector))
+		statSegDir2 := dirSegment(uintptr(dirVector) + uintptr(i1)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
+
+		// retry with actual stats segment and use second index to get
+		// stats for the required item
+		return ss.CopyEntryData(statSegDir2, i2, i2+1)
 
 	default:
 		// TODO: monitor occurrences with metrics
@@ -211,8 +234,8 @@ func (ss *statSegmentV2) CopyEntryData(statSegDir unsafe.Pointer, limit uint32) 
 	return nil
 }
 
-func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapter.Stat) error {
-	dirEntry := (*statSegDirectoryEntryV2)(statSegDir)
+func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat) error {
+	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	switch (*stat).(type) {
 	case adapter.ScalarStat:
 		*stat = adapter.ScalarStat(dirEntry.unionData)
@@ -224,7 +247,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			return nil
 		}
 		vecLen := *(*uint32)(vectorLen(dirVector))
-		var errData adapter.Counter
+		var errData []adapter.Counter
 		for i := uint32(0); i < vecLen; i++ {
 			cb := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
 			cbVal := ss.adjust(vectorLen(cb))
@@ -234,12 +257,12 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 			}
 			offset := uintptr(dirEntry.unionData) * unsafe.Sizeof(adapter.Counter(0))
 			val := *(*adapter.Counter)(statSegPointer(cbVal, offset))
-			errData += val
+			errData = append(errData, val)
 		}
 		*stat = adapter.ErrorStat(errData)
 
 	case adapter.SimpleCounterStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -266,7 +289,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.CombinedCounterStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -290,7 +313,7 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 		}
 
 	case adapter.NameStat:
-		dirVector := ss.adjust(unsafe.Pointer(&dirEntry.unionData))
+		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
 			return nil
@@ -333,9 +356,9 @@ func (ss *statSegmentV2) UpdateEntryData(statSegDir unsafe.Pointer, stat *adapte
 
 // Adjust data pointer using shared header and base and return
 // the pointer to a data segment
-func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
+func (ss *statSegmentV2) adjust(data dirVector) dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	adjusted := unsafe.Pointer(uintptr(unsafe.Pointer(&ss.sharedHeader[0])) +
+	adjusted := dirVector(uintptr(unsafe.Pointer(&ss.sharedHeader[0])) +
 		uintptr(*(*uint64)(data)) - uintptr(*(*uint64)(unsafe.Pointer(&header.base))))
 	if uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) <= uintptr(adjusted) ||
 		uintptr(unsafe.Pointer(&ss.sharedHeader[0])) >= uintptr(adjusted) {
@@ -344,9 +367,28 @@ func (ss *statSegmentV2) adjust(data unsafe.Pointer) unsafe.Pointer {
 	return adjusted
 }
 
-func (ss *statSegmentV2) getErrorVector() unsafe.Pointer {
+func (ss *statSegmentV2) getErrorVector() dirVector {
 	header := ss.loadSharedHeader(ss.sharedHeader)
-	return ss.adjust(unsafe.Pointer(&header.errorVector))
+	return ss.adjust(dirVector(&header.errorVector))
+}
+
+func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (index1, index2 uint32) {
+	var b bytes.Buffer
+	if err := binary.Write(&b, binary.LittleEndian, dirEntry.unionData); err != nil {
+		debugf("error getting symlink indexes for %s: %v", dirEntry.name, err)
+		return
+	}
+	if len(b.Bytes()) != 8 {
+		debugf("incorrect symlink union data length for %s: expected 8, got %d", dirEntry.name, len(b.Bytes()))
+		return
+	}
+	for i := range b.Bytes()[:4] {
+		index1 += uint32(b.Bytes()[i]) << (uint32(i) * 8)
+	}
+	for i := range b.Bytes()[4:] {
+		index2 += uint32(b.Bytes()[i+4]) << (uint32(i) * 8)
+	}
+	return
 }
 
 func applyLimit(val, limit uint32) uint32 {

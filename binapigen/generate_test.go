@@ -47,7 +47,7 @@ func GenerateFromFile(file string, opts Options) error {
 	return nil
 }
 
-func TestGenerateFromFile(t *testing.T) {
+func TestGenerateFromFileACL(t *testing.T) {
 	RegisterTestingT(t)
 
 	// remove directory created during test
@@ -60,6 +60,21 @@ func TestGenerateFromFile(t *testing.T) {
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(fileInfo.IsDir()).To(BeFalse())
 	Expect(fileInfo.Name()).To(BeEquivalentTo("acl.ba.go"))
+}
+
+func TestGenerateFromFileIP(t *testing.T) {
+	RegisterTestingT(t)
+
+	// remove directory created during test
+	defer os.RemoveAll(testOutputDir)
+
+	opts := Options{OutputDir: testOutputDir}
+	err := GenerateFromFile("vppapi/testdata/ip.api.json", opts)
+	Expect(err).ShouldNot(HaveOccurred())
+	fileInfo, err := os.Stat(testOutputDir + "/ip/ip.ba.go")
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(fileInfo.IsDir()).To(BeFalse())
+	Expect(fileInfo.Name()).To(BeEquivalentTo("ip.ba.go"))
 }
 
 func TestGenerateFromFileInputError(t *testing.T) {

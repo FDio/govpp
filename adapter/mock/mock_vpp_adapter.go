@@ -44,7 +44,7 @@ type VppAdapter struct {
 	access       sync.RWMutex
 	msgNameToIds map[string]uint16
 	msgIDsToName map[uint16]string
-	binAPITypes  map[string]reflect.Type
+	binAPITypes  map[string]map[string]reflect.Type
 
 	repliesLock   sync.Mutex     // mutex for the queue
 	replies       []reply        // FIFO queue of messages
@@ -126,7 +126,7 @@ func NewVppAdapter() *VppAdapter {
 		msgIDSeq:     1000,
 		msgIDsToName: make(map[uint16]string),
 		msgNameToIds: make(map[string]uint16),
-		binAPITypes:  make(map[string]reflect.Type),
+		binAPITypes:  make(map[string]map[string]reflect.Type),
 	}
 	a.registerBinAPITypes()
 	return a
@@ -165,19 +165,25 @@ func (a *VppAdapter) GetMsgNameByID(msgID uint16) (string, bool) {
 func (a *VppAdapter) registerBinAPITypes() {
 	a.access.Lock()
 	defer a.access.Unlock()
-	for _, msg := range api.GetRegisteredMessages() {
-		a.binAPITypes[msg.GetMessageName()] = reflect.TypeOf(msg).Elem()
+	for pkg, msgs := range api.GetRegisteredMessages() {
+		msgMap := make(map[string]reflect.Type)
+		for _, msg := range msgs {
+			msgMap[msg.GetMessageName()] = reflect.TypeOf(msg).Elem()
+		}
+		a.binAPITypes[pkg] = msgMap
 	}
 }
 
 // ReplyTypeFor returns reply message type for given request message name.
-func (a *VppAdapter) ReplyTypeFor(requestMsgName string) (reflect.Type, uint16, bool) {
+func (a *VppAdapter) ReplyTypeFor(pkg, requestMsgName string) (reflect.Type, uint16, bool) {
 	replyName, foundName := binapi.ReplyNameFor(requestMsgName)
 	if foundName {
-		if reply, found := a.binAPITypes[replyName]; found {
-			msgID, err := a.GetMsgID(replyName, "")
-			if err == nil {
-				return reply, msgID, found
+		if messages, found := a.binAPITypes[pkg]; found {
+			if reply, found := messages[replyName]; found {
+				msgID, err := a.GetMsgID(replyName, "")
+				if err == nil {
+					return reply, msgID, found
+				}
 			}
 		}
 	}
@@ -186,8 +192,8 @@ func (a *VppAdapter) ReplyTypeFor(requestMsgName string) (reflect.Type, uint16, 
 }
 
 // ReplyFor returns reply message for given request message name.
-func (a *VppAdapter) ReplyFor(requestMsgName string) (api.Message, uint16, bool) {
-	replType, msgID, foundReplType := a.ReplyTypeFor(requestMsgName)
+func (a *VppAdapter) ReplyFor(pkg, requestMsgName string) (api.Message, uint16, bool) {
+	replType, msgID, foundReplType := a.ReplyTypeFor(pkg, requestMsgName)
 	if foundReplType {
 		msgVal := reflect.New(replType)
 		if msg, ok := msgVal.Interface().(api.Message); ok {

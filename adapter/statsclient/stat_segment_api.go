@@ -46,17 +46,21 @@ const (
 	statDirErrorIndex            = 4
 	statDirNameVector            = 5
 	statDirEmpty                 = 6
+	statDirSymlink               = 7
 )
 
-type statDirectoryType int32
-
-type statDirectoryName []byte
+type (
+	dirVector  unsafe.Pointer
+	dirSegment unsafe.Pointer
+	dirName    []byte
+	dirType    int32
+)
 
 // statSegment represents common API for every stats API version
 type statSegment interface {
 	// GetDirectoryVector returns pointer to memory where the beginning
 	// of the data directory is located.
-	GetDirectoryVector() unsafe.Pointer
+	GetDirectoryVector() dirVector
 
 	// GetStatDirOnIndex accepts directory vector and particular index.
 	// Returns pointer to the beginning of the segment. Also the directory
@@ -65,19 +69,21 @@ type statSegment interface {
 	//
 	// Note that if the index is equal to 0, the result pointer points to
 	// the same memory address as the argument.
-	GetStatDirOnIndex(directory unsafe.Pointer, index uint32) (unsafe.Pointer, statDirectoryName, statDirectoryType)
+	GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType)
 
 	// GetEpoch re-loads stats header and returns current epoch
 	//and 'inProgress' value
 	GetEpoch() (int64, bool)
 
 	// CopyEntryData accepts pointer to a directory segment and returns adapter.Stat
-	// based on directory type populated with data
-	CopyEntryData(segment unsafe.Pointer, limit uint32) adapter.Stat
+	// based on directory type populated with data. The imin/imax specify
+	// the range of indices to copy out (used by symlinks).
+	// Use 0, ^uint32(0) to extract all data.
+	CopyEntryData(segment dirSegment, imin uint32, imax uint32) adapter.Stat
 
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update
-	UpdateEntryData(segment unsafe.Pointer, s *adapter.Stat) error
+	UpdateEntryData(segment dirSegment, s *adapter.Stat) error
 }
 
 const copyLimitNone = ^uint32(0)
@@ -88,7 +94,7 @@ type vecHeader struct {
 	vectorData [0]uint8
 }
 
-func (t statDirectoryType) String() string {
+func (t dirType) String() string {
 	return adapter.StatType(t).String()
 }
 
@@ -104,12 +110,12 @@ func getVersion(data []byte) uint64 {
 	return version.value
 }
 
-func vectorLen(v unsafe.Pointer) unsafe.Pointer {
+func vectorLen(v dirVector) dirVector {
 	vec := *(*vecHeader)(unsafe.Pointer(uintptr(v) - unsafe.Sizeof(uint64(0))))
-	return unsafe.Pointer(&vec.length)
+	return dirVector(&vec.length)
 }
 
 //go:nosplit
-func statSegPointer(p unsafe.Pointer, offset uintptr) unsafe.Pointer {
-	return unsafe.Pointer(uintptr(p) + offset)
+func statSegPointer(v dirVector, offset uintptr) dirVector {
+	return dirVector(uintptr(v) + offset)
 }

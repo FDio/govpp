@@ -15,6 +15,7 @@ import (
 type RPCService interface {
 	SwInterfaceVirtioPciDump(ctx context.Context, in *SwInterfaceVirtioPciDump) (RPCService_SwInterfaceVirtioPciDumpClient, error)
 	VirtioPciCreate(ctx context.Context, in *VirtioPciCreate) (*VirtioPciCreateReply, error)
+	VirtioPciCreateV2(ctx context.Context, in *VirtioPciCreateV2) (*VirtioPciCreateV2Reply, error)
 	VirtioPciDelete(ctx context.Context, in *VirtioPciDelete) (*VirtioPciDeleteReply, error)
 }
 
@@ -59,6 +60,10 @@ func (c *serviceClient_SwInterfaceVirtioPciDumpClient) Recv() (*SwInterfaceVirti
 	case *SwInterfaceVirtioPciDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -67,6 +72,15 @@ func (c *serviceClient_SwInterfaceVirtioPciDumpClient) Recv() (*SwInterfaceVirti
 
 func (c *serviceClient) VirtioPciCreate(ctx context.Context, in *VirtioPciCreate) (*VirtioPciCreateReply, error) {
 	out := new(VirtioPciCreateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) VirtioPciCreateV2(ctx context.Context, in *VirtioPciCreateV2) (*VirtioPciCreateV2Reply, error) {
+	out := new(VirtioPciCreateV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
