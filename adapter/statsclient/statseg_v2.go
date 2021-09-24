@@ -91,6 +91,10 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 }
 
 func (ss *statSegmentV2) CopyEntryData(segment dirSegment, imin uint32, imax uint32) adapter.Stat {
+	return ss.copyEntryData(segment, imin, imax, false)
+}
+
+func (ss *statSegmentV2) copyEntryData(segment dirSegment, imin uint32, imax uint32, nofollow bool) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	typ := adapter.StatType(dirEntry.directoryType)
 	// skip zero pointer value
@@ -213,7 +217,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, imin uint32, imax uin
 
 	case statDirSymlink:
 		// prevent recursion loops
-		if imin != 0 || imax != ^uint32(0) {
+		if nofollow {
 			debugf("received symlink with defined item index")
 			return nil
 		}
@@ -225,7 +229,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, imin uint32, imax uin
 
 		// retry with actual stats segment and use second index to get
 		// stats for the required item
-		return ss.CopyEntryData(statSegDir2, i2, i2+1)
+		return ss.copyEntryData(statSegDir2, i2, i2+1 /* nofollow */, true)
 
 	default:
 		// TODO: monitor occurrences with metrics
