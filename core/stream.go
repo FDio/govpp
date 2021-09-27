@@ -70,6 +70,7 @@ func (c *Connection) Invoke(ctx context.Context, req api.Message, reply api.Mess
 	if err != nil {
 		return err
 	}
+	defer func() { _ = stream.Close() }()
 	if err := stream.SendMsg(req); err != nil {
 		return err
 	}
