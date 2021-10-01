@@ -112,23 +112,32 @@ type Channel struct {
 }
 
 func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) *Channel {
-	// create new channel
-	chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
-	channel := &Channel{
-		id:                  chID,
-		conn:                c,
-		msgCodec:            c.codec,
-		msgIdentifier:       c,
-		reqChan:             make(chan *vppRequest, reqChanBufSize),
-		replyChan:           make(chan *vppReply, replyChanBufSize),
-		replyTimeout:        DefaultReplyTimeout,
-		receiveReplyTimeout: ReplyChannelTimeout,
-	}
+	var channel *Channel
+	// Retry until the channel ID we pick is available
+	for {
+		// create new channel
+		chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
+		channel = &Channel{
+			id:                  chID,
+			conn:                c,
+			msgCodec:            c.codec,
+			msgIdentifier:       c,
+			reqChan:             make(chan *vppRequest, reqChanBufSize),
+			replyChan:           make(chan *vppReply, replyChanBufSize),
+			replyTimeout:        DefaultReplyTimeout,
+			receiveReplyTimeout: ReplyChannelTimeout,
+		}
 
-	// store API channel within the client
-	c.channelsLock.Lock()
-	c.channels[chID] = channel
-	c.channelsLock.Unlock()
+		// store API channel within the client
+		c.channelsLock.Lock()
+		_, found := c.channels[chID]
+		if !found {
+			c.channels[chID] = channel
+			c.channelsLock.Unlock()
+			break
+		}
+		c.channelsLock.Unlock()
+	}
 
 	return channel
 }
