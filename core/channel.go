@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
-	"sync/atomic"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -111,10 +110,7 @@ type Channel struct {
 }
 
 func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) *Channel {
-	// create new channel
-	chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
 	channel := &Channel{
-		id:                  chID,
 		conn:                c,
 		msgCodec:            c.codec,
 		msgIdentifier:       c,
@@ -123,10 +119,17 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) *Channel {
 		replyTimeout:        DefaultReplyTimeout,
 		receiveReplyTimeout: ReplyChannelTimeout,
 	}
-
-	// store API channel within the client
 	c.channelsLock.Lock()
-	c.channels[chID] = channel
+	for {
+		c.maxChannelID++
+		chID := uint16(c.maxChannelID & 0x7fff)
+		_, found := c.channels[chID]
+		if !found {
+			channel.id = chID
+			c.channels[chID] = channel
+			break
+		}
+	}
 	c.channelsLock.Unlock()
 
 	return channel
