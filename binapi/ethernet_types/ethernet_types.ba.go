@@ -35,15 +35,19 @@ func ParseMacAddress(s string) (MacAddress, error) {
 	copy(macaddr[:], mac[:])
 	return macaddr, nil
 }
+
 func (x MacAddress) ToMAC() net.HardwareAddr {
 	return net.HardwareAddr(x[:])
 }
+
 func (x MacAddress) String() string {
 	return x.ToMAC().String()
 }
+
 func (x *MacAddress) MarshalText() ([]byte, error) {
 	return []byte(x.String()), nil
 }
+
 func (x *MacAddress) UnmarshalText(text []byte) error {
 	mac, err := ParseMacAddress(string(text))
 	if err != nil {

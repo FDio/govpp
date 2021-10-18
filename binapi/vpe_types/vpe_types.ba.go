@@ -86,18 +86,22 @@ func NewTimestamp(t time.Time) Timestamp {
 	ns := float64(sec) + float64(nsec/1e9)
 	return Timestamp(ns)
 }
+
 func (x Timestamp) ToTime() time.Time {
 	ns := int64(x * 1e9)
 	sec := ns / 1e9
 	nsec := ns % 1e9
 	return time.Unix(sec, nsec)
 }
+
 func (x Timestamp) String() string {
 	return x.ToTime().String()
 }
+
 func (x *Timestamp) MarshalText() ([]byte, error) {
 	return []byte(x.ToTime().Format(time.RFC3339Nano)), nil
 }
+
 func (x *Timestamp) UnmarshalText(text []byte) error {
 	t, err := time.Parse(time.RFC3339Nano, string(text))
 	if err != nil {

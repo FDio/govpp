@@ -55,16 +55,19 @@ func genIPConversion(g *GenFile, structName string, ipv int) {
 		g.P("	return ", netPkg.Ident("IP"), "(x[:]).To16()")
 	}
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return x.ToIP().String()")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -85,6 +88,12 @@ func genAddressConversion(g *GenFile, structName string) {
 	g.P("	if ip == nil {")
 	g.P("		return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid address: %s\", s)")
 	g.P("	}")
+	g.P("	return ", structName, "FromIP(ip), nil")
+	g.P("}")
+	g.P()
+
+	// AddressFromIP method
+	g.P("func ", structName, "FromIP(ip ", netPkg.Ident("IP"), ") ", structName, " {")
 	g.P("	var addr ", structName)
 	g.P("	if ip.To4() == nil {")
 	g.P("		addr.Af = ADDRESS_IP6")
@@ -97,8 +106,9 @@ func genAddressConversion(g *GenFile, structName string) {
 	g.P("		copy(ip4[:], ip.To4())")
 	g.P("		addr.Un.SetIP4(ip4)")
 	g.P("	}")
-	g.P("	return addr, nil")
+	g.P("	return addr")
 	g.P("}")
+	g.P()
 
 	// ToIP method
 	g.P("func (x ", structName, ") ToIP() ", netPkg.Ident("IP"), " {")
@@ -110,16 +120,19 @@ func genAddressConversion(g *GenFile, structName string) {
 	g.P("		return ", netPkg.Ident("IP"), "(ip4[:]).To4()")
 	g.P("	}")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return x.ToIP().String()")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -170,6 +183,7 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	g.P("	}")
 	g.P("	return prefix, nil")
 	g.P("}")
+	g.P()
 
 	// ToIPNet method
 	g.P("func (x ", structName, ") ToIPNet() *", netPkg.Ident("IPNet"), " {")
@@ -181,17 +195,20 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	g.P("	ipnet := &", netPkg.Ident("IPNet"), "{IP: x.Address.ToIP(), Mask: mask}")
 	g.P("	return ipnet")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	ip := x.Address.String()")
 	g.P("	return ip + \"/\" + ", strconvPkg.Ident("Itoa"), "(int(x.Len))")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -234,6 +251,7 @@ func genPrefixConversion(g *GenFile, structName string) {
 	g.P("	}")
 	g.P("	return prefix, nil")
 	g.P("}")
+	g.P()
 
 	// ToIPNet method
 	g.P("func (x ", structName, ") ToIPNet() *", netPkg.Ident("IPNet"), " {")
@@ -246,17 +264,20 @@ func genPrefixConversion(g *GenFile, structName string) {
 	g.P("	ipnet := &", netPkg.Ident("IPNet"), "{IP: x.Address.ToIP(), Mask: mask}")
 	g.P("	return ipnet")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	ip := x.Address.String()")
 	g.P("	return ip + \"/\" + ", strconvPkg.Ident("Itoa"), "(int(x.Len))")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -279,16 +300,19 @@ func genAddressWithPrefixConversion(g *GenFile, structName string) {
 	g.P("	}")
 	g.P("	return ", structName, "(prefix), nil")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return Prefix(x).String()")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -313,21 +337,25 @@ func genMacAddressConversion(g *GenFile, structName string) {
 	g.P("	copy(macaddr[:], mac[:])")
 	g.P("	return macaddr, nil")
 	g.P("}")
+	g.P()
 
 	// ToMAC method
 	g.P("func (x ", structName, ") ToMAC() ", netPkg.Ident("HardwareAddr"), " {")
 	g.P("	return ", netPkg.Ident("HardwareAddr"), "(x[:])")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return x.ToMAC().String()")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.String()), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
@@ -349,6 +377,7 @@ func genTimestampConversion(g *GenFile, structName string) {
 	g.P("	ns := float64(sec) + float64(nsec / 1e9)")
 	g.P("	return ", structName, "(ns)")
 	g.P("}")
+	g.P()
 
 	// ToTime method
 	g.P("func (x ", structName, ") ToTime() ", timePkg.Ident("Time"), " {")
@@ -357,16 +386,19 @@ func genTimestampConversion(g *GenFile, structName string) {
 	g.P("	nsec := ns % 1e9")
 	g.P("	return ", timePkg.Ident("Unix"), "(sec, nsec)")
 	g.P("}")
+	g.P()
 
 	// String method
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return x.ToTime().String()")
 	g.P("}")
+	g.P()
 
 	// MarshalText method
 	g.P("func (x *", structName, ") MarshalText() ([]byte, error) {")
 	g.P("	return []byte(x.ToTime().Format(", timePkg.Ident("RFC3339Nano"), ")), nil")
 	g.P("}")
+	g.P()
 
 	// UnmarshalText method
 	g.P("func (x *", structName, ") UnmarshalText(text []byte) error {")
