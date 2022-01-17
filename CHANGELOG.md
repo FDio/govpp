@@ -13,7 +13,7 @@ This file lists changes for the GoVPP releases.
 
 ## 0.4.0
 
-> _11 January 2022_
+> _17 January 2022_
 
 ### Binapi Generator
 
