@@ -11,6 +11,12 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.5.0
+
+> _TO BE RELESASED_
+
+
+
 ## 0.4.0
 
 > _17 January 2022_
