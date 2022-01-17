@@ -2,22 +2,25 @@
 
 [![stable](https://img.shields.io/github/v/tag/fdio/govpp.svg?label=release&logo=github)](https://github.com/ligato/vpp-agent/releases/latest) [![PkgGoDev](https://pkg.go.dev/badge/git.fd.io/govpp.git)](https://pkg.go.dev/git.fd.io/govpp.git)
 
-The GoVPP repository contains a Go client library for interacting with the VPP and also Go code generator for the VPP API.
+The GoVPP repository contains a Go client library for interacting with the VPP, 
+generator of Go bindings for the VPP binary API and various other tooling for VPP.
 
 ## Overview
 
+Here is a brief overview for the repository structure.
+
 - [govpp](govpp.go) - the entry point for the GoVPP client
   - [adapter](adapter) - VPP binary & stats API interface
-      - [mock](adapter/mock) - Mock adapter used for testing
-      - [socketclient](adapter/socketclient) - Go implementation of VPP API client for unix socket
-      - [statsclient](adapter/statsclient) - Go implementation of VPP Stats client for shared memory
-      - [vppapiclient](adapter/vppapiclient) - CGo wrapper of vppapiclient library (DEPRECATED!)
+    - [mock](adapter/mock) - Mock adapter used for testing
+    - [socketclient](adapter/socketclient) - Go implementation of VPP API client for unix socket
+    - [statsclient](adapter/statsclient) - Go implementation of VPP Stats client for shared memory
+    - [vppapiclient](adapter/vppapiclient) - CGo wrapper of vppapiclient library (DEPRECATED!)
   - [api](api) - GoVPP client API
   - [binapigen](binapigen) - library for generating code from VPP API
-      - [vppapi](binapigen/vppapi) - VPP API parser
-  - [cmd](cmd)
-      - [binapi-generator](cmd/binapi-generator) - VPP binary API generator
-      - [vpp-proxy](cmd/vpp-proxy) - VPP proxy for remote access
+    - [vppapi](binapigen/vppapi) - VPP API parser
+  - cmd/
+    - [binapi-generator](cmd/binapi-generator) - VPP binary API generator
+    - [vpp-proxy](cmd/vpp-proxy) - VPP proxy for remote access
   - [codec](codec) - handles encoding/decoding of generated messages into binary form
   - [core](core) - implementation of the GoVPP client
   - [docs](docs) - documentation
@@ -26,61 +29,13 @@ The GoVPP repository contains a Go client library for interacting with the VPP a
   - [proxy](proxy) - contains client/server implementation for proxy
   - [test](test) - integration tests, benchmarks and performance tests
 
-## Install binapi-generator
-
-### Prerequisites
-
-- Go 1.13+ ([download]((https://golang.org/dl)))
-
-### Install via Go toolchain
-
-```shell
-# Latest version (most recent tag)
-go install git.fd.io/govpp.git/cmd/binapi-generator@latest
-
-# Development version (master branch)
-go install git.fd.io/govpp.git/cmd/binapi-generator@master
-```
-
-NOTE: Using `go install` to install programs is only supported in Go 1.16+ ([more info](https://go.dev/doc/go1.16#go-command)). For Go 1.15 or older, use `go get` instead of `go install`.
-
-### Install from source
-
-```sh
-# Clone repository anywhere
-git clone https://gerrit.fd.io/r/govpp.git
-cd govpp
-make install-generator
-```
-
-NOTE: There is no need to setup or clone inside `GOPATH` for Go 1.13+ ([more info](https://go.dev/doc/go1.13#modules)) 
-and you can simply clone the repository _anywhere_ you want. 
-
-## Examples
-
-The [examples/](examples/) directory contains several examples for GoVPP
-
-- [api-trace](examples/api-trace) - trace sent/received messages
-- [binapi-types](examples/binapi-types) - using common types from generated code
-- [multi-vpp](examples/multi-vpp) - connect to multiple VPP instances
-- [perf-bench](examples/perf-bench) - very basic performance test for measuring throughput
-- [rpc-service](examples/rpc-service) - effortless way to call VPP API via RPC client
-- [simple-client](examples/simple-client) - send and receive VPP API messages using GoVPP API directly
-- [stats-client](examples/stats-client) - client for retrieving VPP stats data
-- [stream-client](examples/stream-client) - using new stream API to call VPP API
-
-### Documentation
-
-Further documentation can be found in [docs/](docs/) directory.
-
-- [Adapters](docs/ADAPTERS.md) - detailed info about transport adapters and their implementations
-- [Binapi Generator](docs/GENERATOR.md) - user guide for generating VPP binary API
-
 ## Quick Start
+
+Below are some code examples showing GoVPP client interacting with VPP API.
 
 ### Using raw messages directly
 
-Here is a sample code for low-level way to access the VPP API using the generated messages directly for sending/receiving.
+Here is a code for low-level way to access the VPP API using the generated messages directly for sending/receiving.
 
 ```go
 package main
@@ -116,7 +71,7 @@ func main() {
 }
 ```
 
-For more extensive example of using raw VPP API see [simple-client](examples/simple-client).
+For a complete example see [simple-client](examples/simple-client).
 
 ### Using RPC service client
 
@@ -150,4 +105,24 @@ func main() {
 }
 ```
 
-For more extensive example of using RPC service client see [rpc-service](examples/rpc-service).
+For a complete example see [rpc-service](examples/rpc-service).
+
+### More code examples
+
+More examples can be found in [examples](examples) directory.
+
+- [api-trace](api-trace) - trace sent/received messages
+- [binapi-types](binapi-types) - using common types from generated code
+- [multi-vpp](multi-vpp) - connect to multiple VPP instances
+- [perf-bench](perf-bench) - very basic performance test for measuring throughput
+- [rpc-service](rpc-service) - effortless way to call VPP API via RPC client
+- [simple-client](simple-client) - send and receive VPP API messages using GoVPP API directly
+- [stats-client](stats-client) - client for retrieving VPP stats data
+- [stream-client](stream-client) - using new stream API to call VPP API
+
+## Documentation
+
+Further documentation can be found in [docs](docs) directory.
+
+- [Adapters](docs/ADAPTERS.md) - detailed info about transport adapters and their implementations
+- [Binapi Generator](docs/GENERATOR.md) - user guide for generating VPP binary API
