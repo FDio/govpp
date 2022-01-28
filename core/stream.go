@@ -20,14 +20,12 @@ import (
 	"fmt"
 	"reflect"
 	"sync"
-	"sync/atomic"
 	"time"
 
 	"git.fd.io/govpp.git/api"
 )
 
 type Stream struct {
-	id      uint32
 	conn    *Connection
 	ctx     context.Context
 	channel *Channel
@@ -57,15 +55,9 @@ func (c *Connection) NewStream(ctx context.Context, options ...api.StreamOption)
 	for _, option := range options {
 		option(s)
 	}
-	// create and store a new channel
-	s.id = atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff
-	s.channel = newChannel(uint16(s.id), c, c.codec, c, s.requestSize, s.replySize)
-	s.channel.SetReplyTimeout(s.replyTimeout)
 
-	// store API channel within the client
-	c.channelsLock.Lock()
-	c.channels[uint16(s.id)] = s.channel
-	c.channelsLock.Unlock()
+	s.channel = c.newChannel(s.requestSize, s.replySize)
+	s.channel.SetReplyTimeout(s.replyTimeout)
 
 	// Channel.watchRequests are not started here intentionally, because
 	// requests are sent directly by SendMsg.
@@ -78,6 +70,7 @@ func (c *Connection) Invoke(ctx context.Context, req api.Message, reply api.Mess
 	if err != nil {
 		return err
 	}
+	defer func() { _ = stream.Close() }()
 	if err := stream.SendMsg(req); err != nil {
 		return err
 	}

@@ -13,6 +13,7 @@ import (
 
 // RPCService defines RPC service pppoe.
 type RPCService interface {
+	PppoeAddDelCp(ctx context.Context, in *PppoeAddDelCp) (*PppoeAddDelCpReply, error)
 	PppoeAddDelSession(ctx context.Context, in *PppoeAddDelSession) (*PppoeAddDelSessionReply, error)
 	PppoeSessionDump(ctx context.Context, in *PppoeSessionDump) (RPCService_PppoeSessionDumpClient, error)
 }
@@ -23,6 +24,15 @@ type serviceClient struct {
 
 func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
+}
+
+func (c *serviceClient) PppoeAddDelCp(ctx context.Context, in *PppoeAddDelCp) (*PppoeAddDelCpReply, error) {
+	out := new(PppoeAddDelCpReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PppoeAddDelSession(ctx context.Context, in *PppoeAddDelSession) (*PppoeAddDelSessionReply, error) {
@@ -67,6 +77,10 @@ func (c *serviceClient_PppoeSessionDumpClient) Recv() (*PppoeSessionDetails, err
 	case *PppoeSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

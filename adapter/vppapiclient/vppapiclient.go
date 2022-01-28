@@ -29,6 +29,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"sync/atomic"
 	"time"
 	"unsafe"
 
@@ -52,7 +53,7 @@ const (
 
 // global VPP binary API client, library vppapiclient only supports
 // single connection at a time
-var globalVppClient *vppClient
+var globalVppClient unsafe.Pointer
 
 // stubVppClient is the default implementation of the VppAPI.
 type vppClient struct {
@@ -76,7 +77,8 @@ func NewVppClientWithInputQueueSize(shmPrefix string, inputQueueSize uint16) ada
 
 // Connect connects the process to VPP.
 func (a *vppClient) Connect() error {
-	if globalVppClient != nil {
+	h := (*vppClient)(atomic.LoadPointer(&globalVppClient))
+	if h != nil {
 		return fmt.Errorf("already connected to binary API, disconnect first")
 	}
 
@@ -92,19 +94,17 @@ func (a *vppClient) Connect() error {
 		return fmt.Errorf("connecting to VPP binary API failed (rc=%v)", rc)
 	}
 
-	globalVppClient = a
+	atomic.StorePointer(&globalVppClient, unsafe.Pointer(a))
 	return nil
 }
 
 // Disconnect disconnects the process from VPP.
 func (a *vppClient) Disconnect() error {
-	globalVppClient = nil
-
+	atomic.StorePointer(&globalVppClient, nil)
 	rc := C.govpp_disconnect()
 	if rc != 0 {
 		return fmt.Errorf("disconnecting from VPP binary API failed (rc=%v)", rc)
 	}
-
 	return nil
 }
 
@@ -187,9 +187,12 @@ func (a *vppClient) WaitReady() error {
 
 //export go_msg_callback
 func go_msg_callback(msgID C.uint16_t, data unsafe.Pointer, size C.size_t) {
+	h := (*vppClient)(atomic.LoadPointer(&globalVppClient))
+	if h == nil {
+		return
+	}
 	// convert unsafe.Pointer to byte slice
 	sliceHeader := &reflect.SliceHeader{Data: uintptr(data), Len: int(size), Cap: int(size)}
 	byteSlice := *(*[]byte)(unsafe.Pointer(sliceHeader))
-
-	globalVppClient.msgCallback(uint16(msgID), byteSlice)
+	h.msgCallback(uint16(msgID), byteSlice)
 }

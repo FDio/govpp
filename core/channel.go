@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -109,17 +110,26 @@ type Channel struct {
 	receiveReplyTimeout time.Duration // maximum time that we wait for receiver to consume reply
 }
 
-func newChannel(id uint16, conn *Connection, codec MessageCodec, identifier MessageIdentifier, reqSize, replySize int) *Channel {
-	return &Channel{
-		id:                  id,
-		conn:                conn,
-		msgCodec:            codec,
-		msgIdentifier:       identifier,
-		reqChan:             make(chan *vppRequest, reqSize),
-		replyChan:           make(chan *vppReply, replySize),
+func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) *Channel {
+	// create new channel
+	chID := uint16(atomic.AddUint32(&c.maxChannelID, 1) & 0x7fff)
+	channel := &Channel{
+		id:                  chID,
+		conn:                c,
+		msgCodec:            c.codec,
+		msgIdentifier:       c,
+		reqChan:             make(chan *vppRequest, reqChanBufSize),
+		replyChan:           make(chan *vppReply, replyChanBufSize),
 		replyTimeout:        DefaultReplyTimeout,
 		receiveReplyTimeout: ReplyChannelTimeout,
 	}
+
+	// store API channel within the client
+	c.channelsLock.Lock()
+	c.channels[chID] = channel
+	c.channelsLock.Unlock()
+
+	return channel
 }
 
 func (ch *Channel) GetID() uint16 {

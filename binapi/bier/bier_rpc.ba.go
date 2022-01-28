@@ -76,6 +76,10 @@ func (c *serviceClient_BierDispEntryDumpClient) Recv() (*BierDispEntryDetails, e
 	case *BierDispEntryDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -124,6 +128,10 @@ func (c *serviceClient_BierDispTableDumpClient) Recv() (*BierDispTableDetails, e
 	case *BierDispTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -181,6 +189,10 @@ func (c *serviceClient_BierImpDumpClient) Recv() (*BierImpDetails, error) {
 	case *BierImpDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -229,6 +241,10 @@ func (c *serviceClient_BierRouteDumpClient) Recv() (*BierRouteDetails, error) {
 	case *BierRouteDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -277,6 +293,10 @@ func (c *serviceClient_BierTableDumpClient) Recv() (*BierTableDetails, error) {
 	case *BierTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

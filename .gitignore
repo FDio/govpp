@@ -12,6 +12,7 @@ cmd/binapi-generator/binapi-generator
 cmd/vpp-proxy/vpp-proxy
 
 # examples
+examples/api-trace/api-trace
 examples/multi-vpp/multi-vpp
 examples/perf-bench/perf-bench
 examples/rpc-service/rpc-service

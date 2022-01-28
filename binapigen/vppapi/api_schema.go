@@ -62,9 +62,10 @@ type (
 	}
 
 	Message struct {
-		Name   string
-		Fields []Field
-		CRC    string
+		Name    string
+		Fields  []Field
+		CRC     string
+		Options map[string]string
 	}
 
 	Field struct {

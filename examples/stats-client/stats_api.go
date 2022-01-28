@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -44,7 +45,7 @@ var (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|poll|errors|interfaces|nodes|system|buffers|memory] <patterns>...\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "%s: usage [ls|dump|poll|errors|interfaces|nodes|system|buffers|memory|epoch] <patterns/index>...\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
@@ -54,9 +55,16 @@ func main() {
 	flag.Parse()
 	skipZeros := !*dumpAll
 
-	var patterns []string
+	patterns := make([]string, 0)
+	indexes := make([]uint32, 0)
 	if flag.NArg() > 0 {
-		patterns = flag.Args()[1:]
+		for _, arg := range flag.Args()[1:] {
+			if index, err := strconv.Atoi(arg); err == nil {
+				indexes = append(indexes, uint32(index))
+				continue
+			}
+			patterns = append(patterns, arg)
+		}
 	}
 
 	var (
@@ -67,7 +75,8 @@ func main() {
 
 	if *async {
 		var statsChan chan core.ConnectionEvent
-		client = statsclient.NewStatsClient(*statsSocket)
+		client = statsclient.NewStatsClient(*statsSocket, statsclient.SetSocketRetryPeriod(1*time.Second),
+			statsclient.SetSocketRetryTimeout(10*time.Second))
 		c, statsChan, err = core.AsyncConnectStats(client, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 		if err != nil {
 			log.Fatalln("Asynchronous connecting failed:", err)
@@ -167,7 +176,7 @@ func main() {
 	case "dump":
 		fmt.Printf("Dumping stats.. %s\n", strings.Join(patterns, " "))
 
-		dumpStats(client, patterns, skipZeros)
+		dumpStats(client, patterns, indexes, skipZeros)
 
 	case "poll":
 		fmt.Printf("Polling stats.. %s\n", strings.Join(patterns, " "))
@@ -177,30 +186,69 @@ func main() {
 	case "list", "ls", "":
 		fmt.Printf("Listing stats.. %s\n", strings.Join(patterns, " "))
 
-		listStats(client, patterns)
+		listStats(client, patterns, indexes)
+
+	case "epoch", "e":
+		fmt.Printf("Getting epoch..\n")
+
+		getEpoch(client)
 
 	default:
 		fmt.Printf("invalid command: %q\n", cmd)
 	}
 }
 
-func listStats(client adapter.StatsAPI, patterns []string) {
-	list, err := client.ListStats(patterns...)
-	if err != nil {
-		log.Fatalln("listing stats failed:", err)
+func listStats(client adapter.StatsAPI, patterns []string, indexes []uint32) {
+	var err error
+	list := make([]adapter.StatIdentifier, 0)
+	if (len(patterns) == 0 && len(indexes) == 0) || len(patterns) != 0 {
+		list, err = client.ListStats(patterns...)
+		if err != nil {
+			log.Fatalln("listing stats failed:", err)
+		}
 	}
-
+	if len(indexes) != 0 {
+		dir, err := client.PrepareDirOnIndex(indexes...)
+		if err != nil {
+			log.Fatalln("listing stats failed:", err)
+		}
+		for _, onIndexSi := range dir.Entries {
+			list = append(list, onIndexSi.StatIdentifier)
+		}
+	}
 	for _, stat := range list {
-		fmt.Printf(" - %v\n", stat)
+		fmt.Printf(" - %d\t %v\n", stat.Index, string(stat.Name))
 	}
 
 	fmt.Printf("Listed %d stats\n", len(list))
 }
 
-func dumpStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
-	stats, err := client.DumpStats(patterns...)
+func getEpoch(client adapter.StatsAPI) {
+	dir, err := client.PrepareDir()
 	if err != nil {
-		log.Fatalln("dumping stats failed:", err)
+		log.Fatalln("failed to prepare dir in order to read epoch:", err)
+	}
+	d := *dir
+	fmt.Printf("Epoch %d\n", d.Epoch)
+}
+
+func dumpStats(client adapter.StatsAPI, patterns []string, indexes []uint32, skipZeros bool) {
+	var err error
+	stats := make([]adapter.StatEntry, 0)
+	if (len(patterns) == 0 && len(indexes) == 0) || len(patterns) != 0 {
+		stats, err = client.DumpStats(patterns...)
+		if err != nil {
+			log.Fatalln("dumping stats failed:", err)
+		}
+	}
+	if len(indexes) != 0 {
+		dir, err := client.PrepareDirOnIndex(indexes...)
+		if err != nil {
+			log.Fatalln("dumping stats failed:", err)
+		}
+		for _, onIndexSi := range dir.Entries {
+			stats = append(stats, onIndexSi)
+		}
 	}
 
 	n := 0

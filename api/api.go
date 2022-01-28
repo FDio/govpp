@@ -1,4 +1,4 @@
-//  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2021 Cisco and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -28,28 +28,24 @@ type Connection interface {
 	NewStream(ctx context.Context, options ...StreamOption) (Stream, error)
 
 	// Invoke can be used for a simple request-reply RPC.
-	// It creates stream and calls SendMsg with req and RecvMsg with reply.
+	// It creates stream and calls SendMsg with req and RecvMsg which returns
+	// reply.
 	Invoke(ctx context.Context, req Message, reply Message) error
 }
 
 // Stream provides low-level access for sending and receiving messages.
 // Users should handle correct type and ordering of messages.
 //
+// It is not safe to call these methods on the same stream in different
+// goroutines.
+//
 // NOTE: This API is EXPERIMENTAL.
 type Stream interface {
 	// SendMsg sends a message to the client.
 	// It blocks until message is sent to the transport.
-	//
-	// It is safe to have a goroutine calling SendMsg and another goroutine
-	// calling RecvMsg on the same stream at the same time, but it is not safe
-	// to call SendMsg on the same stream in different goroutines.
 	SendMsg(Message) error
 
 	// RecvMsg blocks until a message is received or error occurs.
-	//
-	// It is safe to have a goroutine calling SendMsg and another goroutine
-	// calling RecvMsg on the same stream at the same time, but it is not safe
-	// to call SendMsg on the same stream in different goroutines.
 	RecvMsg() (Message, error)
 
 	// Close closes the stream. Calling SendMsg and RecvMsg will return error

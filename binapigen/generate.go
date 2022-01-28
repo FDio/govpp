@@ -41,6 +41,19 @@ const (
 	fieldUnionData = "XXX_UnionData" // name for the union data field
 )
 
+// option keys
+const (
+	msgStatus     = "status"
+	msgDeprecated = "deprecated"
+	msgInProgress = "in_progress"
+)
+
+// generated option messages
+const (
+	deprecatedMsg = "the message will be removed in the future versions"
+	inProgressMsg = "the message form may change in the future versions"
+)
+
 func GenerateAPI(gen *Generator, file *File) *GenFile {
 	logf("----------------------------")
 	logf(" Generate API - %s", file.Desc.Name)
@@ -143,6 +156,23 @@ func genImport(g *GenFile, imp string) {
 
 func genTypeComment(g *GenFile, goName string, vppName string, objKind string) {
 	g.P("// ", goName, " defines ", objKind, " '", vppName, "'.")
+}
+
+func genTypeOptionComment(g *GenFile, options map[string]string) {
+	// all messages for API versions < 1.0.0 are in_progress by default
+	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress ||
+		len(g.file.Version) > 1 && g.file.Version[0:2] == "0." {
+		if msg == "" {
+			msg = inProgressMsg
+		}
+		g.P("// InProgress: ", msg)
+	}
+	if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
+		if msg == "" {
+			msg = deprecatedMsg
+		}
+		g.P("// Deprecated: ", msg)
+	}
 }
 
 func genEnum(g *GenFile, enum *Enum) {
@@ -453,6 +483,7 @@ func genMessage(g *GenFile, msg *Message) {
 	logf("gen MESSAGE %s (%s) - %d fields", msg.GoName, msg.Name, len(msg.Fields))
 
 	genTypeComment(g, msg.GoIdent.GoName, msg.Name, "message")
+	genTypeOptionComment(g, msg.Options)
 
 	// generate message definition
 	if len(msg.Fields) == 0 {

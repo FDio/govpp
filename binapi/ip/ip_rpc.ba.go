@@ -22,6 +22,10 @@ type RPCService interface {
 	IPMrouteAddDel(ctx context.Context, in *IPMrouteAddDel) (*IPMrouteAddDelReply, error)
 	IPMrouteDump(ctx context.Context, in *IPMrouteDump) (RPCService_IPMrouteDumpClient, error)
 	IPMtableDump(ctx context.Context, in *IPMtableDump) (RPCService_IPMtableDumpClient, error)
+	IPPathMtuGet(ctx context.Context, in *IPPathMtuGet) (RPCService_IPPathMtuGetClient, error)
+	IPPathMtuReplaceBegin(ctx context.Context, in *IPPathMtuReplaceBegin) (*IPPathMtuReplaceBeginReply, error)
+	IPPathMtuReplaceEnd(ctx context.Context, in *IPPathMtuReplaceEnd) (*IPPathMtuReplaceEndReply, error)
+	IPPathMtuUpdate(ctx context.Context, in *IPPathMtuUpdate) (*IPPathMtuUpdateReply, error)
 	IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error)
 	IPPuntRedirect(ctx context.Context, in *IPPuntRedirect) (*IPPuntRedirectReply, error)
 	IPPuntRedirectDump(ctx context.Context, in *IPPuntRedirectDump) (RPCService_IPPuntRedirectDumpClient, error)
@@ -29,8 +33,11 @@ type RPCService interface {
 	IPReassemblyGet(ctx context.Context, in *IPReassemblyGet) (*IPReassemblyGetReply, error)
 	IPReassemblySet(ctx context.Context, in *IPReassemblySet) (*IPReassemblySetReply, error)
 	IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*IPRouteAddDelReply, error)
+	IPRouteAddDelV2(ctx context.Context, in *IPRouteAddDelV2) (*IPRouteAddDelV2Reply, error)
 	IPRouteDump(ctx context.Context, in *IPRouteDump) (RPCService_IPRouteDumpClient, error)
 	IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*IPRouteLookupReply, error)
+	IPRouteLookupV2(ctx context.Context, in *IPRouteLookupV2) (*IPRouteLookupV2Reply, error)
+	IPRouteV2Dump(ctx context.Context, in *IPRouteV2Dump) (RPCService_IPRouteV2DumpClient, error)
 	IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error)
 	IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error)
 	IPTableAddDel(ctx context.Context, in *IPTableAddDel) (*IPTableAddDelReply, error)
@@ -41,7 +48,10 @@ type RPCService interface {
 	IPUnnumberedDump(ctx context.Context, in *IPUnnumberedDump) (RPCService_IPUnnumberedDumpClient, error)
 	MfibSignalDump(ctx context.Context, in *MfibSignalDump) (RPCService_MfibSignalDumpClient, error)
 	SetIPFlowHash(ctx context.Context, in *SetIPFlowHash) (*SetIPFlowHashReply, error)
+	SetIPFlowHashRouterID(ctx context.Context, in *SetIPFlowHashRouterID) (*SetIPFlowHashRouterIDReply, error)
+	SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2) (*SetIPFlowHashV2Reply, error)
 	SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error)
+	SwInterfaceIP6GetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6GetLinkLocalAddress) (*SwInterfaceIP6GetLinkLocalAddressReply, error)
 	SwInterfaceIP6SetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6SetLinkLocalAddress) (*SwInterfaceIP6SetLinkLocalAddressReply, error)
 }
 
@@ -104,6 +114,10 @@ func (c *serviceClient_IPAddressDumpClient) Recv() (*IPAddressDetails, error) {
 	case *IPAddressDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -152,6 +166,10 @@ func (c *serviceClient_IPContainerProxyDumpClient) Recv() (*IPContainerProxyDeta
 	case *IPContainerProxyDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -191,6 +209,10 @@ func (c *serviceClient_IPDumpClient) Recv() (*IPDetails, error) {
 	case *IPDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -239,6 +261,10 @@ func (c *serviceClient_IPMrouteDumpClient) Recv() (*IPMrouteDetails, error) {
 	case *IPMrouteDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -278,10 +304,81 @@ func (c *serviceClient_IPMtableDumpClient) Recv() (*IPMtableDetails, error) {
 	case *IPMtableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) IPPathMtuGet(ctx context.Context, in *IPPathMtuGet) (RPCService_IPPathMtuGetClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IPPathMtuGetClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IPPathMtuGetClient interface {
+	Recv() (*IPPathMtuDetails, error)
+	api.Stream
+}
+
+type serviceClient_IPPathMtuGetClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IPPathMtuGetClient) Recv() (*IPPathMtuDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IPPathMtuDetails:
+		return m, nil
+	case *IPPathMtuGetReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) IPPathMtuReplaceBegin(ctx context.Context, in *IPPathMtuReplaceBegin) (*IPPathMtuReplaceBeginReply, error) {
+	out := new(IPPathMtuReplaceBeginReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPPathMtuReplaceEnd(ctx context.Context, in *IPPathMtuReplaceEnd) (*IPPathMtuReplaceEndReply, error) {
+	out := new(IPPathMtuReplaceEndReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPPathMtuUpdate(ctx context.Context, in *IPPathMtuUpdate) (*IPPathMtuUpdateReply, error) {
+	out := new(IPPathMtuUpdateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error) {
@@ -335,6 +432,10 @@ func (c *serviceClient_IPPuntRedirectDumpClient) Recv() (*IPPuntRedirectDetails,
 	case *IPPuntRedirectDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -377,6 +478,15 @@ func (c *serviceClient) IPRouteAddDel(ctx context.Context, in *IPRouteAddDel) (*
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) IPRouteAddDelV2(ctx context.Context, in *IPRouteAddDelV2) (*IPRouteAddDelV2Reply, error) {
+	out := new(IPRouteAddDelV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) IPRouteDump(ctx context.Context, in *IPRouteDump) (RPCService_IPRouteDumpClient, error) {
 	stream, err := c.conn.NewStream(ctx)
 	if err != nil {
@@ -410,6 +520,10 @@ func (c *serviceClient_IPRouteDumpClient) Recv() (*IPRouteDetails, error) {
 	case *IPRouteDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -423,6 +537,58 @@ func (c *serviceClient) IPRouteLookup(ctx context.Context, in *IPRouteLookup) (*
 		return nil, err
 	}
 	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPRouteLookupV2(ctx context.Context, in *IPRouteLookupV2) (*IPRouteLookupV2Reply, error) {
+	out := new(IPRouteLookupV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPRouteV2Dump(ctx context.Context, in *IPRouteV2Dump) (RPCService_IPRouteV2DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IPRouteV2DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IPRouteV2DumpClient interface {
+	Recv() (*IPRouteV2Details, error)
+	api.Stream
+}
+
+type serviceClient_IPRouteV2DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IPRouteV2DumpClient) Recv() (*IPRouteV2Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IPRouteV2Details:
+		return m, nil
+	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error) {
@@ -485,6 +651,10 @@ func (c *serviceClient_IPTableDumpClient) Recv() (*IPTableDetails, error) {
 	case *IPTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -551,6 +721,10 @@ func (c *serviceClient_IPUnnumberedDumpClient) Recv() (*IPUnnumberedDetails, err
 	case *IPUnnumberedDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -590,6 +764,10 @@ func (c *serviceClient_MfibSignalDumpClient) Recv() (*MfibSignalDetails, error) 
 	case *MfibSignalDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -605,8 +783,35 @@ func (c *serviceClient) SetIPFlowHash(ctx context.Context, in *SetIPFlowHash) (*
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) SetIPFlowHashRouterID(ctx context.Context, in *SetIPFlowHashRouterID) (*SetIPFlowHashRouterIDReply, error) {
+	out := new(SetIPFlowHashRouterIDReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2) (*SetIPFlowHashV2Reply, error) {
+	out := new(SetIPFlowHashV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error) {
 	out := new(SwInterfaceIP6EnableDisableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SwInterfaceIP6GetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6GetLinkLocalAddress) (*SwInterfaceIP6GetLinkLocalAddressReply, error) {
+	out := new(SwInterfaceIP6GetLinkLocalAddressReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

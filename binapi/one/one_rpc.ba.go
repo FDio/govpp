@@ -218,6 +218,10 @@ func (c *serviceClient_OneEidTableDumpClient) Recv() (*OneEidTableDetails, error
 	case *OneEidTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -257,6 +261,10 @@ func (c *serviceClient_OneEidTableMapDumpClient) Recv() (*OneEidTableMapDetails,
 	case *OneEidTableMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -296,6 +304,10 @@ func (c *serviceClient_OneEidTableVniDumpClient) Recv() (*OneEidTableVniDetails,
 	case *OneEidTableVniDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -407,6 +419,10 @@ func (c *serviceClient_OneLocatorDumpClient) Recv() (*OneLocatorDetails, error) 
 	case *OneLocatorDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -446,6 +462,10 @@ func (c *serviceClient_OneLocatorSetDumpClient) Recv() (*OneLocatorSetDetails, e
 	case *OneLocatorSetDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -521,6 +541,10 @@ func (c *serviceClient_OneMapResolverDumpClient) Recv() (*OneMapResolverDetails,
 	case *OneMapResolverDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -560,6 +584,10 @@ func (c *serviceClient_OneMapServerDumpClient) Recv() (*OneMapServerDetails, err
 	case *OneMapServerDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -680,6 +708,10 @@ func (c *serviceClient_OneStatsDumpClient) Recv() (*OneStatsDetails, error) {
 	case *OneStatsDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

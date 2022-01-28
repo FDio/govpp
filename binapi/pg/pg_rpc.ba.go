@@ -13,6 +13,7 @@ type RPCService interface {
 	PgCapture(ctx context.Context, in *PgCapture) (*PgCaptureReply, error)
 	PgCreateInterface(ctx context.Context, in *PgCreateInterface) (*PgCreateInterfaceReply, error)
 	PgEnableDisable(ctx context.Context, in *PgEnableDisable) (*PgEnableDisableReply, error)
+	PgInterfaceEnableDisableCoalesce(ctx context.Context, in *PgInterfaceEnableDisableCoalesce) (*PgInterfaceEnableDisableCoalesceReply, error)
 }
 
 type serviceClient struct {
@@ -43,6 +44,15 @@ func (c *serviceClient) PgCreateInterface(ctx context.Context, in *PgCreateInter
 
 func (c *serviceClient) PgEnableDisable(ctx context.Context, in *PgEnableDisable) (*PgEnableDisableReply, error) {
 	out := new(PgEnableDisableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PgInterfaceEnableDisableCoalesce(ctx context.Context, in *PgInterfaceEnableDisableCoalesce) (*PgInterfaceEnableDisableCoalesceReply, error) {
+	out := new(PgInterfaceEnableDisableCoalesceReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

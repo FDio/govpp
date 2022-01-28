@@ -24,7 +24,7 @@ import (
 
 const (
 	Major      = 0
-	Minor      = 4
+	Minor      = 5
 	Patch      = 0
 	PreRelease = "dev"
 )
@@ -43,7 +43,7 @@ func String() string {
 // even with bare go build/install.
 var (
 	name       = "govpp"
-	version    = "v0.4.0-dev"
+	version    = "v0.5.0-dev"
 	commit     = "unknown"
 	branch     = "HEAD"
 	buildStamp = ""
