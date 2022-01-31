@@ -109,9 +109,9 @@ type Connection struct {
 	msgIDs       map[string]uint16                 // map of message IDs indexed by message name + CRC
 	msgMapByPath map[string]map[uint16]api.Message // map of messages indexed by message ID which are indexed by path
 
-	maxChannelID uint32              // maximum used channel ID (the real limit is 2^15, 32-bit is used for atomic operations)
-	channelsLock sync.RWMutex        // lock for the channels map
-	channels     map[uint16]*Channel // map of all API channels indexed by the channel ID
+	channelsLock  sync.RWMutex        // lock for the channels map and the channel ID
+	nextChannelID uint16              // next potential channel ID (the real limit is 2^15)
+	channels      map[uint16]*Channel // map of all API channels indexed by the channel ID
 
 	subscriptionsLock sync.RWMutex                  // lock for the subscriptions map
 	subscriptions     map[uint16][]*subscriptionCtx // map od all notification subscriptions indexed by message ID
@@ -248,7 +248,10 @@ func (c *Connection) newAPIChannel(reqChanBufSize, replyChanBufSize int) (*Chann
 		return nil, errors.New("nil connection passed in")
 	}
 
-	channel := c.newChannel(reqChanBufSize, replyChanBufSize)
+	channel, err := c.newChannel(reqChanBufSize, replyChanBufSize)
+	if err != nil {
+		return nil, err
+	}
 
 	// start watching on the request channel
 	go c.watchRequests(channel)

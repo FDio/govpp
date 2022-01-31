@@ -56,7 +56,11 @@ func (c *Connection) NewStream(ctx context.Context, options ...api.StreamOption)
 		option(s)
 	}
 
-	s.channel = c.newChannel(s.requestSize, s.replySize)
+	ch, err := c.newChannel(s.requestSize, s.replySize)
+	if err != nil {
+		return nil, err
+	}
+	s.channel = ch
 	s.channel.SetReplyTimeout(s.replyTimeout)
 
 	// Channel.watchRequests are not started here intentionally, because
