@@ -152,6 +152,7 @@ func (sc *StatsClient) Disconnect() error {
 		return fmt.Errorf("unmapping shared memory failed: %v", err)
 	}
 	sc.headerData = nil
+	sc.done <- struct{}{}
 
 	Log.Debugf("successfully unmapped shared memory")
 	return nil
