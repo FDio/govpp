@@ -36,11 +36,12 @@ type LogDetails struct {
 	Message   string              `binapi:"string[256],name=message" json:"message,omitempty"`
 }
 
-func (m *LogDetails) Reset()               { *m = LogDetails{} }
-func (*LogDetails) GetMessageName() string { return "log_details" }
-func (*LogDetails) GetCrcString() string   { return "03d61cc0" }
-func (*LogDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LogDetails) Reset()                        { *m = LogDetails{} }
+func (*LogDetails) GetMessageName() string          { return "log_details" }
+func (*LogDetails) GetCrcString() string            { return "03d61cc0" }
+func (*LogDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LogDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LogDetails) Size() (size int) {
@@ -78,12 +79,10 @@ type LogDump struct {
 	StartTimestamp vpe_types.Timestamp `binapi:"timestamp,name=start_timestamp" json:"start_timestamp,omitempty"`
 }
 
-func (m *LogDump) Reset()               { *m = LogDump{} }
-func (*LogDump) GetMessageName() string { return "log_dump" }
-func (*LogDump) GetCrcString() string   { return "6ab31753" }
-func (*LogDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LogDump) Reset()                        { *m = LogDump{} }
+func (*LogDump) GetMessageName() string          { return "log_dump" }
+func (*LogDump) GetCrcString() string            { return "6ab31753" }
+func (*LogDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LogDump) Size() (size int) {
 	if m == nil {
@@ -109,12 +108,10 @@ func (m *LogDump) Unmarshal(b []byte) error {
 // ShowVersion defines message 'show_version'.
 type ShowVersion struct{}
 
-func (m *ShowVersion) Reset()               { *m = ShowVersion{} }
-func (*ShowVersion) GetMessageName() string { return "show_version" }
-func (*ShowVersion) GetCrcString() string   { return "51077d14" }
-func (*ShowVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowVersion) Reset()                        { *m = ShowVersion{} }
+func (*ShowVersion) GetMessageName() string          { return "show_version" }
+func (*ShowVersion) GetCrcString() string            { return "51077d14" }
+func (*ShowVersion) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowVersion) Size() (size int) {
 	if m == nil {
@@ -142,11 +139,12 @@ type ShowVersionReply struct {
 	BuildDirectory string `binapi:"string[256],name=build_directory" json:"build_directory,omitempty"`
 }
 
-func (m *ShowVersionReply) Reset()               { *m = ShowVersionReply{} }
-func (*ShowVersionReply) GetMessageName() string { return "show_version_reply" }
-func (*ShowVersionReply) GetCrcString() string   { return "c919bde1" }
-func (*ShowVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ShowVersionReply) Reset()                        { *m = ShowVersionReply{} }
+func (*ShowVersionReply) GetMessageName() string          { return "show_version_reply" }
+func (*ShowVersionReply) GetCrcString() string            { return "c919bde1" }
+func (*ShowVersionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowVersionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowVersionReply) Size() (size int) {
@@ -185,12 +183,10 @@ func (m *ShowVersionReply) Unmarshal(b []byte) error {
 // ShowVpeSystemTime defines message 'show_vpe_system_time'.
 type ShowVpeSystemTime struct{}
 
-func (m *ShowVpeSystemTime) Reset()               { *m = ShowVpeSystemTime{} }
-func (*ShowVpeSystemTime) GetMessageName() string { return "show_vpe_system_time" }
-func (*ShowVpeSystemTime) GetCrcString() string   { return "51077d14" }
-func (*ShowVpeSystemTime) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowVpeSystemTime) Reset()                        { *m = ShowVpeSystemTime{} }
+func (*ShowVpeSystemTime) GetMessageName() string          { return "show_vpe_system_time" }
+func (*ShowVpeSystemTime) GetCrcString() string            { return "51077d14" }
+func (*ShowVpeSystemTime) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowVpeSystemTime) Size() (size int) {
 	if m == nil {
@@ -215,11 +211,12 @@ type ShowVpeSystemTimeReply struct {
 	VpeSystemTime vpe_types.Timestamp `binapi:"timestamp,name=vpe_system_time" json:"vpe_system_time,omitempty"`
 }
 
-func (m *ShowVpeSystemTimeReply) Reset()               { *m = ShowVpeSystemTimeReply{} }
-func (*ShowVpeSystemTimeReply) GetMessageName() string { return "show_vpe_system_time_reply" }
-func (*ShowVpeSystemTimeReply) GetCrcString() string   { return "7ffd8193" }
-func (*ShowVpeSystemTimeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ShowVpeSystemTimeReply) Reset()                        { *m = ShowVpeSystemTimeReply{} }
+func (*ShowVpeSystemTimeReply) GetMessageName() string          { return "show_vpe_system_time_reply" }
+func (*ShowVpeSystemTimeReply) GetCrcString() string            { return "7ffd8193" }
+func (*ShowVpeSystemTimeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowVpeSystemTimeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowVpeSystemTimeReply) Size() (size int) {

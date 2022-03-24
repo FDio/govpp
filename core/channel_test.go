@@ -126,7 +126,7 @@ func TestMultiRequestReplySwInterfaceMemifDump(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// mock reply
-	var msgs []api.Message
+	var msgs []api.ReplyMessage
 	for i := 1; i <= 10; i++ {
 		msgs = append(msgs, &memif.MemifDetails{
 			SwIfIndex: interface_types.InterfaceIndex(i),

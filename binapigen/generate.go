@@ -515,9 +515,18 @@ func genMessageMethods(g *GenFile, msg *Message) {
 	g.P("func (*", msg.GoIdent.GoName, ") GetCrcString() string { return ", strconv.Quote(msg.CRC), " }")
 
 	// GetMessageType method
-	g.P("func (*", msg.GoIdent.GoName, ") GetMessageType() api.MessageType {")
-	g.P("	return ", apiMsgType(msg.msgType))
-	g.P("}")
+	g.P("func (*", msg.GoIdent.GoName, ") GetMessageType() api.MessageType { return ", apiMsgType(msg.msgType), " }")
+
+	if msg.msgType == msgTypeReply || msg.msgType == msgTypeEvent {
+		// GetRetVal method
+		g.P("func (m *", msg.GoIdent.GoName, ") GetRetVal() error {")
+		if getRetvalField(msg) != nil {
+			g.P("	return api.RetvalToVPPApiError(int32(m.Retval))")
+		} else {
+			g.P("	return nil")
+		}
+		g.P("}")
+	}
 
 	g.P()
 }
@@ -525,12 +534,12 @@ func genMessageMethods(g *GenFile, msg *Message) {
 func apiMsgType(t msgType) GoIdent {
 	switch t {
 	case msgTypeRequest:
-		return govppApiPkg.Ident("RequestMessage")
+		return govppApiPkg.Ident("RequestMessageType")
 	case msgTypeReply:
-		return govppApiPkg.Ident("ReplyMessage")
+		return govppApiPkg.Ident("ReplyMessageType")
 	case msgTypeEvent:
-		return govppApiPkg.Ident("EventMessage")
+		return govppApiPkg.Ident("EventMessageType")
 	default:
-		return govppApiPkg.Ident("OtherMessage")
+		return govppApiPkg.Ident("OtherMessageType")
 	}
 }

@@ -35,12 +35,10 @@ type MrvlPp2Create struct {
 	TxQSz  uint16 `binapi:"u16,name=tx_q_sz" json:"tx_q_sz,omitempty"`
 }
 
-func (m *MrvlPp2Create) Reset()               { *m = MrvlPp2Create{} }
-func (*MrvlPp2Create) GetMessageName() string { return "mrvl_pp2_create" }
-func (*MrvlPp2Create) GetCrcString() string   { return "3a108396" }
-func (*MrvlPp2Create) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MrvlPp2Create) Reset()                        { *m = MrvlPp2Create{} }
+func (*MrvlPp2Create) GetMessageName() string          { return "mrvl_pp2_create" }
+func (*MrvlPp2Create) GetCrcString() string            { return "3a108396" }
+func (*MrvlPp2Create) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MrvlPp2Create) Size() (size int) {
 	if m == nil {
@@ -75,11 +73,12 @@ type MrvlPp2CreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MrvlPp2CreateReply) Reset()               { *m = MrvlPp2CreateReply{} }
-func (*MrvlPp2CreateReply) GetMessageName() string { return "mrvl_pp2_create_reply" }
-func (*MrvlPp2CreateReply) GetCrcString() string   { return "5383d31f" }
-func (*MrvlPp2CreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MrvlPp2CreateReply) Reset()                        { *m = MrvlPp2CreateReply{} }
+func (*MrvlPp2CreateReply) GetMessageName() string          { return "mrvl_pp2_create_reply" }
+func (*MrvlPp2CreateReply) GetCrcString() string            { return "5383d31f" }
+func (*MrvlPp2CreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MrvlPp2CreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MrvlPp2CreateReply) Size() (size int) {
@@ -111,12 +110,10 @@ type MrvlPp2Delete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MrvlPp2Delete) Reset()               { *m = MrvlPp2Delete{} }
-func (*MrvlPp2Delete) GetMessageName() string { return "mrvl_pp2_delete" }
-func (*MrvlPp2Delete) GetCrcString() string   { return "f9e6675e" }
-func (*MrvlPp2Delete) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MrvlPp2Delete) Reset()                        { *m = MrvlPp2Delete{} }
+func (*MrvlPp2Delete) GetMessageName() string          { return "mrvl_pp2_delete" }
+func (*MrvlPp2Delete) GetCrcString() string            { return "f9e6675e" }
+func (*MrvlPp2Delete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MrvlPp2Delete) Size() (size int) {
 	if m == nil {
@@ -144,11 +141,12 @@ type MrvlPp2DeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MrvlPp2DeleteReply) Reset()               { *m = MrvlPp2DeleteReply{} }
-func (*MrvlPp2DeleteReply) GetMessageName() string { return "mrvl_pp2_delete_reply" }
-func (*MrvlPp2DeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*MrvlPp2DeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MrvlPp2DeleteReply) Reset()                        { *m = MrvlPp2DeleteReply{} }
+func (*MrvlPp2DeleteReply) GetMessageName() string          { return "mrvl_pp2_delete_reply" }
+func (*MrvlPp2DeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*MrvlPp2DeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MrvlPp2DeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MrvlPp2DeleteReply) Size() (size int) {

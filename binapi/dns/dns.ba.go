@@ -32,12 +32,10 @@ type DNSEnableDisable struct {
 	Enable uint8 `binapi:"u8,name=enable" json:"enable,omitempty"`
 }
 
-func (m *DNSEnableDisable) Reset()               { *m = DNSEnableDisable{} }
-func (*DNSEnableDisable) GetMessageName() string { return "dns_enable_disable" }
-func (*DNSEnableDisable) GetCrcString() string   { return "8050327d" }
-func (*DNSEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DNSEnableDisable) Reset()                        { *m = DNSEnableDisable{} }
+func (*DNSEnableDisable) GetMessageName() string          { return "dns_enable_disable" }
+func (*DNSEnableDisable) GetCrcString() string            { return "8050327d" }
+func (*DNSEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DNSEnableDisable) Size() (size int) {
 	if m == nil {
@@ -65,11 +63,12 @@ type DNSEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *DNSEnableDisableReply) Reset()               { *m = DNSEnableDisableReply{} }
-func (*DNSEnableDisableReply) GetMessageName() string { return "dns_enable_disable_reply" }
-func (*DNSEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*DNSEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *DNSEnableDisableReply) Reset()                        { *m = DNSEnableDisableReply{} }
+func (*DNSEnableDisableReply) GetMessageName() string          { return "dns_enable_disable_reply" }
+func (*DNSEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*DNSEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DNSEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DNSEnableDisableReply) Size() (size int) {
@@ -100,12 +99,10 @@ type DNSNameServerAddDel struct {
 	ServerAddress []byte `binapi:"u8[16],name=server_address" json:"server_address,omitempty"`
 }
 
-func (m *DNSNameServerAddDel) Reset()               { *m = DNSNameServerAddDel{} }
-func (*DNSNameServerAddDel) GetMessageName() string { return "dns_name_server_add_del" }
-func (*DNSNameServerAddDel) GetCrcString() string   { return "3bb05d8c" }
-func (*DNSNameServerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DNSNameServerAddDel) Reset()                        { *m = DNSNameServerAddDel{} }
+func (*DNSNameServerAddDel) GetMessageName() string          { return "dns_name_server_add_del" }
+func (*DNSNameServerAddDel) GetCrcString() string            { return "3bb05d8c" }
+func (*DNSNameServerAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DNSNameServerAddDel) Size() (size int) {
 	if m == nil {
@@ -140,11 +137,12 @@ type DNSNameServerAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *DNSNameServerAddDelReply) Reset()               { *m = DNSNameServerAddDelReply{} }
-func (*DNSNameServerAddDelReply) GetMessageName() string { return "dns_name_server_add_del_reply" }
-func (*DNSNameServerAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*DNSNameServerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *DNSNameServerAddDelReply) Reset()                        { *m = DNSNameServerAddDelReply{} }
+func (*DNSNameServerAddDelReply) GetMessageName() string          { return "dns_name_server_add_del_reply" }
+func (*DNSNameServerAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*DNSNameServerAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DNSNameServerAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DNSNameServerAddDelReply) Size() (size int) {
@@ -174,12 +172,10 @@ type DNSResolveIP struct {
 	Address []byte `binapi:"u8[16],name=address" json:"address,omitempty"`
 }
 
-func (m *DNSResolveIP) Reset()               { *m = DNSResolveIP{} }
-func (*DNSResolveIP) GetMessageName() string { return "dns_resolve_ip" }
-func (*DNSResolveIP) GetCrcString() string   { return "ae96a1a3" }
-func (*DNSResolveIP) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DNSResolveIP) Reset()                        { *m = DNSResolveIP{} }
+func (*DNSResolveIP) GetMessageName() string          { return "dns_resolve_ip" }
+func (*DNSResolveIP) GetCrcString() string            { return "ae96a1a3" }
+func (*DNSResolveIP) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DNSResolveIP) Size() (size int) {
 	if m == nil {
@@ -212,11 +208,12 @@ type DNSResolveIPReply struct {
 	Name   []byte `binapi:"u8[256],name=name" json:"name,omitempty"`
 }
 
-func (m *DNSResolveIPReply) Reset()               { *m = DNSResolveIPReply{} }
-func (*DNSResolveIPReply) GetMessageName() string { return "dns_resolve_ip_reply" }
-func (*DNSResolveIPReply) GetCrcString() string   { return "49ed78d6" }
-func (*DNSResolveIPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *DNSResolveIPReply) Reset()                        { *m = DNSResolveIPReply{} }
+func (*DNSResolveIPReply) GetMessageName() string          { return "dns_resolve_ip_reply" }
+func (*DNSResolveIPReply) GetCrcString() string            { return "49ed78d6" }
+func (*DNSResolveIPReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DNSResolveIPReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DNSResolveIPReply) Size() (size int) {
@@ -249,12 +246,10 @@ type DNSResolveName struct {
 	Name []byte `binapi:"u8[256],name=name" json:"name,omitempty"`
 }
 
-func (m *DNSResolveName) Reset()               { *m = DNSResolveName{} }
-func (*DNSResolveName) GetMessageName() string { return "dns_resolve_name" }
-func (*DNSResolveName) GetCrcString() string   { return "c6566676" }
-func (*DNSResolveName) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DNSResolveName) Reset()                        { *m = DNSResolveName{} }
+func (*DNSResolveName) GetMessageName() string          { return "dns_resolve_name" }
+func (*DNSResolveName) GetCrcString() string            { return "c6566676" }
+func (*DNSResolveName) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DNSResolveName) Size() (size int) {
 	if m == nil {
@@ -287,11 +282,12 @@ type DNSResolveNameReply struct {
 	IP6Address []byte `binapi:"u8[16],name=ip6_address" json:"ip6_address,omitempty"`
 }
 
-func (m *DNSResolveNameReply) Reset()               { *m = DNSResolveNameReply{} }
-func (*DNSResolveNameReply) GetMessageName() string { return "dns_resolve_name_reply" }
-func (*DNSResolveNameReply) GetCrcString() string   { return "c2d758c3" }
-func (*DNSResolveNameReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *DNSResolveNameReply) Reset()                        { *m = DNSResolveNameReply{} }
+func (*DNSResolveNameReply) GetMessageName() string          { return "dns_resolve_name_reply" }
+func (*DNSResolveNameReply) GetCrcString() string            { return "c2d758c3" }
+func (*DNSResolveNameReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DNSResolveNameReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DNSResolveNameReply) Size() (size int) {

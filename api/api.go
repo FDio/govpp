@@ -104,7 +104,7 @@ type RequestCtx interface {
 	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered
 	// from VPP, or until an error occurs). The reply will be decoded into the msg
 	// argument. Error will be returned if the response cannot be received or decoded.
-	ReceiveReply(msg Message) error
+	ReceiveReply(msg ReplyMessage) error
 }
 
 // MultiRequestCtx is helper interface which allows to receive reply on multi-request.
@@ -115,7 +115,7 @@ type MultiRequestCtx interface {
 	// set to true. Do not use the message itself if lastReplyReceived is
 	// true - it won't be filled with actual data.Error will be returned if the
 	// response cannot be received or decoded.
-	ReceiveReply(msg Message) (lastReplyReceived bool, err error)
+	ReceiveReply(msg ReplyMessage) (lastReplyReceived bool, err error)
 }
 
 // SubscriptionCtx is helper interface which allows to control subscription for

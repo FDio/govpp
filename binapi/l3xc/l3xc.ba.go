@@ -45,12 +45,10 @@ type L3xcDel struct {
 	IsIP6     bool                           `binapi:"bool,name=is_ip6" json:"is_ip6,omitempty"`
 }
 
-func (m *L3xcDel) Reset()               { *m = L3xcDel{} }
-func (*L3xcDel) GetMessageName() string { return "l3xc_del" }
-func (*L3xcDel) GetCrcString() string   { return "e7dbef91" }
-func (*L3xcDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *L3xcDel) Reset()                        { *m = L3xcDel{} }
+func (*L3xcDel) GetMessageName() string          { return "l3xc_del" }
+func (*L3xcDel) GetCrcString() string            { return "e7dbef91" }
+func (*L3xcDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L3xcDel) Size() (size int) {
 	if m == nil {
@@ -81,11 +79,12 @@ type L3xcDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L3xcDelReply) Reset()               { *m = L3xcDelReply{} }
-func (*L3xcDelReply) GetMessageName() string { return "l3xc_del_reply" }
-func (*L3xcDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*L3xcDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *L3xcDelReply) Reset()                        { *m = L3xcDelReply{} }
+func (*L3xcDelReply) GetMessageName() string          { return "l3xc_del_reply" }
+func (*L3xcDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*L3xcDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L3xcDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L3xcDelReply) Size() (size int) {
@@ -114,11 +113,12 @@ type L3xcDetails struct {
 	L3xc L3xc `binapi:"l3xc,name=l3xc" json:"l3xc,omitempty"`
 }
 
-func (m *L3xcDetails) Reset()               { *m = L3xcDetails{} }
-func (*L3xcDetails) GetMessageName() string { return "l3xc_details" }
-func (*L3xcDetails) GetCrcString() string   { return "bc5bf852" }
-func (*L3xcDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *L3xcDetails) Reset()                        { *m = L3xcDetails{} }
+func (*L3xcDetails) GetMessageName() string          { return "l3xc_details" }
+func (*L3xcDetails) GetCrcString() string            { return "bc5bf852" }
+func (*L3xcDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L3xcDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *L3xcDetails) Size() (size int) {
@@ -226,12 +226,10 @@ type L3xcDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *L3xcDump) Reset()               { *m = L3xcDump{} }
-func (*L3xcDump) GetMessageName() string { return "l3xc_dump" }
-func (*L3xcDump) GetCrcString() string   { return "f9e6675e" }
-func (*L3xcDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *L3xcDump) Reset()                        { *m = L3xcDump{} }
+func (*L3xcDump) GetMessageName() string          { return "l3xc_dump" }
+func (*L3xcDump) GetCrcString() string            { return "f9e6675e" }
+func (*L3xcDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L3xcDump) Size() (size int) {
 	if m == nil {
@@ -257,12 +255,10 @@ func (m *L3xcDump) Unmarshal(b []byte) error {
 // L3xcPluginGetVersion defines message 'l3xc_plugin_get_version'.
 type L3xcPluginGetVersion struct{}
 
-func (m *L3xcPluginGetVersion) Reset()               { *m = L3xcPluginGetVersion{} }
-func (*L3xcPluginGetVersion) GetMessageName() string { return "l3xc_plugin_get_version" }
-func (*L3xcPluginGetVersion) GetCrcString() string   { return "51077d14" }
-func (*L3xcPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *L3xcPluginGetVersion) Reset()                        { *m = L3xcPluginGetVersion{} }
+func (*L3xcPluginGetVersion) GetMessageName() string          { return "l3xc_plugin_get_version" }
+func (*L3xcPluginGetVersion) GetCrcString() string            { return "51077d14" }
+func (*L3xcPluginGetVersion) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L3xcPluginGetVersion) Size() (size int) {
 	if m == nil {
@@ -287,11 +283,12 @@ type L3xcPluginGetVersionReply struct {
 	Minor uint32 `binapi:"u32,name=minor" json:"minor,omitempty"`
 }
 
-func (m *L3xcPluginGetVersionReply) Reset()               { *m = L3xcPluginGetVersionReply{} }
-func (*L3xcPluginGetVersionReply) GetMessageName() string { return "l3xc_plugin_get_version_reply" }
-func (*L3xcPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
-func (*L3xcPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *L3xcPluginGetVersionReply) Reset()                        { *m = L3xcPluginGetVersionReply{} }
+func (*L3xcPluginGetVersionReply) GetMessageName() string          { return "l3xc_plugin_get_version_reply" }
+func (*L3xcPluginGetVersionReply) GetCrcString() string            { return "9b32cf86" }
+func (*L3xcPluginGetVersionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L3xcPluginGetVersionReply) GetRetVal() error {
+	return nil
 }
 
 func (m *L3xcPluginGetVersionReply) Size() (size int) {
@@ -323,12 +320,10 @@ type L3xcUpdate struct {
 	L3xc L3xc `binapi:"l3xc,name=l3xc" json:"l3xc,omitempty"`
 }
 
-func (m *L3xcUpdate) Reset()               { *m = L3xcUpdate{} }
-func (*L3xcUpdate) GetMessageName() string { return "l3xc_update" }
-func (*L3xcUpdate) GetCrcString() string   { return "e96aabdf" }
-func (*L3xcUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *L3xcUpdate) Reset()                        { *m = L3xcUpdate{} }
+func (*L3xcUpdate) GetMessageName() string          { return "l3xc_update" }
+func (*L3xcUpdate) GetCrcString() string            { return "e96aabdf" }
+func (*L3xcUpdate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L3xcUpdate) Size() (size int) {
 	if m == nil {
@@ -436,11 +431,12 @@ type L3xcUpdateReply struct {
 	StatsIndex uint32 `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
 }
 
-func (m *L3xcUpdateReply) Reset()               { *m = L3xcUpdateReply{} }
-func (*L3xcUpdateReply) GetMessageName() string { return "l3xc_update_reply" }
-func (*L3xcUpdateReply) GetCrcString() string   { return "1992deab" }
-func (*L3xcUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *L3xcUpdateReply) Reset()                        { *m = L3xcUpdateReply{} }
+func (*L3xcUpdateReply) GetMessageName() string          { return "l3xc_update_reply" }
+func (*L3xcUpdateReply) GetCrcString() string            { return "1992deab" }
+func (*L3xcUpdateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L3xcUpdateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L3xcUpdateReply) Size() (size int) {

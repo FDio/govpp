@@ -169,12 +169,10 @@ type VrrpVrAddDel struct {
 	Addrs     []ip_types.Address             `binapi:"address[n_addrs],name=addrs" json:"addrs,omitempty"`
 }
 
-func (m *VrrpVrAddDel) Reset()               { *m = VrrpVrAddDel{} }
-func (*VrrpVrAddDel) GetMessageName() string { return "vrrp_vr_add_del" }
-func (*VrrpVrAddDel) GetCrcString() string   { return "c5cf15aa" }
-func (*VrrpVrAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrAddDel) Reset()                        { *m = VrrpVrAddDel{} }
+func (*VrrpVrAddDel) GetMessageName() string          { return "vrrp_vr_add_del" }
+func (*VrrpVrAddDel) GetCrcString() string            { return "c5cf15aa" }
+func (*VrrpVrAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrAddDel) Size() (size int) {
 	if m == nil {
@@ -242,11 +240,12 @@ type VrrpVrAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VrrpVrAddDelReply) Reset()               { *m = VrrpVrAddDelReply{} }
-func (*VrrpVrAddDelReply) GetMessageName() string { return "vrrp_vr_add_del_reply" }
-func (*VrrpVrAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*VrrpVrAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrAddDelReply) Reset()                        { *m = VrrpVrAddDelReply{} }
+func (*VrrpVrAddDelReply) GetMessageName() string          { return "vrrp_vr_add_del_reply" }
+func (*VrrpVrAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*VrrpVrAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrAddDelReply) Size() (size int) {
@@ -275,12 +274,10 @@ type VrrpVrDel struct {
 	VrrpIndex uint32 `binapi:"u32,name=vrrp_index" json:"vrrp_index,omitempty"`
 }
 
-func (m *VrrpVrDel) Reset()               { *m = VrrpVrDel{} }
-func (*VrrpVrDel) GetMessageName() string { return "vrrp_vr_del" }
-func (*VrrpVrDel) GetCrcString() string   { return "6029baa1" }
-func (*VrrpVrDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrDel) Reset()                        { *m = VrrpVrDel{} }
+func (*VrrpVrDel) GetMessageName() string          { return "vrrp_vr_del" }
+func (*VrrpVrDel) GetCrcString() string            { return "6029baa1" }
+func (*VrrpVrDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrDel) Size() (size int) {
 	if m == nil {
@@ -308,11 +305,12 @@ type VrrpVrDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VrrpVrDelReply) Reset()               { *m = VrrpVrDelReply{} }
-func (*VrrpVrDelReply) GetMessageName() string { return "vrrp_vr_del_reply" }
-func (*VrrpVrDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*VrrpVrDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrDelReply) Reset()                        { *m = VrrpVrDelReply{} }
+func (*VrrpVrDelReply) GetMessageName() string          { return "vrrp_vr_del_reply" }
+func (*VrrpVrDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*VrrpVrDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrDelReply) Size() (size int) {
@@ -344,11 +342,12 @@ type VrrpVrDetails struct {
 	Addrs   []ip_types.Address `binapi:"address[n_addrs],name=addrs" json:"addrs,omitempty"`
 }
 
-func (m *VrrpVrDetails) Reset()               { *m = VrrpVrDetails{} }
-func (*VrrpVrDetails) GetMessageName() string { return "vrrp_vr_details" }
-func (*VrrpVrDetails) GetCrcString() string   { return "46edcebd" }
-func (*VrrpVrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrDetails) Reset()                        { *m = VrrpVrDetails{} }
+func (*VrrpVrDetails) GetMessageName() string          { return "vrrp_vr_details" }
+func (*VrrpVrDetails) GetCrcString() string            { return "46edcebd" }
+func (*VrrpVrDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *VrrpVrDetails) Size() (size int) {
@@ -435,12 +434,10 @@ type VrrpVrDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VrrpVrDump) Reset()               { *m = VrrpVrDump{} }
-func (*VrrpVrDump) GetMessageName() string { return "vrrp_vr_dump" }
-func (*VrrpVrDump) GetCrcString() string   { return "f9e6675e" }
-func (*VrrpVrDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrDump) Reset()                        { *m = VrrpVrDump{} }
+func (*VrrpVrDump) GetMessageName() string          { return "vrrp_vr_dump" }
+func (*VrrpVrDump) GetCrcString() string            { return "f9e6675e" }
+func (*VrrpVrDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrDump) Size() (size int) {
 	if m == nil {
@@ -471,11 +468,12 @@ type VrrpVrEvent struct {
 	NewState VrrpVrState `binapi:"vrrp_vr_state,name=new_state" json:"new_state,omitempty"`
 }
 
-func (m *VrrpVrEvent) Reset()               { *m = VrrpVrEvent{} }
-func (*VrrpVrEvent) GetMessageName() string { return "vrrp_vr_event" }
-func (*VrrpVrEvent) GetCrcString() string   { return "c1fea6a5" }
-func (*VrrpVrEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+func (m *VrrpVrEvent) Reset()                        { *m = VrrpVrEvent{} }
+func (*VrrpVrEvent) GetMessageName() string          { return "vrrp_vr_event" }
+func (*VrrpVrEvent) GetCrcString() string            { return "c1fea6a5" }
+func (*VrrpVrEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *VrrpVrEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *VrrpVrEvent) Size() (size int) {
@@ -523,12 +521,10 @@ type VrrpVrPeerDetails struct {
 	PeerAddrs  []ip_types.Address             `binapi:"address[n_peer_addrs],name=peer_addrs" json:"peer_addrs,omitempty"`
 }
 
-func (m *VrrpVrPeerDetails) Reset()               { *m = VrrpVrPeerDetails{} }
-func (*VrrpVrPeerDetails) GetMessageName() string { return "vrrp_vr_peer_details" }
-func (*VrrpVrPeerDetails) GetCrcString() string   { return "3d99c108" }
-func (*VrrpVrPeerDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrPeerDetails) Reset()                        { *m = VrrpVrPeerDetails{} }
+func (*VrrpVrPeerDetails) GetMessageName() string          { return "vrrp_vr_peer_details" }
+func (*VrrpVrPeerDetails) GetCrcString() string            { return "3d99c108" }
+func (*VrrpVrPeerDetails) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrPeerDetails) Size() (size int) {
 	if m == nil {
@@ -589,12 +585,10 @@ type VrrpVrPeerDump struct {
 	VrID      uint8                          `binapi:"u8,name=vr_id" json:"vr_id,omitempty"`
 }
 
-func (m *VrrpVrPeerDump) Reset()               { *m = VrrpVrPeerDump{} }
-func (*VrrpVrPeerDump) GetMessageName() string { return "vrrp_vr_peer_dump" }
-func (*VrrpVrPeerDump) GetCrcString() string   { return "6fa3f7c4" }
-func (*VrrpVrPeerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrPeerDump) Reset()                        { *m = VrrpVrPeerDump{} }
+func (*VrrpVrPeerDump) GetMessageName() string          { return "vrrp_vr_peer_dump" }
+func (*VrrpVrPeerDump) GetCrcString() string            { return "6fa3f7c4" }
+func (*VrrpVrPeerDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrPeerDump) Size() (size int) {
 	if m == nil {
@@ -632,12 +626,10 @@ type VrrpVrSetPeers struct {
 	Addrs     []ip_types.Address             `binapi:"address[n_addrs],name=addrs" json:"addrs,omitempty"`
 }
 
-func (m *VrrpVrSetPeers) Reset()               { *m = VrrpVrSetPeers{} }
-func (*VrrpVrSetPeers) GetMessageName() string { return "vrrp_vr_set_peers" }
-func (*VrrpVrSetPeers) GetCrcString() string   { return "20bec71f" }
-func (*VrrpVrSetPeers) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrSetPeers) Reset()                        { *m = VrrpVrSetPeers{} }
+func (*VrrpVrSetPeers) GetMessageName() string          { return "vrrp_vr_set_peers" }
+func (*VrrpVrSetPeers) GetCrcString() string            { return "20bec71f" }
+func (*VrrpVrSetPeers) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrSetPeers) Size() (size int) {
 	if m == nil {
@@ -696,11 +688,12 @@ type VrrpVrSetPeersReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VrrpVrSetPeersReply) Reset()               { *m = VrrpVrSetPeersReply{} }
-func (*VrrpVrSetPeersReply) GetMessageName() string { return "vrrp_vr_set_peers_reply" }
-func (*VrrpVrSetPeersReply) GetCrcString() string   { return "e8d4e804" }
-func (*VrrpVrSetPeersReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrSetPeersReply) Reset()                        { *m = VrrpVrSetPeersReply{} }
+func (*VrrpVrSetPeersReply) GetMessageName() string          { return "vrrp_vr_set_peers_reply" }
+func (*VrrpVrSetPeersReply) GetCrcString() string            { return "e8d4e804" }
+func (*VrrpVrSetPeersReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrSetPeersReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrSetPeersReply) Size() (size int) {
@@ -732,12 +725,10 @@ type VrrpVrStartStop struct {
 	IsStart   uint8                          `binapi:"u8,name=is_start" json:"is_start,omitempty"`
 }
 
-func (m *VrrpVrStartStop) Reset()               { *m = VrrpVrStartStop{} }
-func (*VrrpVrStartStop) GetMessageName() string { return "vrrp_vr_start_stop" }
-func (*VrrpVrStartStop) GetCrcString() string   { return "0662a3b7" }
-func (*VrrpVrStartStop) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrStartStop) Reset()                        { *m = VrrpVrStartStop{} }
+func (*VrrpVrStartStop) GetMessageName() string          { return "vrrp_vr_start_stop" }
+func (*VrrpVrStartStop) GetCrcString() string            { return "0662a3b7" }
+func (*VrrpVrStartStop) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrStartStop) Size() (size int) {
 	if m == nil {
@@ -774,11 +765,12 @@ type VrrpVrStartStopReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VrrpVrStartStopReply) Reset()               { *m = VrrpVrStartStopReply{} }
-func (*VrrpVrStartStopReply) GetMessageName() string { return "vrrp_vr_start_stop_reply" }
-func (*VrrpVrStartStopReply) GetCrcString() string   { return "e8d4e804" }
-func (*VrrpVrStartStopReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrStartStopReply) Reset()                        { *m = VrrpVrStartStopReply{} }
+func (*VrrpVrStartStopReply) GetMessageName() string          { return "vrrp_vr_start_stop_reply" }
+func (*VrrpVrStartStopReply) GetCrcString() string            { return "e8d4e804" }
+func (*VrrpVrStartStopReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrStartStopReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrStartStopReply) Size() (size int) {
@@ -812,12 +804,10 @@ type VrrpVrTrackIfAddDel struct {
 	Ifs       []VrrpVrTrackIf                `binapi:"vrrp_vr_track_if[n_ifs],name=ifs" json:"ifs,omitempty"`
 }
 
-func (m *VrrpVrTrackIfAddDel) Reset()               { *m = VrrpVrTrackIfAddDel{} }
-func (*VrrpVrTrackIfAddDel) GetMessageName() string { return "vrrp_vr_track_if_add_del" }
-func (*VrrpVrTrackIfAddDel) GetCrcString() string   { return "d67df299" }
-func (*VrrpVrTrackIfAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrTrackIfAddDel) Reset()                        { *m = VrrpVrTrackIfAddDel{} }
+func (*VrrpVrTrackIfAddDel) GetMessageName() string          { return "vrrp_vr_track_if_add_del" }
+func (*VrrpVrTrackIfAddDel) GetCrcString() string            { return "d67df299" }
+func (*VrrpVrTrackIfAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrTrackIfAddDel) Size() (size int) {
 	if m == nil {
@@ -879,11 +869,12 @@ type VrrpVrTrackIfAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VrrpVrTrackIfAddDelReply) Reset()               { *m = VrrpVrTrackIfAddDelReply{} }
-func (*VrrpVrTrackIfAddDelReply) GetMessageName() string { return "vrrp_vr_track_if_add_del_reply" }
-func (*VrrpVrTrackIfAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*VrrpVrTrackIfAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrTrackIfAddDelReply) Reset()                        { *m = VrrpVrTrackIfAddDelReply{} }
+func (*VrrpVrTrackIfAddDelReply) GetMessageName() string          { return "vrrp_vr_track_if_add_del_reply" }
+func (*VrrpVrTrackIfAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*VrrpVrTrackIfAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrTrackIfAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrTrackIfAddDelReply) Size() (size int) {
@@ -916,12 +907,10 @@ type VrrpVrTrackIfDetails struct {
 	Ifs       []VrrpVrTrackIf                `binapi:"vrrp_vr_track_if[n_ifs],name=ifs" json:"ifs,omitempty"`
 }
 
-func (m *VrrpVrTrackIfDetails) Reset()               { *m = VrrpVrTrackIfDetails{} }
-func (*VrrpVrTrackIfDetails) GetMessageName() string { return "vrrp_vr_track_if_details" }
-func (*VrrpVrTrackIfDetails) GetCrcString() string   { return "73c36f81" }
-func (*VrrpVrTrackIfDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrTrackIfDetails) Reset()                        { *m = VrrpVrTrackIfDetails{} }
+func (*VrrpVrTrackIfDetails) GetMessageName() string          { return "vrrp_vr_track_if_details" }
+func (*VrrpVrTrackIfDetails) GetCrcString() string            { return "73c36f81" }
+func (*VrrpVrTrackIfDetails) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrTrackIfDetails) Size() (size int) {
 	if m == nil {
@@ -983,12 +972,10 @@ type VrrpVrTrackIfDump struct {
 	DumpAll   uint8                          `binapi:"u8,name=dump_all" json:"dump_all,omitempty"`
 }
 
-func (m *VrrpVrTrackIfDump) Reset()               { *m = VrrpVrTrackIfDump{} }
-func (*VrrpVrTrackIfDump) GetMessageName() string { return "vrrp_vr_track_if_dump" }
-func (*VrrpVrTrackIfDump) GetCrcString() string   { return "a34dfc6d" }
-func (*VrrpVrTrackIfDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrTrackIfDump) Reset()                        { *m = VrrpVrTrackIfDump{} }
+func (*VrrpVrTrackIfDump) GetMessageName() string          { return "vrrp_vr_track_if_dump" }
+func (*VrrpVrTrackIfDump) GetCrcString() string            { return "a34dfc6d" }
+func (*VrrpVrTrackIfDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrTrackIfDump) Size() (size int) {
 	if m == nil {
@@ -1032,12 +1019,10 @@ type VrrpVrUpdate struct {
 	Addrs     []ip_types.Address             `binapi:"address[n_addrs],name=addrs" json:"addrs,omitempty"`
 }
 
-func (m *VrrpVrUpdate) Reset()               { *m = VrrpVrUpdate{} }
-func (*VrrpVrUpdate) GetMessageName() string { return "vrrp_vr_update" }
-func (*VrrpVrUpdate) GetCrcString() string   { return "0b51e2f4" }
-func (*VrrpVrUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VrrpVrUpdate) Reset()                        { *m = VrrpVrUpdate{} }
+func (*VrrpVrUpdate) GetMessageName() string          { return "vrrp_vr_update" }
+func (*VrrpVrUpdate) GetCrcString() string            { return "0b51e2f4" }
+func (*VrrpVrUpdate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VrrpVrUpdate) Size() (size int) {
 	if m == nil {
@@ -1106,11 +1091,12 @@ type VrrpVrUpdateReply struct {
 	VrrpIndex uint32 `binapi:"u32,name=vrrp_index" json:"vrrp_index,omitempty"`
 }
 
-func (m *VrrpVrUpdateReply) Reset()               { *m = VrrpVrUpdateReply{} }
-func (*VrrpVrUpdateReply) GetMessageName() string { return "vrrp_vr_update_reply" }
-func (*VrrpVrUpdateReply) GetCrcString() string   { return "5317d608" }
-func (*VrrpVrUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VrrpVrUpdateReply) Reset()                        { *m = VrrpVrUpdateReply{} }
+func (*VrrpVrUpdateReply) GetMessageName() string          { return "vrrp_vr_update_reply" }
+func (*VrrpVrUpdateReply) GetCrcString() string            { return "5317d608" }
+func (*VrrpVrUpdateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VrrpVrUpdateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrUpdateReply) Size() (size int) {
@@ -1143,12 +1129,10 @@ type WantVrrpVrEvents struct {
 	PID           uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantVrrpVrEvents) Reset()               { *m = WantVrrpVrEvents{} }
-func (*WantVrrpVrEvents) GetMessageName() string { return "want_vrrp_vr_events" }
-func (*WantVrrpVrEvents) GetCrcString() string   { return "c5e2af94" }
-func (*WantVrrpVrEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *WantVrrpVrEvents) Reset()                        { *m = WantVrrpVrEvents{} }
+func (*WantVrrpVrEvents) GetMessageName() string          { return "want_vrrp_vr_events" }
+func (*WantVrrpVrEvents) GetCrcString() string            { return "c5e2af94" }
+func (*WantVrrpVrEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantVrrpVrEvents) Size() (size int) {
 	if m == nil {
@@ -1179,11 +1163,12 @@ type WantVrrpVrEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantVrrpVrEventsReply) Reset()               { *m = WantVrrpVrEventsReply{} }
-func (*WantVrrpVrEventsReply) GetMessageName() string { return "want_vrrp_vr_events_reply" }
-func (*WantVrrpVrEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantVrrpVrEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *WantVrrpVrEventsReply) Reset()                        { *m = WantVrrpVrEventsReply{} }
+func (*WantVrrpVrEventsReply) GetMessageName() string          { return "want_vrrp_vr_events_reply" }
+func (*WantVrrpVrEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantVrrpVrEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantVrrpVrEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantVrrpVrEventsReply) Size() (size int) {

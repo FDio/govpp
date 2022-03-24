@@ -37,12 +37,10 @@ type HTTPStaticEnable struct {
 	URI                string `binapi:"string[256],name=uri" json:"uri,omitempty"`
 }
 
-func (m *HTTPStaticEnable) Reset()               { *m = HTTPStaticEnable{} }
-func (*HTTPStaticEnable) GetMessageName() string { return "http_static_enable" }
-func (*HTTPStaticEnable) GetCrcString() string   { return "075f8292" }
-func (*HTTPStaticEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *HTTPStaticEnable) Reset()                        { *m = HTTPStaticEnable{} }
+func (*HTTPStaticEnable) GetMessageName() string          { return "http_static_enable" }
+func (*HTTPStaticEnable) GetCrcString() string            { return "075f8292" }
+func (*HTTPStaticEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *HTTPStaticEnable) Size() (size int) {
 	if m == nil {
@@ -85,11 +83,12 @@ type HTTPStaticEnableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *HTTPStaticEnableReply) Reset()               { *m = HTTPStaticEnableReply{} }
-func (*HTTPStaticEnableReply) GetMessageName() string { return "http_static_enable_reply" }
-func (*HTTPStaticEnableReply) GetCrcString() string   { return "e8d4e804" }
-func (*HTTPStaticEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *HTTPStaticEnableReply) Reset()                        { *m = HTTPStaticEnableReply{} }
+func (*HTTPStaticEnableReply) GetMessageName() string          { return "http_static_enable_reply" }
+func (*HTTPStaticEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*HTTPStaticEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *HTTPStaticEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *HTTPStaticEnableReply) Size() (size int) {

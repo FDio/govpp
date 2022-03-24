@@ -35,12 +35,10 @@ type TLSOpensslSetEngine struct {
 	Ciphers     []byte `binapi:"u8[64],name=ciphers" json:"ciphers,omitempty"`
 }
 
-func (m *TLSOpensslSetEngine) Reset()               { *m = TLSOpensslSetEngine{} }
-func (*TLSOpensslSetEngine) GetMessageName() string { return "tls_openssl_set_engine" }
-func (*TLSOpensslSetEngine) GetCrcString() string   { return "e34d95c1" }
-func (*TLSOpensslSetEngine) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *TLSOpensslSetEngine) Reset()                        { *m = TLSOpensslSetEngine{} }
+func (*TLSOpensslSetEngine) GetMessageName() string          { return "tls_openssl_set_engine" }
+func (*TLSOpensslSetEngine) GetCrcString() string            { return "e34d95c1" }
+func (*TLSOpensslSetEngine) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TLSOpensslSetEngine) Size() (size int) {
 	if m == nil {
@@ -80,11 +78,12 @@ type TLSOpensslSetEngineReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *TLSOpensslSetEngineReply) Reset()               { *m = TLSOpensslSetEngineReply{} }
-func (*TLSOpensslSetEngineReply) GetMessageName() string { return "tls_openssl_set_engine_reply" }
-func (*TLSOpensslSetEngineReply) GetCrcString() string   { return "e8d4e804" }
-func (*TLSOpensslSetEngineReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *TLSOpensslSetEngineReply) Reset()                        { *m = TLSOpensslSetEngineReply{} }
+func (*TLSOpensslSetEngineReply) GetMessageName() string          { return "tls_openssl_set_engine_reply" }
+func (*TLSOpensslSetEngineReply) GetCrcString() string            { return "e8d4e804" }
+func (*TLSOpensslSetEngineReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TLSOpensslSetEngineReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TLSOpensslSetEngineReply) Size() (size int) {

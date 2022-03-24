@@ -34,12 +34,10 @@ type DHCP6ClientEnableDisable struct {
 	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *DHCP6ClientEnableDisable) Reset()               { *m = DHCP6ClientEnableDisable{} }
-func (*DHCP6ClientEnableDisable) GetMessageName() string { return "dhcp6_client_enable_disable" }
-func (*DHCP6ClientEnableDisable) GetCrcString() string   { return "ae6cfcfb" }
-func (*DHCP6ClientEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DHCP6ClientEnableDisable) Reset()                        { *m = DHCP6ClientEnableDisable{} }
+func (*DHCP6ClientEnableDisable) GetMessageName() string          { return "dhcp6_client_enable_disable" }
+func (*DHCP6ClientEnableDisable) GetCrcString() string            { return "ae6cfcfb" }
+func (*DHCP6ClientEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DHCP6ClientEnableDisable) Size() (size int) {
 	if m == nil {
@@ -74,9 +72,10 @@ func (m *DHCP6ClientEnableDisableReply) Reset() { *m = DHCP6ClientEnableDisableR
 func (*DHCP6ClientEnableDisableReply) GetMessageName() string {
 	return "dhcp6_client_enable_disable_reply"
 }
-func (*DHCP6ClientEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*DHCP6ClientEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*DHCP6ClientEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*DHCP6ClientEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DHCP6ClientEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DHCP6ClientEnableDisableReply) Size() (size int) {

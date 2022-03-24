@@ -36,12 +36,10 @@ type StnAddDelRule struct {
 	IsAdd     bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *StnAddDelRule) Reset()               { *m = StnAddDelRule{} }
-func (*StnAddDelRule) GetMessageName() string { return "stn_add_del_rule" }
-func (*StnAddDelRule) GetCrcString() string   { return "224c6edd" }
-func (*StnAddDelRule) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *StnAddDelRule) Reset()                        { *m = StnAddDelRule{} }
+func (*StnAddDelRule) GetMessageName() string          { return "stn_add_del_rule" }
+func (*StnAddDelRule) GetCrcString() string            { return "224c6edd" }
+func (*StnAddDelRule) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *StnAddDelRule) Size() (size int) {
 	if m == nil {
@@ -78,11 +76,12 @@ type StnAddDelRuleReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *StnAddDelRuleReply) Reset()               { *m = StnAddDelRuleReply{} }
-func (*StnAddDelRuleReply) GetMessageName() string { return "stn_add_del_rule_reply" }
-func (*StnAddDelRuleReply) GetCrcString() string   { return "e8d4e804" }
-func (*StnAddDelRuleReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *StnAddDelRuleReply) Reset()                        { *m = StnAddDelRuleReply{} }
+func (*StnAddDelRuleReply) GetMessageName() string          { return "stn_add_del_rule_reply" }
+func (*StnAddDelRuleReply) GetCrcString() string            { return "e8d4e804" }
+func (*StnAddDelRuleReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *StnAddDelRuleReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *StnAddDelRuleReply) Size() (size int) {
@@ -112,11 +111,12 @@ type StnRulesDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *StnRulesDetails) Reset()               { *m = StnRulesDetails{} }
-func (*StnRulesDetails) GetMessageName() string { return "stn_rules_details" }
-func (*StnRulesDetails) GetCrcString() string   { return "a51935a6" }
-func (*StnRulesDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *StnRulesDetails) Reset()                        { *m = StnRulesDetails{} }
+func (*StnRulesDetails) GetMessageName() string          { return "stn_rules_details" }
+func (*StnRulesDetails) GetCrcString() string            { return "a51935a6" }
+func (*StnRulesDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *StnRulesDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *StnRulesDetails) Size() (size int) {
@@ -149,12 +149,10 @@ func (m *StnRulesDetails) Unmarshal(b []byte) error {
 // StnRulesDump defines message 'stn_rules_dump'.
 type StnRulesDump struct{}
 
-func (m *StnRulesDump) Reset()               { *m = StnRulesDump{} }
-func (*StnRulesDump) GetMessageName() string { return "stn_rules_dump" }
-func (*StnRulesDump) GetCrcString() string   { return "51077d14" }
-func (*StnRulesDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *StnRulesDump) Reset()                        { *m = StnRulesDump{} }
+func (*StnRulesDump) GetMessageName() string          { return "stn_rules_dump" }
+func (*StnRulesDump) GetCrcString() string            { return "51077d14" }
+func (*StnRulesDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *StnRulesDump) Size() (size int) {
 	if m == nil {

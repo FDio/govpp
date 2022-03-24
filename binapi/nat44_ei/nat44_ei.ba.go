@@ -106,12 +106,10 @@ type Nat44EiAddDelAddressRange struct {
 	IsAdd          bool                `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *Nat44EiAddDelAddressRange) Reset()               { *m = Nat44EiAddDelAddressRange{} }
-func (*Nat44EiAddDelAddressRange) GetMessageName() string { return "nat44_ei_add_del_address_range" }
-func (*Nat44EiAddDelAddressRange) GetCrcString() string   { return "35f21abc" }
-func (*Nat44EiAddDelAddressRange) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiAddDelAddressRange) Reset()                        { *m = Nat44EiAddDelAddressRange{} }
+func (*Nat44EiAddDelAddressRange) GetMessageName() string          { return "nat44_ei_add_del_address_range" }
+func (*Nat44EiAddDelAddressRange) GetCrcString() string            { return "35f21abc" }
+func (*Nat44EiAddDelAddressRange) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddDelAddressRange) Size() (size int) {
 	if m == nil {
@@ -153,9 +151,10 @@ func (m *Nat44EiAddDelAddressRangeReply) Reset() { *m = Nat44EiAddDelAddressRang
 func (*Nat44EiAddDelAddressRangeReply) GetMessageName() string {
 	return "nat44_ei_add_del_address_range_reply"
 }
-func (*Nat44EiAddDelAddressRangeReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat44EiAddDelAddressRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiAddDelAddressRangeReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiAddDelAddressRangeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiAddDelAddressRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiAddDelAddressRangeReply) Size() (size int) {
@@ -196,10 +195,8 @@ func (m *Nat44EiAddDelIdentityMapping) Reset() { *m = Nat44EiAddDelIdentityMappi
 func (*Nat44EiAddDelIdentityMapping) GetMessageName() string {
 	return "nat44_ei_add_del_identity_mapping"
 }
-func (*Nat44EiAddDelIdentityMapping) GetCrcString() string { return "cb8606b9" }
-func (*Nat44EiAddDelIdentityMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*Nat44EiAddDelIdentityMapping) GetCrcString() string            { return "cb8606b9" }
+func (*Nat44EiAddDelIdentityMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddDelIdentityMapping) Size() (size int) {
 	if m == nil {
@@ -255,7 +252,10 @@ func (*Nat44EiAddDelIdentityMappingReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelIdentityMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelIdentityMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiAddDelIdentityMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiAddDelIdentityMappingReply) Size() (size int) {
@@ -287,12 +287,10 @@ type Nat44EiAddDelInterfaceAddr struct {
 	Flags     Nat44EiConfigFlags             `binapi:"nat44_ei_config_flags,name=flags" json:"flags,omitempty"`
 }
 
-func (m *Nat44EiAddDelInterfaceAddr) Reset()               { *m = Nat44EiAddDelInterfaceAddr{} }
-func (*Nat44EiAddDelInterfaceAddr) GetMessageName() string { return "nat44_ei_add_del_interface_addr" }
-func (*Nat44EiAddDelInterfaceAddr) GetCrcString() string   { return "883abbcc" }
-func (*Nat44EiAddDelInterfaceAddr) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiAddDelInterfaceAddr) Reset()                        { *m = Nat44EiAddDelInterfaceAddr{} }
+func (*Nat44EiAddDelInterfaceAddr) GetMessageName() string          { return "nat44_ei_add_del_interface_addr" }
+func (*Nat44EiAddDelInterfaceAddr) GetCrcString() string            { return "883abbcc" }
+func (*Nat44EiAddDelInterfaceAddr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddDelInterfaceAddr) Size() (size int) {
 	if m == nil {
@@ -331,9 +329,10 @@ func (m *Nat44EiAddDelInterfaceAddrReply) Reset() { *m = Nat44EiAddDelInterfaceA
 func (*Nat44EiAddDelInterfaceAddrReply) GetMessageName() string {
 	return "nat44_ei_add_del_interface_addr_reply"
 }
-func (*Nat44EiAddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat44EiAddDelInterfaceAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiAddDelInterfaceAddrReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiAddDelInterfaceAddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiAddDelInterfaceAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiAddDelInterfaceAddrReply) Size() (size int) {
@@ -367,10 +366,8 @@ func (m *Nat44EiAddDelOutputInterface) Reset() { *m = Nat44EiAddDelOutputInterfa
 func (*Nat44EiAddDelOutputInterface) GetMessageName() string {
 	return "nat44_ei_add_del_output_interface"
 }
-func (*Nat44EiAddDelOutputInterface) GetCrcString() string { return "47d6e753" }
-func (*Nat44EiAddDelOutputInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*Nat44EiAddDelOutputInterface) GetCrcString() string            { return "47d6e753" }
+func (*Nat44EiAddDelOutputInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddDelOutputInterface) Size() (size int) {
 	if m == nil {
@@ -407,7 +404,10 @@ func (*Nat44EiAddDelOutputInterfaceReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelOutputInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelOutputInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiAddDelOutputInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiAddDelOutputInterfaceReply) Size() (size int) {
@@ -446,12 +446,10 @@ type Nat44EiAddDelStaticMapping struct {
 	Tag               string                         `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *Nat44EiAddDelStaticMapping) Reset()               { *m = Nat44EiAddDelStaticMapping{} }
-func (*Nat44EiAddDelStaticMapping) GetMessageName() string { return "nat44_ei_add_del_static_mapping" }
-func (*Nat44EiAddDelStaticMapping) GetCrcString() string   { return "b404b7fe" }
-func (*Nat44EiAddDelStaticMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiAddDelStaticMapping) Reset()                        { *m = Nat44EiAddDelStaticMapping{} }
+func (*Nat44EiAddDelStaticMapping) GetMessageName() string          { return "nat44_ei_add_del_static_mapping" }
+func (*Nat44EiAddDelStaticMapping) GetCrcString() string            { return "b404b7fe" }
+func (*Nat44EiAddDelStaticMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddDelStaticMapping) Size() (size int) {
 	if m == nil {
@@ -511,9 +509,10 @@ func (m *Nat44EiAddDelStaticMappingReply) Reset() { *m = Nat44EiAddDelStaticMapp
 func (*Nat44EiAddDelStaticMappingReply) GetMessageName() string {
 	return "nat44_ei_add_del_static_mapping_reply"
 }
-func (*Nat44EiAddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat44EiAddDelStaticMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiAddDelStaticMappingReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiAddDelStaticMappingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiAddDelStaticMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiAddDelStaticMappingReply) Size() (size int) {
@@ -544,11 +543,12 @@ type Nat44EiAddressDetails struct {
 	VrfID     uint32              `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
-func (m *Nat44EiAddressDetails) Reset()               { *m = Nat44EiAddressDetails{} }
-func (*Nat44EiAddressDetails) GetMessageName() string { return "nat44_ei_address_details" }
-func (*Nat44EiAddressDetails) GetCrcString() string   { return "318f1202" }
-func (*Nat44EiAddressDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiAddressDetails) Reset()                        { *m = Nat44EiAddressDetails{} }
+func (*Nat44EiAddressDetails) GetMessageName() string          { return "nat44_ei_address_details" }
+func (*Nat44EiAddressDetails) GetCrcString() string            { return "318f1202" }
+func (*Nat44EiAddressDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiAddressDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiAddressDetails) Size() (size int) {
@@ -579,12 +579,10 @@ func (m *Nat44EiAddressDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiAddressDump struct{}
 
-func (m *Nat44EiAddressDump) Reset()               { *m = Nat44EiAddressDump{} }
-func (*Nat44EiAddressDump) GetMessageName() string { return "nat44_ei_address_dump" }
-func (*Nat44EiAddressDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiAddressDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiAddressDump) Reset()                        { *m = Nat44EiAddressDump{} }
+func (*Nat44EiAddressDump) GetMessageName() string          { return "nat44_ei_address_dump" }
+func (*Nat44EiAddressDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiAddressDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiAddressDump) Size() (size int) {
 	if m == nil {
@@ -615,12 +613,10 @@ type Nat44EiDelSession struct {
 	ExtHostPort    uint16              `binapi:"u16,name=ext_host_port" json:"ext_host_port,omitempty"`
 }
 
-func (m *Nat44EiDelSession) Reset()               { *m = Nat44EiDelSession{} }
-func (*Nat44EiDelSession) GetMessageName() string { return "nat44_ei_del_session" }
-func (*Nat44EiDelSession) GetCrcString() string   { return "74969ffe" }
-func (*Nat44EiDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiDelSession) Reset()                        { *m = Nat44EiDelSession{} }
+func (*Nat44EiDelSession) GetMessageName() string          { return "nat44_ei_del_session" }
+func (*Nat44EiDelSession) GetCrcString() string            { return "74969ffe" }
+func (*Nat44EiDelSession) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiDelSession) Size() (size int) {
 	if m == nil {
@@ -667,11 +663,12 @@ type Nat44EiDelSessionReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiDelSessionReply) Reset()               { *m = Nat44EiDelSessionReply{} }
-func (*Nat44EiDelSessionReply) GetMessageName() string { return "nat44_ei_del_session_reply" }
-func (*Nat44EiDelSessionReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiDelSessionReply) Reset()                        { *m = Nat44EiDelSessionReply{} }
+func (*Nat44EiDelSessionReply) GetMessageName() string          { return "nat44_ei_del_session_reply" }
+func (*Nat44EiDelSessionReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiDelSessionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiDelSessionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiDelSessionReply) Size() (size int) {
@@ -702,12 +699,10 @@ type Nat44EiDelUser struct {
 	FibIndex  uint32              `binapi:"u32,name=fib_index" json:"fib_index,omitempty"`
 }
 
-func (m *Nat44EiDelUser) Reset()               { *m = Nat44EiDelUser{} }
-func (*Nat44EiDelUser) GetMessageName() string { return "nat44_ei_del_user" }
-func (*Nat44EiDelUser) GetCrcString() string   { return "99a9f998" }
-func (*Nat44EiDelUser) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiDelUser) Reset()                        { *m = Nat44EiDelUser{} }
+func (*Nat44EiDelUser) GetMessageName() string          { return "nat44_ei_del_user" }
+func (*Nat44EiDelUser) GetCrcString() string            { return "99a9f998" }
+func (*Nat44EiDelUser) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiDelUser) Size() (size int) {
 	if m == nil {
@@ -739,11 +734,12 @@ type Nat44EiDelUserReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiDelUserReply) Reset()               { *m = Nat44EiDelUserReply{} }
-func (*Nat44EiDelUserReply) GetMessageName() string { return "nat44_ei_del_user_reply" }
-func (*Nat44EiDelUserReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiDelUserReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiDelUserReply) Reset()                        { *m = Nat44EiDelUserReply{} }
+func (*Nat44EiDelUserReply) GetMessageName() string          { return "nat44_ei_del_user_reply" }
+func (*Nat44EiDelUserReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiDelUserReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiDelUserReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiDelUserReply) Size() (size int) {
@@ -779,7 +775,7 @@ func (*Nat44EiForwardingEnableDisable) GetMessageName() string {
 }
 func (*Nat44EiForwardingEnableDisable) GetCrcString() string { return "b3e225d2" }
 func (*Nat44EiForwardingEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiForwardingEnableDisable) Size() (size int) {
@@ -815,7 +811,10 @@ func (*Nat44EiForwardingEnableDisableReply) GetMessageName() string {
 }
 func (*Nat44EiForwardingEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiForwardingEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiForwardingEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiForwardingEnableDisableReply) Size() (size int) {
@@ -847,10 +846,8 @@ func (m *Nat44EiGetAddrAndPortAllocAlg) Reset() { *m = Nat44EiGetAddrAndPortAllo
 func (*Nat44EiGetAddrAndPortAllocAlg) GetMessageName() string {
 	return "nat44_ei_get_addr_and_port_alloc_alg"
 }
-func (*Nat44EiGetAddrAndPortAllocAlg) GetCrcString() string { return "51077d14" }
-func (*Nat44EiGetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*Nat44EiGetAddrAndPortAllocAlg) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiGetAddrAndPortAllocAlg) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiGetAddrAndPortAllocAlg) Size() (size int) {
 	if m == nil {
@@ -887,7 +884,10 @@ func (*Nat44EiGetAddrAndPortAllocAlgReply) GetMessageName() string {
 }
 func (*Nat44EiGetAddrAndPortAllocAlgReply) GetCrcString() string { return "3607a7d0" }
 func (*Nat44EiGetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiGetAddrAndPortAllocAlgReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiGetAddrAndPortAllocAlgReply) Size() (size int) {
@@ -933,12 +933,10 @@ func (m *Nat44EiGetAddrAndPortAllocAlgReply) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Nat44EiGetMssClamping struct{}
 
-func (m *Nat44EiGetMssClamping) Reset()               { *m = Nat44EiGetMssClamping{} }
-func (*Nat44EiGetMssClamping) GetMessageName() string { return "nat44_ei_get_mss_clamping" }
-func (*Nat44EiGetMssClamping) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiGetMssClamping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiGetMssClamping) Reset()                        { *m = Nat44EiGetMssClamping{} }
+func (*Nat44EiGetMssClamping) GetMessageName() string          { return "nat44_ei_get_mss_clamping" }
+func (*Nat44EiGetMssClamping) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiGetMssClamping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiGetMssClamping) Size() (size int) {
 	if m == nil {
@@ -965,11 +963,12 @@ type Nat44EiGetMssClampingReply struct {
 	Enable   bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Nat44EiGetMssClampingReply) Reset()               { *m = Nat44EiGetMssClampingReply{} }
-func (*Nat44EiGetMssClampingReply) GetMessageName() string { return "nat44_ei_get_mss_clamping_reply" }
-func (*Nat44EiGetMssClampingReply) GetCrcString() string   { return "1c0b2a78" }
-func (*Nat44EiGetMssClampingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiGetMssClampingReply) Reset()                        { *m = Nat44EiGetMssClampingReply{} }
+func (*Nat44EiGetMssClampingReply) GetMessageName() string          { return "nat44_ei_get_mss_clamping_reply" }
+func (*Nat44EiGetMssClampingReply) GetCrcString() string            { return "1c0b2a78" }
+func (*Nat44EiGetMssClampingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiGetMssClampingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiGetMssClampingReply) Size() (size int) {
@@ -1003,12 +1002,10 @@ func (m *Nat44EiGetMssClampingReply) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiHaFlush struct{}
 
-func (m *Nat44EiHaFlush) Reset()               { *m = Nat44EiHaFlush{} }
-func (*Nat44EiHaFlush) GetMessageName() string { return "nat44_ei_ha_flush" }
-func (*Nat44EiHaFlush) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiHaFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaFlush) Reset()                        { *m = Nat44EiHaFlush{} }
+func (*Nat44EiHaFlush) GetMessageName() string          { return "nat44_ei_ha_flush" }
+func (*Nat44EiHaFlush) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiHaFlush) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaFlush) Size() (size int) {
 	if m == nil {
@@ -1033,11 +1030,12 @@ type Nat44EiHaFlushReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiHaFlushReply) Reset()               { *m = Nat44EiHaFlushReply{} }
-func (*Nat44EiHaFlushReply) GetMessageName() string { return "nat44_ei_ha_flush_reply" }
-func (*Nat44EiHaFlushReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiHaFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaFlushReply) Reset()                        { *m = Nat44EiHaFlushReply{} }
+func (*Nat44EiHaFlushReply) GetMessageName() string          { return "nat44_ei_ha_flush_reply" }
+func (*Nat44EiHaFlushReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiHaFlushReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaFlushReply) Size() (size int) {
@@ -1065,12 +1063,10 @@ func (m *Nat44EiHaFlushReply) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Nat44EiHaGetFailover struct{}
 
-func (m *Nat44EiHaGetFailover) Reset()               { *m = Nat44EiHaGetFailover{} }
-func (*Nat44EiHaGetFailover) GetMessageName() string { return "nat44_ei_ha_get_failover" }
-func (*Nat44EiHaGetFailover) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiHaGetFailover) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaGetFailover) Reset()                        { *m = Nat44EiHaGetFailover{} }
+func (*Nat44EiHaGetFailover) GetMessageName() string          { return "nat44_ei_ha_get_failover" }
+func (*Nat44EiHaGetFailover) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiHaGetFailover) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaGetFailover) Size() (size int) {
 	if m == nil {
@@ -1098,11 +1094,12 @@ type Nat44EiHaGetFailoverReply struct {
 	SessionRefreshInterval uint32              `binapi:"u32,name=session_refresh_interval" json:"session_refresh_interval,omitempty"`
 }
 
-func (m *Nat44EiHaGetFailoverReply) Reset()               { *m = Nat44EiHaGetFailoverReply{} }
-func (*Nat44EiHaGetFailoverReply) GetMessageName() string { return "nat44_ei_ha_get_failover_reply" }
-func (*Nat44EiHaGetFailoverReply) GetCrcString() string   { return "a67d8752" }
-func (*Nat44EiHaGetFailoverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaGetFailoverReply) Reset()                        { *m = Nat44EiHaGetFailoverReply{} }
+func (*Nat44EiHaGetFailoverReply) GetMessageName() string          { return "nat44_ei_ha_get_failover_reply" }
+func (*Nat44EiHaGetFailoverReply) GetCrcString() string            { return "a67d8752" }
+func (*Nat44EiHaGetFailoverReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaGetFailoverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaGetFailoverReply) Size() (size int) {
@@ -1139,12 +1136,10 @@ func (m *Nat44EiHaGetFailoverReply) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Nat44EiHaGetListener struct{}
 
-func (m *Nat44EiHaGetListener) Reset()               { *m = Nat44EiHaGetListener{} }
-func (*Nat44EiHaGetListener) GetMessageName() string { return "nat44_ei_ha_get_listener" }
-func (*Nat44EiHaGetListener) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiHaGetListener) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaGetListener) Reset()                        { *m = Nat44EiHaGetListener{} }
+func (*Nat44EiHaGetListener) GetMessageName() string          { return "nat44_ei_ha_get_listener" }
+func (*Nat44EiHaGetListener) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiHaGetListener) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaGetListener) Size() (size int) {
 	if m == nil {
@@ -1172,11 +1167,12 @@ type Nat44EiHaGetListenerReply struct {
 	PathMtu   uint32              `binapi:"u32,name=path_mtu" json:"path_mtu,omitempty"`
 }
 
-func (m *Nat44EiHaGetListenerReply) Reset()               { *m = Nat44EiHaGetListenerReply{} }
-func (*Nat44EiHaGetListenerReply) GetMessageName() string { return "nat44_ei_ha_get_listener_reply" }
-func (*Nat44EiHaGetListenerReply) GetCrcString() string   { return "123ea41f" }
-func (*Nat44EiHaGetListenerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaGetListenerReply) Reset()                        { *m = Nat44EiHaGetListenerReply{} }
+func (*Nat44EiHaGetListenerReply) GetMessageName() string          { return "nat44_ei_ha_get_listener_reply" }
+func (*Nat44EiHaGetListenerReply) GetCrcString() string            { return "123ea41f" }
+func (*Nat44EiHaGetListenerReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaGetListenerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaGetListenerReply) Size() (size int) {
@@ -1216,12 +1212,10 @@ type Nat44EiHaResync struct {
 	PID             uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *Nat44EiHaResync) Reset()               { *m = Nat44EiHaResync{} }
-func (*Nat44EiHaResync) GetMessageName() string { return "nat44_ei_ha_resync" }
-func (*Nat44EiHaResync) GetCrcString() string   { return "c8ab9e03" }
-func (*Nat44EiHaResync) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaResync) Reset()                        { *m = Nat44EiHaResync{} }
+func (*Nat44EiHaResync) GetMessageName() string          { return "nat44_ei_ha_resync" }
+func (*Nat44EiHaResync) GetCrcString() string            { return "c8ab9e03" }
+func (*Nat44EiHaResync) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaResync) Size() (size int) {
 	if m == nil {
@@ -1258,9 +1252,10 @@ func (m *Nat44EiHaResyncCompletedEvent) Reset() { *m = Nat44EiHaResyncCompletedE
 func (*Nat44EiHaResyncCompletedEvent) GetMessageName() string {
 	return "nat44_ei_ha_resync_completed_event"
 }
-func (*Nat44EiHaResyncCompletedEvent) GetCrcString() string { return "fdc598fb" }
-func (*Nat44EiHaResyncCompletedEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+func (*Nat44EiHaResyncCompletedEvent) GetCrcString() string            { return "fdc598fb" }
+func (*Nat44EiHaResyncCompletedEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *Nat44EiHaResyncCompletedEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiHaResyncCompletedEvent) Size() (size int) {
@@ -1293,11 +1288,12 @@ type Nat44EiHaResyncReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiHaResyncReply) Reset()               { *m = Nat44EiHaResyncReply{} }
-func (*Nat44EiHaResyncReply) GetMessageName() string { return "nat44_ei_ha_resync_reply" }
-func (*Nat44EiHaResyncReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiHaResyncReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaResyncReply) Reset()                        { *m = Nat44EiHaResyncReply{} }
+func (*Nat44EiHaResyncReply) GetMessageName() string          { return "nat44_ei_ha_resync_reply" }
+func (*Nat44EiHaResyncReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiHaResyncReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaResyncReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaResyncReply) Size() (size int) {
@@ -1329,12 +1325,10 @@ type Nat44EiHaSetFailover struct {
 	SessionRefreshInterval uint32              `binapi:"u32,name=session_refresh_interval" json:"session_refresh_interval,omitempty"`
 }
 
-func (m *Nat44EiHaSetFailover) Reset()               { *m = Nat44EiHaSetFailover{} }
-func (*Nat44EiHaSetFailover) GetMessageName() string { return "nat44_ei_ha_set_failover" }
-func (*Nat44EiHaSetFailover) GetCrcString() string   { return "718246af" }
-func (*Nat44EiHaSetFailover) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaSetFailover) Reset()                        { *m = Nat44EiHaSetFailover{} }
+func (*Nat44EiHaSetFailover) GetMessageName() string          { return "nat44_ei_ha_set_failover" }
+func (*Nat44EiHaSetFailover) GetCrcString() string            { return "718246af" }
+func (*Nat44EiHaSetFailover) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaSetFailover) Size() (size int) {
 	if m == nil {
@@ -1369,11 +1363,12 @@ type Nat44EiHaSetFailoverReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiHaSetFailoverReply) Reset()               { *m = Nat44EiHaSetFailoverReply{} }
-func (*Nat44EiHaSetFailoverReply) GetMessageName() string { return "nat44_ei_ha_set_failover_reply" }
-func (*Nat44EiHaSetFailoverReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiHaSetFailoverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaSetFailoverReply) Reset()                        { *m = Nat44EiHaSetFailoverReply{} }
+func (*Nat44EiHaSetFailoverReply) GetMessageName() string          { return "nat44_ei_ha_set_failover_reply" }
+func (*Nat44EiHaSetFailoverReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiHaSetFailoverReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaSetFailoverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaSetFailoverReply) Size() (size int) {
@@ -1405,12 +1400,10 @@ type Nat44EiHaSetListener struct {
 	PathMtu   uint32              `binapi:"u32,name=path_mtu" json:"path_mtu,omitempty"`
 }
 
-func (m *Nat44EiHaSetListener) Reset()               { *m = Nat44EiHaSetListener{} }
-func (*Nat44EiHaSetListener) GetMessageName() string { return "nat44_ei_ha_set_listener" }
-func (*Nat44EiHaSetListener) GetCrcString() string   { return "e4a8cb4e" }
-func (*Nat44EiHaSetListener) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiHaSetListener) Reset()                        { *m = Nat44EiHaSetListener{} }
+func (*Nat44EiHaSetListener) GetMessageName() string          { return "nat44_ei_ha_set_listener" }
+func (*Nat44EiHaSetListener) GetCrcString() string            { return "e4a8cb4e" }
+func (*Nat44EiHaSetListener) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiHaSetListener) Size() (size int) {
 	if m == nil {
@@ -1445,11 +1438,12 @@ type Nat44EiHaSetListenerReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiHaSetListenerReply) Reset()               { *m = Nat44EiHaSetListenerReply{} }
-func (*Nat44EiHaSetListenerReply) GetMessageName() string { return "nat44_ei_ha_set_listener_reply" }
-func (*Nat44EiHaSetListenerReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiHaSetListenerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiHaSetListenerReply) Reset()                        { *m = Nat44EiHaSetListenerReply{} }
+func (*Nat44EiHaSetListenerReply) GetMessageName() string          { return "nat44_ei_ha_set_listener_reply" }
+func (*Nat44EiHaSetListenerReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiHaSetListenerReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiHaSetListenerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiHaSetListenerReply) Size() (size int) {
@@ -1489,9 +1483,10 @@ func (m *Nat44EiIdentityMappingDetails) Reset() { *m = Nat44EiIdentityMappingDet
 func (*Nat44EiIdentityMappingDetails) GetMessageName() string {
 	return "nat44_ei_identity_mapping_details"
 }
-func (*Nat44EiIdentityMappingDetails) GetCrcString() string { return "30d53e26" }
-func (*Nat44EiIdentityMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiIdentityMappingDetails) GetCrcString() string            { return "30d53e26" }
+func (*Nat44EiIdentityMappingDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiIdentityMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiIdentityMappingDetails) Size() (size int) {
@@ -1537,12 +1532,10 @@ func (m *Nat44EiIdentityMappingDetails) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Nat44EiIdentityMappingDump struct{}
 
-func (m *Nat44EiIdentityMappingDump) Reset()               { *m = Nat44EiIdentityMappingDump{} }
-func (*Nat44EiIdentityMappingDump) GetMessageName() string { return "nat44_ei_identity_mapping_dump" }
-func (*Nat44EiIdentityMappingDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiIdentityMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiIdentityMappingDump) Reset()                        { *m = Nat44EiIdentityMappingDump{} }
+func (*Nat44EiIdentityMappingDump) GetMessageName() string          { return "nat44_ei_identity_mapping_dump" }
+func (*Nat44EiIdentityMappingDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiIdentityMappingDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiIdentityMappingDump) Size() (size int) {
 	if m == nil {
@@ -1573,10 +1566,8 @@ func (m *Nat44EiInterfaceAddDelFeature) Reset() { *m = Nat44EiInterfaceAddDelFea
 func (*Nat44EiInterfaceAddDelFeature) GetMessageName() string {
 	return "nat44_ei_interface_add_del_feature"
 }
-func (*Nat44EiInterfaceAddDelFeature) GetCrcString() string { return "63a2db8b" }
-func (*Nat44EiInterfaceAddDelFeature) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*Nat44EiInterfaceAddDelFeature) GetCrcString() string            { return "63a2db8b" }
+func (*Nat44EiInterfaceAddDelFeature) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiInterfaceAddDelFeature) Size() (size int) {
 	if m == nil {
@@ -1617,7 +1608,10 @@ func (*Nat44EiInterfaceAddDelFeatureReply) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelFeatureReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiInterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiInterfaceAddDelFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiInterfaceAddDelFeatureReply) Size() (size int) {
@@ -1655,7 +1649,7 @@ func (*Nat44EiInterfaceAddDelOutputFeature) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelOutputFeature) GetCrcString() string { return "63a2db8b" }
 func (*Nat44EiInterfaceAddDelOutputFeature) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceAddDelOutputFeature) Size() (size int) {
@@ -1699,7 +1693,10 @@ func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiInterfaceAddDelOutputFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiInterfaceAddDelOutputFeatureReply) Size() (size int) {
@@ -1729,11 +1726,12 @@ type Nat44EiInterfaceAddrDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat44EiInterfaceAddrDetails) Reset()               { *m = Nat44EiInterfaceAddrDetails{} }
-func (*Nat44EiInterfaceAddrDetails) GetMessageName() string { return "nat44_ei_interface_addr_details" }
-func (*Nat44EiInterfaceAddrDetails) GetCrcString() string   { return "0b45011c" }
-func (*Nat44EiInterfaceAddrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiInterfaceAddrDetails) Reset()                        { *m = Nat44EiInterfaceAddrDetails{} }
+func (*Nat44EiInterfaceAddrDetails) GetMessageName() string          { return "nat44_ei_interface_addr_details" }
+func (*Nat44EiInterfaceAddrDetails) GetCrcString() string            { return "0b45011c" }
+func (*Nat44EiInterfaceAddrDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiInterfaceAddrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiInterfaceAddrDetails) Size() (size int) {
@@ -1761,12 +1759,10 @@ func (m *Nat44EiInterfaceAddrDetails) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Nat44EiInterfaceAddrDump struct{}
 
-func (m *Nat44EiInterfaceAddrDump) Reset()               { *m = Nat44EiInterfaceAddrDump{} }
-func (*Nat44EiInterfaceAddrDump) GetMessageName() string { return "nat44_ei_interface_addr_dump" }
-func (*Nat44EiInterfaceAddrDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiInterfaceAddrDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiInterfaceAddrDump) Reset()                        { *m = Nat44EiInterfaceAddrDump{} }
+func (*Nat44EiInterfaceAddrDump) GetMessageName() string          { return "nat44_ei_interface_addr_dump" }
+func (*Nat44EiInterfaceAddrDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiInterfaceAddrDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiInterfaceAddrDump) Size() (size int) {
 	if m == nil {
@@ -1792,11 +1788,12 @@ type Nat44EiInterfaceDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat44EiInterfaceDetails) Reset()               { *m = Nat44EiInterfaceDetails{} }
-func (*Nat44EiInterfaceDetails) GetMessageName() string { return "nat44_ei_interface_details" }
-func (*Nat44EiInterfaceDetails) GetCrcString() string   { return "f446e508" }
-func (*Nat44EiInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiInterfaceDetails) Reset()                        { *m = Nat44EiInterfaceDetails{} }
+func (*Nat44EiInterfaceDetails) GetMessageName() string          { return "nat44_ei_interface_details" }
+func (*Nat44EiInterfaceDetails) GetCrcString() string            { return "f446e508" }
+func (*Nat44EiInterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiInterfaceDetails) Size() (size int) {
@@ -1827,12 +1824,10 @@ func (m *Nat44EiInterfaceDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiInterfaceDump struct{}
 
-func (m *Nat44EiInterfaceDump) Reset()               { *m = Nat44EiInterfaceDump{} }
-func (*Nat44EiInterfaceDump) GetMessageName() string { return "nat44_ei_interface_dump" }
-func (*Nat44EiInterfaceDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiInterfaceDump) Reset()                        { *m = Nat44EiInterfaceDump{} }
+func (*Nat44EiInterfaceDump) GetMessageName() string          { return "nat44_ei_interface_dump" }
+func (*Nat44EiInterfaceDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiInterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiInterfaceDump) Size() (size int) {
 	if m == nil {
@@ -1864,7 +1859,10 @@ func (*Nat44EiInterfaceOutputFeatureDetails) GetMessageName() string {
 }
 func (*Nat44EiInterfaceOutputFeatureDetails) GetCrcString() string { return "f446e508" }
 func (*Nat44EiInterfaceOutputFeatureDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiInterfaceOutputFeatureDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiInterfaceOutputFeatureDetails) Size() (size int) {
@@ -1901,7 +1899,7 @@ func (*Nat44EiInterfaceOutputFeatureDump) GetMessageName() string {
 }
 func (*Nat44EiInterfaceOutputFeatureDump) GetCrcString() string { return "51077d14" }
 func (*Nat44EiInterfaceOutputFeatureDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceOutputFeatureDump) Size() (size int) {
@@ -1929,12 +1927,10 @@ type Nat44EiIpfixEnableDisable struct {
 	Enable   bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Nat44EiIpfixEnableDisable) Reset()               { *m = Nat44EiIpfixEnableDisable{} }
-func (*Nat44EiIpfixEnableDisable) GetMessageName() string { return "nat44_ei_ipfix_enable_disable" }
-func (*Nat44EiIpfixEnableDisable) GetCrcString() string   { return "9af4a2d2" }
-func (*Nat44EiIpfixEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiIpfixEnableDisable) Reset()                        { *m = Nat44EiIpfixEnableDisable{} }
+func (*Nat44EiIpfixEnableDisable) GetMessageName() string          { return "nat44_ei_ipfix_enable_disable" }
+func (*Nat44EiIpfixEnableDisable) GetCrcString() string            { return "9af4a2d2" }
+func (*Nat44EiIpfixEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiIpfixEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1973,9 +1969,10 @@ func (m *Nat44EiIpfixEnableDisableReply) Reset() { *m = Nat44EiIpfixEnableDisabl
 func (*Nat44EiIpfixEnableDisableReply) GetMessageName() string {
 	return "nat44_ei_ipfix_enable_disable_reply"
 }
-func (*Nat44EiIpfixEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat44EiIpfixEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiIpfixEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiIpfixEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiIpfixEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiIpfixEnableDisableReply) Size() (size int) {
@@ -2008,9 +2005,10 @@ func (m *Nat44EiOutputInterfaceDetails) Reset() { *m = Nat44EiOutputInterfaceDet
 func (*Nat44EiOutputInterfaceDetails) GetMessageName() string {
 	return "nat44_ei_output_interface_details"
 }
-func (*Nat44EiOutputInterfaceDetails) GetCrcString() string { return "0b45011c" }
-func (*Nat44EiOutputInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiOutputInterfaceDetails) GetCrcString() string            { return "0b45011c" }
+func (*Nat44EiOutputInterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiOutputInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiOutputInterfaceDetails) Size() (size int) {
@@ -2039,12 +2037,10 @@ type Nat44EiOutputInterfaceGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *Nat44EiOutputInterfaceGet) Reset()               { *m = Nat44EiOutputInterfaceGet{} }
-func (*Nat44EiOutputInterfaceGet) GetMessageName() string { return "nat44_ei_output_interface_get" }
-func (*Nat44EiOutputInterfaceGet) GetCrcString() string   { return "f75ba505" }
-func (*Nat44EiOutputInterfaceGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiOutputInterfaceGet) Reset()                        { *m = Nat44EiOutputInterfaceGet{} }
+func (*Nat44EiOutputInterfaceGet) GetMessageName() string          { return "nat44_ei_output_interface_get" }
+func (*Nat44EiOutputInterfaceGet) GetCrcString() string            { return "f75ba505" }
+func (*Nat44EiOutputInterfaceGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiOutputInterfaceGet) Size() (size int) {
 	if m == nil {
@@ -2077,9 +2073,10 @@ func (m *Nat44EiOutputInterfaceGetReply) Reset() { *m = Nat44EiOutputInterfaceGe
 func (*Nat44EiOutputInterfaceGetReply) GetMessageName() string {
 	return "nat44_ei_output_interface_get_reply"
 }
-func (*Nat44EiOutputInterfaceGetReply) GetCrcString() string { return "53b48f5d" }
-func (*Nat44EiOutputInterfaceGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiOutputInterfaceGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*Nat44EiOutputInterfaceGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiOutputInterfaceGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiOutputInterfaceGetReply) Size() (size int) {
@@ -2120,12 +2117,10 @@ type Nat44EiPluginEnableDisable struct {
 	Flags         Nat44EiConfigFlags `binapi:"nat44_ei_config_flags,name=flags" json:"flags,omitempty"`
 }
 
-func (m *Nat44EiPluginEnableDisable) Reset()               { *m = Nat44EiPluginEnableDisable{} }
-func (*Nat44EiPluginEnableDisable) GetMessageName() string { return "nat44_ei_plugin_enable_disable" }
-func (*Nat44EiPluginEnableDisable) GetCrcString() string   { return "bf692144" }
-func (*Nat44EiPluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiPluginEnableDisable) Reset()                        { *m = Nat44EiPluginEnableDisable{} }
+func (*Nat44EiPluginEnableDisable) GetMessageName() string          { return "nat44_ei_plugin_enable_disable" }
+func (*Nat44EiPluginEnableDisable) GetCrcString() string            { return "bf692144" }
+func (*Nat44EiPluginEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiPluginEnableDisable) Size() (size int) {
 	if m == nil {
@@ -2182,9 +2177,10 @@ func (m *Nat44EiPluginEnableDisableReply) Reset() { *m = Nat44EiPluginEnableDisa
 func (*Nat44EiPluginEnableDisableReply) GetMessageName() string {
 	return "nat44_ei_plugin_enable_disable_reply"
 }
-func (*Nat44EiPluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat44EiPluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiPluginEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiPluginEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiPluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiPluginEnableDisableReply) Size() (size int) {
@@ -2223,10 +2219,8 @@ func (m *Nat44EiSetAddrAndPortAllocAlg) Reset() { *m = Nat44EiSetAddrAndPortAllo
 func (*Nat44EiSetAddrAndPortAllocAlg) GetMessageName() string {
 	return "nat44_ei_set_addr_and_port_alloc_alg"
 }
-func (*Nat44EiSetAddrAndPortAllocAlg) GetCrcString() string { return "deeb746f" }
-func (*Nat44EiSetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*Nat44EiSetAddrAndPortAllocAlg) GetCrcString() string            { return "deeb746f" }
+func (*Nat44EiSetAddrAndPortAllocAlg) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetAddrAndPortAllocAlg) Size() (size int) {
 	if m == nil {
@@ -2276,7 +2270,10 @@ func (*Nat44EiSetAddrAndPortAllocAlgReply) GetMessageName() string {
 }
 func (*Nat44EiSetAddrAndPortAllocAlgReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiSetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *Nat44EiSetAddrAndPortAllocAlgReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetAddrAndPortAllocAlgReply) Size() (size int) {
@@ -2306,12 +2303,10 @@ type Nat44EiSetFqOptions struct {
 	FrameQueueNelts uint32 `binapi:"u32,name=frame_queue_nelts" json:"frame_queue_nelts,omitempty"`
 }
 
-func (m *Nat44EiSetFqOptions) Reset()               { *m = Nat44EiSetFqOptions{} }
-func (*Nat44EiSetFqOptions) GetMessageName() string { return "nat44_ei_set_fq_options" }
-func (*Nat44EiSetFqOptions) GetCrcString() string   { return "2399bd71" }
-func (*Nat44EiSetFqOptions) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiSetFqOptions) Reset()                        { *m = Nat44EiSetFqOptions{} }
+func (*Nat44EiSetFqOptions) GetMessageName() string          { return "nat44_ei_set_fq_options" }
+func (*Nat44EiSetFqOptions) GetCrcString() string            { return "2399bd71" }
+func (*Nat44EiSetFqOptions) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetFqOptions) Size() (size int) {
 	if m == nil {
@@ -2340,11 +2335,12 @@ type Nat44EiSetFqOptionsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiSetFqOptionsReply) Reset()               { *m = Nat44EiSetFqOptionsReply{} }
-func (*Nat44EiSetFqOptionsReply) GetMessageName() string { return "nat44_ei_set_fq_options_reply" }
-func (*Nat44EiSetFqOptionsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiSetFqOptionsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiSetFqOptionsReply) Reset()                        { *m = Nat44EiSetFqOptionsReply{} }
+func (*Nat44EiSetFqOptionsReply) GetMessageName() string          { return "nat44_ei_set_fq_options_reply" }
+func (*Nat44EiSetFqOptionsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiSetFqOptionsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiSetFqOptionsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetFqOptionsReply) Size() (size int) {
@@ -2374,12 +2370,10 @@ type Nat44EiSetLogLevel struct {
 	LogLevel nat_types.NatLogLevel `binapi:"nat_log_level,name=log_level" json:"log_level,omitempty"`
 }
 
-func (m *Nat44EiSetLogLevel) Reset()               { *m = Nat44EiSetLogLevel{} }
-func (*Nat44EiSetLogLevel) GetMessageName() string { return "nat44_ei_set_log_level" }
-func (*Nat44EiSetLogLevel) GetCrcString() string   { return "70076bfe" }
-func (*Nat44EiSetLogLevel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiSetLogLevel) Reset()                        { *m = Nat44EiSetLogLevel{} }
+func (*Nat44EiSetLogLevel) GetMessageName() string          { return "nat44_ei_set_log_level" }
+func (*Nat44EiSetLogLevel) GetCrcString() string            { return "70076bfe" }
+func (*Nat44EiSetLogLevel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetLogLevel) Size() (size int) {
 	if m == nil {
@@ -2408,11 +2402,12 @@ type Nat44EiSetLogLevelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiSetLogLevelReply) Reset()               { *m = Nat44EiSetLogLevelReply{} }
-func (*Nat44EiSetLogLevelReply) GetMessageName() string { return "nat44_ei_set_log_level_reply" }
-func (*Nat44EiSetLogLevelReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiSetLogLevelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiSetLogLevelReply) Reset()                        { *m = Nat44EiSetLogLevelReply{} }
+func (*Nat44EiSetLogLevelReply) GetMessageName() string          { return "nat44_ei_set_log_level_reply" }
+func (*Nat44EiSetLogLevelReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiSetLogLevelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiSetLogLevelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetLogLevelReply) Size() (size int) {
@@ -2443,12 +2438,10 @@ type Nat44EiSetMssClamping struct {
 	Enable   bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Nat44EiSetMssClamping) Reset()               { *m = Nat44EiSetMssClamping{} }
-func (*Nat44EiSetMssClamping) GetMessageName() string { return "nat44_ei_set_mss_clamping" }
-func (*Nat44EiSetMssClamping) GetCrcString() string   { return "25e90abb" }
-func (*Nat44EiSetMssClamping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiSetMssClamping) Reset()                        { *m = Nat44EiSetMssClamping{} }
+func (*Nat44EiSetMssClamping) GetMessageName() string          { return "nat44_ei_set_mss_clamping" }
+func (*Nat44EiSetMssClamping) GetCrcString() string            { return "25e90abb" }
+func (*Nat44EiSetMssClamping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetMssClamping) Size() (size int) {
 	if m == nil {
@@ -2480,11 +2473,12 @@ type Nat44EiSetMssClampingReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiSetMssClampingReply) Reset()               { *m = Nat44EiSetMssClampingReply{} }
-func (*Nat44EiSetMssClampingReply) GetMessageName() string { return "nat44_ei_set_mss_clamping_reply" }
-func (*Nat44EiSetMssClampingReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiSetMssClampingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiSetMssClampingReply) Reset()                        { *m = Nat44EiSetMssClampingReply{} }
+func (*Nat44EiSetMssClampingReply) GetMessageName() string          { return "nat44_ei_set_mss_clamping_reply" }
+func (*Nat44EiSetMssClampingReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiSetMssClampingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiSetMssClampingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetMssClampingReply) Size() (size int) {
@@ -2517,12 +2511,10 @@ type Nat44EiSetTimeouts struct {
 	ICMP           uint32 `binapi:"u32,name=icmp" json:"icmp,omitempty"`
 }
 
-func (m *Nat44EiSetTimeouts) Reset()               { *m = Nat44EiSetTimeouts{} }
-func (*Nat44EiSetTimeouts) GetMessageName() string { return "nat44_ei_set_timeouts" }
-func (*Nat44EiSetTimeouts) GetCrcString() string   { return "d4746b16" }
-func (*Nat44EiSetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiSetTimeouts) Reset()                        { *m = Nat44EiSetTimeouts{} }
+func (*Nat44EiSetTimeouts) GetMessageName() string          { return "nat44_ei_set_timeouts" }
+func (*Nat44EiSetTimeouts) GetCrcString() string            { return "d4746b16" }
+func (*Nat44EiSetTimeouts) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetTimeouts) Size() (size int) {
 	if m == nil {
@@ -2560,11 +2552,12 @@ type Nat44EiSetTimeoutsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiSetTimeoutsReply) Reset()               { *m = Nat44EiSetTimeoutsReply{} }
-func (*Nat44EiSetTimeoutsReply) GetMessageName() string { return "nat44_ei_set_timeouts_reply" }
-func (*Nat44EiSetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiSetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiSetTimeoutsReply) Reset()                        { *m = Nat44EiSetTimeoutsReply{} }
+func (*Nat44EiSetTimeoutsReply) GetMessageName() string          { return "nat44_ei_set_timeouts_reply" }
+func (*Nat44EiSetTimeoutsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiSetTimeoutsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiSetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetTimeoutsReply) Size() (size int) {
@@ -2594,12 +2587,10 @@ type Nat44EiSetWorkers struct {
 	WorkerMask uint64 `binapi:"u64,name=worker_mask" json:"worker_mask,omitempty"`
 }
 
-func (m *Nat44EiSetWorkers) Reset()               { *m = Nat44EiSetWorkers{} }
-func (*Nat44EiSetWorkers) GetMessageName() string { return "nat44_ei_set_workers" }
-func (*Nat44EiSetWorkers) GetCrcString() string   { return "da926638" }
-func (*Nat44EiSetWorkers) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiSetWorkers) Reset()                        { *m = Nat44EiSetWorkers{} }
+func (*Nat44EiSetWorkers) GetMessageName() string          { return "nat44_ei_set_workers" }
+func (*Nat44EiSetWorkers) GetCrcString() string            { return "da926638" }
+func (*Nat44EiSetWorkers) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiSetWorkers) Size() (size int) {
 	if m == nil {
@@ -2628,11 +2619,12 @@ type Nat44EiSetWorkersReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat44EiSetWorkersReply) Reset()               { *m = Nat44EiSetWorkersReply{} }
-func (*Nat44EiSetWorkersReply) GetMessageName() string { return "nat44_ei_set_workers_reply" }
-func (*Nat44EiSetWorkersReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat44EiSetWorkersReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiSetWorkersReply) Reset()                        { *m = Nat44EiSetWorkersReply{} }
+func (*Nat44EiSetWorkersReply) GetMessageName() string          { return "nat44_ei_set_workers_reply" }
+func (*Nat44EiSetWorkersReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat44EiSetWorkersReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiSetWorkersReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiSetWorkersReply) Size() (size int) {
@@ -2660,12 +2652,10 @@ func (m *Nat44EiSetWorkersReply) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiShowFqOptions struct{}
 
-func (m *Nat44EiShowFqOptions) Reset()               { *m = Nat44EiShowFqOptions{} }
-func (*Nat44EiShowFqOptions) GetMessageName() string { return "nat44_ei_show_fq_options" }
-func (*Nat44EiShowFqOptions) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiShowFqOptions) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiShowFqOptions) Reset()                        { *m = Nat44EiShowFqOptions{} }
+func (*Nat44EiShowFqOptions) GetMessageName() string          { return "nat44_ei_show_fq_options" }
+func (*Nat44EiShowFqOptions) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiShowFqOptions) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiShowFqOptions) Size() (size int) {
 	if m == nil {
@@ -2691,11 +2681,12 @@ type Nat44EiShowFqOptionsReply struct {
 	FrameQueueNelts uint32 `binapi:"u32,name=frame_queue_nelts" json:"frame_queue_nelts,omitempty"`
 }
 
-func (m *Nat44EiShowFqOptionsReply) Reset()               { *m = Nat44EiShowFqOptionsReply{} }
-func (*Nat44EiShowFqOptionsReply) GetMessageName() string { return "nat44_ei_show_fq_options_reply" }
-func (*Nat44EiShowFqOptionsReply) GetCrcString() string   { return "7213b545" }
-func (*Nat44EiShowFqOptionsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiShowFqOptionsReply) Reset()                        { *m = Nat44EiShowFqOptionsReply{} }
+func (*Nat44EiShowFqOptionsReply) GetMessageName() string          { return "nat44_ei_show_fq_options_reply" }
+func (*Nat44EiShowFqOptionsReply) GetCrcString() string            { return "7213b545" }
+func (*Nat44EiShowFqOptionsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiShowFqOptionsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiShowFqOptionsReply) Size() (size int) {
@@ -2726,12 +2717,10 @@ func (m *Nat44EiShowFqOptionsReply) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiShowRunningConfig struct{}
 
-func (m *Nat44EiShowRunningConfig) Reset()               { *m = Nat44EiShowRunningConfig{} }
-func (*Nat44EiShowRunningConfig) GetMessageName() string { return "nat44_ei_show_running_config" }
-func (*Nat44EiShowRunningConfig) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiShowRunningConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiShowRunningConfig) Reset()                        { *m = Nat44EiShowRunningConfig{} }
+func (*Nat44EiShowRunningConfig) GetMessageName() string          { return "nat44_ei_show_running_config" }
+func (*Nat44EiShowRunningConfig) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiShowRunningConfig) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiShowRunningConfig) Size() (size int) {
 	if m == nil {
@@ -2772,9 +2761,10 @@ func (m *Nat44EiShowRunningConfigReply) Reset() { *m = Nat44EiShowRunningConfigR
 func (*Nat44EiShowRunningConfigReply) GetMessageName() string {
 	return "nat44_ei_show_running_config_reply"
 }
-func (*Nat44EiShowRunningConfigReply) GetCrcString() string { return "41b66a81" }
-func (*Nat44EiShowRunningConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat44EiShowRunningConfigReply) GetCrcString() string            { return "41b66a81" }
+func (*Nat44EiShowRunningConfigReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiShowRunningConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EiShowRunningConfigReply) Size() (size int) {
@@ -2857,11 +2847,12 @@ type Nat44EiStaticMappingDetails struct {
 	Tag               string                         `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *Nat44EiStaticMappingDetails) Reset()               { *m = Nat44EiStaticMappingDetails{} }
-func (*Nat44EiStaticMappingDetails) GetMessageName() string { return "nat44_ei_static_mapping_details" }
-func (*Nat44EiStaticMappingDetails) GetCrcString() string   { return "6b51ca6e" }
-func (*Nat44EiStaticMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiStaticMappingDetails) Reset()                        { *m = Nat44EiStaticMappingDetails{} }
+func (*Nat44EiStaticMappingDetails) GetMessageName() string          { return "nat44_ei_static_mapping_details" }
+func (*Nat44EiStaticMappingDetails) GetCrcString() string            { return "6b51ca6e" }
+func (*Nat44EiStaticMappingDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiStaticMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiStaticMappingDetails) Size() (size int) {
@@ -2913,12 +2904,10 @@ func (m *Nat44EiStaticMappingDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiStaticMappingDump struct{}
 
-func (m *Nat44EiStaticMappingDump) Reset()               { *m = Nat44EiStaticMappingDump{} }
-func (*Nat44EiStaticMappingDump) GetMessageName() string { return "nat44_ei_static_mapping_dump" }
-func (*Nat44EiStaticMappingDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiStaticMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiStaticMappingDump) Reset()                        { *m = Nat44EiStaticMappingDump{} }
+func (*Nat44EiStaticMappingDump) GetMessageName() string          { return "nat44_ei_static_mapping_dump" }
+func (*Nat44EiStaticMappingDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiStaticMappingDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiStaticMappingDump) Size() (size int) {
 	if m == nil {
@@ -2946,11 +2935,12 @@ type Nat44EiUserDetails struct {
 	Nstaticsessions uint32              `binapi:"u32,name=nstaticsessions" json:"nstaticsessions,omitempty"`
 }
 
-func (m *Nat44EiUserDetails) Reset()               { *m = Nat44EiUserDetails{} }
-func (*Nat44EiUserDetails) GetMessageName() string { return "nat44_ei_user_details" }
-func (*Nat44EiUserDetails) GetCrcString() string   { return "355896c2" }
-func (*Nat44EiUserDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiUserDetails) Reset()                        { *m = Nat44EiUserDetails{} }
+func (*Nat44EiUserDetails) GetMessageName() string          { return "nat44_ei_user_details" }
+func (*Nat44EiUserDetails) GetCrcString() string            { return "355896c2" }
+func (*Nat44EiUserDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiUserDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiUserDetails) Size() (size int) {
@@ -2987,12 +2977,10 @@ func (m *Nat44EiUserDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiUserDump struct{}
 
-func (m *Nat44EiUserDump) Reset()               { *m = Nat44EiUserDump{} }
-func (*Nat44EiUserDump) GetMessageName() string { return "nat44_ei_user_dump" }
-func (*Nat44EiUserDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiUserDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiUserDump) Reset()                        { *m = Nat44EiUserDump{} }
+func (*Nat44EiUserDump) GetMessageName() string          { return "nat44_ei_user_dump" }
+func (*Nat44EiUserDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiUserDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiUserDump) Size() (size int) {
 	if m == nil {
@@ -3027,11 +3015,12 @@ type Nat44EiUserSessionDetails struct {
 	ExtHostPort      uint16              `binapi:"u16,name=ext_host_port" json:"ext_host_port,omitempty"`
 }
 
-func (m *Nat44EiUserSessionDetails) Reset()               { *m = Nat44EiUserSessionDetails{} }
-func (*Nat44EiUserSessionDetails) GetMessageName() string { return "nat44_ei_user_session_details" }
-func (*Nat44EiUserSessionDetails) GetCrcString() string   { return "19b7c0ac" }
-func (*Nat44EiUserSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiUserSessionDetails) Reset()                        { *m = Nat44EiUserSessionDetails{} }
+func (*Nat44EiUserSessionDetails) GetMessageName() string          { return "nat44_ei_user_session_details" }
+func (*Nat44EiUserSessionDetails) GetCrcString() string            { return "19b7c0ac" }
+func (*Nat44EiUserSessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiUserSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiUserSessionDetails) Size() (size int) {
@@ -3092,12 +3081,10 @@ type Nat44EiUserSessionDump struct {
 	VrfID     uint32              `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
-func (m *Nat44EiUserSessionDump) Reset()               { *m = Nat44EiUserSessionDump{} }
-func (*Nat44EiUserSessionDump) GetMessageName() string { return "nat44_ei_user_session_dump" }
-func (*Nat44EiUserSessionDump) GetCrcString() string   { return "e1899c98" }
-func (*Nat44EiUserSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiUserSessionDump) Reset()                        { *m = Nat44EiUserSessionDump{} }
+func (*Nat44EiUserSessionDump) GetMessageName() string          { return "nat44_ei_user_session_dump" }
+func (*Nat44EiUserSessionDump) GetCrcString() string            { return "e1899c98" }
+func (*Nat44EiUserSessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiUserSessionDump) Size() (size int) {
 	if m == nil {
@@ -3131,11 +3118,12 @@ type Nat44EiWorkerDetails struct {
 	Name        string `binapi:"string[64],name=name" json:"name,omitempty"`
 }
 
-func (m *Nat44EiWorkerDetails) Reset()               { *m = Nat44EiWorkerDetails{} }
-func (*Nat44EiWorkerDetails) GetMessageName() string { return "nat44_ei_worker_details" }
-func (*Nat44EiWorkerDetails) GetCrcString() string   { return "84bf06fc" }
-func (*Nat44EiWorkerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat44EiWorkerDetails) Reset()                        { *m = Nat44EiWorkerDetails{} }
+func (*Nat44EiWorkerDetails) GetMessageName() string          { return "nat44_ei_worker_details" }
+func (*Nat44EiWorkerDetails) GetCrcString() string            { return "84bf06fc" }
+func (*Nat44EiWorkerDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat44EiWorkerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EiWorkerDetails) Size() (size int) {
@@ -3169,12 +3157,10 @@ func (m *Nat44EiWorkerDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Nat44EiWorkerDump struct{}
 
-func (m *Nat44EiWorkerDump) Reset()               { *m = Nat44EiWorkerDump{} }
-func (*Nat44EiWorkerDump) GetMessageName() string { return "nat44_ei_worker_dump" }
-func (*Nat44EiWorkerDump) GetCrcString() string   { return "51077d14" }
-func (*Nat44EiWorkerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat44EiWorkerDump) Reset()                        { *m = Nat44EiWorkerDump{} }
+func (*Nat44EiWorkerDump) GetMessageName() string          { return "nat44_ei_worker_dump" }
+func (*Nat44EiWorkerDump) GetCrcString() string            { return "51077d14" }
+func (*Nat44EiWorkerDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat44EiWorkerDump) Size() (size int) {
 	if m == nil {

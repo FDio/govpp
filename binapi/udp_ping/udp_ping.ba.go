@@ -42,12 +42,10 @@ type UDPPingAddDel struct {
 	Reserve      []byte           `binapi:"u8[3],name=reserve" json:"reserve,omitempty"`
 }
 
-func (m *UDPPingAddDel) Reset()               { *m = UDPPingAddDel{} }
-func (*UDPPingAddDel) GetMessageName() string { return "udp_ping_add_del" }
-func (*UDPPingAddDel) GetCrcString() string   { return "fa2628fc" }
-func (*UDPPingAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *UDPPingAddDel) Reset()                        { *m = UDPPingAddDel{} }
+func (*UDPPingAddDel) GetMessageName() string          { return "udp_ping_add_del" }
+func (*UDPPingAddDel) GetCrcString() string            { return "fa2628fc" }
+func (*UDPPingAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *UDPPingAddDel) Size() (size int) {
 	if m == nil {
@@ -109,11 +107,12 @@ type UDPPingAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *UDPPingAddDelReply) Reset()               { *m = UDPPingAddDelReply{} }
-func (*UDPPingAddDelReply) GetMessageName() string { return "udp_ping_add_del_reply" }
-func (*UDPPingAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*UDPPingAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *UDPPingAddDelReply) Reset()                        { *m = UDPPingAddDelReply{} }
+func (*UDPPingAddDelReply) GetMessageName() string          { return "udp_ping_add_del_reply" }
+func (*UDPPingAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*UDPPingAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *UDPPingAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *UDPPingAddDelReply) Size() (size int) {
@@ -142,12 +141,10 @@ type UDPPingExport struct {
 	Enable bool `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *UDPPingExport) Reset()               { *m = UDPPingExport{} }
-func (*UDPPingExport) GetMessageName() string { return "udp_ping_export" }
-func (*UDPPingExport) GetCrcString() string   { return "b3e225d2" }
-func (*UDPPingExport) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *UDPPingExport) Reset()                        { *m = UDPPingExport{} }
+func (*UDPPingExport) GetMessageName() string          { return "udp_ping_export" }
+func (*UDPPingExport) GetCrcString() string            { return "b3e225d2" }
+func (*UDPPingExport) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *UDPPingExport) Size() (size int) {
 	if m == nil {
@@ -175,11 +172,12 @@ type UDPPingExportReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *UDPPingExportReply) Reset()               { *m = UDPPingExportReply{} }
-func (*UDPPingExportReply) GetMessageName() string { return "udp_ping_export_reply" }
-func (*UDPPingExportReply) GetCrcString() string   { return "e8d4e804" }
-func (*UDPPingExportReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *UDPPingExportReply) Reset()                        { *m = UDPPingExportReply{} }
+func (*UDPPingExportReply) GetMessageName() string          { return "udp_ping_export_reply" }
+func (*UDPPingExportReply) GetCrcString() string            { return "e8d4e804" }
+func (*UDPPingExportReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *UDPPingExportReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *UDPPingExportReply) Size() (size int) {

@@ -105,12 +105,10 @@ type AppAddCertKeyPair struct {
 	Certkey    []byte `binapi:"u8[certkey_len],name=certkey" json:"certkey,omitempty"`
 }
 
-func (m *AppAddCertKeyPair) Reset()               { *m = AppAddCertKeyPair{} }
-func (*AppAddCertKeyPair) GetMessageName() string { return "app_add_cert_key_pair" }
-func (*AppAddCertKeyPair) GetCrcString() string   { return "02eb8016" }
-func (*AppAddCertKeyPair) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppAddCertKeyPair) Reset()                        { *m = AppAddCertKeyPair{} }
+func (*AppAddCertKeyPair) GetMessageName() string          { return "app_add_cert_key_pair" }
+func (*AppAddCertKeyPair) GetCrcString() string            { return "02eb8016" }
+func (*AppAddCertKeyPair) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppAddCertKeyPair) Size() (size int) {
 	if m == nil {
@@ -146,11 +144,12 @@ type AppAddCertKeyPairReply struct {
 	Index  uint32 `binapi:"u32,name=index" json:"index,omitempty"`
 }
 
-func (m *AppAddCertKeyPairReply) Reset()               { *m = AppAddCertKeyPairReply{} }
-func (*AppAddCertKeyPairReply) GetMessageName() string { return "app_add_cert_key_pair_reply" }
-func (*AppAddCertKeyPairReply) GetCrcString() string   { return "b42958d0" }
-func (*AppAddCertKeyPairReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppAddCertKeyPairReply) Reset()                        { *m = AppAddCertKeyPairReply{} }
+func (*AppAddCertKeyPairReply) GetMessageName() string          { return "app_add_cert_key_pair_reply" }
+func (*AppAddCertKeyPairReply) GetCrcString() string            { return "b42958d0" }
+func (*AppAddCertKeyPairReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppAddCertKeyPairReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppAddCertKeyPairReply) Size() (size int) {
@@ -183,12 +182,10 @@ type AppAttach struct {
 	NamespaceID string   `binapi:"string[],name=namespace_id" json:"namespace_id,omitempty"`
 }
 
-func (m *AppAttach) Reset()               { *m = AppAttach{} }
-func (*AppAttach) GetMessageName() string { return "app_attach" }
-func (*AppAttach) GetCrcString() string   { return "5f4a260d" }
-func (*AppAttach) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppAttach) Reset()                        { *m = AppAttach{} }
+func (*AppAttach) GetMessageName() string          { return "app_attach" }
+func (*AppAttach) GetCrcString() string            { return "5f4a260d" }
+func (*AppAttach) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppAttach) Size() (size int) {
 	if m == nil {
@@ -237,11 +234,12 @@ type AppAttachReply struct {
 	SegmentName     string `binapi:"string[],name=segment_name" json:"segment_name,omitempty"`
 }
 
-func (m *AppAttachReply) Reset()               { *m = AppAttachReply{} }
-func (*AppAttachReply) GetMessageName() string { return "app_attach_reply" }
-func (*AppAttachReply) GetCrcString() string   { return "5c89c3b0" }
-func (*AppAttachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppAttachReply) Reset()                        { *m = AppAttachReply{} }
+func (*AppAttachReply) GetMessageName() string          { return "app_attach_reply" }
+func (*AppAttachReply) GetCrcString() string            { return "5c89c3b0" }
+func (*AppAttachReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppAttachReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppAttachReply) Size() (size int) {
@@ -297,12 +295,10 @@ type AppDelCertKeyPair struct {
 	Index uint32 `binapi:"u32,name=index" json:"index,omitempty"`
 }
 
-func (m *AppDelCertKeyPair) Reset()               { *m = AppDelCertKeyPair{} }
-func (*AppDelCertKeyPair) GetMessageName() string { return "app_del_cert_key_pair" }
-func (*AppDelCertKeyPair) GetCrcString() string   { return "8ac76db6" }
-func (*AppDelCertKeyPair) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppDelCertKeyPair) Reset()                        { *m = AppDelCertKeyPair{} }
+func (*AppDelCertKeyPair) GetMessageName() string          { return "app_del_cert_key_pair" }
+func (*AppDelCertKeyPair) GetCrcString() string            { return "8ac76db6" }
+func (*AppDelCertKeyPair) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppDelCertKeyPair) Size() (size int) {
 	if m == nil {
@@ -330,11 +326,12 @@ type AppDelCertKeyPairReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *AppDelCertKeyPairReply) Reset()               { *m = AppDelCertKeyPairReply{} }
-func (*AppDelCertKeyPairReply) GetMessageName() string { return "app_del_cert_key_pair_reply" }
-func (*AppDelCertKeyPairReply) GetCrcString() string   { return "e8d4e804" }
-func (*AppDelCertKeyPairReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppDelCertKeyPairReply) Reset()                        { *m = AppDelCertKeyPairReply{} }
+func (*AppDelCertKeyPairReply) GetMessageName() string          { return "app_del_cert_key_pair_reply" }
+func (*AppDelCertKeyPairReply) GetCrcString() string            { return "e8d4e804" }
+func (*AppDelCertKeyPairReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppDelCertKeyPairReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppDelCertKeyPairReply) Size() (size int) {
@@ -368,12 +365,10 @@ type AppNamespaceAddDel struct {
 	NamespaceID string                         `binapi:"string[],name=namespace_id" json:"namespace_id,omitempty"`
 }
 
-func (m *AppNamespaceAddDel) Reset()               { *m = AppNamespaceAddDel{} }
-func (*AppNamespaceAddDel) GetMessageName() string { return "app_namespace_add_del" }
-func (*AppNamespaceAddDel) GetCrcString() string   { return "6306aecb" }
-func (*AppNamespaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppNamespaceAddDel) Reset()                        { *m = AppNamespaceAddDel{} }
+func (*AppNamespaceAddDel) GetMessageName() string          { return "app_namespace_add_del" }
+func (*AppNamespaceAddDel) GetCrcString() string            { return "6306aecb" }
+func (*AppNamespaceAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppNamespaceAddDel) Size() (size int) {
 	if m == nil {
@@ -415,11 +410,12 @@ type AppNamespaceAddDelReply struct {
 	AppnsIndex uint32 `binapi:"u32,name=appns_index" json:"appns_index,omitempty"`
 }
 
-func (m *AppNamespaceAddDelReply) Reset()               { *m = AppNamespaceAddDelReply{} }
-func (*AppNamespaceAddDelReply) GetMessageName() string { return "app_namespace_add_del_reply" }
-func (*AppNamespaceAddDelReply) GetCrcString() string   { return "85137120" }
-func (*AppNamespaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppNamespaceAddDelReply) Reset()                        { *m = AppNamespaceAddDelReply{} }
+func (*AppNamespaceAddDelReply) GetMessageName() string          { return "app_namespace_add_del_reply" }
+func (*AppNamespaceAddDelReply) GetCrcString() string            { return "85137120" }
+func (*AppNamespaceAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppNamespaceAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppNamespaceAddDelReply) Size() (size int) {
@@ -456,12 +452,10 @@ type AppNamespaceAddDelV2 struct {
 	Netns       string                         `binapi:"string[64],name=netns" json:"netns,omitempty"`
 }
 
-func (m *AppNamespaceAddDelV2) Reset()               { *m = AppNamespaceAddDelV2{} }
-func (*AppNamespaceAddDelV2) GetMessageName() string { return "app_namespace_add_del_v2" }
-func (*AppNamespaceAddDelV2) GetCrcString() string   { return "ee0755cf" }
-func (*AppNamespaceAddDelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppNamespaceAddDelV2) Reset()                        { *m = AppNamespaceAddDelV2{} }
+func (*AppNamespaceAddDelV2) GetMessageName() string          { return "app_namespace_add_del_v2" }
+func (*AppNamespaceAddDelV2) GetCrcString() string            { return "ee0755cf" }
+func (*AppNamespaceAddDelV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppNamespaceAddDelV2) Size() (size int) {
 	if m == nil {
@@ -505,11 +499,12 @@ type AppNamespaceAddDelV2Reply struct {
 	AppnsIndex uint32 `binapi:"u32,name=appns_index" json:"appns_index,omitempty"`
 }
 
-func (m *AppNamespaceAddDelV2Reply) Reset()               { *m = AppNamespaceAddDelV2Reply{} }
-func (*AppNamespaceAddDelV2Reply) GetMessageName() string { return "app_namespace_add_del_v2_reply" }
-func (*AppNamespaceAddDelV2Reply) GetCrcString() string   { return "85137120" }
-func (*AppNamespaceAddDelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppNamespaceAddDelV2Reply) Reset()                        { *m = AppNamespaceAddDelV2Reply{} }
+func (*AppNamespaceAddDelV2Reply) GetMessageName() string          { return "app_namespace_add_del_v2_reply" }
+func (*AppNamespaceAddDelV2Reply) GetCrcString() string            { return "85137120" }
+func (*AppNamespaceAddDelV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppNamespaceAddDelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppNamespaceAddDelV2Reply) Size() (size int) {
@@ -548,12 +543,10 @@ type AppNamespaceAddDelV3 struct {
 	SockName    string                         `binapi:"string[],name=sock_name" json:"sock_name,omitempty"`
 }
 
-func (m *AppNamespaceAddDelV3) Reset()               { *m = AppNamespaceAddDelV3{} }
-func (*AppNamespaceAddDelV3) GetMessageName() string { return "app_namespace_add_del_v3" }
-func (*AppNamespaceAddDelV3) GetCrcString() string   { return "8a7e40a1" }
-func (*AppNamespaceAddDelV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppNamespaceAddDelV3) Reset()                        { *m = AppNamespaceAddDelV3{} }
+func (*AppNamespaceAddDelV3) GetMessageName() string          { return "app_namespace_add_del_v3" }
+func (*AppNamespaceAddDelV3) GetCrcString() string            { return "8a7e40a1" }
+func (*AppNamespaceAddDelV3) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppNamespaceAddDelV3) Size() (size int) {
 	if m == nil {
@@ -603,11 +596,12 @@ type AppNamespaceAddDelV3Reply struct {
 	AppnsIndex uint32 `binapi:"u32,name=appns_index" json:"appns_index,omitempty"`
 }
 
-func (m *AppNamespaceAddDelV3Reply) Reset()               { *m = AppNamespaceAddDelV3Reply{} }
-func (*AppNamespaceAddDelV3Reply) GetMessageName() string { return "app_namespace_add_del_v3_reply" }
-func (*AppNamespaceAddDelV3Reply) GetCrcString() string   { return "85137120" }
-func (*AppNamespaceAddDelV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppNamespaceAddDelV3Reply) Reset()                        { *m = AppNamespaceAddDelV3Reply{} }
+func (*AppNamespaceAddDelV3Reply) GetMessageName() string          { return "app_namespace_add_del_v3_reply" }
+func (*AppNamespaceAddDelV3Reply) GetCrcString() string            { return "85137120" }
+func (*AppNamespaceAddDelV3Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppNamespaceAddDelV3Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppNamespaceAddDelV3Reply) Size() (size int) {
@@ -641,12 +635,10 @@ type AppWorkerAddDel struct {
 	IsAdd    bool   `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *AppWorkerAddDel) Reset()               { *m = AppWorkerAddDel{} }
-func (*AppWorkerAddDel) GetMessageName() string { return "app_worker_add_del" }
-func (*AppWorkerAddDel) GetCrcString() string   { return "753253dc" }
-func (*AppWorkerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AppWorkerAddDel) Reset()                        { *m = AppWorkerAddDel{} }
+func (*AppWorkerAddDel) GetMessageName() string          { return "app_worker_add_del" }
+func (*AppWorkerAddDel) GetCrcString() string            { return "753253dc" }
+func (*AppWorkerAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AppWorkerAddDel) Size() (size int) {
 	if m == nil {
@@ -687,11 +679,12 @@ type AppWorkerAddDelReply struct {
 	SegmentName          string `binapi:"string[],name=segment_name" json:"segment_name,omitempty"`
 }
 
-func (m *AppWorkerAddDelReply) Reset()               { *m = AppWorkerAddDelReply{} }
-func (*AppWorkerAddDelReply) GetMessageName() string { return "app_worker_add_del_reply" }
-func (*AppWorkerAddDelReply) GetCrcString() string   { return "5735ffe7" }
-func (*AppWorkerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AppWorkerAddDelReply) Reset()                        { *m = AppWorkerAddDelReply{} }
+func (*AppWorkerAddDelReply) GetMessageName() string          { return "app_worker_add_del_reply" }
+func (*AppWorkerAddDelReply) GetCrcString() string            { return "5735ffe7" }
+func (*AppWorkerAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AppWorkerAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AppWorkerAddDelReply) Size() (size int) {
@@ -739,12 +732,10 @@ func (m *AppWorkerAddDelReply) Unmarshal(b []byte) error {
 // ApplicationDetach defines message 'application_detach'.
 type ApplicationDetach struct{}
 
-func (m *ApplicationDetach) Reset()               { *m = ApplicationDetach{} }
-func (*ApplicationDetach) GetMessageName() string { return "application_detach" }
-func (*ApplicationDetach) GetCrcString() string   { return "51077d14" }
-func (*ApplicationDetach) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ApplicationDetach) Reset()                        { *m = ApplicationDetach{} }
+func (*ApplicationDetach) GetMessageName() string          { return "application_detach" }
+func (*ApplicationDetach) GetCrcString() string            { return "51077d14" }
+func (*ApplicationDetach) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ApplicationDetach) Size() (size int) {
 	if m == nil {
@@ -768,11 +759,12 @@ type ApplicationDetachReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ApplicationDetachReply) Reset()               { *m = ApplicationDetachReply{} }
-func (*ApplicationDetachReply) GetMessageName() string { return "application_detach_reply" }
-func (*ApplicationDetachReply) GetCrcString() string   { return "e8d4e804" }
-func (*ApplicationDetachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ApplicationDetachReply) Reset()                        { *m = ApplicationDetachReply{} }
+func (*ApplicationDetachReply) GetMessageName() string          { return "application_detach_reply" }
+func (*ApplicationDetachReply) GetCrcString() string            { return "e8d4e804" }
+func (*ApplicationDetachReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ApplicationDetachReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ApplicationDetachReply) Size() (size int) {
@@ -804,12 +796,10 @@ type ApplicationTLSCertAdd struct {
 	Cert     []byte `binapi:"u8[cert_len],name=cert" json:"cert,omitempty"`
 }
 
-func (m *ApplicationTLSCertAdd) Reset()               { *m = ApplicationTLSCertAdd{} }
-func (*ApplicationTLSCertAdd) GetMessageName() string { return "application_tls_cert_add" }
-func (*ApplicationTLSCertAdd) GetCrcString() string   { return "3f5cfe45" }
-func (*ApplicationTLSCertAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ApplicationTLSCertAdd) Reset()                        { *m = ApplicationTLSCertAdd{} }
+func (*ApplicationTLSCertAdd) GetMessageName() string          { return "application_tls_cert_add" }
+func (*ApplicationTLSCertAdd) GetCrcString() string            { return "3f5cfe45" }
+func (*ApplicationTLSCertAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ApplicationTLSCertAdd) Size() (size int) {
 	if m == nil {
@@ -845,11 +835,12 @@ type ApplicationTLSCertAddReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ApplicationTLSCertAddReply) Reset()               { *m = ApplicationTLSCertAddReply{} }
-func (*ApplicationTLSCertAddReply) GetMessageName() string { return "application_tls_cert_add_reply" }
-func (*ApplicationTLSCertAddReply) GetCrcString() string   { return "e8d4e804" }
-func (*ApplicationTLSCertAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ApplicationTLSCertAddReply) Reset()                        { *m = ApplicationTLSCertAddReply{} }
+func (*ApplicationTLSCertAddReply) GetMessageName() string          { return "application_tls_cert_add_reply" }
+func (*ApplicationTLSCertAddReply) GetCrcString() string            { return "e8d4e804" }
+func (*ApplicationTLSCertAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ApplicationTLSCertAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ApplicationTLSCertAddReply) Size() (size int) {
@@ -881,12 +872,10 @@ type ApplicationTLSKeyAdd struct {
 	Key      []byte `binapi:"u8[key_len],name=key" json:"key,omitempty"`
 }
 
-func (m *ApplicationTLSKeyAdd) Reset()               { *m = ApplicationTLSKeyAdd{} }
-func (*ApplicationTLSKeyAdd) GetMessageName() string { return "application_tls_key_add" }
-func (*ApplicationTLSKeyAdd) GetCrcString() string   { return "5eaf70cd" }
-func (*ApplicationTLSKeyAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ApplicationTLSKeyAdd) Reset()                        { *m = ApplicationTLSKeyAdd{} }
+func (*ApplicationTLSKeyAdd) GetMessageName() string          { return "application_tls_key_add" }
+func (*ApplicationTLSKeyAdd) GetCrcString() string            { return "5eaf70cd" }
+func (*ApplicationTLSKeyAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ApplicationTLSKeyAdd) Size() (size int) {
 	if m == nil {
@@ -922,11 +911,12 @@ type ApplicationTLSKeyAddReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ApplicationTLSKeyAddReply) Reset()               { *m = ApplicationTLSKeyAddReply{} }
-func (*ApplicationTLSKeyAddReply) GetMessageName() string { return "application_tls_key_add_reply" }
-func (*ApplicationTLSKeyAddReply) GetCrcString() string   { return "e8d4e804" }
-func (*ApplicationTLSKeyAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ApplicationTLSKeyAddReply) Reset()                        { *m = ApplicationTLSKeyAddReply{} }
+func (*ApplicationTLSKeyAddReply) GetMessageName() string          { return "application_tls_key_add_reply" }
+func (*ApplicationTLSKeyAddReply) GetCrcString() string            { return "e8d4e804" }
+func (*ApplicationTLSKeyAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ApplicationTLSKeyAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ApplicationTLSKeyAddReply) Size() (size int) {
@@ -955,12 +945,10 @@ type SessionEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *SessionEnableDisable) Reset()               { *m = SessionEnableDisable{} }
-func (*SessionEnableDisable) GetMessageName() string { return "session_enable_disable" }
-func (*SessionEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*SessionEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SessionEnableDisable) Reset()                        { *m = SessionEnableDisable{} }
+func (*SessionEnableDisable) GetMessageName() string          { return "session_enable_disable" }
+func (*SessionEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*SessionEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SessionEnableDisable) Size() (size int) {
 	if m == nil {
@@ -988,11 +976,12 @@ type SessionEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SessionEnableDisableReply) Reset()               { *m = SessionEnableDisableReply{} }
-func (*SessionEnableDisableReply) GetMessageName() string { return "session_enable_disable_reply" }
-func (*SessionEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*SessionEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SessionEnableDisableReply) Reset()                        { *m = SessionEnableDisableReply{} }
+func (*SessionEnableDisableReply) GetMessageName() string          { return "session_enable_disable_reply" }
+func (*SessionEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*SessionEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SessionEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SessionEnableDisableReply) Size() (size int) {
@@ -1030,12 +1019,10 @@ type SessionRuleAddDel struct {
 	Tag            string           `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *SessionRuleAddDel) Reset()               { *m = SessionRuleAddDel{} }
-func (*SessionRuleAddDel) GetMessageName() string { return "session_rule_add_del" }
-func (*SessionRuleAddDel) GetCrcString() string   { return "82a90af5" }
-func (*SessionRuleAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SessionRuleAddDel) Reset()                        { *m = SessionRuleAddDel{} }
+func (*SessionRuleAddDel) GetMessageName() string          { return "session_rule_add_del" }
+func (*SessionRuleAddDel) GetCrcString() string            { return "82a90af5" }
+func (*SessionRuleAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SessionRuleAddDel) Size() (size int) {
 	if m == nil {
@@ -1102,11 +1089,12 @@ type SessionRuleAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SessionRuleAddDelReply) Reset()               { *m = SessionRuleAddDelReply{} }
-func (*SessionRuleAddDelReply) GetMessageName() string { return "session_rule_add_del_reply" }
-func (*SessionRuleAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*SessionRuleAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SessionRuleAddDelReply) Reset()                        { *m = SessionRuleAddDelReply{} }
+func (*SessionRuleAddDelReply) GetMessageName() string          { return "session_rule_add_del_reply" }
+func (*SessionRuleAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*SessionRuleAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SessionRuleAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SessionRuleAddDelReply) Size() (size int) {
@@ -1143,11 +1131,12 @@ type SessionRulesDetails struct {
 	Tag            string           `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *SessionRulesDetails) Reset()               { *m = SessionRulesDetails{} }
-func (*SessionRulesDetails) GetMessageName() string { return "session_rules_details" }
-func (*SessionRulesDetails) GetCrcString() string   { return "4ef746e7" }
-func (*SessionRulesDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SessionRulesDetails) Reset()                        { *m = SessionRulesDetails{} }
+func (*SessionRulesDetails) GetMessageName() string          { return "session_rules_details" }
+func (*SessionRulesDetails) GetCrcString() string            { return "4ef746e7" }
+func (*SessionRulesDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SessionRulesDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SessionRulesDetails) Size() (size int) {
@@ -1210,12 +1199,10 @@ func (m *SessionRulesDetails) Unmarshal(b []byte) error {
 // SessionRulesDump defines message 'session_rules_dump'.
 type SessionRulesDump struct{}
 
-func (m *SessionRulesDump) Reset()               { *m = SessionRulesDump{} }
-func (*SessionRulesDump) GetMessageName() string { return "session_rules_dump" }
-func (*SessionRulesDump) GetCrcString() string   { return "51077d14" }
-func (*SessionRulesDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SessionRulesDump) Reset()                        { *m = SessionRulesDump{} }
+func (*SessionRulesDump) GetMessageName() string          { return "session_rules_dump" }
+func (*SessionRulesDump) GetCrcString() string            { return "51077d14" }
+func (*SessionRulesDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SessionRulesDump) Size() (size int) {
 	if m == nil {
@@ -1239,12 +1226,10 @@ type SessionSapiEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *SessionSapiEnableDisable) Reset()               { *m = SessionSapiEnableDisable{} }
-func (*SessionSapiEnableDisable) GetMessageName() string { return "session_sapi_enable_disable" }
-func (*SessionSapiEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*SessionSapiEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SessionSapiEnableDisable) Reset()                        { *m = SessionSapiEnableDisable{} }
+func (*SessionSapiEnableDisable) GetMessageName() string          { return "session_sapi_enable_disable" }
+func (*SessionSapiEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*SessionSapiEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SessionSapiEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1276,9 +1261,10 @@ func (m *SessionSapiEnableDisableReply) Reset() { *m = SessionSapiEnableDisableR
 func (*SessionSapiEnableDisableReply) GetMessageName() string {
 	return "session_sapi_enable_disable_reply"
 }
-func (*SessionSapiEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*SessionSapiEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*SessionSapiEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*SessionSapiEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SessionSapiEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SessionSapiEnableDisableReply) Size() (size int) {

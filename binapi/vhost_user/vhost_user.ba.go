@@ -46,12 +46,10 @@ type CreateVhostUserIf struct {
 	Tag                 string                    `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *CreateVhostUserIf) Reset()               { *m = CreateVhostUserIf{} }
-func (*CreateVhostUserIf) GetMessageName() string { return "create_vhost_user_if" }
-func (*CreateVhostUserIf) GetCrcString() string   { return "c785c6fc" }
-func (*CreateVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CreateVhostUserIf) Reset()                        { *m = CreateVhostUserIf{} }
+func (*CreateVhostUserIf) GetMessageName() string          { return "create_vhost_user_if" }
+func (*CreateVhostUserIf) GetCrcString() string            { return "c785c6fc" }
+func (*CreateVhostUserIf) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CreateVhostUserIf) Size() (size int) {
 	if m == nil {
@@ -111,11 +109,12 @@ type CreateVhostUserIfReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *CreateVhostUserIfReply) Reset()               { *m = CreateVhostUserIfReply{} }
-func (*CreateVhostUserIfReply) GetMessageName() string { return "create_vhost_user_if_reply" }
-func (*CreateVhostUserIfReply) GetCrcString() string   { return "5383d31f" }
-func (*CreateVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CreateVhostUserIfReply) Reset()                        { *m = CreateVhostUserIfReply{} }
+func (*CreateVhostUserIfReply) GetMessageName() string          { return "create_vhost_user_if_reply" }
+func (*CreateVhostUserIfReply) GetCrcString() string            { return "5383d31f" }
+func (*CreateVhostUserIfReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CreateVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CreateVhostUserIfReply) Size() (size int) {
@@ -158,12 +157,10 @@ type CreateVhostUserIfV2 struct {
 	Tag                 string                    `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *CreateVhostUserIfV2) Reset()               { *m = CreateVhostUserIfV2{} }
-func (*CreateVhostUserIfV2) GetMessageName() string { return "create_vhost_user_if_v2" }
-func (*CreateVhostUserIfV2) GetCrcString() string   { return "dba1cc1d" }
-func (*CreateVhostUserIfV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CreateVhostUserIfV2) Reset()                        { *m = CreateVhostUserIfV2{} }
+func (*CreateVhostUserIfV2) GetMessageName() string          { return "create_vhost_user_if_v2" }
+func (*CreateVhostUserIfV2) GetCrcString() string            { return "dba1cc1d" }
+func (*CreateVhostUserIfV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CreateVhostUserIfV2) Size() (size int) {
 	if m == nil {
@@ -225,11 +222,12 @@ type CreateVhostUserIfV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *CreateVhostUserIfV2Reply) Reset()               { *m = CreateVhostUserIfV2Reply{} }
-func (*CreateVhostUserIfV2Reply) GetMessageName() string { return "create_vhost_user_if_v2_reply" }
-func (*CreateVhostUserIfV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*CreateVhostUserIfV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CreateVhostUserIfV2Reply) Reset()                        { *m = CreateVhostUserIfV2Reply{} }
+func (*CreateVhostUserIfV2Reply) GetMessageName() string          { return "create_vhost_user_if_v2_reply" }
+func (*CreateVhostUserIfV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*CreateVhostUserIfV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CreateVhostUserIfV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CreateVhostUserIfV2Reply) Size() (size int) {
@@ -261,12 +259,10 @@ type DeleteVhostUserIf struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *DeleteVhostUserIf) Reset()               { *m = DeleteVhostUserIf{} }
-func (*DeleteVhostUserIf) GetMessageName() string { return "delete_vhost_user_if" }
-func (*DeleteVhostUserIf) GetCrcString() string   { return "f9e6675e" }
-func (*DeleteVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *DeleteVhostUserIf) Reset()                        { *m = DeleteVhostUserIf{} }
+func (*DeleteVhostUserIf) GetMessageName() string          { return "delete_vhost_user_if" }
+func (*DeleteVhostUserIf) GetCrcString() string            { return "f9e6675e" }
+func (*DeleteVhostUserIf) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DeleteVhostUserIf) Size() (size int) {
 	if m == nil {
@@ -294,11 +290,12 @@ type DeleteVhostUserIfReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *DeleteVhostUserIfReply) Reset()               { *m = DeleteVhostUserIfReply{} }
-func (*DeleteVhostUserIfReply) GetMessageName() string { return "delete_vhost_user_if_reply" }
-func (*DeleteVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
-func (*DeleteVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *DeleteVhostUserIfReply) Reset()                        { *m = DeleteVhostUserIfReply{} }
+func (*DeleteVhostUserIfReply) GetMessageName() string          { return "delete_vhost_user_if_reply" }
+func (*DeleteVhostUserIfReply) GetCrcString() string            { return "e8d4e804" }
+func (*DeleteVhostUserIfReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DeleteVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DeleteVhostUserIfReply) Size() (size int) {
@@ -334,12 +331,10 @@ type ModifyVhostUserIf struct {
 	CustomDevInstance uint32                         `binapi:"u32,name=custom_dev_instance" json:"custom_dev_instance,omitempty"`
 }
 
-func (m *ModifyVhostUserIf) Reset()               { *m = ModifyVhostUserIf{} }
-func (*ModifyVhostUserIf) GetMessageName() string { return "modify_vhost_user_if" }
-func (*ModifyVhostUserIf) GetCrcString() string   { return "0e71d40b" }
-func (*ModifyVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ModifyVhostUserIf) Reset()                        { *m = ModifyVhostUserIf{} }
+func (*ModifyVhostUserIf) GetMessageName() string          { return "modify_vhost_user_if" }
+func (*ModifyVhostUserIf) GetCrcString() string            { return "0e71d40b" }
+func (*ModifyVhostUserIf) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ModifyVhostUserIf) Size() (size int) {
 	if m == nil {
@@ -386,11 +381,12 @@ type ModifyVhostUserIfReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ModifyVhostUserIfReply) Reset()               { *m = ModifyVhostUserIfReply{} }
-func (*ModifyVhostUserIfReply) GetMessageName() string { return "modify_vhost_user_if_reply" }
-func (*ModifyVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
-func (*ModifyVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ModifyVhostUserIfReply) Reset()                        { *m = ModifyVhostUserIfReply{} }
+func (*ModifyVhostUserIfReply) GetMessageName() string          { return "modify_vhost_user_if_reply" }
+func (*ModifyVhostUserIfReply) GetCrcString() string            { return "e8d4e804" }
+func (*ModifyVhostUserIfReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ModifyVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ModifyVhostUserIfReply) Size() (size int) {
@@ -426,12 +422,10 @@ type ModifyVhostUserIfV2 struct {
 	CustomDevInstance uint32                         `binapi:"u32,name=custom_dev_instance" json:"custom_dev_instance,omitempty"`
 }
 
-func (m *ModifyVhostUserIfV2) Reset()               { *m = ModifyVhostUserIfV2{} }
-func (*ModifyVhostUserIfV2) GetMessageName() string { return "modify_vhost_user_if_v2" }
-func (*ModifyVhostUserIfV2) GetCrcString() string   { return "b2483771" }
-func (*ModifyVhostUserIfV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ModifyVhostUserIfV2) Reset()                        { *m = ModifyVhostUserIfV2{} }
+func (*ModifyVhostUserIfV2) GetMessageName() string          { return "modify_vhost_user_if_v2" }
+func (*ModifyVhostUserIfV2) GetCrcString() string            { return "b2483771" }
+func (*ModifyVhostUserIfV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ModifyVhostUserIfV2) Size() (size int) {
 	if m == nil {
@@ -480,11 +474,12 @@ type ModifyVhostUserIfV2Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ModifyVhostUserIfV2Reply) Reset()               { *m = ModifyVhostUserIfV2Reply{} }
-func (*ModifyVhostUserIfV2Reply) GetMessageName() string { return "modify_vhost_user_if_v2_reply" }
-func (*ModifyVhostUserIfV2Reply) GetCrcString() string   { return "e8d4e804" }
-func (*ModifyVhostUserIfV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ModifyVhostUserIfV2Reply) Reset()                        { *m = ModifyVhostUserIfV2Reply{} }
+func (*ModifyVhostUserIfV2Reply) GetMessageName() string          { return "modify_vhost_user_if_v2_reply" }
+func (*ModifyVhostUserIfV2Reply) GetCrcString() string            { return "e8d4e804" }
+func (*ModifyVhostUserIfV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ModifyVhostUserIfV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ModifyVhostUserIfV2Reply) Size() (size int) {
@@ -521,11 +516,12 @@ type SwInterfaceVhostUserDetails struct {
 	SockErrno       int32                                 `binapi:"i32,name=sock_errno" json:"sock_errno,omitempty"`
 }
 
-func (m *SwInterfaceVhostUserDetails) Reset()               { *m = SwInterfaceVhostUserDetails{} }
-func (*SwInterfaceVhostUserDetails) GetMessageName() string { return "sw_interface_vhost_user_details" }
-func (*SwInterfaceVhostUserDetails) GetCrcString() string   { return "0cee1e53" }
-func (*SwInterfaceVhostUserDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SwInterfaceVhostUserDetails) Reset()                        { *m = SwInterfaceVhostUserDetails{} }
+func (*SwInterfaceVhostUserDetails) GetMessageName() string          { return "sw_interface_vhost_user_details" }
+func (*SwInterfaceVhostUserDetails) GetCrcString() string            { return "0cee1e53" }
+func (*SwInterfaceVhostUserDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceVhostUserDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceVhostUserDetails) Size() (size int) {
@@ -578,12 +574,10 @@ type SwInterfaceVhostUserDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwInterfaceVhostUserDump) Reset()               { *m = SwInterfaceVhostUserDump{} }
-func (*SwInterfaceVhostUserDump) GetMessageName() string { return "sw_interface_vhost_user_dump" }
-func (*SwInterfaceVhostUserDump) GetCrcString() string   { return "f9e6675e" }
-func (*SwInterfaceVhostUserDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceVhostUserDump) Reset()                        { *m = SwInterfaceVhostUserDump{} }
+func (*SwInterfaceVhostUserDump) GetMessageName() string          { return "sw_interface_vhost_user_dump" }
+func (*SwInterfaceVhostUserDump) GetCrcString() string            { return "f9e6675e" }
+func (*SwInterfaceVhostUserDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceVhostUserDump) Size() (size int) {
 	if m == nil {

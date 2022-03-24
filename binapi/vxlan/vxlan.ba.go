@@ -36,12 +36,10 @@ type SwInterfaceSetVxlanBypass struct {
 	Enable    bool                           `binapi:"bool,name=enable,default=true" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetVxlanBypass) Reset()               { *m = SwInterfaceSetVxlanBypass{} }
-func (*SwInterfaceSetVxlanBypass) GetMessageName() string { return "sw_interface_set_vxlan_bypass" }
-func (*SwInterfaceSetVxlanBypass) GetCrcString() string   { return "65247409" }
-func (*SwInterfaceSetVxlanBypass) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceSetVxlanBypass) Reset()                        { *m = SwInterfaceSetVxlanBypass{} }
+func (*SwInterfaceSetVxlanBypass) GetMessageName() string          { return "sw_interface_set_vxlan_bypass" }
+func (*SwInterfaceSetVxlanBypass) GetCrcString() string            { return "65247409" }
+func (*SwInterfaceSetVxlanBypass) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetVxlanBypass) Size() (size int) {
 	if m == nil {
@@ -79,9 +77,10 @@ func (m *SwInterfaceSetVxlanBypassReply) Reset() { *m = SwInterfaceSetVxlanBypas
 func (*SwInterfaceSetVxlanBypassReply) GetMessageName() string {
 	return "sw_interface_set_vxlan_bypass_reply"
 }
-func (*SwInterfaceSetVxlanBypassReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetVxlanBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*SwInterfaceSetVxlanBypassReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetVxlanBypassReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetVxlanBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetVxlanBypassReply) Size() (size int) {
@@ -117,12 +116,10 @@ type VxlanAddDelTunnel struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *VxlanAddDelTunnel) Reset()               { *m = VxlanAddDelTunnel{} }
-func (*VxlanAddDelTunnel) GetMessageName() string { return "vxlan_add_del_tunnel" }
-func (*VxlanAddDelTunnel) GetCrcString() string   { return "0c09dc80" }
-func (*VxlanAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanAddDelTunnel) Reset()                        { *m = VxlanAddDelTunnel{} }
+func (*VxlanAddDelTunnel) GetMessageName() string          { return "vxlan_add_del_tunnel" }
+func (*VxlanAddDelTunnel) GetCrcString() string            { return "0c09dc80" }
+func (*VxlanAddDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanAddDelTunnel) Size() (size int) {
 	if m == nil {
@@ -178,11 +175,12 @@ type VxlanAddDelTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanAddDelTunnelReply) Reset()               { *m = VxlanAddDelTunnelReply{} }
-func (*VxlanAddDelTunnelReply) GetMessageName() string { return "vxlan_add_del_tunnel_reply" }
-func (*VxlanAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*VxlanAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanAddDelTunnelReply) Reset()                        { *m = VxlanAddDelTunnelReply{} }
+func (*VxlanAddDelTunnelReply) GetMessageName() string          { return "vxlan_add_del_tunnel_reply" }
+func (*VxlanAddDelTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*VxlanAddDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanAddDelTunnelReply) Size() (size int) {
@@ -223,12 +221,10 @@ type VxlanAddDelTunnelV2 struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *VxlanAddDelTunnelV2) Reset()               { *m = VxlanAddDelTunnelV2{} }
-func (*VxlanAddDelTunnelV2) GetMessageName() string { return "vxlan_add_del_tunnel_v2" }
-func (*VxlanAddDelTunnelV2) GetCrcString() string   { return "4f223f40" }
-func (*VxlanAddDelTunnelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanAddDelTunnelV2) Reset()                        { *m = VxlanAddDelTunnelV2{} }
+func (*VxlanAddDelTunnelV2) GetMessageName() string          { return "vxlan_add_del_tunnel_v2" }
+func (*VxlanAddDelTunnelV2) GetCrcString() string            { return "4f223f40" }
+func (*VxlanAddDelTunnelV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanAddDelTunnelV2) Size() (size int) {
 	if m == nil {
@@ -290,11 +286,12 @@ type VxlanAddDelTunnelV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanAddDelTunnelV2Reply) Reset()               { *m = VxlanAddDelTunnelV2Reply{} }
-func (*VxlanAddDelTunnelV2Reply) GetMessageName() string { return "vxlan_add_del_tunnel_v2_reply" }
-func (*VxlanAddDelTunnelV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*VxlanAddDelTunnelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanAddDelTunnelV2Reply) Reset()                        { *m = VxlanAddDelTunnelV2Reply{} }
+func (*VxlanAddDelTunnelV2Reply) GetMessageName() string          { return "vxlan_add_del_tunnel_v2_reply" }
+func (*VxlanAddDelTunnelV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*VxlanAddDelTunnelV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanAddDelTunnelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanAddDelTunnelV2Reply) Size() (size int) {
@@ -336,12 +333,10 @@ type VxlanAddDelTunnelV3 struct {
 	IsL3           bool                           `binapi:"bool,name=is_l3,default=false" json:"is_l3,omitempty"`
 }
 
-func (m *VxlanAddDelTunnelV3) Reset()               { *m = VxlanAddDelTunnelV3{} }
-func (*VxlanAddDelTunnelV3) GetMessageName() string { return "vxlan_add_del_tunnel_v3" }
-func (*VxlanAddDelTunnelV3) GetCrcString() string   { return "0072b037" }
-func (*VxlanAddDelTunnelV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanAddDelTunnelV3) Reset()                        { *m = VxlanAddDelTunnelV3{} }
+func (*VxlanAddDelTunnelV3) GetMessageName() string          { return "vxlan_add_del_tunnel_v3" }
+func (*VxlanAddDelTunnelV3) GetCrcString() string            { return "0072b037" }
+func (*VxlanAddDelTunnelV3) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanAddDelTunnelV3) Size() (size int) {
 	if m == nil {
@@ -406,11 +401,12 @@ type VxlanAddDelTunnelV3Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanAddDelTunnelV3Reply) Reset()               { *m = VxlanAddDelTunnelV3Reply{} }
-func (*VxlanAddDelTunnelV3Reply) GetMessageName() string { return "vxlan_add_del_tunnel_v3_reply" }
-func (*VxlanAddDelTunnelV3Reply) GetCrcString() string   { return "5383d31f" }
-func (*VxlanAddDelTunnelV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanAddDelTunnelV3Reply) Reset()                        { *m = VxlanAddDelTunnelV3Reply{} }
+func (*VxlanAddDelTunnelV3Reply) GetMessageName() string          { return "vxlan_add_del_tunnel_v3_reply" }
+func (*VxlanAddDelTunnelV3Reply) GetCrcString() string            { return "5383d31f" }
+func (*VxlanAddDelTunnelV3Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanAddDelTunnelV3Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanAddDelTunnelV3Reply) Size() (size int) {
@@ -444,12 +440,10 @@ type VxlanOffloadRx struct {
 	Enable    bool                           `binapi:"bool,name=enable,default=true" json:"enable,omitempty"`
 }
 
-func (m *VxlanOffloadRx) Reset()               { *m = VxlanOffloadRx{} }
-func (*VxlanOffloadRx) GetMessageName() string { return "vxlan_offload_rx" }
-func (*VxlanOffloadRx) GetCrcString() string   { return "9cc95087" }
-func (*VxlanOffloadRx) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanOffloadRx) Reset()                        { *m = VxlanOffloadRx{} }
+func (*VxlanOffloadRx) GetMessageName() string          { return "vxlan_offload_rx" }
+func (*VxlanOffloadRx) GetCrcString() string            { return "9cc95087" }
+func (*VxlanOffloadRx) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanOffloadRx) Size() (size int) {
 	if m == nil {
@@ -483,11 +477,12 @@ type VxlanOffloadRxReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VxlanOffloadRxReply) Reset()               { *m = VxlanOffloadRxReply{} }
-func (*VxlanOffloadRxReply) GetMessageName() string { return "vxlan_offload_rx_reply" }
-func (*VxlanOffloadRxReply) GetCrcString() string   { return "e8d4e804" }
-func (*VxlanOffloadRxReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanOffloadRxReply) Reset()                        { *m = VxlanOffloadRxReply{} }
+func (*VxlanOffloadRxReply) GetMessageName() string          { return "vxlan_offload_rx_reply" }
+func (*VxlanOffloadRxReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanOffloadRxReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanOffloadRxReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanOffloadRxReply) Size() (size int) {
@@ -523,11 +518,12 @@ type VxlanTunnelDetails struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *VxlanTunnelDetails) Reset()               { *m = VxlanTunnelDetails{} }
-func (*VxlanTunnelDetails) GetMessageName() string { return "vxlan_tunnel_details" }
-func (*VxlanTunnelDetails) GetCrcString() string   { return "c3916cb1" }
-func (*VxlanTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanTunnelDetails) Reset()                        { *m = VxlanTunnelDetails{} }
+func (*VxlanTunnelDetails) GetMessageName() string          { return "vxlan_tunnel_details" }
+func (*VxlanTunnelDetails) GetCrcString() string            { return "c3916cb1" }
+func (*VxlanTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanTunnelDetails) Size() (size int) {
@@ -583,12 +579,10 @@ type VxlanTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanTunnelDump) Reset()               { *m = VxlanTunnelDump{} }
-func (*VxlanTunnelDump) GetMessageName() string { return "vxlan_tunnel_dump" }
-func (*VxlanTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*VxlanTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanTunnelDump) Reset()                        { *m = VxlanTunnelDump{} }
+func (*VxlanTunnelDump) GetMessageName() string          { return "vxlan_tunnel_dump" }
+func (*VxlanTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*VxlanTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanTunnelDump) Size() (size int) {
 	if m == nil {
@@ -625,11 +619,12 @@ type VxlanTunnelV2Details struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *VxlanTunnelV2Details) Reset()               { *m = VxlanTunnelV2Details{} }
-func (*VxlanTunnelV2Details) GetMessageName() string { return "vxlan_tunnel_v2_details" }
-func (*VxlanTunnelV2Details) GetCrcString() string   { return "d3bdd4d9" }
-func (*VxlanTunnelV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanTunnelV2Details) Reset()                        { *m = VxlanTunnelV2Details{} }
+func (*VxlanTunnelV2Details) GetMessageName() string          { return "vxlan_tunnel_v2_details" }
+func (*VxlanTunnelV2Details) GetCrcString() string            { return "d3bdd4d9" }
+func (*VxlanTunnelV2Details) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanTunnelV2Details) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanTunnelV2Details) Size() (size int) {
@@ -691,12 +686,10 @@ type VxlanTunnelV2Dump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanTunnelV2Dump) Reset()               { *m = VxlanTunnelV2Dump{} }
-func (*VxlanTunnelV2Dump) GetMessageName() string { return "vxlan_tunnel_v2_dump" }
-func (*VxlanTunnelV2Dump) GetCrcString() string   { return "f9e6675e" }
-func (*VxlanTunnelV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanTunnelV2Dump) Reset()                        { *m = VxlanTunnelV2Dump{} }
+func (*VxlanTunnelV2Dump) GetMessageName() string          { return "vxlan_tunnel_v2_dump" }
+func (*VxlanTunnelV2Dump) GetCrcString() string            { return "f9e6675e" }
+func (*VxlanTunnelV2Dump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanTunnelV2Dump) Size() (size int) {
 	if m == nil {

@@ -60,8 +60,12 @@ type defaultReply struct {
 func (*defaultReply) GetMessageName() string { return "mock_default_reply" }
 func (*defaultReply) GetCrcString() string   { return "xxxxxxxx" }
 func (*defaultReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
+func (m *defaultReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(m.Retval)
+}
+
 func (m *defaultReply) Size() int {
 	if m == nil {
 		return 0
@@ -219,9 +223,9 @@ func (a *VppAdapter) ReplyBytes(request MessageDTO, reply api.Message) ([]byte, 
 	if err != nil {
 		return nil, err
 	}
-	if reply.GetMessageType() == api.ReplyMessage {
+	if reply.GetMessageType() == api.ReplyMessageType {
 		binary.BigEndian.PutUint32(data[2:6], request.ClientID)
-	} else if reply.GetMessageType() == api.RequestMessage {
+	} else if reply.GetMessageType() == api.RequestMessageType {
 		binary.BigEndian.PutUint32(data[6:10], request.ClientID)
 	}
 	return data, nil
@@ -303,9 +307,9 @@ func (a *VppAdapter) SendMsg(clientID uint32, data []byte) error {
 				if err != nil {
 					panic(err)
 				}
-				if msg.Msg.GetMessageType() == api.ReplyMessage {
+				if msg.Msg.GetMessageType() == api.ReplyMessageType {
 					binary.BigEndian.PutUint32(data[2:6], context)
-				} else if msg.Msg.GetMessageType() == api.RequestMessage {
+				} else if msg.Msg.GetMessageType() == api.RequestMessageType {
 					binary.BigEndian.PutUint32(data[6:10], context)
 				}
 				a.callback(msgID, data)
@@ -367,7 +371,7 @@ func (a *VppAdapter) WaitReady() error {
 //
 //	mockVpp.MockReply()  // zero multipart messages
 //	mockVpp.MockReply(&vpe.ControlPingReply{})
-func (a *VppAdapter) MockReply(msgs ...api.Message) {
+func (a *VppAdapter) MockReply(msgs ...api.ReplyMessage) {
 	a.repliesLock.Lock()
 	defer a.repliesLock.Unlock()
 

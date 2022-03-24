@@ -83,12 +83,10 @@ type GreTunnelAddDel struct {
 	Tunnel GreTunnel `binapi:"gre_tunnel,name=tunnel" json:"tunnel,omitempty"`
 }
 
-func (m *GreTunnelAddDel) Reset()               { *m = GreTunnelAddDel{} }
-func (*GreTunnelAddDel) GetMessageName() string { return "gre_tunnel_add_del" }
-func (*GreTunnelAddDel) GetCrcString() string   { return "a27d7f17" }
-func (*GreTunnelAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GreTunnelAddDel) Reset()                        { *m = GreTunnelAddDel{} }
+func (*GreTunnelAddDel) GetMessageName() string          { return "gre_tunnel_add_del" }
+func (*GreTunnelAddDel) GetCrcString() string            { return "a27d7f17" }
+func (*GreTunnelAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GreTunnelAddDel) Size() (size int) {
 	if m == nil {
@@ -150,11 +148,12 @@ type GreTunnelAddDelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GreTunnelAddDelReply) Reset()               { *m = GreTunnelAddDelReply{} }
-func (*GreTunnelAddDelReply) GetMessageName() string { return "gre_tunnel_add_del_reply" }
-func (*GreTunnelAddDelReply) GetCrcString() string   { return "5383d31f" }
-func (*GreTunnelAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GreTunnelAddDelReply) Reset()                        { *m = GreTunnelAddDelReply{} }
+func (*GreTunnelAddDelReply) GetMessageName() string          { return "gre_tunnel_add_del_reply" }
+func (*GreTunnelAddDelReply) GetCrcString() string            { return "5383d31f" }
+func (*GreTunnelAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GreTunnelAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GreTunnelAddDelReply) Size() (size int) {
@@ -186,11 +185,12 @@ type GreTunnelDetails struct {
 	Tunnel GreTunnel `binapi:"gre_tunnel,name=tunnel" json:"tunnel,omitempty"`
 }
 
-func (m *GreTunnelDetails) Reset()               { *m = GreTunnelDetails{} }
-func (*GreTunnelDetails) GetMessageName() string { return "gre_tunnel_details" }
-func (*GreTunnelDetails) GetCrcString() string   { return "24435433" }
-func (*GreTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GreTunnelDetails) Reset()                        { *m = GreTunnelDetails{} }
+func (*GreTunnelDetails) GetMessageName() string          { return "gre_tunnel_details" }
+func (*GreTunnelDetails) GetCrcString() string            { return "24435433" }
+func (*GreTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GreTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GreTunnelDetails) Size() (size int) {
@@ -249,12 +249,10 @@ type GreTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GreTunnelDump) Reset()               { *m = GreTunnelDump{} }
-func (*GreTunnelDump) GetMessageName() string { return "gre_tunnel_dump" }
-func (*GreTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*GreTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GreTunnelDump) Reset()                        { *m = GreTunnelDump{} }
+func (*GreTunnelDump) GetMessageName() string          { return "gre_tunnel_dump" }
+func (*GreTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*GreTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GreTunnelDump) Size() (size int) {
 	if m == nil {
