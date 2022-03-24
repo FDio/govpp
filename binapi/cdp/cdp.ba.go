@@ -32,12 +32,10 @@ type CdpEnableDisable struct {
 	EnableDisable bool `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
 }
 
-func (m *CdpEnableDisable) Reset()               { *m = CdpEnableDisable{} }
-func (*CdpEnableDisable) GetMessageName() string { return "cdp_enable_disable" }
-func (*CdpEnableDisable) GetCrcString() string   { return "2e7b47df" }
-func (*CdpEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CdpEnableDisable) Reset()                        { *m = CdpEnableDisable{} }
+func (*CdpEnableDisable) GetMessageName() string          { return "cdp_enable_disable" }
+func (*CdpEnableDisable) GetCrcString() string            { return "2e7b47df" }
+func (*CdpEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CdpEnableDisable) Size() (size int) {
 	if m == nil {
@@ -65,11 +63,12 @@ type CdpEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CdpEnableDisableReply) Reset()               { *m = CdpEnableDisableReply{} }
-func (*CdpEnableDisableReply) GetMessageName() string { return "cdp_enable_disable_reply" }
-func (*CdpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*CdpEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CdpEnableDisableReply) Reset()                        { *m = CdpEnableDisableReply{} }
+func (*CdpEnableDisableReply) GetMessageName() string          { return "cdp_enable_disable_reply" }
+func (*CdpEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*CdpEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CdpEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CdpEnableDisableReply) Size() (size int) {

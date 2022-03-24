@@ -87,11 +87,12 @@ type GraphNodeDetails struct {
 	ArcsOut []uint32 `binapi:"u32[n_arcs],name=arcs_out" json:"arcs_out,omitempty"`
 }
 
-func (m *GraphNodeDetails) Reset()               { *m = GraphNodeDetails{} }
-func (*GraphNodeDetails) GetMessageName() string { return "graph_node_details" }
-func (*GraphNodeDetails) GetCrcString() string   { return "ac762018" }
-func (*GraphNodeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GraphNodeDetails) Reset()                        { *m = GraphNodeDetails{} }
+func (*GraphNodeDetails) GetMessageName() string          { return "graph_node_details" }
+func (*GraphNodeDetails) GetCrcString() string            { return "ac762018" }
+func (*GraphNodeDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GraphNodeDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GraphNodeDetails) Size() (size int) {
@@ -145,12 +146,10 @@ type GraphNodeGet struct {
 	WantArcs bool     `binapi:"bool,name=want_arcs" json:"want_arcs,omitempty"`
 }
 
-func (m *GraphNodeGet) Reset()               { *m = GraphNodeGet{} }
-func (*GraphNodeGet) GetMessageName() string { return "graph_node_get" }
-func (*GraphNodeGet) GetCrcString() string   { return "39c8792e" }
-func (*GraphNodeGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GraphNodeGet) Reset()                        { *m = GraphNodeGet{} }
+func (*GraphNodeGet) GetMessageName() string          { return "graph_node_get" }
+func (*GraphNodeGet) GetCrcString() string            { return "39c8792e" }
+func (*GraphNodeGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GraphNodeGet) Size() (size int) {
 	if m == nil {
@@ -191,11 +190,12 @@ type GraphNodeGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *GraphNodeGetReply) Reset()               { *m = GraphNodeGetReply{} }
-func (*GraphNodeGetReply) GetMessageName() string { return "graph_node_get_reply" }
-func (*GraphNodeGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*GraphNodeGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GraphNodeGetReply) Reset()                        { *m = GraphNodeGetReply{} }
+func (*GraphNodeGetReply) GetMessageName() string          { return "graph_node_get_reply" }
+func (*GraphNodeGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*GraphNodeGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GraphNodeGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GraphNodeGetReply) Size() (size int) {

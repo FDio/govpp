@@ -79,12 +79,10 @@ type LispAddDelAdjacency struct {
 	Leid  lisp_types.Eid `binapi:"eid,name=leid" json:"leid,omitempty"`
 }
 
-func (m *LispAddDelAdjacency) Reset()               { *m = LispAddDelAdjacency{} }
-func (*LispAddDelAdjacency) GetMessageName() string { return "lisp_add_del_adjacency" }
-func (*LispAddDelAdjacency) GetCrcString() string   { return "2ce0e6f6" }
-func (*LispAddDelAdjacency) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelAdjacency) Reset()                        { *m = LispAddDelAdjacency{} }
+func (*LispAddDelAdjacency) GetMessageName() string          { return "lisp_add_del_adjacency" }
+func (*LispAddDelAdjacency) GetCrcString() string            { return "2ce0e6f6" }
+func (*LispAddDelAdjacency) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelAdjacency) Size() (size int) {
 	if m == nil {
@@ -127,11 +125,12 @@ type LispAddDelAdjacencyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispAddDelAdjacencyReply) Reset()               { *m = LispAddDelAdjacencyReply{} }
-func (*LispAddDelAdjacencyReply) GetMessageName() string { return "lisp_add_del_adjacency_reply" }
-func (*LispAddDelAdjacencyReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispAddDelAdjacencyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelAdjacencyReply) Reset()                        { *m = LispAddDelAdjacencyReply{} }
+func (*LispAddDelAdjacencyReply) GetMessageName() string          { return "lisp_add_del_adjacency_reply" }
+func (*LispAddDelAdjacencyReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelAdjacencyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelAdjacencyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelAdjacencyReply) Size() (size int) {
@@ -164,12 +163,10 @@ type LispAddDelLocalEid struct {
 	Key            lisp_types.HmacKey `binapi:"hmac_key,name=key" json:"key,omitempty"`
 }
 
-func (m *LispAddDelLocalEid) Reset()               { *m = LispAddDelLocalEid{} }
-func (*LispAddDelLocalEid) GetMessageName() string { return "lisp_add_del_local_eid" }
-func (*LispAddDelLocalEid) GetCrcString() string   { return "4e5a83a2" }
-func (*LispAddDelLocalEid) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelLocalEid) Reset()                        { *m = LispAddDelLocalEid{} }
+func (*LispAddDelLocalEid) GetMessageName() string          { return "lisp_add_del_local_eid" }
+func (*LispAddDelLocalEid) GetCrcString() string            { return "4e5a83a2" }
+func (*LispAddDelLocalEid) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelLocalEid) Size() (size int) {
 	if m == nil {
@@ -216,11 +213,12 @@ type LispAddDelLocalEidReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispAddDelLocalEidReply) Reset()               { *m = LispAddDelLocalEidReply{} }
-func (*LispAddDelLocalEidReply) GetMessageName() string { return "lisp_add_del_local_eid_reply" }
-func (*LispAddDelLocalEidReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispAddDelLocalEidReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelLocalEidReply) Reset()                        { *m = LispAddDelLocalEidReply{} }
+func (*LispAddDelLocalEidReply) GetMessageName() string          { return "lisp_add_del_local_eid_reply" }
+func (*LispAddDelLocalEidReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelLocalEidReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelLocalEidReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelLocalEidReply) Size() (size int) {
@@ -253,12 +251,10 @@ type LispAddDelLocator struct {
 	Weight         uint8                          `binapi:"u8,name=weight" json:"weight,omitempty"`
 }
 
-func (m *LispAddDelLocator) Reset()               { *m = LispAddDelLocator{} }
-func (*LispAddDelLocator) GetMessageName() string { return "lisp_add_del_locator" }
-func (*LispAddDelLocator) GetCrcString() string   { return "af4d8f13" }
-func (*LispAddDelLocator) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelLocator) Reset()                        { *m = LispAddDelLocator{} }
+func (*LispAddDelLocator) GetMessageName() string          { return "lisp_add_del_locator" }
+func (*LispAddDelLocator) GetCrcString() string            { return "af4d8f13" }
+func (*LispAddDelLocator) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelLocator) Size() (size int) {
 	if m == nil {
@@ -298,11 +294,12 @@ type LispAddDelLocatorReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispAddDelLocatorReply) Reset()               { *m = LispAddDelLocatorReply{} }
-func (*LispAddDelLocatorReply) GetMessageName() string { return "lisp_add_del_locator_reply" }
-func (*LispAddDelLocatorReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispAddDelLocatorReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelLocatorReply) Reset()                        { *m = LispAddDelLocatorReply{} }
+func (*LispAddDelLocatorReply) GetMessageName() string          { return "lisp_add_del_locator_reply" }
+func (*LispAddDelLocatorReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelLocatorReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelLocatorReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelLocatorReply) Size() (size int) {
@@ -334,12 +331,10 @@ type LispAddDelLocatorSet struct {
 	Locators       []lisp_types.LocalLocator `binapi:"local_locator[locator_num],name=locators" json:"locators,omitempty"`
 }
 
-func (m *LispAddDelLocatorSet) Reset()               { *m = LispAddDelLocatorSet{} }
-func (*LispAddDelLocatorSet) GetMessageName() string { return "lisp_add_del_locator_set" }
-func (*LispAddDelLocatorSet) GetCrcString() string   { return "6fcd6471" }
-func (*LispAddDelLocatorSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelLocatorSet) Reset()                        { *m = LispAddDelLocatorSet{} }
+func (*LispAddDelLocatorSet) GetMessageName() string          { return "lisp_add_del_locator_set" }
+func (*LispAddDelLocatorSet) GetCrcString() string            { return "6fcd6471" }
+func (*LispAddDelLocatorSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelLocatorSet) Size() (size int) {
 	if m == nil {
@@ -399,11 +394,12 @@ type LispAddDelLocatorSetReply struct {
 	LsIndex uint32 `binapi:"u32,name=ls_index" json:"ls_index,omitempty"`
 }
 
-func (m *LispAddDelLocatorSetReply) Reset()               { *m = LispAddDelLocatorSetReply{} }
-func (*LispAddDelLocatorSetReply) GetMessageName() string { return "lisp_add_del_locator_set_reply" }
-func (*LispAddDelLocatorSetReply) GetCrcString() string   { return "b6666db4" }
-func (*LispAddDelLocatorSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelLocatorSetReply) Reset()                        { *m = LispAddDelLocatorSetReply{} }
+func (*LispAddDelLocatorSetReply) GetMessageName() string          { return "lisp_add_del_locator_set_reply" }
+func (*LispAddDelLocatorSetReply) GetCrcString() string            { return "b6666db4" }
+func (*LispAddDelLocatorSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelLocatorSetReply) Size() (size int) {
@@ -440,10 +436,8 @@ func (m *LispAddDelMapRequestItrRlocs) Reset() { *m = LispAddDelMapRequestItrRlo
 func (*LispAddDelMapRequestItrRlocs) GetMessageName() string {
 	return "lisp_add_del_map_request_itr_rlocs"
 }
-func (*LispAddDelMapRequestItrRlocs) GetCrcString() string { return "6be88e45" }
-func (*LispAddDelMapRequestItrRlocs) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*LispAddDelMapRequestItrRlocs) GetCrcString() string            { return "6be88e45" }
+func (*LispAddDelMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
@@ -480,7 +474,10 @@ func (*LispAddDelMapRequestItrRlocsReply) GetMessageName() string {
 }
 func (*LispAddDelMapRequestItrRlocsReply) GetCrcString() string { return "e8d4e804" }
 func (*LispAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *LispAddDelMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelMapRequestItrRlocsReply) Size() (size int) {
@@ -510,12 +507,10 @@ type LispAddDelMapResolver struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *LispAddDelMapResolver) Reset()               { *m = LispAddDelMapResolver{} }
-func (*LispAddDelMapResolver) GetMessageName() string { return "lisp_add_del_map_resolver" }
-func (*LispAddDelMapResolver) GetCrcString() string   { return "ce19e32d" }
-func (*LispAddDelMapResolver) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelMapResolver) Reset()                        { *m = LispAddDelMapResolver{} }
+func (*LispAddDelMapResolver) GetMessageName() string          { return "lisp_add_del_map_resolver" }
+func (*LispAddDelMapResolver) GetCrcString() string            { return "ce19e32d" }
+func (*LispAddDelMapResolver) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelMapResolver) Size() (size int) {
 	if m == nil {
@@ -549,11 +544,12 @@ type LispAddDelMapResolverReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispAddDelMapResolverReply) Reset()               { *m = LispAddDelMapResolverReply{} }
-func (*LispAddDelMapResolverReply) GetMessageName() string { return "lisp_add_del_map_resolver_reply" }
-func (*LispAddDelMapResolverReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispAddDelMapResolverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelMapResolverReply) Reset()                        { *m = LispAddDelMapResolverReply{} }
+func (*LispAddDelMapResolverReply) GetMessageName() string          { return "lisp_add_del_map_resolver_reply" }
+func (*LispAddDelMapResolverReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelMapResolverReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelMapResolverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelMapResolverReply) Size() (size int) {
@@ -583,12 +579,10 @@ type LispAddDelMapServer struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *LispAddDelMapServer) Reset()               { *m = LispAddDelMapServer{} }
-func (*LispAddDelMapServer) GetMessageName() string { return "lisp_add_del_map_server" }
-func (*LispAddDelMapServer) GetCrcString() string   { return "ce19e32d" }
-func (*LispAddDelMapServer) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelMapServer) Reset()                        { *m = LispAddDelMapServer{} }
+func (*LispAddDelMapServer) GetMessageName() string          { return "lisp_add_del_map_server" }
+func (*LispAddDelMapServer) GetCrcString() string            { return "ce19e32d" }
+func (*LispAddDelMapServer) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelMapServer) Size() (size int) {
 	if m == nil {
@@ -622,11 +616,12 @@ type LispAddDelMapServerReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispAddDelMapServerReply) Reset()               { *m = LispAddDelMapServerReply{} }
-func (*LispAddDelMapServerReply) GetMessageName() string { return "lisp_add_del_map_server_reply" }
-func (*LispAddDelMapServerReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispAddDelMapServerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAddDelMapServerReply) Reset()                        { *m = LispAddDelMapServerReply{} }
+func (*LispAddDelMapServerReply) GetMessageName() string          { return "lisp_add_del_map_server_reply" }
+func (*LispAddDelMapServerReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelMapServerReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelMapServerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelMapServerReply) Size() (size int) {
@@ -663,12 +658,10 @@ type LispAddDelRemoteMapping struct {
 	Rlocs    []lisp_types.RemoteLocator `binapi:"remote_locator[rloc_num],name=rlocs" json:"rlocs,omitempty"`
 }
 
-func (m *LispAddDelRemoteMapping) Reset()               { *m = LispAddDelRemoteMapping{} }
-func (*LispAddDelRemoteMapping) GetMessageName() string { return "lisp_add_del_remote_mapping" }
-func (*LispAddDelRemoteMapping) GetCrcString() string   { return "6d5c789e" }
-func (*LispAddDelRemoteMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAddDelRemoteMapping) Reset()                        { *m = LispAddDelRemoteMapping{} }
+func (*LispAddDelRemoteMapping) GetMessageName() string          { return "lisp_add_del_remote_mapping" }
+func (*LispAddDelRemoteMapping) GetCrcString() string            { return "6d5c789e" }
+func (*LispAddDelRemoteMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAddDelRemoteMapping) Size() (size int) {
 	if m == nil {
@@ -755,9 +748,10 @@ func (m *LispAddDelRemoteMappingReply) Reset() { *m = LispAddDelRemoteMappingRep
 func (*LispAddDelRemoteMappingReply) GetMessageName() string {
 	return "lisp_add_del_remote_mapping_reply"
 }
-func (*LispAddDelRemoteMappingReply) GetCrcString() string { return "e8d4e804" }
-func (*LispAddDelRemoteMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*LispAddDelRemoteMappingReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispAddDelRemoteMappingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAddDelRemoteMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAddDelRemoteMappingReply) Size() (size int) {
@@ -786,12 +780,10 @@ type LispAdjacenciesGet struct {
 	Vni uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *LispAdjacenciesGet) Reset()               { *m = LispAdjacenciesGet{} }
-func (*LispAdjacenciesGet) GetMessageName() string { return "lisp_adjacencies_get" }
-func (*LispAdjacenciesGet) GetCrcString() string   { return "8d1f2fe9" }
-func (*LispAdjacenciesGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispAdjacenciesGet) Reset()                        { *m = LispAdjacenciesGet{} }
+func (*LispAdjacenciesGet) GetMessageName() string          { return "lisp_adjacencies_get" }
+func (*LispAdjacenciesGet) GetCrcString() string            { return "8d1f2fe9" }
+func (*LispAdjacenciesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispAdjacenciesGet) Size() (size int) {
 	if m == nil {
@@ -821,11 +813,12 @@ type LispAdjacenciesGetReply struct {
 	Adjacencies []LispAdjacency `binapi:"lisp_adjacency[count],name=adjacencies" json:"adjacencies,omitempty"`
 }
 
-func (m *LispAdjacenciesGetReply) Reset()               { *m = LispAdjacenciesGetReply{} }
-func (*LispAdjacenciesGetReply) GetMessageName() string { return "lisp_adjacencies_get_reply" }
-func (*LispAdjacenciesGetReply) GetCrcString() string   { return "807257bf" }
-func (*LispAdjacenciesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispAdjacenciesGetReply) Reset()                        { *m = LispAdjacenciesGetReply{} }
+func (*LispAdjacenciesGetReply) GetMessageName() string          { return "lisp_adjacencies_get_reply" }
+func (*LispAdjacenciesGetReply) GetCrcString() string            { return "807257bf" }
+func (*LispAdjacenciesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispAdjacenciesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispAdjacenciesGetReply) Size() (size int) {
@@ -888,12 +881,10 @@ type LispEidTableAddDelMap struct {
 	IsL2    bool   `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *LispEidTableAddDelMap) Reset()               { *m = LispEidTableAddDelMap{} }
-func (*LispEidTableAddDelMap) GetMessageName() string { return "lisp_eid_table_add_del_map" }
-func (*LispEidTableAddDelMap) GetCrcString() string   { return "9481416b" }
-func (*LispEidTableAddDelMap) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispEidTableAddDelMap) Reset()                        { *m = LispEidTableAddDelMap{} }
+func (*LispEidTableAddDelMap) GetMessageName() string          { return "lisp_eid_table_add_del_map" }
+func (*LispEidTableAddDelMap) GetCrcString() string            { return "9481416b" }
+func (*LispEidTableAddDelMap) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispEidTableAddDelMap) Size() (size int) {
 	if m == nil {
@@ -930,11 +921,12 @@ type LispEidTableAddDelMapReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispEidTableAddDelMapReply) Reset()               { *m = LispEidTableAddDelMapReply{} }
-func (*LispEidTableAddDelMapReply) GetMessageName() string { return "lisp_eid_table_add_del_map_reply" }
-func (*LispEidTableAddDelMapReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispEidTableAddDelMapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispEidTableAddDelMapReply) Reset()                        { *m = LispEidTableAddDelMapReply{} }
+func (*LispEidTableAddDelMapReply) GetMessageName() string          { return "lisp_eid_table_add_del_map_reply" }
+func (*LispEidTableAddDelMapReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispEidTableAddDelMapReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispEidTableAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispEidTableAddDelMapReply) Size() (size int) {
@@ -972,11 +964,12 @@ type LispEidTableDetails struct {
 	Key             lisp_types.HmacKey `binapi:"hmac_key,name=key" json:"key,omitempty"`
 }
 
-func (m *LispEidTableDetails) Reset()               { *m = LispEidTableDetails{} }
-func (*LispEidTableDetails) GetMessageName() string { return "lisp_eid_table_details" }
-func (*LispEidTableDetails) GetCrcString() string   { return "1c29f792" }
-func (*LispEidTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispEidTableDetails) Reset()                        { *m = LispEidTableDetails{} }
+func (*LispEidTableDetails) GetMessageName() string          { return "lisp_eid_table_details" }
+func (*LispEidTableDetails) GetCrcString() string            { return "1c29f792" }
+func (*LispEidTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispEidTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispEidTableDetails) Size() (size int) {
@@ -1046,12 +1039,10 @@ type LispEidTableDump struct {
 	Filter       LispLocatorSetFilter `binapi:"lisp_locator_set_filter,name=filter" json:"filter,omitempty"`
 }
 
-func (m *LispEidTableDump) Reset()               { *m = LispEidTableDump{} }
-func (*LispEidTableDump) GetMessageName() string { return "lisp_eid_table_dump" }
-func (*LispEidTableDump) GetCrcString() string   { return "629468b5" }
-func (*LispEidTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispEidTableDump) Reset()                        { *m = LispEidTableDump{} }
+func (*LispEidTableDump) GetMessageName() string          { return "lisp_eid_table_dump" }
+func (*LispEidTableDump) GetCrcString() string            { return "629468b5" }
+func (*LispEidTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispEidTableDump) Size() (size int) {
 	if m == nil {
@@ -1095,11 +1086,12 @@ type LispEidTableMapDetails struct {
 	DpTable uint32 `binapi:"u32,name=dp_table" json:"dp_table,omitempty"`
 }
 
-func (m *LispEidTableMapDetails) Reset()               { *m = LispEidTableMapDetails{} }
-func (*LispEidTableMapDetails) GetMessageName() string { return "lisp_eid_table_map_details" }
-func (*LispEidTableMapDetails) GetCrcString() string   { return "0b6859e2" }
-func (*LispEidTableMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispEidTableMapDetails) Reset()                        { *m = LispEidTableMapDetails{} }
+func (*LispEidTableMapDetails) GetMessageName() string          { return "lisp_eid_table_map_details" }
+func (*LispEidTableMapDetails) GetCrcString() string            { return "0b6859e2" }
+func (*LispEidTableMapDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispEidTableMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispEidTableMapDetails) Size() (size int) {
@@ -1131,12 +1123,10 @@ type LispEidTableMapDump struct {
 	IsL2 bool `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *LispEidTableMapDump) Reset()               { *m = LispEidTableMapDump{} }
-func (*LispEidTableMapDump) GetMessageName() string { return "lisp_eid_table_map_dump" }
-func (*LispEidTableMapDump) GetCrcString() string   { return "d6cf0c3d" }
-func (*LispEidTableMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispEidTableMapDump) Reset()                        { *m = LispEidTableMapDump{} }
+func (*LispEidTableMapDump) GetMessageName() string          { return "lisp_eid_table_map_dump" }
+func (*LispEidTableMapDump) GetCrcString() string            { return "d6cf0c3d" }
+func (*LispEidTableMapDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispEidTableMapDump) Size() (size int) {
 	if m == nil {
@@ -1164,11 +1154,12 @@ type LispEidTableVniDetails struct {
 	Vni uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *LispEidTableVniDetails) Reset()               { *m = LispEidTableVniDetails{} }
-func (*LispEidTableVniDetails) GetMessageName() string { return "lisp_eid_table_vni_details" }
-func (*LispEidTableVniDetails) GetCrcString() string   { return "64abc01e" }
-func (*LispEidTableVniDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispEidTableVniDetails) Reset()                        { *m = LispEidTableVniDetails{} }
+func (*LispEidTableVniDetails) GetMessageName() string          { return "lisp_eid_table_vni_details" }
+func (*LispEidTableVniDetails) GetCrcString() string            { return "64abc01e" }
+func (*LispEidTableVniDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispEidTableVniDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispEidTableVniDetails) Size() (size int) {
@@ -1195,12 +1186,10 @@ func (m *LispEidTableVniDetails) Unmarshal(b []byte) error {
 // LispEidTableVniDump defines message 'lisp_eid_table_vni_dump'.
 type LispEidTableVniDump struct{}
 
-func (m *LispEidTableVniDump) Reset()               { *m = LispEidTableVniDump{} }
-func (*LispEidTableVniDump) GetMessageName() string { return "lisp_eid_table_vni_dump" }
-func (*LispEidTableVniDump) GetCrcString() string   { return "51077d14" }
-func (*LispEidTableVniDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispEidTableVniDump) Reset()                        { *m = LispEidTableVniDump{} }
+func (*LispEidTableVniDump) GetMessageName() string          { return "lisp_eid_table_vni_dump" }
+func (*LispEidTableVniDump) GetCrcString() string            { return "51077d14" }
+func (*LispEidTableVniDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispEidTableVniDump) Size() (size int) {
 	if m == nil {
@@ -1224,12 +1213,10 @@ type LispEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *LispEnableDisable) Reset()               { *m = LispEnableDisable{} }
-func (*LispEnableDisable) GetMessageName() string { return "lisp_enable_disable" }
-func (*LispEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*LispEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispEnableDisable) Reset()                        { *m = LispEnableDisable{} }
+func (*LispEnableDisable) GetMessageName() string          { return "lisp_enable_disable" }
+func (*LispEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*LispEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1257,11 +1244,12 @@ type LispEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispEnableDisableReply) Reset()               { *m = LispEnableDisableReply{} }
-func (*LispEnableDisableReply) GetMessageName() string { return "lisp_enable_disable_reply" }
-func (*LispEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispEnableDisableReply) Reset()                        { *m = LispEnableDisableReply{} }
+func (*LispEnableDisableReply) GetMessageName() string          { return "lisp_enable_disable_reply" }
+func (*LispEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispEnableDisableReply) Size() (size int) {
@@ -1288,12 +1276,10 @@ func (m *LispEnableDisableReply) Unmarshal(b []byte) error {
 // LispGetMapRequestItrRlocs defines message 'lisp_get_map_request_itr_rlocs'.
 type LispGetMapRequestItrRlocs struct{}
 
-func (m *LispGetMapRequestItrRlocs) Reset()               { *m = LispGetMapRequestItrRlocs{} }
-func (*LispGetMapRequestItrRlocs) GetMessageName() string { return "lisp_get_map_request_itr_rlocs" }
-func (*LispGetMapRequestItrRlocs) GetCrcString() string   { return "51077d14" }
-func (*LispGetMapRequestItrRlocs) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispGetMapRequestItrRlocs) Reset()                        { *m = LispGetMapRequestItrRlocs{} }
+func (*LispGetMapRequestItrRlocs) GetMessageName() string          { return "lisp_get_map_request_itr_rlocs" }
+func (*LispGetMapRequestItrRlocs) GetCrcString() string            { return "51077d14" }
+func (*LispGetMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispGetMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
@@ -1322,9 +1308,10 @@ func (m *LispGetMapRequestItrRlocsReply) Reset() { *m = LispGetMapRequestItrRloc
 func (*LispGetMapRequestItrRlocsReply) GetMessageName() string {
 	return "lisp_get_map_request_itr_rlocs_reply"
 }
-func (*LispGetMapRequestItrRlocsReply) GetCrcString() string { return "76580f3a" }
-func (*LispGetMapRequestItrRlocsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*LispGetMapRequestItrRlocsReply) GetCrcString() string            { return "76580f3a" }
+func (*LispGetMapRequestItrRlocsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispGetMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispGetMapRequestItrRlocsReply) Size() (size int) {
@@ -1360,11 +1347,12 @@ type LispLocatorDetails struct {
 	Weight    uint8                          `binapi:"u8,name=weight" json:"weight,omitempty"`
 }
 
-func (m *LispLocatorDetails) Reset()               { *m = LispLocatorDetails{} }
-func (*LispLocatorDetails) GetMessageName() string { return "lisp_locator_details" }
-func (*LispLocatorDetails) GetCrcString() string   { return "2c620ffe" }
-func (*LispLocatorDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispLocatorDetails) Reset()                        { *m = LispLocatorDetails{} }
+func (*LispLocatorDetails) GetMessageName() string          { return "lisp_locator_details" }
+func (*LispLocatorDetails) GetCrcString() string            { return "2c620ffe" }
+func (*LispLocatorDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispLocatorDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispLocatorDetails) Size() (size int) {
@@ -1410,12 +1398,10 @@ type LispLocatorDump struct {
 	IsIndexSet uint8  `binapi:"u8,name=is_index_set" json:"is_index_set,omitempty"`
 }
 
-func (m *LispLocatorDump) Reset()               { *m = LispLocatorDump{} }
-func (*LispLocatorDump) GetMessageName() string { return "lisp_locator_dump" }
-func (*LispLocatorDump) GetCrcString() string   { return "b954fad7" }
-func (*LispLocatorDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispLocatorDump) Reset()                        { *m = LispLocatorDump{} }
+func (*LispLocatorDump) GetMessageName() string          { return "lisp_locator_dump" }
+func (*LispLocatorDump) GetCrcString() string            { return "b954fad7" }
+func (*LispLocatorDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispLocatorDump) Size() (size int) {
 	if m == nil {
@@ -1450,11 +1436,12 @@ type LispLocatorSetDetails struct {
 	LsName  string `binapi:"string[64],name=ls_name" json:"ls_name,omitempty"`
 }
 
-func (m *LispLocatorSetDetails) Reset()               { *m = LispLocatorSetDetails{} }
-func (*LispLocatorSetDetails) GetMessageName() string { return "lisp_locator_set_details" }
-func (*LispLocatorSetDetails) GetCrcString() string   { return "5b33a105" }
-func (*LispLocatorSetDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispLocatorSetDetails) Reset()                        { *m = LispLocatorSetDetails{} }
+func (*LispLocatorSetDetails) GetMessageName() string          { return "lisp_locator_set_details" }
+func (*LispLocatorSetDetails) GetCrcString() string            { return "5b33a105" }
+func (*LispLocatorSetDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispLocatorSetDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispLocatorSetDetails) Size() (size int) {
@@ -1486,12 +1473,10 @@ type LispLocatorSetDump struct {
 	Filter LispLocatorSetFilter `binapi:"lisp_locator_set_filter,name=filter" json:"filter,omitempty"`
 }
 
-func (m *LispLocatorSetDump) Reset()               { *m = LispLocatorSetDump{} }
-func (*LispLocatorSetDump) GetMessageName() string { return "lisp_locator_set_dump" }
-func (*LispLocatorSetDump) GetCrcString() string   { return "c2cb5922" }
-func (*LispLocatorSetDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispLocatorSetDump) Reset()                        { *m = LispLocatorSetDump{} }
+func (*LispLocatorSetDump) GetMessageName() string          { return "lisp_locator_set_dump" }
+func (*LispLocatorSetDump) GetCrcString() string            { return "c2cb5922" }
+func (*LispLocatorSetDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispLocatorSetDump) Size() (size int) {
 	if m == nil {
@@ -1523,10 +1508,8 @@ func (m *LispMapRegisterEnableDisable) Reset() { *m = LispMapRegisterEnableDisab
 func (*LispMapRegisterEnableDisable) GetMessageName() string {
 	return "lisp_map_register_enable_disable"
 }
-func (*LispMapRegisterEnableDisable) GetCrcString() string { return "c264d7bf" }
-func (*LispMapRegisterEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*LispMapRegisterEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*LispMapRegisterEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispMapRegisterEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1560,7 +1543,10 @@ func (*LispMapRegisterEnableDisableReply) GetMessageName() string {
 }
 func (*LispMapRegisterEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*LispMapRegisterEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *LispMapRegisterEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispMapRegisterEnableDisableReply) Size() (size int) {
@@ -1589,12 +1575,10 @@ type LispMapRequestMode struct {
 	IsSrcDst bool `binapi:"bool,name=is_src_dst" json:"is_src_dst,omitempty"`
 }
 
-func (m *LispMapRequestMode) Reset()               { *m = LispMapRequestMode{} }
-func (*LispMapRequestMode) GetMessageName() string { return "lisp_map_request_mode" }
-func (*LispMapRequestMode) GetCrcString() string   { return "f43c26ae" }
-func (*LispMapRequestMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispMapRequestMode) Reset()                        { *m = LispMapRequestMode{} }
+func (*LispMapRequestMode) GetMessageName() string          { return "lisp_map_request_mode" }
+func (*LispMapRequestMode) GetCrcString() string            { return "f43c26ae" }
+func (*LispMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispMapRequestMode) Size() (size int) {
 	if m == nil {
@@ -1622,11 +1606,12 @@ type LispMapRequestModeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispMapRequestModeReply) Reset()               { *m = LispMapRequestModeReply{} }
-func (*LispMapRequestModeReply) GetMessageName() string { return "lisp_map_request_mode_reply" }
-func (*LispMapRequestModeReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispMapRequestModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispMapRequestModeReply) Reset()                        { *m = LispMapRequestModeReply{} }
+func (*LispMapRequestModeReply) GetMessageName() string          { return "lisp_map_request_mode_reply" }
+func (*LispMapRequestModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispMapRequestModeReply) Size() (size int) {
@@ -1655,11 +1640,12 @@ type LispMapResolverDetails struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *LispMapResolverDetails) Reset()               { *m = LispMapResolverDetails{} }
-func (*LispMapResolverDetails) GetMessageName() string { return "lisp_map_resolver_details" }
-func (*LispMapResolverDetails) GetCrcString() string   { return "3e78fc57" }
-func (*LispMapResolverDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispMapResolverDetails) Reset()                        { *m = LispMapResolverDetails{} }
+func (*LispMapResolverDetails) GetMessageName() string          { return "lisp_map_resolver_details" }
+func (*LispMapResolverDetails) GetCrcString() string            { return "3e78fc57" }
+func (*LispMapResolverDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispMapResolverDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispMapResolverDetails) Size() (size int) {
@@ -1689,12 +1675,10 @@ func (m *LispMapResolverDetails) Unmarshal(b []byte) error {
 // LispMapResolverDump defines message 'lisp_map_resolver_dump'.
 type LispMapResolverDump struct{}
 
-func (m *LispMapResolverDump) Reset()               { *m = LispMapResolverDump{} }
-func (*LispMapResolverDump) GetMessageName() string { return "lisp_map_resolver_dump" }
-func (*LispMapResolverDump) GetCrcString() string   { return "51077d14" }
-func (*LispMapResolverDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispMapResolverDump) Reset()                        { *m = LispMapResolverDump{} }
+func (*LispMapResolverDump) GetMessageName() string          { return "lisp_map_resolver_dump" }
+func (*LispMapResolverDump) GetCrcString() string            { return "51077d14" }
+func (*LispMapResolverDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispMapResolverDump) Size() (size int) {
 	if m == nil {
@@ -1718,11 +1702,12 @@ type LispMapServerDetails struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *LispMapServerDetails) Reset()               { *m = LispMapServerDetails{} }
-func (*LispMapServerDetails) GetMessageName() string { return "lisp_map_server_details" }
-func (*LispMapServerDetails) GetCrcString() string   { return "3e78fc57" }
-func (*LispMapServerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispMapServerDetails) Reset()                        { *m = LispMapServerDetails{} }
+func (*LispMapServerDetails) GetMessageName() string          { return "lisp_map_server_details" }
+func (*LispMapServerDetails) GetCrcString() string            { return "3e78fc57" }
+func (*LispMapServerDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispMapServerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LispMapServerDetails) Size() (size int) {
@@ -1752,12 +1737,10 @@ func (m *LispMapServerDetails) Unmarshal(b []byte) error {
 // LispMapServerDump defines message 'lisp_map_server_dump'.
 type LispMapServerDump struct{}
 
-func (m *LispMapServerDump) Reset()               { *m = LispMapServerDump{} }
-func (*LispMapServerDump) GetMessageName() string { return "lisp_map_server_dump" }
-func (*LispMapServerDump) GetCrcString() string   { return "51077d14" }
-func (*LispMapServerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispMapServerDump) Reset()                        { *m = LispMapServerDump{} }
+func (*LispMapServerDump) GetMessageName() string          { return "lisp_map_server_dump" }
+func (*LispMapServerDump) GetCrcString() string            { return "51077d14" }
+func (*LispMapServerDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispMapServerDump) Size() (size int) {
 	if m == nil {
@@ -1782,12 +1765,10 @@ type LispPitrSetLocatorSet struct {
 	LsName string `binapi:"string[64],name=ls_name" json:"ls_name,omitempty"`
 }
 
-func (m *LispPitrSetLocatorSet) Reset()               { *m = LispPitrSetLocatorSet{} }
-func (*LispPitrSetLocatorSet) GetMessageName() string { return "lisp_pitr_set_locator_set" }
-func (*LispPitrSetLocatorSet) GetCrcString() string   { return "486e2b76" }
-func (*LispPitrSetLocatorSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispPitrSetLocatorSet) Reset()                        { *m = LispPitrSetLocatorSet{} }
+func (*LispPitrSetLocatorSet) GetMessageName() string          { return "lisp_pitr_set_locator_set" }
+func (*LispPitrSetLocatorSet) GetCrcString() string            { return "486e2b76" }
+func (*LispPitrSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispPitrSetLocatorSet) Size() (size int) {
 	if m == nil {
@@ -1818,11 +1799,12 @@ type LispPitrSetLocatorSetReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispPitrSetLocatorSetReply) Reset()               { *m = LispPitrSetLocatorSetReply{} }
-func (*LispPitrSetLocatorSetReply) GetMessageName() string { return "lisp_pitr_set_locator_set_reply" }
-func (*LispPitrSetLocatorSetReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispPitrSetLocatorSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispPitrSetLocatorSetReply) Reset()                        { *m = LispPitrSetLocatorSetReply{} }
+func (*LispPitrSetLocatorSetReply) GetMessageName() string          { return "lisp_pitr_set_locator_set_reply" }
+func (*LispPitrSetLocatorSetReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispPitrSetLocatorSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispPitrSetLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispPitrSetLocatorSetReply) Size() (size int) {
@@ -1851,12 +1833,10 @@ type LispRlocProbeEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *LispRlocProbeEnableDisable) Reset()               { *m = LispRlocProbeEnableDisable{} }
-func (*LispRlocProbeEnableDisable) GetMessageName() string { return "lisp_rloc_probe_enable_disable" }
-func (*LispRlocProbeEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*LispRlocProbeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispRlocProbeEnableDisable) Reset()                        { *m = LispRlocProbeEnableDisable{} }
+func (*LispRlocProbeEnableDisable) GetMessageName() string          { return "lisp_rloc_probe_enable_disable" }
+func (*LispRlocProbeEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*LispRlocProbeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispRlocProbeEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1888,9 +1868,10 @@ func (m *LispRlocProbeEnableDisableReply) Reset() { *m = LispRlocProbeEnableDisa
 func (*LispRlocProbeEnableDisableReply) GetMessageName() string {
 	return "lisp_rloc_probe_enable_disable_reply"
 }
-func (*LispRlocProbeEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*LispRlocProbeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*LispRlocProbeEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispRlocProbeEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispRlocProbeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispRlocProbeEnableDisableReply) Size() (size int) {
@@ -1920,12 +1901,10 @@ type LispUsePetr struct {
 	IsAdd     bool             `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *LispUsePetr) Reset()               { *m = LispUsePetr{} }
-func (*LispUsePetr) GetMessageName() string { return "lisp_use_petr" }
-func (*LispUsePetr) GetCrcString() string   { return "d87dbad9" }
-func (*LispUsePetr) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LispUsePetr) Reset()                        { *m = LispUsePetr{} }
+func (*LispUsePetr) GetMessageName() string          { return "lisp_use_petr" }
+func (*LispUsePetr) GetCrcString() string            { return "d87dbad9" }
+func (*LispUsePetr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LispUsePetr) Size() (size int) {
 	if m == nil {
@@ -1959,11 +1938,12 @@ type LispUsePetrReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LispUsePetrReply) Reset()               { *m = LispUsePetrReply{} }
-func (*LispUsePetrReply) GetMessageName() string { return "lisp_use_petr_reply" }
-func (*LispUsePetrReply) GetCrcString() string   { return "e8d4e804" }
-func (*LispUsePetrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LispUsePetrReply) Reset()                        { *m = LispUsePetrReply{} }
+func (*LispUsePetrReply) GetMessageName() string          { return "lisp_use_petr_reply" }
+func (*LispUsePetrReply) GetCrcString() string            { return "e8d4e804" }
+func (*LispUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LispUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LispUsePetrReply) Size() (size int) {
@@ -1990,12 +1970,10 @@ func (m *LispUsePetrReply) Unmarshal(b []byte) error {
 // ShowLispMapRegisterState defines message 'show_lisp_map_register_state'.
 type ShowLispMapRegisterState struct{}
 
-func (m *ShowLispMapRegisterState) Reset()               { *m = ShowLispMapRegisterState{} }
-func (*ShowLispMapRegisterState) GetMessageName() string { return "show_lisp_map_register_state" }
-func (*ShowLispMapRegisterState) GetCrcString() string   { return "51077d14" }
-func (*ShowLispMapRegisterState) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispMapRegisterState) Reset()                        { *m = ShowLispMapRegisterState{} }
+func (*ShowLispMapRegisterState) GetMessageName() string          { return "show_lisp_map_register_state" }
+func (*ShowLispMapRegisterState) GetCrcString() string            { return "51077d14" }
+func (*ShowLispMapRegisterState) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispMapRegisterState) Size() (size int) {
 	if m == nil {
@@ -2024,9 +2002,10 @@ func (m *ShowLispMapRegisterStateReply) Reset() { *m = ShowLispMapRegisterStateR
 func (*ShowLispMapRegisterStateReply) GetMessageName() string {
 	return "show_lisp_map_register_state_reply"
 }
-func (*ShowLispMapRegisterStateReply) GetCrcString() string { return "e33a377b" }
-func (*ShowLispMapRegisterStateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*ShowLispMapRegisterStateReply) GetCrcString() string            { return "e33a377b" }
+func (*ShowLispMapRegisterStateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispMapRegisterStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispMapRegisterStateReply) Size() (size int) {
@@ -2056,12 +2035,10 @@ func (m *ShowLispMapRegisterStateReply) Unmarshal(b []byte) error {
 // ShowLispMapRequestMode defines message 'show_lisp_map_request_mode'.
 type ShowLispMapRequestMode struct{}
 
-func (m *ShowLispMapRequestMode) Reset()               { *m = ShowLispMapRequestMode{} }
-func (*ShowLispMapRequestMode) GetMessageName() string { return "show_lisp_map_request_mode" }
-func (*ShowLispMapRequestMode) GetCrcString() string   { return "51077d14" }
-func (*ShowLispMapRequestMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispMapRequestMode) Reset()                        { *m = ShowLispMapRequestMode{} }
+func (*ShowLispMapRequestMode) GetMessageName() string          { return "show_lisp_map_request_mode" }
+func (*ShowLispMapRequestMode) GetCrcString() string            { return "51077d14" }
+func (*ShowLispMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispMapRequestMode) Size() (size int) {
 	if m == nil {
@@ -2090,9 +2067,10 @@ func (m *ShowLispMapRequestModeReply) Reset() { *m = ShowLispMapRequestModeReply
 func (*ShowLispMapRequestModeReply) GetMessageName() string {
 	return "show_lisp_map_request_mode_reply"
 }
-func (*ShowLispMapRequestModeReply) GetCrcString() string { return "5b05038e" }
-func (*ShowLispMapRequestModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*ShowLispMapRequestModeReply) GetCrcString() string            { return "5b05038e" }
+func (*ShowLispMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispMapRequestModeReply) Size() (size int) {
@@ -2122,12 +2100,10 @@ func (m *ShowLispMapRequestModeReply) Unmarshal(b []byte) error {
 // ShowLispPitr defines message 'show_lisp_pitr'.
 type ShowLispPitr struct{}
 
-func (m *ShowLispPitr) Reset()               { *m = ShowLispPitr{} }
-func (*ShowLispPitr) GetMessageName() string { return "show_lisp_pitr" }
-func (*ShowLispPitr) GetCrcString() string   { return "51077d14" }
-func (*ShowLispPitr) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispPitr) Reset()                        { *m = ShowLispPitr{} }
+func (*ShowLispPitr) GetMessageName() string          { return "show_lisp_pitr" }
+func (*ShowLispPitr) GetCrcString() string            { return "51077d14" }
+func (*ShowLispPitr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispPitr) Size() (size int) {
 	if m == nil {
@@ -2153,11 +2129,12 @@ type ShowLispPitrReply struct {
 	LocatorSetName string `binapi:"string[64],name=locator_set_name" json:"locator_set_name,omitempty"`
 }
 
-func (m *ShowLispPitrReply) Reset()               { *m = ShowLispPitrReply{} }
-func (*ShowLispPitrReply) GetMessageName() string { return "show_lisp_pitr_reply" }
-func (*ShowLispPitrReply) GetCrcString() string   { return "27aa69b1" }
-func (*ShowLispPitrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ShowLispPitrReply) Reset()                        { *m = ShowLispPitrReply{} }
+func (*ShowLispPitrReply) GetMessageName() string          { return "show_lisp_pitr_reply" }
+func (*ShowLispPitrReply) GetCrcString() string            { return "27aa69b1" }
+func (*ShowLispPitrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispPitrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispPitrReply) Size() (size int) {
@@ -2190,12 +2167,10 @@ func (m *ShowLispPitrReply) Unmarshal(b []byte) error {
 // ShowLispRlocProbeState defines message 'show_lisp_rloc_probe_state'.
 type ShowLispRlocProbeState struct{}
 
-func (m *ShowLispRlocProbeState) Reset()               { *m = ShowLispRlocProbeState{} }
-func (*ShowLispRlocProbeState) GetMessageName() string { return "show_lisp_rloc_probe_state" }
-func (*ShowLispRlocProbeState) GetCrcString() string   { return "51077d14" }
-func (*ShowLispRlocProbeState) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispRlocProbeState) Reset()                        { *m = ShowLispRlocProbeState{} }
+func (*ShowLispRlocProbeState) GetMessageName() string          { return "show_lisp_rloc_probe_state" }
+func (*ShowLispRlocProbeState) GetCrcString() string            { return "51077d14" }
+func (*ShowLispRlocProbeState) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispRlocProbeState) Size() (size int) {
 	if m == nil {
@@ -2224,9 +2199,10 @@ func (m *ShowLispRlocProbeStateReply) Reset() { *m = ShowLispRlocProbeStateReply
 func (*ShowLispRlocProbeStateReply) GetMessageName() string {
 	return "show_lisp_rloc_probe_state_reply"
 }
-func (*ShowLispRlocProbeStateReply) GetCrcString() string { return "e33a377b" }
-func (*ShowLispRlocProbeStateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*ShowLispRlocProbeStateReply) GetCrcString() string            { return "e33a377b" }
+func (*ShowLispRlocProbeStateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispRlocProbeStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispRlocProbeStateReply) Size() (size int) {
@@ -2256,12 +2232,10 @@ func (m *ShowLispRlocProbeStateReply) Unmarshal(b []byte) error {
 // ShowLispStatus defines message 'show_lisp_status'.
 type ShowLispStatus struct{}
 
-func (m *ShowLispStatus) Reset()               { *m = ShowLispStatus{} }
-func (*ShowLispStatus) GetMessageName() string { return "show_lisp_status" }
-func (*ShowLispStatus) GetCrcString() string   { return "51077d14" }
-func (*ShowLispStatus) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispStatus) Reset()                        { *m = ShowLispStatus{} }
+func (*ShowLispStatus) GetMessageName() string          { return "show_lisp_status" }
+func (*ShowLispStatus) GetCrcString() string            { return "51077d14" }
+func (*ShowLispStatus) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispStatus) Size() (size int) {
 	if m == nil {
@@ -2287,11 +2261,12 @@ type ShowLispStatusReply struct {
 	IsGpeEnabled  bool  `binapi:"bool,name=is_gpe_enabled" json:"is_gpe_enabled,omitempty"`
 }
 
-func (m *ShowLispStatusReply) Reset()               { *m = ShowLispStatusReply{} }
-func (*ShowLispStatusReply) GetMessageName() string { return "show_lisp_status_reply" }
-func (*ShowLispStatusReply) GetCrcString() string   { return "9e8f10c0" }
-func (*ShowLispStatusReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ShowLispStatusReply) Reset()                        { *m = ShowLispStatusReply{} }
+func (*ShowLispStatusReply) GetMessageName() string          { return "show_lisp_status_reply" }
+func (*ShowLispStatusReply) GetCrcString() string            { return "9e8f10c0" }
+func (*ShowLispStatusReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispStatusReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispStatusReply) Size() (size int) {
@@ -2324,12 +2299,10 @@ func (m *ShowLispStatusReply) Unmarshal(b []byte) error {
 // ShowLispUsePetr defines message 'show_lisp_use_petr'.
 type ShowLispUsePetr struct{}
 
-func (m *ShowLispUsePetr) Reset()               { *m = ShowLispUsePetr{} }
-func (*ShowLispUsePetr) GetMessageName() string { return "show_lisp_use_petr" }
-func (*ShowLispUsePetr) GetCrcString() string   { return "51077d14" }
-func (*ShowLispUsePetr) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *ShowLispUsePetr) Reset()                        { *m = ShowLispUsePetr{} }
+func (*ShowLispUsePetr) GetMessageName() string          { return "show_lisp_use_petr" }
+func (*ShowLispUsePetr) GetCrcString() string            { return "51077d14" }
+func (*ShowLispUsePetr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowLispUsePetr) Size() (size int) {
 	if m == nil {
@@ -2355,11 +2328,12 @@ type ShowLispUsePetrReply struct {
 	IPAddress    ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *ShowLispUsePetrReply) Reset()               { *m = ShowLispUsePetrReply{} }
-func (*ShowLispUsePetrReply) GetMessageName() string { return "show_lisp_use_petr_reply" }
-func (*ShowLispUsePetrReply) GetCrcString() string   { return "22b9a4b0" }
-func (*ShowLispUsePetrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *ShowLispUsePetrReply) Reset()                        { *m = ShowLispUsePetrReply{} }
+func (*ShowLispUsePetrReply) GetMessageName() string          { return "show_lisp_use_petr_reply" }
+func (*ShowLispUsePetrReply) GetCrcString() string            { return "22b9a4b0" }
+func (*ShowLispUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowLispUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowLispUsePetrReply) Size() (size int) {

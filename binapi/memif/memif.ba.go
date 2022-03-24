@@ -104,12 +104,10 @@ type MemifCreate struct {
 	Secret     string                    `binapi:"string[24],name=secret" json:"secret,omitempty"`
 }
 
-func (m *MemifCreate) Reset()               { *m = MemifCreate{} }
-func (*MemifCreate) GetMessageName() string { return "memif_create" }
-func (*MemifCreate) GetCrcString() string   { return "b1b25061" }
-func (*MemifCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MemifCreate) Reset()                        { *m = MemifCreate{} }
+func (*MemifCreate) GetMessageName() string          { return "memif_create" }
+func (*MemifCreate) GetCrcString() string            { return "b1b25061" }
+func (*MemifCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MemifCreate) Size() (size int) {
 	if m == nil {
@@ -168,11 +166,12 @@ type MemifCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MemifCreateReply) Reset()               { *m = MemifCreateReply{} }
-func (*MemifCreateReply) GetMessageName() string { return "memif_create_reply" }
-func (*MemifCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*MemifCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MemifCreateReply) Reset()                        { *m = MemifCreateReply{} }
+func (*MemifCreateReply) GetMessageName() string          { return "memif_create_reply" }
+func (*MemifCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*MemifCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MemifCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MemifCreateReply) Size() (size int) {
@@ -204,12 +203,10 @@ type MemifDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MemifDelete) Reset()               { *m = MemifDelete{} }
-func (*MemifDelete) GetMessageName() string { return "memif_delete" }
-func (*MemifDelete) GetCrcString() string   { return "f9e6675e" }
-func (*MemifDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MemifDelete) Reset()                        { *m = MemifDelete{} }
+func (*MemifDelete) GetMessageName() string          { return "memif_delete" }
+func (*MemifDelete) GetCrcString() string            { return "f9e6675e" }
+func (*MemifDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MemifDelete) Size() (size int) {
 	if m == nil {
@@ -237,11 +234,12 @@ type MemifDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MemifDeleteReply) Reset()               { *m = MemifDeleteReply{} }
-func (*MemifDeleteReply) GetMessageName() string { return "memif_delete_reply" }
-func (*MemifDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*MemifDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MemifDeleteReply) Reset()                        { *m = MemifDeleteReply{} }
+func (*MemifDeleteReply) GetMessageName() string          { return "memif_delete_reply" }
+func (*MemifDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*MemifDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MemifDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MemifDeleteReply) Size() (size int) {
@@ -280,11 +278,12 @@ type MemifDetails struct {
 	IfName     string                         `binapi:"string[64],name=if_name" json:"if_name,omitempty"`
 }
 
-func (m *MemifDetails) Reset()               { *m = MemifDetails{} }
-func (*MemifDetails) GetMessageName() string { return "memif_details" }
-func (*MemifDetails) GetCrcString() string   { return "da34feb9" }
-func (*MemifDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MemifDetails) Reset()                        { *m = MemifDetails{} }
+func (*MemifDetails) GetMessageName() string          { return "memif_details" }
+func (*MemifDetails) GetCrcString() string            { return "da34feb9" }
+func (*MemifDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MemifDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MemifDetails) Size() (size int) {
@@ -341,12 +340,10 @@ func (m *MemifDetails) Unmarshal(b []byte) error {
 // MemifDump defines message 'memif_dump'.
 type MemifDump struct{}
 
-func (m *MemifDump) Reset()               { *m = MemifDump{} }
-func (*MemifDump) GetMessageName() string { return "memif_dump" }
-func (*MemifDump) GetCrcString() string   { return "51077d14" }
-func (*MemifDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MemifDump) Reset()                        { *m = MemifDump{} }
+func (*MemifDump) GetMessageName() string          { return "memif_dump" }
+func (*MemifDump) GetCrcString() string            { return "51077d14" }
+func (*MemifDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MemifDump) Size() (size int) {
 	if m == nil {
@@ -372,12 +369,10 @@ type MemifSocketFilenameAddDel struct {
 	SocketFilename string `binapi:"string[108],name=socket_filename" json:"socket_filename,omitempty"`
 }
 
-func (m *MemifSocketFilenameAddDel) Reset()               { *m = MemifSocketFilenameAddDel{} }
-func (*MemifSocketFilenameAddDel) GetMessageName() string { return "memif_socket_filename_add_del" }
-func (*MemifSocketFilenameAddDel) GetCrcString() string   { return "a2ce1a10" }
-func (*MemifSocketFilenameAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MemifSocketFilenameAddDel) Reset()                        { *m = MemifSocketFilenameAddDel{} }
+func (*MemifSocketFilenameAddDel) GetMessageName() string          { return "memif_socket_filename_add_del" }
+func (*MemifSocketFilenameAddDel) GetCrcString() string            { return "a2ce1a10" }
+func (*MemifSocketFilenameAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MemifSocketFilenameAddDel) Size() (size int) {
 	if m == nil {
@@ -415,9 +410,10 @@ func (m *MemifSocketFilenameAddDelReply) Reset() { *m = MemifSocketFilenameAddDe
 func (*MemifSocketFilenameAddDelReply) GetMessageName() string {
 	return "memif_socket_filename_add_del_reply"
 }
-func (*MemifSocketFilenameAddDelReply) GetCrcString() string { return "e8d4e804" }
-func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*MemifSocketFilenameAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MemifSocketFilenameAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MemifSocketFilenameAddDelReply) Size() (size int) {
@@ -447,11 +443,12 @@ type MemifSocketFilenameDetails struct {
 	SocketFilename string `binapi:"string[108],name=socket_filename" json:"socket_filename,omitempty"`
 }
 
-func (m *MemifSocketFilenameDetails) Reset()               { *m = MemifSocketFilenameDetails{} }
-func (*MemifSocketFilenameDetails) GetMessageName() string { return "memif_socket_filename_details" }
-func (*MemifSocketFilenameDetails) GetCrcString() string   { return "7ff326f7" }
-func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *MemifSocketFilenameDetails) Reset()                        { *m = MemifSocketFilenameDetails{} }
+func (*MemifSocketFilenameDetails) GetMessageName() string          { return "memif_socket_filename_details" }
+func (*MemifSocketFilenameDetails) GetCrcString() string            { return "7ff326f7" }
+func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MemifSocketFilenameDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MemifSocketFilenameDetails) Size() (size int) {
@@ -481,12 +478,10 @@ func (m *MemifSocketFilenameDetails) Unmarshal(b []byte) error {
 // MemifSocketFilenameDump defines message 'memif_socket_filename_dump'.
 type MemifSocketFilenameDump struct{}
 
-func (m *MemifSocketFilenameDump) Reset()               { *m = MemifSocketFilenameDump{} }
-func (*MemifSocketFilenameDump) GetMessageName() string { return "memif_socket_filename_dump" }
-func (*MemifSocketFilenameDump) GetCrcString() string   { return "51077d14" }
-func (*MemifSocketFilenameDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *MemifSocketFilenameDump) Reset()                        { *m = MemifSocketFilenameDump{} }
+func (*MemifSocketFilenameDump) GetMessageName() string          { return "memif_socket_filename_dump" }
+func (*MemifSocketFilenameDump) GetCrcString() string            { return "51077d14" }
+func (*MemifSocketFilenameDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MemifSocketFilenameDump) Size() (size int) {
 	if m == nil {

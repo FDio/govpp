@@ -108,9 +108,9 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) (err error) {
 
 func (*MsgCodec) DecodeMsgContext(data []byte, msgType api.MessageType) (context uint32, err error) {
 	switch msgType {
-	case api.RequestMessage:
+	case api.RequestMessageType:
 		return binary.BigEndian.Uint32(data[6:10]), nil
-	case api.ReplyMessage:
+	case api.ReplyMessageType:
 		return binary.BigEndian.Uint32(data[2:6]), nil
 	}
 
@@ -119,11 +119,11 @@ func (*MsgCodec) DecodeMsgContext(data []byte, msgType api.MessageType) (context
 
 func getOffset(msg api.Message) (offset int) {
 	switch msg.GetMessageType() {
-	case api.RequestMessage:
+	case api.RequestMessageType:
 		return 10
-	case api.ReplyMessage:
+	case api.ReplyMessageType:
 		return 6
-	case api.EventMessage:
+	case api.EventMessageType:
 		return 6
 	}
 	return 2

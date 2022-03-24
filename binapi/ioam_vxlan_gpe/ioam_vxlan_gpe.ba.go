@@ -33,12 +33,10 @@ type VxlanGpeIoamDisable struct {
 	ID uint16 `binapi:"u16,name=id" json:"id,omitempty"`
 }
 
-func (m *VxlanGpeIoamDisable) Reset()               { *m = VxlanGpeIoamDisable{} }
-func (*VxlanGpeIoamDisable) GetMessageName() string { return "vxlan_gpe_ioam_disable" }
-func (*VxlanGpeIoamDisable) GetCrcString() string   { return "6b16a45e" }
-func (*VxlanGpeIoamDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamDisable) Reset()                        { *m = VxlanGpeIoamDisable{} }
+func (*VxlanGpeIoamDisable) GetMessageName() string          { return "vxlan_gpe_ioam_disable" }
+func (*VxlanGpeIoamDisable) GetCrcString() string            { return "6b16a45e" }
+func (*VxlanGpeIoamDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamDisable) Size() (size int) {
 	if m == nil {
@@ -66,11 +64,12 @@ type VxlanGpeIoamDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VxlanGpeIoamDisableReply) Reset()               { *m = VxlanGpeIoamDisableReply{} }
-func (*VxlanGpeIoamDisableReply) GetMessageName() string { return "vxlan_gpe_ioam_disable_reply" }
-func (*VxlanGpeIoamDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*VxlanGpeIoamDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeIoamDisableReply) Reset()                        { *m = VxlanGpeIoamDisableReply{} }
+func (*VxlanGpeIoamDisableReply) GetMessageName() string          { return "vxlan_gpe_ioam_disable_reply" }
+func (*VxlanGpeIoamDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamDisableReply) Size() (size int) {
@@ -102,12 +101,10 @@ type VxlanGpeIoamEnable struct {
 	TraceEnable bool   `binapi:"bool,name=trace_enable" json:"trace_enable,omitempty"`
 }
 
-func (m *VxlanGpeIoamEnable) Reset()               { *m = VxlanGpeIoamEnable{} }
-func (*VxlanGpeIoamEnable) GetMessageName() string { return "vxlan_gpe_ioam_enable" }
-func (*VxlanGpeIoamEnable) GetCrcString() string   { return "2481bef7" }
-func (*VxlanGpeIoamEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamEnable) Reset()                        { *m = VxlanGpeIoamEnable{} }
+func (*VxlanGpeIoamEnable) GetMessageName() string          { return "vxlan_gpe_ioam_enable" }
+func (*VxlanGpeIoamEnable) GetCrcString() string            { return "2481bef7" }
+func (*VxlanGpeIoamEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamEnable) Size() (size int) {
 	if m == nil {
@@ -144,11 +141,12 @@ type VxlanGpeIoamEnableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VxlanGpeIoamEnableReply) Reset()               { *m = VxlanGpeIoamEnableReply{} }
-func (*VxlanGpeIoamEnableReply) GetMessageName() string { return "vxlan_gpe_ioam_enable_reply" }
-func (*VxlanGpeIoamEnableReply) GetCrcString() string   { return "e8d4e804" }
-func (*VxlanGpeIoamEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeIoamEnableReply) Reset()                        { *m = VxlanGpeIoamEnableReply{} }
+func (*VxlanGpeIoamEnableReply) GetMessageName() string          { return "vxlan_gpe_ioam_enable_reply" }
+func (*VxlanGpeIoamEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamEnableReply) Size() (size int) {
@@ -178,12 +176,10 @@ type VxlanGpeIoamTransitDisable struct {
 	DstAddr       ip_types.Address `binapi:"address,name=dst_addr" json:"dst_addr,omitempty"`
 }
 
-func (m *VxlanGpeIoamTransitDisable) Reset()               { *m = VxlanGpeIoamTransitDisable{} }
-func (*VxlanGpeIoamTransitDisable) GetMessageName() string { return "vxlan_gpe_ioam_transit_disable" }
-func (*VxlanGpeIoamTransitDisable) GetCrcString() string   { return "3d3ec657" }
-func (*VxlanGpeIoamTransitDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamTransitDisable) Reset()                        { *m = VxlanGpeIoamTransitDisable{} }
+func (*VxlanGpeIoamTransitDisable) GetMessageName() string          { return "vxlan_gpe_ioam_transit_disable" }
+func (*VxlanGpeIoamTransitDisable) GetCrcString() string            { return "3d3ec657" }
+func (*VxlanGpeIoamTransitDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamTransitDisable) Size() (size int) {
 	if m == nil {
@@ -221,9 +217,10 @@ func (m *VxlanGpeIoamTransitDisableReply) Reset() { *m = VxlanGpeIoamTransitDisa
 func (*VxlanGpeIoamTransitDisableReply) GetMessageName() string {
 	return "vxlan_gpe_ioam_transit_disable_reply"
 }
-func (*VxlanGpeIoamTransitDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*VxlanGpeIoamTransitDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*VxlanGpeIoamTransitDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamTransitDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamTransitDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamTransitDisableReply) Size() (size int) {
@@ -253,12 +250,10 @@ type VxlanGpeIoamTransitEnable struct {
 	DstAddr       ip_types.Address `binapi:"address,name=dst_addr" json:"dst_addr,omitempty"`
 }
 
-func (m *VxlanGpeIoamTransitEnable) Reset()               { *m = VxlanGpeIoamTransitEnable{} }
-func (*VxlanGpeIoamTransitEnable) GetMessageName() string { return "vxlan_gpe_ioam_transit_enable" }
-func (*VxlanGpeIoamTransitEnable) GetCrcString() string   { return "3d3ec657" }
-func (*VxlanGpeIoamTransitEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamTransitEnable) Reset()                        { *m = VxlanGpeIoamTransitEnable{} }
+func (*VxlanGpeIoamTransitEnable) GetMessageName() string          { return "vxlan_gpe_ioam_transit_enable" }
+func (*VxlanGpeIoamTransitEnable) GetCrcString() string            { return "3d3ec657" }
+func (*VxlanGpeIoamTransitEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamTransitEnable) Size() (size int) {
 	if m == nil {
@@ -296,9 +291,10 @@ func (m *VxlanGpeIoamTransitEnableReply) Reset() { *m = VxlanGpeIoamTransitEnabl
 func (*VxlanGpeIoamTransitEnableReply) GetMessageName() string {
 	return "vxlan_gpe_ioam_transit_enable_reply"
 }
-func (*VxlanGpeIoamTransitEnableReply) GetCrcString() string { return "e8d4e804" }
-func (*VxlanGpeIoamTransitEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*VxlanGpeIoamTransitEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamTransitEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamTransitEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamTransitEnableReply) Size() (size int) {
@@ -329,12 +325,10 @@ type VxlanGpeIoamVniDisable struct {
 	Remote ip_types.Address `binapi:"address,name=remote" json:"remote,omitempty"`
 }
 
-func (m *VxlanGpeIoamVniDisable) Reset()               { *m = VxlanGpeIoamVniDisable{} }
-func (*VxlanGpeIoamVniDisable) GetMessageName() string { return "vxlan_gpe_ioam_vni_disable" }
-func (*VxlanGpeIoamVniDisable) GetCrcString() string   { return "0fbb5fb1" }
-func (*VxlanGpeIoamVniDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamVniDisable) Reset()                        { *m = VxlanGpeIoamVniDisable{} }
+func (*VxlanGpeIoamVniDisable) GetMessageName() string          { return "vxlan_gpe_ioam_vni_disable" }
+func (*VxlanGpeIoamVniDisable) GetCrcString() string            { return "0fbb5fb1" }
+func (*VxlanGpeIoamVniDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamVniDisable) Size() (size int) {
 	if m == nil {
@@ -378,9 +372,10 @@ func (m *VxlanGpeIoamVniDisableReply) Reset() { *m = VxlanGpeIoamVniDisableReply
 func (*VxlanGpeIoamVniDisableReply) GetMessageName() string {
 	return "vxlan_gpe_ioam_vni_disable_reply"
 }
-func (*VxlanGpeIoamVniDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*VxlanGpeIoamVniDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*VxlanGpeIoamVniDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamVniDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamVniDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamVniDisableReply) Size() (size int) {
@@ -411,12 +406,10 @@ type VxlanGpeIoamVniEnable struct {
 	Remote ip_types.Address `binapi:"address,name=remote" json:"remote,omitempty"`
 }
 
-func (m *VxlanGpeIoamVniEnable) Reset()               { *m = VxlanGpeIoamVniEnable{} }
-func (*VxlanGpeIoamVniEnable) GetMessageName() string { return "vxlan_gpe_ioam_vni_enable" }
-func (*VxlanGpeIoamVniEnable) GetCrcString() string   { return "0fbb5fb1" }
-func (*VxlanGpeIoamVniEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeIoamVniEnable) Reset()                        { *m = VxlanGpeIoamVniEnable{} }
+func (*VxlanGpeIoamVniEnable) GetMessageName() string          { return "vxlan_gpe_ioam_vni_enable" }
+func (*VxlanGpeIoamVniEnable) GetCrcString() string            { return "0fbb5fb1" }
+func (*VxlanGpeIoamVniEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeIoamVniEnable) Size() (size int) {
 	if m == nil {
@@ -456,11 +449,12 @@ type VxlanGpeIoamVniEnableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VxlanGpeIoamVniEnableReply) Reset()               { *m = VxlanGpeIoamVniEnableReply{} }
-func (*VxlanGpeIoamVniEnableReply) GetMessageName() string { return "vxlan_gpe_ioam_vni_enable_reply" }
-func (*VxlanGpeIoamVniEnableReply) GetCrcString() string   { return "e8d4e804" }
-func (*VxlanGpeIoamVniEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeIoamVniEnableReply) Reset()                        { *m = VxlanGpeIoamVniEnableReply{} }
+func (*VxlanGpeIoamVniEnableReply) GetMessageName() string          { return "vxlan_gpe_ioam_vni_enable_reply" }
+func (*VxlanGpeIoamVniEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*VxlanGpeIoamVniEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeIoamVniEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamVniEnableReply) Size() (size int) {

@@ -37,12 +37,10 @@ type AvfCreate struct {
 	TxqSize    uint16 `binapi:"u16,name=txq_size" json:"txq_size,omitempty"`
 }
 
-func (m *AvfCreate) Reset()               { *m = AvfCreate{} }
-func (*AvfCreate) GetMessageName() string { return "avf_create" }
-func (*AvfCreate) GetCrcString() string   { return "daab8ae2" }
-func (*AvfCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AvfCreate) Reset()                        { *m = AvfCreate{} }
+func (*AvfCreate) GetMessageName() string          { return "avf_create" }
+func (*AvfCreate) GetCrcString() string            { return "daab8ae2" }
+func (*AvfCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AvfCreate) Size() (size int) {
 	if m == nil {
@@ -83,11 +81,12 @@ type AvfCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *AvfCreateReply) Reset()               { *m = AvfCreateReply{} }
-func (*AvfCreateReply) GetMessageName() string { return "avf_create_reply" }
-func (*AvfCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*AvfCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AvfCreateReply) Reset()                        { *m = AvfCreateReply{} }
+func (*AvfCreateReply) GetMessageName() string          { return "avf_create_reply" }
+func (*AvfCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*AvfCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AvfCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AvfCreateReply) Size() (size int) {
@@ -119,12 +118,10 @@ type AvfDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *AvfDelete) Reset()               { *m = AvfDelete{} }
-func (*AvfDelete) GetMessageName() string { return "avf_delete" }
-func (*AvfDelete) GetCrcString() string   { return "f9e6675e" }
-func (*AvfDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *AvfDelete) Reset()                        { *m = AvfDelete{} }
+func (*AvfDelete) GetMessageName() string          { return "avf_delete" }
+func (*AvfDelete) GetCrcString() string            { return "f9e6675e" }
+func (*AvfDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AvfDelete) Size() (size int) {
 	if m == nil {
@@ -152,11 +149,12 @@ type AvfDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *AvfDeleteReply) Reset()               { *m = AvfDeleteReply{} }
-func (*AvfDeleteReply) GetMessageName() string { return "avf_delete_reply" }
-func (*AvfDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*AvfDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *AvfDeleteReply) Reset()                        { *m = AvfDeleteReply{} }
+func (*AvfDeleteReply) GetMessageName() string          { return "avf_delete_reply" }
+func (*AvfDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*AvfDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AvfDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AvfDeleteReply) Size() (size int) {

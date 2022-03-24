@@ -35,12 +35,10 @@ type OddbufEnableDisable struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *OddbufEnableDisable) Reset()               { *m = OddbufEnableDisable{} }
-func (*OddbufEnableDisable) GetMessageName() string { return "oddbuf_enable_disable" }
-func (*OddbufEnableDisable) GetCrcString() string   { return "3865946c" }
-func (*OddbufEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *OddbufEnableDisable) Reset()                        { *m = OddbufEnableDisable{} }
+func (*OddbufEnableDisable) GetMessageName() string          { return "oddbuf_enable_disable" }
+func (*OddbufEnableDisable) GetCrcString() string            { return "3865946c" }
+func (*OddbufEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OddbufEnableDisable) Size() (size int) {
 	if m == nil {
@@ -72,11 +70,12 @@ type OddbufEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OddbufEnableDisableReply) Reset()               { *m = OddbufEnableDisableReply{} }
-func (*OddbufEnableDisableReply) GetMessageName() string { return "oddbuf_enable_disable_reply" }
-func (*OddbufEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*OddbufEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *OddbufEnableDisableReply) Reset()                        { *m = OddbufEnableDisableReply{} }
+func (*OddbufEnableDisableReply) GetMessageName() string          { return "oddbuf_enable_disable_reply" }
+func (*OddbufEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*OddbufEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OddbufEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OddbufEnableDisableReply) Size() (size int) {

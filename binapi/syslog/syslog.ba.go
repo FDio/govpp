@@ -79,12 +79,10 @@ func (x SyslogSeverity) String() string {
 // SyslogGetFilter defines message 'syslog_get_filter'.
 type SyslogGetFilter struct{}
 
-func (m *SyslogGetFilter) Reset()               { *m = SyslogGetFilter{} }
-func (*SyslogGetFilter) GetMessageName() string { return "syslog_get_filter" }
-func (*SyslogGetFilter) GetCrcString() string   { return "51077d14" }
-func (*SyslogGetFilter) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SyslogGetFilter) Reset()                        { *m = SyslogGetFilter{} }
+func (*SyslogGetFilter) GetMessageName() string          { return "syslog_get_filter" }
+func (*SyslogGetFilter) GetCrcString() string            { return "51077d14" }
+func (*SyslogGetFilter) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SyslogGetFilter) Size() (size int) {
 	if m == nil {
@@ -109,11 +107,12 @@ type SyslogGetFilterReply struct {
 	Severity SyslogSeverity `binapi:"syslog_severity,name=severity" json:"severity,omitempty"`
 }
 
-func (m *SyslogGetFilterReply) Reset()               { *m = SyslogGetFilterReply{} }
-func (*SyslogGetFilterReply) GetMessageName() string { return "syslog_get_filter_reply" }
-func (*SyslogGetFilterReply) GetCrcString() string   { return "eb1833f8" }
-func (*SyslogGetFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SyslogGetFilterReply) Reset()                        { *m = SyslogGetFilterReply{} }
+func (*SyslogGetFilterReply) GetMessageName() string          { return "syslog_get_filter_reply" }
+func (*SyslogGetFilterReply) GetCrcString() string            { return "eb1833f8" }
+func (*SyslogGetFilterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SyslogGetFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogGetFilterReply) Size() (size int) {
@@ -143,12 +142,10 @@ func (m *SyslogGetFilterReply) Unmarshal(b []byte) error {
 // SyslogGetSender defines message 'syslog_get_sender'.
 type SyslogGetSender struct{}
 
-func (m *SyslogGetSender) Reset()               { *m = SyslogGetSender{} }
-func (*SyslogGetSender) GetMessageName() string { return "syslog_get_sender" }
-func (*SyslogGetSender) GetCrcString() string   { return "51077d14" }
-func (*SyslogGetSender) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SyslogGetSender) Reset()                        { *m = SyslogGetSender{} }
+func (*SyslogGetSender) GetMessageName() string          { return "syslog_get_sender" }
+func (*SyslogGetSender) GetCrcString() string            { return "51077d14" }
+func (*SyslogGetSender) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SyslogGetSender) Size() (size int) {
 	if m == nil {
@@ -177,11 +174,12 @@ type SyslogGetSenderReply struct {
 	MaxMsgSize       uint32              `binapi:"u32,name=max_msg_size" json:"max_msg_size,omitempty"`
 }
 
-func (m *SyslogGetSenderReply) Reset()               { *m = SyslogGetSenderReply{} }
-func (*SyslogGetSenderReply) GetMessageName() string { return "syslog_get_sender_reply" }
-func (*SyslogGetSenderReply) GetCrcString() string   { return "424cfa4e" }
-func (*SyslogGetSenderReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SyslogGetSenderReply) Reset()                        { *m = SyslogGetSenderReply{} }
+func (*SyslogGetSenderReply) GetMessageName() string          { return "syslog_get_sender_reply" }
+func (*SyslogGetSenderReply) GetCrcString() string            { return "424cfa4e" }
+func (*SyslogGetSenderReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SyslogGetSenderReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogGetSenderReply) Size() (size int) {
@@ -225,12 +223,10 @@ type SyslogSetFilter struct {
 	Severity SyslogSeverity `binapi:"syslog_severity,name=severity" json:"severity,omitempty"`
 }
 
-func (m *SyslogSetFilter) Reset()               { *m = SyslogSetFilter{} }
-func (*SyslogSetFilter) GetMessageName() string { return "syslog_set_filter" }
-func (*SyslogSetFilter) GetCrcString() string   { return "571348c3" }
-func (*SyslogSetFilter) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SyslogSetFilter) Reset()                        { *m = SyslogSetFilter{} }
+func (*SyslogSetFilter) GetMessageName() string          { return "syslog_set_filter" }
+func (*SyslogSetFilter) GetCrcString() string            { return "571348c3" }
+func (*SyslogSetFilter) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SyslogSetFilter) Size() (size int) {
 	if m == nil {
@@ -258,11 +254,12 @@ type SyslogSetFilterReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SyslogSetFilterReply) Reset()               { *m = SyslogSetFilterReply{} }
-func (*SyslogSetFilterReply) GetMessageName() string { return "syslog_set_filter_reply" }
-func (*SyslogSetFilterReply) GetCrcString() string   { return "e8d4e804" }
-func (*SyslogSetFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SyslogSetFilterReply) Reset()                        { *m = SyslogSetFilterReply{} }
+func (*SyslogSetFilterReply) GetMessageName() string          { return "syslog_set_filter_reply" }
+func (*SyslogSetFilterReply) GetCrcString() string            { return "e8d4e804" }
+func (*SyslogSetFilterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SyslogSetFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogSetFilterReply) Size() (size int) {
@@ -295,12 +292,10 @@ type SyslogSetSender struct {
 	MaxMsgSize       uint32              `binapi:"u32,name=max_msg_size,default=480" json:"max_msg_size,omitempty"`
 }
 
-func (m *SyslogSetSender) Reset()               { *m = SyslogSetSender{} }
-func (*SyslogSetSender) GetMessageName() string { return "syslog_set_sender" }
-func (*SyslogSetSender) GetCrcString() string   { return "b8011d0b" }
-func (*SyslogSetSender) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SyslogSetSender) Reset()                        { *m = SyslogSetSender{} }
+func (*SyslogSetSender) GetMessageName() string          { return "syslog_set_sender" }
+func (*SyslogSetSender) GetCrcString() string            { return "b8011d0b" }
+func (*SyslogSetSender) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SyslogSetSender) Size() (size int) {
 	if m == nil {
@@ -340,11 +335,12 @@ type SyslogSetSenderReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SyslogSetSenderReply) Reset()               { *m = SyslogSetSenderReply{} }
-func (*SyslogSetSenderReply) GetMessageName() string { return "syslog_set_sender_reply" }
-func (*SyslogSetSenderReply) GetCrcString() string   { return "e8d4e804" }
-func (*SyslogSetSenderReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SyslogSetSenderReply) Reset()                        { *m = SyslogSetSenderReply{} }
+func (*SyslogSetSenderReply) GetMessageName() string          { return "syslog_set_sender_reply" }
+func (*SyslogSetSenderReply) GetCrcString() string            { return "e8d4e804" }
+func (*SyslogSetSenderReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SyslogSetSenderReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogSetSenderReply) Size() (size int) {

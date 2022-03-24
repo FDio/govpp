@@ -107,12 +107,10 @@ type IgmpClearInterface struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IgmpClearInterface) Reset()               { *m = IgmpClearInterface{} }
-func (*IgmpClearInterface) GetMessageName() string { return "igmp_clear_interface" }
-func (*IgmpClearInterface) GetCrcString() string   { return "f9e6675e" }
-func (*IgmpClearInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpClearInterface) Reset()                        { *m = IgmpClearInterface{} }
+func (*IgmpClearInterface) GetMessageName() string          { return "igmp_clear_interface" }
+func (*IgmpClearInterface) GetCrcString() string            { return "f9e6675e" }
+func (*IgmpClearInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpClearInterface) Size() (size int) {
 	if m == nil {
@@ -140,11 +138,12 @@ type IgmpClearInterfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IgmpClearInterfaceReply) Reset()               { *m = IgmpClearInterfaceReply{} }
-func (*IgmpClearInterfaceReply) GetMessageName() string { return "igmp_clear_interface_reply" }
-func (*IgmpClearInterfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*IgmpClearInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpClearInterfaceReply) Reset()                        { *m = IgmpClearInterfaceReply{} }
+func (*IgmpClearInterfaceReply) GetMessageName() string          { return "igmp_clear_interface_reply" }
+func (*IgmpClearInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*IgmpClearInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpClearInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpClearInterfaceReply) Size() (size int) {
@@ -175,11 +174,12 @@ type IgmpDetails struct {
 	Gaddr     ip_types.IP4Address            `binapi:"ip4_address,name=gaddr" json:"gaddr,omitempty"`
 }
 
-func (m *IgmpDetails) Reset()               { *m = IgmpDetails{} }
-func (*IgmpDetails) GetMessageName() string { return "igmp_details" }
-func (*IgmpDetails) GetCrcString() string   { return "38f09929" }
-func (*IgmpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpDetails) Reset()                        { *m = IgmpDetails{} }
+func (*IgmpDetails) GetMessageName() string          { return "igmp_details" }
+func (*IgmpDetails) GetCrcString() string            { return "38f09929" }
+func (*IgmpDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IgmpDetails) Size() (size int) {
@@ -214,12 +214,10 @@ type IgmpDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IgmpDump) Reset()               { *m = IgmpDump{} }
-func (*IgmpDump) GetMessageName() string { return "igmp_dump" }
-func (*IgmpDump) GetCrcString() string   { return "f9e6675e" }
-func (*IgmpDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpDump) Reset()                        { *m = IgmpDump{} }
+func (*IgmpDump) GetMessageName() string          { return "igmp_dump" }
+func (*IgmpDump) GetCrcString() string            { return "f9e6675e" }
+func (*IgmpDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpDump) Size() (size int) {
 	if m == nil {
@@ -249,12 +247,10 @@ type IgmpEnableDisable struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IgmpEnableDisable) Reset()               { *m = IgmpEnableDisable{} }
-func (*IgmpEnableDisable) GetMessageName() string { return "igmp_enable_disable" }
-func (*IgmpEnableDisable) GetCrcString() string   { return "b1edfb96" }
-func (*IgmpEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpEnableDisable) Reset()                        { *m = IgmpEnableDisable{} }
+func (*IgmpEnableDisable) GetMessageName() string          { return "igmp_enable_disable" }
+func (*IgmpEnableDisable) GetCrcString() string            { return "b1edfb96" }
+func (*IgmpEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpEnableDisable) Size() (size int) {
 	if m == nil {
@@ -288,11 +284,12 @@ type IgmpEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IgmpEnableDisableReply) Reset()               { *m = IgmpEnableDisableReply{} }
-func (*IgmpEnableDisableReply) GetMessageName() string { return "igmp_enable_disable_reply" }
-func (*IgmpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*IgmpEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpEnableDisableReply) Reset()                        { *m = IgmpEnableDisableReply{} }
+func (*IgmpEnableDisableReply) GetMessageName() string          { return "igmp_enable_disable_reply" }
+func (*IgmpEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*IgmpEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpEnableDisableReply) Size() (size int) {
@@ -324,12 +321,10 @@ type IgmpEvent struct {
 	Gaddr     ip_types.IP4Address            `binapi:"ip4_address,name=gaddr" json:"gaddr,omitempty"`
 }
 
-func (m *IgmpEvent) Reset()               { *m = IgmpEvent{} }
-func (*IgmpEvent) GetMessageName() string { return "igmp_event" }
-func (*IgmpEvent) GetCrcString() string   { return "85fe93ec" }
-func (*IgmpEvent) GetMessageType() api.MessageType {
-	return api.OtherMessage
-}
+func (m *IgmpEvent) Reset()                        { *m = IgmpEvent{} }
+func (*IgmpEvent) GetMessageName() string          { return "igmp_event" }
+func (*IgmpEvent) GetCrcString() string            { return "85fe93ec" }
+func (*IgmpEvent) GetMessageType() api.MessageType { return api.OtherMessageType }
 
 func (m *IgmpEvent) Size() (size int) {
 	if m == nil {
@@ -366,11 +361,12 @@ type IgmpGroupPrefixDetails struct {
 	Gp GroupPrefix `binapi:"group_prefix,name=gp" json:"gp,omitempty"`
 }
 
-func (m *IgmpGroupPrefixDetails) Reset()               { *m = IgmpGroupPrefixDetails{} }
-func (*IgmpGroupPrefixDetails) GetMessageName() string { return "igmp_group_prefix_details" }
-func (*IgmpGroupPrefixDetails) GetCrcString() string   { return "259ccd81" }
-func (*IgmpGroupPrefixDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpGroupPrefixDetails) Reset()                        { *m = IgmpGroupPrefixDetails{} }
+func (*IgmpGroupPrefixDetails) GetMessageName() string          { return "igmp_group_prefix_details" }
+func (*IgmpGroupPrefixDetails) GetCrcString() string            { return "259ccd81" }
+func (*IgmpGroupPrefixDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpGroupPrefixDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IgmpGroupPrefixDetails) Size() (size int) {
@@ -406,12 +402,10 @@ func (m *IgmpGroupPrefixDetails) Unmarshal(b []byte) error {
 // IgmpGroupPrefixDump defines message 'igmp_group_prefix_dump'.
 type IgmpGroupPrefixDump struct{}
 
-func (m *IgmpGroupPrefixDump) Reset()               { *m = IgmpGroupPrefixDump{} }
-func (*IgmpGroupPrefixDump) GetMessageName() string { return "igmp_group_prefix_dump" }
-func (*IgmpGroupPrefixDump) GetCrcString() string   { return "51077d14" }
-func (*IgmpGroupPrefixDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpGroupPrefixDump) Reset()                        { *m = IgmpGroupPrefixDump{} }
+func (*IgmpGroupPrefixDump) GetMessageName() string          { return "igmp_group_prefix_dump" }
+func (*IgmpGroupPrefixDump) GetCrcString() string            { return "51077d14" }
+func (*IgmpGroupPrefixDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpGroupPrefixDump) Size() (size int) {
 	if m == nil {
@@ -435,12 +429,10 @@ type IgmpGroupPrefixSet struct {
 	Gp GroupPrefix `binapi:"group_prefix,name=gp" json:"gp,omitempty"`
 }
 
-func (m *IgmpGroupPrefixSet) Reset()               { *m = IgmpGroupPrefixSet{} }
-func (*IgmpGroupPrefixSet) GetMessageName() string { return "igmp_group_prefix_set" }
-func (*IgmpGroupPrefixSet) GetCrcString() string   { return "5b14a5ce" }
-func (*IgmpGroupPrefixSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpGroupPrefixSet) Reset()                        { *m = IgmpGroupPrefixSet{} }
+func (*IgmpGroupPrefixSet) GetMessageName() string          { return "igmp_group_prefix_set" }
+func (*IgmpGroupPrefixSet) GetCrcString() string            { return "5b14a5ce" }
+func (*IgmpGroupPrefixSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpGroupPrefixSet) Size() (size int) {
 	if m == nil {
@@ -477,11 +469,12 @@ type IgmpGroupPrefixSetReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IgmpGroupPrefixSetReply) Reset()               { *m = IgmpGroupPrefixSetReply{} }
-func (*IgmpGroupPrefixSetReply) GetMessageName() string { return "igmp_group_prefix_set_reply" }
-func (*IgmpGroupPrefixSetReply) GetCrcString() string   { return "e8d4e804" }
-func (*IgmpGroupPrefixSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpGroupPrefixSetReply) Reset()                        { *m = IgmpGroupPrefixSetReply{} }
+func (*IgmpGroupPrefixSetReply) GetMessageName() string          { return "igmp_group_prefix_set_reply" }
+func (*IgmpGroupPrefixSetReply) GetCrcString() string            { return "e8d4e804" }
+func (*IgmpGroupPrefixSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpGroupPrefixSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpGroupPrefixSetReply) Size() (size int) {
@@ -510,12 +503,10 @@ type IgmpListen struct {
 	Group IgmpGroup `binapi:"igmp_group,name=group" json:"group,omitempty"`
 }
 
-func (m *IgmpListen) Reset()               { *m = IgmpListen{} }
-func (*IgmpListen) GetMessageName() string { return "igmp_listen" }
-func (*IgmpListen) GetCrcString() string   { return "19a49f1e" }
-func (*IgmpListen) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpListen) Reset()                        { *m = IgmpListen{} }
+func (*IgmpListen) GetMessageName() string          { return "igmp_listen" }
+func (*IgmpListen) GetCrcString() string            { return "19a49f1e" }
+func (*IgmpListen) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpListen) Size() (size int) {
 	if m == nil {
@@ -571,11 +562,12 @@ type IgmpListenReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IgmpListenReply) Reset()               { *m = IgmpListenReply{} }
-func (*IgmpListenReply) GetMessageName() string { return "igmp_listen_reply" }
-func (*IgmpListenReply) GetCrcString() string   { return "e8d4e804" }
-func (*IgmpListenReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpListenReply) Reset()                        { *m = IgmpListenReply{} }
+func (*IgmpListenReply) GetMessageName() string          { return "igmp_listen_reply" }
+func (*IgmpListenReply) GetCrcString() string            { return "e8d4e804" }
+func (*IgmpListenReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpListenReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpListenReply) Size() (size int) {
@@ -606,12 +598,10 @@ type IgmpProxyDeviceAddDel struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IgmpProxyDeviceAddDel) Reset()               { *m = IgmpProxyDeviceAddDel{} }
-func (*IgmpProxyDeviceAddDel) GetMessageName() string { return "igmp_proxy_device_add_del" }
-func (*IgmpProxyDeviceAddDel) GetCrcString() string   { return "0b9be9ce" }
-func (*IgmpProxyDeviceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IgmpProxyDeviceAddDel) Reset()                        { *m = IgmpProxyDeviceAddDel{} }
+func (*IgmpProxyDeviceAddDel) GetMessageName() string          { return "igmp_proxy_device_add_del" }
+func (*IgmpProxyDeviceAddDel) GetCrcString() string            { return "0b9be9ce" }
+func (*IgmpProxyDeviceAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IgmpProxyDeviceAddDel) Size() (size int) {
 	if m == nil {
@@ -653,7 +643,7 @@ func (*IgmpProxyDeviceAddDelInterface) GetMessageName() string {
 }
 func (*IgmpProxyDeviceAddDelInterface) GetCrcString() string { return "1a9ec24a" }
 func (*IgmpProxyDeviceAddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpProxyDeviceAddDelInterface) Size() (size int) {
@@ -694,7 +684,10 @@ func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageName() string {
 }
 func (*IgmpProxyDeviceAddDelInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *IgmpProxyDeviceAddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpProxyDeviceAddDelInterfaceReply) Size() (size int) {
@@ -723,11 +716,12 @@ type IgmpProxyDeviceAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IgmpProxyDeviceAddDelReply) Reset()               { *m = IgmpProxyDeviceAddDelReply{} }
-func (*IgmpProxyDeviceAddDelReply) GetMessageName() string { return "igmp_proxy_device_add_del_reply" }
-func (*IgmpProxyDeviceAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*IgmpProxyDeviceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IgmpProxyDeviceAddDelReply) Reset()                        { *m = IgmpProxyDeviceAddDelReply{} }
+func (*IgmpProxyDeviceAddDelReply) GetMessageName() string          { return "igmp_proxy_device_add_del_reply" }
+func (*IgmpProxyDeviceAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*IgmpProxyDeviceAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IgmpProxyDeviceAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpProxyDeviceAddDelReply) Size() (size int) {
@@ -757,12 +751,10 @@ type WantIgmpEvents struct {
 	PID    uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantIgmpEvents) Reset()               { *m = WantIgmpEvents{} }
-func (*WantIgmpEvents) GetMessageName() string { return "want_igmp_events" }
-func (*WantIgmpEvents) GetCrcString() string   { return "cfaccc1f" }
-func (*WantIgmpEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *WantIgmpEvents) Reset()                        { *m = WantIgmpEvents{} }
+func (*WantIgmpEvents) GetMessageName() string          { return "want_igmp_events" }
+func (*WantIgmpEvents) GetCrcString() string            { return "cfaccc1f" }
+func (*WantIgmpEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantIgmpEvents) Size() (size int) {
 	if m == nil {
@@ -793,11 +785,12 @@ type WantIgmpEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantIgmpEventsReply) Reset()               { *m = WantIgmpEventsReply{} }
-func (*WantIgmpEventsReply) GetMessageName() string { return "want_igmp_events_reply" }
-func (*WantIgmpEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantIgmpEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *WantIgmpEventsReply) Reset()                        { *m = WantIgmpEventsReply{} }
+func (*WantIgmpEventsReply) GetMessageName() string          { return "want_igmp_events_reply" }
+func (*WantIgmpEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantIgmpEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantIgmpEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantIgmpEventsReply) Size() (size int) {

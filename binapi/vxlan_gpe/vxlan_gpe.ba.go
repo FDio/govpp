@@ -40,10 +40,8 @@ func (m *SwInterfaceSetVxlanGpeBypass) Reset() { *m = SwInterfaceSetVxlanGpeBypa
 func (*SwInterfaceSetVxlanGpeBypass) GetMessageName() string {
 	return "sw_interface_set_vxlan_gpe_bypass"
 }
-func (*SwInterfaceSetVxlanGpeBypass) GetCrcString() string { return "65247409" }
-func (*SwInterfaceSetVxlanGpeBypass) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (*SwInterfaceSetVxlanGpeBypass) GetCrcString() string            { return "65247409" }
+func (*SwInterfaceSetVxlanGpeBypass) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetVxlanGpeBypass) Size() (size int) {
 	if m == nil {
@@ -83,7 +81,10 @@ func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageName() string {
 }
 func (*SwInterfaceSetVxlanGpeBypassReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *SwInterfaceSetVxlanGpeBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetVxlanGpeBypassReply) Size() (size int) {
@@ -119,12 +120,10 @@ type VxlanGpeAddDelTunnel struct {
 	IsAdd          bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *VxlanGpeAddDelTunnel) Reset()               { *m = VxlanGpeAddDelTunnel{} }
-func (*VxlanGpeAddDelTunnel) GetMessageName() string { return "vxlan_gpe_add_del_tunnel" }
-func (*VxlanGpeAddDelTunnel) GetCrcString() string   { return "a645b2b0" }
-func (*VxlanGpeAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeAddDelTunnel) Reset()                        { *m = VxlanGpeAddDelTunnel{} }
+func (*VxlanGpeAddDelTunnel) GetMessageName() string          { return "vxlan_gpe_add_del_tunnel" }
+func (*VxlanGpeAddDelTunnel) GetCrcString() string            { return "a645b2b0" }
+func (*VxlanGpeAddDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeAddDelTunnel) Size() (size int) {
 	if m == nil {
@@ -180,11 +179,12 @@ type VxlanGpeAddDelTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanGpeAddDelTunnelReply) Reset()               { *m = VxlanGpeAddDelTunnelReply{} }
-func (*VxlanGpeAddDelTunnelReply) GetMessageName() string { return "vxlan_gpe_add_del_tunnel_reply" }
-func (*VxlanGpeAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*VxlanGpeAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeAddDelTunnelReply) Reset()                        { *m = VxlanGpeAddDelTunnelReply{} }
+func (*VxlanGpeAddDelTunnelReply) GetMessageName() string          { return "vxlan_gpe_add_del_tunnel_reply" }
+func (*VxlanGpeAddDelTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*VxlanGpeAddDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeAddDelTunnelReply) Size() (size int) {
@@ -225,12 +225,10 @@ type VxlanGpeAddDelTunnelV2 struct {
 	IsAdd          bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *VxlanGpeAddDelTunnelV2) Reset()               { *m = VxlanGpeAddDelTunnelV2{} }
-func (*VxlanGpeAddDelTunnelV2) GetMessageName() string { return "vxlan_gpe_add_del_tunnel_v2" }
-func (*VxlanGpeAddDelTunnelV2) GetCrcString() string   { return "d62fdb35" }
-func (*VxlanGpeAddDelTunnelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeAddDelTunnelV2) Reset()                        { *m = VxlanGpeAddDelTunnelV2{} }
+func (*VxlanGpeAddDelTunnelV2) GetMessageName() string          { return "vxlan_gpe_add_del_tunnel_v2" }
+func (*VxlanGpeAddDelTunnelV2) GetCrcString() string            { return "d62fdb35" }
+func (*VxlanGpeAddDelTunnelV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeAddDelTunnelV2) Size() (size int) {
 	if m == nil {
@@ -296,9 +294,10 @@ func (m *VxlanGpeAddDelTunnelV2Reply) Reset() { *m = VxlanGpeAddDelTunnelV2Reply
 func (*VxlanGpeAddDelTunnelV2Reply) GetMessageName() string {
 	return "vxlan_gpe_add_del_tunnel_v2_reply"
 }
-func (*VxlanGpeAddDelTunnelV2Reply) GetCrcString() string { return "5383d31f" }
-func (*VxlanGpeAddDelTunnelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*VxlanGpeAddDelTunnelV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*VxlanGpeAddDelTunnelV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeAddDelTunnelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeAddDelTunnelV2Reply) Size() (size int) {
@@ -338,11 +337,12 @@ type VxlanGpeTunnelDetails struct {
 	IsIPv6         bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
-func (m *VxlanGpeTunnelDetails) Reset()               { *m = VxlanGpeTunnelDetails{} }
-func (*VxlanGpeTunnelDetails) GetMessageName() string { return "vxlan_gpe_tunnel_details" }
-func (*VxlanGpeTunnelDetails) GetCrcString() string   { return "0968fc8b" }
-func (*VxlanGpeTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeTunnelDetails) Reset()                        { *m = VxlanGpeTunnelDetails{} }
+func (*VxlanGpeTunnelDetails) GetMessageName() string          { return "vxlan_gpe_tunnel_details" }
+func (*VxlanGpeTunnelDetails) GetCrcString() string            { return "0968fc8b" }
+func (*VxlanGpeTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanGpeTunnelDetails) Size() (size int) {
@@ -401,12 +401,10 @@ type VxlanGpeTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanGpeTunnelDump) Reset()               { *m = VxlanGpeTunnelDump{} }
-func (*VxlanGpeTunnelDump) GetMessageName() string { return "vxlan_gpe_tunnel_dump" }
-func (*VxlanGpeTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*VxlanGpeTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeTunnelDump) Reset()                        { *m = VxlanGpeTunnelDump{} }
+func (*VxlanGpeTunnelDump) GetMessageName() string          { return "vxlan_gpe_tunnel_dump" }
+func (*VxlanGpeTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*VxlanGpeTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeTunnelDump) Size() (size int) {
 	if m == nil {
@@ -444,11 +442,12 @@ type VxlanGpeTunnelV2Details struct {
 	IsIPv6         bool                           `binapi:"bool,name=is_ipv6" json:"is_ipv6,omitempty"`
 }
 
-func (m *VxlanGpeTunnelV2Details) Reset()               { *m = VxlanGpeTunnelV2Details{} }
-func (*VxlanGpeTunnelV2Details) GetMessageName() string { return "vxlan_gpe_tunnel_v2_details" }
-func (*VxlanGpeTunnelV2Details) GetCrcString() string   { return "06be4870" }
-func (*VxlanGpeTunnelV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *VxlanGpeTunnelV2Details) Reset()                        { *m = VxlanGpeTunnelV2Details{} }
+func (*VxlanGpeTunnelV2Details) GetMessageName() string          { return "vxlan_gpe_tunnel_v2_details" }
+func (*VxlanGpeTunnelV2Details) GetCrcString() string            { return "06be4870" }
+func (*VxlanGpeTunnelV2Details) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VxlanGpeTunnelV2Details) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanGpeTunnelV2Details) Size() (size int) {
@@ -513,12 +512,10 @@ type VxlanGpeTunnelV2Dump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VxlanGpeTunnelV2Dump) Reset()               { *m = VxlanGpeTunnelV2Dump{} }
-func (*VxlanGpeTunnelV2Dump) GetMessageName() string { return "vxlan_gpe_tunnel_v2_dump" }
-func (*VxlanGpeTunnelV2Dump) GetCrcString() string   { return "f9e6675e" }
-func (*VxlanGpeTunnelV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *VxlanGpeTunnelV2Dump) Reset()                        { *m = VxlanGpeTunnelV2Dump{} }
+func (*VxlanGpeTunnelV2Dump) GetMessageName() string          { return "vxlan_gpe_tunnel_v2_dump" }
+func (*VxlanGpeTunnelV2Dump) GetCrcString() string            { return "f9e6675e" }
+func (*VxlanGpeTunnelV2Dump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VxlanGpeTunnelV2Dump) Size() (size int) {
 	if m == nil {

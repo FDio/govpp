@@ -114,11 +114,12 @@ type SwInterfaceTapV2Details struct {
 	HostBridge    string                        `binapi:"string[64],name=host_bridge" json:"host_bridge,omitempty"`
 }
 
-func (m *SwInterfaceTapV2Details) Reset()               { *m = SwInterfaceTapV2Details{} }
-func (*SwInterfaceTapV2Details) GetMessageName() string { return "sw_interface_tap_v2_details" }
-func (*SwInterfaceTapV2Details) GetCrcString() string   { return "1e2b2a47" }
-func (*SwInterfaceTapV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SwInterfaceTapV2Details) Reset()                        { *m = SwInterfaceTapV2Details{} }
+func (*SwInterfaceTapV2Details) GetMessageName() string          { return "sw_interface_tap_v2_details" }
+func (*SwInterfaceTapV2Details) GetCrcString() string            { return "1e2b2a47" }
+func (*SwInterfaceTapV2Details) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceTapV2Details) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceTapV2Details) Size() (size int) {
@@ -189,12 +190,10 @@ type SwInterfaceTapV2Dump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwInterfaceTapV2Dump) Reset()               { *m = SwInterfaceTapV2Dump{} }
-func (*SwInterfaceTapV2Dump) GetMessageName() string { return "sw_interface_tap_v2_dump" }
-func (*SwInterfaceTapV2Dump) GetCrcString() string   { return "f9e6675e" }
-func (*SwInterfaceTapV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceTapV2Dump) Reset()                        { *m = SwInterfaceTapV2Dump{} }
+func (*SwInterfaceTapV2Dump) GetMessageName() string          { return "sw_interface_tap_v2_dump" }
+func (*SwInterfaceTapV2Dump) GetCrcString() string            { return "f9e6675e" }
+func (*SwInterfaceTapV2Dump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceTapV2Dump) Size() (size int) {
 	if m == nil {
@@ -247,12 +246,10 @@ type TapCreateV2 struct {
 	Tag              string                        `binapi:"string[],name=tag" json:"tag,omitempty"`
 }
 
-func (m *TapCreateV2) Reset()               { *m = TapCreateV2{} }
-func (*TapCreateV2) GetMessageName() string { return "tap_create_v2" }
-func (*TapCreateV2) GetCrcString() string   { return "2d0d6570" }
-func (*TapCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *TapCreateV2) Reset()                        { *m = TapCreateV2{} }
+func (*TapCreateV2) GetMessageName() string          { return "tap_create_v2" }
+func (*TapCreateV2) GetCrcString() string            { return "2d0d6570" }
+func (*TapCreateV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TapCreateV2) Size() (size int) {
 	if m == nil {
@@ -362,11 +359,12 @@ type TapCreateV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *TapCreateV2Reply) Reset()               { *m = TapCreateV2Reply{} }
-func (*TapCreateV2Reply) GetMessageName() string { return "tap_create_v2_reply" }
-func (*TapCreateV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*TapCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *TapCreateV2Reply) Reset()                        { *m = TapCreateV2Reply{} }
+func (*TapCreateV2Reply) GetMessageName() string          { return "tap_create_v2_reply" }
+func (*TapCreateV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*TapCreateV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TapCreateV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TapCreateV2Reply) Size() (size int) {
@@ -424,12 +422,10 @@ type TapCreateV3 struct {
 	Tag              string                        `binapi:"string[],name=tag" json:"tag,omitempty"`
 }
 
-func (m *TapCreateV3) Reset()               { *m = TapCreateV3{} }
-func (*TapCreateV3) GetMessageName() string { return "tap_create_v3" }
-func (*TapCreateV3) GetCrcString() string   { return "3f3fd1df" }
-func (*TapCreateV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *TapCreateV3) Reset()                        { *m = TapCreateV3{} }
+func (*TapCreateV3) GetMessageName() string          { return "tap_create_v3" }
+func (*TapCreateV3) GetCrcString() string            { return "3f3fd1df" }
+func (*TapCreateV3) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TapCreateV3) Size() (size int) {
 	if m == nil {
@@ -542,11 +538,12 @@ type TapCreateV3Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *TapCreateV3Reply) Reset()               { *m = TapCreateV3Reply{} }
-func (*TapCreateV3Reply) GetMessageName() string { return "tap_create_v3_reply" }
-func (*TapCreateV3Reply) GetCrcString() string   { return "5383d31f" }
-func (*TapCreateV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *TapCreateV3Reply) Reset()                        { *m = TapCreateV3Reply{} }
+func (*TapCreateV3Reply) GetMessageName() string          { return "tap_create_v3_reply" }
+func (*TapCreateV3Reply) GetCrcString() string            { return "5383d31f" }
+func (*TapCreateV3Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TapCreateV3Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TapCreateV3Reply) Size() (size int) {
@@ -578,12 +575,10 @@ type TapDeleteV2 struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *TapDeleteV2) Reset()               { *m = TapDeleteV2{} }
-func (*TapDeleteV2) GetMessageName() string { return "tap_delete_v2" }
-func (*TapDeleteV2) GetCrcString() string   { return "f9e6675e" }
-func (*TapDeleteV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *TapDeleteV2) Reset()                        { *m = TapDeleteV2{} }
+func (*TapDeleteV2) GetMessageName() string          { return "tap_delete_v2" }
+func (*TapDeleteV2) GetCrcString() string            { return "f9e6675e" }
+func (*TapDeleteV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TapDeleteV2) Size() (size int) {
 	if m == nil {
@@ -611,11 +606,12 @@ type TapDeleteV2Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *TapDeleteV2Reply) Reset()               { *m = TapDeleteV2Reply{} }
-func (*TapDeleteV2Reply) GetMessageName() string { return "tap_delete_v2_reply" }
-func (*TapDeleteV2Reply) GetCrcString() string   { return "e8d4e804" }
-func (*TapDeleteV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *TapDeleteV2Reply) Reset()                        { *m = TapDeleteV2Reply{} }
+func (*TapDeleteV2Reply) GetMessageName() string          { return "tap_delete_v2_reply" }
+func (*TapDeleteV2Reply) GetCrcString() string            { return "e8d4e804" }
+func (*TapDeleteV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TapDeleteV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TapDeleteV2Reply) Size() (size int) {

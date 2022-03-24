@@ -61,12 +61,10 @@ func (x LcpItfHostType) String() string {
 // LcpDefaultNsGet defines message 'lcp_default_ns_get'.
 type LcpDefaultNsGet struct{}
 
-func (m *LcpDefaultNsGet) Reset()               { *m = LcpDefaultNsGet{} }
-func (*LcpDefaultNsGet) GetMessageName() string { return "lcp_default_ns_get" }
-func (*LcpDefaultNsGet) GetCrcString() string   { return "51077d14" }
-func (*LcpDefaultNsGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpDefaultNsGet) Reset()                        { *m = LcpDefaultNsGet{} }
+func (*LcpDefaultNsGet) GetMessageName() string          { return "lcp_default_ns_get" }
+func (*LcpDefaultNsGet) GetCrcString() string            { return "51077d14" }
+func (*LcpDefaultNsGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpDefaultNsGet) Size() (size int) {
 	if m == nil {
@@ -90,11 +88,12 @@ type LcpDefaultNsGetReply struct {
 	Namespace string `binapi:"string[32],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *LcpDefaultNsGetReply) Reset()               { *m = LcpDefaultNsGetReply{} }
-func (*LcpDefaultNsGetReply) GetMessageName() string { return "lcp_default_ns_get_reply" }
-func (*LcpDefaultNsGetReply) GetCrcString() string   { return "eaeef6d3" }
-func (*LcpDefaultNsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpDefaultNsGetReply) Reset()                        { *m = LcpDefaultNsGetReply{} }
+func (*LcpDefaultNsGetReply) GetMessageName() string          { return "lcp_default_ns_get_reply" }
+func (*LcpDefaultNsGetReply) GetCrcString() string            { return "eaeef6d3" }
+func (*LcpDefaultNsGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpDefaultNsGetReply) GetRetVal() error {
+	return nil
 }
 
 func (m *LcpDefaultNsGetReply) Size() (size int) {
@@ -123,12 +122,10 @@ type LcpDefaultNsSet struct {
 	Namespace string `binapi:"string[32],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *LcpDefaultNsSet) Reset()               { *m = LcpDefaultNsSet{} }
-func (*LcpDefaultNsSet) GetMessageName() string { return "lcp_default_ns_set" }
-func (*LcpDefaultNsSet) GetCrcString() string   { return "b561a74a" }
-func (*LcpDefaultNsSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpDefaultNsSet) Reset()                        { *m = LcpDefaultNsSet{} }
+func (*LcpDefaultNsSet) GetMessageName() string          { return "lcp_default_ns_set" }
+func (*LcpDefaultNsSet) GetCrcString() string            { return "b561a74a" }
+func (*LcpDefaultNsSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpDefaultNsSet) Size() (size int) {
 	if m == nil {
@@ -156,11 +153,12 @@ type LcpDefaultNsSetReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LcpDefaultNsSetReply) Reset()               { *m = LcpDefaultNsSetReply{} }
-func (*LcpDefaultNsSetReply) GetMessageName() string { return "lcp_default_ns_set_reply" }
-func (*LcpDefaultNsSetReply) GetCrcString() string   { return "e8d4e804" }
-func (*LcpDefaultNsSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpDefaultNsSetReply) Reset()                        { *m = LcpDefaultNsSetReply{} }
+func (*LcpDefaultNsSetReply) GetMessageName() string          { return "lcp_default_ns_set_reply" }
+func (*LcpDefaultNsSetReply) GetCrcString() string            { return "e8d4e804" }
+func (*LcpDefaultNsSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpDefaultNsSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpDefaultNsSetReply) Size() (size int) {
@@ -193,12 +191,10 @@ type LcpItfPairAddDel struct {
 	Namespace  string                         `binapi:"string[32],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *LcpItfPairAddDel) Reset()               { *m = LcpItfPairAddDel{} }
-func (*LcpItfPairAddDel) GetMessageName() string { return "lcp_itf_pair_add_del" }
-func (*LcpItfPairAddDel) GetCrcString() string   { return "f3157f59" }
-func (*LcpItfPairAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpItfPairAddDel) Reset()                        { *m = LcpItfPairAddDel{} }
+func (*LcpItfPairAddDel) GetMessageName() string          { return "lcp_itf_pair_add_del" }
+func (*LcpItfPairAddDel) GetCrcString() string            { return "f3157f59" }
+func (*LcpItfPairAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpItfPairAddDel) Size() (size int) {
 	if m == nil {
@@ -238,11 +234,12 @@ type LcpItfPairAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LcpItfPairAddDelReply) Reset()               { *m = LcpItfPairAddDelReply{} }
-func (*LcpItfPairAddDelReply) GetMessageName() string { return "lcp_itf_pair_add_del_reply" }
-func (*LcpItfPairAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*LcpItfPairAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpItfPairAddDelReply) Reset()                        { *m = LcpItfPairAddDelReply{} }
+func (*LcpItfPairAddDelReply) GetMessageName() string          { return "lcp_itf_pair_add_del_reply" }
+func (*LcpItfPairAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*LcpItfPairAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairAddDelReply) Size() (size int) {
@@ -275,12 +272,10 @@ type LcpItfPairAddDelV2 struct {
 	Namespace  string                         `binapi:"string[32],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *LcpItfPairAddDelV2) Reset()               { *m = LcpItfPairAddDelV2{} }
-func (*LcpItfPairAddDelV2) GetMessageName() string { return "lcp_itf_pair_add_del_v2" }
-func (*LcpItfPairAddDelV2) GetCrcString() string   { return "f3157f59" }
-func (*LcpItfPairAddDelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpItfPairAddDelV2) Reset()                        { *m = LcpItfPairAddDelV2{} }
+func (*LcpItfPairAddDelV2) GetMessageName() string          { return "lcp_itf_pair_add_del_v2" }
+func (*LcpItfPairAddDelV2) GetCrcString() string            { return "f3157f59" }
+func (*LcpItfPairAddDelV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpItfPairAddDelV2) Size() (size int) {
 	if m == nil {
@@ -321,11 +316,12 @@ type LcpItfPairAddDelV2Reply struct {
 	HostSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=host_sw_if_index" json:"host_sw_if_index,omitempty"`
 }
 
-func (m *LcpItfPairAddDelV2Reply) Reset()               { *m = LcpItfPairAddDelV2Reply{} }
-func (*LcpItfPairAddDelV2Reply) GetMessageName() string { return "lcp_itf_pair_add_del_v2_reply" }
-func (*LcpItfPairAddDelV2Reply) GetCrcString() string   { return "39452f52" }
-func (*LcpItfPairAddDelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpItfPairAddDelV2Reply) Reset()                        { *m = LcpItfPairAddDelV2Reply{} }
+func (*LcpItfPairAddDelV2Reply) GetMessageName() string          { return "lcp_itf_pair_add_del_v2_reply" }
+func (*LcpItfPairAddDelV2Reply) GetCrcString() string            { return "39452f52" }
+func (*LcpItfPairAddDelV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairAddDelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairAddDelV2Reply) Size() (size int) {
@@ -362,11 +358,12 @@ type LcpItfPairDetails struct {
 	Namespace     string                         `binapi:"string[32],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *LcpItfPairDetails) Reset()               { *m = LcpItfPairDetails{} }
-func (*LcpItfPairDetails) GetMessageName() string { return "lcp_itf_pair_details" }
-func (*LcpItfPairDetails) GetCrcString() string   { return "5a95842f" }
-func (*LcpItfPairDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpItfPairDetails) Reset()                        { *m = LcpItfPairDetails{} }
+func (*LcpItfPairDetails) GetMessageName() string          { return "lcp_itf_pair_details" }
+func (*LcpItfPairDetails) GetCrcString() string            { return "5a95842f" }
+func (*LcpItfPairDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LcpItfPairDetails) Size() (size int) {
@@ -410,12 +407,10 @@ type LcpItfPairGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *LcpItfPairGet) Reset()               { *m = LcpItfPairGet{} }
-func (*LcpItfPairGet) GetMessageName() string { return "lcp_itf_pair_get" }
-func (*LcpItfPairGet) GetCrcString() string   { return "f75ba505" }
-func (*LcpItfPairGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpItfPairGet) Reset()                        { *m = LcpItfPairGet{} }
+func (*LcpItfPairGet) GetMessageName() string          { return "lcp_itf_pair_get" }
+func (*LcpItfPairGet) GetCrcString() string            { return "f75ba505" }
+func (*LcpItfPairGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpItfPairGet) Size() (size int) {
 	if m == nil {
@@ -444,11 +439,12 @@ type LcpItfPairGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *LcpItfPairGetReply) Reset()               { *m = LcpItfPairGetReply{} }
-func (*LcpItfPairGetReply) GetMessageName() string { return "lcp_itf_pair_get_reply" }
-func (*LcpItfPairGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*LcpItfPairGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpItfPairGetReply) Reset()                        { *m = LcpItfPairGetReply{} }
+func (*LcpItfPairGetReply) GetMessageName() string          { return "lcp_itf_pair_get_reply" }
+func (*LcpItfPairGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*LcpItfPairGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairGetReply) Size() (size int) {
@@ -478,12 +474,10 @@ func (m *LcpItfPairGetReply) Unmarshal(b []byte) error {
 // LcpItfPairReplaceBegin defines message 'lcp_itf_pair_replace_begin'.
 type LcpItfPairReplaceBegin struct{}
 
-func (m *LcpItfPairReplaceBegin) Reset()               { *m = LcpItfPairReplaceBegin{} }
-func (*LcpItfPairReplaceBegin) GetMessageName() string { return "lcp_itf_pair_replace_begin" }
-func (*LcpItfPairReplaceBegin) GetCrcString() string   { return "51077d14" }
-func (*LcpItfPairReplaceBegin) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpItfPairReplaceBegin) Reset()                        { *m = LcpItfPairReplaceBegin{} }
+func (*LcpItfPairReplaceBegin) GetMessageName() string          { return "lcp_itf_pair_replace_begin" }
+func (*LcpItfPairReplaceBegin) GetCrcString() string            { return "51077d14" }
+func (*LcpItfPairReplaceBegin) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpItfPairReplaceBegin) Size() (size int) {
 	if m == nil {
@@ -511,9 +505,10 @@ func (m *LcpItfPairReplaceBeginReply) Reset() { *m = LcpItfPairReplaceBeginReply
 func (*LcpItfPairReplaceBeginReply) GetMessageName() string {
 	return "lcp_itf_pair_replace_begin_reply"
 }
-func (*LcpItfPairReplaceBeginReply) GetCrcString() string { return "e8d4e804" }
-func (*LcpItfPairReplaceBeginReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*LcpItfPairReplaceBeginReply) GetCrcString() string            { return "e8d4e804" }
+func (*LcpItfPairReplaceBeginReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairReplaceBeginReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairReplaceBeginReply) Size() (size int) {
@@ -540,12 +535,10 @@ func (m *LcpItfPairReplaceBeginReply) Unmarshal(b []byte) error {
 // LcpItfPairReplaceEnd defines message 'lcp_itf_pair_replace_end'.
 type LcpItfPairReplaceEnd struct{}
 
-func (m *LcpItfPairReplaceEnd) Reset()               { *m = LcpItfPairReplaceEnd{} }
-func (*LcpItfPairReplaceEnd) GetMessageName() string { return "lcp_itf_pair_replace_end" }
-func (*LcpItfPairReplaceEnd) GetCrcString() string   { return "51077d14" }
-func (*LcpItfPairReplaceEnd) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LcpItfPairReplaceEnd) Reset()                        { *m = LcpItfPairReplaceEnd{} }
+func (*LcpItfPairReplaceEnd) GetMessageName() string          { return "lcp_itf_pair_replace_end" }
+func (*LcpItfPairReplaceEnd) GetCrcString() string            { return "51077d14" }
+func (*LcpItfPairReplaceEnd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LcpItfPairReplaceEnd) Size() (size int) {
 	if m == nil {
@@ -569,11 +562,12 @@ type LcpItfPairReplaceEndReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LcpItfPairReplaceEndReply) Reset()               { *m = LcpItfPairReplaceEndReply{} }
-func (*LcpItfPairReplaceEndReply) GetMessageName() string { return "lcp_itf_pair_replace_end_reply" }
-func (*LcpItfPairReplaceEndReply) GetCrcString() string   { return "e8d4e804" }
-func (*LcpItfPairReplaceEndReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LcpItfPairReplaceEndReply) Reset()                        { *m = LcpItfPairReplaceEndReply{} }
+func (*LcpItfPairReplaceEndReply) GetMessageName() string          { return "lcp_itf_pair_replace_end_reply" }
+func (*LcpItfPairReplaceEndReply) GetCrcString() string            { return "e8d4e804" }
+func (*LcpItfPairReplaceEndReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LcpItfPairReplaceEndReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairReplaceEndReply) Size() (size int) {

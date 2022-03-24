@@ -248,12 +248,10 @@ type CnatTranslation struct {
 // InProgress: the message form may change in the future versions
 type CnatGetSnatAddresses struct{}
 
-func (m *CnatGetSnatAddresses) Reset()               { *m = CnatGetSnatAddresses{} }
-func (*CnatGetSnatAddresses) GetMessageName() string { return "cnat_get_snat_addresses" }
-func (*CnatGetSnatAddresses) GetCrcString() string   { return "51077d14" }
-func (*CnatGetSnatAddresses) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatGetSnatAddresses) Reset()                        { *m = CnatGetSnatAddresses{} }
+func (*CnatGetSnatAddresses) GetMessageName() string          { return "cnat_get_snat_addresses" }
+func (*CnatGetSnatAddresses) GetCrcString() string            { return "51077d14" }
+func (*CnatGetSnatAddresses) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatGetSnatAddresses) Size() (size int) {
 	if m == nil {
@@ -282,11 +280,12 @@ type CnatGetSnatAddressesReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *CnatGetSnatAddressesReply) Reset()               { *m = CnatGetSnatAddressesReply{} }
-func (*CnatGetSnatAddressesReply) GetMessageName() string { return "cnat_get_snat_addresses_reply" }
-func (*CnatGetSnatAddressesReply) GetCrcString() string   { return "879513c1" }
-func (*CnatGetSnatAddressesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatGetSnatAddressesReply) Reset()                        { *m = CnatGetSnatAddressesReply{} }
+func (*CnatGetSnatAddressesReply) GetMessageName() string          { return "cnat_get_snat_addresses_reply" }
+func (*CnatGetSnatAddressesReply) GetCrcString() string            { return "879513c1" }
+func (*CnatGetSnatAddressesReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatGetSnatAddressesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatGetSnatAddressesReply) Size() (size int) {
@@ -328,11 +327,12 @@ type CnatSessionDetails struct {
 	Session CnatSession `binapi:"cnat_session,name=session" json:"session,omitempty"`
 }
 
-func (m *CnatSessionDetails) Reset()               { *m = CnatSessionDetails{} }
-func (*CnatSessionDetails) GetMessageName() string { return "cnat_session_details" }
-func (*CnatSessionDetails) GetCrcString() string   { return "7e5017c7" }
-func (*CnatSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatSessionDetails) Reset()                        { *m = CnatSessionDetails{} }
+func (*CnatSessionDetails) GetMessageName() string          { return "cnat_session_details" }
+func (*CnatSessionDetails) GetCrcString() string            { return "7e5017c7" }
+func (*CnatSessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *CnatSessionDetails) Size() (size int) {
@@ -411,12 +411,10 @@ func (m *CnatSessionDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type CnatSessionDump struct{}
 
-func (m *CnatSessionDump) Reset()               { *m = CnatSessionDump{} }
-func (*CnatSessionDump) GetMessageName() string { return "cnat_session_dump" }
-func (*CnatSessionDump) GetCrcString() string   { return "51077d14" }
-func (*CnatSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatSessionDump) Reset()                        { *m = CnatSessionDump{} }
+func (*CnatSessionDump) GetMessageName() string          { return "cnat_session_dump" }
+func (*CnatSessionDump) GetCrcString() string            { return "51077d14" }
+func (*CnatSessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatSessionDump) Size() (size int) {
 	if m == nil {
@@ -439,12 +437,10 @@ func (m *CnatSessionDump) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type CnatSessionPurge struct{}
 
-func (m *CnatSessionPurge) Reset()               { *m = CnatSessionPurge{} }
-func (*CnatSessionPurge) GetMessageName() string { return "cnat_session_purge" }
-func (*CnatSessionPurge) GetCrcString() string   { return "51077d14" }
-func (*CnatSessionPurge) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatSessionPurge) Reset()                        { *m = CnatSessionPurge{} }
+func (*CnatSessionPurge) GetMessageName() string          { return "cnat_session_purge" }
+func (*CnatSessionPurge) GetCrcString() string            { return "51077d14" }
+func (*CnatSessionPurge) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatSessionPurge) Size() (size int) {
 	if m == nil {
@@ -469,11 +465,12 @@ type CnatSessionPurgeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CnatSessionPurgeReply) Reset()               { *m = CnatSessionPurgeReply{} }
-func (*CnatSessionPurgeReply) GetMessageName() string { return "cnat_session_purge_reply" }
-func (*CnatSessionPurgeReply) GetCrcString() string   { return "e8d4e804" }
-func (*CnatSessionPurgeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatSessionPurgeReply) Reset()                        { *m = CnatSessionPurgeReply{} }
+func (*CnatSessionPurgeReply) GetMessageName() string          { return "cnat_session_purge_reply" }
+func (*CnatSessionPurgeReply) GetCrcString() string            { return "e8d4e804" }
+func (*CnatSessionPurgeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatSessionPurgeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatSessionPurgeReply) Size() (size int) {
@@ -505,12 +502,10 @@ type CnatSetSnatAddresses struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *CnatSetSnatAddresses) Reset()               { *m = CnatSetSnatAddresses{} }
-func (*CnatSetSnatAddresses) GetMessageName() string { return "cnat_set_snat_addresses" }
-func (*CnatSetSnatAddresses) GetCrcString() string   { return "d997e96c" }
-func (*CnatSetSnatAddresses) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatSetSnatAddresses) Reset()                        { *m = CnatSetSnatAddresses{} }
+func (*CnatSetSnatAddresses) GetMessageName() string          { return "cnat_set_snat_addresses" }
+func (*CnatSetSnatAddresses) GetCrcString() string            { return "d997e96c" }
+func (*CnatSetSnatAddresses) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatSetSnatAddresses) Size() (size int) {
 	if m == nil {
@@ -545,11 +540,12 @@ type CnatSetSnatAddressesReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CnatSetSnatAddressesReply) Reset()               { *m = CnatSetSnatAddressesReply{} }
-func (*CnatSetSnatAddressesReply) GetMessageName() string { return "cnat_set_snat_addresses_reply" }
-func (*CnatSetSnatAddressesReply) GetCrcString() string   { return "e8d4e804" }
-func (*CnatSetSnatAddressesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatSetSnatAddressesReply) Reset()                        { *m = CnatSetSnatAddressesReply{} }
+func (*CnatSetSnatAddressesReply) GetMessageName() string          { return "cnat_set_snat_addresses_reply" }
+func (*CnatSetSnatAddressesReply) GetCrcString() string            { return "e8d4e804" }
+func (*CnatSetSnatAddressesReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatSetSnatAddressesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatSetSnatAddressesReply) Size() (size int) {
@@ -579,12 +575,10 @@ type CnatSetSnatPolicy struct {
 	Policy CnatSnatPolicies `binapi:"cnat_snat_policies,name=policy" json:"policy,omitempty"`
 }
 
-func (m *CnatSetSnatPolicy) Reset()               { *m = CnatSetSnatPolicy{} }
-func (*CnatSetSnatPolicy) GetMessageName() string { return "cnat_set_snat_policy" }
-func (*CnatSetSnatPolicy) GetCrcString() string   { return "d3e6eaf4" }
-func (*CnatSetSnatPolicy) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatSetSnatPolicy) Reset()                        { *m = CnatSetSnatPolicy{} }
+func (*CnatSetSnatPolicy) GetMessageName() string          { return "cnat_set_snat_policy" }
+func (*CnatSetSnatPolicy) GetCrcString() string            { return "d3e6eaf4" }
+func (*CnatSetSnatPolicy) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatSetSnatPolicy) Size() (size int) {
 	if m == nil {
@@ -613,11 +607,12 @@ type CnatSetSnatPolicyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CnatSetSnatPolicyReply) Reset()               { *m = CnatSetSnatPolicyReply{} }
-func (*CnatSetSnatPolicyReply) GetMessageName() string { return "cnat_set_snat_policy_reply" }
-func (*CnatSetSnatPolicyReply) GetCrcString() string   { return "e8d4e804" }
-func (*CnatSetSnatPolicyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatSetSnatPolicyReply) Reset()                        { *m = CnatSetSnatPolicyReply{} }
+func (*CnatSetSnatPolicyReply) GetMessageName() string          { return "cnat_set_snat_policy_reply" }
+func (*CnatSetSnatPolicyReply) GetCrcString() string            { return "e8d4e804" }
+func (*CnatSetSnatPolicyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatSetSnatPolicyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatSetSnatPolicyReply) Size() (size int) {
@@ -654,7 +649,7 @@ func (*CnatSnatPolicyAddDelExcludePfx) GetMessageName() string {
 }
 func (*CnatSnatPolicyAddDelExcludePfx) GetCrcString() string { return "e26dd79a" }
 func (*CnatSnatPolicyAddDelExcludePfx) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CnatSnatPolicyAddDelExcludePfx) Size() (size int) {
@@ -699,7 +694,10 @@ func (*CnatSnatPolicyAddDelExcludePfxReply) GetMessageName() string {
 }
 func (*CnatSnatPolicyAddDelExcludePfxReply) GetCrcString() string { return "e8d4e804" }
 func (*CnatSnatPolicyAddDelExcludePfxReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *CnatSnatPolicyAddDelExcludePfxReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatSnatPolicyAddDelExcludePfxReply) Size() (size int) {
@@ -731,12 +729,10 @@ type CnatSnatPolicyAddDelIf struct {
 	Table     CnatSnatPolicyTable            `binapi:"cnat_snat_policy_table,name=table" json:"table,omitempty"`
 }
 
-func (m *CnatSnatPolicyAddDelIf) Reset()               { *m = CnatSnatPolicyAddDelIf{} }
-func (*CnatSnatPolicyAddDelIf) GetMessageName() string { return "cnat_snat_policy_add_del_if" }
-func (*CnatSnatPolicyAddDelIf) GetCrcString() string   { return "6828deca" }
-func (*CnatSnatPolicyAddDelIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatSnatPolicyAddDelIf) Reset()                        { *m = CnatSnatPolicyAddDelIf{} }
+func (*CnatSnatPolicyAddDelIf) GetMessageName() string          { return "cnat_snat_policy_add_del_if" }
+func (*CnatSnatPolicyAddDelIf) GetCrcString() string            { return "6828deca" }
+func (*CnatSnatPolicyAddDelIf) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatSnatPolicyAddDelIf) Size() (size int) {
 	if m == nil {
@@ -775,9 +771,10 @@ func (m *CnatSnatPolicyAddDelIfReply) Reset() { *m = CnatSnatPolicyAddDelIfReply
 func (*CnatSnatPolicyAddDelIfReply) GetMessageName() string {
 	return "cnat_snat_policy_add_del_if_reply"
 }
-func (*CnatSnatPolicyAddDelIfReply) GetCrcString() string { return "e8d4e804" }
-func (*CnatSnatPolicyAddDelIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*CnatSnatPolicyAddDelIfReply) GetCrcString() string            { return "e8d4e804" }
+func (*CnatSnatPolicyAddDelIfReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatSnatPolicyAddDelIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatSnatPolicyAddDelIfReply) Size() (size int) {
@@ -807,12 +804,10 @@ type CnatTranslationDel struct {
 	ID uint32 `binapi:"u32,name=id" json:"id,omitempty"`
 }
 
-func (m *CnatTranslationDel) Reset()               { *m = CnatTranslationDel{} }
-func (*CnatTranslationDel) GetMessageName() string { return "cnat_translation_del" }
-func (*CnatTranslationDel) GetCrcString() string   { return "3a91bde5" }
-func (*CnatTranslationDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatTranslationDel) Reset()                        { *m = CnatTranslationDel{} }
+func (*CnatTranslationDel) GetMessageName() string          { return "cnat_translation_del" }
+func (*CnatTranslationDel) GetCrcString() string            { return "3a91bde5" }
+func (*CnatTranslationDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatTranslationDel) Size() (size int) {
 	if m == nil {
@@ -841,11 +836,12 @@ type CnatTranslationDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CnatTranslationDelReply) Reset()               { *m = CnatTranslationDelReply{} }
-func (*CnatTranslationDelReply) GetMessageName() string { return "cnat_translation_del_reply" }
-func (*CnatTranslationDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*CnatTranslationDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatTranslationDelReply) Reset()                        { *m = CnatTranslationDelReply{} }
+func (*CnatTranslationDelReply) GetMessageName() string          { return "cnat_translation_del_reply" }
+func (*CnatTranslationDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*CnatTranslationDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatTranslationDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatTranslationDelReply) Size() (size int) {
@@ -875,11 +871,12 @@ type CnatTranslationDetails struct {
 	Translation CnatTranslation `binapi:"cnat_translation,name=translation" json:"translation,omitempty"`
 }
 
-func (m *CnatTranslationDetails) Reset()               { *m = CnatTranslationDetails{} }
-func (*CnatTranslationDetails) GetMessageName() string { return "cnat_translation_details" }
-func (*CnatTranslationDetails) GetCrcString() string   { return "347e1f16" }
-func (*CnatTranslationDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatTranslationDetails) Reset()                        { *m = CnatTranslationDetails{} }
+func (*CnatTranslationDetails) GetMessageName() string          { return "cnat_translation_details" }
+func (*CnatTranslationDetails) GetCrcString() string            { return "347e1f16" }
+func (*CnatTranslationDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatTranslationDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *CnatTranslationDetails) Size() (size int) {
@@ -986,12 +983,10 @@ func (m *CnatTranslationDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type CnatTranslationDump struct{}
 
-func (m *CnatTranslationDump) Reset()               { *m = CnatTranslationDump{} }
-func (*CnatTranslationDump) GetMessageName() string { return "cnat_translation_dump" }
-func (*CnatTranslationDump) GetCrcString() string   { return "51077d14" }
-func (*CnatTranslationDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatTranslationDump) Reset()                        { *m = CnatTranslationDump{} }
+func (*CnatTranslationDump) GetMessageName() string          { return "cnat_translation_dump" }
+func (*CnatTranslationDump) GetCrcString() string            { return "51077d14" }
+func (*CnatTranslationDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatTranslationDump) Size() (size int) {
 	if m == nil {
@@ -1016,12 +1011,10 @@ type CnatTranslationUpdate struct {
 	Translation CnatTranslation `binapi:"cnat_translation,name=translation" json:"translation,omitempty"`
 }
 
-func (m *CnatTranslationUpdate) Reset()               { *m = CnatTranslationUpdate{} }
-func (*CnatTranslationUpdate) GetMessageName() string { return "cnat_translation_update" }
-func (*CnatTranslationUpdate) GetCrcString() string   { return "cd5aedf5" }
-func (*CnatTranslationUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *CnatTranslationUpdate) Reset()                        { *m = CnatTranslationUpdate{} }
+func (*CnatTranslationUpdate) GetMessageName() string          { return "cnat_translation_update" }
+func (*CnatTranslationUpdate) GetCrcString() string            { return "cd5aedf5" }
+func (*CnatTranslationUpdate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CnatTranslationUpdate) Size() (size int) {
 	if m == nil {
@@ -1130,11 +1123,12 @@ type CnatTranslationUpdateReply struct {
 	ID     uint32 `binapi:"u32,name=id" json:"id,omitempty"`
 }
 
-func (m *CnatTranslationUpdateReply) Reset()               { *m = CnatTranslationUpdateReply{} }
-func (*CnatTranslationUpdateReply) GetMessageName() string { return "cnat_translation_update_reply" }
-func (*CnatTranslationUpdateReply) GetCrcString() string   { return "e2fc8294" }
-func (*CnatTranslationUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *CnatTranslationUpdateReply) Reset()                        { *m = CnatTranslationUpdateReply{} }
+func (*CnatTranslationUpdateReply) GetMessageName() string          { return "cnat_translation_update_reply" }
+func (*CnatTranslationUpdateReply) GetCrcString() string            { return "e2fc8294" }
+func (*CnatTranslationUpdateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CnatTranslationUpdateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CnatTranslationUpdateReply) Size() (size int) {

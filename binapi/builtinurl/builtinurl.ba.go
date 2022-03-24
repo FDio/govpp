@@ -30,12 +30,10 @@ const (
 // BuiltinurlEnable defines message 'builtinurl_enable'.
 type BuiltinurlEnable struct{}
 
-func (m *BuiltinurlEnable) Reset()               { *m = BuiltinurlEnable{} }
-func (*BuiltinurlEnable) GetMessageName() string { return "builtinurl_enable" }
-func (*BuiltinurlEnable) GetCrcString() string   { return "51077d14" }
-func (*BuiltinurlEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *BuiltinurlEnable) Reset()                        { *m = BuiltinurlEnable{} }
+func (*BuiltinurlEnable) GetMessageName() string          { return "builtinurl_enable" }
+func (*BuiltinurlEnable) GetCrcString() string            { return "51077d14" }
+func (*BuiltinurlEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BuiltinurlEnable) Size() (size int) {
 	if m == nil {
@@ -59,11 +57,12 @@ type BuiltinurlEnableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BuiltinurlEnableReply) Reset()               { *m = BuiltinurlEnableReply{} }
-func (*BuiltinurlEnableReply) GetMessageName() string { return "builtinurl_enable_reply" }
-func (*BuiltinurlEnableReply) GetCrcString() string   { return "e8d4e804" }
-func (*BuiltinurlEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *BuiltinurlEnableReply) Reset()                        { *m = BuiltinurlEnableReply{} }
+func (*BuiltinurlEnableReply) GetMessageName() string          { return "builtinurl_enable_reply" }
+func (*BuiltinurlEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*BuiltinurlEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BuiltinurlEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BuiltinurlEnableReply) Size() (size int) {

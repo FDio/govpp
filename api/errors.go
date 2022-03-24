@@ -42,7 +42,7 @@ func (e VPPApiError) Error() string {
 
 // definitions from: vpp/src/vnet/api_errno.h
 const (
-	_                                  VPPApiError = 0
+	API_SUCCESS                        VPPApiError = 0
 	UNSPECIFIED                                    = -1
 	INVALID_SW_IF_INDEX                            = -2
 	NO_SUCH_FIB                                    = -3

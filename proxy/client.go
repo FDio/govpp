@@ -190,7 +190,7 @@ func (b *BinapiClient) NewStream(_ context.Context, _ ...api.StreamOption) (api.
 	return stream, err
 }
 
-func (b *BinapiClient) Invoke(_ context.Context, request api.Message, reply api.Message) error {
+func (b *BinapiClient) Invoke(_ context.Context, request api.Message, reply api.ReplyMessage) error {
 	return invokeInternal(b.rpc, request, reply, b.timeout)
 }
 
@@ -210,11 +210,11 @@ type requestCtx struct {
 	timeout time.Duration
 }
 
-func (r *requestCtx) ReceiveReply(msg api.Message) error {
+func (r *requestCtx) ReceiveReply(msg api.ReplyMessage) error {
 	return invokeInternal(r.rpc, r.req, msg, r.timeout)
 }
 
-func invokeInternal(rpc *rpc.Client, msgIn, msgOut api.Message, timeout time.Duration) error {
+func invokeInternal(rpc *rpc.Client, msgIn api.Message, msgOut api.ReplyMessage, timeout time.Duration) error {
 	req := BinapiRequest{
 		Msg:      msgIn,
 		ReplyMsg: msgOut,
@@ -249,10 +249,10 @@ type multiRequestCtx struct {
 	timeout time.Duration
 
 	index   int
-	replies []api.Message
+	replies []api.ReplyMessage
 }
 
-func (r *multiRequestCtx) ReceiveReply(msg api.Message) (stop bool, err error) {
+func (r *multiRequestCtx) ReceiveReply(msg api.ReplyMessage) (stop bool, err error) {
 	// we call Invoke only on first ReceiveReply
 	if r.index == 0 {
 		req := BinapiRequest{

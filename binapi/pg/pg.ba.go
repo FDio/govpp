@@ -69,12 +69,10 @@ type PgCapture struct {
 	PcapFileName string                         `binapi:"string[],name=pcap_file_name" json:"pcap_file_name,omitempty"`
 }
 
-func (m *PgCapture) Reset()               { *m = PgCapture{} }
-func (*PgCapture) GetMessageName() string { return "pg_capture" }
-func (*PgCapture) GetCrcString() string   { return "3712fb6c" }
-func (*PgCapture) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PgCapture) Reset()                        { *m = PgCapture{} }
+func (*PgCapture) GetMessageName() string          { return "pg_capture" }
+func (*PgCapture) GetCrcString() string            { return "3712fb6c" }
+func (*PgCapture) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PgCapture) Size() (size int) {
 	if m == nil {
@@ -111,11 +109,12 @@ type PgCaptureReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PgCaptureReply) Reset()               { *m = PgCaptureReply{} }
-func (*PgCaptureReply) GetMessageName() string { return "pg_capture_reply" }
-func (*PgCaptureReply) GetCrcString() string   { return "e8d4e804" }
-func (*PgCaptureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PgCaptureReply) Reset()                        { *m = PgCaptureReply{} }
+func (*PgCaptureReply) GetMessageName() string          { return "pg_capture_reply" }
+func (*PgCaptureReply) GetCrcString() string            { return "e8d4e804" }
+func (*PgCaptureReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PgCaptureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgCaptureReply) Size() (size int) {
@@ -146,12 +145,10 @@ type PgCreateInterface struct {
 	GsoSize     uint32                         `binapi:"u32,name=gso_size" json:"gso_size,omitempty"`
 }
 
-func (m *PgCreateInterface) Reset()               { *m = PgCreateInterface{} }
-func (*PgCreateInterface) GetMessageName() string { return "pg_create_interface" }
-func (*PgCreateInterface) GetCrcString() string   { return "b7c893d7" }
-func (*PgCreateInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PgCreateInterface) Reset()                        { *m = PgCreateInterface{} }
+func (*PgCreateInterface) GetMessageName() string          { return "pg_create_interface" }
+func (*PgCreateInterface) GetCrcString() string            { return "b7c893d7" }
+func (*PgCreateInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PgCreateInterface) Size() (size int) {
 	if m == nil {
@@ -186,11 +183,12 @@ type PgCreateInterfaceReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PgCreateInterfaceReply) Reset()               { *m = PgCreateInterfaceReply{} }
-func (*PgCreateInterfaceReply) GetMessageName() string { return "pg_create_interface_reply" }
-func (*PgCreateInterfaceReply) GetCrcString() string   { return "5383d31f" }
-func (*PgCreateInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PgCreateInterfaceReply) Reset()                        { *m = PgCreateInterfaceReply{} }
+func (*PgCreateInterfaceReply) GetMessageName() string          { return "pg_create_interface_reply" }
+func (*PgCreateInterfaceReply) GetCrcString() string            { return "5383d31f" }
+func (*PgCreateInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PgCreateInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgCreateInterfaceReply) Size() (size int) {
@@ -225,12 +223,10 @@ type PgCreateInterfaceV2 struct {
 	Mode        PgInterfaceMode                `binapi:"pg_interface_mode,name=mode" json:"mode,omitempty"`
 }
 
-func (m *PgCreateInterfaceV2) Reset()               { *m = PgCreateInterfaceV2{} }
-func (*PgCreateInterfaceV2) GetMessageName() string { return "pg_create_interface_v2" }
-func (*PgCreateInterfaceV2) GetCrcString() string   { return "8657466a" }
-func (*PgCreateInterfaceV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PgCreateInterfaceV2) Reset()                        { *m = PgCreateInterfaceV2{} }
+func (*PgCreateInterfaceV2) GetMessageName() string          { return "pg_create_interface_v2" }
+func (*PgCreateInterfaceV2) GetCrcString() string            { return "8657466a" }
+func (*PgCreateInterfaceV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PgCreateInterfaceV2) Size() (size int) {
 	if m == nil {
@@ -268,11 +264,12 @@ type PgCreateInterfaceV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PgCreateInterfaceV2Reply) Reset()               { *m = PgCreateInterfaceV2Reply{} }
-func (*PgCreateInterfaceV2Reply) GetMessageName() string { return "pg_create_interface_v2_reply" }
-func (*PgCreateInterfaceV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*PgCreateInterfaceV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PgCreateInterfaceV2Reply) Reset()                        { *m = PgCreateInterfaceV2Reply{} }
+func (*PgCreateInterfaceV2Reply) GetMessageName() string          { return "pg_create_interface_v2_reply" }
+func (*PgCreateInterfaceV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*PgCreateInterfaceV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PgCreateInterfaceV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgCreateInterfaceV2Reply) Size() (size int) {
@@ -305,12 +302,10 @@ type PgEnableDisable struct {
 	StreamName string `binapi:"string[],name=stream_name" json:"stream_name,omitempty"`
 }
 
-func (m *PgEnableDisable) Reset()               { *m = PgEnableDisable{} }
-func (*PgEnableDisable) GetMessageName() string { return "pg_enable_disable" }
-func (*PgEnableDisable) GetCrcString() string   { return "01f94f3a" }
-func (*PgEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PgEnableDisable) Reset()                        { *m = PgEnableDisable{} }
+func (*PgEnableDisable) GetMessageName() string          { return "pg_enable_disable" }
+func (*PgEnableDisable) GetCrcString() string            { return "01f94f3a" }
+func (*PgEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PgEnableDisable) Size() (size int) {
 	if m == nil {
@@ -341,11 +336,12 @@ type PgEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PgEnableDisableReply) Reset()               { *m = PgEnableDisableReply{} }
-func (*PgEnableDisableReply) GetMessageName() string { return "pg_enable_disable_reply" }
-func (*PgEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*PgEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PgEnableDisableReply) Reset()                        { *m = PgEnableDisableReply{} }
+func (*PgEnableDisableReply) GetMessageName() string          { return "pg_enable_disable_reply" }
+func (*PgEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*PgEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PgEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgEnableDisableReply) Size() (size int) {
@@ -382,7 +378,7 @@ func (*PgInterfaceEnableDisableCoalesce) GetMessageName() string {
 }
 func (*PgInterfaceEnableDisableCoalesce) GetCrcString() string { return "a2ef99e7" }
 func (*PgInterfaceEnableDisableCoalesce) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PgInterfaceEnableDisableCoalesce) Size() (size int) {
@@ -421,7 +417,10 @@ func (*PgInterfaceEnableDisableCoalesceReply) GetMessageName() string {
 }
 func (*PgInterfaceEnableDisableCoalesceReply) GetCrcString() string { return "e8d4e804" }
 func (*PgInterfaceEnableDisableCoalesceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *PgInterfaceEnableDisableCoalesceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgInterfaceEnableDisableCoalesceReply) Size() (size int) {

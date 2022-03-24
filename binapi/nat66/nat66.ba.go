@@ -37,12 +37,10 @@ type Nat66AddDelInterface struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat66AddDelInterface) Reset()               { *m = Nat66AddDelInterface{} }
-func (*Nat66AddDelInterface) GetMessageName() string { return "nat66_add_del_interface" }
-func (*Nat66AddDelInterface) GetCrcString() string   { return "f3699b83" }
-func (*Nat66AddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat66AddDelInterface) Reset()                        { *m = Nat66AddDelInterface{} }
+func (*Nat66AddDelInterface) GetMessageName() string          { return "nat66_add_del_interface" }
+func (*Nat66AddDelInterface) GetCrcString() string            { return "f3699b83" }
+func (*Nat66AddDelInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat66AddDelInterface) Size() (size int) {
 	if m == nil {
@@ -76,11 +74,12 @@ type Nat66AddDelInterfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat66AddDelInterfaceReply) Reset()               { *m = Nat66AddDelInterfaceReply{} }
-func (*Nat66AddDelInterfaceReply) GetMessageName() string { return "nat66_add_del_interface_reply" }
-func (*Nat66AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat66AddDelInterfaceReply) Reset()                        { *m = Nat66AddDelInterfaceReply{} }
+func (*Nat66AddDelInterfaceReply) GetMessageName() string          { return "nat66_add_del_interface_reply" }
+func (*Nat66AddDelInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat66AddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat66AddDelInterfaceReply) Size() (size int) {
@@ -112,12 +111,10 @@ type Nat66AddDelStaticMapping struct {
 	VrfID             uint32              `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
-func (m *Nat66AddDelStaticMapping) Reset()               { *m = Nat66AddDelStaticMapping{} }
-func (*Nat66AddDelStaticMapping) GetMessageName() string { return "nat66_add_del_static_mapping" }
-func (*Nat66AddDelStaticMapping) GetCrcString() string   { return "3ed88f71" }
-func (*Nat66AddDelStaticMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat66AddDelStaticMapping) Reset()                        { *m = Nat66AddDelStaticMapping{} }
+func (*Nat66AddDelStaticMapping) GetMessageName() string          { return "nat66_add_del_static_mapping" }
+func (*Nat66AddDelStaticMapping) GetCrcString() string            { return "3ed88f71" }
+func (*Nat66AddDelStaticMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat66AddDelStaticMapping) Size() (size int) {
 	if m == nil {
@@ -158,9 +155,10 @@ func (m *Nat66AddDelStaticMappingReply) Reset() { *m = Nat66AddDelStaticMappingR
 func (*Nat66AddDelStaticMappingReply) GetMessageName() string {
 	return "nat66_add_del_static_mapping_reply"
 }
-func (*Nat66AddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat66AddDelStaticMappingReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat66AddDelStaticMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat66AddDelStaticMappingReply) Size() (size int) {
@@ -190,11 +188,12 @@ type Nat66InterfaceDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat66InterfaceDetails) Reset()               { *m = Nat66InterfaceDetails{} }
-func (*Nat66InterfaceDetails) GetMessageName() string { return "nat66_interface_details" }
-func (*Nat66InterfaceDetails) GetCrcString() string   { return "5d286289" }
-func (*Nat66InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat66InterfaceDetails) Reset()                        { *m = Nat66InterfaceDetails{} }
+func (*Nat66InterfaceDetails) GetMessageName() string          { return "nat66_interface_details" }
+func (*Nat66InterfaceDetails) GetCrcString() string            { return "5d286289" }
+func (*Nat66InterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat66InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat66InterfaceDetails) Size() (size int) {
@@ -224,12 +223,10 @@ func (m *Nat66InterfaceDetails) Unmarshal(b []byte) error {
 // Nat66InterfaceDump defines message 'nat66_interface_dump'.
 type Nat66InterfaceDump struct{}
 
-func (m *Nat66InterfaceDump) Reset()               { *m = Nat66InterfaceDump{} }
-func (*Nat66InterfaceDump) GetMessageName() string { return "nat66_interface_dump" }
-func (*Nat66InterfaceDump) GetCrcString() string   { return "51077d14" }
-func (*Nat66InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat66InterfaceDump) Reset()                        { *m = Nat66InterfaceDump{} }
+func (*Nat66InterfaceDump) GetMessageName() string          { return "nat66_interface_dump" }
+func (*Nat66InterfaceDump) GetCrcString() string            { return "51077d14" }
+func (*Nat66InterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat66InterfaceDump) Size() (size int) {
 	if m == nil {
@@ -254,12 +251,10 @@ type Nat66PluginEnableDisable struct {
 	Enable     bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Nat66PluginEnableDisable) Reset()               { *m = Nat66PluginEnableDisable{} }
-func (*Nat66PluginEnableDisable) GetMessageName() string { return "nat66_plugin_enable_disable" }
-func (*Nat66PluginEnableDisable) GetCrcString() string   { return "56f2f83b" }
-func (*Nat66PluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat66PluginEnableDisable) Reset()                        { *m = Nat66PluginEnableDisable{} }
+func (*Nat66PluginEnableDisable) GetMessageName() string          { return "nat66_plugin_enable_disable" }
+func (*Nat66PluginEnableDisable) GetCrcString() string            { return "56f2f83b" }
+func (*Nat66PluginEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat66PluginEnableDisable) Size() (size int) {
 	if m == nil {
@@ -294,9 +289,10 @@ func (m *Nat66PluginEnableDisableReply) Reset() { *m = Nat66PluginEnableDisableR
 func (*Nat66PluginEnableDisableReply) GetMessageName() string {
 	return "nat66_plugin_enable_disable_reply"
 }
-func (*Nat66PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat66PluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*Nat66PluginEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat66PluginEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat66PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat66PluginEnableDisableReply) Size() (size int) {
@@ -329,11 +325,12 @@ type Nat66StaticMappingDetails struct {
 	TotalPkts         uint64              `binapi:"u64,name=total_pkts" json:"total_pkts,omitempty"`
 }
 
-func (m *Nat66StaticMappingDetails) Reset()               { *m = Nat66StaticMappingDetails{} }
-func (*Nat66StaticMappingDetails) GetMessageName() string { return "nat66_static_mapping_details" }
-func (*Nat66StaticMappingDetails) GetCrcString() string   { return "df39654b" }
-func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *Nat66StaticMappingDetails) Reset()                        { *m = Nat66StaticMappingDetails{} }
+func (*Nat66StaticMappingDetails) GetMessageName() string          { return "nat66_static_mapping_details" }
+func (*Nat66StaticMappingDetails) GetCrcString() string            { return "df39654b" }
+func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat66StaticMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat66StaticMappingDetails) Size() (size int) {
@@ -372,12 +369,10 @@ func (m *Nat66StaticMappingDetails) Unmarshal(b []byte) error {
 // Nat66StaticMappingDump defines message 'nat66_static_mapping_dump'.
 type Nat66StaticMappingDump struct{}
 
-func (m *Nat66StaticMappingDump) Reset()               { *m = Nat66StaticMappingDump{} }
-func (*Nat66StaticMappingDump) GetMessageName() string { return "nat66_static_mapping_dump" }
-func (*Nat66StaticMappingDump) GetCrcString() string   { return "51077d14" }
-func (*Nat66StaticMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *Nat66StaticMappingDump) Reset()                        { *m = Nat66StaticMappingDump{} }
+func (*Nat66StaticMappingDump) GetMessageName() string          { return "nat66_static_mapping_dump" }
+func (*Nat66StaticMappingDump) GetCrcString() string            { return "51077d14" }
+func (*Nat66StaticMappingDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat66StaticMappingDump) Size() (size int) {
 	if m == nil {

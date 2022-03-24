@@ -67,12 +67,10 @@ type GpeAddDelFwdEntry struct {
 	Locs    []GpeLocator   `binapi:"gpe_locator[loc_num],name=locs" json:"locs,omitempty"`
 }
 
-func (m *GpeAddDelFwdEntry) Reset()               { *m = GpeAddDelFwdEntry{} }
-func (*GpeAddDelFwdEntry) GetMessageName() string { return "gpe_add_del_fwd_entry" }
-func (*GpeAddDelFwdEntry) GetCrcString() string   { return "f0847644" }
-func (*GpeAddDelFwdEntry) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeAddDelFwdEntry) Reset()                        { *m = GpeAddDelFwdEntry{} }
+func (*GpeAddDelFwdEntry) GetMessageName() string          { return "gpe_add_del_fwd_entry" }
+func (*GpeAddDelFwdEntry) GetCrcString() string            { return "f0847644" }
+func (*GpeAddDelFwdEntry) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeAddDelFwdEntry) Size() (size int) {
 	if m == nil {
@@ -150,11 +148,12 @@ type GpeAddDelFwdEntryReply struct {
 	FwdEntryIndex uint32 `binapi:"u32,name=fwd_entry_index" json:"fwd_entry_index,omitempty"`
 }
 
-func (m *GpeAddDelFwdEntryReply) Reset()               { *m = GpeAddDelFwdEntryReply{} }
-func (*GpeAddDelFwdEntryReply) GetMessageName() string { return "gpe_add_del_fwd_entry_reply" }
-func (*GpeAddDelFwdEntryReply) GetCrcString() string   { return "efe5f176" }
-func (*GpeAddDelFwdEntryReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeAddDelFwdEntryReply) Reset()                        { *m = GpeAddDelFwdEntryReply{} }
+func (*GpeAddDelFwdEntryReply) GetMessageName() string          { return "gpe_add_del_fwd_entry_reply" }
+func (*GpeAddDelFwdEntryReply) GetCrcString() string            { return "efe5f176" }
+func (*GpeAddDelFwdEntryReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeAddDelFwdEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeAddDelFwdEntryReply) Size() (size int) {
@@ -189,12 +188,10 @@ type GpeAddDelIface struct {
 	Vni     uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *GpeAddDelIface) Reset()               { *m = GpeAddDelIface{} }
-func (*GpeAddDelIface) GetMessageName() string { return "gpe_add_del_iface" }
-func (*GpeAddDelIface) GetCrcString() string   { return "3ccff273" }
-func (*GpeAddDelIface) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeAddDelIface) Reset()                        { *m = GpeAddDelIface{} }
+func (*GpeAddDelIface) GetMessageName() string          { return "gpe_add_del_iface" }
+func (*GpeAddDelIface) GetCrcString() string            { return "3ccff273" }
+func (*GpeAddDelIface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeAddDelIface) Size() (size int) {
 	if m == nil {
@@ -231,11 +228,12 @@ type GpeAddDelIfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *GpeAddDelIfaceReply) Reset()               { *m = GpeAddDelIfaceReply{} }
-func (*GpeAddDelIfaceReply) GetMessageName() string { return "gpe_add_del_iface_reply" }
-func (*GpeAddDelIfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*GpeAddDelIfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeAddDelIfaceReply) Reset()                        { *m = GpeAddDelIfaceReply{} }
+func (*GpeAddDelIfaceReply) GetMessageName() string          { return "gpe_add_del_iface_reply" }
+func (*GpeAddDelIfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*GpeAddDelIfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeAddDelIfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeAddDelIfaceReply) Size() (size int) {
@@ -267,12 +265,10 @@ type GpeAddDelNativeFwdRpath struct {
 	NhAddr      ip_types.Address               `binapi:"address,name=nh_addr" json:"nh_addr,omitempty"`
 }
 
-func (m *GpeAddDelNativeFwdRpath) Reset()               { *m = GpeAddDelNativeFwdRpath{} }
-func (*GpeAddDelNativeFwdRpath) GetMessageName() string { return "gpe_add_del_native_fwd_rpath" }
-func (*GpeAddDelNativeFwdRpath) GetCrcString() string   { return "43fc8b54" }
-func (*GpeAddDelNativeFwdRpath) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeAddDelNativeFwdRpath) Reset()                        { *m = GpeAddDelNativeFwdRpath{} }
+func (*GpeAddDelNativeFwdRpath) GetMessageName() string          { return "gpe_add_del_native_fwd_rpath" }
+func (*GpeAddDelNativeFwdRpath) GetCrcString() string            { return "43fc8b54" }
+func (*GpeAddDelNativeFwdRpath) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeAddDelNativeFwdRpath) Size() (size int) {
 	if m == nil {
@@ -316,9 +312,10 @@ func (m *GpeAddDelNativeFwdRpathReply) Reset() { *m = GpeAddDelNativeFwdRpathRep
 func (*GpeAddDelNativeFwdRpathReply) GetMessageName() string {
 	return "gpe_add_del_native_fwd_rpath_reply"
 }
-func (*GpeAddDelNativeFwdRpathReply) GetCrcString() string { return "e8d4e804" }
-func (*GpeAddDelNativeFwdRpathReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*GpeAddDelNativeFwdRpathReply) GetCrcString() string            { return "e8d4e804" }
+func (*GpeAddDelNativeFwdRpathReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeAddDelNativeFwdRpathReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeAddDelNativeFwdRpathReply) Size() (size int) {
@@ -347,12 +344,10 @@ type GpeEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *GpeEnableDisable) Reset()               { *m = GpeEnableDisable{} }
-func (*GpeEnableDisable) GetMessageName() string { return "gpe_enable_disable" }
-func (*GpeEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*GpeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeEnableDisable) Reset()                        { *m = GpeEnableDisable{} }
+func (*GpeEnableDisable) GetMessageName() string          { return "gpe_enable_disable" }
+func (*GpeEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*GpeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeEnableDisable) Size() (size int) {
 	if m == nil {
@@ -380,11 +375,12 @@ type GpeEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *GpeEnableDisableReply) Reset()               { *m = GpeEnableDisableReply{} }
-func (*GpeEnableDisableReply) GetMessageName() string { return "gpe_enable_disable_reply" }
-func (*GpeEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*GpeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeEnableDisableReply) Reset()                        { *m = GpeEnableDisableReply{} }
+func (*GpeEnableDisableReply) GetMessageName() string          { return "gpe_enable_disable_reply" }
+func (*GpeEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*GpeEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeEnableDisableReply) Size() (size int) {
@@ -413,12 +409,10 @@ type GpeFwdEntriesGet struct {
 	Vni uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *GpeFwdEntriesGet) Reset()               { *m = GpeFwdEntriesGet{} }
-func (*GpeFwdEntriesGet) GetMessageName() string { return "gpe_fwd_entries_get" }
-func (*GpeFwdEntriesGet) GetCrcString() string   { return "8d1f2fe9" }
-func (*GpeFwdEntriesGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeFwdEntriesGet) Reset()                        { *m = GpeFwdEntriesGet{} }
+func (*GpeFwdEntriesGet) GetMessageName() string          { return "gpe_fwd_entries_get" }
+func (*GpeFwdEntriesGet) GetCrcString() string            { return "8d1f2fe9" }
+func (*GpeFwdEntriesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeFwdEntriesGet) Size() (size int) {
 	if m == nil {
@@ -448,11 +442,12 @@ type GpeFwdEntriesGetReply struct {
 	Entries []GpeFwdEntry `binapi:"gpe_fwd_entry[count],name=entries" json:"entries,omitempty"`
 }
 
-func (m *GpeFwdEntriesGetReply) Reset()               { *m = GpeFwdEntriesGetReply{} }
-func (*GpeFwdEntriesGetReply) GetMessageName() string { return "gpe_fwd_entries_get_reply" }
-func (*GpeFwdEntriesGetReply) GetCrcString() string   { return "c4844876" }
-func (*GpeFwdEntriesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeFwdEntriesGetReply) Reset()                        { *m = GpeFwdEntriesGetReply{} }
+func (*GpeFwdEntriesGetReply) GetMessageName() string          { return "gpe_fwd_entries_get_reply" }
+func (*GpeFwdEntriesGetReply) GetCrcString() string            { return "c4844876" }
+func (*GpeFwdEntriesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeFwdEntriesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeFwdEntriesGetReply) Size() (size int) {
@@ -525,11 +520,12 @@ type GpeFwdEntryPathDetails struct {
 	RmtLoc GpeLocator `binapi:"gpe_locator,name=rmt_loc" json:"rmt_loc,omitempty"`
 }
 
-func (m *GpeFwdEntryPathDetails) Reset()               { *m = GpeFwdEntryPathDetails{} }
-func (*GpeFwdEntryPathDetails) GetMessageName() string { return "gpe_fwd_entry_path_details" }
-func (*GpeFwdEntryPathDetails) GetCrcString() string   { return "483df51a" }
-func (*GpeFwdEntryPathDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeFwdEntryPathDetails) Reset()                        { *m = GpeFwdEntryPathDetails{} }
+func (*GpeFwdEntryPathDetails) GetMessageName() string          { return "gpe_fwd_entry_path_details" }
+func (*GpeFwdEntryPathDetails) GetCrcString() string            { return "483df51a" }
+func (*GpeFwdEntryPathDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeFwdEntryPathDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GpeFwdEntryPathDetails) Size() (size int) {
@@ -573,12 +569,10 @@ type GpeFwdEntryPathDump struct {
 	FwdEntryIndex uint32 `binapi:"u32,name=fwd_entry_index" json:"fwd_entry_index,omitempty"`
 }
 
-func (m *GpeFwdEntryPathDump) Reset()               { *m = GpeFwdEntryPathDump{} }
-func (*GpeFwdEntryPathDump) GetMessageName() string { return "gpe_fwd_entry_path_dump" }
-func (*GpeFwdEntryPathDump) GetCrcString() string   { return "39bce980" }
-func (*GpeFwdEntryPathDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeFwdEntryPathDump) Reset()                        { *m = GpeFwdEntryPathDump{} }
+func (*GpeFwdEntryPathDump) GetMessageName() string          { return "gpe_fwd_entry_path_dump" }
+func (*GpeFwdEntryPathDump) GetCrcString() string            { return "39bce980" }
+func (*GpeFwdEntryPathDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeFwdEntryPathDump) Size() (size int) {
 	if m == nil {
@@ -604,12 +598,10 @@ func (m *GpeFwdEntryPathDump) Unmarshal(b []byte) error {
 // GpeFwdEntryVnisGet defines message 'gpe_fwd_entry_vnis_get'.
 type GpeFwdEntryVnisGet struct{}
 
-func (m *GpeFwdEntryVnisGet) Reset()               { *m = GpeFwdEntryVnisGet{} }
-func (*GpeFwdEntryVnisGet) GetMessageName() string { return "gpe_fwd_entry_vnis_get" }
-func (*GpeFwdEntryVnisGet) GetCrcString() string   { return "51077d14" }
-func (*GpeFwdEntryVnisGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeFwdEntryVnisGet) Reset()                        { *m = GpeFwdEntryVnisGet{} }
+func (*GpeFwdEntryVnisGet) GetMessageName() string          { return "gpe_fwd_entry_vnis_get" }
+func (*GpeFwdEntryVnisGet) GetCrcString() string            { return "51077d14" }
+func (*GpeFwdEntryVnisGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeFwdEntryVnisGet) Size() (size int) {
 	if m == nil {
@@ -635,11 +627,12 @@ type GpeFwdEntryVnisGetReply struct {
 	Vnis   []uint32 `binapi:"u32[count],name=vnis" json:"vnis,omitempty"`
 }
 
-func (m *GpeFwdEntryVnisGetReply) Reset()               { *m = GpeFwdEntryVnisGetReply{} }
-func (*GpeFwdEntryVnisGetReply) GetMessageName() string { return "gpe_fwd_entry_vnis_get_reply" }
-func (*GpeFwdEntryVnisGetReply) GetCrcString() string   { return "aa70da20" }
-func (*GpeFwdEntryVnisGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeFwdEntryVnisGetReply) Reset()                        { *m = GpeFwdEntryVnisGetReply{} }
+func (*GpeFwdEntryVnisGetReply) GetMessageName() string          { return "gpe_fwd_entry_vnis_get_reply" }
+func (*GpeFwdEntryVnisGetReply) GetCrcString() string            { return "aa70da20" }
+func (*GpeFwdEntryVnisGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeFwdEntryVnisGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeFwdEntryVnisGetReply) Size() (size int) {
@@ -681,12 +674,10 @@ func (m *GpeFwdEntryVnisGetReply) Unmarshal(b []byte) error {
 // GpeGetEncapMode defines message 'gpe_get_encap_mode'.
 type GpeGetEncapMode struct{}
 
-func (m *GpeGetEncapMode) Reset()               { *m = GpeGetEncapMode{} }
-func (*GpeGetEncapMode) GetMessageName() string { return "gpe_get_encap_mode" }
-func (*GpeGetEncapMode) GetCrcString() string   { return "51077d14" }
-func (*GpeGetEncapMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeGetEncapMode) Reset()                        { *m = GpeGetEncapMode{} }
+func (*GpeGetEncapMode) GetMessageName() string          { return "gpe_get_encap_mode" }
+func (*GpeGetEncapMode) GetCrcString() string            { return "51077d14" }
+func (*GpeGetEncapMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeGetEncapMode) Size() (size int) {
 	if m == nil {
@@ -711,11 +702,12 @@ type GpeGetEncapModeReply struct {
 	EncapMode uint8 `binapi:"u8,name=encap_mode" json:"encap_mode,omitempty"`
 }
 
-func (m *GpeGetEncapModeReply) Reset()               { *m = GpeGetEncapModeReply{} }
-func (*GpeGetEncapModeReply) GetMessageName() string { return "gpe_get_encap_mode_reply" }
-func (*GpeGetEncapModeReply) GetCrcString() string   { return "36e3f7ca" }
-func (*GpeGetEncapModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeGetEncapModeReply) Reset()                        { *m = GpeGetEncapModeReply{} }
+func (*GpeGetEncapModeReply) GetMessageName() string          { return "gpe_get_encap_mode_reply" }
+func (*GpeGetEncapModeReply) GetCrcString() string            { return "36e3f7ca" }
+func (*GpeGetEncapModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeGetEncapModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeGetEncapModeReply) Size() (size int) {
@@ -747,12 +739,10 @@ type GpeNativeFwdRpathsGet struct {
 	IsIP4 bool `binapi:"bool,name=is_ip4" json:"is_ip4,omitempty"`
 }
 
-func (m *GpeNativeFwdRpathsGet) Reset()               { *m = GpeNativeFwdRpathsGet{} }
-func (*GpeNativeFwdRpathsGet) GetMessageName() string { return "gpe_native_fwd_rpaths_get" }
-func (*GpeNativeFwdRpathsGet) GetCrcString() string   { return "f652ceb4" }
-func (*GpeNativeFwdRpathsGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeNativeFwdRpathsGet) Reset()                        { *m = GpeNativeFwdRpathsGet{} }
+func (*GpeNativeFwdRpathsGet) GetMessageName() string          { return "gpe_native_fwd_rpaths_get" }
+func (*GpeNativeFwdRpathsGet) GetCrcString() string            { return "f652ceb4" }
+func (*GpeNativeFwdRpathsGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeNativeFwdRpathsGet) Size() (size int) {
 	if m == nil {
@@ -782,11 +772,12 @@ type GpeNativeFwdRpathsGetReply struct {
 	Entries []GpeNativeFwdRpath `binapi:"gpe_native_fwd_rpath[count],name=entries" json:"entries,omitempty"`
 }
 
-func (m *GpeNativeFwdRpathsGetReply) Reset()               { *m = GpeNativeFwdRpathsGetReply{} }
-func (*GpeNativeFwdRpathsGetReply) GetMessageName() string { return "gpe_native_fwd_rpaths_get_reply" }
-func (*GpeNativeFwdRpathsGetReply) GetCrcString() string   { return "7a1ca5a2" }
-func (*GpeNativeFwdRpathsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeNativeFwdRpathsGetReply) Reset()                        { *m = GpeNativeFwdRpathsGetReply{} }
+func (*GpeNativeFwdRpathsGetReply) GetMessageName() string          { return "gpe_native_fwd_rpaths_get_reply" }
+func (*GpeNativeFwdRpathsGetReply) GetCrcString() string            { return "7a1ca5a2" }
+func (*GpeNativeFwdRpathsGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeNativeFwdRpathsGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeNativeFwdRpathsGetReply) Size() (size int) {
@@ -846,12 +837,10 @@ type GpeSetEncapMode struct {
 	IsVxlan bool `binapi:"bool,name=is_vxlan" json:"is_vxlan,omitempty"`
 }
 
-func (m *GpeSetEncapMode) Reset()               { *m = GpeSetEncapMode{} }
-func (*GpeSetEncapMode) GetMessageName() string { return "gpe_set_encap_mode" }
-func (*GpeSetEncapMode) GetCrcString() string   { return "bd819eac" }
-func (*GpeSetEncapMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GpeSetEncapMode) Reset()                        { *m = GpeSetEncapMode{} }
+func (*GpeSetEncapMode) GetMessageName() string          { return "gpe_set_encap_mode" }
+func (*GpeSetEncapMode) GetCrcString() string            { return "bd819eac" }
+func (*GpeSetEncapMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GpeSetEncapMode) Size() (size int) {
 	if m == nil {
@@ -879,11 +868,12 @@ type GpeSetEncapModeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *GpeSetEncapModeReply) Reset()               { *m = GpeSetEncapModeReply{} }
-func (*GpeSetEncapModeReply) GetMessageName() string { return "gpe_set_encap_mode_reply" }
-func (*GpeSetEncapModeReply) GetCrcString() string   { return "e8d4e804" }
-func (*GpeSetEncapModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GpeSetEncapModeReply) Reset()                        { *m = GpeSetEncapModeReply{} }
+func (*GpeSetEncapModeReply) GetMessageName() string          { return "gpe_set_encap_mode_reply" }
+func (*GpeSetEncapModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*GpeSetEncapModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GpeSetEncapModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GpeSetEncapModeReply) Size() (size int) {

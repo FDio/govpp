@@ -41,7 +41,7 @@ func (*VxlanGpeIoamExportEnableDisable) GetMessageName() string {
 }
 func (*VxlanGpeIoamExportEnableDisable) GetCrcString() string { return "d4c76d3a" }
 func (*VxlanGpeIoamExportEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamExportEnableDisable) Size() (size int) {
@@ -82,7 +82,10 @@ func (*VxlanGpeIoamExportEnableDisableReply) GetMessageName() string {
 }
 func (*VxlanGpeIoamExportEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamExportEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
+}
+func (m *VxlanGpeIoamExportEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamExportEnableDisableReply) Size() (size int) {

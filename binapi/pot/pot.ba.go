@@ -33,12 +33,10 @@ type PotProfileActivate struct {
 	ListName string `binapi:"string[],name=list_name" json:"list_name,omitempty"`
 }
 
-func (m *PotProfileActivate) Reset()               { *m = PotProfileActivate{} }
-func (*PotProfileActivate) GetMessageName() string { return "pot_profile_activate" }
-func (*PotProfileActivate) GetCrcString() string   { return "0770af98" }
-func (*PotProfileActivate) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PotProfileActivate) Reset()                        { *m = PotProfileActivate{} }
+func (*PotProfileActivate) GetMessageName() string          { return "pot_profile_activate" }
+func (*PotProfileActivate) GetCrcString() string            { return "0770af98" }
+func (*PotProfileActivate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PotProfileActivate) Size() (size int) {
 	if m == nil {
@@ -69,11 +67,12 @@ type PotProfileActivateReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PotProfileActivateReply) Reset()               { *m = PotProfileActivateReply{} }
-func (*PotProfileActivateReply) GetMessageName() string { return "pot_profile_activate_reply" }
-func (*PotProfileActivateReply) GetCrcString() string   { return "e8d4e804" }
-func (*PotProfileActivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PotProfileActivateReply) Reset()                        { *m = PotProfileActivateReply{} }
+func (*PotProfileActivateReply) GetMessageName() string          { return "pot_profile_activate_reply" }
+func (*PotProfileActivateReply) GetCrcString() string            { return "e8d4e804" }
+func (*PotProfileActivateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PotProfileActivateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PotProfileActivateReply) Size() (size int) {
@@ -110,12 +109,10 @@ type PotProfileAdd struct {
 	ListName         string `binapi:"string[],name=list_name" json:"list_name,omitempty"`
 }
 
-func (m *PotProfileAdd) Reset()               { *m = PotProfileAdd{} }
-func (*PotProfileAdd) GetMessageName() string { return "pot_profile_add" }
-func (*PotProfileAdd) GetCrcString() string   { return "ad5da3a3" }
-func (*PotProfileAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PotProfileAdd) Reset()                        { *m = PotProfileAdd{} }
+func (*PotProfileAdd) GetMessageName() string          { return "pot_profile_add" }
+func (*PotProfileAdd) GetCrcString() string            { return "ad5da3a3" }
+func (*PotProfileAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PotProfileAdd) Size() (size int) {
 	if m == nil {
@@ -167,11 +164,12 @@ type PotProfileAddReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PotProfileAddReply) Reset()               { *m = PotProfileAddReply{} }
-func (*PotProfileAddReply) GetMessageName() string { return "pot_profile_add_reply" }
-func (*PotProfileAddReply) GetCrcString() string   { return "e8d4e804" }
-func (*PotProfileAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PotProfileAddReply) Reset()                        { *m = PotProfileAddReply{} }
+func (*PotProfileAddReply) GetMessageName() string          { return "pot_profile_add_reply" }
+func (*PotProfileAddReply) GetCrcString() string            { return "e8d4e804" }
+func (*PotProfileAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PotProfileAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PotProfileAddReply) Size() (size int) {
@@ -200,12 +198,10 @@ type PotProfileDel struct {
 	ListName string `binapi:"string[],name=list_name" json:"list_name,omitempty"`
 }
 
-func (m *PotProfileDel) Reset()               { *m = PotProfileDel{} }
-func (*PotProfileDel) GetMessageName() string { return "pot_profile_del" }
-func (*PotProfileDel) GetCrcString() string   { return "cd63f53b" }
-func (*PotProfileDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PotProfileDel) Reset()                        { *m = PotProfileDel{} }
+func (*PotProfileDel) GetMessageName() string          { return "pot_profile_del" }
+func (*PotProfileDel) GetCrcString() string            { return "cd63f53b" }
+func (*PotProfileDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PotProfileDel) Size() (size int) {
 	if m == nil {
@@ -233,11 +229,12 @@ type PotProfileDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PotProfileDelReply) Reset()               { *m = PotProfileDelReply{} }
-func (*PotProfileDelReply) GetMessageName() string { return "pot_profile_del_reply" }
-func (*PotProfileDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*PotProfileDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PotProfileDelReply) Reset()                        { *m = PotProfileDelReply{} }
+func (*PotProfileDelReply) GetMessageName() string          { return "pot_profile_del_reply" }
+func (*PotProfileDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*PotProfileDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PotProfileDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PotProfileDelReply) Size() (size int) {
@@ -274,11 +271,12 @@ type PotProfileShowConfigDetails struct {
 	PolynomialPublic uint64 `binapi:"u64,name=polynomial_public" json:"polynomial_public,omitempty"`
 }
 
-func (m *PotProfileShowConfigDetails) Reset()               { *m = PotProfileShowConfigDetails{} }
-func (*PotProfileShowConfigDetails) GetMessageName() string { return "pot_profile_show_config_details" }
-func (*PotProfileShowConfigDetails) GetCrcString() string   { return "b7ce0618" }
-func (*PotProfileShowConfigDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PotProfileShowConfigDetails) Reset()                        { *m = PotProfileShowConfigDetails{} }
+func (*PotProfileShowConfigDetails) GetMessageName() string          { return "pot_profile_show_config_details" }
+func (*PotProfileShowConfigDetails) GetCrcString() string            { return "b7ce0618" }
+func (*PotProfileShowConfigDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PotProfileShowConfigDetails) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PotProfileShowConfigDetails) Size() (size int) {
@@ -331,12 +329,10 @@ type PotProfileShowConfigDump struct {
 	ID uint8 `binapi:"u8,name=id" json:"id,omitempty"`
 }
 
-func (m *PotProfileShowConfigDump) Reset()               { *m = PotProfileShowConfigDump{} }
-func (*PotProfileShowConfigDump) GetMessageName() string { return "pot_profile_show_config_dump" }
-func (*PotProfileShowConfigDump) GetCrcString() string   { return "005b7d59" }
-func (*PotProfileShowConfigDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PotProfileShowConfigDump) Reset()                        { *m = PotProfileShowConfigDump{} }
+func (*PotProfileShowConfigDump) GetMessageName() string          { return "pot_profile_show_config_dump" }
+func (*PotProfileShowConfigDump) GetCrcString() string            { return "005b7d59" }
+func (*PotProfileShowConfigDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PotProfileShowConfigDump) Size() (size int) {
 	if m == nil {

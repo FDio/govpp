@@ -42,12 +42,10 @@ type GeneveAddDelTunnel struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *GeneveAddDelTunnel) Reset()               { *m = GeneveAddDelTunnel{} }
-func (*GeneveAddDelTunnel) GetMessageName() string { return "geneve_add_del_tunnel" }
-func (*GeneveAddDelTunnel) GetCrcString() string   { return "99445831" }
-func (*GeneveAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GeneveAddDelTunnel) Reset()                        { *m = GeneveAddDelTunnel{} }
+func (*GeneveAddDelTunnel) GetMessageName() string          { return "geneve_add_del_tunnel" }
+func (*GeneveAddDelTunnel) GetCrcString() string            { return "99445831" }
+func (*GeneveAddDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GeneveAddDelTunnel) Size() (size int) {
 	if m == nil {
@@ -106,12 +104,10 @@ type GeneveAddDelTunnel2 struct {
 	L3Mode         bool                           `binapi:"bool,name=l3_mode" json:"l3_mode,omitempty"`
 }
 
-func (m *GeneveAddDelTunnel2) Reset()               { *m = GeneveAddDelTunnel2{} }
-func (*GeneveAddDelTunnel2) GetMessageName() string { return "geneve_add_del_tunnel2" }
-func (*GeneveAddDelTunnel2) GetCrcString() string   { return "8c2a9999" }
-func (*GeneveAddDelTunnel2) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GeneveAddDelTunnel2) Reset()                        { *m = GeneveAddDelTunnel2{} }
+func (*GeneveAddDelTunnel2) GetMessageName() string          { return "geneve_add_del_tunnel2" }
+func (*GeneveAddDelTunnel2) GetCrcString() string            { return "8c2a9999" }
+func (*GeneveAddDelTunnel2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GeneveAddDelTunnel2) Size() (size int) {
 	if m == nil {
@@ -167,11 +163,12 @@ type GeneveAddDelTunnel2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GeneveAddDelTunnel2Reply) Reset()               { *m = GeneveAddDelTunnel2Reply{} }
-func (*GeneveAddDelTunnel2Reply) GetMessageName() string { return "geneve_add_del_tunnel2_reply" }
-func (*GeneveAddDelTunnel2Reply) GetCrcString() string   { return "5383d31f" }
-func (*GeneveAddDelTunnel2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GeneveAddDelTunnel2Reply) Reset()                        { *m = GeneveAddDelTunnel2Reply{} }
+func (*GeneveAddDelTunnel2Reply) GetMessageName() string          { return "geneve_add_del_tunnel2_reply" }
+func (*GeneveAddDelTunnel2Reply) GetCrcString() string            { return "5383d31f" }
+func (*GeneveAddDelTunnel2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GeneveAddDelTunnel2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GeneveAddDelTunnel2Reply) Size() (size int) {
@@ -204,11 +201,12 @@ type GeneveAddDelTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GeneveAddDelTunnelReply) Reset()               { *m = GeneveAddDelTunnelReply{} }
-func (*GeneveAddDelTunnelReply) GetMessageName() string { return "geneve_add_del_tunnel_reply" }
-func (*GeneveAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*GeneveAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GeneveAddDelTunnelReply) Reset()                        { *m = GeneveAddDelTunnelReply{} }
+func (*GeneveAddDelTunnelReply) GetMessageName() string          { return "geneve_add_del_tunnel_reply" }
+func (*GeneveAddDelTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*GeneveAddDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GeneveAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GeneveAddDelTunnelReply) Size() (size int) {
@@ -246,11 +244,12 @@ type GeneveTunnelDetails struct {
 	Vni            uint32                         `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *GeneveTunnelDetails) Reset()               { *m = GeneveTunnelDetails{} }
-func (*GeneveTunnelDetails) GetMessageName() string { return "geneve_tunnel_details" }
-func (*GeneveTunnelDetails) GetCrcString() string   { return "6b16eb24" }
-func (*GeneveTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *GeneveTunnelDetails) Reset()                        { *m = GeneveTunnelDetails{} }
+func (*GeneveTunnelDetails) GetMessageName() string          { return "geneve_tunnel_details" }
+func (*GeneveTunnelDetails) GetCrcString() string            { return "6b16eb24" }
+func (*GeneveTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GeneveTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GeneveTunnelDetails) Size() (size int) {
@@ -303,12 +302,10 @@ type GeneveTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GeneveTunnelDump) Reset()               { *m = GeneveTunnelDump{} }
-func (*GeneveTunnelDump) GetMessageName() string { return "geneve_tunnel_dump" }
-func (*GeneveTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*GeneveTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *GeneveTunnelDump) Reset()                        { *m = GeneveTunnelDump{} }
+func (*GeneveTunnelDump) GetMessageName() string          { return "geneve_tunnel_dump" }
+func (*GeneveTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*GeneveTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GeneveTunnelDump) Size() (size int) {
 	if m == nil {
@@ -338,12 +335,10 @@ type SwInterfaceSetGeneveBypass struct {
 	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetGeneveBypass) Reset()               { *m = SwInterfaceSetGeneveBypass{} }
-func (*SwInterfaceSetGeneveBypass) GetMessageName() string { return "sw_interface_set_geneve_bypass" }
-func (*SwInterfaceSetGeneveBypass) GetCrcString() string   { return "65247409" }
-func (*SwInterfaceSetGeneveBypass) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceSetGeneveBypass) Reset()                        { *m = SwInterfaceSetGeneveBypass{} }
+func (*SwInterfaceSetGeneveBypass) GetMessageName() string          { return "sw_interface_set_geneve_bypass" }
+func (*SwInterfaceSetGeneveBypass) GetCrcString() string            { return "65247409" }
+func (*SwInterfaceSetGeneveBypass) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetGeneveBypass) Size() (size int) {
 	if m == nil {
@@ -381,9 +376,10 @@ func (m *SwInterfaceSetGeneveBypassReply) Reset() { *m = SwInterfaceSetGeneveByp
 func (*SwInterfaceSetGeneveBypassReply) GetMessageName() string {
 	return "sw_interface_set_geneve_bypass_reply"
 }
-func (*SwInterfaceSetGeneveBypassReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetGeneveBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*SwInterfaceSetGeneveBypassReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetGeneveBypassReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetGeneveBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetGeneveBypassReply) Size() (size int) {

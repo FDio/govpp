@@ -36,12 +36,10 @@ type LldpConfig struct {
 	SystemName string `binapi:"string[],name=system_name" json:"system_name,omitempty"`
 }
 
-func (m *LldpConfig) Reset()               { *m = LldpConfig{} }
-func (*LldpConfig) GetMessageName() string { return "lldp_config" }
-func (*LldpConfig) GetCrcString() string   { return "c14445df" }
-func (*LldpConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *LldpConfig) Reset()                        { *m = LldpConfig{} }
+func (*LldpConfig) GetMessageName() string          { return "lldp_config" }
+func (*LldpConfig) GetCrcString() string            { return "c14445df" }
+func (*LldpConfig) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LldpConfig) Size() (size int) {
 	if m == nil {
@@ -75,11 +73,12 @@ type LldpConfigReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LldpConfigReply) Reset()               { *m = LldpConfigReply{} }
-func (*LldpConfigReply) GetMessageName() string { return "lldp_config_reply" }
-func (*LldpConfigReply) GetCrcString() string   { return "e8d4e804" }
-func (*LldpConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *LldpConfigReply) Reset()                        { *m = LldpConfigReply{} }
+func (*LldpConfigReply) GetMessageName() string          { return "lldp_config_reply" }
+func (*LldpConfigReply) GetCrcString() string            { return "e8d4e804" }
+func (*LldpConfigReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LldpConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LldpConfigReply) Size() (size int) {
@@ -113,12 +112,10 @@ type SwInterfaceSetLldp struct {
 	PortDesc  string                         `binapi:"string[],name=port_desc" json:"port_desc,omitempty"`
 }
 
-func (m *SwInterfaceSetLldp) Reset()               { *m = SwInterfaceSetLldp{} }
-func (*SwInterfaceSetLldp) GetMessageName() string { return "sw_interface_set_lldp" }
-func (*SwInterfaceSetLldp) GetCrcString() string   { return "57afbcd4" }
-func (*SwInterfaceSetLldp) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceSetLldp) Reset()                        { *m = SwInterfaceSetLldp{} }
+func (*SwInterfaceSetLldp) GetMessageName() string          { return "sw_interface_set_lldp" }
+func (*SwInterfaceSetLldp) GetCrcString() string            { return "57afbcd4" }
+func (*SwInterfaceSetLldp) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetLldp) Size() (size int) {
 	if m == nil {
@@ -162,11 +159,12 @@ type SwInterfaceSetLldpReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SwInterfaceSetLldpReply) Reset()               { *m = SwInterfaceSetLldpReply{} }
-func (*SwInterfaceSetLldpReply) GetMessageName() string { return "sw_interface_set_lldp_reply" }
-func (*SwInterfaceSetLldpReply) GetCrcString() string   { return "e8d4e804" }
-func (*SwInterfaceSetLldpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SwInterfaceSetLldpReply) Reset()                        { *m = SwInterfaceSetLldpReply{} }
+func (*SwInterfaceSetLldpReply) GetMessageName() string          { return "sw_interface_set_lldp_reply" }
+func (*SwInterfaceSetLldpReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetLldpReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetLldpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetLldpReply) Size() (size int) {

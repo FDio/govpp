@@ -39,11 +39,12 @@ type IpfixAllExporterDetails struct {
 	UDPChecksum      bool             `binapi:"bool,name=udp_checksum" json:"udp_checksum,omitempty"`
 }
 
-func (m *IpfixAllExporterDetails) Reset()               { *m = IpfixAllExporterDetails{} }
-func (*IpfixAllExporterDetails) GetMessageName() string { return "ipfix_all_exporter_details" }
-func (*IpfixAllExporterDetails) GetCrcString() string   { return "0dedbfe4" }
-func (*IpfixAllExporterDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixAllExporterDetails) Reset()                        { *m = IpfixAllExporterDetails{} }
+func (*IpfixAllExporterDetails) GetMessageName() string          { return "ipfix_all_exporter_details" }
+func (*IpfixAllExporterDetails) GetCrcString() string            { return "0dedbfe4" }
+func (*IpfixAllExporterDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixAllExporterDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpfixAllExporterDetails) Size() (size int) {
@@ -96,12 +97,10 @@ type IpfixAllExporterGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *IpfixAllExporterGet) Reset()               { *m = IpfixAllExporterGet{} }
-func (*IpfixAllExporterGet) GetMessageName() string { return "ipfix_all_exporter_get" }
-func (*IpfixAllExporterGet) GetCrcString() string   { return "f75ba505" }
-func (*IpfixAllExporterGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixAllExporterGet) Reset()                        { *m = IpfixAllExporterGet{} }
+func (*IpfixAllExporterGet) GetMessageName() string          { return "ipfix_all_exporter_get" }
+func (*IpfixAllExporterGet) GetCrcString() string            { return "f75ba505" }
+func (*IpfixAllExporterGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixAllExporterGet) Size() (size int) {
 	if m == nil {
@@ -130,11 +129,12 @@ type IpfixAllExporterGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *IpfixAllExporterGetReply) Reset()               { *m = IpfixAllExporterGetReply{} }
-func (*IpfixAllExporterGetReply) GetMessageName() string { return "ipfix_all_exporter_get_reply" }
-func (*IpfixAllExporterGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*IpfixAllExporterGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixAllExporterGetReply) Reset()                        { *m = IpfixAllExporterGetReply{} }
+func (*IpfixAllExporterGetReply) GetMessageName() string          { return "ipfix_all_exporter_get_reply" }
+func (*IpfixAllExporterGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*IpfixAllExporterGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixAllExporterGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpfixAllExporterGetReply) Size() (size int) {
@@ -167,11 +167,12 @@ type IpfixClassifyStreamDetails struct {
 	SrcPort  uint16 `binapi:"u16,name=src_port" json:"src_port,omitempty"`
 }
 
-func (m *IpfixClassifyStreamDetails) Reset()               { *m = IpfixClassifyStreamDetails{} }
-func (*IpfixClassifyStreamDetails) GetMessageName() string { return "ipfix_classify_stream_details" }
-func (*IpfixClassifyStreamDetails) GetCrcString() string   { return "2903539d" }
-func (*IpfixClassifyStreamDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixClassifyStreamDetails) Reset()                        { *m = IpfixClassifyStreamDetails{} }
+func (*IpfixClassifyStreamDetails) GetMessageName() string          { return "ipfix_classify_stream_details" }
+func (*IpfixClassifyStreamDetails) GetCrcString() string            { return "2903539d" }
+func (*IpfixClassifyStreamDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixClassifyStreamDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpfixClassifyStreamDetails) Size() (size int) {
@@ -201,12 +202,10 @@ func (m *IpfixClassifyStreamDetails) Unmarshal(b []byte) error {
 // IpfixClassifyStreamDump defines message 'ipfix_classify_stream_dump'.
 type IpfixClassifyStreamDump struct{}
 
-func (m *IpfixClassifyStreamDump) Reset()               { *m = IpfixClassifyStreamDump{} }
-func (*IpfixClassifyStreamDump) GetMessageName() string { return "ipfix_classify_stream_dump" }
-func (*IpfixClassifyStreamDump) GetCrcString() string   { return "51077d14" }
-func (*IpfixClassifyStreamDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixClassifyStreamDump) Reset()                        { *m = IpfixClassifyStreamDump{} }
+func (*IpfixClassifyStreamDump) GetMessageName() string          { return "ipfix_classify_stream_dump" }
+func (*IpfixClassifyStreamDump) GetCrcString() string            { return "51077d14" }
+func (*IpfixClassifyStreamDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixClassifyStreamDump) Size() (size int) {
 	if m == nil {
@@ -233,12 +232,10 @@ type IpfixClassifyTableAddDel struct {
 	IsAdd             bool                   `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *IpfixClassifyTableAddDel) Reset()               { *m = IpfixClassifyTableAddDel{} }
-func (*IpfixClassifyTableAddDel) GetMessageName() string { return "ipfix_classify_table_add_del" }
-func (*IpfixClassifyTableAddDel) GetCrcString() string   { return "3e449bb9" }
-func (*IpfixClassifyTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixClassifyTableAddDel) Reset()                        { *m = IpfixClassifyTableAddDel{} }
+func (*IpfixClassifyTableAddDel) GetMessageName() string          { return "ipfix_classify_table_add_del" }
+func (*IpfixClassifyTableAddDel) GetCrcString() string            { return "3e449bb9" }
+func (*IpfixClassifyTableAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixClassifyTableAddDel) Size() (size int) {
 	if m == nil {
@@ -279,9 +276,10 @@ func (m *IpfixClassifyTableAddDelReply) Reset() { *m = IpfixClassifyTableAddDelR
 func (*IpfixClassifyTableAddDelReply) GetMessageName() string {
 	return "ipfix_classify_table_add_del_reply"
 }
-func (*IpfixClassifyTableAddDelReply) GetCrcString() string { return "e8d4e804" }
-func (*IpfixClassifyTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*IpfixClassifyTableAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*IpfixClassifyTableAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixClassifyTableAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpfixClassifyTableAddDelReply) Size() (size int) {
@@ -312,11 +310,12 @@ type IpfixClassifyTableDetails struct {
 	TransportProtocol ip_types.IPProto       `binapi:"ip_proto,name=transport_protocol" json:"transport_protocol,omitempty"`
 }
 
-func (m *IpfixClassifyTableDetails) Reset()               { *m = IpfixClassifyTableDetails{} }
-func (*IpfixClassifyTableDetails) GetMessageName() string { return "ipfix_classify_table_details" }
-func (*IpfixClassifyTableDetails) GetCrcString() string   { return "1af8c28c" }
-func (*IpfixClassifyTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixClassifyTableDetails) Reset()                        { *m = IpfixClassifyTableDetails{} }
+func (*IpfixClassifyTableDetails) GetMessageName() string          { return "ipfix_classify_table_details" }
+func (*IpfixClassifyTableDetails) GetCrcString() string            { return "1af8c28c" }
+func (*IpfixClassifyTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixClassifyTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpfixClassifyTableDetails) Size() (size int) {
@@ -349,12 +348,10 @@ func (m *IpfixClassifyTableDetails) Unmarshal(b []byte) error {
 // IpfixClassifyTableDump defines message 'ipfix_classify_table_dump'.
 type IpfixClassifyTableDump struct{}
 
-func (m *IpfixClassifyTableDump) Reset()               { *m = IpfixClassifyTableDump{} }
-func (*IpfixClassifyTableDump) GetMessageName() string { return "ipfix_classify_table_dump" }
-func (*IpfixClassifyTableDump) GetCrcString() string   { return "51077d14" }
-func (*IpfixClassifyTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixClassifyTableDump) Reset()                        { *m = IpfixClassifyTableDump{} }
+func (*IpfixClassifyTableDump) GetMessageName() string          { return "ipfix_classify_table_dump" }
+func (*IpfixClassifyTableDump) GetCrcString() string            { return "51077d14" }
+func (*IpfixClassifyTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixClassifyTableDump) Size() (size int) {
 	if m == nil {
@@ -385,12 +382,10 @@ type IpfixExporterCreateDelete struct {
 	UDPChecksum      bool             `binapi:"bool,name=udp_checksum" json:"udp_checksum,omitempty"`
 }
 
-func (m *IpfixExporterCreateDelete) Reset()               { *m = IpfixExporterCreateDelete{} }
-func (*IpfixExporterCreateDelete) GetMessageName() string { return "ipfix_exporter_create_delete" }
-func (*IpfixExporterCreateDelete) GetCrcString() string   { return "0753a768" }
-func (*IpfixExporterCreateDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixExporterCreateDelete) Reset()                        { *m = IpfixExporterCreateDelete{} }
+func (*IpfixExporterCreateDelete) GetMessageName() string          { return "ipfix_exporter_create_delete" }
+func (*IpfixExporterCreateDelete) GetCrcString() string            { return "0753a768" }
+func (*IpfixExporterCreateDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixExporterCreateDelete) Size() (size int) {
 	if m == nil {
@@ -450,9 +445,10 @@ func (m *IpfixExporterCreateDeleteReply) Reset() { *m = IpfixExporterCreateDelet
 func (*IpfixExporterCreateDeleteReply) GetMessageName() string {
 	return "ipfix_exporter_create_delete_reply"
 }
-func (*IpfixExporterCreateDeleteReply) GetCrcString() string { return "9ffac24b" }
-func (*IpfixExporterCreateDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (*IpfixExporterCreateDeleteReply) GetCrcString() string            { return "9ffac24b" }
+func (*IpfixExporterCreateDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixExporterCreateDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpfixExporterCreateDeleteReply) Size() (size int) {
@@ -490,11 +486,12 @@ type IpfixExporterDetails struct {
 	UDPChecksum      bool             `binapi:"bool,name=udp_checksum" json:"udp_checksum,omitempty"`
 }
 
-func (m *IpfixExporterDetails) Reset()               { *m = IpfixExporterDetails{} }
-func (*IpfixExporterDetails) GetMessageName() string { return "ipfix_exporter_details" }
-func (*IpfixExporterDetails) GetCrcString() string   { return "0dedbfe4" }
-func (*IpfixExporterDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixExporterDetails) Reset()                        { *m = IpfixExporterDetails{} }
+func (*IpfixExporterDetails) GetMessageName() string          { return "ipfix_exporter_details" }
+func (*IpfixExporterDetails) GetCrcString() string            { return "0dedbfe4" }
+func (*IpfixExporterDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixExporterDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpfixExporterDetails) Size() (size int) {
@@ -545,12 +542,10 @@ func (m *IpfixExporterDetails) Unmarshal(b []byte) error {
 // IpfixExporterDump defines message 'ipfix_exporter_dump'.
 type IpfixExporterDump struct{}
 
-func (m *IpfixExporterDump) Reset()               { *m = IpfixExporterDump{} }
-func (*IpfixExporterDump) GetMessageName() string { return "ipfix_exporter_dump" }
-func (*IpfixExporterDump) GetCrcString() string   { return "51077d14" }
-func (*IpfixExporterDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixExporterDump) Reset()                        { *m = IpfixExporterDump{} }
+func (*IpfixExporterDump) GetMessageName() string          { return "ipfix_exporter_dump" }
+func (*IpfixExporterDump) GetCrcString() string            { return "51077d14" }
+func (*IpfixExporterDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixExporterDump) Size() (size int) {
 	if m == nil {
@@ -572,12 +567,10 @@ func (m *IpfixExporterDump) Unmarshal(b []byte) error {
 // IpfixFlush defines message 'ipfix_flush'.
 type IpfixFlush struct{}
 
-func (m *IpfixFlush) Reset()               { *m = IpfixFlush{} }
-func (*IpfixFlush) GetMessageName() string { return "ipfix_flush" }
-func (*IpfixFlush) GetCrcString() string   { return "51077d14" }
-func (*IpfixFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *IpfixFlush) Reset()                        { *m = IpfixFlush{} }
+func (*IpfixFlush) GetMessageName() string          { return "ipfix_flush" }
+func (*IpfixFlush) GetCrcString() string            { return "51077d14" }
+func (*IpfixFlush) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpfixFlush) Size() (size int) {
 	if m == nil {
@@ -601,11 +594,12 @@ type IpfixFlushReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IpfixFlushReply) Reset()               { *m = IpfixFlushReply{} }
-func (*IpfixFlushReply) GetMessageName() string { return "ipfix_flush_reply" }
-func (*IpfixFlushReply) GetCrcString() string   { return "e8d4e804" }
-func (*IpfixFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *IpfixFlushReply) Reset()                        { *m = IpfixFlushReply{} }
+func (*IpfixFlushReply) GetMessageName() string          { return "ipfix_flush_reply" }
+func (*IpfixFlushReply) GetCrcString() string            { return "e8d4e804" }
+func (*IpfixFlushReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpfixFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpfixFlushReply) Size() (size int) {
@@ -635,12 +629,10 @@ type SetIpfixClassifyStream struct {
 	SrcPort  uint16 `binapi:"u16,name=src_port" json:"src_port,omitempty"`
 }
 
-func (m *SetIpfixClassifyStream) Reset()               { *m = SetIpfixClassifyStream{} }
-func (*SetIpfixClassifyStream) GetMessageName() string { return "set_ipfix_classify_stream" }
-func (*SetIpfixClassifyStream) GetCrcString() string   { return "c9cbe053" }
-func (*SetIpfixClassifyStream) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SetIpfixClassifyStream) Reset()                        { *m = SetIpfixClassifyStream{} }
+func (*SetIpfixClassifyStream) GetMessageName() string          { return "set_ipfix_classify_stream" }
+func (*SetIpfixClassifyStream) GetCrcString() string            { return "c9cbe053" }
+func (*SetIpfixClassifyStream) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SetIpfixClassifyStream) Size() (size int) {
 	if m == nil {
@@ -671,11 +663,12 @@ type SetIpfixClassifyStreamReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SetIpfixClassifyStreamReply) Reset()               { *m = SetIpfixClassifyStreamReply{} }
-func (*SetIpfixClassifyStreamReply) GetMessageName() string { return "set_ipfix_classify_stream_reply" }
-func (*SetIpfixClassifyStreamReply) GetCrcString() string   { return "e8d4e804" }
-func (*SetIpfixClassifyStreamReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SetIpfixClassifyStreamReply) Reset()                        { *m = SetIpfixClassifyStreamReply{} }
+func (*SetIpfixClassifyStreamReply) GetMessageName() string          { return "set_ipfix_classify_stream_reply" }
+func (*SetIpfixClassifyStreamReply) GetCrcString() string            { return "e8d4e804" }
+func (*SetIpfixClassifyStreamReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SetIpfixClassifyStreamReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SetIpfixClassifyStreamReply) Size() (size int) {
@@ -710,12 +703,10 @@ type SetIpfixExporter struct {
 	UDPChecksum      bool             `binapi:"bool,name=udp_checksum" json:"udp_checksum,omitempty"`
 }
 
-func (m *SetIpfixExporter) Reset()               { *m = SetIpfixExporter{} }
-func (*SetIpfixExporter) GetMessageName() string { return "set_ipfix_exporter" }
-func (*SetIpfixExporter) GetCrcString() string   { return "5530c8a0" }
-func (*SetIpfixExporter) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SetIpfixExporter) Reset()                        { *m = SetIpfixExporter{} }
+func (*SetIpfixExporter) GetMessageName() string          { return "set_ipfix_exporter" }
+func (*SetIpfixExporter) GetCrcString() string            { return "5530c8a0" }
+func (*SetIpfixExporter) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SetIpfixExporter) Size() (size int) {
 	if m == nil {
@@ -767,11 +758,12 @@ type SetIpfixExporterReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SetIpfixExporterReply) Reset()               { *m = SetIpfixExporterReply{} }
-func (*SetIpfixExporterReply) GetMessageName() string { return "set_ipfix_exporter_reply" }
-func (*SetIpfixExporterReply) GetCrcString() string   { return "e8d4e804" }
-func (*SetIpfixExporterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SetIpfixExporterReply) Reset()                        { *m = SetIpfixExporterReply{} }
+func (*SetIpfixExporterReply) GetMessageName() string          { return "set_ipfix_exporter_reply" }
+func (*SetIpfixExporterReply) GetCrcString() string            { return "e8d4e804" }
+func (*SetIpfixExporterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SetIpfixExporterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SetIpfixExporterReply) Size() (size int) {

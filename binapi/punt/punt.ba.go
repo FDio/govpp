@@ -155,11 +155,12 @@ type PuntReasonDetails struct {
 	Reason PuntReason `binapi:"punt_reason,name=reason" json:"reason,omitempty"`
 }
 
-func (m *PuntReasonDetails) Reset()               { *m = PuntReasonDetails{} }
-func (*PuntReasonDetails) GetMessageName() string { return "punt_reason_details" }
-func (*PuntReasonDetails) GetCrcString() string   { return "2c9d4a40" }
-func (*PuntReasonDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PuntReasonDetails) Reset()                        { *m = PuntReasonDetails{} }
+func (*PuntReasonDetails) GetMessageName() string          { return "punt_reason_details" }
+func (*PuntReasonDetails) GetCrcString() string            { return "2c9d4a40" }
+func (*PuntReasonDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntReasonDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PuntReasonDetails) Size() (size int) {
@@ -191,12 +192,10 @@ type PuntReasonDump struct {
 	Reason PuntReason `binapi:"punt_reason,name=reason" json:"reason,omitempty"`
 }
 
-func (m *PuntReasonDump) Reset()               { *m = PuntReasonDump{} }
-func (*PuntReasonDump) GetMessageName() string { return "punt_reason_dump" }
-func (*PuntReasonDump) GetCrcString() string   { return "5c0dd4fe" }
-func (*PuntReasonDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PuntReasonDump) Reset()                        { *m = PuntReasonDump{} }
+func (*PuntReasonDump) GetMessageName() string          { return "punt_reason_dump" }
+func (*PuntReasonDump) GetCrcString() string            { return "5c0dd4fe" }
+func (*PuntReasonDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntReasonDump) Size() (size int) {
 	if m == nil {
@@ -227,12 +226,10 @@ type PuntSocketDeregister struct {
 	Punt Punt `binapi:"punt,name=punt" json:"punt,omitempty"`
 }
 
-func (m *PuntSocketDeregister) Reset()               { *m = PuntSocketDeregister{} }
-func (*PuntSocketDeregister) GetMessageName() string { return "punt_socket_deregister" }
-func (*PuntSocketDeregister) GetCrcString() string   { return "75afa766" }
-func (*PuntSocketDeregister) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PuntSocketDeregister) Reset()                        { *m = PuntSocketDeregister{} }
+func (*PuntSocketDeregister) GetMessageName() string          { return "punt_socket_deregister" }
+func (*PuntSocketDeregister) GetCrcString() string            { return "75afa766" }
+func (*PuntSocketDeregister) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntSocketDeregister) Size() (size int) {
 	if m == nil {
@@ -263,11 +260,12 @@ type PuntSocketDeregisterReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PuntSocketDeregisterReply) Reset()               { *m = PuntSocketDeregisterReply{} }
-func (*PuntSocketDeregisterReply) GetMessageName() string { return "punt_socket_deregister_reply" }
-func (*PuntSocketDeregisterReply) GetCrcString() string   { return "e8d4e804" }
-func (*PuntSocketDeregisterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PuntSocketDeregisterReply) Reset()                        { *m = PuntSocketDeregisterReply{} }
+func (*PuntSocketDeregisterReply) GetMessageName() string          { return "punt_socket_deregister_reply" }
+func (*PuntSocketDeregisterReply) GetCrcString() string            { return "e8d4e804" }
+func (*PuntSocketDeregisterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntSocketDeregisterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PuntSocketDeregisterReply) Size() (size int) {
@@ -297,11 +295,12 @@ type PuntSocketDetails struct {
 	Pathname string `binapi:"string[108],name=pathname" json:"pathname,omitempty"`
 }
 
-func (m *PuntSocketDetails) Reset()               { *m = PuntSocketDetails{} }
-func (*PuntSocketDetails) GetMessageName() string { return "punt_socket_details" }
-func (*PuntSocketDetails) GetCrcString() string   { return "330466e4" }
-func (*PuntSocketDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PuntSocketDetails) Reset()                        { *m = PuntSocketDetails{} }
+func (*PuntSocketDetails) GetMessageName() string          { return "punt_socket_details" }
+func (*PuntSocketDetails) GetCrcString() string            { return "330466e4" }
+func (*PuntSocketDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntSocketDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PuntSocketDetails) Size() (size int) {
@@ -336,12 +335,10 @@ type PuntSocketDump struct {
 	Type PuntType `binapi:"punt_type,name=type" json:"type,omitempty"`
 }
 
-func (m *PuntSocketDump) Reset()               { *m = PuntSocketDump{} }
-func (*PuntSocketDump) GetMessageName() string { return "punt_socket_dump" }
-func (*PuntSocketDump) GetCrcString() string   { return "916fb004" }
-func (*PuntSocketDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PuntSocketDump) Reset()                        { *m = PuntSocketDump{} }
+func (*PuntSocketDump) GetMessageName() string          { return "punt_socket_dump" }
+func (*PuntSocketDump) GetCrcString() string            { return "916fb004" }
+func (*PuntSocketDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntSocketDump) Size() (size int) {
 	if m == nil {
@@ -371,12 +368,10 @@ type PuntSocketRegister struct {
 	Pathname      string `binapi:"string[108],name=pathname" json:"pathname,omitempty"`
 }
 
-func (m *PuntSocketRegister) Reset()               { *m = PuntSocketRegister{} }
-func (*PuntSocketRegister) GetMessageName() string { return "punt_socket_register" }
-func (*PuntSocketRegister) GetCrcString() string   { return "7875badb" }
-func (*PuntSocketRegister) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *PuntSocketRegister) Reset()                        { *m = PuntSocketRegister{} }
+func (*PuntSocketRegister) GetMessageName() string          { return "punt_socket_register" }
+func (*PuntSocketRegister) GetCrcString() string            { return "7875badb" }
+func (*PuntSocketRegister) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntSocketRegister) Size() (size int) {
 	if m == nil {
@@ -414,11 +409,12 @@ type PuntSocketRegisterReply struct {
 	Pathname string `binapi:"string[108],name=pathname" json:"pathname,omitempty"`
 }
 
-func (m *PuntSocketRegisterReply) Reset()               { *m = PuntSocketRegisterReply{} }
-func (*PuntSocketRegisterReply) GetMessageName() string { return "punt_socket_register_reply" }
-func (*PuntSocketRegisterReply) GetCrcString() string   { return "bd30ae90" }
-func (*PuntSocketRegisterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *PuntSocketRegisterReply) Reset()                        { *m = PuntSocketRegisterReply{} }
+func (*PuntSocketRegisterReply) GetMessageName() string          { return "punt_socket_register_reply" }
+func (*PuntSocketRegisterReply) GetCrcString() string            { return "bd30ae90" }
+func (*PuntSocketRegisterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntSocketRegisterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PuntSocketRegisterReply) Size() (size int) {
@@ -451,12 +447,10 @@ type SetPunt struct {
 	Punt  Punt `binapi:"punt,name=punt" json:"punt,omitempty"`
 }
 
-func (m *SetPunt) Reset()               { *m = SetPunt{} }
-func (*SetPunt) GetMessageName() string { return "set_punt" }
-func (*SetPunt) GetCrcString() string   { return "47d0e347" }
-func (*SetPunt) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SetPunt) Reset()                        { *m = SetPunt{} }
+func (*SetPunt) GetMessageName() string          { return "set_punt" }
+func (*SetPunt) GetCrcString() string            { return "47d0e347" }
+func (*SetPunt) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SetPunt) Size() (size int) {
 	if m == nil {
@@ -490,11 +484,12 @@ type SetPuntReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SetPuntReply) Reset()               { *m = SetPuntReply{} }
-func (*SetPuntReply) GetMessageName() string { return "set_punt_reply" }
-func (*SetPuntReply) GetCrcString() string   { return "e8d4e804" }
-func (*SetPuntReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SetPuntReply) Reset()                        { *m = SetPuntReply{} }
+func (*SetPuntReply) GetMessageName() string          { return "set_punt_reply" }
+func (*SetPuntReply) GetCrcString() string            { return "e8d4e804" }
+func (*SetPuntReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SetPuntReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SetPuntReply) Size() (size int) {

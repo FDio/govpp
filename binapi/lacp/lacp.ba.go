@@ -52,11 +52,12 @@ type SwInterfaceLacpDetails struct {
 	PartnerState          uint8                          `binapi:"u8,name=partner_state" json:"partner_state,omitempty"`
 }
 
-func (m *SwInterfaceLacpDetails) Reset()               { *m = SwInterfaceLacpDetails{} }
-func (*SwInterfaceLacpDetails) GetMessageName() string { return "sw_interface_lacp_details" }
-func (*SwInterfaceLacpDetails) GetCrcString() string   { return "d9a83d2f" }
-func (*SwInterfaceLacpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+func (m *SwInterfaceLacpDetails) Reset()                        { *m = SwInterfaceLacpDetails{} }
+func (*SwInterfaceLacpDetails) GetMessageName() string          { return "sw_interface_lacp_details" }
+func (*SwInterfaceLacpDetails) GetCrcString() string            { return "d9a83d2f" }
+func (*SwInterfaceLacpDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceLacpDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceLacpDetails) Size() (size int) {
@@ -137,12 +138,10 @@ func (m *SwInterfaceLacpDetails) Unmarshal(b []byte) error {
 // SwInterfaceLacpDump defines message 'sw_interface_lacp_dump'.
 type SwInterfaceLacpDump struct{}
 
-func (m *SwInterfaceLacpDump) Reset()               { *m = SwInterfaceLacpDump{} }
-func (*SwInterfaceLacpDump) GetMessageName() string { return "sw_interface_lacp_dump" }
-func (*SwInterfaceLacpDump) GetCrcString() string   { return "51077d14" }
-func (*SwInterfaceLacpDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
-}
+func (m *SwInterfaceLacpDump) Reset()                        { *m = SwInterfaceLacpDump{} }
+func (*SwInterfaceLacpDump) GetMessageName() string          { return "sw_interface_lacp_dump" }
+func (*SwInterfaceLacpDump) GetCrcString() string            { return "51077d14" }
+func (*SwInterfaceLacpDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceLacpDump) Size() (size int) {
 	if m == nil {
