@@ -84,6 +84,9 @@ func (*DsliteAddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804"
 func (*DsliteAddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DsliteAddDelPoolAddrRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DsliteAddDelPoolAddrRangeReply) Size() (size int) {
 	if m == nil {
@@ -116,6 +119,9 @@ func (*DsliteAddressDetails) GetMessageName() string { return "dslite_address_de
 func (*DsliteAddressDetails) GetCrcString() string   { return "ec26d648" }
 func (*DsliteAddressDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DsliteAddressDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *DsliteAddressDetails) Size() (size int) {
@@ -206,6 +212,9 @@ func (*DsliteGetAftrAddrReply) GetCrcString() string   { return "8e23608e" }
 func (*DsliteGetAftrAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DsliteGetAftrAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DsliteGetAftrAddrReply) Size() (size int) {
 	if m == nil {
@@ -273,6 +282,9 @@ func (*DsliteGetB4AddrReply) GetMessageName() string { return "dslite_get_b4_add
 func (*DsliteGetB4AddrReply) GetCrcString() string   { return "8e23608e" }
 func (*DsliteGetB4AddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DsliteGetB4AddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteGetB4AddrReply) Size() (size int) {
@@ -350,6 +362,9 @@ func (*DsliteSetAftrAddrReply) GetCrcString() string   { return "e8d4e804" }
 func (*DsliteSetAftrAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DsliteSetAftrAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DsliteSetAftrAddrReply) Size() (size int) {
 	if m == nil {
@@ -419,6 +434,9 @@ func (*DsliteSetB4AddrReply) GetMessageName() string { return "dslite_set_b4_add
 func (*DsliteSetB4AddrReply) GetCrcString() string   { return "e8d4e804" }
 func (*DsliteSetB4AddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DsliteSetB4AddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteSetB4AddrReply) Size() (size int) {

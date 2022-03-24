@@ -235,6 +235,9 @@ func (*BdIPMacAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BdIPMacAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BdIPMacAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BdIPMacAddDelReply) Size() (size int) {
 	if m == nil {
@@ -267,6 +270,9 @@ func (*BdIPMacDetails) GetMessageName() string { return "bd_ip_mac_details" }
 func (*BdIPMacDetails) GetCrcString() string   { return "545af86a" }
 func (*BdIPMacDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *BdIPMacDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BdIPMacDetails) Size() (size int) {
@@ -376,6 +382,9 @@ func (*BdIPMacFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*BdIPMacFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BdIPMacFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BdIPMacFlushReply) Size() (size int) {
 	if m == nil {
@@ -478,6 +487,9 @@ func (*BridgeDomainAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BridgeDomainAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BridgeDomainAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BridgeDomainAddDelReply) Size() (size int) {
 	if m == nil {
@@ -522,6 +534,9 @@ func (*BridgeDomainDetails) GetMessageName() string { return "bridge_domain_deta
 func (*BridgeDomainDetails) GetCrcString() string   { return "0fa506fd" }
 func (*BridgeDomainDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *BridgeDomainDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BridgeDomainDetails) Size() (size int) {
@@ -689,6 +704,9 @@ func (*BridgeDomainSetDefaultLearnLimitReply) GetCrcString() string { return "e8
 func (*BridgeDomainSetDefaultLearnLimitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BridgeDomainSetDefaultLearnLimitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BridgeDomainSetDefaultLearnLimitReply) Size() (size int) {
 	if m == nil {
@@ -761,6 +779,9 @@ func (*BridgeDomainSetLearnLimitReply) GetCrcString() string { return "e8d4e804"
 func (*BridgeDomainSetLearnLimitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BridgeDomainSetLearnLimitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BridgeDomainSetLearnLimitReply) Size() (size int) {
 	if m == nil {
@@ -830,6 +851,9 @@ func (*BridgeDomainSetMacAgeReply) GetMessageName() string { return "bridge_doma
 func (*BridgeDomainSetMacAgeReply) GetCrcString() string   { return "e8d4e804" }
 func (*BridgeDomainSetMacAgeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *BridgeDomainSetMacAgeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BridgeDomainSetMacAgeReply) Size() (size int) {
@@ -906,6 +930,9 @@ func (*BridgeFlagsReply) GetCrcString() string   { return "29b2a2b3" }
 func (*BridgeFlagsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BridgeFlagsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BridgeFlagsReply) Size() (size int) {
 	if m == nil {
@@ -980,6 +1007,9 @@ func (*BviCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*BviCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BviCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BviCreateReply) Size() (size int) {
 	if m == nil {
@@ -1049,6 +1079,9 @@ func (*BviDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*BviDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BviDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BviDeleteReply) Size() (size int) {
 	if m == nil {
@@ -1084,6 +1117,9 @@ func (*L2ArpTermEvent) GetMessageName() string { return "l2_arp_term_event" }
 func (*L2ArpTermEvent) GetCrcString() string   { return "6963e07a" }
 func (*L2ArpTermEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *L2ArpTermEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *L2ArpTermEvent) Size() (size int) {
@@ -1157,6 +1193,9 @@ func (*L2FibClearTableReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2FibClearTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2FibClearTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2FibClearTableReply) Size() (size int) {
 	if m == nil {
@@ -1194,6 +1233,9 @@ func (*L2FibTableDetails) GetMessageName() string { return "l2_fib_table_details
 func (*L2FibTableDetails) GetCrcString() string   { return "a44ef6b8" }
 func (*L2FibTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *L2FibTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *L2FibTableDetails) Size() (size int) {
@@ -1318,6 +1360,9 @@ func (*L2FlagsReply) GetCrcString() string   { return "29b2a2b3" }
 func (*L2FlagsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2FlagsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2FlagsReply) Size() (size int) {
 	if m == nil {
@@ -1390,6 +1435,9 @@ func (*L2InterfaceEfpFilterReply) GetMessageName() string { return "l2_interface
 func (*L2InterfaceEfpFilterReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2InterfaceEfpFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *L2InterfaceEfpFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2InterfaceEfpFilterReply) Size() (size int) {
@@ -1483,6 +1531,9 @@ func (*L2InterfacePbbTagRewriteReply) GetCrcString() string { return "e8d4e804" 
 func (*L2InterfacePbbTagRewriteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2InterfacePbbTagRewriteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2InterfacePbbTagRewriteReply) Size() (size int) {
 	if m == nil {
@@ -1567,6 +1618,9 @@ func (*L2InterfaceVlanTagRewriteReply) GetCrcString() string { return "e8d4e804"
 func (*L2InterfaceVlanTagRewriteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2InterfaceVlanTagRewriteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2InterfaceVlanTagRewriteReply) Size() (size int) {
 	if m == nil {
@@ -1601,6 +1655,9 @@ func (*L2MacsEvent) GetMessageName() string { return "l2_macs_event" }
 func (*L2MacsEvent) GetCrcString() string   { return "44b8fd64" }
 func (*L2MacsEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *L2MacsEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *L2MacsEvent) Size() (size int) {
@@ -1708,6 +1765,9 @@ func (*L2PatchAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2PatchAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2PatchAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2PatchAddDelReply) Size() (size int) {
 	if m == nil {
@@ -1741,6 +1801,9 @@ func (*L2XconnectDetails) GetMessageName() string { return "l2_xconnect_details"
 func (*L2XconnectDetails) GetCrcString() string   { return "472b6b67" }
 func (*L2XconnectDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *L2XconnectDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *L2XconnectDetails) Size() (size int) {
@@ -1862,6 +1925,9 @@ func (*L2fibAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2fibAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2fibAddDelReply) Size() (size int) {
 	if m == nil {
@@ -1921,6 +1987,9 @@ func (*L2fibFlushAllReply) GetMessageName() string { return "l2fib_flush_all_rep
 func (*L2fibFlushAllReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushAllReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *L2fibFlushAllReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibFlushAllReply) Size() (size int) {
@@ -1988,6 +2057,9 @@ func (*L2fibFlushBdReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushBdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2fibFlushBdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2fibFlushBdReply) Size() (size int) {
 	if m == nil {
@@ -2054,6 +2126,9 @@ func (*L2fibFlushIntReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushIntReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *L2fibFlushIntReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *L2fibFlushIntReply) Size() (size int) {
 	if m == nil {
@@ -2119,6 +2194,9 @@ func (*L2fibSetScanDelayReply) GetMessageName() string { return "l2fib_set_scan_
 func (*L2fibSetScanDelayReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibSetScanDelayReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *L2fibSetScanDelayReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibSetScanDelayReply) Size() (size int) {
@@ -2204,6 +2282,9 @@ func (*SwInterfaceSetL2BridgeReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetL2BridgeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceSetL2BridgeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceSetL2BridgeReply) Size() (size int) {
 	if m == nil {
@@ -2280,6 +2361,9 @@ func (*SwInterfaceSetL2XconnectReply) GetCrcString() string { return "e8d4e804" 
 func (*SwInterfaceSetL2XconnectReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceSetL2XconnectReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceSetL2XconnectReply) Size() (size int) {
 	if m == nil {
@@ -2350,6 +2434,9 @@ func (*SwInterfaceSetVpathReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetVpathReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceSetVpathReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceSetVpathReply) Size() (size int) {
 	if m == nil {
@@ -2419,6 +2506,9 @@ func (*WantL2ArpTermEventsReply) GetMessageName() string { return "want_l2_arp_t
 func (*WantL2ArpTermEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2ArpTermEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantL2ArpTermEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantL2ArpTermEventsReply) Size() (size int) {
@@ -2544,6 +2634,9 @@ func (*WantL2MacsEvents2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2MacsEvents2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WantL2MacsEvents2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WantL2MacsEvents2Reply) Size() (size int) {
 	if m == nil {
@@ -2577,6 +2670,9 @@ func (*WantL2MacsEventsReply) GetMessageName() string { return "want_l2_macs_eve
 func (*WantL2MacsEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2MacsEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantL2MacsEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantL2MacsEventsReply) Size() (size int) {

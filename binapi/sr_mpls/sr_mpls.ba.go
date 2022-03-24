@@ -100,6 +100,9 @@ func (*SrMplsPolicyAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SrMplsPolicyAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SrMplsPolicyAddReply) Size() (size int) {
 	if m == nil {
@@ -181,6 +184,9 @@ func (*SrMplsPolicyAssignEndpointColorReply) GetCrcString() string { return "e8d
 func (*SrMplsPolicyAssignEndpointColorReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SrMplsPolicyAssignEndpointColorReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SrMplsPolicyAssignEndpointColorReply) Size() (size int) {
 	if m == nil {
@@ -246,6 +252,9 @@ func (*SrMplsPolicyDelReply) GetMessageName() string { return "sr_mpls_policy_de
 func (*SrMplsPolicyDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SrMplsPolicyDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SrMplsPolicyDelReply) Size() (size int) {
@@ -341,6 +350,9 @@ func (*SrMplsPolicyModReply) GetMessageName() string { return "sr_mpls_policy_mo
 func (*SrMplsPolicyModReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyModReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SrMplsPolicyModReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SrMplsPolicyModReply) Size() (size int) {
@@ -448,6 +460,9 @@ func (*SrMplsSteeringAddDelReply) GetMessageName() string { return "sr_mpls_stee
 func (*SrMplsSteeringAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsSteeringAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SrMplsSteeringAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SrMplsSteeringAddDelReply) Size() (size int) {

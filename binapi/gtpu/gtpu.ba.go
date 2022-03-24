@@ -109,6 +109,9 @@ func (*GtpuAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*GtpuAddDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GtpuAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GtpuAddDelTunnelReply) Size() (size int) {
 	if m == nil {
@@ -186,6 +189,9 @@ func (*GtpuOffloadRxReply) GetCrcString() string   { return "e8d4e804" }
 func (*GtpuOffloadRxReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GtpuOffloadRxReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GtpuOffloadRxReply) Size() (size int) {
 	if m == nil {
@@ -225,6 +231,9 @@ func (*GtpuTunnelDetails) GetMessageName() string { return "gtpu_tunnel_details"
 func (*GtpuTunnelDetails) GetCrcString() string   { return "27f434ae" }
 func (*GtpuTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *GtpuTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GtpuTunnelDetails) Size() (size int) {
@@ -367,6 +376,9 @@ func (*GtpuTunnelUpdateTteidReply) GetCrcString() string   { return "e8d4e804" }
 func (*GtpuTunnelUpdateTteidReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GtpuTunnelUpdateTteidReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GtpuTunnelUpdateTteidReply) Size() (size int) {
 	if m == nil {
@@ -442,6 +454,9 @@ func (*SwInterfaceSetGtpuBypassReply) GetMessageName() string {
 func (*SwInterfaceSetGtpuBypassReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetGtpuBypassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SwInterfaceSetGtpuBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetGtpuBypassReply) Size() (size int) {

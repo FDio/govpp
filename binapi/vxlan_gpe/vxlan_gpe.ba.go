@@ -86,6 +86,9 @@ func (*SwInterfaceSetVxlanGpeBypassReply) GetCrcString() string { return "e8d4e8
 func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceSetVxlanGpeBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceSetVxlanGpeBypassReply) Size() (size int) {
 	if m == nil {
@@ -186,6 +189,9 @@ func (*VxlanGpeAddDelTunnelReply) GetMessageName() string { return "vxlan_gpe_ad
 func (*VxlanGpeAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*VxlanGpeAddDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VxlanGpeAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeAddDelTunnelReply) Size() (size int) {
@@ -301,6 +307,9 @@ func (*VxlanGpeAddDelTunnelV2Reply) GetCrcString() string { return "5383d31f" }
 func (*VxlanGpeAddDelTunnelV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VxlanGpeAddDelTunnelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeAddDelTunnelV2Reply) Size() (size int) {
 	if m == nil {
@@ -344,6 +353,9 @@ func (*VxlanGpeTunnelDetails) GetMessageName() string { return "vxlan_gpe_tunnel
 func (*VxlanGpeTunnelDetails) GetCrcString() string   { return "0968fc8b" }
 func (*VxlanGpeTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VxlanGpeTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanGpeTunnelDetails) Size() (size int) {
@@ -450,6 +462,9 @@ func (*VxlanGpeTunnelV2Details) GetMessageName() string { return "vxlan_gpe_tunn
 func (*VxlanGpeTunnelV2Details) GetCrcString() string   { return "06be4870" }
 func (*VxlanGpeTunnelV2Details) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VxlanGpeTunnelV2Details) GetRetVal() error {
+	return nil
 }
 
 func (m *VxlanGpeTunnelV2Details) Size() (size int) {

@@ -18,15 +18,9 @@ type MyMsg struct {
 	Port  uint16
 }
 
-func (*MyMsg) GetMessageName() string {
-	return "my_msg"
-}
-func (*MyMsg) GetCrcString() string {
-	return "xxxxx"
-}
-func (*MyMsg) GetMessageType() api.MessageType {
-	return api.OtherMessage
-}
+func (*MyMsg) GetMessageName() string          { return "my_msg" }
+func (*MyMsg) GetCrcString() string            { return "xxxxx" }
+func (*MyMsg) GetMessageType() api.MessageType { return api.OtherMessage }
 
 func TestEncode(t *testing.T) {
 	tests := []struct {

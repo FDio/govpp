@@ -173,6 +173,9 @@ func (*OneAddDelAdjacencyReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelAdjacencyReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelAdjacencyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelAdjacencyReply) Size() (size int) {
 	if m == nil {
@@ -249,6 +252,9 @@ func (*OneAddDelL2ArpEntryReply) GetMessageName() string { return "one_add_del_l
 func (*OneAddDelL2ArpEntryReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelL2ArpEntryReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneAddDelL2ArpEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelL2ArpEntryReply) Size() (size int) {
@@ -339,6 +345,9 @@ func (*OneAddDelLocalEidReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelLocalEidReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelLocalEidReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelLocalEidReply) Size() (size int) {
 	if m == nil {
@@ -420,6 +429,9 @@ func (*OneAddDelLocatorReply) GetMessageName() string { return "one_add_del_loca
 func (*OneAddDelLocatorReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelLocatorReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneAddDelLocatorReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelLocatorReply) Size() (size int) {
@@ -523,6 +535,9 @@ func (*OneAddDelLocatorSetReply) GetCrcString() string   { return "b6666db4" }
 func (*OneAddDelLocatorSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelLocatorSetReply) Size() (size int) {
 	if m == nil {
@@ -600,6 +615,9 @@ func (*OneAddDelMapRequestItrRlocsReply) GetCrcString() string { return "e8d4e80
 func (*OneAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelMapRequestItrRlocsReply) Size() (size int) {
 	if m == nil {
@@ -673,6 +691,9 @@ func (*OneAddDelMapResolverReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelMapResolverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelMapResolverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelMapResolverReply) Size() (size int) {
 	if m == nil {
@@ -745,6 +766,9 @@ func (*OneAddDelMapServerReply) GetMessageName() string { return "one_add_del_ma
 func (*OneAddDelMapServerReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelMapServerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneAddDelMapServerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelMapServerReply) Size() (size int) {
@@ -822,6 +846,9 @@ func (*OneAddDelNdpEntryReply) GetMessageName() string { return "one_add_del_ndp
 func (*OneAddDelNdpEntryReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneAddDelNdpEntryReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneAddDelNdpEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelNdpEntryReply) Size() (size int) {
@@ -955,6 +982,9 @@ func (*OneAddDelRemoteMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*OneAddDelRemoteMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneAddDelRemoteMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelRemoteMappingReply) Size() (size int) {
 	if m == nil {
@@ -1022,6 +1052,9 @@ func (*OneAdjacenciesGetReply) GetMessageName() string { return "one_adjacencies
 func (*OneAdjacenciesGetReply) GetCrcString() string   { return "085bab89" }
 func (*OneAdjacenciesGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneAdjacenciesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAdjacenciesGetReply) Size() (size int) {
@@ -1133,6 +1166,9 @@ func (*OneEidTableAddDelMapReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneEidTableAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneEidTableAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneEidTableAddDelMapReply) Size() (size int) {
 	if m == nil {
@@ -1174,6 +1210,9 @@ func (*OneEidTableDetails) GetMessageName() string { return "one_eid_table_detai
 func (*OneEidTableDetails) GetCrcString() string   { return "1c29f792" }
 func (*OneEidTableDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneEidTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneEidTableDetails) Size() (size int) {
@@ -1294,6 +1333,9 @@ func (*OneEidTableMapDetails) GetCrcString() string   { return "0b6859e2" }
 func (*OneEidTableMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneEidTableMapDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *OneEidTableMapDetails) Size() (size int) {
 	if m == nil {
@@ -1362,6 +1404,9 @@ func (*OneEidTableVniDetails) GetMessageName() string { return "one_eid_table_vn
 func (*OneEidTableVniDetails) GetCrcString() string   { return "64abc01e" }
 func (*OneEidTableVniDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneEidTableVniDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneEidTableVniDetails) Size() (size int) {
@@ -1491,6 +1536,9 @@ func (*OneEnableDisablePetrModeReply) GetCrcString() string { return "e8d4e804" 
 func (*OneEnableDisablePetrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneEnableDisablePetrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneEnableDisablePetrModeReply) Size() (size int) {
 	if m == nil {
@@ -1559,6 +1607,9 @@ func (*OneEnableDisablePitrModeReply) GetCrcString() string { return "e8d4e804" 
 func (*OneEnableDisablePitrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneEnableDisablePitrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneEnableDisablePitrModeReply) Size() (size int) {
 	if m == nil {
@@ -1591,6 +1642,9 @@ func (*OneEnableDisableReply) GetMessageName() string { return "one_enable_disab
 func (*OneEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEnableDisableReply) Size() (size int) {
@@ -1660,6 +1714,9 @@ func (*OneEnableDisableXtrModeReply) GetCrcString() string { return "e8d4e804" }
 func (*OneEnableDisableXtrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneEnableDisableXtrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneEnableDisableXtrModeReply) Size() (size int) {
 	if m == nil {
@@ -1722,6 +1779,9 @@ func (*OneGetMapRequestItrRlocsReply) GetMessageName() string {
 func (*OneGetMapRequestItrRlocsReply) GetCrcString() string { return "76580f3a" }
 func (*OneGetMapRequestItrRlocsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneGetMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneGetMapRequestItrRlocsReply) Size() (size int) {
@@ -1789,6 +1849,9 @@ func (*OneGetTransportProtocolReply) GetCrcString() string { return "62a28eb3" }
 func (*OneGetTransportProtocolReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneGetTransportProtocolReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneGetTransportProtocolReply) Size() (size int) {
 	if m == nil {
@@ -1853,6 +1916,9 @@ func (*OneL2ArpBdGetReply) GetMessageName() string { return "one_l2_arp_bd_get_r
 func (*OneL2ArpBdGetReply) GetCrcString() string   { return "221ac888" }
 func (*OneL2ArpBdGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneL2ArpBdGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneL2ArpBdGetReply) Size() (size int) {
@@ -1937,6 +2003,9 @@ func (*OneL2ArpEntriesGetReply) GetCrcString() string   { return "b0dd200f" }
 func (*OneL2ArpEntriesGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneL2ArpEntriesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneL2ArpEntriesGetReply) Size() (size int) {
 	if m == nil {
@@ -1999,6 +2068,9 @@ func (*OneLocatorDetails) GetMessageName() string { return "one_locator_details"
 func (*OneLocatorDetails) GetCrcString() string   { return "2c620ffe" }
 func (*OneLocatorDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneLocatorDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneLocatorDetails) Size() (size int) {
@@ -2089,6 +2161,9 @@ func (*OneLocatorSetDetails) GetMessageName() string { return "one_locator_set_d
 func (*OneLocatorSetDetails) GetCrcString() string   { return "5b33a105" }
 func (*OneLocatorSetDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneLocatorSetDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneLocatorSetDetails) Size() (size int) {
@@ -2194,6 +2269,9 @@ func (*OneMapRegisterEnableDisableReply) GetCrcString() string { return "e8d4e80
 func (*OneMapRegisterEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneMapRegisterEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneMapRegisterEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -2264,6 +2342,9 @@ func (*OneMapRegisterFallbackThresholdReply) GetCrcString() string { return "e8d
 func (*OneMapRegisterFallbackThresholdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneMapRegisterFallbackThresholdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneMapRegisterFallbackThresholdReply) Size() (size int) {
 	if m == nil {
@@ -2329,6 +2410,9 @@ func (*OneMapRegisterSetTTLReply) GetMessageName() string { return "one_map_regi
 func (*OneMapRegisterSetTTLReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneMapRegisterSetTTLReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneMapRegisterSetTTLReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneMapRegisterSetTTLReply) Size() (size int) {
@@ -2396,6 +2480,9 @@ func (*OneMapRequestModeReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneMapRequestModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneMapRequestModeReply) Size() (size int) {
 	if m == nil {
@@ -2428,6 +2515,9 @@ func (*OneMapResolverDetails) GetMessageName() string { return "one_map_resolver
 func (*OneMapResolverDetails) GetCrcString() string   { return "3e78fc57" }
 func (*OneMapResolverDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneMapResolverDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneMapResolverDetails) Size() (size int) {
@@ -2491,6 +2581,9 @@ func (*OneMapServerDetails) GetMessageName() string { return "one_map_server_det
 func (*OneMapServerDetails) GetCrcString() string   { return "3e78fc57" }
 func (*OneMapServerDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneMapServerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneMapServerDetails) Size() (size int) {
@@ -2584,6 +2677,9 @@ func (*OneNdpBdGetReply) GetCrcString() string   { return "221ac888" }
 func (*OneNdpBdGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneNdpBdGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneNdpBdGetReply) Size() (size int) {
 	if m == nil {
@@ -2666,6 +2762,9 @@ func (*OneNdpEntriesGetReply) GetMessageName() string { return "one_ndp_entries_
 func (*OneNdpEntriesGetReply) GetCrcString() string   { return "70719b1a" }
 func (*OneNdpEntriesGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneNdpEntriesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneNdpEntriesGetReply) Size() (size int) {
@@ -2763,6 +2862,9 @@ func (*OneNshSetLocatorSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneNshSetLocatorSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneNshSetLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneNshSetLocatorSetReply) Size() (size int) {
 	if m == nil {
@@ -2833,6 +2935,9 @@ func (*OnePitrSetLocatorSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*OnePitrSetLocatorSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OnePitrSetLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OnePitrSetLocatorSetReply) Size() (size int) {
 	if m == nil {
@@ -2900,6 +3005,9 @@ func (*OneRlocProbeEnableDisableReply) GetMessageName() string {
 func (*OneRlocProbeEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*OneRlocProbeEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneRlocProbeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneRlocProbeEnableDisableReply) Size() (size int) {
@@ -2969,6 +3077,9 @@ func (*OneSetTransportProtocolReply) GetCrcString() string { return "e8d4e804" }
 func (*OneSetTransportProtocolReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneSetTransportProtocolReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneSetTransportProtocolReply) Size() (size int) {
 	if m == nil {
@@ -3029,6 +3140,9 @@ func (*OneShowPetrModeReply) GetMessageName() string { return "one_show_petr_mod
 func (*OneShowPetrModeReply) GetCrcString() string   { return "f15abb16" }
 func (*OneShowPetrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneShowPetrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneShowPetrModeReply) Size() (size int) {
@@ -3094,6 +3208,9 @@ func (*OneShowPitrModeReply) GetCrcString() string   { return "f15abb16" }
 func (*OneShowPitrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneShowPitrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneShowPitrModeReply) Size() (size int) {
 	if m == nil {
@@ -3158,6 +3275,9 @@ func (*OneShowXtrModeReply) GetCrcString() string   { return "f15abb16" }
 func (*OneShowXtrModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneShowXtrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneShowXtrModeReply) Size() (size int) {
 	if m == nil {
@@ -3199,6 +3319,9 @@ func (*OneStatsDetails) GetMessageName() string { return "one_stats_details" }
 func (*OneStatsDetails) GetCrcString() string   { return "2eb74678" }
 func (*OneStatsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneStatsDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneStatsDetails) Size() (size int) {
@@ -3323,6 +3446,9 @@ func (*OneStatsEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneStatsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneStatsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneStatsEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -3382,6 +3508,9 @@ func (*OneStatsFlushReply) GetMessageName() string { return "one_stats_flush_rep
 func (*OneStatsFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneStatsFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *OneStatsFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneStatsFlushReply) Size() (size int) {
@@ -3456,6 +3585,9 @@ func (*OneUsePetrReply) GetCrcString() string   { return "e8d4e804" }
 func (*OneUsePetrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OneUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneUsePetrReply) Size() (size int) {
 	if m == nil {
@@ -3523,6 +3655,9 @@ func (*ShowOneMapRegisterFallbackThresholdReply) GetCrcString() string { return 
 func (*ShowOneMapRegisterFallbackThresholdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOneMapRegisterFallbackThresholdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneMapRegisterFallbackThresholdReply) Size() (size int) {
 	if m == nil {
@@ -3589,6 +3724,9 @@ func (*ShowOneMapRegisterStateReply) GetCrcString() string { return "f15abb16" }
 func (*ShowOneMapRegisterStateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOneMapRegisterStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneMapRegisterStateReply) Size() (size int) {
 	if m == nil {
@@ -3652,6 +3790,9 @@ func (*ShowOneMapRegisterTTLReply) GetMessageName() string { return "show_one_ma
 func (*ShowOneMapRegisterTTLReply) GetCrcString() string   { return "fa83dd66" }
 func (*ShowOneMapRegisterTTLReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowOneMapRegisterTTLReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneMapRegisterTTLReply) Size() (size int) {
@@ -3717,6 +3858,9 @@ func (*ShowOneMapRequestModeReply) GetCrcString() string   { return "d41f3c1d" }
 func (*ShowOneMapRequestModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOneMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneMapRequestModeReply) Size() (size int) {
 	if m == nil {
@@ -3781,6 +3925,9 @@ func (*ShowOneNshMappingReply) GetMessageName() string { return "show_one_nsh_ma
 func (*ShowOneNshMappingReply) GetCrcString() string   { return "46478c02" }
 func (*ShowOneNshMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowOneNshMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneNshMappingReply) Size() (size int) {
@@ -3850,6 +3997,9 @@ func (*ShowOnePitrReply) GetCrcString() string   { return "a2d1a49f" }
 func (*ShowOnePitrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOnePitrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOnePitrReply) Size() (size int) {
 	if m == nil {
@@ -3917,6 +4067,9 @@ func (*ShowOneRlocProbeStateReply) GetCrcString() string   { return "f15abb16" }
 func (*ShowOneRlocProbeStateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOneRlocProbeStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneRlocProbeStateReply) Size() (size int) {
 	if m == nil {
@@ -3983,6 +4136,9 @@ func (*ShowOneStatsEnableDisableReply) GetCrcString() string { return "f15abb16"
 func (*ShowOneStatsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowOneStatsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneStatsEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -4047,6 +4203,9 @@ func (*ShowOneStatusReply) GetMessageName() string { return "show_one_status_rep
 func (*ShowOneStatusReply) GetCrcString() string   { return "961bb25b" }
 func (*ShowOneStatusReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowOneStatusReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneStatusReply) Size() (size int) {
@@ -4115,6 +4274,9 @@ func (*ShowOneUsePetrReply) GetMessageName() string { return "show_one_use_petr_
 func (*ShowOneUsePetrReply) GetCrcString() string   { return "84a03528" }
 func (*ShowOneUsePetrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowOneUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneUsePetrReply) Size() (size int) {

@@ -72,6 +72,9 @@ func (*CdpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*CdpEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *CdpEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *CdpEnableDisableReply) Size() (size int) {
 	if m == nil {

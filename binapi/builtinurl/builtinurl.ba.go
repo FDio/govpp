@@ -66,6 +66,9 @@ func (*BuiltinurlEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*BuiltinurlEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *BuiltinurlEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BuiltinurlEnableReply) Size() (size int) {
 	if m == nil {

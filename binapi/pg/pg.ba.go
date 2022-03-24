@@ -118,6 +118,9 @@ func (*PgCaptureReply) GetCrcString() string   { return "e8d4e804" }
 func (*PgCaptureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *PgCaptureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *PgCaptureReply) Size() (size int) {
 	if m == nil {
@@ -192,6 +195,9 @@ func (*PgCreateInterfaceReply) GetMessageName() string { return "pg_create_inter
 func (*PgCreateInterfaceReply) GetCrcString() string   { return "5383d31f" }
 func (*PgCreateInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *PgCreateInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgCreateInterfaceReply) Size() (size int) {
@@ -275,6 +281,9 @@ func (*PgCreateInterfaceV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*PgCreateInterfaceV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *PgCreateInterfaceV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *PgCreateInterfaceV2Reply) Size() (size int) {
 	if m == nil {
@@ -347,6 +356,9 @@ func (*PgEnableDisableReply) GetMessageName() string { return "pg_enable_disable
 func (*PgEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*PgEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *PgEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgEnableDisableReply) Size() (size int) {
@@ -423,6 +435,9 @@ func (*PgInterfaceEnableDisableCoalesceReply) GetMessageName() string {
 func (*PgInterfaceEnableDisableCoalesceReply) GetCrcString() string { return "e8d4e804" }
 func (*PgInterfaceEnableDisableCoalesceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *PgInterfaceEnableDisableCoalesceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PgInterfaceEnableDisableCoalesceReply) Size() (size int) {

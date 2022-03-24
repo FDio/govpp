@@ -83,6 +83,9 @@ func (*Nat66AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat66AddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat66AddDelInterfaceReply) Size() (size int) {
 	if m == nil {
@@ -163,6 +166,9 @@ func (*Nat66AddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat66AddDelStaticMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat66AddDelStaticMappingReply) Size() (size int) {
 	if m == nil {
@@ -196,6 +202,9 @@ func (*Nat66InterfaceDetails) GetMessageName() string { return "nat66_interface_
 func (*Nat66InterfaceDetails) GetCrcString() string   { return "5d286289" }
 func (*Nat66InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat66InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat66InterfaceDetails) Size() (size int) {
@@ -299,6 +308,9 @@ func (*Nat66PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat66PluginEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat66PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat66PluginEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -335,6 +347,9 @@ func (*Nat66StaticMappingDetails) GetMessageName() string { return "nat66_static
 func (*Nat66StaticMappingDetails) GetCrcString() string   { return "df39654b" }
 func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat66StaticMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat66StaticMappingDetails) Size() (size int) {

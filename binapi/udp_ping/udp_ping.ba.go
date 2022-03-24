@@ -116,6 +116,9 @@ func (*UDPPingAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPPingAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *UDPPingAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *UDPPingAddDelReply) Size() (size int) {
 	if m == nil {
@@ -181,6 +184,9 @@ func (*UDPPingExportReply) GetMessageName() string { return "udp_ping_export_rep
 func (*UDPPingExportReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPPingExportReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *UDPPingExportReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *UDPPingExportReply) Size() (size int) {

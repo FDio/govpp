@@ -84,6 +84,9 @@ func (*DHCP6PdClientEnableDisableReply) GetCrcString() string { return "e8d4e804
 func (*DHCP6PdClientEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6PdClientEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6PdClientEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -168,6 +171,9 @@ func (*IP6AddDelAddressUsingPrefixReply) GetMessageName() string {
 func (*IP6AddDelAddressUsingPrefixReply) GetCrcString() string { return "e8d4e804" }
 func (*IP6AddDelAddressUsingPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IP6AddDelAddressUsingPrefixReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IP6AddDelAddressUsingPrefixReply) Size() (size int) {

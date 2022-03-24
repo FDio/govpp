@@ -118,6 +118,9 @@ func (*CreateVhostUserIfReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *CreateVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *CreateVhostUserIfReply) Size() (size int) {
 	if m == nil {
@@ -232,6 +235,9 @@ func (*CreateVhostUserIfV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*CreateVhostUserIfV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *CreateVhostUserIfV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *CreateVhostUserIfV2Reply) Size() (size int) {
 	if m == nil {
@@ -300,6 +306,9 @@ func (*DeleteVhostUserIfReply) GetMessageName() string { return "delete_vhost_us
 func (*DeleteVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
 func (*DeleteVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DeleteVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DeleteVhostUserIfReply) Size() (size int) {
@@ -392,6 +401,9 @@ func (*ModifyVhostUserIfReply) GetMessageName() string { return "modify_vhost_us
 func (*ModifyVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
 func (*ModifyVhostUserIfReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ModifyVhostUserIfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ModifyVhostUserIfReply) Size() (size int) {
@@ -487,6 +499,9 @@ func (*ModifyVhostUserIfV2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*ModifyVhostUserIfV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ModifyVhostUserIfV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ModifyVhostUserIfV2Reply) Size() (size int) {
 	if m == nil {
@@ -527,6 +542,9 @@ func (*SwInterfaceVhostUserDetails) GetMessageName() string { return "sw_interfa
 func (*SwInterfaceVhostUserDetails) GetCrcString() string   { return "0cee1e53" }
 func (*SwInterfaceVhostUserDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SwInterfaceVhostUserDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceVhostUserDetails) Size() (size int) {

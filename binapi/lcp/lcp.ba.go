@@ -97,6 +97,9 @@ func (*LcpDefaultNsGetReply) GetCrcString() string   { return "eaeef6d3" }
 func (*LcpDefaultNsGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LcpDefaultNsGetReply) GetRetVal() error {
+	return nil
+}
 
 func (m *LcpDefaultNsGetReply) Size() (size int) {
 	if m == nil {
@@ -162,6 +165,9 @@ func (*LcpDefaultNsSetReply) GetMessageName() string { return "lcp_default_ns_se
 func (*LcpDefaultNsSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*LcpDefaultNsSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *LcpDefaultNsSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpDefaultNsSetReply) Size() (size int) {
@@ -244,6 +250,9 @@ func (*LcpItfPairAddDelReply) GetMessageName() string { return "lcp_itf_pair_add
 func (*LcpItfPairAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*LcpItfPairAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *LcpItfPairAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairAddDelReply) Size() (size int) {
@@ -328,6 +337,9 @@ func (*LcpItfPairAddDelV2Reply) GetCrcString() string   { return "39452f52" }
 func (*LcpItfPairAddDelV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LcpItfPairAddDelV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *LcpItfPairAddDelV2Reply) Size() (size int) {
 	if m == nil {
@@ -368,6 +380,9 @@ func (*LcpItfPairDetails) GetMessageName() string { return "lcp_itf_pair_details
 func (*LcpItfPairDetails) GetCrcString() string   { return "5a95842f" }
 func (*LcpItfPairDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *LcpItfPairDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LcpItfPairDetails) Size() (size int) {
@@ -451,6 +466,9 @@ func (*LcpItfPairGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*LcpItfPairGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LcpItfPairGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *LcpItfPairGetReply) Size() (size int) {
 	if m == nil {
@@ -516,6 +534,9 @@ func (*LcpItfPairReplaceBeginReply) GetCrcString() string { return "e8d4e804" }
 func (*LcpItfPairReplaceBeginReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LcpItfPairReplaceBeginReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *LcpItfPairReplaceBeginReply) Size() (size int) {
 	if m == nil {
@@ -575,6 +596,9 @@ func (*LcpItfPairReplaceEndReply) GetMessageName() string { return "lcp_itf_pair
 func (*LcpItfPairReplaceEndReply) GetCrcString() string   { return "e8d4e804" }
 func (*LcpItfPairReplaceEndReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *LcpItfPairReplaceEndReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LcpItfPairReplaceEndReply) Size() (size int) {

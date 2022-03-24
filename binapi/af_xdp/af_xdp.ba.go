@@ -178,6 +178,9 @@ func (*AfXdpCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*AfXdpCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *AfXdpCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *AfXdpCreateReply) Size() (size int) {
 	if m == nil {
@@ -280,6 +283,9 @@ func (*AfXdpCreateV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*AfXdpCreateV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *AfXdpCreateV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *AfXdpCreateV2Reply) Size() (size int) {
 	if m == nil {
@@ -348,6 +354,9 @@ func (*AfXdpDeleteReply) GetMessageName() string { return "af_xdp_delete_reply" 
 func (*AfXdpDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*AfXdpDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *AfXdpDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AfXdpDeleteReply) Size() (size int) {

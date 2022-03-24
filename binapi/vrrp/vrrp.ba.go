@@ -250,6 +250,9 @@ func (*VrrpVrAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VrrpVrAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VrrpVrAddDelReply) Size() (size int) {
 	if m == nil {
@@ -285,6 +288,9 @@ func (*VrrpVrDetails) GetMessageName() string { return "vrrp_vr_details" }
 func (*VrrpVrDetails) GetCrcString() string   { return "46edcebd" }
 func (*VrrpVrDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VrrpVrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *VrrpVrDetails) Size() (size int) {
@@ -413,6 +419,9 @@ func (*VrrpVrEvent) GetMessageName() string { return "vrrp_vr_event" }
 func (*VrrpVrEvent) GetCrcString() string   { return "c1fea6a5" }
 func (*VrrpVrEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *VrrpVrEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *VrrpVrEvent) Size() (size int) {
@@ -641,6 +650,9 @@ func (*VrrpVrSetPeersReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrSetPeersReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VrrpVrSetPeersReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VrrpVrSetPeersReply) Size() (size int) {
 	if m == nil {
@@ -718,6 +730,9 @@ func (*VrrpVrStartStopReply) GetMessageName() string { return "vrrp_vr_start_sto
 func (*VrrpVrStartStopReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrStartStopReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VrrpVrStartStopReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrStartStopReply) Size() (size int) {
@@ -824,6 +839,9 @@ func (*VrrpVrTrackIfAddDelReply) GetMessageName() string { return "vrrp_vr_track
 func (*VrrpVrTrackIfAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrTrackIfAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VrrpVrTrackIfAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VrrpVrTrackIfAddDelReply) Size() (size int) {
@@ -1008,6 +1026,9 @@ func (*WantVrrpVrEventsReply) GetMessageName() string { return "want_vrrp_vr_eve
 func (*WantVrrpVrEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantVrrpVrEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantVrrpVrEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantVrrpVrEventsReply) Size() (size int) {

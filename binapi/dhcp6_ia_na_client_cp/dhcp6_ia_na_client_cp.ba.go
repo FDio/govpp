@@ -79,6 +79,9 @@ func (*DHCP6ClientEnableDisableReply) GetCrcString() string { return "e8d4e804" 
 func (*DHCP6ClientEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6ClientEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6ClientEnableDisableReply) Size() (size int) {
 	if m == nil {

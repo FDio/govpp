@@ -116,6 +116,9 @@ func (*SyslogGetFilterReply) GetCrcString() string   { return "eb1833f8" }
 func (*SyslogGetFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SyslogGetFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SyslogGetFilterReply) Size() (size int) {
 	if m == nil {
@@ -183,6 +186,9 @@ func (*SyslogGetSenderReply) GetMessageName() string { return "syslog_get_sender
 func (*SyslogGetSenderReply) GetCrcString() string   { return "424cfa4e" }
 func (*SyslogGetSenderReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SyslogGetSenderReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogGetSenderReply) Size() (size int) {
@@ -265,6 +271,9 @@ func (*SyslogSetFilterReply) GetCrcString() string   { return "e8d4e804" }
 func (*SyslogSetFilterReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SyslogSetFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SyslogSetFilterReply) Size() (size int) {
 	if m == nil {
@@ -346,6 +355,9 @@ func (*SyslogSetSenderReply) GetMessageName() string { return "syslog_set_sender
 func (*SyslogSetSenderReply) GetCrcString() string   { return "e8d4e804" }
 func (*SyslogSetSenderReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SyslogSetSenderReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SyslogSetSenderReply) Size() (size int) {

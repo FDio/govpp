@@ -119,6 +119,9 @@ func (*Ipip6rdAddTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*Ipip6rdAddTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Ipip6rdAddTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Ipip6rdAddTunnelReply) Size() (size int) {
 	if m == nil {
@@ -187,6 +190,9 @@ func (*Ipip6rdDelTunnelReply) GetMessageName() string { return "ipip_6rd_del_tun
 func (*Ipip6rdDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
 func (*Ipip6rdDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Ipip6rdDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ipip6rdDelTunnelReply) Size() (size int) {
@@ -282,6 +288,9 @@ func (*IpipAddTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*IpipAddTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IpipAddTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IpipAddTunnelReply) Size() (size int) {
 	if m == nil {
@@ -351,6 +360,9 @@ func (*IpipDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IpipDelTunnelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IpipDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IpipDelTunnelReply) Size() (size int) {
 	if m == nil {
@@ -383,6 +395,9 @@ func (*IpipTunnelDetails) GetMessageName() string { return "ipip_tunnel_details"
 func (*IpipTunnelDetails) GetCrcString() string   { return "d31cb34e" }
 func (*IpipTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IpipTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpipTunnelDetails) Size() (size int) {

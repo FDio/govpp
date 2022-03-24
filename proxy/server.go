@@ -213,13 +213,13 @@ func (s *StatsRPC) GetStats(req StatsRequest, resp *StatsResponse) error {
 type BinapiRequest struct {
 	Msg      api.Message
 	IsMulti  bool
-	ReplyMsg api.Message
+	ReplyMsg api.ResponseMessage
 	Timeout  time.Duration
 }
 
 type BinapiResponse struct {
-	Msg  api.Message
-	Msgs []api.Message
+	Msg  api.ResponseMessage
+	Msgs []api.ResponseMessage
 }
 
 type BinapiCompatibilityRequest struct {
@@ -444,7 +444,7 @@ func (s *BinapiRPC) Invoke(req BinapiRequest, resp *BinapiResponse) error {
 		multi := ch.SendMultiRequest(req.Msg)
 		for {
 			// create new message in response of type ReplyMsg
-			msg := reflect.New(reflect.TypeOf(req.ReplyMsg).Elem()).Interface().(api.Message)
+			msg := reflect.New(reflect.TypeOf(req.ReplyMsg).Elem()).Interface().(api.ResponseMessage)
 
 			stop, err := multi.ReceiveReply(msg)
 			if err != nil {
@@ -457,7 +457,7 @@ func (s *BinapiRPC) Invoke(req BinapiRequest, resp *BinapiResponse) error {
 		}
 	} else {
 		// create new message in response of type ReplyMsg
-		resp.Msg = reflect.New(reflect.TypeOf(req.ReplyMsg).Elem()).Interface().(api.Message)
+		resp.Msg = reflect.New(reflect.TypeOf(req.ReplyMsg).Elem()).Interface().(api.ResponseMessage)
 
 		err := ch.SendRequest(req.Msg).ReceiveReply(resp.Msg)
 		if err != nil {

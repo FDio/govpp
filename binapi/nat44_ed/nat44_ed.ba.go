@@ -160,6 +160,9 @@ func (*Nat44AddDelAddressRangeReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44AddDelAddressRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44AddDelAddressRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44AddDelAddressRangeReply) Size() (size int) {
 	if m == nil {
@@ -256,6 +259,9 @@ func (*Nat44AddDelIdentityMappingReply) GetCrcString() string { return "e8d4e804
 func (*Nat44AddDelIdentityMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44AddDelIdentityMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44AddDelIdentityMappingReply) Size() (size int) {
 	if m == nil {
@@ -331,6 +337,9 @@ func (*Nat44AddDelInterfaceAddrReply) GetMessageName() string {
 func (*Nat44AddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44AddDelInterfaceAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44AddDelInterfaceAddrReply) Size() (size int) {
@@ -458,6 +467,9 @@ func (*Nat44AddDelLbStaticMappingReply) GetCrcString() string { return "e8d4e804
 func (*Nat44AddDelLbStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44AddDelLbStaticMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44AddDelLbStaticMappingReply) Size() (size int) {
 	if m == nil {
@@ -561,6 +573,9 @@ func (*Nat44AddDelStaticMappingReply) GetMessageName() string {
 func (*Nat44AddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44AddDelStaticMappingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44AddDelStaticMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44AddDelStaticMappingReply) Size() (size int) {
@@ -676,6 +691,9 @@ func (*Nat44AddDelStaticMappingV2Reply) GetCrcString() string { return "e8d4e804
 func (*Nat44AddDelStaticMappingV2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44AddDelStaticMappingV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44AddDelStaticMappingV2Reply) Size() (size int) {
 	if m == nil {
@@ -710,6 +728,9 @@ func (*Nat44AddressDetails) GetMessageName() string { return "nat44_address_deta
 func (*Nat44AddressDetails) GetCrcString() string   { return "0d1beac1" }
 func (*Nat44AddressDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44AddressDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44AddressDetails) Size() (size int) {
@@ -834,6 +855,9 @@ func (*Nat44DelSessionReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44DelSessionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44DelSessionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44DelSessionReply) Size() (size int) {
 	if m == nil {
@@ -903,6 +927,9 @@ func (*Nat44DelUserReply) GetMessageName() string { return "nat44_del_user_reply
 func (*Nat44DelUserReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44DelUserReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44DelUserReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44DelUserReply) Size() (size int) {
@@ -978,6 +1005,9 @@ func (*Nat44EdAddDelOutputInterfaceReply) GetCrcString() string { return "e8d4e8
 func (*Nat44EdAddDelOutputInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44EdAddDelOutputInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44EdAddDelOutputInterfaceReply) Size() (size int) {
 	if m == nil {
@@ -1012,6 +1042,9 @@ func (*Nat44EdOutputInterfaceDetails) GetMessageName() string {
 func (*Nat44EdOutputInterfaceDetails) GetCrcString() string { return "0b45011c" }
 func (*Nat44EdOutputInterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44EdOutputInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44EdOutputInterfaceDetails) Size() (size int) {
@@ -1081,6 +1114,9 @@ func (*Nat44EdOutputInterfaceGetReply) GetMessageName() string {
 func (*Nat44EdOutputInterfaceGetReply) GetCrcString() string { return "53b48f5d" }
 func (*Nat44EdOutputInterfaceGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44EdOutputInterfaceGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EdOutputInterfaceGetReply) Size() (size int) {
@@ -1175,6 +1211,9 @@ func (*Nat44EdPluginEnableDisableReply) GetCrcString() string { return "e8d4e804
 func (*Nat44EdPluginEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44EdPluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44EdPluginEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -1243,6 +1282,9 @@ func (*Nat44EdSetFqOptionsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EdSetFqOptionsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44EdSetFqOptionsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44EdSetFqOptionsReply) Size() (size int) {
 	if m == nil {
@@ -1305,6 +1347,9 @@ func (*Nat44EdShowFqOptionsReply) GetMessageName() string { return "nat44_ed_sho
 func (*Nat44EdShowFqOptionsReply) GetCrcString() string   { return "7213b545" }
 func (*Nat44EdShowFqOptionsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44EdShowFqOptionsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44EdShowFqOptionsReply) Size() (size int) {
@@ -1381,6 +1426,9 @@ func (*Nat44ForwardingEnableDisableReply) GetCrcString() string { return "e8d4e8
 func (*Nat44ForwardingEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44ForwardingEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44ForwardingEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -1445,6 +1493,9 @@ func (*Nat44ForwardingIsEnabledReply) GetCrcString() string { return "46924a06" 
 func (*Nat44ForwardingIsEnabledReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44ForwardingIsEnabledReply) GetRetVal() error {
+	return nil
+}
 
 func (m *Nat44ForwardingIsEnabledReply) Size() (size int) {
 	if m == nil {
@@ -1483,6 +1534,9 @@ func (*Nat44IdentityMappingDetails) GetMessageName() string { return "nat44_iden
 func (*Nat44IdentityMappingDetails) GetCrcString() string   { return "2a52a030" }
 func (*Nat44IdentityMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44IdentityMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44IdentityMappingDetails) Size() (size int) {
@@ -1605,6 +1659,9 @@ func (*Nat44InterfaceAddDelFeatureReply) GetCrcString() string { return "e8d4e80
 func (*Nat44InterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44InterfaceAddDelFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44InterfaceAddDelFeatureReply) Size() (size int) {
 	if m == nil {
@@ -1687,6 +1744,9 @@ func (*Nat44InterfaceAddDelOutputFeatureReply) GetCrcString() string { return "e
 func (*Nat44InterfaceAddDelOutputFeatureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44InterfaceAddDelOutputFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44InterfaceAddDelOutputFeatureReply) Size() (size int) {
 	if m == nil {
@@ -1720,6 +1780,9 @@ func (*Nat44InterfaceAddrDetails) GetMessageName() string { return "nat44_interf
 func (*Nat44InterfaceAddrDetails) GetCrcString() string   { return "e4aca9ca" }
 func (*Nat44InterfaceAddrDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44InterfaceAddrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44InterfaceAddrDetails) Size() (size int) {
@@ -1784,6 +1847,9 @@ func (*Nat44InterfaceDetails) GetMessageName() string { return "nat44_interface_
 func (*Nat44InterfaceDetails) GetCrcString() string   { return "5d286289" }
 func (*Nat44InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44InterfaceDetails) Size() (size int) {
@@ -1851,6 +1917,9 @@ func (*Nat44InterfaceOutputFeatureDetails) GetMessageName() string {
 func (*Nat44InterfaceOutputFeatureDetails) GetCrcString() string { return "5d286289" }
 func (*Nat44InterfaceOutputFeatureDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44InterfaceOutputFeatureDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44InterfaceOutputFeatureDetails) Size() (size int) {
@@ -1980,6 +2049,9 @@ func (*Nat44LbStaticMappingAddDelLocalReply) GetCrcString() string { return "e8d
 func (*Nat44LbStaticMappingAddDelLocalReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44LbStaticMappingAddDelLocalReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44LbStaticMappingAddDelLocalReply) Size() (size int) {
 	if m == nil {
@@ -2019,6 +2091,9 @@ func (*Nat44LbStaticMappingDetails) GetMessageName() string { return "nat44_lb_s
 func (*Nat44LbStaticMappingDetails) GetCrcString() string   { return "ed5ce876" }
 func (*Nat44LbStaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44LbStaticMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44LbStaticMappingDetails) Size() (size int) {
@@ -2196,6 +2271,9 @@ func (*Nat44PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat44PluginEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat44PluginEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -2257,6 +2335,9 @@ func (*Nat44SessionCleanupReply) GetMessageName() string { return "nat44_session
 func (*Nat44SessionCleanupReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44SessionCleanupReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44SessionCleanupReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44SessionCleanupReply) Size() (size int) {
@@ -2327,6 +2408,9 @@ func (*Nat44SetSessionLimitReply) GetMessageName() string { return "nat44_set_se
 func (*Nat44SetSessionLimitReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44SetSessionLimitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44SetSessionLimitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44SetSessionLimitReply) Size() (size int) {
@@ -2401,6 +2485,9 @@ func (*Nat44ShowRunningConfigReply) GetMessageName() string { return "nat44_show
 func (*Nat44ShowRunningConfigReply) GetCrcString() string   { return "93d8e267" }
 func (*Nat44ShowRunningConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44ShowRunningConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat44ShowRunningConfigReply) Size() (size int) {
@@ -2487,6 +2574,9 @@ func (*Nat44StaticMappingDetails) GetMessageName() string { return "nat44_static
 func (*Nat44StaticMappingDetails) GetCrcString() string   { return "06cb40b2" }
 func (*Nat44StaticMappingDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44StaticMappingDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44StaticMappingDetails) Size() (size int) {
@@ -2575,6 +2665,9 @@ func (*Nat44UserDetails) GetCrcString() string   { return "355896c2" }
 func (*Nat44UserDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat44UserDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *Nat44UserDetails) Size() (size int) {
 	if m == nil {
@@ -2655,6 +2748,9 @@ func (*Nat44UserSessionDetails) GetMessageName() string { return "nat44_user_ses
 func (*Nat44UserSessionDetails) GetCrcString() string   { return "2cf6e16d" }
 func (*Nat44UserSessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44UserSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44UserSessionDetails) Size() (size int) {
@@ -2775,6 +2871,9 @@ func (*Nat44UserSessionV2Details) GetMessageName() string { return "nat44_user_s
 func (*Nat44UserSessionV2Details) GetCrcString() string   { return "fd42b729" }
 func (*Nat44UserSessionV2Details) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat44UserSessionV2Details) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat44UserSessionV2Details) Size() (size int) {
@@ -2917,6 +3016,9 @@ func (*NatControlPingReply) GetCrcString() string   { return "f6b0b8ca" }
 func (*NatControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatControlPingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatControlPingReply) Size() (size int) {
 	if m == nil {
@@ -2990,6 +3092,9 @@ func (*NatGetAddrAndPortAllocAlgReply) GetMessageName() string {
 func (*NatGetAddrAndPortAllocAlgReply) GetCrcString() string { return "3607a7d0" }
 func (*NatGetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatGetAddrAndPortAllocAlgReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatGetAddrAndPortAllocAlgReply) Size() (size int) {
@@ -3071,6 +3176,9 @@ func (*NatGetMssClampingReply) GetCrcString() string   { return "1c0b2a78" }
 func (*NatGetMssClampingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatGetMssClampingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatGetMssClampingReply) Size() (size int) {
 	if m == nil {
@@ -3142,6 +3250,9 @@ func (*NatGetTimeoutsReply) GetMessageName() string { return "nat_get_timeouts_r
 func (*NatGetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
 func (*NatGetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatGetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatGetTimeoutsReply) Size() (size int) {
@@ -3215,6 +3326,9 @@ func (*NatHaFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatHaFlushReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatHaFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatHaFlushReply) Size() (size int) {
 	if m == nil {
@@ -3277,6 +3391,9 @@ func (*NatHaGetFailoverReply) GetMessageName() string { return "nat_ha_get_failo
 func (*NatHaGetFailoverReply) GetCrcString() string   { return "a67d8752" }
 func (*NatHaGetFailoverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatHaGetFailoverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatHaGetFailoverReply) Size() (size int) {
@@ -3349,6 +3466,9 @@ func (*NatHaGetListenerReply) GetMessageName() string { return "nat_ha_get_liste
 func (*NatHaGetListenerReply) GetCrcString() string   { return "123ea41f" }
 func (*NatHaGetListenerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatHaGetListenerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatHaGetListenerReply) Size() (size int) {
@@ -3430,6 +3550,9 @@ func (*NatHaResyncCompletedEvent) GetCrcString() string   { return "fdc598fb" }
 func (*NatHaResyncCompletedEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
+func (m *NatHaResyncCompletedEvent) GetRetVal() error {
+	return nil
+}
 
 func (m *NatHaResyncCompletedEvent) Size() (size int) {
 	if m == nil {
@@ -3465,6 +3588,9 @@ func (*NatHaResyncReply) GetMessageName() string { return "nat_ha_resync_reply" 
 func (*NatHaResyncReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatHaResyncReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatHaResyncReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatHaResyncReply) Size() (size int) {
@@ -3540,6 +3666,9 @@ func (*NatHaSetFailoverReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatHaSetFailoverReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatHaSetFailoverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatHaSetFailoverReply) Size() (size int) {
 	if m == nil {
@@ -3613,6 +3742,9 @@ func (*NatHaSetListenerReply) GetMessageName() string { return "nat_ha_set_liste
 func (*NatHaSetListenerReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatHaSetListenerReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatHaSetListenerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatHaSetListenerReply) Size() (size int) {
@@ -3689,6 +3821,9 @@ func (*NatIpfixEnableDisableReply) GetMessageName() string { return "nat_ipfix_e
 func (*NatIpfixEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatIpfixEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatIpfixEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatIpfixEnableDisableReply) Size() (size int) {
@@ -3778,6 +3913,9 @@ func (*NatSetAddrAndPortAllocAlgReply) GetCrcString() string { return "e8d4e804"
 func (*NatSetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatSetAddrAndPortAllocAlgReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatSetAddrAndPortAllocAlgReply) Size() (size int) {
 	if m == nil {
@@ -3845,6 +3983,9 @@ func (*NatSetLogLevelReply) GetMessageName() string { return "nat_set_log_level_
 func (*NatSetLogLevelReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatSetLogLevelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatSetLogLevelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatSetLogLevelReply) Size() (size int) {
@@ -3915,6 +4056,9 @@ func (*NatSetMssClampingReply) GetMessageName() string { return "nat_set_mss_cla
 func (*NatSetMssClampingReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatSetMssClampingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatSetMssClampingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatSetMssClampingReply) Size() (size int) {
@@ -3996,6 +4140,9 @@ func (*NatSetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatSetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatSetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatSetTimeoutsReply) Size() (size int) {
 	if m == nil {
@@ -4061,6 +4208,9 @@ func (*NatSetWorkersReply) GetMessageName() string { return "nat_set_workers_rep
 func (*NatSetWorkersReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatSetWorkersReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatSetWorkersReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatSetWorkersReply) Size() (size int) {
@@ -4171,6 +4321,9 @@ func (*NatShowConfig2Reply) GetCrcString() string   { return "0404a5b4" }
 func (*NatShowConfig2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatShowConfig2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatShowConfig2Reply) Size() (size int) {
 	if m == nil {
@@ -4279,6 +4432,9 @@ func (*NatShowConfigReply) GetCrcString() string   { return "7903ef06" }
 func (*NatShowConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatShowConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatShowConfigReply) Size() (size int) {
 	if m == nil {
@@ -4364,6 +4520,9 @@ func (*NatWorkerDetails) GetMessageName() string { return "nat_worker_details" }
 func (*NatWorkerDetails) GetCrcString() string   { return "84bf06fc" }
 func (*NatWorkerDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatWorkerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NatWorkerDetails) Size() (size int) {

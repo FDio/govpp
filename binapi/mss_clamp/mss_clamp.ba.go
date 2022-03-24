@@ -96,6 +96,9 @@ func (*MssClampDetails) GetCrcString() string   { return "d3a4de61" }
 func (*MssClampDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MssClampDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *MssClampDetails) Size() (size int) {
 	if m == nil {
@@ -190,6 +193,9 @@ func (*MssClampEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MssClampEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MssClampEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MssClampEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -260,6 +266,9 @@ func (*MssClampGetReply) GetMessageName() string { return "mss_clamp_get_reply" 
 func (*MssClampGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*MssClampGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MssClampGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MssClampGetReply) Size() (size int) {

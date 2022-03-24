@@ -59,6 +59,9 @@ func (*SwInterfaceLacpDetails) GetCrcString() string   { return "d9a83d2f" }
 func (*SwInterfaceLacpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceLacpDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *SwInterfaceLacpDetails) Size() (size int) {
 	if m == nil {

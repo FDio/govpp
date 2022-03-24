@@ -83,6 +83,9 @@ func (*APIVersionsReply) GetCrcString() string   { return "5f0d99d6" }
 func (*APIVersionsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *APIVersionsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *APIVersionsReply) Size() (size int) {
 	if m == nil {
@@ -177,6 +180,9 @@ func (*ControlPingReply) GetCrcString() string   { return "f6b0b8ca" }
 func (*ControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ControlPingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ControlPingReply) Size() (size int) {
 	if m == nil {
@@ -250,6 +256,9 @@ func (*GetFirstMsgIDReply) GetCrcString() string   { return "7d337472" }
 func (*GetFirstMsgIDReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GetFirstMsgIDReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GetFirstMsgIDReply) Size() (size int) {
 	if m == nil {
@@ -288,6 +297,9 @@ func (*MemclntCreate) GetMessageName() string { return "memclnt_create" }
 func (*MemclntCreate) GetCrcString() string   { return "9c5e1c2f" }
 func (*MemclntCreate) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MemclntCreate) GetRetVal() error {
+	return nil
 }
 
 func (m *MemclntCreate) Size() (size int) {
@@ -342,6 +354,9 @@ func (*MemclntCreateReply) GetMessageName() string { return "memclnt_create_repl
 func (*MemclntCreateReply) GetCrcString() string   { return "42ec4560" }
 func (*MemclntCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MemclntCreateReply) GetRetVal() error {
+	return nil
 }
 
 func (m *MemclntCreateReply) Size() (size int) {
@@ -489,6 +504,9 @@ func (*MemclntKeepaliveReply) GetMessageName() string { return "memclnt_keepaliv
 func (*MemclntKeepaliveReply) GetCrcString() string   { return "e8d4e804" }
 func (*MemclntKeepaliveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MemclntKeepaliveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MemclntKeepaliveReply) Size() (size int) {
@@ -643,6 +661,9 @@ func (*RPCCallReply) GetCrcString() string   { return "e8d4e804" }
 func (*RPCCallReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *RPCCallReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *RPCCallReply) Size() (size int) {
 	if m == nil {
@@ -759,6 +780,9 @@ func (*SockInitShmReply) GetCrcString() string   { return "e8d4e804" }
 func (*SockInitShmReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SockInitShmReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SockInitShmReply) Size() (size int) {
 	if m == nil {
@@ -791,6 +815,9 @@ func (*SockclntCreate) GetMessageName() string { return "sockclnt_create" }
 func (*SockclntCreate) GetCrcString() string   { return "455fb9c4" }
 func (*SockclntCreate) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SockclntCreate) GetRetVal() error {
+	return nil
 }
 
 func (m *SockclntCreate) Size() (size int) {
@@ -922,6 +949,9 @@ func (*SockclntDeleteReply) GetMessageName() string { return "sockclnt_delete_re
 func (*SockclntDeleteReply) GetCrcString() string   { return "8f38b1ee" }
 func (*SockclntDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SockclntDeleteReply) GetRetVal() error {
+	return nil
 }
 
 func (m *SockclntDeleteReply) Size() (size int) {

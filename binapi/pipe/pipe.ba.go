@@ -79,6 +79,9 @@ func (*PipeCreateReply) GetCrcString() string   { return "b7ce310c" }
 func (*PipeCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *PipeCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *PipeCreateReply) Size() (size int) {
 	if m == nil {
@@ -157,6 +160,9 @@ func (*PipeDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*PipeDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *PipeDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *PipeDeleteReply) Size() (size int) {
 	if m == nil {
@@ -191,6 +197,9 @@ func (*PipeDetails) GetMessageName() string { return "pipe_details" }
 func (*PipeDetails) GetCrcString() string   { return "c52b799d" }
 func (*PipeDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *PipeDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PipeDetails) Size() (size int) {

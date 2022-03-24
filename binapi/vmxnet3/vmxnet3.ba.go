@@ -68,6 +68,9 @@ func (*SwVmxnet3InterfaceDetails) GetCrcString() string   { return "6a1a5498" }
 func (*SwVmxnet3InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwVmxnet3InterfaceDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *SwVmxnet3InterfaceDetails) Size() (size int) {
 	if m == nil {
@@ -283,6 +286,9 @@ func (*Vmxnet3CreateReply) GetCrcString() string   { return "5383d31f" }
 func (*Vmxnet3CreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Vmxnet3CreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Vmxnet3CreateReply) Size() (size int) {
 	if m == nil {
@@ -352,6 +358,9 @@ func (*Vmxnet3DeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*Vmxnet3DeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Vmxnet3DeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Vmxnet3DeleteReply) Size() (size int) {
 	if m == nil {
@@ -393,6 +402,9 @@ func (*Vmxnet3Details) GetMessageName() string { return "vmxnet3_details" }
 func (*Vmxnet3Details) GetCrcString() string   { return "6a1a5498" }
 func (*Vmxnet3Details) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Vmxnet3Details) GetRetVal() error {
+	return nil
 }
 
 func (m *Vmxnet3Details) Size() (size int) {

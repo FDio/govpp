@@ -225,7 +225,7 @@ func (ch *Channel) Close() {
 	close(ch.reqChan)
 }
 
-func (req *requestCtx) ReceiveReply(msg api.Message) error {
+func (req *requestCtx) ReceiveReply(msg api.ResponseMessage) error {
 	if req == nil || req.ch == nil {
 		return ErrInvalidRequestCtx
 	}
@@ -240,7 +240,7 @@ func (req *requestCtx) ReceiveReply(msg api.Message) error {
 	return nil
 }
 
-func (req *multiRequestCtx) ReceiveReply(msg api.Message) (lastReplyReceived bool, err error) {
+func (req *multiRequestCtx) ReceiveReply(msg api.ResponseMessage) (lastReplyReceived bool, err error) {
 	if req == nil || req.ch == nil {
 		return false, ErrInvalidRequestCtx
 	}

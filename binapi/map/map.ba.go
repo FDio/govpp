@@ -86,6 +86,9 @@ func (*MapAddDelRuleReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapAddDelRuleReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapAddDelRuleReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapAddDelRuleReply) Size() (size int) {
 	if m == nil {
@@ -190,6 +193,9 @@ func (*MapAddDomainReply) GetCrcString() string   { return "3e6d4e2c" }
 func (*MapAddDomainReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapAddDomainReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapAddDomainReply) Size() (size int) {
 	if m == nil {
@@ -259,6 +265,9 @@ func (*MapDelDomainReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapDelDomainReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapDelDomainReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapDelDomainReply) Size() (size int) {
 	if m == nil {
@@ -300,6 +309,9 @@ func (*MapDomainDetails) GetMessageName() string { return "map_domain_details" }
 func (*MapDomainDetails) GetCrcString() string   { return "796edb50" }
 func (*MapDomainDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapDomainDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MapDomainDetails) Size() (size int) {
@@ -432,6 +444,9 @@ func (*MapDomainsGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*MapDomainsGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapDomainsGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapDomainsGetReply) Size() (size int) {
 	if m == nil {
@@ -509,6 +524,9 @@ func (*MapIfEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapIfEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapIfEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -585,6 +603,9 @@ func (*MapParamAddDelPreResolveReply) GetCrcString() string { return "e8d4e804" 
 func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapParamAddDelPreResolveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapParamAddDelPreResolveReply) Size() (size int) {
 	if m == nil {
@@ -658,6 +679,9 @@ func (*MapParamGetReply) GetMessageName() string { return "map_param_get_reply" 
 func (*MapParamGetReply) GetCrcString() string   { return "26272c90" }
 func (*MapParamGetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapParamGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamGetReply) Size() (size int) {
@@ -773,6 +797,9 @@ func (*MapParamSetFragmentationReply) GetCrcString() string { return "e8d4e804" 
 func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapParamSetFragmentationReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapParamSetFragmentationReply) Size() (size int) {
 	if m == nil {
@@ -872,6 +899,9 @@ func (*MapParamSetICMP6Reply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapParamSetICMP6Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapParamSetICMP6Reply) Size() (size int) {
 	if m == nil {
@@ -904,6 +934,9 @@ func (*MapParamSetICMPReply) GetMessageName() string { return "map_param_set_icm
 func (*MapParamSetICMPReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetICMPReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapParamSetICMPReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetICMPReply) Size() (size int) {
@@ -977,6 +1010,9 @@ func (*MapParamSetSecurityCheckReply) GetCrcString() string { return "e8d4e804" 
 func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapParamSetSecurityCheckReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapParamSetSecurityCheckReply) Size() (size int) {
 	if m == nil {
@@ -1042,6 +1078,9 @@ func (*MapParamSetTCPReply) GetMessageName() string { return "map_param_set_tcp_
 func (*MapParamSetTCPReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapParamSetTCPReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetTCPReply) Size() (size int) {
@@ -1115,6 +1154,9 @@ func (*MapParamSetTrafficClassReply) GetCrcString() string { return "e8d4e804" }
 func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MapParamSetTrafficClassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MapParamSetTrafficClassReply) Size() (size int) {
 	if m == nil {
@@ -1148,6 +1190,9 @@ func (*MapRuleDetails) GetMessageName() string { return "map_rule_details" }
 func (*MapRuleDetails) GetCrcString() string   { return "c7cbeea5" }
 func (*MapRuleDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapRuleDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MapRuleDetails) Size() (size int) {
@@ -1249,6 +1294,9 @@ func (*MapSummaryStatsReply) GetMessageName() string { return "map_summary_stats
 func (*MapSummaryStatsReply) GetCrcString() string   { return "0e4ace0e" }
 func (*MapSummaryStatsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MapSummaryStatsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapSummaryStatsReply) Size() (size int) {

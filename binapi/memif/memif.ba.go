@@ -175,6 +175,9 @@ func (*MemifCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*MemifCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MemifCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MemifCreateReply) Size() (size int) {
 	if m == nil {
@@ -244,6 +247,9 @@ func (*MemifDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*MemifDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MemifDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MemifDeleteReply) Size() (size int) {
 	if m == nil {
@@ -286,6 +292,9 @@ func (*MemifDetails) GetMessageName() string { return "memif_details" }
 func (*MemifDetails) GetCrcString() string   { return "da34feb9" }
 func (*MemifDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MemifDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MemifDetails) Size() (size int) {
@@ -420,6 +429,9 @@ func (*MemifSocketFilenameAddDelReply) GetCrcString() string { return "e8d4e804"
 func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MemifSocketFilenameAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MemifSocketFilenameAddDelReply) Size() (size int) {
 	if m == nil {
@@ -453,6 +465,9 @@ func (*MemifSocketFilenameDetails) GetMessageName() string { return "memif_socke
 func (*MemifSocketFilenameDetails) GetCrcString() string   { return "7ff326f7" }
 func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MemifSocketFilenameDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MemifSocketFilenameDetails) Size() (size int) {

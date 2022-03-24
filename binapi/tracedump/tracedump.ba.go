@@ -129,6 +129,9 @@ func (*TraceCapturePacketsReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceCapturePacketsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *TraceCapturePacketsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *TraceCapturePacketsReply) Size() (size int) {
 	if m == nil {
@@ -190,6 +193,9 @@ func (*TraceClearCaptureReply) GetMessageName() string { return "trace_clear_cap
 func (*TraceClearCaptureReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceClearCaptureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *TraceClearCaptureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceClearCaptureReply) Size() (size int) {
@@ -335,6 +341,9 @@ func (*TraceDumpReply) GetCrcString() string   { return "e0e87f9d" }
 func (*TraceDumpReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *TraceDumpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *TraceDumpReply) Size() (size int) {
 	if m == nil {
@@ -432,6 +441,9 @@ func (*TraceSetFiltersReply) GetMessageName() string { return "trace_set_filters
 func (*TraceSetFiltersReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceSetFiltersReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *TraceSetFiltersReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceSetFiltersReply) Size() (size int) {

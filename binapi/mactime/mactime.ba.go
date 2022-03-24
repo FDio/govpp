@@ -143,6 +143,9 @@ func (*MactimeAddDelRangeReply) GetCrcString() string   { return "e8d4e804" }
 func (*MactimeAddDelRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MactimeAddDelRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MactimeAddDelRangeReply) Size() (size int) {
 	if m == nil {
@@ -182,6 +185,9 @@ func (*MactimeDetails) GetMessageName() string { return "mactime_details" }
 func (*MactimeDetails) GetCrcString() string   { return "da25b13a" }
 func (*MactimeDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MactimeDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MactimeDetails) Size() (size int) {
@@ -291,6 +297,9 @@ func (*MactimeDumpReply) GetCrcString() string   { return "49bcc753" }
 func (*MactimeDumpReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *MactimeDumpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *MactimeDumpReply) Size() (size int) {
 	if m == nil {
@@ -363,6 +372,9 @@ func (*MactimeEnableDisableReply) GetMessageName() string { return "mactime_enab
 func (*MactimeEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MactimeEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *MactimeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MactimeEnableDisableReply) Size() (size int) {

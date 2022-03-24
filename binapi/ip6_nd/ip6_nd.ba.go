@@ -59,6 +59,9 @@ func (*IP6RaEvent) GetCrcString() string   { return "0364c1c5" }
 func (*IP6RaEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
+func (m *IP6RaEvent) GetRetVal() error {
+	return nil
+}
 
 func (m *IP6RaEvent) Size() (size int) {
 	if m == nil {
@@ -192,6 +195,9 @@ func (*IP6ndProxyAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IP6ndProxyAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IP6ndProxyAddDelReply) Size() (size int) {
 	if m == nil {
@@ -225,6 +231,9 @@ func (*IP6ndProxyDetails) GetMessageName() string { return "ip6nd_proxy_details"
 func (*IP6ndProxyDetails) GetCrcString() string   { return "30b9ff4a" }
 func (*IP6ndProxyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IP6ndProxyDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IP6ndProxyDetails) Size() (size int) {
@@ -328,6 +337,9 @@ func (*IP6ndProxyEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IP6ndProxyEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IP6ndProxyEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IP6ndProxyEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -415,6 +427,9 @@ func (*IP6ndSendRouterSolicitationReply) GetMessageName() string {
 func (*IP6ndSendRouterSolicitationReply) GetCrcString() string { return "e8d4e804" }
 func (*IP6ndSendRouterSolicitationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IP6ndSendRouterSolicitationReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IP6ndSendRouterSolicitationReply) Size() (size int) {
@@ -536,6 +551,9 @@ func (*SwInterfaceIP6ndRaConfigReply) GetCrcString() string { return "e8d4e804" 
 func (*SwInterfaceIP6ndRaConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceIP6ndRaConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceIP6ndRaConfigReply) Size() (size int) {
 	if m == nil {
@@ -646,6 +664,9 @@ func (*SwInterfaceIP6ndRaPrefixReply) GetCrcString() string { return "e8d4e804" 
 func (*SwInterfaceIP6ndRaPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SwInterfaceIP6ndRaPrefixReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SwInterfaceIP6ndRaPrefixReply) Size() (size int) {
 	if m == nil {
@@ -715,6 +736,9 @@ func (*WantIP6RaEventsReply) GetMessageName() string { return "want_ip6_ra_event
 func (*WantIP6RaEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantIP6RaEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantIP6RaEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantIP6RaEventsReply) Size() (size int) {

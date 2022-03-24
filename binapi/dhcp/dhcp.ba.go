@@ -254,6 +254,9 @@ func (*DHCP6ClientsEnableDisableReply) GetCrcString() string { return "e8d4e804"
 func (*DHCP6ClientsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6ClientsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6ClientsEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -321,6 +324,9 @@ func (*DHCP6DuidLlSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCP6DuidLlSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6DuidLlSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6DuidLlSetReply) Size() (size int) {
 	if m == nil {
@@ -363,6 +369,9 @@ func (*DHCP6PdReplyEvent) GetMessageName() string { return "dhcp6_pd_reply_event
 func (*DHCP6PdReplyEvent) GetCrcString() string   { return "5e878029" }
 func (*DHCP6PdReplyEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *DHCP6PdReplyEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *DHCP6PdReplyEvent) Size() (size int) {
@@ -558,6 +567,9 @@ func (*DHCP6PdSendClientMessageReply) GetCrcString() string { return "e8d4e804" 
 func (*DHCP6PdSendClientMessageReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6PdSendClientMessageReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6PdSendClientMessageReply) Size() (size int) {
 	if m == nil {
@@ -600,6 +612,9 @@ func (*DHCP6ReplyEvent) GetMessageName() string { return "dhcp6_reply_event" }
 func (*DHCP6ReplyEvent) GetCrcString() string   { return "85b7b17e" }
 func (*DHCP6ReplyEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *DHCP6ReplyEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *DHCP6ReplyEvent) Size() (size int) {
@@ -787,6 +802,9 @@ func (*DHCP6SendClientMessageReply) GetCrcString() string   { return "e8d4e804" 
 func (*DHCP6SendClientMessageReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCP6SendClientMessageReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCP6SendClientMessageReply) Size() (size int) {
 	if m == nil {
@@ -876,6 +894,9 @@ func (*DHCPClientConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPClientConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCPClientConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCPClientConfigReply) Size() (size int) {
 	if m == nil {
@@ -909,6 +930,9 @@ func (*DHCPClientDetails) GetMessageName() string { return "dhcp_client_details"
 func (*DHCPClientDetails) GetCrcString() string   { return "3c5cd28a" }
 func (*DHCPClientDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DHCPClientDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *DHCPClientDetails) Size() (size int) {
@@ -1046,6 +1070,9 @@ func (*DHCPComplEvent) GetCrcString() string   { return "554a44e5" }
 func (*DHCPComplEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
 }
+func (m *DHCPComplEvent) GetRetVal() error {
+	return nil
+}
 
 func (m *DHCPComplEvent) Size() (size int) {
 	if m == nil {
@@ -1164,6 +1191,9 @@ func (*DHCPPluginControlPingReply) GetCrcString() string   { return "f6b0b8ca" }
 func (*DHCPPluginControlPingReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCPPluginControlPingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCPPluginControlPingReply) Size() (size int) {
 	if m == nil {
@@ -1230,6 +1260,9 @@ func (*DHCPPluginGetVersionReply) GetMessageName() string { return "dhcp_plugin_
 func (*DHCPPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*DHCPPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DHCPPluginGetVersionReply) GetRetVal() error {
+	return nil
 }
 
 func (m *DHCPPluginGetVersionReply) Size() (size int) {
@@ -1322,6 +1355,9 @@ func (*DHCPProxyConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPProxyConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCPProxyConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCPProxyConfigReply) Size() (size int) {
 	if m == nil {
@@ -1362,6 +1398,9 @@ func (*DHCPProxyDetails) GetMessageName() string { return "dhcp_proxy_details" }
 func (*DHCPProxyDetails) GetCrcString() string   { return "dcbaf540" }
 func (*DHCPProxyDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *DHCPProxyDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *DHCPProxyDetails) Size() (size int) {
@@ -1536,6 +1575,9 @@ func (*DHCPProxySetVssReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPProxySetVssReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *DHCPProxySetVssReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *DHCPProxySetVssReply) Size() (size int) {
 	if m == nil {
@@ -1608,6 +1650,9 @@ func (*WantDHCP6PdReplyEventsReply) GetCrcString() string { return "e8d4e804" }
 func (*WantDHCP6PdReplyEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WantDHCP6PdReplyEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WantDHCP6PdReplyEventsReply) Size() (size int) {
 	if m == nil {
@@ -1677,6 +1722,9 @@ func (*WantDHCP6ReplyEventsReply) GetMessageName() string { return "want_dhcp6_r
 func (*WantDHCP6ReplyEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantDHCP6ReplyEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantDHCP6ReplyEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantDHCP6ReplyEventsReply) Size() (size int) {

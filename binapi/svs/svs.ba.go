@@ -43,6 +43,9 @@ func (*SvsDetails) GetCrcString() string   { return "6282cd55" }
 func (*SvsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SvsDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *SvsDetails) Size() (size int) {
 	if m == nil {
@@ -154,6 +157,9 @@ func (*SvsEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SvsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SvsEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -214,6 +220,9 @@ func (*SvsPluginGetVersionReply) GetMessageName() string { return "svs_plugin_ge
 func (*SvsPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*SvsPluginGetVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SvsPluginGetVersionReply) GetRetVal() error {
+	return nil
 }
 
 func (m *SvsPluginGetVersionReply) Size() (size int) {
@@ -302,6 +311,9 @@ func (*SvsRouteAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsRouteAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *SvsRouteAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *SvsRouteAddDelReply) Size() (size int) {
 	if m == nil {
@@ -375,6 +387,9 @@ func (*SvsTableAddDelReply) GetMessageName() string { return "svs_table_add_del_
 func (*SvsTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsTableAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SvsTableAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SvsTableAddDelReply) Size() (size int) {

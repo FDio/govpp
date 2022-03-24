@@ -91,6 +91,9 @@ func (*Det44AddDelMapReply) GetCrcString() string   { return "e8d4e804" }
 func (*Det44AddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44AddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44AddDelMapReply) Size() (size int) {
 	if m == nil {
@@ -168,6 +171,9 @@ func (*Det44CloseSessionInReply) GetMessageName() string { return "det44_close_s
 func (*Det44CloseSessionInReply) GetCrcString() string   { return "e8d4e804" }
 func (*Det44CloseSessionInReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44CloseSessionInReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44CloseSessionInReply) Size() (size int) {
@@ -247,6 +253,9 @@ func (*Det44CloseSessionOutReply) GetCrcString() string   { return "e8d4e804" }
 func (*Det44CloseSessionOutReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44CloseSessionOutReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44CloseSessionOutReply) Size() (size int) {
 	if m == nil {
@@ -315,6 +324,9 @@ func (*Det44ForwardReply) GetMessageName() string { return "det44_forward_reply"
 func (*Det44ForwardReply) GetCrcString() string   { return "a8ccbdc0" }
 func (*Det44ForwardReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44ForwardReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44ForwardReply) Size() (size int) {
@@ -389,6 +401,9 @@ func (*Det44GetTimeoutsReply) GetMessageName() string { return "det44_get_timeou
 func (*Det44GetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
 func (*Det44GetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44GetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44GetTimeoutsReply) Size() (size int) {
@@ -480,6 +495,9 @@ func (*Det44InterfaceAddDelFeatureReply) GetCrcString() string { return "e8d4e80
 func (*Det44InterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44InterfaceAddDelFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44InterfaceAddDelFeatureReply) Size() (size int) {
 	if m == nil {
@@ -515,6 +533,9 @@ func (*Det44InterfaceDetails) GetMessageName() string { return "det44_interface_
 func (*Det44InterfaceDetails) GetCrcString() string   { return "e60cc5be" }
 func (*Det44InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44InterfaceDetails) Size() (size int) {
@@ -588,6 +609,9 @@ func (*Det44MapDetails) GetMessageName() string { return "det44_map_details" }
 func (*Det44MapDetails) GetCrcString() string   { return "ad91dc83" }
 func (*Det44MapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44MapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44MapDetails) Size() (size int) {
@@ -712,6 +736,9 @@ func (*Det44PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" 
 func (*Det44PluginEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44PluginEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -783,6 +810,9 @@ func (*Det44ReverseReply) GetCrcString() string   { return "34066d48" }
 func (*Det44ReverseReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44ReverseReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44ReverseReply) Size() (size int) {
 	if m == nil {
@@ -823,6 +853,9 @@ func (*Det44SessionDetails) GetMessageName() string { return "det44_session_deta
 func (*Det44SessionDetails) GetCrcString() string   { return "27f3c171" }
 func (*Det44SessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Det44SessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44SessionDetails) Size() (size int) {
@@ -952,6 +985,9 @@ func (*Det44SetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Det44SetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Det44SetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44SetTimeoutsReply) Size() (size int) {
 	if m == nil {
@@ -1036,6 +1072,9 @@ func (*NatDetAddDelMapReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatDetAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatDetAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatDetAddDelMapReply) Size() (size int) {
 	if m == nil {
@@ -1115,6 +1154,9 @@ func (*NatDetCloseSessionInReply) GetMessageName() string { return "nat_det_clos
 func (*NatDetCloseSessionInReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatDetCloseSessionInReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatDetCloseSessionInReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetCloseSessionInReply) Size() (size int) {
@@ -1196,6 +1238,9 @@ func (*NatDetCloseSessionOutReply) GetCrcString() string   { return "e8d4e804" }
 func (*NatDetCloseSessionOutReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatDetCloseSessionOutReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatDetCloseSessionOutReply) Size() (size int) {
 	if m == nil {
@@ -1267,6 +1312,9 @@ func (*NatDetForwardReply) GetCrcString() string   { return "a8ccbdc0" }
 func (*NatDetForwardReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatDetForwardReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatDetForwardReply) Size() (size int) {
 	if m == nil {
@@ -1315,6 +1363,9 @@ func (*NatDetMapDetails) GetMessageName() string { return "nat_det_map_details" 
 func (*NatDetMapDetails) GetCrcString() string   { return "ad91dc83" }
 func (*NatDetMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatDetMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NatDetMapDetails) Size() (size int) {
@@ -1435,6 +1486,9 @@ func (*NatDetReverseReply) GetCrcString() string   { return "34066d48" }
 func (*NatDetReverseReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NatDetReverseReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NatDetReverseReply) Size() (size int) {
 	if m == nil {
@@ -1476,6 +1530,9 @@ func (*NatDetSessionDetails) GetMessageName() string { return "nat_det_session_d
 func (*NatDetSessionDetails) GetCrcString() string   { return "27f3c171" }
 func (*NatDetSessionDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NatDetSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NatDetSessionDetails) Size() (size int) {

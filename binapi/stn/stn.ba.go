@@ -85,6 +85,9 @@ func (*StnAddDelRuleReply) GetCrcString() string   { return "e8d4e804" }
 func (*StnAddDelRuleReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *StnAddDelRuleReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *StnAddDelRuleReply) Size() (size int) {
 	if m == nil {
@@ -118,6 +121,9 @@ func (*StnRulesDetails) GetMessageName() string { return "stn_rules_details" }
 func (*StnRulesDetails) GetCrcString() string   { return "a51935a6" }
 func (*StnRulesDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *StnRulesDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *StnRulesDetails) Size() (size int) {

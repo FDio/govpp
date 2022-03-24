@@ -73,6 +73,9 @@ func (*VxlanGpeIoamDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VxlanGpeIoamDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeIoamDisableReply) Size() (size int) {
 	if m == nil {
@@ -151,6 +154,9 @@ func (*VxlanGpeIoamEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VxlanGpeIoamEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeIoamEnableReply) Size() (size int) {
 	if m == nil {
@@ -226,6 +232,9 @@ func (*VxlanGpeIoamTransitDisableReply) GetCrcString() string { return "e8d4e804
 func (*VxlanGpeIoamTransitDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VxlanGpeIoamTransitDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeIoamTransitDisableReply) Size() (size int) {
 	if m == nil {
@@ -300,6 +309,9 @@ func (*VxlanGpeIoamTransitEnableReply) GetMessageName() string {
 func (*VxlanGpeIoamTransitEnableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamTransitEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VxlanGpeIoamTransitEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamTransitEnableReply) Size() (size int) {
@@ -383,6 +395,9 @@ func (*VxlanGpeIoamVniDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamVniDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *VxlanGpeIoamVniDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeIoamVniDisableReply) Size() (size int) {
 	if m == nil {
@@ -462,6 +477,9 @@ func (*VxlanGpeIoamVniEnableReply) GetMessageName() string { return "vxlan_gpe_i
 func (*VxlanGpeIoamVniEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamVniEnableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *VxlanGpeIoamVniEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VxlanGpeIoamVniEnableReply) Size() (size int) {

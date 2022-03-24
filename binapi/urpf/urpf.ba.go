@@ -120,6 +120,9 @@ func (*UrpfUpdateReply) GetCrcString() string   { return "e8d4e804" }
 func (*UrpfUpdateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *UrpfUpdateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *UrpfUpdateReply) Size() (size int) {
 	if m == nil {

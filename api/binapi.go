@@ -52,6 +52,13 @@ type Message interface {
 	GetMessageType() MessageType
 }
 
+type ResponseMessage interface {
+	Message
+
+	// GetRetVal returns the API return value if present and non zero, nil otherwise
+	GetRetVal() error
+}
+
 // DataType is an interface that is implemented by all VPP Binary API data types by the binapi_generator.
 type DataType interface {
 	// GetTypeName returns the original VPP name of the data type, as defined in the VPP API.

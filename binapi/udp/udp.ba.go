@@ -134,6 +134,9 @@ func (*UDPDecapAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPDecapAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *UDPDecapAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *UDPDecapAddDelReply) Size() (size int) {
 	if m == nil {
@@ -222,6 +225,9 @@ func (*UDPEncapAddReply) GetCrcString() string   { return "e2fc8294" }
 func (*UDPEncapAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *UDPEncapAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *UDPEncapAddReply) Size() (size int) {
 	if m == nil {
@@ -291,6 +297,9 @@ func (*UDPEncapDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPEncapDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *UDPEncapDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *UDPEncapDelReply) Size() (size int) {
 	if m == nil {
@@ -323,6 +332,9 @@ func (*UDPEncapDetails) GetMessageName() string { return "udp_encap_details" }
 func (*UDPEncapDetails) GetCrcString() string   { return "8cfb9c76" }
 func (*UDPEncapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *UDPEncapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *UDPEncapDetails) Size() (size int) {

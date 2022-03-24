@@ -43,6 +43,9 @@ func (*LogDetails) GetCrcString() string   { return "03d61cc0" }
 func (*LogDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LogDetails) GetRetVal() error {
+	return nil
+}
 
 func (m *LogDetails) Size() (size int) {
 	if m == nil {
@@ -149,6 +152,9 @@ func (*ShowVersionReply) GetCrcString() string   { return "c919bde1" }
 func (*ShowVersionReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *ShowVersionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowVersionReply) Size() (size int) {
 	if m == nil {
@@ -221,6 +227,9 @@ func (*ShowVpeSystemTimeReply) GetMessageName() string { return "show_vpe_system
 func (*ShowVpeSystemTimeReply) GetCrcString() string   { return "7ffd8193" }
 func (*ShowVpeSystemTimeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowVpeSystemTimeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowVpeSystemTimeReply) Size() (size int) {

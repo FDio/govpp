@@ -123,6 +123,9 @@ func (*NshAddDelEntryReply) GetCrcString() string   { return "6296a9eb" }
 func (*NshAddDelEntryReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NshAddDelEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NshAddDelEntryReply) Size() (size int) {
 	if m == nil {
@@ -217,6 +220,9 @@ func (*NshAddDelMapReply) GetCrcString() string   { return "b2b127ef" }
 func (*NshAddDelMapReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NshAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NshAddDelMapReply) Size() (size int) {
 	if m == nil {
@@ -264,6 +270,9 @@ func (*NshEntryDetails) GetMessageName() string { return "nsh_entry_details" }
 func (*NshEntryDetails) GetCrcString() string   { return "046fb556" }
 func (*NshEntryDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NshEntryDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NshEntryDetails) Size() (size int) {
@@ -373,6 +382,9 @@ func (*NshMapDetails) GetMessageName() string { return "nsh_map_details" }
 func (*NshMapDetails) GetCrcString() string   { return "2fefcf49" }
 func (*NshMapDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NshMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NshMapDetails) Size() (size int) {

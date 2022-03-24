@@ -122,6 +122,9 @@ func (*Nat64AddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat64AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64AddDelInterfaceAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64AddDelInterfaceAddrReply) Size() (size int) {
 	if m == nil {
@@ -154,6 +157,9 @@ func (*Nat64AddDelInterfaceReply) GetMessageName() string { return "nat64_add_de
 func (*Nat64AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64AddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelInterfaceReply) Size() (size int) {
@@ -235,6 +241,9 @@ func (*Nat64AddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat64AddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64AddDelPoolAddrRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64AddDelPoolAddrRangeReply) Size() (size int) {
 	if m == nil {
@@ -311,6 +320,9 @@ func (*Nat64AddDelPrefixReply) GetMessageName() string { return "nat64_add_del_p
 func (*Nat64AddDelPrefixReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelPrefixReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64AddDelPrefixReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelPrefixReply) Size() (size int) {
@@ -402,6 +414,9 @@ func (*Nat64AddDelStaticBibReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelStaticBibReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64AddDelStaticBibReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64AddDelStaticBibReply) Size() (size int) {
 	if m == nil {
@@ -441,6 +456,9 @@ func (*Nat64BibDetails) GetMessageName() string { return "nat64_bib_details" }
 func (*Nat64BibDetails) GetCrcString() string   { return "43bc3ddf" }
 func (*Nat64BibDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64BibDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64BibDetails) Size() (size int) {
@@ -560,6 +578,9 @@ func (*Nat64GetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
 func (*Nat64GetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64GetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64GetTimeoutsReply) Size() (size int) {
 	if m == nil {
@@ -605,6 +626,9 @@ func (*Nat64InterfaceDetails) GetMessageName() string { return "nat64_interface_
 func (*Nat64InterfaceDetails) GetCrcString() string   { return "5d286289" }
 func (*Nat64InterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64InterfaceDetails) Size() (size int) {
@@ -722,6 +746,9 @@ func (*Nat64PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" 
 func (*Nat64PluginEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64PluginEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -755,6 +782,9 @@ func (*Nat64PoolAddrDetails) GetMessageName() string { return "nat64_pool_addr_d
 func (*Nat64PoolAddrDetails) GetCrcString() string   { return "9bb99cdb" }
 func (*Nat64PoolAddrDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64PoolAddrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64PoolAddrDetails) Size() (size int) {
@@ -819,6 +849,9 @@ func (*Nat64PrefixDetails) GetMessageName() string { return "nat64_prefix_detail
 func (*Nat64PrefixDetails) GetCrcString() string   { return "20568de3" }
 func (*Nat64PrefixDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64PrefixDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64PrefixDetails) Size() (size int) {
@@ -931,6 +964,9 @@ func (*Nat64SetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64SetTimeoutsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *Nat64SetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Nat64SetTimeoutsReply) Size() (size int) {
 	if m == nil {
@@ -971,6 +1007,9 @@ func (*Nat64StDetails) GetMessageName() string { return "nat64_st_details" }
 func (*Nat64StDetails) GetCrcString() string   { return "dd3361ed" }
 func (*Nat64StDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *Nat64StDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64StDetails) Size() (size int) {

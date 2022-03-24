@@ -88,6 +88,9 @@ func (*TraceProfileAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceProfileAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *TraceProfileAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *TraceProfileAddReply) Size() (size int) {
 	if m == nil {
@@ -147,6 +150,9 @@ func (*TraceProfileDelReply) GetMessageName() string { return "trace_profile_del
 func (*TraceProfileDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceProfileDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *TraceProfileDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceProfileDelReply) Size() (size int) {
@@ -212,6 +218,9 @@ func (*TraceProfileShowConfigReply) GetMessageName() string { return "trace_prof
 func (*TraceProfileShowConfigReply) GetCrcString() string   { return "0f1d374c" }
 func (*TraceProfileShowConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *TraceProfileShowConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceProfileShowConfigReply) Size() (size int) {

@@ -79,6 +79,9 @@ func (*OddbufEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*OddbufEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *OddbufEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OddbufEnableDisableReply) Size() (size int) {
 	if m == nil {

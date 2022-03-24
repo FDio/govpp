@@ -85,6 +85,9 @@ func (*FeatureEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*FeatureEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *FeatureEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *FeatureEnableDisableReply) Size() (size int) {
 	if m == nil {

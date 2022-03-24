@@ -89,6 +89,9 @@ func (*FibSourceAddReply) GetCrcString() string   { return "604fd6f1" }
 func (*FibSourceAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *FibSourceAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *FibSourceAddReply) Size() (size int) {
 	if m == nil {
@@ -124,6 +127,9 @@ func (*FibSourceDetails) GetMessageName() string { return "fib_source_details" }
 func (*FibSourceDetails) GetCrcString() string   { return "8668acdb" }
 func (*FibSourceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *FibSourceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *FibSourceDetails) Size() (size int) {

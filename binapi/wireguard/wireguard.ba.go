@@ -163,6 +163,9 @@ func (*WantWireguardPeerEventsReply) GetCrcString() string { return "e8d4e804" }
 func (*WantWireguardPeerEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WantWireguardPeerEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WantWireguardPeerEventsReply) Size() (size int) {
 	if m == nil {
@@ -230,6 +233,9 @@ func (*WgSetAsyncModeReply) GetMessageName() string { return "wg_set_async_mode_
 func (*WgSetAsyncModeReply) GetCrcString() string   { return "e8d4e804" }
 func (*WgSetAsyncModeReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WgSetAsyncModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WgSetAsyncModeReply) Size() (size int) {
@@ -326,6 +332,9 @@ func (*WireguardInterfaceCreateReply) GetCrcString() string { return "5383d31f" 
 func (*WireguardInterfaceCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WireguardInterfaceCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WireguardInterfaceCreateReply) Size() (size int) {
 	if m == nil {
@@ -399,6 +408,9 @@ func (*WireguardInterfaceDeleteReply) GetCrcString() string { return "e8d4e804" 
 func (*WireguardInterfaceDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WireguardInterfaceDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WireguardInterfaceDeleteReply) Size() (size int) {
 	if m == nil {
@@ -432,6 +444,9 @@ func (*WireguardInterfaceDetails) GetMessageName() string { return "wireguard_in
 func (*WireguardInterfaceDetails) GetCrcString() string   { return "0dd4865d" }
 func (*WireguardInterfaceDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WireguardInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *WireguardInterfaceDetails) Size() (size int) {
@@ -611,6 +626,9 @@ func (*WireguardPeerAddReply) GetCrcString() string   { return "084a0cd3" }
 func (*WireguardPeerAddReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WireguardPeerAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WireguardPeerAddReply) Size() (size int) {
 	if m == nil {
@@ -649,6 +667,9 @@ func (*WireguardPeerEvent) GetMessageName() string { return "wireguard_peer_even
 func (*WireguardPeerEvent) GetCrcString() string   { return "4e1b5d67" }
 func (*WireguardPeerEvent) GetMessageType() api.MessageType {
 	return api.EventMessage
+}
+func (m *WireguardPeerEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *WireguardPeerEvent) Size() (size int) {
@@ -724,6 +745,9 @@ func (*WireguardPeerRemoveReply) GetCrcString() string   { return "e8d4e804" }
 func (*WireguardPeerRemoveReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *WireguardPeerRemoveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *WireguardPeerRemoveReply) Size() (size int) {
 	if m == nil {
@@ -757,6 +781,9 @@ func (*WireguardPeersDetails) GetMessageName() string { return "wireguard_peers_
 func (*WireguardPeersDetails) GetCrcString() string   { return "29269d0e" }
 func (*WireguardPeersDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WireguardPeersDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *WireguardPeersDetails) Size() (size int) {

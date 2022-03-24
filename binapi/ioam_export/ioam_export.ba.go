@@ -83,6 +83,9 @@ func (*IoamExportIP6EnableDisableReply) GetCrcString() string { return "e8d4e804
 func (*IoamExportIP6EnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IoamExportIP6EnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IoamExportIP6EnableDisableReply) Size() (size int) {
 	if m == nil {

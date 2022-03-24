@@ -520,6 +520,17 @@ func genMessageMethods(g *GenFile, msg *Message) {
 	g.P("	return ", apiMsgType(msg.msgType))
 	g.P("}")
 
+    if msg.msgType == msgTypeReply || msg.msgType == msgTypeEvent {
+		// GetRetVal method
+		g.P("func (m *", msg.GoIdent.GoName, ") GetRetVal() error {")
+		if getRetvalField(msg) != nil {
+			g.P("	return api.RetvalToVPPApiError(int32(m.Retval))")
+		} else {
+			g.P("	return nil")
+		}
+		g.P("}")
+	}
+
 	g.P()
 }
 

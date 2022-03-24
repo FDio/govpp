@@ -93,6 +93,9 @@ func (*AdlAllowlistEnableDisableReply) GetCrcString() string { return "e8d4e804"
 func (*AdlAllowlistEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *AdlAllowlistEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *AdlAllowlistEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -166,6 +169,9 @@ func (*AdlInterfaceEnableDisableReply) GetMessageName() string {
 func (*AdlInterfaceEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*AdlInterfaceEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *AdlInterfaceEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AdlInterfaceEnableDisableReply) Size() (size int) {

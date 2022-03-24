@@ -157,6 +157,9 @@ func (*GreTunnelAddDelReply) GetCrcString() string   { return "5383d31f" }
 func (*GreTunnelAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GreTunnelAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GreTunnelAddDelReply) Size() (size int) {
 	if m == nil {
@@ -192,6 +195,9 @@ func (*GreTunnelDetails) GetMessageName() string { return "gre_tunnel_details" }
 func (*GreTunnelDetails) GetCrcString() string   { return "24435433" }
 func (*GreTunnelDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *GreTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GreTunnelDetails) Size() (size int) {

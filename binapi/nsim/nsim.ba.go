@@ -135,6 +135,9 @@ func (*NsimConfigure2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*NsimConfigure2Reply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NsimConfigure2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NsimConfigure2Reply) Size() (size int) {
 	if m == nil {
@@ -168,6 +171,9 @@ func (*NsimConfigureReply) GetMessageName() string { return "nsim_configure_repl
 func (*NsimConfigureReply) GetCrcString() string   { return "e8d4e804" }
 func (*NsimConfigureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NsimConfigureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimConfigureReply) Size() (size int) {
@@ -247,6 +253,9 @@ func (*NsimCrossConnectEnableDisableReply) GetCrcString() string { return "e8d4e
 func (*NsimCrossConnectEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *NsimCrossConnectEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *NsimCrossConnectEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -320,6 +329,9 @@ func (*NsimOutputFeatureEnableDisableReply) GetMessageName() string {
 func (*NsimOutputFeatureEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*NsimOutputFeatureEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *NsimOutputFeatureEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimOutputFeatureEnableDisableReply) Size() (size int) {

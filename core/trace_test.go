@@ -26,7 +26,7 @@ func TestTraceEnabled(t *testing.T) {
 		&l2.BridgeDomainAddDel{},
 		&ip.IPTableAddDel{},
 	}
-	reply := []api.Message{
+	reply := []api.ResponseMessage{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
 		&l2.BridgeDomainAddDelReply{},
@@ -68,7 +68,7 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 	request := []api.Message{
 		&interfaces.SwInterfaceDump{},
 	}
-	reply := []api.Message{
+	reply := []api.ResponseMessage{
 		&interfaces.SwInterfaceDetails{
 			SwIfIndex: 1,
 		},
@@ -129,7 +129,7 @@ func TestTraceDisabled(t *testing.T) {
 		&l2.BridgeDomainAddDel{},
 		&ip.IPTableAddDel{},
 	}
-	reply := []api.Message{
+	reply := []api.ResponseMessage{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
 		&l2.BridgeDomainAddDelReply{},
@@ -161,7 +161,7 @@ func TestTracePerChannel(t *testing.T) {
 		&memif.MemifCreate{},
 		&l2.BridgeDomainAddDel{},
 	}
-	replyCh1 := []api.Message{
+	replyCh1 := []api.ResponseMessage{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
 		&l2.BridgeDomainAddDelReply{},
@@ -169,7 +169,7 @@ func TestTracePerChannel(t *testing.T) {
 	requestCh2 := []api.Message{
 		&ip.IPTableAddDel{},
 	}
-	replyCh2 := []api.Message{
+	replyCh2 := []api.ResponseMessage{
 		&ip.IPTableAddDelReply{},
 	}
 
@@ -243,7 +243,7 @@ func TestTraceClear(t *testing.T) {
 		&interfaces.CreateLoopback{},
 		&memif.MemifCreate{},
 	}
-	reply := []api.Message{
+	reply := []api.ResponseMessage{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
 	}

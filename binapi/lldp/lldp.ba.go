@@ -82,6 +82,9 @@ func (*LldpConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*LldpConfigReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *LldpConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *LldpConfigReply) Size() (size int) {
 	if m == nil {
@@ -168,6 +171,9 @@ func (*SwInterfaceSetLldpReply) GetMessageName() string { return "sw_interface_s
 func (*SwInterfaceSetLldpReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetLldpReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *SwInterfaceSetLldpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetLldpReply) Size() (size int) {

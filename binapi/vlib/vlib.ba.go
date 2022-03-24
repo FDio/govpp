@@ -89,6 +89,9 @@ func (*AddNodeNextReply) GetCrcString() string   { return "2ed75f32" }
 func (*AddNodeNextReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *AddNodeNextReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *AddNodeNextReply) Size() (size int) {
 	if m == nil {
@@ -192,6 +195,9 @@ func (*CliInbandReply) GetCrcString() string   { return "05879051" }
 func (*CliInbandReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *CliInbandReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *CliInbandReply) Size() (size int) {
 	if m == nil {
@@ -228,6 +234,9 @@ func (*CliReply) GetMessageName() string { return "cli_reply" }
 func (*CliReply) GetCrcString() string   { return "06d68297" }
 func (*CliReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *CliReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CliReply) Size() (size int) {
@@ -299,6 +308,9 @@ func (*GetF64EndianValueReply) GetCrcString() string   { return "7e02e404" }
 func (*GetF64EndianValueReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GetF64EndianValueReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GetF64EndianValueReply) Size() (size int) {
 	if m == nil {
@@ -368,6 +380,9 @@ func (*GetF64IncrementByOneReply) GetMessageName() string { return "get_f64_incr
 func (*GetF64IncrementByOneReply) GetCrcString() string   { return "d25dbaa3" }
 func (*GetF64IncrementByOneReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *GetF64IncrementByOneReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetF64IncrementByOneReply) Size() (size int) {
@@ -443,6 +458,9 @@ func (*GetNextIndexReply) GetCrcString() string   { return "2ed75f32" }
 func (*GetNextIndexReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GetNextIndexReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GetNextIndexReply) Size() (size int) {
 	if m == nil {
@@ -506,6 +524,9 @@ func (*GetNodeGraphReply) GetMessageName() string { return "get_node_graph_reply
 func (*GetNodeGraphReply) GetCrcString() string   { return "06d68297" }
 func (*GetNodeGraphReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *GetNodeGraphReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetNodeGraphReply) Size() (size int) {
@@ -577,6 +598,9 @@ func (*GetNodeIndexReply) GetCrcString() string   { return "a8600b89" }
 func (*GetNodeIndexReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *GetNodeIndexReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *GetNodeIndexReply) Size() (size int) {
 	if m == nil {
@@ -641,6 +665,9 @@ func (*ShowThreadsReply) GetMessageName() string { return "show_threads_reply" }
 func (*ShowThreadsReply) GetCrcString() string   { return "efd78e83" }
 func (*ShowThreadsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *ShowThreadsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowThreadsReply) Size() (size int) {

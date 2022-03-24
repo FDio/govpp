@@ -90,6 +90,9 @@ func (*AvfCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*AvfCreateReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *AvfCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *AvfCreateReply) Size() (size int) {
 	if m == nil {
@@ -158,6 +161,9 @@ func (*AvfDeleteReply) GetMessageName() string { return "avf_delete_reply" }
 func (*AvfDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*AvfDeleteReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *AvfDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AvfDeleteReply) Size() (size int) {

@@ -147,6 +147,9 @@ func (*IgmpClearInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpClearInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IgmpClearInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IgmpClearInterfaceReply) Size() (size int) {
 	if m == nil {
@@ -181,6 +184,9 @@ func (*IgmpDetails) GetMessageName() string { return "igmp_details" }
 func (*IgmpDetails) GetCrcString() string   { return "38f09929" }
 func (*IgmpDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IgmpDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IgmpDetails) Size() (size int) {
@@ -295,6 +301,9 @@ func (*IgmpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IgmpEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IgmpEnableDisableReply) Size() (size int) {
 	if m == nil {
@@ -372,6 +381,9 @@ func (*IgmpGroupPrefixDetails) GetMessageName() string { return "igmp_group_pref
 func (*IgmpGroupPrefixDetails) GetCrcString() string   { return "259ccd81" }
 func (*IgmpGroupPrefixDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IgmpGroupPrefixDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IgmpGroupPrefixDetails) Size() (size int) {
@@ -484,6 +496,9 @@ func (*IgmpGroupPrefixSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpGroupPrefixSetReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IgmpGroupPrefixSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IgmpGroupPrefixSetReply) Size() (size int) {
 	if m == nil {
@@ -578,6 +593,9 @@ func (*IgmpListenReply) GetMessageName() string { return "igmp_listen_reply" }
 func (*IgmpListenReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpListenReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IgmpListenReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpListenReply) Size() (size int) {
@@ -698,6 +716,9 @@ func (*IgmpProxyDeviceAddDelInterfaceReply) GetCrcString() string { return "e8d4
 func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
+func (m *IgmpProxyDeviceAddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IgmpProxyDeviceAddDelInterfaceReply) Size() (size int) {
 	if m == nil {
@@ -730,6 +751,9 @@ func (*IgmpProxyDeviceAddDelReply) GetMessageName() string { return "igmp_proxy_
 func (*IgmpProxyDeviceAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpProxyDeviceAddDelReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *IgmpProxyDeviceAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IgmpProxyDeviceAddDelReply) Size() (size int) {
@@ -800,6 +824,9 @@ func (*WantIgmpEventsReply) GetMessageName() string { return "want_igmp_events_r
 func (*WantIgmpEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantIgmpEventsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessage
+}
+func (m *WantIgmpEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantIgmpEventsReply) Size() (size int) {
