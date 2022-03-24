@@ -36,12 +36,10 @@ type P2pEthernetAdd struct {
 	RemoteMac     ethernet_types.MacAddress      `binapi:"mac_address,name=remote_mac" json:"remote_mac,omitempty"`
 }
 
-func (m *P2pEthernetAdd) Reset()               { *m = P2pEthernetAdd{} }
-func (*P2pEthernetAdd) GetMessageName() string { return "p2p_ethernet_add" }
-func (*P2pEthernetAdd) GetCrcString() string   { return "36a1a6dc" }
-func (*P2pEthernetAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *P2pEthernetAdd) Reset()                        { *m = P2pEthernetAdd{} }
+func (*P2pEthernetAdd) GetMessageName() string          { return "p2p_ethernet_add" }
+func (*P2pEthernetAdd) GetCrcString() string            { return "36a1a6dc" }
+func (*P2pEthernetAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *P2pEthernetAdd) Size() (size int) {
 	if m == nil {
@@ -76,11 +74,12 @@ type P2pEthernetAddReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *P2pEthernetAddReply) Reset()               { *m = P2pEthernetAddReply{} }
-func (*P2pEthernetAddReply) GetMessageName() string { return "p2p_ethernet_add_reply" }
-func (*P2pEthernetAddReply) GetCrcString() string   { return "5383d31f" }
-func (*P2pEthernetAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *P2pEthernetAddReply) Reset()                        { *m = P2pEthernetAddReply{} }
+func (*P2pEthernetAddReply) GetMessageName() string          { return "p2p_ethernet_add_reply" }
+func (*P2pEthernetAddReply) GetCrcString() string            { return "5383d31f" }
+func (*P2pEthernetAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *P2pEthernetAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *P2pEthernetAddReply) Size() (size int) {
@@ -113,12 +112,10 @@ type P2pEthernetDel struct {
 	RemoteMac     ethernet_types.MacAddress      `binapi:"mac_address,name=remote_mac" json:"remote_mac,omitempty"`
 }
 
-func (m *P2pEthernetDel) Reset()               { *m = P2pEthernetDel{} }
-func (*P2pEthernetDel) GetMessageName() string { return "p2p_ethernet_del" }
-func (*P2pEthernetDel) GetCrcString() string   { return "62f81c8c" }
-func (*P2pEthernetDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *P2pEthernetDel) Reset()                        { *m = P2pEthernetDel{} }
+func (*P2pEthernetDel) GetMessageName() string          { return "p2p_ethernet_del" }
+func (*P2pEthernetDel) GetCrcString() string            { return "62f81c8c" }
+func (*P2pEthernetDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *P2pEthernetDel) Size() (size int) {
 	if m == nil {
@@ -149,11 +146,12 @@ type P2pEthernetDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *P2pEthernetDelReply) Reset()               { *m = P2pEthernetDelReply{} }
-func (*P2pEthernetDelReply) GetMessageName() string { return "p2p_ethernet_del_reply" }
-func (*P2pEthernetDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*P2pEthernetDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *P2pEthernetDelReply) Reset()                        { *m = P2pEthernetDelReply{} }
+func (*P2pEthernetDelReply) GetMessageName() string          { return "p2p_ethernet_del_reply" }
+func (*P2pEthernetDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*P2pEthernetDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *P2pEthernetDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *P2pEthernetDelReply) Size() (size int) {

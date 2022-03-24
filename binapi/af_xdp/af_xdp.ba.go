@@ -116,12 +116,10 @@ type AfXdpCreate struct {
 	Prog    string    `binapi:"string[256],name=prog" json:"prog,omitempty"`
 }
 
-func (m *AfXdpCreate) Reset()               { *m = AfXdpCreate{} }
-func (*AfXdpCreate) GetMessageName() string { return "af_xdp_create" }
-func (*AfXdpCreate) GetCrcString() string   { return "21226c99" }
-func (*AfXdpCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *AfXdpCreate) Reset()                        { *m = AfXdpCreate{} }
+func (*AfXdpCreate) GetMessageName() string          { return "af_xdp_create" }
+func (*AfXdpCreate) GetCrcString() string            { return "21226c99" }
+func (*AfXdpCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AfXdpCreate) Size() (size int) {
 	if m == nil {
@@ -171,11 +169,12 @@ type AfXdpCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *AfXdpCreateReply) Reset()               { *m = AfXdpCreateReply{} }
-func (*AfXdpCreateReply) GetMessageName() string { return "af_xdp_create_reply" }
-func (*AfXdpCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*AfXdpCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *AfXdpCreateReply) Reset()                        { *m = AfXdpCreateReply{} }
+func (*AfXdpCreateReply) GetMessageName() string          { return "af_xdp_create_reply" }
+func (*AfXdpCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*AfXdpCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AfXdpCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AfXdpCreateReply) Size() (size int) {
@@ -215,12 +214,10 @@ type AfXdpCreateV2 struct {
 	Namespace string    `binapi:"string[64],name=namespace" json:"namespace,omitempty"`
 }
 
-func (m *AfXdpCreateV2) Reset()               { *m = AfXdpCreateV2{} }
-func (*AfXdpCreateV2) GetMessageName() string { return "af_xdp_create_v2" }
-func (*AfXdpCreateV2) GetCrcString() string   { return "e17ec2eb" }
-func (*AfXdpCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *AfXdpCreateV2) Reset()                        { *m = AfXdpCreateV2{} }
+func (*AfXdpCreateV2) GetMessageName() string          { return "af_xdp_create_v2" }
+func (*AfXdpCreateV2) GetCrcString() string            { return "e17ec2eb" }
+func (*AfXdpCreateV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AfXdpCreateV2) Size() (size int) {
 	if m == nil {
@@ -273,11 +270,12 @@ type AfXdpCreateV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *AfXdpCreateV2Reply) Reset()               { *m = AfXdpCreateV2Reply{} }
-func (*AfXdpCreateV2Reply) GetMessageName() string { return "af_xdp_create_v2_reply" }
-func (*AfXdpCreateV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*AfXdpCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *AfXdpCreateV2Reply) Reset()                        { *m = AfXdpCreateV2Reply{} }
+func (*AfXdpCreateV2Reply) GetMessageName() string          { return "af_xdp_create_v2_reply" }
+func (*AfXdpCreateV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*AfXdpCreateV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AfXdpCreateV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AfXdpCreateV2Reply) Size() (size int) {
@@ -309,12 +307,10 @@ type AfXdpDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *AfXdpDelete) Reset()               { *m = AfXdpDelete{} }
-func (*AfXdpDelete) GetMessageName() string { return "af_xdp_delete" }
-func (*AfXdpDelete) GetCrcString() string   { return "f9e6675e" }
-func (*AfXdpDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *AfXdpDelete) Reset()                        { *m = AfXdpDelete{} }
+func (*AfXdpDelete) GetMessageName() string          { return "af_xdp_delete" }
+func (*AfXdpDelete) GetCrcString() string            { return "f9e6675e" }
+func (*AfXdpDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AfXdpDelete) Size() (size int) {
 	if m == nil {
@@ -342,11 +338,12 @@ type AfXdpDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *AfXdpDeleteReply) Reset()               { *m = AfXdpDeleteReply{} }
-func (*AfXdpDeleteReply) GetMessageName() string { return "af_xdp_delete_reply" }
-func (*AfXdpDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*AfXdpDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *AfXdpDeleteReply) Reset()                        { *m = AfXdpDeleteReply{} }
+func (*AfXdpDeleteReply) GetMessageName() string          { return "af_xdp_delete_reply" }
+func (*AfXdpDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*AfXdpDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AfXdpDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AfXdpDeleteReply) Size() (size int) {

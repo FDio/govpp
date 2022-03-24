@@ -36,12 +36,10 @@ type TraceProfileAdd struct {
 	AppData   uint32 `binapi:"u32,name=app_data" json:"app_data,omitempty"`
 }
 
-func (m *TraceProfileAdd) Reset()               { *m = TraceProfileAdd{} }
-func (*TraceProfileAdd) GetMessageName() string { return "trace_profile_add" }
-func (*TraceProfileAdd) GetCrcString() string   { return "de08aa6d" }
-func (*TraceProfileAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TraceProfileAdd) Reset()                        { *m = TraceProfileAdd{} }
+func (*TraceProfileAdd) GetMessageName() string          { return "trace_profile_add" }
+func (*TraceProfileAdd) GetCrcString() string            { return "de08aa6d" }
+func (*TraceProfileAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TraceProfileAdd) Size() (size int) {
 	if m == nil {
@@ -81,11 +79,12 @@ type TraceProfileAddReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *TraceProfileAddReply) Reset()               { *m = TraceProfileAddReply{} }
-func (*TraceProfileAddReply) GetMessageName() string { return "trace_profile_add_reply" }
-func (*TraceProfileAddReply) GetCrcString() string   { return "e8d4e804" }
-func (*TraceProfileAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *TraceProfileAddReply) Reset()                        { *m = TraceProfileAddReply{} }
+func (*TraceProfileAddReply) GetMessageName() string          { return "trace_profile_add_reply" }
+func (*TraceProfileAddReply) GetCrcString() string            { return "e8d4e804" }
+func (*TraceProfileAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TraceProfileAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceProfileAddReply) Size() (size int) {
@@ -112,12 +111,10 @@ func (m *TraceProfileAddReply) Unmarshal(b []byte) error {
 // TraceProfileDel defines message 'trace_profile_del'.
 type TraceProfileDel struct{}
 
-func (m *TraceProfileDel) Reset()               { *m = TraceProfileDel{} }
-func (*TraceProfileDel) GetMessageName() string { return "trace_profile_del" }
-func (*TraceProfileDel) GetCrcString() string   { return "51077d14" }
-func (*TraceProfileDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TraceProfileDel) Reset()                        { *m = TraceProfileDel{} }
+func (*TraceProfileDel) GetMessageName() string          { return "trace_profile_del" }
+func (*TraceProfileDel) GetCrcString() string            { return "51077d14" }
+func (*TraceProfileDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TraceProfileDel) Size() (size int) {
 	if m == nil {
@@ -141,11 +138,12 @@ type TraceProfileDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *TraceProfileDelReply) Reset()               { *m = TraceProfileDelReply{} }
-func (*TraceProfileDelReply) GetMessageName() string { return "trace_profile_del_reply" }
-func (*TraceProfileDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*TraceProfileDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *TraceProfileDelReply) Reset()                        { *m = TraceProfileDelReply{} }
+func (*TraceProfileDelReply) GetMessageName() string          { return "trace_profile_del_reply" }
+func (*TraceProfileDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*TraceProfileDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TraceProfileDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceProfileDelReply) Size() (size int) {
@@ -172,12 +170,10 @@ func (m *TraceProfileDelReply) Unmarshal(b []byte) error {
 // TraceProfileShowConfig defines message 'trace_profile_show_config'.
 type TraceProfileShowConfig struct{}
 
-func (m *TraceProfileShowConfig) Reset()               { *m = TraceProfileShowConfig{} }
-func (*TraceProfileShowConfig) GetMessageName() string { return "trace_profile_show_config" }
-func (*TraceProfileShowConfig) GetCrcString() string   { return "51077d14" }
-func (*TraceProfileShowConfig) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TraceProfileShowConfig) Reset()                        { *m = TraceProfileShowConfig{} }
+func (*TraceProfileShowConfig) GetMessageName() string          { return "trace_profile_show_config" }
+func (*TraceProfileShowConfig) GetCrcString() string            { return "51077d14" }
+func (*TraceProfileShowConfig) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TraceProfileShowConfig) Size() (size int) {
 	if m == nil {
@@ -206,11 +202,12 @@ type TraceProfileShowConfigReply struct {
 	AppData   uint32 `binapi:"u32,name=app_data" json:"app_data,omitempty"`
 }
 
-func (m *TraceProfileShowConfigReply) Reset()               { *m = TraceProfileShowConfigReply{} }
-func (*TraceProfileShowConfigReply) GetMessageName() string { return "trace_profile_show_config_reply" }
-func (*TraceProfileShowConfigReply) GetCrcString() string   { return "0f1d374c" }
-func (*TraceProfileShowConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *TraceProfileShowConfigReply) Reset()                        { *m = TraceProfileShowConfigReply{} }
+func (*TraceProfileShowConfigReply) GetMessageName() string          { return "trace_profile_show_config_reply" }
+func (*TraceProfileShowConfigReply) GetCrcString() string            { return "0f1d374c" }
+func (*TraceProfileShowConfigReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TraceProfileShowConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TraceProfileShowConfigReply) Size() (size int) {

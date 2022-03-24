@@ -49,6 +49,7 @@ func (m *CliInbandReply) Reset()                        { *m = CliInbandReply{} 
 func (*CliInbandReply) GetMessageName() string          { return "cli_inband_reply" }
 func (*CliInbandReply) GetCrcString() string            { return "05879051" }
 func (*CliInbandReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (*CliInbandReply) GetRetVal() error                { return nil }
 
 func TestWrapperEncode(t *testing.T) {
 	msg := &CliInband{

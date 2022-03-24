@@ -101,11 +101,12 @@ type SwInterfaceVirtioPciDetails struct {
 	Features  uint64                         `binapi:"u64,name=features" json:"features,omitempty"`
 }
 
-func (m *SwInterfaceVirtioPciDetails) Reset()               { *m = SwInterfaceVirtioPciDetails{} }
-func (*SwInterfaceVirtioPciDetails) GetMessageName() string { return "sw_interface_virtio_pci_details" }
-func (*SwInterfaceVirtioPciDetails) GetCrcString() string   { return "6ca9c167" }
-func (*SwInterfaceVirtioPciDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwInterfaceVirtioPciDetails) Reset()                        { *m = SwInterfaceVirtioPciDetails{} }
+func (*SwInterfaceVirtioPciDetails) GetMessageName() string          { return "sw_interface_virtio_pci_details" }
+func (*SwInterfaceVirtioPciDetails) GetCrcString() string            { return "6ca9c167" }
+func (*SwInterfaceVirtioPciDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceVirtioPciDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceVirtioPciDetails) Size() (size int) {
@@ -156,12 +157,10 @@ func (m *SwInterfaceVirtioPciDetails) Unmarshal(b []byte) error {
 // SwInterfaceVirtioPciDump defines message 'sw_interface_virtio_pci_dump'.
 type SwInterfaceVirtioPciDump struct{}
 
-func (m *SwInterfaceVirtioPciDump) Reset()               { *m = SwInterfaceVirtioPciDump{} }
-func (*SwInterfaceVirtioPciDump) GetMessageName() string { return "sw_interface_virtio_pci_dump" }
-func (*SwInterfaceVirtioPciDump) GetCrcString() string   { return "51077d14" }
-func (*SwInterfaceVirtioPciDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceVirtioPciDump) Reset()                        { *m = SwInterfaceVirtioPciDump{} }
+func (*SwInterfaceVirtioPciDump) GetMessageName() string          { return "sw_interface_virtio_pci_dump" }
+func (*SwInterfaceVirtioPciDump) GetCrcString() string            { return "51077d14" }
+func (*SwInterfaceVirtioPciDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceVirtioPciDump) Size() (size int) {
 	if m == nil {
@@ -191,12 +190,10 @@ type VirtioPciCreate struct {
 	Features               uint64                    `binapi:"u64,name=features" json:"features,omitempty"`
 }
 
-func (m *VirtioPciCreate) Reset()               { *m = VirtioPciCreate{} }
-func (*VirtioPciCreate) GetMessageName() string { return "virtio_pci_create" }
-func (*VirtioPciCreate) GetCrcString() string   { return "1944f8db" }
-func (*VirtioPciCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *VirtioPciCreate) Reset()                        { *m = VirtioPciCreate{} }
+func (*VirtioPciCreate) GetMessageName() string          { return "virtio_pci_create" }
+func (*VirtioPciCreate) GetCrcString() string            { return "1944f8db" }
+func (*VirtioPciCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VirtioPciCreate) Size() (size int) {
 	if m == nil {
@@ -250,11 +247,12 @@ type VirtioPciCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VirtioPciCreateReply) Reset()               { *m = VirtioPciCreateReply{} }
-func (*VirtioPciCreateReply) GetMessageName() string { return "virtio_pci_create_reply" }
-func (*VirtioPciCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*VirtioPciCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *VirtioPciCreateReply) Reset()                        { *m = VirtioPciCreateReply{} }
+func (*VirtioPciCreateReply) GetMessageName() string          { return "virtio_pci_create_reply" }
+func (*VirtioPciCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*VirtioPciCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VirtioPciCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VirtioPciCreateReply) Size() (size int) {
@@ -290,12 +288,10 @@ type VirtioPciCreateV2 struct {
 	Features     uint64                    `binapi:"u64,name=features" json:"features,omitempty"`
 }
 
-func (m *VirtioPciCreateV2) Reset()               { *m = VirtioPciCreateV2{} }
-func (*VirtioPciCreateV2) GetMessageName() string { return "virtio_pci_create_v2" }
-func (*VirtioPciCreateV2) GetCrcString() string   { return "5d096e1a" }
-func (*VirtioPciCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *VirtioPciCreateV2) Reset()                        { *m = VirtioPciCreateV2{} }
+func (*VirtioPciCreateV2) GetMessageName() string          { return "virtio_pci_create_v2" }
+func (*VirtioPciCreateV2) GetCrcString() string            { return "5d096e1a" }
+func (*VirtioPciCreateV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VirtioPciCreateV2) Size() (size int) {
 	if m == nil {
@@ -345,11 +341,12 @@ type VirtioPciCreateV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VirtioPciCreateV2Reply) Reset()               { *m = VirtioPciCreateV2Reply{} }
-func (*VirtioPciCreateV2Reply) GetMessageName() string { return "virtio_pci_create_v2_reply" }
-func (*VirtioPciCreateV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*VirtioPciCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *VirtioPciCreateV2Reply) Reset()                        { *m = VirtioPciCreateV2Reply{} }
+func (*VirtioPciCreateV2Reply) GetMessageName() string          { return "virtio_pci_create_v2_reply" }
+func (*VirtioPciCreateV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*VirtioPciCreateV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VirtioPciCreateV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VirtioPciCreateV2Reply) Size() (size int) {
@@ -381,12 +378,10 @@ type VirtioPciDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *VirtioPciDelete) Reset()               { *m = VirtioPciDelete{} }
-func (*VirtioPciDelete) GetMessageName() string { return "virtio_pci_delete" }
-func (*VirtioPciDelete) GetCrcString() string   { return "f9e6675e" }
-func (*VirtioPciDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *VirtioPciDelete) Reset()                        { *m = VirtioPciDelete{} }
+func (*VirtioPciDelete) GetMessageName() string          { return "virtio_pci_delete" }
+func (*VirtioPciDelete) GetCrcString() string            { return "f9e6675e" }
+func (*VirtioPciDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *VirtioPciDelete) Size() (size int) {
 	if m == nil {
@@ -414,11 +409,12 @@ type VirtioPciDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *VirtioPciDeleteReply) Reset()               { *m = VirtioPciDeleteReply{} }
-func (*VirtioPciDeleteReply) GetMessageName() string { return "virtio_pci_delete_reply" }
-func (*VirtioPciDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*VirtioPciDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *VirtioPciDeleteReply) Reset()                        { *m = VirtioPciDeleteReply{} }
+func (*VirtioPciDeleteReply) GetMessageName() string          { return "virtio_pci_delete_reply" }
+func (*VirtioPciDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*VirtioPciDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *VirtioPciDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *VirtioPciDeleteReply) Size() (size int) {

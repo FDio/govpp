@@ -184,7 +184,7 @@ func TestMultiRequestsWithSequenceNumbers(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	var msgs []api.Message
+	var msgs []api.ReplyMessage
 	for i := 0; i < 10; i++ {
 		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)})
 	}

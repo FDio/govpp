@@ -62,6 +62,10 @@ func (*defaultReply) GetCrcString() string   { return "xxxxxxxx" }
 func (*defaultReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *defaultReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(m.Retval)
+}
+
 func (m *defaultReply) Size() int {
 	if m == nil {
 		return 0
@@ -367,7 +371,7 @@ func (a *VppAdapter) WaitReady() error {
 //
 //	mockVpp.MockReply()  // zero multipart messages
 //	mockVpp.MockReply(&vpe.ControlPingReply{})
-func (a *VppAdapter) MockReply(msgs ...api.Message) {
+func (a *VppAdapter) MockReply(msgs ...api.ReplyMessage) {
 	a.repliesLock.Lock()
 	defer a.repliesLock.Unlock()
 

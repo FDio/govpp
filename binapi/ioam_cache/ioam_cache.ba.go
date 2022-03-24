@@ -32,12 +32,10 @@ type IoamCacheIP6EnableDisable struct {
 	IsDisable bool `binapi:"bool,name=is_disable" json:"is_disable,omitempty"`
 }
 
-func (m *IoamCacheIP6EnableDisable) Reset()               { *m = IoamCacheIP6EnableDisable{} }
-func (*IoamCacheIP6EnableDisable) GetMessageName() string { return "ioam_cache_ip6_enable_disable" }
-func (*IoamCacheIP6EnableDisable) GetCrcString() string   { return "47705c03" }
-func (*IoamCacheIP6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IoamCacheIP6EnableDisable) Reset()                        { *m = IoamCacheIP6EnableDisable{} }
+func (*IoamCacheIP6EnableDisable) GetMessageName() string          { return "ioam_cache_ip6_enable_disable" }
+func (*IoamCacheIP6EnableDisable) GetCrcString() string            { return "47705c03" }
+func (*IoamCacheIP6EnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IoamCacheIP6EnableDisable) Size() (size int) {
 	if m == nil {
@@ -69,9 +67,10 @@ func (m *IoamCacheIP6EnableDisableReply) Reset() { *m = IoamCacheIP6EnableDisabl
 func (*IoamCacheIP6EnableDisableReply) GetMessageName() string {
 	return "ioam_cache_ip6_enable_disable_reply"
 }
-func (*IoamCacheIP6EnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*IoamCacheIP6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*IoamCacheIP6EnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*IoamCacheIP6EnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IoamCacheIP6EnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IoamCacheIP6EnableDisableReply) Size() (size int) {

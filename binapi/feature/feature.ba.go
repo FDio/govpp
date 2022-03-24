@@ -36,12 +36,10 @@ type FeatureEnableDisable struct {
 	FeatureName string                         `binapi:"string[64],name=feature_name" json:"feature_name,omitempty"`
 }
 
-func (m *FeatureEnableDisable) Reset()               { *m = FeatureEnableDisable{} }
-func (*FeatureEnableDisable) GetMessageName() string { return "feature_enable_disable" }
-func (*FeatureEnableDisable) GetCrcString() string   { return "7531c862" }
-func (*FeatureEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FeatureEnableDisable) Reset()                        { *m = FeatureEnableDisable{} }
+func (*FeatureEnableDisable) GetMessageName() string          { return "feature_enable_disable" }
+func (*FeatureEnableDisable) GetCrcString() string            { return "7531c862" }
+func (*FeatureEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FeatureEnableDisable) Size() (size int) {
 	if m == nil {
@@ -78,11 +76,12 @@ type FeatureEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *FeatureEnableDisableReply) Reset()               { *m = FeatureEnableDisableReply{} }
-func (*FeatureEnableDisableReply) GetMessageName() string { return "feature_enable_disable_reply" }
-func (*FeatureEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*FeatureEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FeatureEnableDisableReply) Reset()                        { *m = FeatureEnableDisableReply{} }
+func (*FeatureEnableDisableReply) GetMessageName() string          { return "feature_enable_disable_reply" }
+func (*FeatureEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*FeatureEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FeatureEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FeatureEnableDisableReply) Size() (size int) {

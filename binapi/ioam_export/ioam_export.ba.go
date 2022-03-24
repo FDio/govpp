@@ -35,12 +35,10 @@ type IoamExportIP6EnableDisable struct {
 	SrcAddress       ip_types.IP4Address `binapi:"ip4_address,name=src_address" json:"src_address,omitempty"`
 }
 
-func (m *IoamExportIP6EnableDisable) Reset()               { *m = IoamExportIP6EnableDisable{} }
-func (*IoamExportIP6EnableDisable) GetMessageName() string { return "ioam_export_ip6_enable_disable" }
-func (*IoamExportIP6EnableDisable) GetCrcString() string   { return "d4c76d3a" }
-func (*IoamExportIP6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IoamExportIP6EnableDisable) Reset()                        { *m = IoamExportIP6EnableDisable{} }
+func (*IoamExportIP6EnableDisable) GetMessageName() string          { return "ioam_export_ip6_enable_disable" }
+func (*IoamExportIP6EnableDisable) GetCrcString() string            { return "d4c76d3a" }
+func (*IoamExportIP6EnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IoamExportIP6EnableDisable) Size() (size int) {
 	if m == nil {
@@ -78,9 +76,10 @@ func (m *IoamExportIP6EnableDisableReply) Reset() { *m = IoamExportIP6EnableDisa
 func (*IoamExportIP6EnableDisableReply) GetMessageName() string {
 	return "ioam_export_ip6_enable_disable_reply"
 }
-func (*IoamExportIP6EnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*IoamExportIP6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*IoamExportIP6EnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*IoamExportIP6EnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IoamExportIP6EnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IoamExportIP6EnableDisableReply) Size() (size int) {

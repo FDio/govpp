@@ -89,11 +89,12 @@ type MssClampDetails struct {
 	IPv6Direction MssClampDir                    `binapi:"mss_clamp_dir,name=ipv6_direction" json:"ipv6_direction,omitempty"`
 }
 
-func (m *MssClampDetails) Reset()               { *m = MssClampDetails{} }
-func (*MssClampDetails) GetMessageName() string { return "mss_clamp_details" }
-func (*MssClampDetails) GetCrcString() string   { return "d3a4de61" }
-func (*MssClampDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MssClampDetails) Reset()                        { *m = MssClampDetails{} }
+func (*MssClampDetails) GetMessageName() string          { return "mss_clamp_details" }
+func (*MssClampDetails) GetCrcString() string            { return "d3a4de61" }
+func (*MssClampDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MssClampDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MssClampDetails) Size() (size int) {
@@ -138,12 +139,10 @@ type MssClampEnableDisable struct {
 	IPv6Direction MssClampDir                    `binapi:"mss_clamp_dir,name=ipv6_direction" json:"ipv6_direction,omitempty"`
 }
 
-func (m *MssClampEnableDisable) Reset()               { *m = MssClampEnableDisable{} }
-func (*MssClampEnableDisable) GetMessageName() string { return "mss_clamp_enable_disable" }
-func (*MssClampEnableDisable) GetCrcString() string   { return "d31b44e3" }
-func (*MssClampEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MssClampEnableDisable) Reset()                        { *m = MssClampEnableDisable{} }
+func (*MssClampEnableDisable) GetMessageName() string          { return "mss_clamp_enable_disable" }
+func (*MssClampEnableDisable) GetCrcString() string            { return "d31b44e3" }
+func (*MssClampEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MssClampEnableDisable) Size() (size int) {
 	if m == nil {
@@ -183,11 +182,12 @@ type MssClampEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MssClampEnableDisableReply) Reset()               { *m = MssClampEnableDisableReply{} }
-func (*MssClampEnableDisableReply) GetMessageName() string { return "mss_clamp_enable_disable_reply" }
-func (*MssClampEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*MssClampEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MssClampEnableDisableReply) Reset()                        { *m = MssClampEnableDisableReply{} }
+func (*MssClampEnableDisableReply) GetMessageName() string          { return "mss_clamp_enable_disable_reply" }
+func (*MssClampEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*MssClampEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MssClampEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MssClampEnableDisableReply) Size() (size int) {
@@ -217,12 +217,10 @@ type MssClampGet struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MssClampGet) Reset()               { *m = MssClampGet{} }
-func (*MssClampGet) GetMessageName() string { return "mss_clamp_get" }
-func (*MssClampGet) GetCrcString() string   { return "47250981" }
-func (*MssClampGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MssClampGet) Reset()                        { *m = MssClampGet{} }
+func (*MssClampGet) GetMessageName() string          { return "mss_clamp_get" }
+func (*MssClampGet) GetCrcString() string            { return "47250981" }
+func (*MssClampGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MssClampGet) Size() (size int) {
 	if m == nil {
@@ -254,11 +252,12 @@ type MssClampGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *MssClampGetReply) Reset()               { *m = MssClampGetReply{} }
-func (*MssClampGetReply) GetMessageName() string { return "mss_clamp_get_reply" }
-func (*MssClampGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*MssClampGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MssClampGetReply) Reset()                        { *m = MssClampGetReply{} }
+func (*MssClampGetReply) GetMessageName() string          { return "mss_clamp_get_reply" }
+func (*MssClampGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*MssClampGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MssClampGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MssClampGetReply) Size() (size int) {

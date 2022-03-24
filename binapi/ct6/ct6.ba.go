@@ -35,12 +35,10 @@ type Ct6EnableDisable struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Ct6EnableDisable) Reset()               { *m = Ct6EnableDisable{} }
-func (*Ct6EnableDisable) GetMessageName() string { return "ct6_enable_disable" }
-func (*Ct6EnableDisable) GetCrcString() string   { return "5d02ac02" }
-func (*Ct6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ct6EnableDisable) Reset()                        { *m = Ct6EnableDisable{} }
+func (*Ct6EnableDisable) GetMessageName() string          { return "ct6_enable_disable" }
+func (*Ct6EnableDisable) GetCrcString() string            { return "5d02ac02" }
+func (*Ct6EnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ct6EnableDisable) Size() (size int) {
 	if m == nil {
@@ -74,11 +72,12 @@ type Ct6EnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ct6EnableDisableReply) Reset()               { *m = Ct6EnableDisableReply{} }
-func (*Ct6EnableDisableReply) GetMessageName() string { return "ct6_enable_disable_reply" }
-func (*Ct6EnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ct6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ct6EnableDisableReply) Reset()                        { *m = Ct6EnableDisableReply{} }
+func (*Ct6EnableDisableReply) GetMessageName() string          { return "ct6_enable_disable_reply" }
+func (*Ct6EnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ct6EnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ct6EnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ct6EnableDisableReply) Size() (size int) {

@@ -34,12 +34,10 @@ type MdataEnableDisable struct {
 	EnableDisable bool `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
 }
 
-func (m *MdataEnableDisable) Reset()               { *m = MdataEnableDisable{} }
-func (*MdataEnableDisable) GetMessageName() string { return "mdata_enable_disable" }
-func (*MdataEnableDisable) GetCrcString() string   { return "2e7b47df" }
-func (*MdataEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MdataEnableDisable) Reset()                        { *m = MdataEnableDisable{} }
+func (*MdataEnableDisable) GetMessageName() string          { return "mdata_enable_disable" }
+func (*MdataEnableDisable) GetCrcString() string            { return "2e7b47df" }
+func (*MdataEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MdataEnableDisable) Size() (size int) {
 	if m == nil {
@@ -68,11 +66,12 @@ type MdataEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MdataEnableDisableReply) Reset()               { *m = MdataEnableDisableReply{} }
-func (*MdataEnableDisableReply) GetMessageName() string { return "mdata_enable_disable_reply" }
-func (*MdataEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*MdataEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MdataEnableDisableReply) Reset()                        { *m = MdataEnableDisableReply{} }
+func (*MdataEnableDisableReply) GetMessageName() string          { return "mdata_enable_disable_reply" }
+func (*MdataEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*MdataEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MdataEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MdataEnableDisableReply) Size() (size int) {

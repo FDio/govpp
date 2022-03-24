@@ -41,12 +41,10 @@ type GtpuAddDelTunnel struct {
 	Tteid          uint32                         `binapi:"u32,name=tteid" json:"tteid,omitempty"`
 }
 
-func (m *GtpuAddDelTunnel) Reset()               { *m = GtpuAddDelTunnel{} }
-func (*GtpuAddDelTunnel) GetMessageName() string { return "gtpu_add_del_tunnel" }
-func (*GtpuAddDelTunnel) GetCrcString() string   { return "ca983a2b" }
-func (*GtpuAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GtpuAddDelTunnel) Reset()                        { *m = GtpuAddDelTunnel{} }
+func (*GtpuAddDelTunnel) GetMessageName() string          { return "gtpu_add_del_tunnel" }
+func (*GtpuAddDelTunnel) GetCrcString() string            { return "ca983a2b" }
+func (*GtpuAddDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GtpuAddDelTunnel) Size() (size int) {
 	if m == nil {
@@ -102,11 +100,12 @@ type GtpuAddDelTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GtpuAddDelTunnelReply) Reset()               { *m = GtpuAddDelTunnelReply{} }
-func (*GtpuAddDelTunnelReply) GetMessageName() string { return "gtpu_add_del_tunnel_reply" }
-func (*GtpuAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*GtpuAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GtpuAddDelTunnelReply) Reset()                        { *m = GtpuAddDelTunnelReply{} }
+func (*GtpuAddDelTunnelReply) GetMessageName() string          { return "gtpu_add_del_tunnel_reply" }
+func (*GtpuAddDelTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*GtpuAddDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GtpuAddDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GtpuAddDelTunnelReply) Size() (size int) {
@@ -140,12 +139,10 @@ type GtpuOffloadRx struct {
 	Enable    uint8  `binapi:"u8,name=enable" json:"enable,omitempty"`
 }
 
-func (m *GtpuOffloadRx) Reset()               { *m = GtpuOffloadRx{} }
-func (*GtpuOffloadRx) GetMessageName() string { return "gtpu_offload_rx" }
-func (*GtpuOffloadRx) GetCrcString() string   { return "f0b08786" }
-func (*GtpuOffloadRx) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GtpuOffloadRx) Reset()                        { *m = GtpuOffloadRx{} }
+func (*GtpuOffloadRx) GetMessageName() string          { return "gtpu_offload_rx" }
+func (*GtpuOffloadRx) GetCrcString() string            { return "f0b08786" }
+func (*GtpuOffloadRx) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GtpuOffloadRx) Size() (size int) {
 	if m == nil {
@@ -179,11 +176,12 @@ type GtpuOffloadRxReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *GtpuOffloadRxReply) Reset()               { *m = GtpuOffloadRxReply{} }
-func (*GtpuOffloadRxReply) GetMessageName() string { return "gtpu_offload_rx_reply" }
-func (*GtpuOffloadRxReply) GetCrcString() string   { return "e8d4e804" }
-func (*GtpuOffloadRxReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GtpuOffloadRxReply) Reset()                        { *m = GtpuOffloadRxReply{} }
+func (*GtpuOffloadRxReply) GetMessageName() string          { return "gtpu_offload_rx_reply" }
+func (*GtpuOffloadRxReply) GetCrcString() string            { return "e8d4e804" }
+func (*GtpuOffloadRxReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GtpuOffloadRxReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GtpuOffloadRxReply) Size() (size int) {
@@ -219,11 +217,12 @@ type GtpuTunnelDetails struct {
 	Tteid          uint32                         `binapi:"u32,name=tteid" json:"tteid,omitempty"`
 }
 
-func (m *GtpuTunnelDetails) Reset()               { *m = GtpuTunnelDetails{} }
-func (*GtpuTunnelDetails) GetMessageName() string { return "gtpu_tunnel_details" }
-func (*GtpuTunnelDetails) GetCrcString() string   { return "27f434ae" }
-func (*GtpuTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GtpuTunnelDetails) Reset()                        { *m = GtpuTunnelDetails{} }
+func (*GtpuTunnelDetails) GetMessageName() string          { return "gtpu_tunnel_details" }
+func (*GtpuTunnelDetails) GetCrcString() string            { return "27f434ae" }
+func (*GtpuTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GtpuTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *GtpuTunnelDetails) Size() (size int) {
@@ -279,12 +278,10 @@ type GtpuTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *GtpuTunnelDump) Reset()               { *m = GtpuTunnelDump{} }
-func (*GtpuTunnelDump) GetMessageName() string { return "gtpu_tunnel_dump" }
-func (*GtpuTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*GtpuTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GtpuTunnelDump) Reset()                        { *m = GtpuTunnelDump{} }
+func (*GtpuTunnelDump) GetMessageName() string          { return "gtpu_tunnel_dump" }
+func (*GtpuTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*GtpuTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GtpuTunnelDump) Size() (size int) {
 	if m == nil {
@@ -315,12 +312,10 @@ type GtpuTunnelUpdateTteid struct {
 	Tteid      uint32           `binapi:"u32,name=tteid" json:"tteid,omitempty"`
 }
 
-func (m *GtpuTunnelUpdateTteid) Reset()               { *m = GtpuTunnelUpdateTteid{} }
-func (*GtpuTunnelUpdateTteid) GetMessageName() string { return "gtpu_tunnel_update_tteid" }
-func (*GtpuTunnelUpdateTteid) GetCrcString() string   { return "79f33816" }
-func (*GtpuTunnelUpdateTteid) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GtpuTunnelUpdateTteid) Reset()                        { *m = GtpuTunnelUpdateTteid{} }
+func (*GtpuTunnelUpdateTteid) GetMessageName() string          { return "gtpu_tunnel_update_tteid" }
+func (*GtpuTunnelUpdateTteid) GetCrcString() string            { return "79f33816" }
+func (*GtpuTunnelUpdateTteid) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GtpuTunnelUpdateTteid) Size() (size int) {
 	if m == nil {
@@ -360,11 +355,12 @@ type GtpuTunnelUpdateTteidReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *GtpuTunnelUpdateTteidReply) Reset()               { *m = GtpuTunnelUpdateTteidReply{} }
-func (*GtpuTunnelUpdateTteidReply) GetMessageName() string { return "gtpu_tunnel_update_tteid_reply" }
-func (*GtpuTunnelUpdateTteidReply) GetCrcString() string   { return "e8d4e804" }
-func (*GtpuTunnelUpdateTteidReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GtpuTunnelUpdateTteidReply) Reset()                        { *m = GtpuTunnelUpdateTteidReply{} }
+func (*GtpuTunnelUpdateTteidReply) GetMessageName() string          { return "gtpu_tunnel_update_tteid_reply" }
+func (*GtpuTunnelUpdateTteidReply) GetCrcString() string            { return "e8d4e804" }
+func (*GtpuTunnelUpdateTteidReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GtpuTunnelUpdateTteidReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GtpuTunnelUpdateTteidReply) Size() (size int) {
@@ -395,12 +391,10 @@ type SwInterfaceSetGtpuBypass struct {
 	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetGtpuBypass) Reset()               { *m = SwInterfaceSetGtpuBypass{} }
-func (*SwInterfaceSetGtpuBypass) GetMessageName() string { return "sw_interface_set_gtpu_bypass" }
-func (*SwInterfaceSetGtpuBypass) GetCrcString() string   { return "65247409" }
-func (*SwInterfaceSetGtpuBypass) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetGtpuBypass) Reset()                        { *m = SwInterfaceSetGtpuBypass{} }
+func (*SwInterfaceSetGtpuBypass) GetMessageName() string          { return "sw_interface_set_gtpu_bypass" }
+func (*SwInterfaceSetGtpuBypass) GetCrcString() string            { return "65247409" }
+func (*SwInterfaceSetGtpuBypass) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetGtpuBypass) Size() (size int) {
 	if m == nil {
@@ -438,9 +432,10 @@ func (m *SwInterfaceSetGtpuBypassReply) Reset() { *m = SwInterfaceSetGtpuBypassR
 func (*SwInterfaceSetGtpuBypassReply) GetMessageName() string {
 	return "sw_interface_set_gtpu_bypass_reply"
 }
-func (*SwInterfaceSetGtpuBypassReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetGtpuBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceSetGtpuBypassReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetGtpuBypassReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetGtpuBypassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetGtpuBypassReply) Size() (size int) {

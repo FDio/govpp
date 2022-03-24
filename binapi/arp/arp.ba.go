@@ -44,12 +44,10 @@ type ProxyArpAddDel struct {
 	Proxy ProxyArp `binapi:"proxy_arp,name=proxy" json:"proxy,omitempty"`
 }
 
-func (m *ProxyArpAddDel) Reset()               { *m = ProxyArpAddDel{} }
-func (*ProxyArpAddDel) GetMessageName() string { return "proxy_arp_add_del" }
-func (*ProxyArpAddDel) GetCrcString() string   { return "1823c3e7" }
-func (*ProxyArpAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ProxyArpAddDel) Reset()                        { *m = ProxyArpAddDel{} }
+func (*ProxyArpAddDel) GetMessageName() string          { return "proxy_arp_add_del" }
+func (*ProxyArpAddDel) GetCrcString() string            { return "1823c3e7" }
+func (*ProxyArpAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ProxyArpAddDel) Size() (size int) {
 	if m == nil {
@@ -86,11 +84,12 @@ type ProxyArpAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ProxyArpAddDelReply) Reset()               { *m = ProxyArpAddDelReply{} }
-func (*ProxyArpAddDelReply) GetMessageName() string { return "proxy_arp_add_del_reply" }
-func (*ProxyArpAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*ProxyArpAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ProxyArpAddDelReply) Reset()                        { *m = ProxyArpAddDelReply{} }
+func (*ProxyArpAddDelReply) GetMessageName() string          { return "proxy_arp_add_del_reply" }
+func (*ProxyArpAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*ProxyArpAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ProxyArpAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ProxyArpAddDelReply) Size() (size int) {
@@ -119,11 +118,12 @@ type ProxyArpDetails struct {
 	Proxy ProxyArp `binapi:"proxy_arp,name=proxy" json:"proxy,omitempty"`
 }
 
-func (m *ProxyArpDetails) Reset()               { *m = ProxyArpDetails{} }
-func (*ProxyArpDetails) GetMessageName() string { return "proxy_arp_details" }
-func (*ProxyArpDetails) GetCrcString() string   { return "5b948673" }
-func (*ProxyArpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ProxyArpDetails) Reset()                        { *m = ProxyArpDetails{} }
+func (*ProxyArpDetails) GetMessageName() string          { return "proxy_arp_details" }
+func (*ProxyArpDetails) GetCrcString() string            { return "5b948673" }
+func (*ProxyArpDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ProxyArpDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *ProxyArpDetails) Size() (size int) {
@@ -156,12 +156,10 @@ func (m *ProxyArpDetails) Unmarshal(b []byte) error {
 // ProxyArpDump defines message 'proxy_arp_dump'.
 type ProxyArpDump struct{}
 
-func (m *ProxyArpDump) Reset()               { *m = ProxyArpDump{} }
-func (*ProxyArpDump) GetMessageName() string { return "proxy_arp_dump" }
-func (*ProxyArpDump) GetCrcString() string   { return "51077d14" }
-func (*ProxyArpDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ProxyArpDump) Reset()                        { *m = ProxyArpDump{} }
+func (*ProxyArpDump) GetMessageName() string          { return "proxy_arp_dump" }
+func (*ProxyArpDump) GetCrcString() string            { return "51077d14" }
+func (*ProxyArpDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ProxyArpDump) Size() (size int) {
 	if m == nil {
@@ -185,11 +183,12 @@ type ProxyArpIntfcDetails struct {
 	SwIfIndex uint32 `binapi:"u32,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *ProxyArpIntfcDetails) Reset()               { *m = ProxyArpIntfcDetails{} }
-func (*ProxyArpIntfcDetails) GetMessageName() string { return "proxy_arp_intfc_details" }
-func (*ProxyArpIntfcDetails) GetCrcString() string   { return "f6458e5f" }
-func (*ProxyArpIntfcDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ProxyArpIntfcDetails) Reset()                        { *m = ProxyArpIntfcDetails{} }
+func (*ProxyArpIntfcDetails) GetMessageName() string          { return "proxy_arp_intfc_details" }
+func (*ProxyArpIntfcDetails) GetCrcString() string            { return "f6458e5f" }
+func (*ProxyArpIntfcDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ProxyArpIntfcDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *ProxyArpIntfcDetails) Size() (size int) {
@@ -216,12 +215,10 @@ func (m *ProxyArpIntfcDetails) Unmarshal(b []byte) error {
 // ProxyArpIntfcDump defines message 'proxy_arp_intfc_dump'.
 type ProxyArpIntfcDump struct{}
 
-func (m *ProxyArpIntfcDump) Reset()               { *m = ProxyArpIntfcDump{} }
-func (*ProxyArpIntfcDump) GetMessageName() string { return "proxy_arp_intfc_dump" }
-func (*ProxyArpIntfcDump) GetCrcString() string   { return "51077d14" }
-func (*ProxyArpIntfcDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ProxyArpIntfcDump) Reset()                        { *m = ProxyArpIntfcDump{} }
+func (*ProxyArpIntfcDump) GetMessageName() string          { return "proxy_arp_intfc_dump" }
+func (*ProxyArpIntfcDump) GetCrcString() string            { return "51077d14" }
+func (*ProxyArpIntfcDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ProxyArpIntfcDump) Size() (size int) {
 	if m == nil {
@@ -246,12 +243,10 @@ type ProxyArpIntfcEnableDisable struct {
 	Enable    bool                           `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *ProxyArpIntfcEnableDisable) Reset()               { *m = ProxyArpIntfcEnableDisable{} }
-func (*ProxyArpIntfcEnableDisable) GetMessageName() string { return "proxy_arp_intfc_enable_disable" }
-func (*ProxyArpIntfcEnableDisable) GetCrcString() string   { return "ae6cfcfb" }
-func (*ProxyArpIntfcEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ProxyArpIntfcEnableDisable) Reset()                        { *m = ProxyArpIntfcEnableDisable{} }
+func (*ProxyArpIntfcEnableDisable) GetMessageName() string          { return "proxy_arp_intfc_enable_disable" }
+func (*ProxyArpIntfcEnableDisable) GetCrcString() string            { return "ae6cfcfb" }
+func (*ProxyArpIntfcEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ProxyArpIntfcEnableDisable) Size() (size int) {
 	if m == nil {
@@ -286,9 +281,10 @@ func (m *ProxyArpIntfcEnableDisableReply) Reset() { *m = ProxyArpIntfcEnableDisa
 func (*ProxyArpIntfcEnableDisableReply) GetMessageName() string {
 	return "proxy_arp_intfc_enable_disable_reply"
 }
-func (*ProxyArpIntfcEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*ProxyArpIntfcEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ProxyArpIntfcEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*ProxyArpIntfcEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ProxyArpIntfcEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ProxyArpIntfcEnableDisableReply) Size() (size int) {

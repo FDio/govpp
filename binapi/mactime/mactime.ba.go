@@ -56,12 +56,10 @@ type MactimeAddDelRange struct {
 	Ranges     []TimeRange               `binapi:"time_range[count],name=ranges" json:"ranges,omitempty"`
 }
 
-func (m *MactimeAddDelRange) Reset()               { *m = MactimeAddDelRange{} }
-func (*MactimeAddDelRange) GetMessageName() string { return "mactime_add_del_range" }
-func (*MactimeAddDelRange) GetCrcString() string   { return "cb56e877" }
-func (*MactimeAddDelRange) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MactimeAddDelRange) Reset()                        { *m = MactimeAddDelRange{} }
+func (*MactimeAddDelRange) GetMessageName() string          { return "mactime_add_del_range" }
+func (*MactimeAddDelRange) GetCrcString() string            { return "cb56e877" }
+func (*MactimeAddDelRange) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MactimeAddDelRange) Size() (size int) {
 	if m == nil {
@@ -135,11 +133,12 @@ type MactimeAddDelRangeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MactimeAddDelRangeReply) Reset()               { *m = MactimeAddDelRangeReply{} }
-func (*MactimeAddDelRangeReply) GetMessageName() string { return "mactime_add_del_range_reply" }
-func (*MactimeAddDelRangeReply) GetCrcString() string   { return "e8d4e804" }
-func (*MactimeAddDelRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MactimeAddDelRangeReply) Reset()                        { *m = MactimeAddDelRangeReply{} }
+func (*MactimeAddDelRangeReply) GetMessageName() string          { return "mactime_add_del_range_reply" }
+func (*MactimeAddDelRangeReply) GetCrcString() string            { return "e8d4e804" }
+func (*MactimeAddDelRangeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MactimeAddDelRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MactimeAddDelRangeReply) Size() (size int) {
@@ -175,11 +174,12 @@ type MactimeDetails struct {
 	Ranges          []MactimeTimeRange        `binapi:"mactime_time_range[nranges],name=ranges" json:"ranges,omitempty"`
 }
 
-func (m *MactimeDetails) Reset()               { *m = MactimeDetails{} }
-func (*MactimeDetails) GetMessageName() string { return "mactime_details" }
-func (*MactimeDetails) GetCrcString() string   { return "da25b13a" }
-func (*MactimeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MactimeDetails) Reset()                        { *m = MactimeDetails{} }
+func (*MactimeDetails) GetMessageName() string          { return "mactime_details" }
+func (*MactimeDetails) GetCrcString() string            { return "da25b13a" }
+func (*MactimeDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MactimeDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MactimeDetails) Size() (size int) {
@@ -248,12 +248,10 @@ type MactimeDump struct {
 	MyTableEpoch uint32 `binapi:"u32,name=my_table_epoch" json:"my_table_epoch,omitempty"`
 }
 
-func (m *MactimeDump) Reset()               { *m = MactimeDump{} }
-func (*MactimeDump) GetMessageName() string { return "mactime_dump" }
-func (*MactimeDump) GetCrcString() string   { return "8f454e23" }
-func (*MactimeDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MactimeDump) Reset()                        { *m = MactimeDump{} }
+func (*MactimeDump) GetMessageName() string          { return "mactime_dump" }
+func (*MactimeDump) GetCrcString() string            { return "8f454e23" }
+func (*MactimeDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MactimeDump) Size() (size int) {
 	if m == nil {
@@ -282,11 +280,12 @@ type MactimeDumpReply struct {
 	TableEpoch uint32 `binapi:"u32,name=table_epoch" json:"table_epoch,omitempty"`
 }
 
-func (m *MactimeDumpReply) Reset()               { *m = MactimeDumpReply{} }
-func (*MactimeDumpReply) GetMessageName() string { return "mactime_dump_reply" }
-func (*MactimeDumpReply) GetCrcString() string   { return "49bcc753" }
-func (*MactimeDumpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MactimeDumpReply) Reset()                        { *m = MactimeDumpReply{} }
+func (*MactimeDumpReply) GetMessageName() string          { return "mactime_dump_reply" }
+func (*MactimeDumpReply) GetCrcString() string            { return "49bcc753" }
+func (*MactimeDumpReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MactimeDumpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MactimeDumpReply) Size() (size int) {
@@ -319,12 +318,10 @@ type MactimeEnableDisable struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *MactimeEnableDisable) Reset()               { *m = MactimeEnableDisable{} }
-func (*MactimeEnableDisable) GetMessageName() string { return "mactime_enable_disable" }
-func (*MactimeEnableDisable) GetCrcString() string   { return "3865946c" }
-func (*MactimeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MactimeEnableDisable) Reset()                        { *m = MactimeEnableDisable{} }
+func (*MactimeEnableDisable) GetMessageName() string          { return "mactime_enable_disable" }
+func (*MactimeEnableDisable) GetCrcString() string            { return "3865946c" }
+func (*MactimeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MactimeEnableDisable) Size() (size int) {
 	if m == nil {
@@ -355,11 +352,12 @@ type MactimeEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MactimeEnableDisableReply) Reset()               { *m = MactimeEnableDisableReply{} }
-func (*MactimeEnableDisableReply) GetMessageName() string { return "mactime_enable_disable_reply" }
-func (*MactimeEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*MactimeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MactimeEnableDisableReply) Reset()                        { *m = MactimeEnableDisableReply{} }
+func (*MactimeEnableDisableReply) GetMessageName() string          { return "mactime_enable_disable_reply" }
+func (*MactimeEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*MactimeEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MactimeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MactimeEnableDisableReply) Size() (size int) {

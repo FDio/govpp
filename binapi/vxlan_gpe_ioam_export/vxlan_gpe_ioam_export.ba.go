@@ -84,6 +84,9 @@ func (*VxlanGpeIoamExportEnableDisableReply) GetCrcString() string { return "e8d
 func (*VxlanGpeIoamExportEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *VxlanGpeIoamExportEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *VxlanGpeIoamExportEnableDisableReply) Size() (size int) {
 	if m == nil {

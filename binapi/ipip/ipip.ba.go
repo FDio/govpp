@@ -54,12 +54,10 @@ type Ipip6rdAddTunnel struct {
 	TcTos         uint8               `binapi:"u8,name=tc_tos" json:"tc_tos,omitempty"`
 }
 
-func (m *Ipip6rdAddTunnel) Reset()               { *m = Ipip6rdAddTunnel{} }
-func (*Ipip6rdAddTunnel) GetMessageName() string { return "ipip_6rd_add_tunnel" }
-func (*Ipip6rdAddTunnel) GetCrcString() string   { return "b9ec1863" }
-func (*Ipip6rdAddTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ipip6rdAddTunnel) Reset()                        { *m = Ipip6rdAddTunnel{} }
+func (*Ipip6rdAddTunnel) GetMessageName() string          { return "ipip_6rd_add_tunnel" }
+func (*Ipip6rdAddTunnel) GetCrcString() string            { return "b9ec1863" }
+func (*Ipip6rdAddTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ipip6rdAddTunnel) Size() (size int) {
 	if m == nil {
@@ -112,11 +110,12 @@ type Ipip6rdAddTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Ipip6rdAddTunnelReply) Reset()               { *m = Ipip6rdAddTunnelReply{} }
-func (*Ipip6rdAddTunnelReply) GetMessageName() string { return "ipip_6rd_add_tunnel_reply" }
-func (*Ipip6rdAddTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*Ipip6rdAddTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ipip6rdAddTunnelReply) Reset()                        { *m = Ipip6rdAddTunnelReply{} }
+func (*Ipip6rdAddTunnelReply) GetMessageName() string          { return "ipip_6rd_add_tunnel_reply" }
+func (*Ipip6rdAddTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*Ipip6rdAddTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ipip6rdAddTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ipip6rdAddTunnelReply) Size() (size int) {
@@ -148,12 +147,10 @@ type Ipip6rdDelTunnel struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Ipip6rdDelTunnel) Reset()               { *m = Ipip6rdDelTunnel{} }
-func (*Ipip6rdDelTunnel) GetMessageName() string { return "ipip_6rd_del_tunnel" }
-func (*Ipip6rdDelTunnel) GetCrcString() string   { return "f9e6675e" }
-func (*Ipip6rdDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ipip6rdDelTunnel) Reset()                        { *m = Ipip6rdDelTunnel{} }
+func (*Ipip6rdDelTunnel) GetMessageName() string          { return "ipip_6rd_del_tunnel" }
+func (*Ipip6rdDelTunnel) GetCrcString() string            { return "f9e6675e" }
+func (*Ipip6rdDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ipip6rdDelTunnel) Size() (size int) {
 	if m == nil {
@@ -181,11 +178,12 @@ type Ipip6rdDelTunnelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ipip6rdDelTunnelReply) Reset()               { *m = Ipip6rdDelTunnelReply{} }
-func (*Ipip6rdDelTunnelReply) GetMessageName() string { return "ipip_6rd_del_tunnel_reply" }
-func (*Ipip6rdDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ipip6rdDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ipip6rdDelTunnelReply) Reset()                        { *m = Ipip6rdDelTunnelReply{} }
+func (*Ipip6rdDelTunnelReply) GetMessageName() string          { return "ipip_6rd_del_tunnel_reply" }
+func (*Ipip6rdDelTunnelReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ipip6rdDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ipip6rdDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ipip6rdDelTunnelReply) Size() (size int) {
@@ -214,12 +212,10 @@ type IpipAddTunnel struct {
 	Tunnel IpipTunnel `binapi:"ipip_tunnel,name=tunnel" json:"tunnel,omitempty"`
 }
 
-func (m *IpipAddTunnel) Reset()               { *m = IpipAddTunnel{} }
-func (*IpipAddTunnel) GetMessageName() string { return "ipip_add_tunnel" }
-func (*IpipAddTunnel) GetCrcString() string   { return "2ac399f5" }
-func (*IpipAddTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IpipAddTunnel) Reset()                        { *m = IpipAddTunnel{} }
+func (*IpipAddTunnel) GetMessageName() string          { return "ipip_add_tunnel" }
+func (*IpipAddTunnel) GetCrcString() string            { return "2ac399f5" }
+func (*IpipAddTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpipAddTunnel) Size() (size int) {
 	if m == nil {
@@ -275,11 +271,12 @@ type IpipAddTunnelReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IpipAddTunnelReply) Reset()               { *m = IpipAddTunnelReply{} }
-func (*IpipAddTunnelReply) GetMessageName() string { return "ipip_add_tunnel_reply" }
-func (*IpipAddTunnelReply) GetCrcString() string   { return "5383d31f" }
-func (*IpipAddTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IpipAddTunnelReply) Reset()                        { *m = IpipAddTunnelReply{} }
+func (*IpipAddTunnelReply) GetMessageName() string          { return "ipip_add_tunnel_reply" }
+func (*IpipAddTunnelReply) GetCrcString() string            { return "5383d31f" }
+func (*IpipAddTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpipAddTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpipAddTunnelReply) Size() (size int) {
@@ -311,12 +308,10 @@ type IpipDelTunnel struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IpipDelTunnel) Reset()               { *m = IpipDelTunnel{} }
-func (*IpipDelTunnel) GetMessageName() string { return "ipip_del_tunnel" }
-func (*IpipDelTunnel) GetCrcString() string   { return "f9e6675e" }
-func (*IpipDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IpipDelTunnel) Reset()                        { *m = IpipDelTunnel{} }
+func (*IpipDelTunnel) GetMessageName() string          { return "ipip_del_tunnel" }
+func (*IpipDelTunnel) GetCrcString() string            { return "f9e6675e" }
+func (*IpipDelTunnel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpipDelTunnel) Size() (size int) {
 	if m == nil {
@@ -344,11 +339,12 @@ type IpipDelTunnelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IpipDelTunnelReply) Reset()               { *m = IpipDelTunnelReply{} }
-func (*IpipDelTunnelReply) GetMessageName() string { return "ipip_del_tunnel_reply" }
-func (*IpipDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
-func (*IpipDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IpipDelTunnelReply) Reset()                        { *m = IpipDelTunnelReply{} }
+func (*IpipDelTunnelReply) GetMessageName() string          { return "ipip_del_tunnel_reply" }
+func (*IpipDelTunnelReply) GetCrcString() string            { return "e8d4e804" }
+func (*IpipDelTunnelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpipDelTunnelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IpipDelTunnelReply) Size() (size int) {
@@ -377,11 +373,12 @@ type IpipTunnelDetails struct {
 	Tunnel IpipTunnel `binapi:"ipip_tunnel,name=tunnel" json:"tunnel,omitempty"`
 }
 
-func (m *IpipTunnelDetails) Reset()               { *m = IpipTunnelDetails{} }
-func (*IpipTunnelDetails) GetMessageName() string { return "ipip_tunnel_details" }
-func (*IpipTunnelDetails) GetCrcString() string   { return "d31cb34e" }
-func (*IpipTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IpipTunnelDetails) Reset()                        { *m = IpipTunnelDetails{} }
+func (*IpipTunnelDetails) GetMessageName() string          { return "ipip_tunnel_details" }
+func (*IpipTunnelDetails) GetCrcString() string            { return "d31cb34e" }
+func (*IpipTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IpipTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IpipTunnelDetails) Size() (size int) {
@@ -437,12 +434,10 @@ type IpipTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *IpipTunnelDump) Reset()               { *m = IpipTunnelDump{} }
-func (*IpipTunnelDump) GetMessageName() string { return "ipip_tunnel_dump" }
-func (*IpipTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*IpipTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IpipTunnelDump) Reset()                        { *m = IpipTunnelDump{} }
+func (*IpipTunnelDump) GetMessageName() string          { return "ipip_tunnel_dump" }
+func (*IpipTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*IpipTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IpipTunnelDump) Size() (size int) {
 	if m == nil {

@@ -46,12 +46,10 @@ type PolicerAddDel struct {
 	ViolateAction policer_types.Sse2QosAction      `binapi:"sse2_qos_action,name=violate_action" json:"violate_action,omitempty"`
 }
 
-func (m *PolicerAddDel) Reset()               { *m = PolicerAddDel{} }
-func (*PolicerAddDel) GetMessageName() string { return "policer_add_del" }
-func (*PolicerAddDel) GetCrcString() string   { return "2b31dd38" }
-func (*PolicerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerAddDel) Reset()                        { *m = PolicerAddDel{} }
+func (*PolicerAddDel) GetMessageName() string          { return "policer_add_del" }
+func (*PolicerAddDel) GetCrcString() string            { return "2b31dd38" }
+func (*PolicerAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerAddDel) Size() (size int) {
 	if m == nil {
@@ -125,11 +123,12 @@ type PolicerAddDelReply struct {
 	PolicerIndex uint32 `binapi:"u32,name=policer_index" json:"policer_index,omitempty"`
 }
 
-func (m *PolicerAddDelReply) Reset()               { *m = PolicerAddDelReply{} }
-func (*PolicerAddDelReply) GetMessageName() string { return "policer_add_del_reply" }
-func (*PolicerAddDelReply) GetCrcString() string   { return "a177cef2" }
-func (*PolicerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerAddDelReply) Reset()                        { *m = PolicerAddDelReply{} }
+func (*PolicerAddDelReply) GetMessageName() string          { return "policer_add_del_reply" }
+func (*PolicerAddDelReply) GetCrcString() string            { return "a177cef2" }
+func (*PolicerAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PolicerAddDelReply) Size() (size int) {
@@ -163,12 +162,10 @@ type PolicerBind struct {
 	BindEnable  bool   `binapi:"bool,name=bind_enable" json:"bind_enable,omitempty"`
 }
 
-func (m *PolicerBind) Reset()               { *m = PolicerBind{} }
-func (*PolicerBind) GetMessageName() string { return "policer_bind" }
-func (*PolicerBind) GetCrcString() string   { return "dcf516f9" }
-func (*PolicerBind) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerBind) Reset()                        { *m = PolicerBind{} }
+func (*PolicerBind) GetMessageName() string          { return "policer_bind" }
+func (*PolicerBind) GetCrcString() string            { return "dcf516f9" }
+func (*PolicerBind) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerBind) Size() (size int) {
 	if m == nil {
@@ -202,11 +199,12 @@ type PolicerBindReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PolicerBindReply) Reset()               { *m = PolicerBindReply{} }
-func (*PolicerBindReply) GetMessageName() string { return "policer_bind_reply" }
-func (*PolicerBindReply) GetCrcString() string   { return "e8d4e804" }
-func (*PolicerBindReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerBindReply) Reset()                        { *m = PolicerBindReply{} }
+func (*PolicerBindReply) GetMessageName() string          { return "policer_bind_reply" }
+func (*PolicerBindReply) GetCrcString() string            { return "e8d4e804" }
+func (*PolicerBindReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerBindReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PolicerBindReply) Size() (size int) {
@@ -255,11 +253,12 @@ type PolicerDetails struct {
 	LastUpdateTime     uint64                           `binapi:"u64,name=last_update_time" json:"last_update_time,omitempty"`
 }
 
-func (m *PolicerDetails) Reset()               { *m = PolicerDetails{} }
-func (*PolicerDetails) GetMessageName() string { return "policer_details" }
-func (*PolicerDetails) GetCrcString() string   { return "72d0e248" }
-func (*PolicerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerDetails) Reset()                        { *m = PolicerDetails{} }
+func (*PolicerDetails) GetMessageName() string          { return "policer_details" }
+func (*PolicerDetails) GetCrcString() string            { return "72d0e248" }
+func (*PolicerDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PolicerDetails) Size() (size int) {
@@ -358,12 +357,10 @@ type PolicerDump struct {
 	MatchName      string `binapi:"string[64],name=match_name" json:"match_name,omitempty"`
 }
 
-func (m *PolicerDump) Reset()               { *m = PolicerDump{} }
-func (*PolicerDump) GetMessageName() string { return "policer_dump" }
-func (*PolicerDump) GetCrcString() string   { return "35f1ae0f" }
-func (*PolicerDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerDump) Reset()                        { *m = PolicerDump{} }
+func (*PolicerDump) GetMessageName() string          { return "policer_dump" }
+func (*PolicerDump) GetCrcString() string            { return "35f1ae0f" }
+func (*PolicerDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerDump) Size() (size int) {
 	if m == nil {
@@ -396,12 +393,10 @@ type PolicerInput struct {
 	Apply     bool                           `binapi:"bool,name=apply" json:"apply,omitempty"`
 }
 
-func (m *PolicerInput) Reset()               { *m = PolicerInput{} }
-func (*PolicerInput) GetMessageName() string { return "policer_input" }
-func (*PolicerInput) GetCrcString() string   { return "233f0ef5" }
-func (*PolicerInput) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerInput) Reset()                        { *m = PolicerInput{} }
+func (*PolicerInput) GetMessageName() string          { return "policer_input" }
+func (*PolicerInput) GetCrcString() string            { return "233f0ef5" }
+func (*PolicerInput) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerInput) Size() (size int) {
 	if m == nil {
@@ -435,11 +430,12 @@ type PolicerInputReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PolicerInputReply) Reset()               { *m = PolicerInputReply{} }
-func (*PolicerInputReply) GetMessageName() string { return "policer_input_reply" }
-func (*PolicerInputReply) GetCrcString() string   { return "e8d4e804" }
-func (*PolicerInputReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerInputReply) Reset()                        { *m = PolicerInputReply{} }
+func (*PolicerInputReply) GetMessageName() string          { return "policer_input_reply" }
+func (*PolicerInputReply) GetCrcString() string            { return "e8d4e804" }
+func (*PolicerInputReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerInputReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PolicerInputReply) Size() (size int) {
@@ -470,12 +466,10 @@ type PolicerOutput struct {
 	Apply     bool                           `binapi:"bool,name=apply" json:"apply,omitempty"`
 }
 
-func (m *PolicerOutput) Reset()               { *m = PolicerOutput{} }
-func (*PolicerOutput) GetMessageName() string { return "policer_output" }
-func (*PolicerOutput) GetCrcString() string   { return "233f0ef5" }
-func (*PolicerOutput) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerOutput) Reset()                        { *m = PolicerOutput{} }
+func (*PolicerOutput) GetMessageName() string          { return "policer_output" }
+func (*PolicerOutput) GetCrcString() string            { return "233f0ef5" }
+func (*PolicerOutput) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerOutput) Size() (size int) {
 	if m == nil {
@@ -509,11 +503,12 @@ type PolicerOutputReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PolicerOutputReply) Reset()               { *m = PolicerOutputReply{} }
-func (*PolicerOutputReply) GetMessageName() string { return "policer_output_reply" }
-func (*PolicerOutputReply) GetCrcString() string   { return "e8d4e804" }
-func (*PolicerOutputReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerOutputReply) Reset()                        { *m = PolicerOutputReply{} }
+func (*PolicerOutputReply) GetMessageName() string          { return "policer_output_reply" }
+func (*PolicerOutputReply) GetCrcString() string            { return "e8d4e804" }
+func (*PolicerOutputReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerOutputReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PolicerOutputReply) Size() (size int) {

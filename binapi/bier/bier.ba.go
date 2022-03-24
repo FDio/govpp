@@ -55,12 +55,10 @@ type BierDispEntryAddDel struct {
 	BdePaths        []fib_types.FibPath `binapi:"fib_path[bde_n_paths],name=bde_paths" json:"bde_paths,omitempty"`
 }
 
-func (m *BierDispEntryAddDel) Reset()               { *m = BierDispEntryAddDel{} }
-func (*BierDispEntryAddDel) GetMessageName() string { return "bier_disp_entry_add_del" }
-func (*BierDispEntryAddDel) GetCrcString() string   { return "9eb80cb4" }
-func (*BierDispEntryAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierDispEntryAddDel) Reset()                        { *m = BierDispEntryAddDel{} }
+func (*BierDispEntryAddDel) GetMessageName() string          { return "bier_disp_entry_add_del" }
+func (*BierDispEntryAddDel) GetCrcString() string            { return "9eb80cb4" }
+func (*BierDispEntryAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierDispEntryAddDel) Size() (size int) {
 	if m == nil {
@@ -173,11 +171,12 @@ type BierDispEntryAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BierDispEntryAddDelReply) Reset()               { *m = BierDispEntryAddDelReply{} }
-func (*BierDispEntryAddDelReply) GetMessageName() string { return "bier_disp_entry_add_del_reply" }
-func (*BierDispEntryAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BierDispEntryAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierDispEntryAddDelReply) Reset()                        { *m = BierDispEntryAddDelReply{} }
+func (*BierDispEntryAddDelReply) GetMessageName() string          { return "bier_disp_entry_add_del_reply" }
+func (*BierDispEntryAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BierDispEntryAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierDispEntryAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierDispEntryAddDelReply) Size() (size int) {
@@ -211,11 +210,12 @@ type BierDispEntryDetails struct {
 	BdePaths        []fib_types.FibPath `binapi:"fib_path[bde_n_paths],name=bde_paths" json:"bde_paths,omitempty"`
 }
 
-func (m *BierDispEntryDetails) Reset()               { *m = BierDispEntryDetails{} }
-func (*BierDispEntryDetails) GetMessageName() string { return "bier_disp_entry_details" }
-func (*BierDispEntryDetails) GetCrcString() string   { return "84c218f1" }
-func (*BierDispEntryDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierDispEntryDetails) Reset()                        { *m = BierDispEntryDetails{} }
+func (*BierDispEntryDetails) GetMessageName() string          { return "bier_disp_entry_details" }
+func (*BierDispEntryDetails) GetCrcString() string            { return "84c218f1" }
+func (*BierDispEntryDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierDispEntryDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BierDispEntryDetails) Size() (size int) {
@@ -329,12 +329,10 @@ type BierDispEntryDump struct {
 	BdeTblID uint32 `binapi:"u32,name=bde_tbl_id" json:"bde_tbl_id,omitempty"`
 }
 
-func (m *BierDispEntryDump) Reset()               { *m = BierDispEntryDump{} }
-func (*BierDispEntryDump) GetMessageName() string { return "bier_disp_entry_dump" }
-func (*BierDispEntryDump) GetCrcString() string   { return "b5fa54ad" }
-func (*BierDispEntryDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierDispEntryDump) Reset()                        { *m = BierDispEntryDump{} }
+func (*BierDispEntryDump) GetMessageName() string          { return "bier_disp_entry_dump" }
+func (*BierDispEntryDump) GetCrcString() string            { return "b5fa54ad" }
+func (*BierDispEntryDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierDispEntryDump) Size() (size int) {
 	if m == nil {
@@ -363,12 +361,10 @@ type BierDispTableAddDel struct {
 	BdtIsAdd bool   `binapi:"bool,name=bdt_is_add" json:"bdt_is_add,omitempty"`
 }
 
-func (m *BierDispTableAddDel) Reset()               { *m = BierDispTableAddDel{} }
-func (*BierDispTableAddDel) GetMessageName() string { return "bier_disp_table_add_del" }
-func (*BierDispTableAddDel) GetCrcString() string   { return "889657ac" }
-func (*BierDispTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierDispTableAddDel) Reset()                        { *m = BierDispTableAddDel{} }
+func (*BierDispTableAddDel) GetMessageName() string          { return "bier_disp_table_add_del" }
+func (*BierDispTableAddDel) GetCrcString() string            { return "889657ac" }
+func (*BierDispTableAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierDispTableAddDel) Size() (size int) {
 	if m == nil {
@@ -399,11 +395,12 @@ type BierDispTableAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BierDispTableAddDelReply) Reset()               { *m = BierDispTableAddDelReply{} }
-func (*BierDispTableAddDelReply) GetMessageName() string { return "bier_disp_table_add_del_reply" }
-func (*BierDispTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BierDispTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierDispTableAddDelReply) Reset()                        { *m = BierDispTableAddDelReply{} }
+func (*BierDispTableAddDelReply) GetMessageName() string          { return "bier_disp_table_add_del_reply" }
+func (*BierDispTableAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BierDispTableAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierDispTableAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierDispTableAddDelReply) Size() (size int) {
@@ -432,11 +429,12 @@ type BierDispTableDetails struct {
 	BdtTblID uint32 `binapi:"u32,name=bdt_tbl_id" json:"bdt_tbl_id,omitempty"`
 }
 
-func (m *BierDispTableDetails) Reset()               { *m = BierDispTableDetails{} }
-func (*BierDispTableDetails) GetMessageName() string { return "bier_disp_table_details" }
-func (*BierDispTableDetails) GetCrcString() string   { return "d27942c0" }
-func (*BierDispTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierDispTableDetails) Reset()                        { *m = BierDispTableDetails{} }
+func (*BierDispTableDetails) GetMessageName() string          { return "bier_disp_table_details" }
+func (*BierDispTableDetails) GetCrcString() string            { return "d27942c0" }
+func (*BierDispTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierDispTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BierDispTableDetails) Size() (size int) {
@@ -463,12 +461,10 @@ func (m *BierDispTableDetails) Unmarshal(b []byte) error {
 // BierDispTableDump defines message 'bier_disp_table_dump'.
 type BierDispTableDump struct{}
 
-func (m *BierDispTableDump) Reset()               { *m = BierDispTableDump{} }
-func (*BierDispTableDump) GetMessageName() string { return "bier_disp_table_dump" }
-func (*BierDispTableDump) GetCrcString() string   { return "51077d14" }
-func (*BierDispTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierDispTableDump) Reset()                        { *m = BierDispTableDump{} }
+func (*BierDispTableDump) GetMessageName() string          { return "bier_disp_table_dump" }
+func (*BierDispTableDump) GetCrcString() string            { return "51077d14" }
+func (*BierDispTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierDispTableDump) Size() (size int) {
 	if m == nil {
@@ -495,12 +491,10 @@ type BierImpAdd struct {
 	BiBytes  []byte      `binapi:"u8[bi_n_bytes],name=bi_bytes" json:"bi_bytes,omitempty"`
 }
 
-func (m *BierImpAdd) Reset()               { *m = BierImpAdd{} }
-func (*BierImpAdd) GetMessageName() string { return "bier_imp_add" }
-func (*BierImpAdd) GetCrcString() string   { return "3856dc3d" }
-func (*BierImpAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierImpAdd) Reset()                        { *m = BierImpAdd{} }
+func (*BierImpAdd) GetMessageName() string          { return "bier_imp_add" }
+func (*BierImpAdd) GetCrcString() string            { return "3856dc3d" }
+func (*BierImpAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierImpAdd) Size() (size int) {
 	if m == nil {
@@ -545,11 +539,12 @@ type BierImpAddReply struct {
 	BiIndex uint32 `binapi:"u32,name=bi_index" json:"bi_index,omitempty"`
 }
 
-func (m *BierImpAddReply) Reset()               { *m = BierImpAddReply{} }
-func (*BierImpAddReply) GetMessageName() string { return "bier_imp_add_reply" }
-func (*BierImpAddReply) GetCrcString() string   { return "d49c5793" }
-func (*BierImpAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierImpAddReply) Reset()                        { *m = BierImpAddReply{} }
+func (*BierImpAddReply) GetMessageName() string          { return "bier_imp_add_reply" }
+func (*BierImpAddReply) GetCrcString() string            { return "d49c5793" }
+func (*BierImpAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierImpAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierImpAddReply) Size() (size int) {
@@ -581,12 +576,10 @@ type BierImpDel struct {
 	BiIndex uint32 `binapi:"u32,name=bi_index" json:"bi_index,omitempty"`
 }
 
-func (m *BierImpDel) Reset()               { *m = BierImpDel{} }
-func (*BierImpDel) GetMessageName() string { return "bier_imp_del" }
-func (*BierImpDel) GetCrcString() string   { return "7d45edf6" }
-func (*BierImpDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierImpDel) Reset()                        { *m = BierImpDel{} }
+func (*BierImpDel) GetMessageName() string          { return "bier_imp_del" }
+func (*BierImpDel) GetCrcString() string            { return "7d45edf6" }
+func (*BierImpDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierImpDel) Size() (size int) {
 	if m == nil {
@@ -614,11 +607,12 @@ type BierImpDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BierImpDelReply) Reset()               { *m = BierImpDelReply{} }
-func (*BierImpDelReply) GetMessageName() string { return "bier_imp_del_reply" }
-func (*BierImpDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BierImpDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierImpDelReply) Reset()                        { *m = BierImpDelReply{} }
+func (*BierImpDelReply) GetMessageName() string          { return "bier_imp_del_reply" }
+func (*BierImpDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BierImpDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierImpDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierImpDelReply) Size() (size int) {
@@ -650,11 +644,12 @@ type BierImpDetails struct {
 	BiBytes  []byte      `binapi:"u8[bi_n_bytes],name=bi_bytes" json:"bi_bytes,omitempty"`
 }
 
-func (m *BierImpDetails) Reset()               { *m = BierImpDetails{} }
-func (*BierImpDetails) GetMessageName() string { return "bier_imp_details" }
-func (*BierImpDetails) GetCrcString() string   { return "b76192df" }
-func (*BierImpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierImpDetails) Reset()                        { *m = BierImpDetails{} }
+func (*BierImpDetails) GetMessageName() string          { return "bier_imp_details" }
+func (*BierImpDetails) GetCrcString() string            { return "b76192df" }
+func (*BierImpDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierImpDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BierImpDetails) Size() (size int) {
@@ -697,12 +692,10 @@ func (m *BierImpDetails) Unmarshal(b []byte) error {
 // BierImpDump defines message 'bier_imp_dump'.
 type BierImpDump struct{}
 
-func (m *BierImpDump) Reset()               { *m = BierImpDump{} }
-func (*BierImpDump) GetMessageName() string { return "bier_imp_dump" }
-func (*BierImpDump) GetCrcString() string   { return "51077d14" }
-func (*BierImpDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierImpDump) Reset()                        { *m = BierImpDump{} }
+func (*BierImpDump) GetMessageName() string          { return "bier_imp_dump" }
+func (*BierImpDump) GetCrcString() string            { return "51077d14" }
+func (*BierImpDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierImpDump) Size() (size int) {
 	if m == nil {
@@ -728,12 +721,10 @@ type BierRouteAddDel struct {
 	BrRoute     BierRoute `binapi:"bier_route,name=br_route" json:"br_route,omitempty"`
 }
 
-func (m *BierRouteAddDel) Reset()               { *m = BierRouteAddDel{} }
-func (*BierRouteAddDel) GetMessageName() string { return "bier_route_add_del" }
-func (*BierRouteAddDel) GetCrcString() string   { return "fd02f3ea" }
-func (*BierRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierRouteAddDel) Reset()                        { *m = BierRouteAddDel{} }
+func (*BierRouteAddDel) GetMessageName() string          { return "bier_route_add_del" }
+func (*BierRouteAddDel) GetCrcString() string            { return "fd02f3ea" }
+func (*BierRouteAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierRouteAddDel) Size() (size int) {
 	if m == nil {
@@ -852,11 +843,12 @@ type BierRouteAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BierRouteAddDelReply) Reset()               { *m = BierRouteAddDelReply{} }
-func (*BierRouteAddDelReply) GetMessageName() string { return "bier_route_add_del_reply" }
-func (*BierRouteAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BierRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierRouteAddDelReply) Reset()                        { *m = BierRouteAddDelReply{} }
+func (*BierRouteAddDelReply) GetMessageName() string          { return "bier_route_add_del_reply" }
+func (*BierRouteAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BierRouteAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierRouteAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierRouteAddDelReply) Size() (size int) {
@@ -885,11 +877,12 @@ type BierRouteDetails struct {
 	BrRoute BierRoute `binapi:"bier_route,name=br_route" json:"br_route,omitempty"`
 }
 
-func (m *BierRouteDetails) Reset()               { *m = BierRouteDetails{} }
-func (*BierRouteDetails) GetMessageName() string { return "bier_route_details" }
-func (*BierRouteDetails) GetCrcString() string   { return "4008caee" }
-func (*BierRouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierRouteDetails) Reset()                        { *m = BierRouteDetails{} }
+func (*BierRouteDetails) GetMessageName() string          { return "bier_route_details" }
+func (*BierRouteDetails) GetCrcString() string            { return "4008caee" }
+func (*BierRouteDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierRouteDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BierRouteDetails) Size() (size int) {
@@ -1003,12 +996,10 @@ type BierRouteDump struct {
 	BrTblID BierTableID `binapi:"bier_table_id,name=br_tbl_id" json:"br_tbl_id,omitempty"`
 }
 
-func (m *BierRouteDump) Reset()               { *m = BierRouteDump{} }
-func (*BierRouteDump) GetMessageName() string { return "bier_route_dump" }
-func (*BierRouteDump) GetCrcString() string   { return "38339846" }
-func (*BierRouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierRouteDump) Reset()                        { *m = BierRouteDump{} }
+func (*BierRouteDump) GetMessageName() string          { return "bier_route_dump" }
+func (*BierRouteDump) GetCrcString() string            { return "38339846" }
+func (*BierRouteDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierRouteDump) Size() (size int) {
 	if m == nil {
@@ -1044,12 +1035,10 @@ type BierTableAddDel struct {
 	BtIsAdd bool        `binapi:"bool,name=bt_is_add" json:"bt_is_add,omitempty"`
 }
 
-func (m *BierTableAddDel) Reset()               { *m = BierTableAddDel{} }
-func (*BierTableAddDel) GetMessageName() string { return "bier_table_add_del" }
-func (*BierTableAddDel) GetCrcString() string   { return "35e59209" }
-func (*BierTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierTableAddDel) Reset()                        { *m = BierTableAddDel{} }
+func (*BierTableAddDel) GetMessageName() string          { return "bier_table_add_del" }
+func (*BierTableAddDel) GetCrcString() string            { return "35e59209" }
+func (*BierTableAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierTableAddDel) Size() (size int) {
 	if m == nil {
@@ -1089,11 +1078,12 @@ type BierTableAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BierTableAddDelReply) Reset()               { *m = BierTableAddDelReply{} }
-func (*BierTableAddDelReply) GetMessageName() string { return "bier_table_add_del_reply" }
-func (*BierTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BierTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierTableAddDelReply) Reset()                        { *m = BierTableAddDelReply{} }
+func (*BierTableAddDelReply) GetMessageName() string          { return "bier_table_add_del_reply" }
+func (*BierTableAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BierTableAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierTableAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BierTableAddDelReply) Size() (size int) {
@@ -1123,11 +1113,12 @@ type BierTableDetails struct {
 	BtTblID BierTableID `binapi:"bier_table_id,name=bt_tbl_id" json:"bt_tbl_id,omitempty"`
 }
 
-func (m *BierTableDetails) Reset()               { *m = BierTableDetails{} }
-func (*BierTableDetails) GetMessageName() string { return "bier_table_details" }
-func (*BierTableDetails) GetCrcString() string   { return "fc44a9dd" }
-func (*BierTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BierTableDetails) Reset()                        { *m = BierTableDetails{} }
+func (*BierTableDetails) GetMessageName() string          { return "bier_table_details" }
+func (*BierTableDetails) GetCrcString() string            { return "fc44a9dd" }
+func (*BierTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BierTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BierTableDetails) Size() (size int) {
@@ -1163,12 +1154,10 @@ func (m *BierTableDetails) Unmarshal(b []byte) error {
 // BierTableDump defines message 'bier_table_dump'.
 type BierTableDump struct{}
 
-func (m *BierTableDump) Reset()               { *m = BierTableDump{} }
-func (*BierTableDump) GetMessageName() string { return "bier_table_dump" }
-func (*BierTableDump) GetCrcString() string   { return "51077d14" }
-func (*BierTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BierTableDump) Reset()                        { *m = BierTableDump{} }
+func (*BierTableDump) GetMessageName() string          { return "bier_table_dump" }
+func (*BierTableDump) GetCrcString() string            { return "51077d14" }
+func (*BierTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BierTableDump) Size() (size int) {
 	if m == nil {

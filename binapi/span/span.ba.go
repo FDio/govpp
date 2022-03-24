@@ -72,11 +72,12 @@ type SwInterfaceSpanDetails struct {
 	IsL2          bool                           `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *SwInterfaceSpanDetails) Reset()               { *m = SwInterfaceSpanDetails{} }
-func (*SwInterfaceSpanDetails) GetMessageName() string { return "sw_interface_span_details" }
-func (*SwInterfaceSpanDetails) GetCrcString() string   { return "8a20e79f" }
-func (*SwInterfaceSpanDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwInterfaceSpanDetails) Reset()                        { *m = SwInterfaceSpanDetails{} }
+func (*SwInterfaceSpanDetails) GetMessageName() string          { return "sw_interface_span_details" }
+func (*SwInterfaceSpanDetails) GetCrcString() string            { return "8a20e79f" }
+func (*SwInterfaceSpanDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSpanDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceSpanDetails) Size() (size int) {
@@ -114,12 +115,10 @@ type SwInterfaceSpanDump struct {
 	IsL2 bool `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *SwInterfaceSpanDump) Reset()               { *m = SwInterfaceSpanDump{} }
-func (*SwInterfaceSpanDump) GetMessageName() string { return "sw_interface_span_dump" }
-func (*SwInterfaceSpanDump) GetCrcString() string   { return "d6cf0c3d" }
-func (*SwInterfaceSpanDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSpanDump) Reset()                        { *m = SwInterfaceSpanDump{} }
+func (*SwInterfaceSpanDump) GetMessageName() string          { return "sw_interface_span_dump" }
+func (*SwInterfaceSpanDump) GetCrcString() string            { return "d6cf0c3d" }
+func (*SwInterfaceSpanDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSpanDump) Size() (size int) {
 	if m == nil {
@@ -154,10 +153,8 @@ func (m *SwInterfaceSpanEnableDisable) Reset() { *m = SwInterfaceSpanEnableDisab
 func (*SwInterfaceSpanEnableDisable) GetMessageName() string {
 	return "sw_interface_span_enable_disable"
 }
-func (*SwInterfaceSpanEnableDisable) GetCrcString() string { return "23ddd96b" }
-func (*SwInterfaceSpanEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (*SwInterfaceSpanEnableDisable) GetCrcString() string            { return "23ddd96b" }
+func (*SwInterfaceSpanEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSpanEnableDisable) Size() (size int) {
 	if m == nil {
@@ -201,6 +198,9 @@ func (*SwInterfaceSpanEnableDisableReply) GetMessageName() string {
 func (*SwInterfaceSpanEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSpanEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
+}
+func (m *SwInterfaceSpanEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSpanEnableDisableReply) Size() (size int) {

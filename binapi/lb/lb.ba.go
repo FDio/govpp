@@ -40,12 +40,10 @@ type LbAddDelAs struct {
 	IsFlush   bool                       `binapi:"bool,name=is_flush" json:"is_flush,omitempty"`
 }
 
-func (m *LbAddDelAs) Reset()               { *m = LbAddDelAs{} }
-func (*LbAddDelAs) GetMessageName() string { return "lb_add_del_as" }
-func (*LbAddDelAs) GetCrcString() string   { return "35d72500" }
-func (*LbAddDelAs) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbAddDelAs) Reset()                        { *m = LbAddDelAs{} }
+func (*LbAddDelAs) GetMessageName() string          { return "lb_add_del_as" }
+func (*LbAddDelAs) GetCrcString() string            { return "35d72500" }
+func (*LbAddDelAs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbAddDelAs) Size() (size int) {
 	if m == nil {
@@ -97,11 +95,12 @@ type LbAddDelAsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbAddDelAsReply) Reset()               { *m = LbAddDelAsReply{} }
-func (*LbAddDelAsReply) GetMessageName() string { return "lb_add_del_as_reply" }
-func (*LbAddDelAsReply) GetCrcString() string   { return "e8d4e804" }
-func (*LbAddDelAsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbAddDelAsReply) Reset()                        { *m = LbAddDelAsReply{} }
+func (*LbAddDelAsReply) GetMessageName() string          { return "lb_add_del_as_reply" }
+func (*LbAddDelAsReply) GetCrcString() string            { return "e8d4e804" }
+func (*LbAddDelAsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbAddDelAsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbAddDelAsReply) Size() (size int) {
@@ -131,12 +130,10 @@ type LbAddDelIntfNat4 struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *LbAddDelIntfNat4) Reset()               { *m = LbAddDelIntfNat4{} }
-func (*LbAddDelIntfNat4) GetMessageName() string { return "lb_add_del_intf_nat4" }
-func (*LbAddDelIntfNat4) GetCrcString() string   { return "47d6e753" }
-func (*LbAddDelIntfNat4) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbAddDelIntfNat4) Reset()                        { *m = LbAddDelIntfNat4{} }
+func (*LbAddDelIntfNat4) GetMessageName() string          { return "lb_add_del_intf_nat4" }
+func (*LbAddDelIntfNat4) GetCrcString() string            { return "47d6e753" }
+func (*LbAddDelIntfNat4) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbAddDelIntfNat4) Size() (size int) {
 	if m == nil {
@@ -167,11 +164,12 @@ type LbAddDelIntfNat4Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbAddDelIntfNat4Reply) Reset()               { *m = LbAddDelIntfNat4Reply{} }
-func (*LbAddDelIntfNat4Reply) GetMessageName() string { return "lb_add_del_intf_nat4_reply" }
-func (*LbAddDelIntfNat4Reply) GetCrcString() string   { return "e8d4e804" }
-func (*LbAddDelIntfNat4Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbAddDelIntfNat4Reply) Reset()                        { *m = LbAddDelIntfNat4Reply{} }
+func (*LbAddDelIntfNat4Reply) GetMessageName() string          { return "lb_add_del_intf_nat4_reply" }
+func (*LbAddDelIntfNat4Reply) GetCrcString() string            { return "e8d4e804" }
+func (*LbAddDelIntfNat4Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbAddDelIntfNat4Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbAddDelIntfNat4Reply) Size() (size int) {
@@ -201,12 +199,10 @@ type LbAddDelIntfNat6 struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *LbAddDelIntfNat6) Reset()               { *m = LbAddDelIntfNat6{} }
-func (*LbAddDelIntfNat6) GetMessageName() string { return "lb_add_del_intf_nat6" }
-func (*LbAddDelIntfNat6) GetCrcString() string   { return "47d6e753" }
-func (*LbAddDelIntfNat6) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbAddDelIntfNat6) Reset()                        { *m = LbAddDelIntfNat6{} }
+func (*LbAddDelIntfNat6) GetMessageName() string          { return "lb_add_del_intf_nat6" }
+func (*LbAddDelIntfNat6) GetCrcString() string            { return "47d6e753" }
+func (*LbAddDelIntfNat6) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbAddDelIntfNat6) Size() (size int) {
 	if m == nil {
@@ -237,11 +233,12 @@ type LbAddDelIntfNat6Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbAddDelIntfNat6Reply) Reset()               { *m = LbAddDelIntfNat6Reply{} }
-func (*LbAddDelIntfNat6Reply) GetMessageName() string { return "lb_add_del_intf_nat6_reply" }
-func (*LbAddDelIntfNat6Reply) GetCrcString() string   { return "e8d4e804" }
-func (*LbAddDelIntfNat6Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbAddDelIntfNat6Reply) Reset()                        { *m = LbAddDelIntfNat6Reply{} }
+func (*LbAddDelIntfNat6Reply) GetMessageName() string          { return "lb_add_del_intf_nat6_reply" }
+func (*LbAddDelIntfNat6Reply) GetCrcString() string            { return "e8d4e804" }
+func (*LbAddDelIntfNat6Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbAddDelIntfNat6Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbAddDelIntfNat6Reply) Size() (size int) {
@@ -279,12 +276,10 @@ type LbAddDelVip struct {
 	IsDel               bool                       `binapi:"bool,name=is_del" json:"is_del,omitempty"`
 }
 
-func (m *LbAddDelVip) Reset()               { *m = LbAddDelVip{} }
-func (*LbAddDelVip) GetMessageName() string { return "lb_add_del_vip" }
-func (*LbAddDelVip) GetCrcString() string   { return "6fa569c7" }
-func (*LbAddDelVip) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbAddDelVip) Reset()                        { *m = LbAddDelVip{} }
+func (*LbAddDelVip) GetMessageName() string          { return "lb_add_del_vip" }
+func (*LbAddDelVip) GetCrcString() string            { return "6fa569c7" }
+func (*LbAddDelVip) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbAddDelVip) Size() (size int) {
 	if m == nil {
@@ -345,11 +340,12 @@ type LbAddDelVipReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbAddDelVipReply) Reset()               { *m = LbAddDelVipReply{} }
-func (*LbAddDelVipReply) GetMessageName() string { return "lb_add_del_vip_reply" }
-func (*LbAddDelVipReply) GetCrcString() string   { return "e8d4e804" }
-func (*LbAddDelVipReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbAddDelVipReply) Reset()                        { *m = LbAddDelVipReply{} }
+func (*LbAddDelVipReply) GetMessageName() string          { return "lb_add_del_vip_reply" }
+func (*LbAddDelVipReply) GetCrcString() string            { return "e8d4e804" }
+func (*LbAddDelVipReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbAddDelVipReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbAddDelVipReply) Size() (size int) {
@@ -381,11 +377,12 @@ type LbAsDetails struct {
 	InUseSince uint32           `binapi:"u32,name=in_use_since" json:"in_use_since,omitempty"`
 }
 
-func (m *LbAsDetails) Reset()               { *m = LbAsDetails{} }
-func (*LbAsDetails) GetMessageName() string { return "lb_as_details" }
-func (*LbAsDetails) GetCrcString() string   { return "8d24c29e" }
-func (*LbAsDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbAsDetails) Reset()                        { *m = LbAsDetails{} }
+func (*LbAsDetails) GetMessageName() string          { return "lb_as_details" }
+func (*LbAsDetails) GetCrcString() string            { return "8d24c29e" }
+func (*LbAsDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbAsDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LbAsDetails) Size() (size int) {
@@ -440,12 +437,10 @@ type LbAsDump struct {
 	Port     uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 }
 
-func (m *LbAsDump) Reset()               { *m = LbAsDump{} }
-func (*LbAsDump) GetMessageName() string { return "lb_as_dump" }
-func (*LbAsDump) GetCrcString() string   { return "1063f819" }
-func (*LbAsDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbAsDump) Reset()                        { *m = LbAsDump{} }
+func (*LbAsDump) GetMessageName() string          { return "lb_as_dump" }
+func (*LbAsDump) GetCrcString() string            { return "1063f819" }
+func (*LbAsDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbAsDump) Size() (size int) {
 	if m == nil {
@@ -488,12 +483,10 @@ type LbConf struct {
 	FlowTimeout          uint32              `binapi:"u32,name=flow_timeout,default=4294967295" json:"flow_timeout,omitempty"`
 }
 
-func (m *LbConf) Reset()               { *m = LbConf{} }
-func (*LbConf) GetMessageName() string { return "lb_conf" }
-func (*LbConf) GetCrcString() string   { return "56cd3261" }
-func (*LbConf) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbConf) Reset()                        { *m = LbConf{} }
+func (*LbConf) GetMessageName() string          { return "lb_conf" }
+func (*LbConf) GetCrcString() string            { return "56cd3261" }
+func (*LbConf) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbConf) Size() (size int) {
 	if m == nil {
@@ -530,11 +523,12 @@ type LbConfReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbConfReply) Reset()               { *m = LbConfReply{} }
-func (*LbConfReply) GetMessageName() string { return "lb_conf_reply" }
-func (*LbConfReply) GetCrcString() string   { return "e8d4e804" }
-func (*LbConfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbConfReply) Reset()                        { *m = LbConfReply{} }
+func (*LbConfReply) GetMessageName() string          { return "lb_conf_reply" }
+func (*LbConfReply) GetCrcString() string            { return "e8d4e804" }
+func (*LbConfReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbConfReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbConfReply) Size() (size int) {
@@ -565,12 +559,10 @@ type LbFlushVip struct {
 	Port     uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 }
 
-func (m *LbFlushVip) Reset()               { *m = LbFlushVip{} }
-func (*LbFlushVip) GetMessageName() string { return "lb_flush_vip" }
-func (*LbFlushVip) GetCrcString() string   { return "1063f819" }
-func (*LbFlushVip) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbFlushVip) Reset()                        { *m = LbFlushVip{} }
+func (*LbFlushVip) GetMessageName() string          { return "lb_flush_vip" }
+func (*LbFlushVip) GetCrcString() string            { return "1063f819" }
+func (*LbFlushVip) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbFlushVip) Size() (size int) {
 	if m == nil {
@@ -610,11 +602,12 @@ type LbFlushVipReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *LbFlushVipReply) Reset()               { *m = LbFlushVipReply{} }
-func (*LbFlushVipReply) GetMessageName() string { return "lb_flush_vip_reply" }
-func (*LbFlushVipReply) GetCrcString() string   { return "e8d4e804" }
-func (*LbFlushVipReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbFlushVipReply) Reset()                        { *m = LbFlushVipReply{} }
+func (*LbFlushVipReply) GetMessageName() string          { return "lb_flush_vip_reply" }
+func (*LbFlushVipReply) GetCrcString() string            { return "e8d4e804" }
+func (*LbFlushVipReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbFlushVipReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *LbFlushVipReply) Size() (size int) {
@@ -648,11 +641,12 @@ type LbVipDetails struct {
 	FlowTableLength uint16               `binapi:"u16,name=flow_table_length" json:"flow_table_length,omitempty"`
 }
 
-func (m *LbVipDetails) Reset()               { *m = LbVipDetails{} }
-func (*LbVipDetails) GetMessageName() string { return "lb_vip_details" }
-func (*LbVipDetails) GetCrcString() string   { return "1329ec9b" }
-func (*LbVipDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *LbVipDetails) Reset()                        { *m = LbVipDetails{} }
+func (*LbVipDetails) GetMessageName() string          { return "lb_vip_details" }
+func (*LbVipDetails) GetCrcString() string            { return "1329ec9b" }
+func (*LbVipDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *LbVipDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *LbVipDetails) Size() (size int) {
@@ -711,12 +705,10 @@ type LbVipDump struct {
 	Port       uint16                     `binapi:"u16,name=port" json:"port,omitempty"`
 }
 
-func (m *LbVipDump) Reset()               { *m = LbVipDump{} }
-func (*LbVipDump) GetMessageName() string { return "lb_vip_dump" }
-func (*LbVipDump) GetCrcString() string   { return "56110cb7" }
-func (*LbVipDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *LbVipDump) Reset()                        { *m = LbVipDump{} }
+func (*LbVipDump) GetMessageName() string          { return "lb_vip_dump" }
+func (*LbVipDump) GetCrcString() string            { return "56110cb7" }
+func (*LbVipDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *LbVipDump) Size() (size int) {
 	if m == nil {

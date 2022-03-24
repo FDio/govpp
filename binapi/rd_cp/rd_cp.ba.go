@@ -35,12 +35,10 @@ type IP6NdAddressAutoconfig struct {
 	InstallDefaultRoutes bool                           `binapi:"bool,name=install_default_routes" json:"install_default_routes,omitempty"`
 }
 
-func (m *IP6NdAddressAutoconfig) Reset()               { *m = IP6NdAddressAutoconfig{} }
-func (*IP6NdAddressAutoconfig) GetMessageName() string { return "ip6_nd_address_autoconfig" }
-func (*IP6NdAddressAutoconfig) GetCrcString() string   { return "9e14a4a7" }
-func (*IP6NdAddressAutoconfig) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IP6NdAddressAutoconfig) Reset()                        { *m = IP6NdAddressAutoconfig{} }
+func (*IP6NdAddressAutoconfig) GetMessageName() string          { return "ip6_nd_address_autoconfig" }
+func (*IP6NdAddressAutoconfig) GetCrcString() string            { return "9e14a4a7" }
+func (*IP6NdAddressAutoconfig) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IP6NdAddressAutoconfig) Size() (size int) {
 	if m == nil {
@@ -74,11 +72,12 @@ type IP6NdAddressAutoconfigReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IP6NdAddressAutoconfigReply) Reset()               { *m = IP6NdAddressAutoconfigReply{} }
-func (*IP6NdAddressAutoconfigReply) GetMessageName() string { return "ip6_nd_address_autoconfig_reply" }
-func (*IP6NdAddressAutoconfigReply) GetCrcString() string   { return "e8d4e804" }
-func (*IP6NdAddressAutoconfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IP6NdAddressAutoconfigReply) Reset()                        { *m = IP6NdAddressAutoconfigReply{} }
+func (*IP6NdAddressAutoconfigReply) GetMessageName() string          { return "ip6_nd_address_autoconfig_reply" }
+func (*IP6NdAddressAutoconfigReply) GetCrcString() string            { return "e8d4e804" }
+func (*IP6NdAddressAutoconfigReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IP6NdAddressAutoconfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IP6NdAddressAutoconfigReply) Size() (size int) {

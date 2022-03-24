@@ -37,11 +37,12 @@ type Ikev2ChildSaDetails struct {
 	ChildSa ikev2_types.Ikev2ChildSa `binapi:"ikev2_child_sa,name=child_sa" json:"child_sa,omitempty"`
 }
 
-func (m *Ikev2ChildSaDetails) Reset()               { *m = Ikev2ChildSaDetails{} }
-func (*Ikev2ChildSaDetails) GetMessageName() string { return "ikev2_child_sa_details" }
-func (*Ikev2ChildSaDetails) GetCrcString() string   { return "ff67741f" }
-func (*Ikev2ChildSaDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ChildSaDetails) Reset()                        { *m = Ikev2ChildSaDetails{} }
+func (*Ikev2ChildSaDetails) GetMessageName() string          { return "ikev2_child_sa_details" }
+func (*Ikev2ChildSaDetails) GetCrcString() string            { return "ff67741f" }
+func (*Ikev2ChildSaDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ChildSaDetails) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ChildSaDetails) Size() (size int) {
@@ -186,12 +187,10 @@ type Ikev2ChildSaDump struct {
 	SaIndex uint32 `binapi:"u32,name=sa_index" json:"sa_index,omitempty"`
 }
 
-func (m *Ikev2ChildSaDump) Reset()               { *m = Ikev2ChildSaDump{} }
-func (*Ikev2ChildSaDump) GetMessageName() string { return "ikev2_child_sa_dump" }
-func (*Ikev2ChildSaDump) GetCrcString() string   { return "01eab609" }
-func (*Ikev2ChildSaDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ChildSaDump) Reset()                        { *m = Ikev2ChildSaDump{} }
+func (*Ikev2ChildSaDump) GetMessageName() string          { return "ikev2_child_sa_dump" }
+func (*Ikev2ChildSaDump) GetCrcString() string            { return "01eab609" }
+func (*Ikev2ChildSaDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ChildSaDump) Size() (size int) {
 	if m == nil {
@@ -220,12 +219,10 @@ type Ikev2InitiateDelChildSa struct {
 	Ispi uint32 `binapi:"u32,name=ispi" json:"ispi,omitempty"`
 }
 
-func (m *Ikev2InitiateDelChildSa) Reset()               { *m = Ikev2InitiateDelChildSa{} }
-func (*Ikev2InitiateDelChildSa) GetMessageName() string { return "ikev2_initiate_del_child_sa" }
-func (*Ikev2InitiateDelChildSa) GetCrcString() string   { return "7f004d2e" }
-func (*Ikev2InitiateDelChildSa) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2InitiateDelChildSa) Reset()                        { *m = Ikev2InitiateDelChildSa{} }
+func (*Ikev2InitiateDelChildSa) GetMessageName() string          { return "ikev2_initiate_del_child_sa" }
+func (*Ikev2InitiateDelChildSa) GetCrcString() string            { return "7f004d2e" }
+func (*Ikev2InitiateDelChildSa) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2InitiateDelChildSa) Size() (size int) {
 	if m == nil {
@@ -258,9 +255,10 @@ func (m *Ikev2InitiateDelChildSaReply) Reset() { *m = Ikev2InitiateDelChildSaRep
 func (*Ikev2InitiateDelChildSaReply) GetMessageName() string {
 	return "ikev2_initiate_del_child_sa_reply"
 }
-func (*Ikev2InitiateDelChildSaReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2InitiateDelChildSaReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2InitiateDelChildSaReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2InitiateDelChildSaReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2InitiateDelChildSaReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2InitiateDelChildSaReply) Size() (size int) {
@@ -290,12 +288,10 @@ type Ikev2InitiateDelIkeSa struct {
 	Ispi uint64 `binapi:"u64,name=ispi" json:"ispi,omitempty"`
 }
 
-func (m *Ikev2InitiateDelIkeSa) Reset()               { *m = Ikev2InitiateDelIkeSa{} }
-func (*Ikev2InitiateDelIkeSa) GetMessageName() string { return "ikev2_initiate_del_ike_sa" }
-func (*Ikev2InitiateDelIkeSa) GetCrcString() string   { return "8d125bdd" }
-func (*Ikev2InitiateDelIkeSa) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2InitiateDelIkeSa) Reset()                        { *m = Ikev2InitiateDelIkeSa{} }
+func (*Ikev2InitiateDelIkeSa) GetMessageName() string          { return "ikev2_initiate_del_ike_sa" }
+func (*Ikev2InitiateDelIkeSa) GetCrcString() string            { return "8d125bdd" }
+func (*Ikev2InitiateDelIkeSa) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2InitiateDelIkeSa) Size() (size int) {
 	if m == nil {
@@ -324,11 +320,12 @@ type Ikev2InitiateDelIkeSaReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2InitiateDelIkeSaReply) Reset()               { *m = Ikev2InitiateDelIkeSaReply{} }
-func (*Ikev2InitiateDelIkeSaReply) GetMessageName() string { return "ikev2_initiate_del_ike_sa_reply" }
-func (*Ikev2InitiateDelIkeSaReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2InitiateDelIkeSaReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2InitiateDelIkeSaReply) Reset()                        { *m = Ikev2InitiateDelIkeSaReply{} }
+func (*Ikev2InitiateDelIkeSaReply) GetMessageName() string          { return "ikev2_initiate_del_ike_sa_reply" }
+func (*Ikev2InitiateDelIkeSaReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2InitiateDelIkeSaReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2InitiateDelIkeSaReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2InitiateDelIkeSaReply) Size() (size int) {
@@ -358,12 +355,10 @@ type Ikev2InitiateRekeyChildSa struct {
 	Ispi uint32 `binapi:"u32,name=ispi" json:"ispi,omitempty"`
 }
 
-func (m *Ikev2InitiateRekeyChildSa) Reset()               { *m = Ikev2InitiateRekeyChildSa{} }
-func (*Ikev2InitiateRekeyChildSa) GetMessageName() string { return "ikev2_initiate_rekey_child_sa" }
-func (*Ikev2InitiateRekeyChildSa) GetCrcString() string   { return "7f004d2e" }
-func (*Ikev2InitiateRekeyChildSa) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2InitiateRekeyChildSa) Reset()                        { *m = Ikev2InitiateRekeyChildSa{} }
+func (*Ikev2InitiateRekeyChildSa) GetMessageName() string          { return "ikev2_initiate_rekey_child_sa" }
+func (*Ikev2InitiateRekeyChildSa) GetCrcString() string            { return "7f004d2e" }
+func (*Ikev2InitiateRekeyChildSa) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2InitiateRekeyChildSa) Size() (size int) {
 	if m == nil {
@@ -396,9 +391,10 @@ func (m *Ikev2InitiateRekeyChildSaReply) Reset() { *m = Ikev2InitiateRekeyChildS
 func (*Ikev2InitiateRekeyChildSaReply) GetMessageName() string {
 	return "ikev2_initiate_rekey_child_sa_reply"
 }
-func (*Ikev2InitiateRekeyChildSaReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2InitiateRekeyChildSaReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2InitiateRekeyChildSaReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2InitiateRekeyChildSaReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2InitiateRekeyChildSaReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2InitiateRekeyChildSaReply) Size() (size int) {
@@ -428,12 +424,10 @@ type Ikev2InitiateSaInit struct {
 	Name string `binapi:"string[64],name=name" json:"name,omitempty"`
 }
 
-func (m *Ikev2InitiateSaInit) Reset()               { *m = Ikev2InitiateSaInit{} }
-func (*Ikev2InitiateSaInit) GetMessageName() string { return "ikev2_initiate_sa_init" }
-func (*Ikev2InitiateSaInit) GetCrcString() string   { return "ebf79a66" }
-func (*Ikev2InitiateSaInit) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2InitiateSaInit) Reset()                        { *m = Ikev2InitiateSaInit{} }
+func (*Ikev2InitiateSaInit) GetMessageName() string          { return "ikev2_initiate_sa_init" }
+func (*Ikev2InitiateSaInit) GetCrcString() string            { return "ebf79a66" }
+func (*Ikev2InitiateSaInit) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2InitiateSaInit) Size() (size int) {
 	if m == nil {
@@ -462,11 +456,12 @@ type Ikev2InitiateSaInitReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2InitiateSaInitReply) Reset()               { *m = Ikev2InitiateSaInitReply{} }
-func (*Ikev2InitiateSaInitReply) GetMessageName() string { return "ikev2_initiate_sa_init_reply" }
-func (*Ikev2InitiateSaInitReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2InitiateSaInitReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2InitiateSaInitReply) Reset()                        { *m = Ikev2InitiateSaInitReply{} }
+func (*Ikev2InitiateSaInitReply) GetMessageName() string          { return "ikev2_initiate_sa_init_reply" }
+func (*Ikev2InitiateSaInitReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2InitiateSaInitReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2InitiateSaInitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2InitiateSaInitReply) Size() (size int) {
@@ -497,12 +492,10 @@ type Ikev2NonceGet struct {
 	SaIndex     uint32 `binapi:"u32,name=sa_index" json:"sa_index,omitempty"`
 }
 
-func (m *Ikev2NonceGet) Reset()               { *m = Ikev2NonceGet{} }
-func (*Ikev2NonceGet) GetMessageName() string { return "ikev2_nonce_get" }
-func (*Ikev2NonceGet) GetCrcString() string   { return "7fe9ad51" }
-func (*Ikev2NonceGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2NonceGet) Reset()                        { *m = Ikev2NonceGet{} }
+func (*Ikev2NonceGet) GetMessageName() string          { return "ikev2_nonce_get" }
+func (*Ikev2NonceGet) GetCrcString() string            { return "7fe9ad51" }
+func (*Ikev2NonceGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2NonceGet) Size() (size int) {
 	if m == nil {
@@ -536,11 +529,12 @@ type Ikev2NonceGetReply struct {
 	Nonce   []byte `binapi:"u8[data_len],name=nonce" json:"nonce,omitempty"`
 }
 
-func (m *Ikev2NonceGetReply) Reset()               { *m = Ikev2NonceGetReply{} }
-func (*Ikev2NonceGetReply) GetMessageName() string { return "ikev2_nonce_get_reply" }
-func (*Ikev2NonceGetReply) GetCrcString() string   { return "1b37a342" }
-func (*Ikev2NonceGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2NonceGetReply) Reset()                        { *m = Ikev2NonceGetReply{} }
+func (*Ikev2NonceGetReply) GetMessageName() string          { return "ikev2_nonce_get_reply" }
+func (*Ikev2NonceGetReply) GetCrcString() string            { return "1b37a342" }
+func (*Ikev2NonceGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2NonceGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2NonceGetReply) Size() (size int) {
@@ -574,12 +568,10 @@ func (m *Ikev2NonceGetReply) Unmarshal(b []byte) error {
 // Ikev2PluginGetVersion defines message 'ikev2_plugin_get_version'.
 type Ikev2PluginGetVersion struct{}
 
-func (m *Ikev2PluginGetVersion) Reset()               { *m = Ikev2PluginGetVersion{} }
-func (*Ikev2PluginGetVersion) GetMessageName() string { return "ikev2_plugin_get_version" }
-func (*Ikev2PluginGetVersion) GetCrcString() string   { return "51077d14" }
-func (*Ikev2PluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2PluginGetVersion) Reset()                        { *m = Ikev2PluginGetVersion{} }
+func (*Ikev2PluginGetVersion) GetMessageName() string          { return "ikev2_plugin_get_version" }
+func (*Ikev2PluginGetVersion) GetCrcString() string            { return "51077d14" }
+func (*Ikev2PluginGetVersion) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2PluginGetVersion) Size() (size int) {
 	if m == nil {
@@ -604,11 +596,12 @@ type Ikev2PluginGetVersionReply struct {
 	Minor uint32 `binapi:"u32,name=minor" json:"minor,omitempty"`
 }
 
-func (m *Ikev2PluginGetVersionReply) Reset()               { *m = Ikev2PluginGetVersionReply{} }
-func (*Ikev2PluginGetVersionReply) GetMessageName() string { return "ikev2_plugin_get_version_reply" }
-func (*Ikev2PluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
-func (*Ikev2PluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2PluginGetVersionReply) Reset()                        { *m = Ikev2PluginGetVersionReply{} }
+func (*Ikev2PluginGetVersionReply) GetMessageName() string          { return "ikev2_plugin_get_version_reply" }
+func (*Ikev2PluginGetVersionReply) GetCrcString() string            { return "9b32cf86" }
+func (*Ikev2PluginGetVersionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2PluginGetVersionReply) GetRetVal() error {
+	return nil
 }
 
 func (m *Ikev2PluginGetVersionReply) Size() (size int) {
@@ -642,12 +635,10 @@ type Ikev2ProfileAddDel struct {
 	IsAdd bool   `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *Ikev2ProfileAddDel) Reset()               { *m = Ikev2ProfileAddDel{} }
-func (*Ikev2ProfileAddDel) GetMessageName() string { return "ikev2_profile_add_del" }
-func (*Ikev2ProfileAddDel) GetCrcString() string   { return "2c925b55" }
-func (*Ikev2ProfileAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileAddDel) Reset()                        { *m = Ikev2ProfileAddDel{} }
+func (*Ikev2ProfileAddDel) GetMessageName() string          { return "ikev2_profile_add_del" }
+func (*Ikev2ProfileAddDel) GetCrcString() string            { return "2c925b55" }
+func (*Ikev2ProfileAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileAddDel) Size() (size int) {
 	if m == nil {
@@ -679,11 +670,12 @@ type Ikev2ProfileAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2ProfileAddDelReply) Reset()               { *m = Ikev2ProfileAddDelReply{} }
-func (*Ikev2ProfileAddDelReply) GetMessageName() string { return "ikev2_profile_add_del_reply" }
-func (*Ikev2ProfileAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2ProfileAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ProfileAddDelReply) Reset()                        { *m = Ikev2ProfileAddDelReply{} }
+func (*Ikev2ProfileAddDelReply) GetMessageName() string          { return "ikev2_profile_add_del_reply" }
+func (*Ikev2ProfileAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileAddDelReply) Size() (size int) {
@@ -713,11 +705,12 @@ type Ikev2ProfileDetails struct {
 	Profile ikev2_types.Ikev2Profile `binapi:"ikev2_profile,name=profile" json:"profile,omitempty"`
 }
 
-func (m *Ikev2ProfileDetails) Reset()               { *m = Ikev2ProfileDetails{} }
-func (*Ikev2ProfileDetails) GetMessageName() string { return "ikev2_profile_details" }
-func (*Ikev2ProfileDetails) GetCrcString() string   { return "670d01d9" }
-func (*Ikev2ProfileDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ProfileDetails) Reset()                        { *m = Ikev2ProfileDetails{} }
+func (*Ikev2ProfileDetails) GetMessageName() string          { return "ikev2_profile_details" }
+func (*Ikev2ProfileDetails) GetCrcString() string            { return "670d01d9" }
+func (*Ikev2ProfileDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Ikev2ProfileDetails) Size() (size int) {
@@ -892,12 +885,10 @@ type Ikev2ProfileDisableNatt struct {
 	Name string `binapi:"string[64],name=name" json:"name,omitempty"`
 }
 
-func (m *Ikev2ProfileDisableNatt) Reset()               { *m = Ikev2ProfileDisableNatt{} }
-func (*Ikev2ProfileDisableNatt) GetMessageName() string { return "ikev2_profile_disable_natt" }
-func (*Ikev2ProfileDisableNatt) GetCrcString() string   { return "ebf79a66" }
-func (*Ikev2ProfileDisableNatt) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileDisableNatt) Reset()                        { *m = Ikev2ProfileDisableNatt{} }
+func (*Ikev2ProfileDisableNatt) GetMessageName() string          { return "ikev2_profile_disable_natt" }
+func (*Ikev2ProfileDisableNatt) GetCrcString() string            { return "ebf79a66" }
+func (*Ikev2ProfileDisableNatt) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileDisableNatt) Size() (size int) {
 	if m == nil {
@@ -930,9 +921,10 @@ func (m *Ikev2ProfileDisableNattReply) Reset() { *m = Ikev2ProfileDisableNattRep
 func (*Ikev2ProfileDisableNattReply) GetMessageName() string {
 	return "ikev2_profile_disable_natt_reply"
 }
-func (*Ikev2ProfileDisableNattReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2ProfileDisableNattReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2ProfileDisableNattReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileDisableNattReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileDisableNattReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileDisableNattReply) Size() (size int) {
@@ -960,12 +952,10 @@ func (m *Ikev2ProfileDisableNattReply) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Ikev2ProfileDump struct{}
 
-func (m *Ikev2ProfileDump) Reset()               { *m = Ikev2ProfileDump{} }
-func (*Ikev2ProfileDump) GetMessageName() string { return "ikev2_profile_dump" }
-func (*Ikev2ProfileDump) GetCrcString() string   { return "51077d14" }
-func (*Ikev2ProfileDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileDump) Reset()                        { *m = Ikev2ProfileDump{} }
+func (*Ikev2ProfileDump) GetMessageName() string          { return "ikev2_profile_dump" }
+func (*Ikev2ProfileDump) GetCrcString() string            { return "51077d14" }
+func (*Ikev2ProfileDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileDump) Size() (size int) {
 	if m == nil {
@@ -994,12 +984,10 @@ type Ikev2ProfileSetAuth struct {
 	Data       []byte `binapi:"u8[data_len],name=data" json:"data,omitempty"`
 }
 
-func (m *Ikev2ProfileSetAuth) Reset()               { *m = Ikev2ProfileSetAuth{} }
-func (*Ikev2ProfileSetAuth) GetMessageName() string { return "ikev2_profile_set_auth" }
-func (*Ikev2ProfileSetAuth) GetCrcString() string   { return "642c97cd" }
-func (*Ikev2ProfileSetAuth) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileSetAuth) Reset()                        { *m = Ikev2ProfileSetAuth{} }
+func (*Ikev2ProfileSetAuth) GetMessageName() string          { return "ikev2_profile_set_auth" }
+func (*Ikev2ProfileSetAuth) GetCrcString() string            { return "642c97cd" }
+func (*Ikev2ProfileSetAuth) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetAuth) Size() (size int) {
 	if m == nil {
@@ -1041,11 +1029,12 @@ type Ikev2ProfileSetAuthReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2ProfileSetAuthReply) Reset()               { *m = Ikev2ProfileSetAuthReply{} }
-func (*Ikev2ProfileSetAuthReply) GetMessageName() string { return "ikev2_profile_set_auth_reply" }
-func (*Ikev2ProfileSetAuthReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2ProfileSetAuthReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ProfileSetAuthReply) Reset()                        { *m = Ikev2ProfileSetAuthReply{} }
+func (*Ikev2ProfileSetAuthReply) GetMessageName() string          { return "ikev2_profile_set_auth_reply" }
+func (*Ikev2ProfileSetAuthReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileSetAuthReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileSetAuthReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileSetAuthReply) Size() (size int) {
@@ -1079,12 +1068,10 @@ type Ikev2ProfileSetID struct {
 	Data    []byte `binapi:"u8[data_len],name=data" json:"data,omitempty"`
 }
 
-func (m *Ikev2ProfileSetID) Reset()               { *m = Ikev2ProfileSetID{} }
-func (*Ikev2ProfileSetID) GetMessageName() string { return "ikev2_profile_set_id" }
-func (*Ikev2ProfileSetID) GetCrcString() string   { return "4d7e2418" }
-func (*Ikev2ProfileSetID) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileSetID) Reset()                        { *m = Ikev2ProfileSetID{} }
+func (*Ikev2ProfileSetID) GetMessageName() string          { return "ikev2_profile_set_id" }
+func (*Ikev2ProfileSetID) GetCrcString() string            { return "4d7e2418" }
+func (*Ikev2ProfileSetID) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetID) Size() (size int) {
 	if m == nil {
@@ -1126,11 +1113,12 @@ type Ikev2ProfileSetIDReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2ProfileSetIDReply) Reset()               { *m = Ikev2ProfileSetIDReply{} }
-func (*Ikev2ProfileSetIDReply) GetMessageName() string { return "ikev2_profile_set_id_reply" }
-func (*Ikev2ProfileSetIDReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2ProfileSetIDReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ProfileSetIDReply) Reset()                        { *m = Ikev2ProfileSetIDReply{} }
+func (*Ikev2ProfileSetIDReply) GetMessageName() string          { return "ikev2_profile_set_id_reply" }
+func (*Ikev2ProfileSetIDReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileSetIDReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileSetIDReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileSetIDReply) Size() (size int) {
@@ -1166,10 +1154,8 @@ func (m *Ikev2ProfileSetIpsecUDPPort) Reset() { *m = Ikev2ProfileSetIpsecUDPPort
 func (*Ikev2ProfileSetIpsecUDPPort) GetMessageName() string {
 	return "ikev2_profile_set_ipsec_udp_port"
 }
-func (*Ikev2ProfileSetIpsecUDPPort) GetCrcString() string { return "615ce758" }
-func (*Ikev2ProfileSetIpsecUDPPort) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (*Ikev2ProfileSetIpsecUDPPort) GetCrcString() string            { return "615ce758" }
+func (*Ikev2ProfileSetIpsecUDPPort) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetIpsecUDPPort) Size() (size int) {
 	if m == nil {
@@ -1212,6 +1198,9 @@ func (*Ikev2ProfileSetIpsecUDPPortReply) GetCrcString() string { return "e8d4e80
 func (*Ikev2ProfileSetIpsecUDPPortReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *Ikev2ProfileSetIpsecUDPPortReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Ikev2ProfileSetIpsecUDPPortReply) Size() (size int) {
 	if m == nil {
@@ -1241,12 +1230,10 @@ type Ikev2ProfileSetLiveness struct {
 	MaxRetries uint32 `binapi:"u32,name=max_retries" json:"max_retries,omitempty"`
 }
 
-func (m *Ikev2ProfileSetLiveness) Reset()               { *m = Ikev2ProfileSetLiveness{} }
-func (*Ikev2ProfileSetLiveness) GetMessageName() string { return "ikev2_profile_set_liveness" }
-func (*Ikev2ProfileSetLiveness) GetCrcString() string   { return "6bdf4d65" }
-func (*Ikev2ProfileSetLiveness) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileSetLiveness) Reset()                        { *m = Ikev2ProfileSetLiveness{} }
+func (*Ikev2ProfileSetLiveness) GetMessageName() string          { return "ikev2_profile_set_liveness" }
+func (*Ikev2ProfileSetLiveness) GetCrcString() string            { return "6bdf4d65" }
+func (*Ikev2ProfileSetLiveness) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetLiveness) Size() (size int) {
 	if m == nil {
@@ -1282,9 +1269,10 @@ func (m *Ikev2ProfileSetLivenessReply) Reset() { *m = Ikev2ProfileSetLivenessRep
 func (*Ikev2ProfileSetLivenessReply) GetMessageName() string {
 	return "ikev2_profile_set_liveness_reply"
 }
-func (*Ikev2ProfileSetLivenessReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2ProfileSetLivenessReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2ProfileSetLivenessReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileSetLivenessReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileSetLivenessReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileSetLivenessReply) Size() (size int) {
@@ -1315,12 +1303,10 @@ type Ikev2ProfileSetTs struct {
 	Ts   ikev2_types.Ikev2Ts `binapi:"ikev2_ts,name=ts" json:"ts,omitempty"`
 }
 
-func (m *Ikev2ProfileSetTs) Reset()               { *m = Ikev2ProfileSetTs{} }
-func (*Ikev2ProfileSetTs) GetMessageName() string { return "ikev2_profile_set_ts" }
-func (*Ikev2ProfileSetTs) GetCrcString() string   { return "8eb8cfd1" }
-func (*Ikev2ProfileSetTs) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileSetTs) Reset()                        { *m = Ikev2ProfileSetTs{} }
+func (*Ikev2ProfileSetTs) GetMessageName() string          { return "ikev2_profile_set_ts" }
+func (*Ikev2ProfileSetTs) GetCrcString() string            { return "8eb8cfd1" }
+func (*Ikev2ProfileSetTs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetTs) Size() (size int) {
 	if m == nil {
@@ -1379,11 +1365,12 @@ type Ikev2ProfileSetTsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2ProfileSetTsReply) Reset()               { *m = Ikev2ProfileSetTsReply{} }
-func (*Ikev2ProfileSetTsReply) GetMessageName() string { return "ikev2_profile_set_ts_reply" }
-func (*Ikev2ProfileSetTsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2ProfileSetTsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2ProfileSetTsReply) Reset()                        { *m = Ikev2ProfileSetTsReply{} }
+func (*Ikev2ProfileSetTsReply) GetMessageName() string          { return "ikev2_profile_set_ts_reply" }
+func (*Ikev2ProfileSetTsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileSetTsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileSetTsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileSetTsReply) Size() (size int) {
@@ -1413,12 +1400,10 @@ type Ikev2ProfileSetUDPEncap struct {
 	Name string `binapi:"string[64],name=name" json:"name,omitempty"`
 }
 
-func (m *Ikev2ProfileSetUDPEncap) Reset()               { *m = Ikev2ProfileSetUDPEncap{} }
-func (*Ikev2ProfileSetUDPEncap) GetMessageName() string { return "ikev2_profile_set_udp_encap" }
-func (*Ikev2ProfileSetUDPEncap) GetCrcString() string   { return "ebf79a66" }
-func (*Ikev2ProfileSetUDPEncap) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2ProfileSetUDPEncap) Reset()                        { *m = Ikev2ProfileSetUDPEncap{} }
+func (*Ikev2ProfileSetUDPEncap) GetMessageName() string          { return "ikev2_profile_set_udp_encap" }
+func (*Ikev2ProfileSetUDPEncap) GetCrcString() string            { return "ebf79a66" }
+func (*Ikev2ProfileSetUDPEncap) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2ProfileSetUDPEncap) Size() (size int) {
 	if m == nil {
@@ -1451,9 +1436,10 @@ func (m *Ikev2ProfileSetUDPEncapReply) Reset() { *m = Ikev2ProfileSetUDPEncapRep
 func (*Ikev2ProfileSetUDPEncapReply) GetMessageName() string {
 	return "ikev2_profile_set_udp_encap_reply"
 }
-func (*Ikev2ProfileSetUDPEncapReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2ProfileSetUDPEncapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2ProfileSetUDPEncapReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2ProfileSetUDPEncapReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2ProfileSetUDPEncapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2ProfileSetUDPEncapReply) Size() (size int) {
@@ -1484,11 +1470,12 @@ type Ikev2SaDetails struct {
 	Sa     ikev2_types.Ikev2Sa `binapi:"ikev2_sa,name=sa" json:"sa,omitempty"`
 }
 
-func (m *Ikev2SaDetails) Reset()               { *m = Ikev2SaDetails{} }
-func (*Ikev2SaDetails) GetMessageName() string { return "ikev2_sa_details" }
-func (*Ikev2SaDetails) GetCrcString() string   { return "937c22d5" }
-func (*Ikev2SaDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SaDetails) Reset()                        { *m = Ikev2SaDetails{} }
+func (*Ikev2SaDetails) GetMessageName() string          { return "ikev2_sa_details" }
+func (*Ikev2SaDetails) GetCrcString() string            { return "937c22d5" }
+func (*Ikev2SaDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SaDetails) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SaDetails) Size() (size int) {
@@ -1697,12 +1684,10 @@ func (m *Ikev2SaDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Ikev2SaDump struct{}
 
-func (m *Ikev2SaDump) Reset()               { *m = Ikev2SaDump{} }
-func (*Ikev2SaDump) GetMessageName() string { return "ikev2_sa_dump" }
-func (*Ikev2SaDump) GetCrcString() string   { return "51077d14" }
-func (*Ikev2SaDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SaDump) Reset()                        { *m = Ikev2SaDump{} }
+func (*Ikev2SaDump) GetMessageName() string          { return "ikev2_sa_dump" }
+func (*Ikev2SaDump) GetCrcString() string            { return "51077d14" }
+func (*Ikev2SaDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SaDump) Size() (size int) {
 	if m == nil {
@@ -1728,12 +1713,10 @@ type Ikev2SetEspTransforms struct {
 	Tr   ikev2_types.Ikev2EspTransforms `binapi:"ikev2_esp_transforms,name=tr" json:"tr,omitempty"`
 }
 
-func (m *Ikev2SetEspTransforms) Reset()               { *m = Ikev2SetEspTransforms{} }
-func (*Ikev2SetEspTransforms) GetMessageName() string { return "ikev2_set_esp_transforms" }
-func (*Ikev2SetEspTransforms) GetCrcString() string   { return "a63dc205" }
-func (*Ikev2SetEspTransforms) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetEspTransforms) Reset()                        { *m = Ikev2SetEspTransforms{} }
+func (*Ikev2SetEspTransforms) GetMessageName() string          { return "ikev2_set_esp_transforms" }
+func (*Ikev2SetEspTransforms) GetCrcString() string            { return "a63dc205" }
+func (*Ikev2SetEspTransforms) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetEspTransforms) Size() (size int) {
 	if m == nil {
@@ -1771,11 +1754,12 @@ type Ikev2SetEspTransformsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2SetEspTransformsReply) Reset()               { *m = Ikev2SetEspTransformsReply{} }
-func (*Ikev2SetEspTransformsReply) GetMessageName() string { return "ikev2_set_esp_transforms_reply" }
-func (*Ikev2SetEspTransformsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2SetEspTransformsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SetEspTransformsReply) Reset()                        { *m = Ikev2SetEspTransformsReply{} }
+func (*Ikev2SetEspTransformsReply) GetMessageName() string          { return "ikev2_set_esp_transforms_reply" }
+func (*Ikev2SetEspTransformsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetEspTransformsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetEspTransformsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetEspTransformsReply) Size() (size int) {
@@ -1806,12 +1790,10 @@ type Ikev2SetIkeTransforms struct {
 	Tr   ikev2_types.Ikev2IkeTransforms `binapi:"ikev2_ike_transforms,name=tr" json:"tr,omitempty"`
 }
 
-func (m *Ikev2SetIkeTransforms) Reset()               { *m = Ikev2SetIkeTransforms{} }
-func (*Ikev2SetIkeTransforms) GetMessageName() string { return "ikev2_set_ike_transforms" }
-func (*Ikev2SetIkeTransforms) GetCrcString() string   { return "076d7378" }
-func (*Ikev2SetIkeTransforms) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetIkeTransforms) Reset()                        { *m = Ikev2SetIkeTransforms{} }
+func (*Ikev2SetIkeTransforms) GetMessageName() string          { return "ikev2_set_ike_transforms" }
+func (*Ikev2SetIkeTransforms) GetCrcString() string            { return "076d7378" }
+func (*Ikev2SetIkeTransforms) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetIkeTransforms) Size() (size int) {
 	if m == nil {
@@ -1852,11 +1834,12 @@ type Ikev2SetIkeTransformsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2SetIkeTransformsReply) Reset()               { *m = Ikev2SetIkeTransformsReply{} }
-func (*Ikev2SetIkeTransformsReply) GetMessageName() string { return "ikev2_set_ike_transforms_reply" }
-func (*Ikev2SetIkeTransformsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2SetIkeTransformsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SetIkeTransformsReply) Reset()                        { *m = Ikev2SetIkeTransformsReply{} }
+func (*Ikev2SetIkeTransformsReply) GetMessageName() string          { return "ikev2_set_ike_transforms_reply" }
+func (*Ikev2SetIkeTransformsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetIkeTransformsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetIkeTransformsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetIkeTransformsReply) Size() (size int) {
@@ -1886,12 +1869,10 @@ type Ikev2SetLocalKey struct {
 	KeyFile string `binapi:"string[256],name=key_file" json:"key_file,omitempty"`
 }
 
-func (m *Ikev2SetLocalKey) Reset()               { *m = Ikev2SetLocalKey{} }
-func (*Ikev2SetLocalKey) GetMessageName() string { return "ikev2_set_local_key" }
-func (*Ikev2SetLocalKey) GetCrcString() string   { return "799b69ec" }
-func (*Ikev2SetLocalKey) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetLocalKey) Reset()                        { *m = Ikev2SetLocalKey{} }
+func (*Ikev2SetLocalKey) GetMessageName() string          { return "ikev2_set_local_key" }
+func (*Ikev2SetLocalKey) GetCrcString() string            { return "799b69ec" }
+func (*Ikev2SetLocalKey) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetLocalKey) Size() (size int) {
 	if m == nil {
@@ -1920,11 +1901,12 @@ type Ikev2SetLocalKeyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2SetLocalKeyReply) Reset()               { *m = Ikev2SetLocalKeyReply{} }
-func (*Ikev2SetLocalKeyReply) GetMessageName() string { return "ikev2_set_local_key_reply" }
-func (*Ikev2SetLocalKeyReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2SetLocalKeyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SetLocalKeyReply) Reset()                        { *m = Ikev2SetLocalKeyReply{} }
+func (*Ikev2SetLocalKeyReply) GetMessageName() string          { return "ikev2_set_local_key_reply" }
+func (*Ikev2SetLocalKeyReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetLocalKeyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetLocalKeyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetLocalKeyReply) Size() (size int) {
@@ -1955,12 +1937,10 @@ type Ikev2SetResponder struct {
 	Responder ikev2_types.Ikev2Responder `binapi:"ikev2_responder,name=responder" json:"responder,omitempty"`
 }
 
-func (m *Ikev2SetResponder) Reset()               { *m = Ikev2SetResponder{} }
-func (*Ikev2SetResponder) GetMessageName() string { return "ikev2_set_responder" }
-func (*Ikev2SetResponder) GetCrcString() string   { return "a2055df1" }
-func (*Ikev2SetResponder) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetResponder) Reset()                        { *m = Ikev2SetResponder{} }
+func (*Ikev2SetResponder) GetMessageName() string          { return "ikev2_set_responder" }
+func (*Ikev2SetResponder) GetCrcString() string            { return "a2055df1" }
+func (*Ikev2SetResponder) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetResponder) Size() (size int) {
 	if m == nil {
@@ -2000,12 +1980,10 @@ type Ikev2SetResponderHostname struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Ikev2SetResponderHostname) Reset()               { *m = Ikev2SetResponderHostname{} }
-func (*Ikev2SetResponderHostname) GetMessageName() string { return "ikev2_set_responder_hostname" }
-func (*Ikev2SetResponderHostname) GetCrcString() string   { return "350d6949" }
-func (*Ikev2SetResponderHostname) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetResponderHostname) Reset()                        { *m = Ikev2SetResponderHostname{} }
+func (*Ikev2SetResponderHostname) GetMessageName() string          { return "ikev2_set_responder_hostname" }
+func (*Ikev2SetResponderHostname) GetCrcString() string            { return "350d6949" }
+func (*Ikev2SetResponderHostname) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetResponderHostname) Size() (size int) {
 	if m == nil {
@@ -2044,9 +2022,10 @@ func (m *Ikev2SetResponderHostnameReply) Reset() { *m = Ikev2SetResponderHostnam
 func (*Ikev2SetResponderHostnameReply) GetMessageName() string {
 	return "ikev2_set_responder_hostname_reply"
 }
-func (*Ikev2SetResponderHostnameReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2SetResponderHostnameReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2SetResponderHostnameReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetResponderHostnameReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetResponderHostnameReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetResponderHostnameReply) Size() (size int) {
@@ -2076,11 +2055,12 @@ type Ikev2SetResponderReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2SetResponderReply) Reset()               { *m = Ikev2SetResponderReply{} }
-func (*Ikev2SetResponderReply) GetMessageName() string { return "ikev2_set_responder_reply" }
-func (*Ikev2SetResponderReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2SetResponderReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SetResponderReply) Reset()                        { *m = Ikev2SetResponderReply{} }
+func (*Ikev2SetResponderReply) GetMessageName() string          { return "ikev2_set_responder_reply" }
+func (*Ikev2SetResponderReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetResponderReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetResponderReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetResponderReply) Size() (size int) {
@@ -2114,12 +2094,10 @@ type Ikev2SetSaLifetime struct {
 	LifetimeMaxdata uint64 `binapi:"u64,name=lifetime_maxdata" json:"lifetime_maxdata,omitempty"`
 }
 
-func (m *Ikev2SetSaLifetime) Reset()               { *m = Ikev2SetSaLifetime{} }
-func (*Ikev2SetSaLifetime) GetMessageName() string { return "ikev2_set_sa_lifetime" }
-func (*Ikev2SetSaLifetime) GetCrcString() string   { return "7039feaa" }
-func (*Ikev2SetSaLifetime) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetSaLifetime) Reset()                        { *m = Ikev2SetSaLifetime{} }
+func (*Ikev2SetSaLifetime) GetMessageName() string          { return "ikev2_set_sa_lifetime" }
+func (*Ikev2SetSaLifetime) GetCrcString() string            { return "7039feaa" }
+func (*Ikev2SetSaLifetime) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetSaLifetime) Size() (size int) {
 	if m == nil {
@@ -2160,11 +2138,12 @@ type Ikev2SetSaLifetimeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Ikev2SetSaLifetimeReply) Reset()               { *m = Ikev2SetSaLifetimeReply{} }
-func (*Ikev2SetSaLifetimeReply) GetMessageName() string { return "ikev2_set_sa_lifetime_reply" }
-func (*Ikev2SetSaLifetimeReply) GetCrcString() string   { return "e8d4e804" }
-func (*Ikev2SetSaLifetimeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2SetSaLifetimeReply) Reset()                        { *m = Ikev2SetSaLifetimeReply{} }
+func (*Ikev2SetSaLifetimeReply) GetMessageName() string          { return "ikev2_set_sa_lifetime_reply" }
+func (*Ikev2SetSaLifetimeReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetSaLifetimeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetSaLifetimeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetSaLifetimeReply) Size() (size int) {
@@ -2195,12 +2174,10 @@ type Ikev2SetTunnelInterface struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Ikev2SetTunnelInterface) Reset()               { *m = Ikev2SetTunnelInterface{} }
-func (*Ikev2SetTunnelInterface) GetMessageName() string { return "ikev2_set_tunnel_interface" }
-func (*Ikev2SetTunnelInterface) GetCrcString() string   { return "ca67182c" }
-func (*Ikev2SetTunnelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2SetTunnelInterface) Reset()                        { *m = Ikev2SetTunnelInterface{} }
+func (*Ikev2SetTunnelInterface) GetMessageName() string          { return "ikev2_set_tunnel_interface" }
+func (*Ikev2SetTunnelInterface) GetCrcString() string            { return "ca67182c" }
+func (*Ikev2SetTunnelInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2SetTunnelInterface) Size() (size int) {
 	if m == nil {
@@ -2236,9 +2213,10 @@ func (m *Ikev2SetTunnelInterfaceReply) Reset() { *m = Ikev2SetTunnelInterfaceRep
 func (*Ikev2SetTunnelInterfaceReply) GetMessageName() string {
 	return "ikev2_set_tunnel_interface_reply"
 }
-func (*Ikev2SetTunnelInterfaceReply) GetCrcString() string { return "e8d4e804" }
-func (*Ikev2SetTunnelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Ikev2SetTunnelInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*Ikev2SetTunnelInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2SetTunnelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2SetTunnelInterfaceReply) Size() (size int) {
@@ -2269,11 +2247,12 @@ type Ikev2TrafficSelectorDetails struct {
 	Ts     ikev2_types.Ikev2Ts `binapi:"ikev2_ts,name=ts" json:"ts,omitempty"`
 }
 
-func (m *Ikev2TrafficSelectorDetails) Reset()               { *m = Ikev2TrafficSelectorDetails{} }
-func (*Ikev2TrafficSelectorDetails) GetMessageName() string { return "ikev2_traffic_selector_details" }
-func (*Ikev2TrafficSelectorDetails) GetCrcString() string   { return "518cb06f" }
-func (*Ikev2TrafficSelectorDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Ikev2TrafficSelectorDetails) Reset()                        { *m = Ikev2TrafficSelectorDetails{} }
+func (*Ikev2TrafficSelectorDetails) GetMessageName() string          { return "ikev2_traffic_selector_details" }
+func (*Ikev2TrafficSelectorDetails) GetCrcString() string            { return "518cb06f" }
+func (*Ikev2TrafficSelectorDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Ikev2TrafficSelectorDetails) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Ikev2TrafficSelectorDetails) Size() (size int) {
@@ -2335,12 +2314,10 @@ type Ikev2TrafficSelectorDump struct {
 	ChildSaIndex uint32 `binapi:"u32,name=child_sa_index" json:"child_sa_index,omitempty"`
 }
 
-func (m *Ikev2TrafficSelectorDump) Reset()               { *m = Ikev2TrafficSelectorDump{} }
-func (*Ikev2TrafficSelectorDump) GetMessageName() string { return "ikev2_traffic_selector_dump" }
-func (*Ikev2TrafficSelectorDump) GetCrcString() string   { return "a7385e33" }
-func (*Ikev2TrafficSelectorDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Ikev2TrafficSelectorDump) Reset()                        { *m = Ikev2TrafficSelectorDump{} }
+func (*Ikev2TrafficSelectorDump) GetMessageName() string          { return "ikev2_traffic_selector_dump" }
+func (*Ikev2TrafficSelectorDump) GetCrcString() string            { return "a7385e33" }
+func (*Ikev2TrafficSelectorDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Ikev2TrafficSelectorDump) Size() (size int) {
 	if m == nil {

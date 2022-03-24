@@ -37,12 +37,10 @@ type Nat64AddDelInterface struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat64AddDelInterface) Reset()               { *m = Nat64AddDelInterface{} }
-func (*Nat64AddDelInterface) GetMessageName() string { return "nat64_add_del_interface" }
-func (*Nat64AddDelInterface) GetCrcString() string   { return "f3699b83" }
-func (*Nat64AddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64AddDelInterface) Reset()                        { *m = Nat64AddDelInterface{} }
+func (*Nat64AddDelInterface) GetMessageName() string          { return "nat64_add_del_interface" }
+func (*Nat64AddDelInterface) GetCrcString() string            { return "f3699b83" }
+func (*Nat64AddDelInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64AddDelInterface) Size() (size int) {
 	if m == nil {
@@ -77,12 +75,10 @@ type Nat64AddDelInterfaceAddr struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat64AddDelInterfaceAddr) Reset()               { *m = Nat64AddDelInterfaceAddr{} }
-func (*Nat64AddDelInterfaceAddr) GetMessageName() string { return "nat64_add_del_interface_addr" }
-func (*Nat64AddDelInterfaceAddr) GetCrcString() string   { return "47d6e753" }
-func (*Nat64AddDelInterfaceAddr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64AddDelInterfaceAddr) Reset()                        { *m = Nat64AddDelInterfaceAddr{} }
+func (*Nat64AddDelInterfaceAddr) GetMessageName() string          { return "nat64_add_del_interface_addr" }
+func (*Nat64AddDelInterfaceAddr) GetCrcString() string            { return "47d6e753" }
+func (*Nat64AddDelInterfaceAddr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64AddDelInterfaceAddr) Size() (size int) {
 	if m == nil {
@@ -117,9 +113,10 @@ func (m *Nat64AddDelInterfaceAddrReply) Reset() { *m = Nat64AddDelInterfaceAddrR
 func (*Nat64AddDelInterfaceAddrReply) GetMessageName() string {
 	return "nat64_add_del_interface_addr_reply"
 }
-func (*Nat64AddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat64AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Nat64AddDelInterfaceAddrReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64AddDelInterfaceAddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64AddDelInterfaceAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelInterfaceAddrReply) Size() (size int) {
@@ -148,11 +145,12 @@ type Nat64AddDelInterfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat64AddDelInterfaceReply) Reset()               { *m = Nat64AddDelInterfaceReply{} }
-func (*Nat64AddDelInterfaceReply) GetMessageName() string { return "nat64_add_del_interface_reply" }
-func (*Nat64AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat64AddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64AddDelInterfaceReply) Reset()                        { *m = Nat64AddDelInterfaceReply{} }
+func (*Nat64AddDelInterfaceReply) GetMessageName() string          { return "nat64_add_del_interface_reply" }
+func (*Nat64AddDelInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64AddDelInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64AddDelInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelInterfaceReply) Size() (size int) {
@@ -184,12 +182,10 @@ type Nat64AddDelPoolAddrRange struct {
 	IsAdd     bool                `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *Nat64AddDelPoolAddrRange) Reset()               { *m = Nat64AddDelPoolAddrRange{} }
-func (*Nat64AddDelPoolAddrRange) GetMessageName() string { return "nat64_add_del_pool_addr_range" }
-func (*Nat64AddDelPoolAddrRange) GetCrcString() string   { return "a3b944e3" }
-func (*Nat64AddDelPoolAddrRange) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64AddDelPoolAddrRange) Reset()                        { *m = Nat64AddDelPoolAddrRange{} }
+func (*Nat64AddDelPoolAddrRange) GetMessageName() string          { return "nat64_add_del_pool_addr_range" }
+func (*Nat64AddDelPoolAddrRange) GetCrcString() string            { return "a3b944e3" }
+func (*Nat64AddDelPoolAddrRange) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64AddDelPoolAddrRange) Size() (size int) {
 	if m == nil {
@@ -230,9 +226,10 @@ func (m *Nat64AddDelPoolAddrRangeReply) Reset() { *m = Nat64AddDelPoolAddrRangeR
 func (*Nat64AddDelPoolAddrRangeReply) GetMessageName() string {
 	return "nat64_add_del_pool_addr_range_reply"
 }
-func (*Nat64AddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat64AddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Nat64AddDelPoolAddrRangeReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64AddDelPoolAddrRangeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64AddDelPoolAddrRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelPoolAddrRangeReply) Size() (size int) {
@@ -263,12 +260,10 @@ type Nat64AddDelPrefix struct {
 	IsAdd  bool               `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *Nat64AddDelPrefix) Reset()               { *m = Nat64AddDelPrefix{} }
-func (*Nat64AddDelPrefix) GetMessageName() string { return "nat64_add_del_prefix" }
-func (*Nat64AddDelPrefix) GetCrcString() string   { return "727b2f4c" }
-func (*Nat64AddDelPrefix) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64AddDelPrefix) Reset()                        { *m = Nat64AddDelPrefix{} }
+func (*Nat64AddDelPrefix) GetMessageName() string          { return "nat64_add_del_prefix" }
+func (*Nat64AddDelPrefix) GetCrcString() string            { return "727b2f4c" }
+func (*Nat64AddDelPrefix) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64AddDelPrefix) Size() (size int) {
 	if m == nil {
@@ -305,11 +300,12 @@ type Nat64AddDelPrefixReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat64AddDelPrefixReply) Reset()               { *m = Nat64AddDelPrefixReply{} }
-func (*Nat64AddDelPrefixReply) GetMessageName() string { return "nat64_add_del_prefix_reply" }
-func (*Nat64AddDelPrefixReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat64AddDelPrefixReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64AddDelPrefixReply) Reset()                        { *m = Nat64AddDelPrefixReply{} }
+func (*Nat64AddDelPrefixReply) GetMessageName() string          { return "nat64_add_del_prefix_reply" }
+func (*Nat64AddDelPrefixReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64AddDelPrefixReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64AddDelPrefixReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelPrefixReply) Size() (size int) {
@@ -344,12 +340,10 @@ type Nat64AddDelStaticBib struct {
 	IsAdd bool                `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *Nat64AddDelStaticBib) Reset()               { *m = Nat64AddDelStaticBib{} }
-func (*Nat64AddDelStaticBib) GetMessageName() string { return "nat64_add_del_static_bib" }
-func (*Nat64AddDelStaticBib) GetCrcString() string   { return "1c404de5" }
-func (*Nat64AddDelStaticBib) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64AddDelStaticBib) Reset()                        { *m = Nat64AddDelStaticBib{} }
+func (*Nat64AddDelStaticBib) GetMessageName() string          { return "nat64_add_del_static_bib" }
+func (*Nat64AddDelStaticBib) GetCrcString() string            { return "1c404de5" }
+func (*Nat64AddDelStaticBib) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64AddDelStaticBib) Size() (size int) {
 	if m == nil {
@@ -395,11 +389,12 @@ type Nat64AddDelStaticBibReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat64AddDelStaticBibReply) Reset()               { *m = Nat64AddDelStaticBibReply{} }
-func (*Nat64AddDelStaticBibReply) GetMessageName() string { return "nat64_add_del_static_bib_reply" }
-func (*Nat64AddDelStaticBibReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat64AddDelStaticBibReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64AddDelStaticBibReply) Reset()                        { *m = Nat64AddDelStaticBibReply{} }
+func (*Nat64AddDelStaticBibReply) GetMessageName() string          { return "nat64_add_del_static_bib_reply" }
+func (*Nat64AddDelStaticBibReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64AddDelStaticBibReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64AddDelStaticBibReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64AddDelStaticBibReply) Size() (size int) {
@@ -435,11 +430,12 @@ type Nat64BibDetails struct {
 	SesNum uint32                   `binapi:"u32,name=ses_num" json:"ses_num,omitempty"`
 }
 
-func (m *Nat64BibDetails) Reset()               { *m = Nat64BibDetails{} }
-func (*Nat64BibDetails) GetMessageName() string { return "nat64_bib_details" }
-func (*Nat64BibDetails) GetCrcString() string   { return "43bc3ddf" }
-func (*Nat64BibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64BibDetails) Reset()                        { *m = Nat64BibDetails{} }
+func (*Nat64BibDetails) GetMessageName() string          { return "nat64_bib_details" }
+func (*Nat64BibDetails) GetCrcString() string            { return "43bc3ddf" }
+func (*Nat64BibDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64BibDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64BibDetails) Size() (size int) {
@@ -489,12 +485,10 @@ type Nat64BibDump struct {
 	Proto uint8 `binapi:"u8,name=proto" json:"proto,omitempty"`
 }
 
-func (m *Nat64BibDump) Reset()               { *m = Nat64BibDump{} }
-func (*Nat64BibDump) GetMessageName() string { return "nat64_bib_dump" }
-func (*Nat64BibDump) GetCrcString() string   { return "cfcb6b75" }
-func (*Nat64BibDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64BibDump) Reset()                        { *m = Nat64BibDump{} }
+func (*Nat64BibDump) GetMessageName() string          { return "nat64_bib_dump" }
+func (*Nat64BibDump) GetCrcString() string            { return "cfcb6b75" }
+func (*Nat64BibDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64BibDump) Size() (size int) {
 	if m == nil {
@@ -520,12 +514,10 @@ func (m *Nat64BibDump) Unmarshal(b []byte) error {
 // Nat64GetTimeouts defines message 'nat64_get_timeouts'.
 type Nat64GetTimeouts struct{}
 
-func (m *Nat64GetTimeouts) Reset()               { *m = Nat64GetTimeouts{} }
-func (*Nat64GetTimeouts) GetMessageName() string { return "nat64_get_timeouts" }
-func (*Nat64GetTimeouts) GetCrcString() string   { return "51077d14" }
-func (*Nat64GetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64GetTimeouts) Reset()                        { *m = Nat64GetTimeouts{} }
+func (*Nat64GetTimeouts) GetMessageName() string          { return "nat64_get_timeouts" }
+func (*Nat64GetTimeouts) GetCrcString() string            { return "51077d14" }
+func (*Nat64GetTimeouts) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64GetTimeouts) Size() (size int) {
 	if m == nil {
@@ -553,11 +545,12 @@ type Nat64GetTimeoutsReply struct {
 	ICMP           uint32 `binapi:"u32,name=icmp" json:"icmp,omitempty"`
 }
 
-func (m *Nat64GetTimeoutsReply) Reset()               { *m = Nat64GetTimeoutsReply{} }
-func (*Nat64GetTimeoutsReply) GetMessageName() string { return "nat64_get_timeouts_reply" }
-func (*Nat64GetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
-func (*Nat64GetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64GetTimeoutsReply) Reset()                        { *m = Nat64GetTimeoutsReply{} }
+func (*Nat64GetTimeoutsReply) GetMessageName() string          { return "nat64_get_timeouts_reply" }
+func (*Nat64GetTimeoutsReply) GetCrcString() string            { return "3c4df4e1" }
+func (*Nat64GetTimeoutsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64GetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64GetTimeoutsReply) Size() (size int) {
@@ -599,11 +592,12 @@ type Nat64InterfaceDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Nat64InterfaceDetails) Reset()               { *m = Nat64InterfaceDetails{} }
-func (*Nat64InterfaceDetails) GetMessageName() string { return "nat64_interface_details" }
-func (*Nat64InterfaceDetails) GetCrcString() string   { return "5d286289" }
-func (*Nat64InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64InterfaceDetails) Reset()                        { *m = Nat64InterfaceDetails{} }
+func (*Nat64InterfaceDetails) GetMessageName() string          { return "nat64_interface_details" }
+func (*Nat64InterfaceDetails) GetCrcString() string            { return "5d286289" }
+func (*Nat64InterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64InterfaceDetails) Size() (size int) {
@@ -633,12 +627,10 @@ func (m *Nat64InterfaceDetails) Unmarshal(b []byte) error {
 // Nat64InterfaceDump defines message 'nat64_interface_dump'.
 type Nat64InterfaceDump struct{}
 
-func (m *Nat64InterfaceDump) Reset()               { *m = Nat64InterfaceDump{} }
-func (*Nat64InterfaceDump) GetMessageName() string { return "nat64_interface_dump" }
-func (*Nat64InterfaceDump) GetCrcString() string   { return "51077d14" }
-func (*Nat64InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64InterfaceDump) Reset()                        { *m = Nat64InterfaceDump{} }
+func (*Nat64InterfaceDump) GetMessageName() string          { return "nat64_interface_dump" }
+func (*Nat64InterfaceDump) GetCrcString() string            { return "51077d14" }
+func (*Nat64InterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64InterfaceDump) Size() (size int) {
 	if m == nil {
@@ -667,12 +659,10 @@ type Nat64PluginEnableDisable struct {
 	Enable        bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Nat64PluginEnableDisable) Reset()               { *m = Nat64PluginEnableDisable{} }
-func (*Nat64PluginEnableDisable) GetMessageName() string { return "nat64_plugin_enable_disable" }
-func (*Nat64PluginEnableDisable) GetCrcString() string   { return "45948b90" }
-func (*Nat64PluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64PluginEnableDisable) Reset()                        { *m = Nat64PluginEnableDisable{} }
+func (*Nat64PluginEnableDisable) GetMessageName() string          { return "nat64_plugin_enable_disable" }
+func (*Nat64PluginEnableDisable) GetCrcString() string            { return "45948b90" }
+func (*Nat64PluginEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64PluginEnableDisable) Size() (size int) {
 	if m == nil {
@@ -717,9 +707,10 @@ func (m *Nat64PluginEnableDisableReply) Reset() { *m = Nat64PluginEnableDisableR
 func (*Nat64PluginEnableDisableReply) GetMessageName() string {
 	return "nat64_plugin_enable_disable_reply"
 }
-func (*Nat64PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*Nat64PluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Nat64PluginEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64PluginEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64PluginEnableDisableReply) Size() (size int) {
@@ -749,11 +740,12 @@ type Nat64PoolAddrDetails struct {
 	VrfID   uint32              `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
-func (m *Nat64PoolAddrDetails) Reset()               { *m = Nat64PoolAddrDetails{} }
-func (*Nat64PoolAddrDetails) GetMessageName() string { return "nat64_pool_addr_details" }
-func (*Nat64PoolAddrDetails) GetCrcString() string   { return "9bb99cdb" }
-func (*Nat64PoolAddrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64PoolAddrDetails) Reset()                        { *m = Nat64PoolAddrDetails{} }
+func (*Nat64PoolAddrDetails) GetMessageName() string          { return "nat64_pool_addr_details" }
+func (*Nat64PoolAddrDetails) GetCrcString() string            { return "9bb99cdb" }
+func (*Nat64PoolAddrDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64PoolAddrDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64PoolAddrDetails) Size() (size int) {
@@ -783,12 +775,10 @@ func (m *Nat64PoolAddrDetails) Unmarshal(b []byte) error {
 // Nat64PoolAddrDump defines message 'nat64_pool_addr_dump'.
 type Nat64PoolAddrDump struct{}
 
-func (m *Nat64PoolAddrDump) Reset()               { *m = Nat64PoolAddrDump{} }
-func (*Nat64PoolAddrDump) GetMessageName() string { return "nat64_pool_addr_dump" }
-func (*Nat64PoolAddrDump) GetCrcString() string   { return "51077d14" }
-func (*Nat64PoolAddrDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64PoolAddrDump) Reset()                        { *m = Nat64PoolAddrDump{} }
+func (*Nat64PoolAddrDump) GetMessageName() string          { return "nat64_pool_addr_dump" }
+func (*Nat64PoolAddrDump) GetCrcString() string            { return "51077d14" }
+func (*Nat64PoolAddrDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64PoolAddrDump) Size() (size int) {
 	if m == nil {
@@ -813,11 +803,12 @@ type Nat64PrefixDetails struct {
 	VrfID  uint32             `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`
 }
 
-func (m *Nat64PrefixDetails) Reset()               { *m = Nat64PrefixDetails{} }
-func (*Nat64PrefixDetails) GetMessageName() string { return "nat64_prefix_details" }
-func (*Nat64PrefixDetails) GetCrcString() string   { return "20568de3" }
-func (*Nat64PrefixDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64PrefixDetails) Reset()                        { *m = Nat64PrefixDetails{} }
+func (*Nat64PrefixDetails) GetMessageName() string          { return "nat64_prefix_details" }
+func (*Nat64PrefixDetails) GetCrcString() string            { return "20568de3" }
+func (*Nat64PrefixDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64PrefixDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64PrefixDetails) Size() (size int) {
@@ -850,12 +841,10 @@ func (m *Nat64PrefixDetails) Unmarshal(b []byte) error {
 // Nat64PrefixDump defines message 'nat64_prefix_dump'.
 type Nat64PrefixDump struct{}
 
-func (m *Nat64PrefixDump) Reset()               { *m = Nat64PrefixDump{} }
-func (*Nat64PrefixDump) GetMessageName() string { return "nat64_prefix_dump" }
-func (*Nat64PrefixDump) GetCrcString() string   { return "51077d14" }
-func (*Nat64PrefixDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64PrefixDump) Reset()                        { *m = Nat64PrefixDump{} }
+func (*Nat64PrefixDump) GetMessageName() string          { return "nat64_prefix_dump" }
+func (*Nat64PrefixDump) GetCrcString() string            { return "51077d14" }
+func (*Nat64PrefixDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64PrefixDump) Size() (size int) {
 	if m == nil {
@@ -882,12 +871,10 @@ type Nat64SetTimeouts struct {
 	ICMP           uint32 `binapi:"u32,name=icmp" json:"icmp,omitempty"`
 }
 
-func (m *Nat64SetTimeouts) Reset()               { *m = Nat64SetTimeouts{} }
-func (*Nat64SetTimeouts) GetMessageName() string { return "nat64_set_timeouts" }
-func (*Nat64SetTimeouts) GetCrcString() string   { return "d4746b16" }
-func (*Nat64SetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64SetTimeouts) Reset()                        { *m = Nat64SetTimeouts{} }
+func (*Nat64SetTimeouts) GetMessageName() string          { return "nat64_set_timeouts" }
+func (*Nat64SetTimeouts) GetCrcString() string            { return "d4746b16" }
+func (*Nat64SetTimeouts) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64SetTimeouts) Size() (size int) {
 	if m == nil {
@@ -924,11 +911,12 @@ type Nat64SetTimeoutsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Nat64SetTimeoutsReply) Reset()               { *m = Nat64SetTimeoutsReply{} }
-func (*Nat64SetTimeoutsReply) GetMessageName() string { return "nat64_set_timeouts_reply" }
-func (*Nat64SetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Nat64SetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64SetTimeoutsReply) Reset()                        { *m = Nat64SetTimeoutsReply{} }
+func (*Nat64SetTimeoutsReply) GetMessageName() string          { return "nat64_set_timeouts_reply" }
+func (*Nat64SetTimeoutsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Nat64SetTimeoutsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64SetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Nat64SetTimeoutsReply) Size() (size int) {
@@ -965,11 +953,12 @@ type Nat64StDetails struct {
 	Proto  uint8               `binapi:"u8,name=proto" json:"proto,omitempty"`
 }
 
-func (m *Nat64StDetails) Reset()               { *m = Nat64StDetails{} }
-func (*Nat64StDetails) GetMessageName() string { return "nat64_st_details" }
-func (*Nat64StDetails) GetCrcString() string   { return "dd3361ed" }
-func (*Nat64StDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Nat64StDetails) Reset()                        { *m = Nat64StDetails{} }
+func (*Nat64StDetails) GetMessageName() string          { return "nat64_st_details" }
+func (*Nat64StDetails) GetCrcString() string            { return "dd3361ed" }
+func (*Nat64StDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Nat64StDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Nat64StDetails) Size() (size int) {
@@ -1022,12 +1011,10 @@ type Nat64StDump struct {
 	Proto uint8 `binapi:"u8,name=proto" json:"proto,omitempty"`
 }
 
-func (m *Nat64StDump) Reset()               { *m = Nat64StDump{} }
-func (*Nat64StDump) GetMessageName() string { return "nat64_st_dump" }
-func (*Nat64StDump) GetCrcString() string   { return "cfcb6b75" }
-func (*Nat64StDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Nat64StDump) Reset()                        { *m = Nat64StDump{} }
+func (*Nat64StDump) GetMessageName() string          { return "nat64_st_dump" }
+func (*Nat64StDump) GetCrcString() string            { return "cfcb6b75" }
+func (*Nat64StDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Nat64StDump) Size() (size int) {
 	if m == nil {

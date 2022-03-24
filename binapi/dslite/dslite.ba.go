@@ -36,12 +36,10 @@ type DsliteAddDelPoolAddrRange struct {
 	IsAdd     bool                `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *DsliteAddDelPoolAddrRange) Reset()               { *m = DsliteAddDelPoolAddrRange{} }
-func (*DsliteAddDelPoolAddrRange) GetMessageName() string { return "dslite_add_del_pool_addr_range" }
-func (*DsliteAddDelPoolAddrRange) GetCrcString() string   { return "de2a5b02" }
-func (*DsliteAddDelPoolAddrRange) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteAddDelPoolAddrRange) Reset()                        { *m = DsliteAddDelPoolAddrRange{} }
+func (*DsliteAddDelPoolAddrRange) GetMessageName() string          { return "dslite_add_del_pool_addr_range" }
+func (*DsliteAddDelPoolAddrRange) GetCrcString() string            { return "de2a5b02" }
+func (*DsliteAddDelPoolAddrRange) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteAddDelPoolAddrRange) Size() (size int) {
 	if m == nil {
@@ -79,9 +77,10 @@ func (m *DsliteAddDelPoolAddrRangeReply) Reset() { *m = DsliteAddDelPoolAddrRang
 func (*DsliteAddDelPoolAddrRangeReply) GetMessageName() string {
 	return "dslite_add_del_pool_addr_range_reply"
 }
-func (*DsliteAddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804" }
-func (*DsliteAddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*DsliteAddDelPoolAddrRangeReply) GetCrcString() string            { return "e8d4e804" }
+func (*DsliteAddDelPoolAddrRangeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteAddDelPoolAddrRangeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteAddDelPoolAddrRangeReply) Size() (size int) {
@@ -110,11 +109,12 @@ type DsliteAddressDetails struct {
 	IPAddress ip_types.IP4Address `binapi:"ip4_address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *DsliteAddressDetails) Reset()               { *m = DsliteAddressDetails{} }
-func (*DsliteAddressDetails) GetMessageName() string { return "dslite_address_details" }
-func (*DsliteAddressDetails) GetCrcString() string   { return "ec26d648" }
-func (*DsliteAddressDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *DsliteAddressDetails) Reset()                        { *m = DsliteAddressDetails{} }
+func (*DsliteAddressDetails) GetMessageName() string          { return "dslite_address_details" }
+func (*DsliteAddressDetails) GetCrcString() string            { return "ec26d648" }
+func (*DsliteAddressDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteAddressDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *DsliteAddressDetails) Size() (size int) {
@@ -141,12 +141,10 @@ func (m *DsliteAddressDetails) Unmarshal(b []byte) error {
 // DsliteAddressDump defines message 'dslite_address_dump'.
 type DsliteAddressDump struct{}
 
-func (m *DsliteAddressDump) Reset()               { *m = DsliteAddressDump{} }
-func (*DsliteAddressDump) GetMessageName() string { return "dslite_address_dump" }
-func (*DsliteAddressDump) GetCrcString() string   { return "51077d14" }
-func (*DsliteAddressDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteAddressDump) Reset()                        { *m = DsliteAddressDump{} }
+func (*DsliteAddressDump) GetMessageName() string          { return "dslite_address_dump" }
+func (*DsliteAddressDump) GetCrcString() string            { return "51077d14" }
+func (*DsliteAddressDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteAddressDump) Size() (size int) {
 	if m == nil {
@@ -168,12 +166,10 @@ func (m *DsliteAddressDump) Unmarshal(b []byte) error {
 // DsliteGetAftrAddr defines message 'dslite_get_aftr_addr'.
 type DsliteGetAftrAddr struct{}
 
-func (m *DsliteGetAftrAddr) Reset()               { *m = DsliteGetAftrAddr{} }
-func (*DsliteGetAftrAddr) GetMessageName() string { return "dslite_get_aftr_addr" }
-func (*DsliteGetAftrAddr) GetCrcString() string   { return "51077d14" }
-func (*DsliteGetAftrAddr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteGetAftrAddr) Reset()                        { *m = DsliteGetAftrAddr{} }
+func (*DsliteGetAftrAddr) GetMessageName() string          { return "dslite_get_aftr_addr" }
+func (*DsliteGetAftrAddr) GetCrcString() string            { return "51077d14" }
+func (*DsliteGetAftrAddr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteGetAftrAddr) Size() (size int) {
 	if m == nil {
@@ -199,11 +195,12 @@ type DsliteGetAftrAddrReply struct {
 	IP6Addr ip_types.IP6Address `binapi:"ip6_address,name=ip6_addr" json:"ip6_addr,omitempty"`
 }
 
-func (m *DsliteGetAftrAddrReply) Reset()               { *m = DsliteGetAftrAddrReply{} }
-func (*DsliteGetAftrAddrReply) GetMessageName() string { return "dslite_get_aftr_addr_reply" }
-func (*DsliteGetAftrAddrReply) GetCrcString() string   { return "8e23608e" }
-func (*DsliteGetAftrAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *DsliteGetAftrAddrReply) Reset()                        { *m = DsliteGetAftrAddrReply{} }
+func (*DsliteGetAftrAddrReply) GetMessageName() string          { return "dslite_get_aftr_addr_reply" }
+func (*DsliteGetAftrAddrReply) GetCrcString() string            { return "8e23608e" }
+func (*DsliteGetAftrAddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteGetAftrAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteGetAftrAddrReply) Size() (size int) {
@@ -236,12 +233,10 @@ func (m *DsliteGetAftrAddrReply) Unmarshal(b []byte) error {
 // DsliteGetB4Addr defines message 'dslite_get_b4_addr'.
 type DsliteGetB4Addr struct{}
 
-func (m *DsliteGetB4Addr) Reset()               { *m = DsliteGetB4Addr{} }
-func (*DsliteGetB4Addr) GetMessageName() string { return "dslite_get_b4_addr" }
-func (*DsliteGetB4Addr) GetCrcString() string   { return "51077d14" }
-func (*DsliteGetB4Addr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteGetB4Addr) Reset()                        { *m = DsliteGetB4Addr{} }
+func (*DsliteGetB4Addr) GetMessageName() string          { return "dslite_get_b4_addr" }
+func (*DsliteGetB4Addr) GetCrcString() string            { return "51077d14" }
+func (*DsliteGetB4Addr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteGetB4Addr) Size() (size int) {
 	if m == nil {
@@ -267,11 +262,12 @@ type DsliteGetB4AddrReply struct {
 	IP6Addr ip_types.IP6Address `binapi:"ip6_address,name=ip6_addr" json:"ip6_addr,omitempty"`
 }
 
-func (m *DsliteGetB4AddrReply) Reset()               { *m = DsliteGetB4AddrReply{} }
-func (*DsliteGetB4AddrReply) GetMessageName() string { return "dslite_get_b4_addr_reply" }
-func (*DsliteGetB4AddrReply) GetCrcString() string   { return "8e23608e" }
-func (*DsliteGetB4AddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *DsliteGetB4AddrReply) Reset()                        { *m = DsliteGetB4AddrReply{} }
+func (*DsliteGetB4AddrReply) GetMessageName() string          { return "dslite_get_b4_addr_reply" }
+func (*DsliteGetB4AddrReply) GetCrcString() string            { return "8e23608e" }
+func (*DsliteGetB4AddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteGetB4AddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteGetB4AddrReply) Size() (size int) {
@@ -307,12 +303,10 @@ type DsliteSetAftrAddr struct {
 	IP6Addr ip_types.IP6Address `binapi:"ip6_address,name=ip6_addr" json:"ip6_addr,omitempty"`
 }
 
-func (m *DsliteSetAftrAddr) Reset()               { *m = DsliteSetAftrAddr{} }
-func (*DsliteSetAftrAddr) GetMessageName() string { return "dslite_set_aftr_addr" }
-func (*DsliteSetAftrAddr) GetCrcString() string   { return "78b50fdf" }
-func (*DsliteSetAftrAddr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteSetAftrAddr) Reset()                        { *m = DsliteSetAftrAddr{} }
+func (*DsliteSetAftrAddr) GetMessageName() string          { return "dslite_set_aftr_addr" }
+func (*DsliteSetAftrAddr) GetCrcString() string            { return "78b50fdf" }
+func (*DsliteSetAftrAddr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteSetAftrAddr) Size() (size int) {
 	if m == nil {
@@ -343,11 +337,12 @@ type DsliteSetAftrAddrReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *DsliteSetAftrAddrReply) Reset()               { *m = DsliteSetAftrAddrReply{} }
-func (*DsliteSetAftrAddrReply) GetMessageName() string { return "dslite_set_aftr_addr_reply" }
-func (*DsliteSetAftrAddrReply) GetCrcString() string   { return "e8d4e804" }
-func (*DsliteSetAftrAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *DsliteSetAftrAddrReply) Reset()                        { *m = DsliteSetAftrAddrReply{} }
+func (*DsliteSetAftrAddrReply) GetMessageName() string          { return "dslite_set_aftr_addr_reply" }
+func (*DsliteSetAftrAddrReply) GetCrcString() string            { return "e8d4e804" }
+func (*DsliteSetAftrAddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteSetAftrAddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteSetAftrAddrReply) Size() (size int) {
@@ -377,12 +372,10 @@ type DsliteSetB4Addr struct {
 	IP6Addr ip_types.IP6Address `binapi:"ip6_address,name=ip6_addr" json:"ip6_addr,omitempty"`
 }
 
-func (m *DsliteSetB4Addr) Reset()               { *m = DsliteSetB4Addr{} }
-func (*DsliteSetB4Addr) GetMessageName() string { return "dslite_set_b4_addr" }
-func (*DsliteSetB4Addr) GetCrcString() string   { return "78b50fdf" }
-func (*DsliteSetB4Addr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *DsliteSetB4Addr) Reset()                        { *m = DsliteSetB4Addr{} }
+func (*DsliteSetB4Addr) GetMessageName() string          { return "dslite_set_b4_addr" }
+func (*DsliteSetB4Addr) GetCrcString() string            { return "78b50fdf" }
+func (*DsliteSetB4Addr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *DsliteSetB4Addr) Size() (size int) {
 	if m == nil {
@@ -413,11 +406,12 @@ type DsliteSetB4AddrReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *DsliteSetB4AddrReply) Reset()               { *m = DsliteSetB4AddrReply{} }
-func (*DsliteSetB4AddrReply) GetMessageName() string { return "dslite_set_b4_addr_reply" }
-func (*DsliteSetB4AddrReply) GetCrcString() string   { return "e8d4e804" }
-func (*DsliteSetB4AddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *DsliteSetB4AddrReply) Reset()                        { *m = DsliteSetB4AddrReply{} }
+func (*DsliteSetB4AddrReply) GetMessageName() string          { return "dslite_set_b4_addr_reply" }
+func (*DsliteSetB4AddrReply) GetCrcString() string            { return "e8d4e804" }
+func (*DsliteSetB4AddrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *DsliteSetB4AddrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *DsliteSetB4AddrReply) Size() (size int) {

@@ -183,12 +183,10 @@ type BdIPMacAddDel struct {
 	Entry BdIPMac `binapi:"bd_ip_mac,name=entry" json:"entry,omitempty"`
 }
 
-func (m *BdIPMacAddDel) Reset()               { *m = BdIPMacAddDel{} }
-func (*BdIPMacAddDel) GetMessageName() string { return "bd_ip_mac_add_del" }
-func (*BdIPMacAddDel) GetCrcString() string   { return "0257c869" }
-func (*BdIPMacAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BdIPMacAddDel) Reset()                        { *m = BdIPMacAddDel{} }
+func (*BdIPMacAddDel) GetMessageName() string          { return "bd_ip_mac_add_del" }
+func (*BdIPMacAddDel) GetCrcString() string            { return "0257c869" }
+func (*BdIPMacAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BdIPMacAddDel) Size() (size int) {
 	if m == nil {
@@ -228,11 +226,12 @@ type BdIPMacAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BdIPMacAddDelReply) Reset()               { *m = BdIPMacAddDelReply{} }
-func (*BdIPMacAddDelReply) GetMessageName() string { return "bd_ip_mac_add_del_reply" }
-func (*BdIPMacAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BdIPMacAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BdIPMacAddDelReply) Reset()                        { *m = BdIPMacAddDelReply{} }
+func (*BdIPMacAddDelReply) GetMessageName() string          { return "bd_ip_mac_add_del_reply" }
+func (*BdIPMacAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BdIPMacAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BdIPMacAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BdIPMacAddDelReply) Size() (size int) {
@@ -261,11 +260,12 @@ type BdIPMacDetails struct {
 	Entry BdIPMac `binapi:"bd_ip_mac,name=entry" json:"entry,omitempty"`
 }
 
-func (m *BdIPMacDetails) Reset()               { *m = BdIPMacDetails{} }
-func (*BdIPMacDetails) GetMessageName() string { return "bd_ip_mac_details" }
-func (*BdIPMacDetails) GetCrcString() string   { return "545af86a" }
-func (*BdIPMacDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BdIPMacDetails) Reset()                        { *m = BdIPMacDetails{} }
+func (*BdIPMacDetails) GetMessageName() string          { return "bd_ip_mac_details" }
+func (*BdIPMacDetails) GetCrcString() string            { return "545af86a" }
+func (*BdIPMacDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BdIPMacDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BdIPMacDetails) Size() (size int) {
@@ -303,12 +303,10 @@ type BdIPMacDump struct {
 	BdID uint32 `binapi:"u32,name=bd_id" json:"bd_id,omitempty"`
 }
 
-func (m *BdIPMacDump) Reset()               { *m = BdIPMacDump{} }
-func (*BdIPMacDump) GetMessageName() string { return "bd_ip_mac_dump" }
-func (*BdIPMacDump) GetCrcString() string   { return "c25fdce6" }
-func (*BdIPMacDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BdIPMacDump) Reset()                        { *m = BdIPMacDump{} }
+func (*BdIPMacDump) GetMessageName() string          { return "bd_ip_mac_dump" }
+func (*BdIPMacDump) GetCrcString() string            { return "c25fdce6" }
+func (*BdIPMacDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BdIPMacDump) Size() (size int) {
 	if m == nil {
@@ -336,12 +334,10 @@ type BdIPMacFlush struct {
 	BdID uint32 `binapi:"u32,name=bd_id" json:"bd_id,omitempty"`
 }
 
-func (m *BdIPMacFlush) Reset()               { *m = BdIPMacFlush{} }
-func (*BdIPMacFlush) GetMessageName() string { return "bd_ip_mac_flush" }
-func (*BdIPMacFlush) GetCrcString() string   { return "c25fdce6" }
-func (*BdIPMacFlush) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BdIPMacFlush) Reset()                        { *m = BdIPMacFlush{} }
+func (*BdIPMacFlush) GetMessageName() string          { return "bd_ip_mac_flush" }
+func (*BdIPMacFlush) GetCrcString() string            { return "c25fdce6" }
+func (*BdIPMacFlush) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BdIPMacFlush) Size() (size int) {
 	if m == nil {
@@ -369,11 +365,12 @@ type BdIPMacFlushReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BdIPMacFlushReply) Reset()               { *m = BdIPMacFlushReply{} }
-func (*BdIPMacFlushReply) GetMessageName() string { return "bd_ip_mac_flush_reply" }
-func (*BdIPMacFlushReply) GetCrcString() string   { return "e8d4e804" }
-func (*BdIPMacFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BdIPMacFlushReply) Reset()                        { *m = BdIPMacFlushReply{} }
+func (*BdIPMacFlushReply) GetMessageName() string          { return "bd_ip_mac_flush_reply" }
+func (*BdIPMacFlushReply) GetCrcString() string            { return "e8d4e804" }
+func (*BdIPMacFlushReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BdIPMacFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BdIPMacFlushReply) Size() (size int) {
@@ -411,12 +408,10 @@ type BridgeDomainAddDel struct {
 	IsAdd   bool   `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *BridgeDomainAddDel) Reset()               { *m = BridgeDomainAddDel{} }
-func (*BridgeDomainAddDel) GetMessageName() string { return "bridge_domain_add_del" }
-func (*BridgeDomainAddDel) GetCrcString() string   { return "600b7170" }
-func (*BridgeDomainAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BridgeDomainAddDel) Reset()                        { *m = BridgeDomainAddDel{} }
+func (*BridgeDomainAddDel) GetMessageName() string          { return "bridge_domain_add_del" }
+func (*BridgeDomainAddDel) GetCrcString() string            { return "600b7170" }
+func (*BridgeDomainAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BridgeDomainAddDel) Size() (size int) {
 	if m == nil {
@@ -471,11 +466,12 @@ type BridgeDomainAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BridgeDomainAddDelReply) Reset()               { *m = BridgeDomainAddDelReply{} }
-func (*BridgeDomainAddDelReply) GetMessageName() string { return "bridge_domain_add_del_reply" }
-func (*BridgeDomainAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BridgeDomainAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BridgeDomainAddDelReply) Reset()                        { *m = BridgeDomainAddDelReply{} }
+func (*BridgeDomainAddDelReply) GetMessageName() string          { return "bridge_domain_add_del_reply" }
+func (*BridgeDomainAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BridgeDomainAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BridgeDomainAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BridgeDomainAddDelReply) Size() (size int) {
@@ -516,11 +512,12 @@ type BridgeDomainDetails struct {
 	SwIfDetails    []BridgeDomainSwIf             `binapi:"bridge_domain_sw_if[n_sw_ifs],name=sw_if_details" json:"sw_if_details,omitempty"`
 }
 
-func (m *BridgeDomainDetails) Reset()               { *m = BridgeDomainDetails{} }
-func (*BridgeDomainDetails) GetMessageName() string { return "bridge_domain_details" }
-func (*BridgeDomainDetails) GetCrcString() string   { return "0fa506fd" }
-func (*BridgeDomainDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BridgeDomainDetails) Reset()                        { *m = BridgeDomainDetails{} }
+func (*BridgeDomainDetails) GetMessageName() string          { return "bridge_domain_details" }
+func (*BridgeDomainDetails) GetCrcString() string            { return "0fa506fd" }
+func (*BridgeDomainDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BridgeDomainDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BridgeDomainDetails) Size() (size int) {
@@ -608,12 +605,10 @@ type BridgeDomainDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *BridgeDomainDump) Reset()               { *m = BridgeDomainDump{} }
-func (*BridgeDomainDump) GetMessageName() string { return "bridge_domain_dump" }
-func (*BridgeDomainDump) GetCrcString() string   { return "74396a43" }
-func (*BridgeDomainDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BridgeDomainDump) Reset()                        { *m = BridgeDomainDump{} }
+func (*BridgeDomainDump) GetMessageName() string          { return "bridge_domain_dump" }
+func (*BridgeDomainDump) GetCrcString() string            { return "74396a43" }
+func (*BridgeDomainDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BridgeDomainDump) Size() (size int) {
 	if m == nil {
@@ -687,6 +682,9 @@ func (*BridgeDomainSetDefaultLearnLimitReply) GetCrcString() string { return "e8
 func (*BridgeDomainSetDefaultLearnLimitReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *BridgeDomainSetDefaultLearnLimitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *BridgeDomainSetDefaultLearnLimitReply) Size() (size int) {
 	if m == nil {
@@ -715,12 +713,10 @@ type BridgeDomainSetLearnLimit struct {
 	LearnLimit uint32 `binapi:"u32,name=learn_limit" json:"learn_limit,omitempty"`
 }
 
-func (m *BridgeDomainSetLearnLimit) Reset()               { *m = BridgeDomainSetLearnLimit{} }
-func (*BridgeDomainSetLearnLimit) GetMessageName() string { return "bridge_domain_set_learn_limit" }
-func (*BridgeDomainSetLearnLimit) GetCrcString() string   { return "89c52b5f" }
-func (*BridgeDomainSetLearnLimit) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BridgeDomainSetLearnLimit) Reset()                        { *m = BridgeDomainSetLearnLimit{} }
+func (*BridgeDomainSetLearnLimit) GetMessageName() string          { return "bridge_domain_set_learn_limit" }
+func (*BridgeDomainSetLearnLimit) GetCrcString() string            { return "89c52b5f" }
+func (*BridgeDomainSetLearnLimit) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BridgeDomainSetLearnLimit) Size() (size int) {
 	if m == nil {
@@ -755,9 +751,10 @@ func (m *BridgeDomainSetLearnLimitReply) Reset() { *m = BridgeDomainSetLearnLimi
 func (*BridgeDomainSetLearnLimitReply) GetMessageName() string {
 	return "bridge_domain_set_learn_limit_reply"
 }
-func (*BridgeDomainSetLearnLimitReply) GetCrcString() string { return "e8d4e804" }
-func (*BridgeDomainSetLearnLimitReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*BridgeDomainSetLearnLimitReply) GetCrcString() string            { return "e8d4e804" }
+func (*BridgeDomainSetLearnLimitReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BridgeDomainSetLearnLimitReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BridgeDomainSetLearnLimitReply) Size() (size int) {
@@ -787,12 +784,10 @@ type BridgeDomainSetMacAge struct {
 	MacAge uint8  `binapi:"u8,name=mac_age" json:"mac_age,omitempty"`
 }
 
-func (m *BridgeDomainSetMacAge) Reset()               { *m = BridgeDomainSetMacAge{} }
-func (*BridgeDomainSetMacAge) GetMessageName() string { return "bridge_domain_set_mac_age" }
-func (*BridgeDomainSetMacAge) GetCrcString() string   { return "b537ad7b" }
-func (*BridgeDomainSetMacAge) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BridgeDomainSetMacAge) Reset()                        { *m = BridgeDomainSetMacAge{} }
+func (*BridgeDomainSetMacAge) GetMessageName() string          { return "bridge_domain_set_mac_age" }
+func (*BridgeDomainSetMacAge) GetCrcString() string            { return "b537ad7b" }
+func (*BridgeDomainSetMacAge) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BridgeDomainSetMacAge) Size() (size int) {
 	if m == nil {
@@ -823,11 +818,12 @@ type BridgeDomainSetMacAgeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BridgeDomainSetMacAgeReply) Reset()               { *m = BridgeDomainSetMacAgeReply{} }
-func (*BridgeDomainSetMacAgeReply) GetMessageName() string { return "bridge_domain_set_mac_age_reply" }
-func (*BridgeDomainSetMacAgeReply) GetCrcString() string   { return "e8d4e804" }
-func (*BridgeDomainSetMacAgeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BridgeDomainSetMacAgeReply) Reset()                        { *m = BridgeDomainSetMacAgeReply{} }
+func (*BridgeDomainSetMacAgeReply) GetMessageName() string          { return "bridge_domain_set_mac_age_reply" }
+func (*BridgeDomainSetMacAgeReply) GetCrcString() string            { return "e8d4e804" }
+func (*BridgeDomainSetMacAgeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BridgeDomainSetMacAgeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BridgeDomainSetMacAgeReply) Size() (size int) {
@@ -858,12 +854,10 @@ type BridgeFlags struct {
 	Flags BdFlags `binapi:"bd_flags,name=flags" json:"flags,omitempty"`
 }
 
-func (m *BridgeFlags) Reset()               { *m = BridgeFlags{} }
-func (*BridgeFlags) GetMessageName() string { return "bridge_flags" }
-func (*BridgeFlags) GetCrcString() string   { return "1b0c5fbd" }
-func (*BridgeFlags) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BridgeFlags) Reset()                        { *m = BridgeFlags{} }
+func (*BridgeFlags) GetMessageName() string          { return "bridge_flags" }
+func (*BridgeFlags) GetCrcString() string            { return "1b0c5fbd" }
+func (*BridgeFlags) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BridgeFlags) Size() (size int) {
 	if m == nil {
@@ -898,11 +892,12 @@ type BridgeFlagsReply struct {
 	ResultingFeatureBitmap uint32 `binapi:"u32,name=resulting_feature_bitmap" json:"resulting_feature_bitmap,omitempty"`
 }
 
-func (m *BridgeFlagsReply) Reset()               { *m = BridgeFlagsReply{} }
-func (*BridgeFlagsReply) GetMessageName() string { return "bridge_flags_reply" }
-func (*BridgeFlagsReply) GetCrcString() string   { return "29b2a2b3" }
-func (*BridgeFlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BridgeFlagsReply) Reset()                        { *m = BridgeFlagsReply{} }
+func (*BridgeFlagsReply) GetMessageName() string          { return "bridge_flags_reply" }
+func (*BridgeFlagsReply) GetCrcString() string            { return "29b2a2b3" }
+func (*BridgeFlagsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BridgeFlagsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BridgeFlagsReply) Size() (size int) {
@@ -935,12 +930,10 @@ type BviCreate struct {
 	UserInstance uint32                    `binapi:"u32,name=user_instance,default=4294967295" json:"user_instance,omitempty"`
 }
 
-func (m *BviCreate) Reset()               { *m = BviCreate{} }
-func (*BviCreate) GetMessageName() string { return "bvi_create" }
-func (*BviCreate) GetCrcString() string   { return "f5398559" }
-func (*BviCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BviCreate) Reset()                        { *m = BviCreate{} }
+func (*BviCreate) GetMessageName() string          { return "bvi_create" }
+func (*BviCreate) GetCrcString() string            { return "f5398559" }
+func (*BviCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BviCreate) Size() (size int) {
 	if m == nil {
@@ -972,11 +965,12 @@ type BviCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BviCreateReply) Reset()               { *m = BviCreateReply{} }
-func (*BviCreateReply) GetMessageName() string { return "bvi_create_reply" }
-func (*BviCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*BviCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BviCreateReply) Reset()                        { *m = BviCreateReply{} }
+func (*BviCreateReply) GetMessageName() string          { return "bvi_create_reply" }
+func (*BviCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*BviCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BviCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BviCreateReply) Size() (size int) {
@@ -1008,12 +1002,10 @@ type BviDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BviDelete) Reset()               { *m = BviDelete{} }
-func (*BviDelete) GetMessageName() string { return "bvi_delete" }
-func (*BviDelete) GetCrcString() string   { return "f9e6675e" }
-func (*BviDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BviDelete) Reset()                        { *m = BviDelete{} }
+func (*BviDelete) GetMessageName() string          { return "bvi_delete" }
+func (*BviDelete) GetCrcString() string            { return "f9e6675e" }
+func (*BviDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BviDelete) Size() (size int) {
 	if m == nil {
@@ -1041,11 +1033,12 @@ type BviDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BviDeleteReply) Reset()               { *m = BviDeleteReply{} }
-func (*BviDeleteReply) GetMessageName() string { return "bvi_delete_reply" }
-func (*BviDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*BviDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BviDeleteReply) Reset()                        { *m = BviDeleteReply{} }
+func (*BviDeleteReply) GetMessageName() string          { return "bvi_delete_reply" }
+func (*BviDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*BviDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BviDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BviDeleteReply) Size() (size int) {
@@ -1077,11 +1070,12 @@ type L2ArpTermEvent struct {
 	Mac       ethernet_types.MacAddress      `binapi:"mac_address,name=mac" json:"mac,omitempty"`
 }
 
-func (m *L2ArpTermEvent) Reset()               { *m = L2ArpTermEvent{} }
-func (*L2ArpTermEvent) GetMessageName() string { return "l2_arp_term_event" }
-func (*L2ArpTermEvent) GetCrcString() string   { return "6963e07a" }
-func (*L2ArpTermEvent) GetMessageType() api.MessageType {
-	return api.EventMessageType
+func (m *L2ArpTermEvent) Reset()                        { *m = L2ArpTermEvent{} }
+func (*L2ArpTermEvent) GetMessageName() string          { return "l2_arp_term_event" }
+func (*L2ArpTermEvent) GetCrcString() string            { return "6963e07a" }
+func (*L2ArpTermEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *L2ArpTermEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *L2ArpTermEvent) Size() (size int) {
@@ -1120,12 +1114,10 @@ func (m *L2ArpTermEvent) Unmarshal(b []byte) error {
 // L2FibClearTable defines message 'l2_fib_clear_table'.
 type L2FibClearTable struct{}
 
-func (m *L2FibClearTable) Reset()               { *m = L2FibClearTable{} }
-func (*L2FibClearTable) GetMessageName() string { return "l2_fib_clear_table" }
-func (*L2FibClearTable) GetCrcString() string   { return "51077d14" }
-func (*L2FibClearTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2FibClearTable) Reset()                        { *m = L2FibClearTable{} }
+func (*L2FibClearTable) GetMessageName() string          { return "l2_fib_clear_table" }
+func (*L2FibClearTable) GetCrcString() string            { return "51077d14" }
+func (*L2FibClearTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2FibClearTable) Size() (size int) {
 	if m == nil {
@@ -1149,11 +1141,12 @@ type L2FibClearTableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2FibClearTableReply) Reset()               { *m = L2FibClearTableReply{} }
-func (*L2FibClearTableReply) GetMessageName() string { return "l2_fib_clear_table_reply" }
-func (*L2FibClearTableReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2FibClearTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2FibClearTableReply) Reset()                        { *m = L2FibClearTableReply{} }
+func (*L2FibClearTableReply) GetMessageName() string          { return "l2_fib_clear_table_reply" }
+func (*L2FibClearTableReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2FibClearTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2FibClearTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2FibClearTableReply) Size() (size int) {
@@ -1187,11 +1180,12 @@ type L2FibTableDetails struct {
 	BviMac    bool                           `binapi:"bool,name=bvi_mac" json:"bvi_mac,omitempty"`
 }
 
-func (m *L2FibTableDetails) Reset()               { *m = L2FibTableDetails{} }
-func (*L2FibTableDetails) GetMessageName() string { return "l2_fib_table_details" }
-func (*L2FibTableDetails) GetCrcString() string   { return "a44ef6b8" }
-func (*L2FibTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2FibTableDetails) Reset()                        { *m = L2FibTableDetails{} }
+func (*L2FibTableDetails) GetMessageName() string          { return "l2_fib_table_details" }
+func (*L2FibTableDetails) GetCrcString() string            { return "a44ef6b8" }
+func (*L2FibTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2FibTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *L2FibTableDetails) Size() (size int) {
@@ -1235,12 +1229,10 @@ type L2FibTableDump struct {
 	BdID uint32 `binapi:"u32,name=bd_id" json:"bd_id,omitempty"`
 }
 
-func (m *L2FibTableDump) Reset()               { *m = L2FibTableDump{} }
-func (*L2FibTableDump) GetMessageName() string { return "l2_fib_table_dump" }
-func (*L2FibTableDump) GetCrcString() string   { return "c25fdce6" }
-func (*L2FibTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2FibTableDump) Reset()                        { *m = L2FibTableDump{} }
+func (*L2FibTableDump) GetMessageName() string          { return "l2_fib_table_dump" }
+func (*L2FibTableDump) GetCrcString() string            { return "c25fdce6" }
+func (*L2FibTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2FibTableDump) Size() (size int) {
 	if m == nil {
@@ -1270,12 +1262,10 @@ type L2Flags struct {
 	FeatureBitmap uint32                         `binapi:"u32,name=feature_bitmap" json:"feature_bitmap,omitempty"`
 }
 
-func (m *L2Flags) Reset()               { *m = L2Flags{} }
-func (*L2Flags) GetMessageName() string { return "l2_flags" }
-func (*L2Flags) GetCrcString() string   { return "fc41cfe8" }
-func (*L2Flags) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2Flags) Reset()                        { *m = L2Flags{} }
+func (*L2Flags) GetMessageName() string          { return "l2_flags" }
+func (*L2Flags) GetCrcString() string            { return "fc41cfe8" }
+func (*L2Flags) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2Flags) Size() (size int) {
 	if m == nil {
@@ -1310,11 +1300,12 @@ type L2FlagsReply struct {
 	ResultingFeatureBitmap uint32 `binapi:"u32,name=resulting_feature_bitmap" json:"resulting_feature_bitmap,omitempty"`
 }
 
-func (m *L2FlagsReply) Reset()               { *m = L2FlagsReply{} }
-func (*L2FlagsReply) GetMessageName() string { return "l2_flags_reply" }
-func (*L2FlagsReply) GetCrcString() string   { return "29b2a2b3" }
-func (*L2FlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2FlagsReply) Reset()                        { *m = L2FlagsReply{} }
+func (*L2FlagsReply) GetMessageName() string          { return "l2_flags_reply" }
+func (*L2FlagsReply) GetCrcString() string            { return "29b2a2b3" }
+func (*L2FlagsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2FlagsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2FlagsReply) Size() (size int) {
@@ -1347,12 +1338,10 @@ type L2InterfaceEfpFilter struct {
 	EnableDisable bool                           `binapi:"bool,name=enable_disable,default=true" json:"enable_disable,omitempty"`
 }
 
-func (m *L2InterfaceEfpFilter) Reset()               { *m = L2InterfaceEfpFilter{} }
-func (*L2InterfaceEfpFilter) GetMessageName() string { return "l2_interface_efp_filter" }
-func (*L2InterfaceEfpFilter) GetCrcString() string   { return "5501adee" }
-func (*L2InterfaceEfpFilter) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2InterfaceEfpFilter) Reset()                        { *m = L2InterfaceEfpFilter{} }
+func (*L2InterfaceEfpFilter) GetMessageName() string          { return "l2_interface_efp_filter" }
+func (*L2InterfaceEfpFilter) GetCrcString() string            { return "5501adee" }
+func (*L2InterfaceEfpFilter) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2InterfaceEfpFilter) Size() (size int) {
 	if m == nil {
@@ -1383,11 +1372,12 @@ type L2InterfaceEfpFilterReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2InterfaceEfpFilterReply) Reset()               { *m = L2InterfaceEfpFilterReply{} }
-func (*L2InterfaceEfpFilterReply) GetMessageName() string { return "l2_interface_efp_filter_reply" }
-func (*L2InterfaceEfpFilterReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2InterfaceEfpFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2InterfaceEfpFilterReply) Reset()                        { *m = L2InterfaceEfpFilterReply{} }
+func (*L2InterfaceEfpFilterReply) GetMessageName() string          { return "l2_interface_efp_filter_reply" }
+func (*L2InterfaceEfpFilterReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2InterfaceEfpFilterReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2InterfaceEfpFilterReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2InterfaceEfpFilterReply) Size() (size int) {
@@ -1422,12 +1412,10 @@ type L2InterfacePbbTagRewrite struct {
 	ISid      uint32                         `binapi:"u32,name=i_sid" json:"i_sid,omitempty"`
 }
 
-func (m *L2InterfacePbbTagRewrite) Reset()               { *m = L2InterfacePbbTagRewrite{} }
-func (*L2InterfacePbbTagRewrite) GetMessageName() string { return "l2_interface_pbb_tag_rewrite" }
-func (*L2InterfacePbbTagRewrite) GetCrcString() string   { return "38e802a8" }
-func (*L2InterfacePbbTagRewrite) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2InterfacePbbTagRewrite) Reset()                        { *m = L2InterfacePbbTagRewrite{} }
+func (*L2InterfacePbbTagRewrite) GetMessageName() string          { return "l2_interface_pbb_tag_rewrite" }
+func (*L2InterfacePbbTagRewrite) GetCrcString() string            { return "38e802a8" }
+func (*L2InterfacePbbTagRewrite) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2InterfacePbbTagRewrite) Size() (size int) {
 	if m == nil {
@@ -1477,9 +1465,10 @@ func (m *L2InterfacePbbTagRewriteReply) Reset() { *m = L2InterfacePbbTagRewriteR
 func (*L2InterfacePbbTagRewriteReply) GetMessageName() string {
 	return "l2_interface_pbb_tag_rewrite_reply"
 }
-func (*L2InterfacePbbTagRewriteReply) GetCrcString() string { return "e8d4e804" }
-func (*L2InterfacePbbTagRewriteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*L2InterfacePbbTagRewriteReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2InterfacePbbTagRewriteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2InterfacePbbTagRewriteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2InterfacePbbTagRewriteReply) Size() (size int) {
@@ -1512,12 +1501,10 @@ type L2InterfaceVlanTagRewrite struct {
 	Tag2      uint32                         `binapi:"u32,name=tag2" json:"tag2,omitempty"`
 }
 
-func (m *L2InterfaceVlanTagRewrite) Reset()               { *m = L2InterfaceVlanTagRewrite{} }
-func (*L2InterfaceVlanTagRewrite) GetMessageName() string { return "l2_interface_vlan_tag_rewrite" }
-func (*L2InterfaceVlanTagRewrite) GetCrcString() string   { return "62cc0bbc" }
-func (*L2InterfaceVlanTagRewrite) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2InterfaceVlanTagRewrite) Reset()                        { *m = L2InterfaceVlanTagRewrite{} }
+func (*L2InterfaceVlanTagRewrite) GetMessageName() string          { return "l2_interface_vlan_tag_rewrite" }
+func (*L2InterfaceVlanTagRewrite) GetCrcString() string            { return "62cc0bbc" }
+func (*L2InterfaceVlanTagRewrite) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2InterfaceVlanTagRewrite) Size() (size int) {
 	if m == nil {
@@ -1561,9 +1548,10 @@ func (m *L2InterfaceVlanTagRewriteReply) Reset() { *m = L2InterfaceVlanTagRewrit
 func (*L2InterfaceVlanTagRewriteReply) GetMessageName() string {
 	return "l2_interface_vlan_tag_rewrite_reply"
 }
-func (*L2InterfaceVlanTagRewriteReply) GetCrcString() string { return "e8d4e804" }
-func (*L2InterfaceVlanTagRewriteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*L2InterfaceVlanTagRewriteReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2InterfaceVlanTagRewriteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2InterfaceVlanTagRewriteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2InterfaceVlanTagRewriteReply) Size() (size int) {
@@ -1594,11 +1582,12 @@ type L2MacsEvent struct {
 	Mac   []MacEntry `binapi:"mac_entry[n_macs],name=mac" json:"mac,omitempty"`
 }
 
-func (m *L2MacsEvent) Reset()               { *m = L2MacsEvent{} }
-func (*L2MacsEvent) GetMessageName() string { return "l2_macs_event" }
-func (*L2MacsEvent) GetCrcString() string   { return "44b8fd64" }
-func (*L2MacsEvent) GetMessageType() api.MessageType {
-	return api.EventMessageType
+func (m *L2MacsEvent) Reset()                        { *m = L2MacsEvent{} }
+func (*L2MacsEvent) GetMessageName() string          { return "l2_macs_event" }
+func (*L2MacsEvent) GetCrcString() string            { return "44b8fd64" }
+func (*L2MacsEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *L2MacsEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *L2MacsEvent) Size() (size int) {
@@ -1660,12 +1649,10 @@ type L2PatchAddDel struct {
 	IsAdd       bool                           `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *L2PatchAddDel) Reset()               { *m = L2PatchAddDel{} }
-func (*L2PatchAddDel) GetMessageName() string { return "l2_patch_add_del" }
-func (*L2PatchAddDel) GetCrcString() string   { return "a1f6a6f3" }
-func (*L2PatchAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2PatchAddDel) Reset()                        { *m = L2PatchAddDel{} }
+func (*L2PatchAddDel) GetMessageName() string          { return "l2_patch_add_del" }
+func (*L2PatchAddDel) GetCrcString() string            { return "a1f6a6f3" }
+func (*L2PatchAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2PatchAddDel) Size() (size int) {
 	if m == nil {
@@ -1699,11 +1686,12 @@ type L2PatchAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2PatchAddDelReply) Reset()               { *m = L2PatchAddDelReply{} }
-func (*L2PatchAddDelReply) GetMessageName() string { return "l2_patch_add_del_reply" }
-func (*L2PatchAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2PatchAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2PatchAddDelReply) Reset()                        { *m = L2PatchAddDelReply{} }
+func (*L2PatchAddDelReply) GetMessageName() string          { return "l2_patch_add_del_reply" }
+func (*L2PatchAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2PatchAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2PatchAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2PatchAddDelReply) Size() (size int) {
@@ -1733,11 +1721,12 @@ type L2XconnectDetails struct {
 	TxSwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=tx_sw_if_index" json:"tx_sw_if_index,omitempty"`
 }
 
-func (m *L2XconnectDetails) Reset()               { *m = L2XconnectDetails{} }
-func (*L2XconnectDetails) GetMessageName() string { return "l2_xconnect_details" }
-func (*L2XconnectDetails) GetCrcString() string   { return "472b6b67" }
-func (*L2XconnectDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2XconnectDetails) Reset()                        { *m = L2XconnectDetails{} }
+func (*L2XconnectDetails) GetMessageName() string          { return "l2_xconnect_details" }
+func (*L2XconnectDetails) GetCrcString() string            { return "472b6b67" }
+func (*L2XconnectDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2XconnectDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *L2XconnectDetails) Size() (size int) {
@@ -1767,12 +1756,10 @@ func (m *L2XconnectDetails) Unmarshal(b []byte) error {
 // L2XconnectDump defines message 'l2_xconnect_dump'.
 type L2XconnectDump struct{}
 
-func (m *L2XconnectDump) Reset()               { *m = L2XconnectDump{} }
-func (*L2XconnectDump) GetMessageName() string { return "l2_xconnect_dump" }
-func (*L2XconnectDump) GetCrcString() string   { return "51077d14" }
-func (*L2XconnectDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2XconnectDump) Reset()                        { *m = L2XconnectDump{} }
+func (*L2XconnectDump) GetMessageName() string          { return "l2_xconnect_dump" }
+func (*L2XconnectDump) GetCrcString() string            { return "51077d14" }
+func (*L2XconnectDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2XconnectDump) Size() (size int) {
 	if m == nil {
@@ -1802,12 +1789,10 @@ type L2fibAddDel struct {
 	BviMac    bool                           `binapi:"bool,name=bvi_mac" json:"bvi_mac,omitempty"`
 }
 
-func (m *L2fibAddDel) Reset()               { *m = L2fibAddDel{} }
-func (*L2fibAddDel) GetMessageName() string { return "l2fib_add_del" }
-func (*L2fibAddDel) GetCrcString() string   { return "eddda487" }
-func (*L2fibAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2fibAddDel) Reset()                        { *m = L2fibAddDel{} }
+func (*L2fibAddDel) GetMessageName() string          { return "l2fib_add_del" }
+func (*L2fibAddDel) GetCrcString() string            { return "eddda487" }
+func (*L2fibAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2fibAddDel) Size() (size int) {
 	if m == nil {
@@ -1853,11 +1838,12 @@ type L2fibAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2fibAddDelReply) Reset()               { *m = L2fibAddDelReply{} }
-func (*L2fibAddDelReply) GetMessageName() string { return "l2fib_add_del_reply" }
-func (*L2fibAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2fibAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2fibAddDelReply) Reset()                        { *m = L2fibAddDelReply{} }
+func (*L2fibAddDelReply) GetMessageName() string          { return "l2fib_add_del_reply" }
+func (*L2fibAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2fibAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2fibAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibAddDelReply) Size() (size int) {
@@ -1884,12 +1870,10 @@ func (m *L2fibAddDelReply) Unmarshal(b []byte) error {
 // L2fibFlushAll defines message 'l2fib_flush_all'.
 type L2fibFlushAll struct{}
 
-func (m *L2fibFlushAll) Reset()               { *m = L2fibFlushAll{} }
-func (*L2fibFlushAll) GetMessageName() string { return "l2fib_flush_all" }
-func (*L2fibFlushAll) GetCrcString() string   { return "51077d14" }
-func (*L2fibFlushAll) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2fibFlushAll) Reset()                        { *m = L2fibFlushAll{} }
+func (*L2fibFlushAll) GetMessageName() string          { return "l2fib_flush_all" }
+func (*L2fibFlushAll) GetCrcString() string            { return "51077d14" }
+func (*L2fibFlushAll) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2fibFlushAll) Size() (size int) {
 	if m == nil {
@@ -1913,11 +1897,12 @@ type L2fibFlushAllReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2fibFlushAllReply) Reset()               { *m = L2fibFlushAllReply{} }
-func (*L2fibFlushAllReply) GetMessageName() string { return "l2fib_flush_all_reply" }
-func (*L2fibFlushAllReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2fibFlushAllReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2fibFlushAllReply) Reset()                        { *m = L2fibFlushAllReply{} }
+func (*L2fibFlushAllReply) GetMessageName() string          { return "l2fib_flush_all_reply" }
+func (*L2fibFlushAllReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2fibFlushAllReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2fibFlushAllReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibFlushAllReply) Size() (size int) {
@@ -1946,12 +1931,10 @@ type L2fibFlushBd struct {
 	BdID uint32 `binapi:"u32,name=bd_id" json:"bd_id,omitempty"`
 }
 
-func (m *L2fibFlushBd) Reset()               { *m = L2fibFlushBd{} }
-func (*L2fibFlushBd) GetMessageName() string { return "l2fib_flush_bd" }
-func (*L2fibFlushBd) GetCrcString() string   { return "c25fdce6" }
-func (*L2fibFlushBd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2fibFlushBd) Reset()                        { *m = L2fibFlushBd{} }
+func (*L2fibFlushBd) GetMessageName() string          { return "l2fib_flush_bd" }
+func (*L2fibFlushBd) GetCrcString() string            { return "c25fdce6" }
+func (*L2fibFlushBd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2fibFlushBd) Size() (size int) {
 	if m == nil {
@@ -1979,11 +1962,12 @@ type L2fibFlushBdReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2fibFlushBdReply) Reset()               { *m = L2fibFlushBdReply{} }
-func (*L2fibFlushBdReply) GetMessageName() string { return "l2fib_flush_bd_reply" }
-func (*L2fibFlushBdReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2fibFlushBdReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2fibFlushBdReply) Reset()                        { *m = L2fibFlushBdReply{} }
+func (*L2fibFlushBdReply) GetMessageName() string          { return "l2fib_flush_bd_reply" }
+func (*L2fibFlushBdReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2fibFlushBdReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2fibFlushBdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibFlushBdReply) Size() (size int) {
@@ -2012,12 +1996,10 @@ type L2fibFlushInt struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *L2fibFlushInt) Reset()               { *m = L2fibFlushInt{} }
-func (*L2fibFlushInt) GetMessageName() string { return "l2fib_flush_int" }
-func (*L2fibFlushInt) GetCrcString() string   { return "f9e6675e" }
-func (*L2fibFlushInt) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2fibFlushInt) Reset()                        { *m = L2fibFlushInt{} }
+func (*L2fibFlushInt) GetMessageName() string          { return "l2fib_flush_int" }
+func (*L2fibFlushInt) GetCrcString() string            { return "f9e6675e" }
+func (*L2fibFlushInt) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2fibFlushInt) Size() (size int) {
 	if m == nil {
@@ -2045,11 +2027,12 @@ type L2fibFlushIntReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2fibFlushIntReply) Reset()               { *m = L2fibFlushIntReply{} }
-func (*L2fibFlushIntReply) GetMessageName() string { return "l2fib_flush_int_reply" }
-func (*L2fibFlushIntReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2fibFlushIntReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2fibFlushIntReply) Reset()                        { *m = L2fibFlushIntReply{} }
+func (*L2fibFlushIntReply) GetMessageName() string          { return "l2fib_flush_int_reply" }
+func (*L2fibFlushIntReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2fibFlushIntReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2fibFlushIntReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibFlushIntReply) Size() (size int) {
@@ -2078,12 +2061,10 @@ type L2fibSetScanDelay struct {
 	ScanDelay uint16 `binapi:"u16,name=scan_delay,default=10" json:"scan_delay,omitempty"`
 }
 
-func (m *L2fibSetScanDelay) Reset()               { *m = L2fibSetScanDelay{} }
-func (*L2fibSetScanDelay) GetMessageName() string { return "l2fib_set_scan_delay" }
-func (*L2fibSetScanDelay) GetCrcString() string   { return "a3b968a4" }
-func (*L2fibSetScanDelay) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *L2fibSetScanDelay) Reset()                        { *m = L2fibSetScanDelay{} }
+func (*L2fibSetScanDelay) GetMessageName() string          { return "l2fib_set_scan_delay" }
+func (*L2fibSetScanDelay) GetCrcString() string            { return "a3b968a4" }
+func (*L2fibSetScanDelay) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *L2fibSetScanDelay) Size() (size int) {
 	if m == nil {
@@ -2111,11 +2092,12 @@ type L2fibSetScanDelayReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *L2fibSetScanDelayReply) Reset()               { *m = L2fibSetScanDelayReply{} }
-func (*L2fibSetScanDelayReply) GetMessageName() string { return "l2fib_set_scan_delay_reply" }
-func (*L2fibSetScanDelayReply) GetCrcString() string   { return "e8d4e804" }
-func (*L2fibSetScanDelayReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *L2fibSetScanDelayReply) Reset()                        { *m = L2fibSetScanDelayReply{} }
+func (*L2fibSetScanDelayReply) GetMessageName() string          { return "l2fib_set_scan_delay_reply" }
+func (*L2fibSetScanDelayReply) GetCrcString() string            { return "e8d4e804" }
+func (*L2fibSetScanDelayReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *L2fibSetScanDelayReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *L2fibSetScanDelayReply) Size() (size int) {
@@ -2148,12 +2130,10 @@ type SwInterfaceSetL2Bridge struct {
 	Enable      bool                           `binapi:"bool,name=enable,default=true" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetL2Bridge) Reset()               { *m = SwInterfaceSetL2Bridge{} }
-func (*SwInterfaceSetL2Bridge) GetMessageName() string { return "sw_interface_set_l2_bridge" }
-func (*SwInterfaceSetL2Bridge) GetCrcString() string   { return "d0678b13" }
-func (*SwInterfaceSetL2Bridge) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetL2Bridge) Reset()                        { *m = SwInterfaceSetL2Bridge{} }
+func (*SwInterfaceSetL2Bridge) GetMessageName() string          { return "sw_interface_set_l2_bridge" }
+func (*SwInterfaceSetL2Bridge) GetCrcString() string            { return "d0678b13" }
+func (*SwInterfaceSetL2Bridge) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetL2Bridge) Size() (size int) {
 	if m == nil {
@@ -2197,9 +2177,10 @@ func (m *SwInterfaceSetL2BridgeReply) Reset() { *m = SwInterfaceSetL2BridgeReply
 func (*SwInterfaceSetL2BridgeReply) GetMessageName() string {
 	return "sw_interface_set_l2_bridge_reply"
 }
-func (*SwInterfaceSetL2BridgeReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetL2BridgeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceSetL2BridgeReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetL2BridgeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetL2BridgeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetL2BridgeReply) Size() (size int) {
@@ -2230,12 +2211,10 @@ type SwInterfaceSetL2Xconnect struct {
 	Enable      bool                           `binapi:"bool,name=enable,default=true" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetL2Xconnect) Reset()               { *m = SwInterfaceSetL2Xconnect{} }
-func (*SwInterfaceSetL2Xconnect) GetMessageName() string { return "sw_interface_set_l2_xconnect" }
-func (*SwInterfaceSetL2Xconnect) GetCrcString() string   { return "4fa28a85" }
-func (*SwInterfaceSetL2Xconnect) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetL2Xconnect) Reset()                        { *m = SwInterfaceSetL2Xconnect{} }
+func (*SwInterfaceSetL2Xconnect) GetMessageName() string          { return "sw_interface_set_l2_xconnect" }
+func (*SwInterfaceSetL2Xconnect) GetCrcString() string            { return "4fa28a85" }
+func (*SwInterfaceSetL2Xconnect) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetL2Xconnect) Size() (size int) {
 	if m == nil {
@@ -2273,9 +2252,10 @@ func (m *SwInterfaceSetL2XconnectReply) Reset() { *m = SwInterfaceSetL2XconnectR
 func (*SwInterfaceSetL2XconnectReply) GetMessageName() string {
 	return "sw_interface_set_l2_xconnect_reply"
 }
-func (*SwInterfaceSetL2XconnectReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetL2XconnectReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceSetL2XconnectReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetL2XconnectReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetL2XconnectReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetL2XconnectReply) Size() (size int) {
@@ -2305,12 +2285,10 @@ type SwInterfaceSetVpath struct {
 	Enable    bool                           `binapi:"bool,name=enable,default=4.294967295e+09" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetVpath) Reset()               { *m = SwInterfaceSetVpath{} }
-func (*SwInterfaceSetVpath) GetMessageName() string { return "sw_interface_set_vpath" }
-func (*SwInterfaceSetVpath) GetCrcString() string   { return "ae6cfcfb" }
-func (*SwInterfaceSetVpath) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetVpath) Reset()                        { *m = SwInterfaceSetVpath{} }
+func (*SwInterfaceSetVpath) GetMessageName() string          { return "sw_interface_set_vpath" }
+func (*SwInterfaceSetVpath) GetCrcString() string            { return "ae6cfcfb" }
+func (*SwInterfaceSetVpath) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetVpath) Size() (size int) {
 	if m == nil {
@@ -2341,11 +2319,12 @@ type SwInterfaceSetVpathReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *SwInterfaceSetVpathReply) Reset()               { *m = SwInterfaceSetVpathReply{} }
-func (*SwInterfaceSetVpathReply) GetMessageName() string { return "sw_interface_set_vpath_reply" }
-func (*SwInterfaceSetVpathReply) GetCrcString() string   { return "e8d4e804" }
-func (*SwInterfaceSetVpathReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwInterfaceSetVpathReply) Reset()                        { *m = SwInterfaceSetVpathReply{} }
+func (*SwInterfaceSetVpathReply) GetMessageName() string          { return "sw_interface_set_vpath_reply" }
+func (*SwInterfaceSetVpathReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetVpathReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetVpathReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetVpathReply) Size() (size int) {
@@ -2375,12 +2354,10 @@ type WantL2ArpTermEvents struct {
 	PID    uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantL2ArpTermEvents) Reset()               { *m = WantL2ArpTermEvents{} }
-func (*WantL2ArpTermEvents) GetMessageName() string { return "want_l2_arp_term_events" }
-func (*WantL2ArpTermEvents) GetCrcString() string   { return "3ec6d6c2" }
-func (*WantL2ArpTermEvents) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *WantL2ArpTermEvents) Reset()                        { *m = WantL2ArpTermEvents{} }
+func (*WantL2ArpTermEvents) GetMessageName() string          { return "want_l2_arp_term_events" }
+func (*WantL2ArpTermEvents) GetCrcString() string            { return "3ec6d6c2" }
+func (*WantL2ArpTermEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantL2ArpTermEvents) Size() (size int) {
 	if m == nil {
@@ -2411,11 +2388,12 @@ type WantL2ArpTermEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantL2ArpTermEventsReply) Reset()               { *m = WantL2ArpTermEventsReply{} }
-func (*WantL2ArpTermEventsReply) GetMessageName() string { return "want_l2_arp_term_events_reply" }
-func (*WantL2ArpTermEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantL2ArpTermEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *WantL2ArpTermEventsReply) Reset()                        { *m = WantL2ArpTermEventsReply{} }
+func (*WantL2ArpTermEventsReply) GetMessageName() string          { return "want_l2_arp_term_events_reply" }
+func (*WantL2ArpTermEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantL2ArpTermEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantL2ArpTermEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantL2ArpTermEventsReply) Size() (size int) {
@@ -2449,12 +2427,10 @@ type WantL2MacsEvents struct {
 	PID            uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantL2MacsEvents) Reset()               { *m = WantL2MacsEvents{} }
-func (*WantL2MacsEvents) GetMessageName() string { return "want_l2_macs_events" }
-func (*WantL2MacsEvents) GetCrcString() string   { return "9aabdfde" }
-func (*WantL2MacsEvents) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *WantL2MacsEvents) Reset()                        { *m = WantL2MacsEvents{} }
+func (*WantL2MacsEvents) GetMessageName() string          { return "want_l2_macs_events" }
+func (*WantL2MacsEvents) GetCrcString() string            { return "9aabdfde" }
+func (*WantL2MacsEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantL2MacsEvents) Size() (size int) {
 	if m == nil {
@@ -2496,12 +2472,10 @@ type WantL2MacsEvents2 struct {
 	PID            uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantL2MacsEvents2) Reset()               { *m = WantL2MacsEvents2{} }
-func (*WantL2MacsEvents2) GetMessageName() string { return "want_l2_macs_events2" }
-func (*WantL2MacsEvents2) GetCrcString() string   { return "cc1377b0" }
-func (*WantL2MacsEvents2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *WantL2MacsEvents2) Reset()                        { *m = WantL2MacsEvents2{} }
+func (*WantL2MacsEvents2) GetMessageName() string          { return "want_l2_macs_events2" }
+func (*WantL2MacsEvents2) GetCrcString() string            { return "cc1377b0" }
+func (*WantL2MacsEvents2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantL2MacsEvents2) Size() (size int) {
 	if m == nil {
@@ -2535,11 +2509,12 @@ type WantL2MacsEvents2Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantL2MacsEvents2Reply) Reset()               { *m = WantL2MacsEvents2Reply{} }
-func (*WantL2MacsEvents2Reply) GetMessageName() string { return "want_l2_macs_events2_reply" }
-func (*WantL2MacsEvents2Reply) GetCrcString() string   { return "e8d4e804" }
-func (*WantL2MacsEvents2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *WantL2MacsEvents2Reply) Reset()                        { *m = WantL2MacsEvents2Reply{} }
+func (*WantL2MacsEvents2Reply) GetMessageName() string          { return "want_l2_macs_events2_reply" }
+func (*WantL2MacsEvents2Reply) GetCrcString() string            { return "e8d4e804" }
+func (*WantL2MacsEvents2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantL2MacsEvents2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantL2MacsEvents2Reply) Size() (size int) {
@@ -2569,11 +2544,12 @@ type WantL2MacsEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantL2MacsEventsReply) Reset()               { *m = WantL2MacsEventsReply{} }
-func (*WantL2MacsEventsReply) GetMessageName() string { return "want_l2_macs_events_reply" }
-func (*WantL2MacsEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantL2MacsEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *WantL2MacsEventsReply) Reset()                        { *m = WantL2MacsEventsReply{} }
+func (*WantL2MacsEventsReply) GetMessageName() string          { return "want_l2_macs_events_reply" }
+func (*WantL2MacsEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantL2MacsEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantL2MacsEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantL2MacsEventsReply) Size() (size int) {

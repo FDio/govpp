@@ -134,12 +134,10 @@ type PnatBindingAdd struct {
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
 }
 
-func (m *PnatBindingAdd) Reset()               { *m = PnatBindingAdd{} }
-func (*PnatBindingAdd) GetMessageName() string { return "pnat_binding_add" }
-func (*PnatBindingAdd) GetCrcString() string   { return "946ee0b7" }
-func (*PnatBindingAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingAdd) Reset()                        { *m = PnatBindingAdd{} }
+func (*PnatBindingAdd) GetMessageName() string          { return "pnat_binding_add" }
+func (*PnatBindingAdd) GetCrcString() string            { return "946ee0b7" }
+func (*PnatBindingAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingAdd) Size() (size int) {
 	if m == nil {
@@ -208,11 +206,12 @@ type PnatBindingAddReply struct {
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
 
-func (m *PnatBindingAddReply) Reset()               { *m = PnatBindingAddReply{} }
-func (*PnatBindingAddReply) GetMessageName() string { return "pnat_binding_add_reply" }
-func (*PnatBindingAddReply) GetCrcString() string   { return "4cd980a7" }
-func (*PnatBindingAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingAddReply) Reset()                        { *m = PnatBindingAddReply{} }
+func (*PnatBindingAddReply) GetMessageName() string          { return "pnat_binding_add_reply" }
+func (*PnatBindingAddReply) GetCrcString() string            { return "4cd980a7" }
+func (*PnatBindingAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingAddReply) Size() (size int) {
@@ -246,12 +245,10 @@ type PnatBindingAddV2 struct {
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
 }
 
-func (m *PnatBindingAddV2) Reset()               { *m = PnatBindingAddV2{} }
-func (*PnatBindingAddV2) GetMessageName() string { return "pnat_binding_add_v2" }
-func (*PnatBindingAddV2) GetCrcString() string   { return "946ee0b7" }
-func (*PnatBindingAddV2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingAddV2) Reset()                        { *m = PnatBindingAddV2{} }
+func (*PnatBindingAddV2) GetMessageName() string          { return "pnat_binding_add_v2" }
+func (*PnatBindingAddV2) GetCrcString() string            { return "946ee0b7" }
+func (*PnatBindingAddV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingAddV2) Size() (size int) {
 	if m == nil {
@@ -320,11 +317,12 @@ type PnatBindingAddV2Reply struct {
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
 
-func (m *PnatBindingAddV2Reply) Reset()               { *m = PnatBindingAddV2Reply{} }
-func (*PnatBindingAddV2Reply) GetMessageName() string { return "pnat_binding_add_v2_reply" }
-func (*PnatBindingAddV2Reply) GetCrcString() string   { return "4cd980a7" }
-func (*PnatBindingAddV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingAddV2Reply) Reset()                        { *m = PnatBindingAddV2Reply{} }
+func (*PnatBindingAddV2Reply) GetMessageName() string          { return "pnat_binding_add_v2_reply" }
+func (*PnatBindingAddV2Reply) GetCrcString() string            { return "4cd980a7" }
+func (*PnatBindingAddV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingAddV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingAddV2Reply) Size() (size int) {
@@ -359,12 +357,10 @@ type PnatBindingAttach struct {
 	BindingIndex uint32                         `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
 
-func (m *PnatBindingAttach) Reset()               { *m = PnatBindingAttach{} }
-func (*PnatBindingAttach) GetMessageName() string { return "pnat_binding_attach" }
-func (*PnatBindingAttach) GetCrcString() string   { return "6e074232" }
-func (*PnatBindingAttach) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingAttach) Reset()                        { *m = PnatBindingAttach{} }
+func (*PnatBindingAttach) GetMessageName() string          { return "pnat_binding_attach" }
+func (*PnatBindingAttach) GetCrcString() string            { return "6e074232" }
+func (*PnatBindingAttach) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingAttach) Size() (size int) {
 	if m == nil {
@@ -399,11 +395,12 @@ type PnatBindingAttachReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PnatBindingAttachReply) Reset()               { *m = PnatBindingAttachReply{} }
-func (*PnatBindingAttachReply) GetMessageName() string { return "pnat_binding_attach_reply" }
-func (*PnatBindingAttachReply) GetCrcString() string   { return "e8d4e804" }
-func (*PnatBindingAttachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingAttachReply) Reset()                        { *m = PnatBindingAttachReply{} }
+func (*PnatBindingAttachReply) GetMessageName() string          { return "pnat_binding_attach_reply" }
+func (*PnatBindingAttachReply) GetCrcString() string            { return "e8d4e804" }
+func (*PnatBindingAttachReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingAttachReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingAttachReply) Size() (size int) {
@@ -433,12 +430,10 @@ type PnatBindingDel struct {
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
 
-func (m *PnatBindingDel) Reset()               { *m = PnatBindingDel{} }
-func (*PnatBindingDel) GetMessageName() string { return "pnat_binding_del" }
-func (*PnatBindingDel) GetCrcString() string   { return "9259df7b" }
-func (*PnatBindingDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingDel) Reset()                        { *m = PnatBindingDel{} }
+func (*PnatBindingDel) GetMessageName() string          { return "pnat_binding_del" }
+func (*PnatBindingDel) GetCrcString() string            { return "9259df7b" }
+func (*PnatBindingDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingDel) Size() (size int) {
 	if m == nil {
@@ -467,11 +462,12 @@ type PnatBindingDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PnatBindingDelReply) Reset()               { *m = PnatBindingDelReply{} }
-func (*PnatBindingDelReply) GetMessageName() string { return "pnat_binding_del_reply" }
-func (*PnatBindingDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*PnatBindingDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingDelReply) Reset()                        { *m = PnatBindingDelReply{} }
+func (*PnatBindingDelReply) GetMessageName() string          { return "pnat_binding_del_reply" }
+func (*PnatBindingDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*PnatBindingDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingDelReply) Size() (size int) {
@@ -503,12 +499,10 @@ type PnatBindingDetach struct {
 	BindingIndex uint32                         `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
 
-func (m *PnatBindingDetach) Reset()               { *m = PnatBindingDetach{} }
-func (*PnatBindingDetach) GetMessageName() string { return "pnat_binding_detach" }
-func (*PnatBindingDetach) GetCrcString() string   { return "6e074232" }
-func (*PnatBindingDetach) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingDetach) Reset()                        { *m = PnatBindingDetach{} }
+func (*PnatBindingDetach) GetMessageName() string          { return "pnat_binding_detach" }
+func (*PnatBindingDetach) GetCrcString() string            { return "6e074232" }
+func (*PnatBindingDetach) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingDetach) Size() (size int) {
 	if m == nil {
@@ -543,11 +537,12 @@ type PnatBindingDetachReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PnatBindingDetachReply) Reset()               { *m = PnatBindingDetachReply{} }
-func (*PnatBindingDetachReply) GetMessageName() string { return "pnat_binding_detach_reply" }
-func (*PnatBindingDetachReply) GetCrcString() string   { return "e8d4e804" }
-func (*PnatBindingDetachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingDetachReply) Reset()                        { *m = PnatBindingDetachReply{} }
+func (*PnatBindingDetachReply) GetMessageName() string          { return "pnat_binding_detach_reply" }
+func (*PnatBindingDetachReply) GetCrcString() string            { return "e8d4e804" }
+func (*PnatBindingDetachReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingDetachReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingDetachReply) Size() (size int) {
@@ -578,11 +573,12 @@ type PnatBindingsDetails struct {
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
 }
 
-func (m *PnatBindingsDetails) Reset()               { *m = PnatBindingsDetails{} }
-func (*PnatBindingsDetails) GetMessageName() string { return "pnat_bindings_details" }
-func (*PnatBindingsDetails) GetCrcString() string   { return "08fb2815" }
-func (*PnatBindingsDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingsDetails) Reset()                        { *m = PnatBindingsDetails{} }
+func (*PnatBindingsDetails) GetMessageName() string          { return "pnat_bindings_details" }
+func (*PnatBindingsDetails) GetCrcString() string            { return "08fb2815" }
+func (*PnatBindingsDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingsDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PnatBindingsDetails) Size() (size int) {
@@ -651,12 +647,10 @@ type PnatBindingsGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *PnatBindingsGet) Reset()               { *m = PnatBindingsGet{} }
-func (*PnatBindingsGet) GetMessageName() string { return "pnat_bindings_get" }
-func (*PnatBindingsGet) GetCrcString() string   { return "f75ba505" }
-func (*PnatBindingsGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatBindingsGet) Reset()                        { *m = PnatBindingsGet{} }
+func (*PnatBindingsGet) GetMessageName() string          { return "pnat_bindings_get" }
+func (*PnatBindingsGet) GetCrcString() string            { return "f75ba505" }
+func (*PnatBindingsGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatBindingsGet) Size() (size int) {
 	if m == nil {
@@ -686,11 +680,12 @@ type PnatBindingsGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *PnatBindingsGetReply) Reset()               { *m = PnatBindingsGetReply{} }
-func (*PnatBindingsGetReply) GetMessageName() string { return "pnat_bindings_get_reply" }
-func (*PnatBindingsGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*PnatBindingsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatBindingsGetReply) Reset()                        { *m = PnatBindingsGetReply{} }
+func (*PnatBindingsGetReply) GetMessageName() string          { return "pnat_bindings_get_reply" }
+func (*PnatBindingsGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*PnatBindingsGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatBindingsGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatBindingsGetReply) Size() (size int) {
@@ -725,11 +720,12 @@ type PnatInterfacesDetails struct {
 	LookupMask [2]PnatMask                    `binapi:"pnat_mask[2],name=lookup_mask" json:"lookup_mask,omitempty"`
 }
 
-func (m *PnatInterfacesDetails) Reset()               { *m = PnatInterfacesDetails{} }
-func (*PnatInterfacesDetails) GetMessageName() string { return "pnat_interfaces_details" }
-func (*PnatInterfacesDetails) GetCrcString() string   { return "4cb09493" }
-func (*PnatInterfacesDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatInterfacesDetails) Reset()                        { *m = PnatInterfacesDetails{} }
+func (*PnatInterfacesDetails) GetMessageName() string          { return "pnat_interfaces_details" }
+func (*PnatInterfacesDetails) GetCrcString() string            { return "4cb09493" }
+func (*PnatInterfacesDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatInterfacesDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PnatInterfacesDetails) Size() (size int) {
@@ -780,12 +776,10 @@ type PnatInterfacesGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *PnatInterfacesGet) Reset()               { *m = PnatInterfacesGet{} }
-func (*PnatInterfacesGet) GetMessageName() string { return "pnat_interfaces_get" }
-func (*PnatInterfacesGet) GetCrcString() string   { return "f75ba505" }
-func (*PnatInterfacesGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PnatInterfacesGet) Reset()                        { *m = PnatInterfacesGet{} }
+func (*PnatInterfacesGet) GetMessageName() string          { return "pnat_interfaces_get" }
+func (*PnatInterfacesGet) GetCrcString() string            { return "f75ba505" }
+func (*PnatInterfacesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PnatInterfacesGet) Size() (size int) {
 	if m == nil {
@@ -815,11 +809,12 @@ type PnatInterfacesGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *PnatInterfacesGetReply) Reset()               { *m = PnatInterfacesGetReply{} }
-func (*PnatInterfacesGetReply) GetMessageName() string { return "pnat_interfaces_get_reply" }
-func (*PnatInterfacesGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*PnatInterfacesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PnatInterfacesGetReply) Reset()                        { *m = PnatInterfacesGetReply{} }
+func (*PnatInterfacesGetReply) GetMessageName() string          { return "pnat_interfaces_get_reply" }
+func (*PnatInterfacesGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*PnatInterfacesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PnatInterfacesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PnatInterfacesGetReply) Size() (size int) {

@@ -70,12 +70,10 @@ type BfdAuthDelKey struct {
 	ConfKeyID uint32 `binapi:"u32,name=conf_key_id" json:"conf_key_id,omitempty"`
 }
 
-func (m *BfdAuthDelKey) Reset()               { *m = BfdAuthDelKey{} }
-func (*BfdAuthDelKey) GetMessageName() string { return "bfd_auth_del_key" }
-func (*BfdAuthDelKey) GetCrcString() string   { return "65310b22" }
-func (*BfdAuthDelKey) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdAuthDelKey) Reset()                        { *m = BfdAuthDelKey{} }
+func (*BfdAuthDelKey) GetMessageName() string          { return "bfd_auth_del_key" }
+func (*BfdAuthDelKey) GetCrcString() string            { return "65310b22" }
+func (*BfdAuthDelKey) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdAuthDelKey) Size() (size int) {
 	if m == nil {
@@ -103,11 +101,12 @@ type BfdAuthDelKeyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdAuthDelKeyReply) Reset()               { *m = BfdAuthDelKeyReply{} }
-func (*BfdAuthDelKeyReply) GetMessageName() string { return "bfd_auth_del_key_reply" }
-func (*BfdAuthDelKeyReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdAuthDelKeyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdAuthDelKeyReply) Reset()                        { *m = BfdAuthDelKeyReply{} }
+func (*BfdAuthDelKeyReply) GetMessageName() string          { return "bfd_auth_del_key_reply" }
+func (*BfdAuthDelKeyReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdAuthDelKeyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdAuthDelKeyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdAuthDelKeyReply) Size() (size int) {
@@ -138,11 +137,12 @@ type BfdAuthKeysDetails struct {
 	AuthType  uint8  `binapi:"u8,name=auth_type" json:"auth_type,omitempty"`
 }
 
-func (m *BfdAuthKeysDetails) Reset()               { *m = BfdAuthKeysDetails{} }
-func (*BfdAuthKeysDetails) GetMessageName() string { return "bfd_auth_keys_details" }
-func (*BfdAuthKeysDetails) GetCrcString() string   { return "84130e9f" }
-func (*BfdAuthKeysDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdAuthKeysDetails) Reset()                        { *m = BfdAuthKeysDetails{} }
+func (*BfdAuthKeysDetails) GetMessageName() string          { return "bfd_auth_keys_details" }
+func (*BfdAuthKeysDetails) GetCrcString() string            { return "84130e9f" }
+func (*BfdAuthKeysDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdAuthKeysDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BfdAuthKeysDetails) Size() (size int) {
@@ -175,12 +175,10 @@ func (m *BfdAuthKeysDetails) Unmarshal(b []byte) error {
 // BfdAuthKeysDump defines message 'bfd_auth_keys_dump'.
 type BfdAuthKeysDump struct{}
 
-func (m *BfdAuthKeysDump) Reset()               { *m = BfdAuthKeysDump{} }
-func (*BfdAuthKeysDump) GetMessageName() string { return "bfd_auth_keys_dump" }
-func (*BfdAuthKeysDump) GetCrcString() string   { return "51077d14" }
-func (*BfdAuthKeysDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdAuthKeysDump) Reset()                        { *m = BfdAuthKeysDump{} }
+func (*BfdAuthKeysDump) GetMessageName() string          { return "bfd_auth_keys_dump" }
+func (*BfdAuthKeysDump) GetCrcString() string            { return "51077d14" }
+func (*BfdAuthKeysDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdAuthKeysDump) Size() (size int) {
 	if m == nil {
@@ -207,12 +205,10 @@ type BfdAuthSetKey struct {
 	Key       []byte `binapi:"u8[20],name=key" json:"key,omitempty"`
 }
 
-func (m *BfdAuthSetKey) Reset()               { *m = BfdAuthSetKey{} }
-func (*BfdAuthSetKey) GetMessageName() string { return "bfd_auth_set_key" }
-func (*BfdAuthSetKey) GetCrcString() string   { return "690b8877" }
-func (*BfdAuthSetKey) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdAuthSetKey) Reset()                        { *m = BfdAuthSetKey{} }
+func (*BfdAuthSetKey) GetMessageName() string          { return "bfd_auth_set_key" }
+func (*BfdAuthSetKey) GetCrcString() string            { return "690b8877" }
+func (*BfdAuthSetKey) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdAuthSetKey) Size() (size int) {
 	if m == nil {
@@ -250,11 +246,12 @@ type BfdAuthSetKeyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdAuthSetKeyReply) Reset()               { *m = BfdAuthSetKeyReply{} }
-func (*BfdAuthSetKeyReply) GetMessageName() string { return "bfd_auth_set_key_reply" }
-func (*BfdAuthSetKeyReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdAuthSetKeyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdAuthSetKeyReply) Reset()                        { *m = BfdAuthSetKeyReply{} }
+func (*BfdAuthSetKeyReply) GetMessageName() string          { return "bfd_auth_set_key_reply" }
+func (*BfdAuthSetKeyReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdAuthSetKeyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdAuthSetKeyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdAuthSetKeyReply) Size() (size int) {
@@ -291,12 +288,10 @@ type BfdUDPAdd struct {
 	ConfKeyID       uint32                         `binapi:"u32,name=conf_key_id" json:"conf_key_id,omitempty"`
 }
 
-func (m *BfdUDPAdd) Reset()               { *m = BfdUDPAdd{} }
-func (*BfdUDPAdd) GetMessageName() string { return "bfd_udp_add" }
-func (*BfdUDPAdd) GetCrcString() string   { return "939cd26a" }
-func (*BfdUDPAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPAdd) Reset()                        { *m = BfdUDPAdd{} }
+func (*BfdUDPAdd) GetMessageName() string          { return "bfd_udp_add" }
+func (*BfdUDPAdd) GetCrcString() string            { return "939cd26a" }
+func (*BfdUDPAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPAdd) Size() (size int) {
 	if m == nil {
@@ -354,11 +349,12 @@ type BfdUDPAddReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPAddReply) Reset()               { *m = BfdUDPAddReply{} }
-func (*BfdUDPAddReply) GetMessageName() string { return "bfd_udp_add_reply" }
-func (*BfdUDPAddReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPAddReply) Reset()                        { *m = BfdUDPAddReply{} }
+func (*BfdUDPAddReply) GetMessageName() string          { return "bfd_udp_add_reply" }
+func (*BfdUDPAddReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPAddReply) Size() (size int) {
@@ -392,12 +388,10 @@ type BfdUDPAuthActivate struct {
 	ConfKeyID uint32                         `binapi:"u32,name=conf_key_id" json:"conf_key_id,omitempty"`
 }
 
-func (m *BfdUDPAuthActivate) Reset()               { *m = BfdUDPAuthActivate{} }
-func (*BfdUDPAuthActivate) GetMessageName() string { return "bfd_udp_auth_activate" }
-func (*BfdUDPAuthActivate) GetCrcString() string   { return "21fd1bdb" }
-func (*BfdUDPAuthActivate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPAuthActivate) Reset()                        { *m = BfdUDPAuthActivate{} }
+func (*BfdUDPAuthActivate) GetMessageName() string          { return "bfd_udp_auth_activate" }
+func (*BfdUDPAuthActivate) GetCrcString() string            { return "21fd1bdb" }
+func (*BfdUDPAuthActivate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPAuthActivate) Size() (size int) {
 	if m == nil {
@@ -446,11 +440,12 @@ type BfdUDPAuthActivateReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPAuthActivateReply) Reset()               { *m = BfdUDPAuthActivateReply{} }
-func (*BfdUDPAuthActivateReply) GetMessageName() string { return "bfd_udp_auth_activate_reply" }
-func (*BfdUDPAuthActivateReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPAuthActivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPAuthActivateReply) Reset()                        { *m = BfdUDPAuthActivateReply{} }
+func (*BfdUDPAuthActivateReply) GetMessageName() string          { return "bfd_udp_auth_activate_reply" }
+func (*BfdUDPAuthActivateReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPAuthActivateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPAuthActivateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPAuthActivateReply) Size() (size int) {
@@ -482,12 +477,10 @@ type BfdUDPAuthDeactivate struct {
 	IsDelayed bool                           `binapi:"bool,name=is_delayed" json:"is_delayed,omitempty"`
 }
 
-func (m *BfdUDPAuthDeactivate) Reset()               { *m = BfdUDPAuthDeactivate{} }
-func (*BfdUDPAuthDeactivate) GetMessageName() string { return "bfd_udp_auth_deactivate" }
-func (*BfdUDPAuthDeactivate) GetCrcString() string   { return "9a05e2e0" }
-func (*BfdUDPAuthDeactivate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPAuthDeactivate) Reset()                        { *m = BfdUDPAuthDeactivate{} }
+func (*BfdUDPAuthDeactivate) GetMessageName() string          { return "bfd_udp_auth_deactivate" }
+func (*BfdUDPAuthDeactivate) GetCrcString() string            { return "9a05e2e0" }
+func (*BfdUDPAuthDeactivate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPAuthDeactivate) Size() (size int) {
 	if m == nil {
@@ -530,11 +523,12 @@ type BfdUDPAuthDeactivateReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPAuthDeactivateReply) Reset()               { *m = BfdUDPAuthDeactivateReply{} }
-func (*BfdUDPAuthDeactivateReply) GetMessageName() string { return "bfd_udp_auth_deactivate_reply" }
-func (*BfdUDPAuthDeactivateReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPAuthDeactivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPAuthDeactivateReply) Reset()                        { *m = BfdUDPAuthDeactivateReply{} }
+func (*BfdUDPAuthDeactivateReply) GetMessageName() string          { return "bfd_udp_auth_deactivate_reply" }
+func (*BfdUDPAuthDeactivateReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPAuthDeactivateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPAuthDeactivateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPAuthDeactivateReply) Size() (size int) {
@@ -565,12 +559,10 @@ type BfdUDPDel struct {
 	PeerAddr  ip_types.Address               `binapi:"address,name=peer_addr" json:"peer_addr,omitempty"`
 }
 
-func (m *BfdUDPDel) Reset()               { *m = BfdUDPDel{} }
-func (*BfdUDPDel) GetMessageName() string { return "bfd_udp_del" }
-func (*BfdUDPDel) GetCrcString() string   { return "dcb13a89" }
-func (*BfdUDPDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPDel) Reset()                        { *m = BfdUDPDel{} }
+func (*BfdUDPDel) GetMessageName() string          { return "bfd_udp_del" }
+func (*BfdUDPDel) GetCrcString() string            { return "dcb13a89" }
+func (*BfdUDPDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPDel) Size() (size int) {
 	if m == nil {
@@ -608,12 +600,10 @@ func (m *BfdUDPDel) Unmarshal(b []byte) error {
 // BfdUDPDelEchoSource defines message 'bfd_udp_del_echo_source'.
 type BfdUDPDelEchoSource struct{}
 
-func (m *BfdUDPDelEchoSource) Reset()               { *m = BfdUDPDelEchoSource{} }
-func (*BfdUDPDelEchoSource) GetMessageName() string { return "bfd_udp_del_echo_source" }
-func (*BfdUDPDelEchoSource) GetCrcString() string   { return "51077d14" }
-func (*BfdUDPDelEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPDelEchoSource) Reset()                        { *m = BfdUDPDelEchoSource{} }
+func (*BfdUDPDelEchoSource) GetMessageName() string          { return "bfd_udp_del_echo_source" }
+func (*BfdUDPDelEchoSource) GetCrcString() string            { return "51077d14" }
+func (*BfdUDPDelEchoSource) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPDelEchoSource) Size() (size int) {
 	if m == nil {
@@ -637,11 +627,12 @@ type BfdUDPDelEchoSourceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPDelEchoSourceReply) Reset()               { *m = BfdUDPDelEchoSourceReply{} }
-func (*BfdUDPDelEchoSourceReply) GetMessageName() string { return "bfd_udp_del_echo_source_reply" }
-func (*BfdUDPDelEchoSourceReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPDelEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPDelEchoSourceReply) Reset()                        { *m = BfdUDPDelEchoSourceReply{} }
+func (*BfdUDPDelEchoSourceReply) GetMessageName() string          { return "bfd_udp_del_echo_source_reply" }
+func (*BfdUDPDelEchoSourceReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPDelEchoSourceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPDelEchoSourceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPDelEchoSourceReply) Size() (size int) {
@@ -670,11 +661,12 @@ type BfdUDPDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPDelReply) Reset()               { *m = BfdUDPDelReply{} }
-func (*BfdUDPDelReply) GetMessageName() string { return "bfd_udp_del_reply" }
-func (*BfdUDPDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPDelReply) Reset()                        { *m = BfdUDPDelReply{} }
+func (*BfdUDPDelReply) GetMessageName() string          { return "bfd_udp_del_reply" }
+func (*BfdUDPDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPDelReply) Size() (size int) {
@@ -701,12 +693,10 @@ func (m *BfdUDPDelReply) Unmarshal(b []byte) error {
 // BfdUDPGetEchoSource defines message 'bfd_udp_get_echo_source'.
 type BfdUDPGetEchoSource struct{}
 
-func (m *BfdUDPGetEchoSource) Reset()               { *m = BfdUDPGetEchoSource{} }
-func (*BfdUDPGetEchoSource) GetMessageName() string { return "bfd_udp_get_echo_source" }
-func (*BfdUDPGetEchoSource) GetCrcString() string   { return "51077d14" }
-func (*BfdUDPGetEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPGetEchoSource) Reset()                        { *m = BfdUDPGetEchoSource{} }
+func (*BfdUDPGetEchoSource) GetMessageName() string          { return "bfd_udp_get_echo_source" }
+func (*BfdUDPGetEchoSource) GetCrcString() string            { return "51077d14" }
+func (*BfdUDPGetEchoSource) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPGetEchoSource) Size() (size int) {
 	if m == nil {
@@ -736,11 +726,12 @@ type BfdUDPGetEchoSourceReply struct {
 	IP6Addr       ip_types.IP6Address            `binapi:"ip6_address,name=ip6_addr" json:"ip6_addr,omitempty"`
 }
 
-func (m *BfdUDPGetEchoSourceReply) Reset()               { *m = BfdUDPGetEchoSourceReply{} }
-func (*BfdUDPGetEchoSourceReply) GetMessageName() string { return "bfd_udp_get_echo_source_reply" }
-func (*BfdUDPGetEchoSourceReply) GetCrcString() string   { return "e3d736a1" }
-func (*BfdUDPGetEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPGetEchoSourceReply) Reset()                        { *m = BfdUDPGetEchoSourceReply{} }
+func (*BfdUDPGetEchoSourceReply) GetMessageName() string          { return "bfd_udp_get_echo_source_reply" }
+func (*BfdUDPGetEchoSourceReply) GetCrcString() string            { return "e3d736a1" }
+func (*BfdUDPGetEchoSourceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPGetEchoSourceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPGetEchoSourceReply) Size() (size int) {
@@ -792,12 +783,10 @@ type BfdUDPMod struct {
 	DetectMult    uint8                          `binapi:"u8,name=detect_mult" json:"detect_mult,omitempty"`
 }
 
-func (m *BfdUDPMod) Reset()               { *m = BfdUDPMod{} }
-func (*BfdUDPMod) GetMessageName() string { return "bfd_udp_mod" }
-func (*BfdUDPMod) GetCrcString() string   { return "913df085" }
-func (*BfdUDPMod) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPMod) Reset()                        { *m = BfdUDPMod{} }
+func (*BfdUDPMod) GetMessageName() string          { return "bfd_udp_mod" }
+func (*BfdUDPMod) GetCrcString() string            { return "913df085" }
+func (*BfdUDPMod) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPMod) Size() (size int) {
 	if m == nil {
@@ -846,11 +835,12 @@ type BfdUDPModReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPModReply) Reset()               { *m = BfdUDPModReply{} }
-func (*BfdUDPModReply) GetMessageName() string { return "bfd_udp_mod_reply" }
-func (*BfdUDPModReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPModReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPModReply) Reset()                        { *m = BfdUDPModReply{} }
+func (*BfdUDPModReply) GetMessageName() string          { return "bfd_udp_mod_reply" }
+func (*BfdUDPModReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPModReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPModReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPModReply) Size() (size int) {
@@ -888,11 +878,12 @@ type BfdUDPSessionDetails struct {
 	DetectMult      uint8                          `binapi:"u8,name=detect_mult" json:"detect_mult,omitempty"`
 }
 
-func (m *BfdUDPSessionDetails) Reset()               { *m = BfdUDPSessionDetails{} }
-func (*BfdUDPSessionDetails) GetMessageName() string { return "bfd_udp_session_details" }
-func (*BfdUDPSessionDetails) GetCrcString() string   { return "09fb2f2d" }
-func (*BfdUDPSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPSessionDetails) Reset()                        { *m = BfdUDPSessionDetails{} }
+func (*BfdUDPSessionDetails) GetMessageName() string          { return "bfd_udp_session_details" }
+func (*BfdUDPSessionDetails) GetCrcString() string            { return "09fb2f2d" }
+func (*BfdUDPSessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *BfdUDPSessionDetails) Size() (size int) {
@@ -952,12 +943,10 @@ func (m *BfdUDPSessionDetails) Unmarshal(b []byte) error {
 // BfdUDPSessionDump defines message 'bfd_udp_session_dump'.
 type BfdUDPSessionDump struct{}
 
-func (m *BfdUDPSessionDump) Reset()               { *m = BfdUDPSessionDump{} }
-func (*BfdUDPSessionDump) GetMessageName() string { return "bfd_udp_session_dump" }
-func (*BfdUDPSessionDump) GetCrcString() string   { return "51077d14" }
-func (*BfdUDPSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPSessionDump) Reset()                        { *m = BfdUDPSessionDump{} }
+func (*BfdUDPSessionDump) GetMessageName() string          { return "bfd_udp_session_dump" }
+func (*BfdUDPSessionDump) GetCrcString() string            { return "51077d14" }
+func (*BfdUDPSessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPSessionDump) Size() (size int) {
 	if m == nil {
@@ -991,11 +980,12 @@ type BfdUDPSessionEvent struct {
 	DetectMult      uint8                          `binapi:"u8,name=detect_mult" json:"detect_mult,omitempty"`
 }
 
-func (m *BfdUDPSessionEvent) Reset()               { *m = BfdUDPSessionEvent{} }
-func (*BfdUDPSessionEvent) GetMessageName() string { return "bfd_udp_session_event" }
-func (*BfdUDPSessionEvent) GetCrcString() string   { return "8eaaf062" }
-func (*BfdUDPSessionEvent) GetMessageType() api.MessageType {
-	return api.EventMessageType
+func (m *BfdUDPSessionEvent) Reset()                        { *m = BfdUDPSessionEvent{} }
+func (*BfdUDPSessionEvent) GetMessageName() string          { return "bfd_udp_session_event" }
+func (*BfdUDPSessionEvent) GetCrcString() string            { return "8eaaf062" }
+func (*BfdUDPSessionEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *BfdUDPSessionEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *BfdUDPSessionEvent) Size() (size int) {
@@ -1063,12 +1053,10 @@ type BfdUDPSessionSetFlags struct {
 	Flags     interface_types.IfStatusFlags  `binapi:"if_status_flags,name=flags" json:"flags,omitempty"`
 }
 
-func (m *BfdUDPSessionSetFlags) Reset()               { *m = BfdUDPSessionSetFlags{} }
-func (*BfdUDPSessionSetFlags) GetMessageName() string { return "bfd_udp_session_set_flags" }
-func (*BfdUDPSessionSetFlags) GetCrcString() string   { return "04b4bdfd" }
-func (*BfdUDPSessionSetFlags) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPSessionSetFlags) Reset()                        { *m = BfdUDPSessionSetFlags{} }
+func (*BfdUDPSessionSetFlags) GetMessageName() string          { return "bfd_udp_session_set_flags" }
+func (*BfdUDPSessionSetFlags) GetCrcString() string            { return "04b4bdfd" }
+func (*BfdUDPSessionSetFlags) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPSessionSetFlags) Size() (size int) {
 	if m == nil {
@@ -1111,11 +1099,12 @@ type BfdUDPSessionSetFlagsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPSessionSetFlagsReply) Reset()               { *m = BfdUDPSessionSetFlagsReply{} }
-func (*BfdUDPSessionSetFlagsReply) GetMessageName() string { return "bfd_udp_session_set_flags_reply" }
-func (*BfdUDPSessionSetFlagsReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPSessionSetFlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPSessionSetFlagsReply) Reset()                        { *m = BfdUDPSessionSetFlagsReply{} }
+func (*BfdUDPSessionSetFlagsReply) GetMessageName() string          { return "bfd_udp_session_set_flags_reply" }
+func (*BfdUDPSessionSetFlagsReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPSessionSetFlagsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPSessionSetFlagsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPSessionSetFlagsReply) Size() (size int) {
@@ -1144,12 +1133,10 @@ type BfdUDPSetEchoSource struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BfdUDPSetEchoSource) Reset()               { *m = BfdUDPSetEchoSource{} }
-func (*BfdUDPSetEchoSource) GetMessageName() string { return "bfd_udp_set_echo_source" }
-func (*BfdUDPSetEchoSource) GetCrcString() string   { return "f9e6675e" }
-func (*BfdUDPSetEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPSetEchoSource) Reset()                        { *m = BfdUDPSetEchoSource{} }
+func (*BfdUDPSetEchoSource) GetMessageName() string          { return "bfd_udp_set_echo_source" }
+func (*BfdUDPSetEchoSource) GetCrcString() string            { return "f9e6675e" }
+func (*BfdUDPSetEchoSource) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPSetEchoSource) Size() (size int) {
 	if m == nil {
@@ -1177,11 +1164,12 @@ type BfdUDPSetEchoSourceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BfdUDPSetEchoSourceReply) Reset()               { *m = BfdUDPSetEchoSourceReply{} }
-func (*BfdUDPSetEchoSourceReply) GetMessageName() string { return "bfd_udp_set_echo_source_reply" }
-func (*BfdUDPSetEchoSourceReply) GetCrcString() string   { return "e8d4e804" }
-func (*BfdUDPSetEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPSetEchoSourceReply) Reset()                        { *m = BfdUDPSetEchoSourceReply{} }
+func (*BfdUDPSetEchoSourceReply) GetMessageName() string          { return "bfd_udp_set_echo_source_reply" }
+func (*BfdUDPSetEchoSourceReply) GetCrcString() string            { return "e8d4e804" }
+func (*BfdUDPSetEchoSourceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPSetEchoSourceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPSetEchoSourceReply) Size() (size int) {
@@ -1218,12 +1206,10 @@ type BfdUDPUpd struct {
 	ConfKeyID       uint32                         `binapi:"u32,name=conf_key_id" json:"conf_key_id,omitempty"`
 }
 
-func (m *BfdUDPUpd) Reset()               { *m = BfdUDPUpd{} }
-func (*BfdUDPUpd) GetMessageName() string { return "bfd_udp_upd" }
-func (*BfdUDPUpd) GetCrcString() string   { return "939cd26a" }
-func (*BfdUDPUpd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BfdUDPUpd) Reset()                        { *m = BfdUDPUpd{} }
+func (*BfdUDPUpd) GetMessageName() string          { return "bfd_udp_upd" }
+func (*BfdUDPUpd) GetCrcString() string            { return "939cd26a" }
+func (*BfdUDPUpd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BfdUDPUpd) Size() (size int) {
 	if m == nil {
@@ -1282,11 +1268,12 @@ type BfdUDPUpdReply struct {
 	StatsIndex uint32 `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
 }
 
-func (m *BfdUDPUpdReply) Reset()               { *m = BfdUDPUpdReply{} }
-func (*BfdUDPUpdReply) GetMessageName() string { return "bfd_udp_upd_reply" }
-func (*BfdUDPUpdReply) GetCrcString() string   { return "1992deab" }
-func (*BfdUDPUpdReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BfdUDPUpdReply) Reset()                        { *m = BfdUDPUpdReply{} }
+func (*BfdUDPUpdReply) GetMessageName() string          { return "bfd_udp_upd_reply" }
+func (*BfdUDPUpdReply) GetCrcString() string            { return "1992deab" }
+func (*BfdUDPUpdReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BfdUDPUpdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BfdUDPUpdReply) Size() (size int) {
@@ -1319,12 +1306,10 @@ type WantBfdEvents struct {
 	PID           uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantBfdEvents) Reset()               { *m = WantBfdEvents{} }
-func (*WantBfdEvents) GetMessageName() string { return "want_bfd_events" }
-func (*WantBfdEvents) GetCrcString() string   { return "c5e2af94" }
-func (*WantBfdEvents) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *WantBfdEvents) Reset()                        { *m = WantBfdEvents{} }
+func (*WantBfdEvents) GetMessageName() string          { return "want_bfd_events" }
+func (*WantBfdEvents) GetCrcString() string            { return "c5e2af94" }
+func (*WantBfdEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantBfdEvents) Size() (size int) {
 	if m == nil {
@@ -1355,11 +1340,12 @@ type WantBfdEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantBfdEventsReply) Reset()               { *m = WantBfdEventsReply{} }
-func (*WantBfdEventsReply) GetMessageName() string { return "want_bfd_events_reply" }
-func (*WantBfdEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantBfdEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *WantBfdEventsReply) Reset()                        { *m = WantBfdEventsReply{} }
+func (*WantBfdEventsReply) GetMessageName() string          { return "want_bfd_events_reply" }
+func (*WantBfdEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantBfdEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantBfdEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantBfdEventsReply) Size() (size int) {

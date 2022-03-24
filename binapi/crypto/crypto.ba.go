@@ -92,12 +92,10 @@ type CryptoSetAsyncDispatch struct {
 	Mode CryptoDispatchMode `binapi:"crypto_dispatch_mode,name=mode" json:"mode,omitempty"`
 }
 
-func (m *CryptoSetAsyncDispatch) Reset()               { *m = CryptoSetAsyncDispatch{} }
-func (*CryptoSetAsyncDispatch) GetMessageName() string { return "crypto_set_async_dispatch" }
-func (*CryptoSetAsyncDispatch) GetCrcString() string   { return "5ca4adc0" }
-func (*CryptoSetAsyncDispatch) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *CryptoSetAsyncDispatch) Reset()                        { *m = CryptoSetAsyncDispatch{} }
+func (*CryptoSetAsyncDispatch) GetMessageName() string          { return "crypto_set_async_dispatch" }
+func (*CryptoSetAsyncDispatch) GetCrcString() string            { return "5ca4adc0" }
+func (*CryptoSetAsyncDispatch) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CryptoSetAsyncDispatch) Size() (size int) {
 	if m == nil {
@@ -125,11 +123,12 @@ type CryptoSetAsyncDispatchReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CryptoSetAsyncDispatchReply) Reset()               { *m = CryptoSetAsyncDispatchReply{} }
-func (*CryptoSetAsyncDispatchReply) GetMessageName() string { return "crypto_set_async_dispatch_reply" }
-func (*CryptoSetAsyncDispatchReply) GetCrcString() string   { return "e8d4e804" }
-func (*CryptoSetAsyncDispatchReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *CryptoSetAsyncDispatchReply) Reset()                        { *m = CryptoSetAsyncDispatchReply{} }
+func (*CryptoSetAsyncDispatchReply) GetMessageName() string          { return "crypto_set_async_dispatch_reply" }
+func (*CryptoSetAsyncDispatchReply) GetCrcString() string            { return "e8d4e804" }
+func (*CryptoSetAsyncDispatchReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CryptoSetAsyncDispatchReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CryptoSetAsyncDispatchReply) Size() (size int) {
@@ -161,12 +160,10 @@ type CryptoSetHandler struct {
 	IsAsync uint8             `binapi:"u8,name=is_async" json:"is_async,omitempty"`
 }
 
-func (m *CryptoSetHandler) Reset()               { *m = CryptoSetHandler{} }
-func (*CryptoSetHandler) GetMessageName() string { return "crypto_set_handler" }
-func (*CryptoSetHandler) GetCrcString() string   { return "ce9ad00d" }
-func (*CryptoSetHandler) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *CryptoSetHandler) Reset()                        { *m = CryptoSetHandler{} }
+func (*CryptoSetHandler) GetMessageName() string          { return "crypto_set_handler" }
+func (*CryptoSetHandler) GetCrcString() string            { return "ce9ad00d" }
+func (*CryptoSetHandler) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CryptoSetHandler) Size() (size int) {
 	if m == nil {
@@ -203,11 +200,12 @@ type CryptoSetHandlerReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *CryptoSetHandlerReply) Reset()               { *m = CryptoSetHandlerReply{} }
-func (*CryptoSetHandlerReply) GetMessageName() string { return "crypto_set_handler_reply" }
-func (*CryptoSetHandlerReply) GetCrcString() string   { return "e8d4e804" }
-func (*CryptoSetHandlerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *CryptoSetHandlerReply) Reset()                        { *m = CryptoSetHandlerReply{} }
+func (*CryptoSetHandlerReply) GetMessageName() string          { return "crypto_set_handler_reply" }
+func (*CryptoSetHandlerReply) GetCrcString() string            { return "e8d4e804" }
+func (*CryptoSetHandlerReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CryptoSetHandlerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CryptoSetHandlerReply) Size() (size int) {

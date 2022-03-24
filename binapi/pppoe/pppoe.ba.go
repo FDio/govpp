@@ -36,12 +36,10 @@ type PppoeAddDelCp struct {
 	IsAdd     uint8                          `binapi:"u8,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *PppoeAddDelCp) Reset()               { *m = PppoeAddDelCp{} }
-func (*PppoeAddDelCp) GetMessageName() string { return "pppoe_add_del_cp" }
-func (*PppoeAddDelCp) GetCrcString() string   { return "eacd9aaa" }
-func (*PppoeAddDelCp) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PppoeAddDelCp) Reset()                        { *m = PppoeAddDelCp{} }
+func (*PppoeAddDelCp) GetMessageName() string          { return "pppoe_add_del_cp" }
+func (*PppoeAddDelCp) GetCrcString() string            { return "eacd9aaa" }
+func (*PppoeAddDelCp) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PppoeAddDelCp) Size() (size int) {
 	if m == nil {
@@ -72,11 +70,12 @@ type PppoeAddDelCpReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PppoeAddDelCpReply) Reset()               { *m = PppoeAddDelCpReply{} }
-func (*PppoeAddDelCpReply) GetMessageName() string { return "pppoe_add_del_cp_reply" }
-func (*PppoeAddDelCpReply) GetCrcString() string   { return "e8d4e804" }
-func (*PppoeAddDelCpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PppoeAddDelCpReply) Reset()                        { *m = PppoeAddDelCpReply{} }
+func (*PppoeAddDelCpReply) GetMessageName() string          { return "pppoe_add_del_cp_reply" }
+func (*PppoeAddDelCpReply) GetCrcString() string            { return "e8d4e804" }
+func (*PppoeAddDelCpReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PppoeAddDelCpReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PppoeAddDelCpReply) Size() (size int) {
@@ -109,12 +108,10 @@ type PppoeAddDelSession struct {
 	ClientMac  ethernet_types.MacAddress `binapi:"mac_address,name=client_mac" json:"client_mac,omitempty"`
 }
 
-func (m *PppoeAddDelSession) Reset()               { *m = PppoeAddDelSession{} }
-func (*PppoeAddDelSession) GetMessageName() string { return "pppoe_add_del_session" }
-func (*PppoeAddDelSession) GetCrcString() string   { return "f6fd759e" }
-func (*PppoeAddDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PppoeAddDelSession) Reset()                        { *m = PppoeAddDelSession{} }
+func (*PppoeAddDelSession) GetMessageName() string          { return "pppoe_add_del_session" }
+func (*PppoeAddDelSession) GetCrcString() string            { return "f6fd759e" }
+func (*PppoeAddDelSession) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PppoeAddDelSession) Size() (size int) {
 	if m == nil {
@@ -158,11 +155,12 @@ type PppoeAddDelSessionReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PppoeAddDelSessionReply) Reset()               { *m = PppoeAddDelSessionReply{} }
-func (*PppoeAddDelSessionReply) GetMessageName() string { return "pppoe_add_del_session_reply" }
-func (*PppoeAddDelSessionReply) GetCrcString() string   { return "5383d31f" }
-func (*PppoeAddDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PppoeAddDelSessionReply) Reset()                        { *m = PppoeAddDelSessionReply{} }
+func (*PppoeAddDelSessionReply) GetMessageName() string          { return "pppoe_add_del_session_reply" }
+func (*PppoeAddDelSessionReply) GetCrcString() string            { return "5383d31f" }
+func (*PppoeAddDelSessionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PppoeAddDelSessionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PppoeAddDelSessionReply) Size() (size int) {
@@ -200,11 +198,12 @@ type PppoeSessionDetails struct {
 	ClientMac    ethernet_types.MacAddress      `binapi:"mac_address,name=client_mac" json:"client_mac,omitempty"`
 }
 
-func (m *PppoeSessionDetails) Reset()               { *m = PppoeSessionDetails{} }
-func (*PppoeSessionDetails) GetMessageName() string { return "pppoe_session_details" }
-func (*PppoeSessionDetails) GetCrcString() string   { return "4b8e8a4a" }
-func (*PppoeSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PppoeSessionDetails) Reset()                        { *m = PppoeSessionDetails{} }
+func (*PppoeSessionDetails) GetMessageName() string          { return "pppoe_session_details" }
+func (*PppoeSessionDetails) GetCrcString() string            { return "4b8e8a4a" }
+func (*PppoeSessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PppoeSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PppoeSessionDetails) Size() (size int) {
@@ -254,12 +253,10 @@ type PppoeSessionDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PppoeSessionDump) Reset()               { *m = PppoeSessionDump{} }
-func (*PppoeSessionDump) GetMessageName() string { return "pppoe_session_dump" }
-func (*PppoeSessionDump) GetCrcString() string   { return "f9e6675e" }
-func (*PppoeSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PppoeSessionDump) Reset()                        { *m = PppoeSessionDump{} }
+func (*PppoeSessionDump) GetMessageName() string          { return "pppoe_session_dump" }
+func (*PppoeSessionDump) GetCrcString() string            { return "f9e6675e" }
+func (*PppoeSessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PppoeSessionDump) Size() (size int) {
 	if m == nil {

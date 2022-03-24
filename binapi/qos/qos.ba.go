@@ -102,12 +102,10 @@ type QosEgressMapDelete struct {
 	ID uint32 `binapi:"u32,name=id" json:"id,omitempty"`
 }
 
-func (m *QosEgressMapDelete) Reset()               { *m = QosEgressMapDelete{} }
-func (*QosEgressMapDelete) GetMessageName() string { return "qos_egress_map_delete" }
-func (*QosEgressMapDelete) GetCrcString() string   { return "3a91bde5" }
-func (*QosEgressMapDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosEgressMapDelete) Reset()                        { *m = QosEgressMapDelete{} }
+func (*QosEgressMapDelete) GetMessageName() string          { return "qos_egress_map_delete" }
+func (*QosEgressMapDelete) GetCrcString() string            { return "3a91bde5" }
+func (*QosEgressMapDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosEgressMapDelete) Size() (size int) {
 	if m == nil {
@@ -135,11 +133,12 @@ type QosEgressMapDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosEgressMapDeleteReply) Reset()               { *m = QosEgressMapDeleteReply{} }
-func (*QosEgressMapDeleteReply) GetMessageName() string { return "qos_egress_map_delete_reply" }
-func (*QosEgressMapDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosEgressMapDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosEgressMapDeleteReply) Reset()                        { *m = QosEgressMapDeleteReply{} }
+func (*QosEgressMapDeleteReply) GetMessageName() string          { return "qos_egress_map_delete_reply" }
+func (*QosEgressMapDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosEgressMapDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosEgressMapDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosEgressMapDeleteReply) Size() (size int) {
@@ -168,11 +167,12 @@ type QosEgressMapDetails struct {
 	Map QosEgressMap `binapi:"qos_egress_map,name=map" json:"map,omitempty"`
 }
 
-func (m *QosEgressMapDetails) Reset()               { *m = QosEgressMapDetails{} }
-func (*QosEgressMapDetails) GetMessageName() string { return "qos_egress_map_details" }
-func (*QosEgressMapDetails) GetCrcString() string   { return "46c5653c" }
-func (*QosEgressMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosEgressMapDetails) Reset()                        { *m = QosEgressMapDetails{} }
+func (*QosEgressMapDetails) GetMessageName() string          { return "qos_egress_map_details" }
+func (*QosEgressMapDetails) GetCrcString() string            { return "46c5653c" }
+func (*QosEgressMapDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosEgressMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *QosEgressMapDetails) Size() (size int) {
@@ -209,12 +209,10 @@ func (m *QosEgressMapDetails) Unmarshal(b []byte) error {
 // QosEgressMapDump defines message 'qos_egress_map_dump'.
 type QosEgressMapDump struct{}
 
-func (m *QosEgressMapDump) Reset()               { *m = QosEgressMapDump{} }
-func (*QosEgressMapDump) GetMessageName() string { return "qos_egress_map_dump" }
-func (*QosEgressMapDump) GetCrcString() string   { return "51077d14" }
-func (*QosEgressMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosEgressMapDump) Reset()                        { *m = QosEgressMapDump{} }
+func (*QosEgressMapDump) GetMessageName() string          { return "qos_egress_map_dump" }
+func (*QosEgressMapDump) GetCrcString() string            { return "51077d14" }
+func (*QosEgressMapDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosEgressMapDump) Size() (size int) {
 	if m == nil {
@@ -238,12 +236,10 @@ type QosEgressMapUpdate struct {
 	Map QosEgressMap `binapi:"qos_egress_map,name=map" json:"map,omitempty"`
 }
 
-func (m *QosEgressMapUpdate) Reset()               { *m = QosEgressMapUpdate{} }
-func (*QosEgressMapUpdate) GetMessageName() string { return "qos_egress_map_update" }
-func (*QosEgressMapUpdate) GetCrcString() string   { return "6d1c065f" }
-func (*QosEgressMapUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosEgressMapUpdate) Reset()                        { *m = QosEgressMapUpdate{} }
+func (*QosEgressMapUpdate) GetMessageName() string          { return "qos_egress_map_update" }
+func (*QosEgressMapUpdate) GetCrcString() string            { return "6d1c065f" }
+func (*QosEgressMapUpdate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosEgressMapUpdate) Size() (size int) {
 	if m == nil {
@@ -281,11 +277,12 @@ type QosEgressMapUpdateReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosEgressMapUpdateReply) Reset()               { *m = QosEgressMapUpdateReply{} }
-func (*QosEgressMapUpdateReply) GetMessageName() string { return "qos_egress_map_update_reply" }
-func (*QosEgressMapUpdateReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosEgressMapUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosEgressMapUpdateReply) Reset()                        { *m = QosEgressMapUpdateReply{} }
+func (*QosEgressMapUpdateReply) GetMessageName() string          { return "qos_egress_map_update_reply" }
+func (*QosEgressMapUpdateReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosEgressMapUpdateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosEgressMapUpdateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosEgressMapUpdateReply) Size() (size int) {
@@ -314,11 +311,12 @@ type QosMarkDetails struct {
 	Mark QosMark `binapi:"qos_mark,name=mark" json:"mark,omitempty"`
 }
 
-func (m *QosMarkDetails) Reset()               { *m = QosMarkDetails{} }
-func (*QosMarkDetails) GetMessageName() string { return "qos_mark_details" }
-func (*QosMarkDetails) GetCrcString() string   { return "89fe81a9" }
-func (*QosMarkDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosMarkDetails) Reset()                        { *m = QosMarkDetails{} }
+func (*QosMarkDetails) GetMessageName() string          { return "qos_mark_details" }
+func (*QosMarkDetails) GetCrcString() string            { return "89fe81a9" }
+func (*QosMarkDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosMarkDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *QosMarkDetails) Size() (size int) {
@@ -353,11 +351,12 @@ type QosMarkDetailsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosMarkDetailsReply) Reset()               { *m = QosMarkDetailsReply{} }
-func (*QosMarkDetailsReply) GetMessageName() string { return "qos_mark_details_reply" }
-func (*QosMarkDetailsReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosMarkDetailsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosMarkDetailsReply) Reset()                        { *m = QosMarkDetailsReply{} }
+func (*QosMarkDetailsReply) GetMessageName() string          { return "qos_mark_details_reply" }
+func (*QosMarkDetailsReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosMarkDetailsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosMarkDetailsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosMarkDetailsReply) Size() (size int) {
@@ -386,12 +385,10 @@ type QosMarkDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *QosMarkDump) Reset()               { *m = QosMarkDump{} }
-func (*QosMarkDump) GetMessageName() string { return "qos_mark_dump" }
-func (*QosMarkDump) GetCrcString() string   { return "f9e6675e" }
-func (*QosMarkDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosMarkDump) Reset()                        { *m = QosMarkDump{} }
+func (*QosMarkDump) GetMessageName() string          { return "qos_mark_dump" }
+func (*QosMarkDump) GetCrcString() string            { return "f9e6675e" }
+func (*QosMarkDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosMarkDump) Size() (size int) {
 	if m == nil {
@@ -420,12 +417,10 @@ type QosMarkEnableDisable struct {
 	Mark   QosMark `binapi:"qos_mark,name=mark" json:"mark,omitempty"`
 }
 
-func (m *QosMarkEnableDisable) Reset()               { *m = QosMarkEnableDisable{} }
-func (*QosMarkEnableDisable) GetMessageName() string { return "qos_mark_enable_disable" }
-func (*QosMarkEnableDisable) GetCrcString() string   { return "1a010f74" }
-func (*QosMarkEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosMarkEnableDisable) Reset()                        { *m = QosMarkEnableDisable{} }
+func (*QosMarkEnableDisable) GetMessageName() string          { return "qos_mark_enable_disable" }
+func (*QosMarkEnableDisable) GetCrcString() string            { return "1a010f74" }
+func (*QosMarkEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosMarkEnableDisable) Size() (size int) {
 	if m == nil {
@@ -462,11 +457,12 @@ type QosMarkEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosMarkEnableDisableReply) Reset()               { *m = QosMarkEnableDisableReply{} }
-func (*QosMarkEnableDisableReply) GetMessageName() string { return "qos_mark_enable_disable_reply" }
-func (*QosMarkEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosMarkEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosMarkEnableDisableReply) Reset()                        { *m = QosMarkEnableDisableReply{} }
+func (*QosMarkEnableDisableReply) GetMessageName() string          { return "qos_mark_enable_disable_reply" }
+func (*QosMarkEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosMarkEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosMarkEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosMarkEnableDisableReply) Size() (size int) {
@@ -495,11 +491,12 @@ type QosRecordDetails struct {
 	Record QosRecord `binapi:"qos_record,name=record" json:"record,omitempty"`
 }
 
-func (m *QosRecordDetails) Reset()               { *m = QosRecordDetails{} }
-func (*QosRecordDetails) GetMessageName() string { return "qos_record_details" }
-func (*QosRecordDetails) GetCrcString() string   { return "a425d4d3" }
-func (*QosRecordDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosRecordDetails) Reset()                        { *m = QosRecordDetails{} }
+func (*QosRecordDetails) GetMessageName() string          { return "qos_record_details" }
+func (*QosRecordDetails) GetCrcString() string            { return "a425d4d3" }
+func (*QosRecordDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosRecordDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *QosRecordDetails) Size() (size int) {
@@ -529,12 +526,10 @@ func (m *QosRecordDetails) Unmarshal(b []byte) error {
 // QosRecordDump defines message 'qos_record_dump'.
 type QosRecordDump struct{}
 
-func (m *QosRecordDump) Reset()               { *m = QosRecordDump{} }
-func (*QosRecordDump) GetMessageName() string { return "qos_record_dump" }
-func (*QosRecordDump) GetCrcString() string   { return "51077d14" }
-func (*QosRecordDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosRecordDump) Reset()                        { *m = QosRecordDump{} }
+func (*QosRecordDump) GetMessageName() string          { return "qos_record_dump" }
+func (*QosRecordDump) GetCrcString() string            { return "51077d14" }
+func (*QosRecordDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosRecordDump) Size() (size int) {
 	if m == nil {
@@ -559,12 +554,10 @@ type QosRecordEnableDisable struct {
 	Record QosRecord `binapi:"qos_record,name=record" json:"record,omitempty"`
 }
 
-func (m *QosRecordEnableDisable) Reset()               { *m = QosRecordEnableDisable{} }
-func (*QosRecordEnableDisable) GetMessageName() string { return "qos_record_enable_disable" }
-func (*QosRecordEnableDisable) GetCrcString() string   { return "2f1a4a38" }
-func (*QosRecordEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosRecordEnableDisable) Reset()                        { *m = QosRecordEnableDisable{} }
+func (*QosRecordEnableDisable) GetMessageName() string          { return "qos_record_enable_disable" }
+func (*QosRecordEnableDisable) GetCrcString() string            { return "2f1a4a38" }
+func (*QosRecordEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosRecordEnableDisable) Size() (size int) {
 	if m == nil {
@@ -598,11 +591,12 @@ type QosRecordEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosRecordEnableDisableReply) Reset()               { *m = QosRecordEnableDisableReply{} }
-func (*QosRecordEnableDisableReply) GetMessageName() string { return "qos_record_enable_disable_reply" }
-func (*QosRecordEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosRecordEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosRecordEnableDisableReply) Reset()                        { *m = QosRecordEnableDisableReply{} }
+func (*QosRecordEnableDisableReply) GetMessageName() string          { return "qos_record_enable_disable_reply" }
+func (*QosRecordEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosRecordEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosRecordEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosRecordEnableDisableReply) Size() (size int) {
@@ -631,11 +625,12 @@ type QosStoreDetails struct {
 	Store QosStore `binapi:"qos_store,name=store" json:"store,omitempty"`
 }
 
-func (m *QosStoreDetails) Reset()               { *m = QosStoreDetails{} }
-func (*QosStoreDetails) GetMessageName() string { return "qos_store_details" }
-func (*QosStoreDetails) GetCrcString() string   { return "3ee0aad7" }
-func (*QosStoreDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosStoreDetails) Reset()                        { *m = QosStoreDetails{} }
+func (*QosStoreDetails) GetMessageName() string          { return "qos_store_details" }
+func (*QosStoreDetails) GetCrcString() string            { return "3ee0aad7" }
+func (*QosStoreDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosStoreDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *QosStoreDetails) Size() (size int) {
@@ -668,12 +663,10 @@ func (m *QosStoreDetails) Unmarshal(b []byte) error {
 // QosStoreDump defines message 'qos_store_dump'.
 type QosStoreDump struct{}
 
-func (m *QosStoreDump) Reset()               { *m = QosStoreDump{} }
-func (*QosStoreDump) GetMessageName() string { return "qos_store_dump" }
-func (*QosStoreDump) GetCrcString() string   { return "51077d14" }
-func (*QosStoreDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosStoreDump) Reset()                        { *m = QosStoreDump{} }
+func (*QosStoreDump) GetMessageName() string          { return "qos_store_dump" }
+func (*QosStoreDump) GetCrcString() string            { return "51077d14" }
+func (*QosStoreDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosStoreDump) Size() (size int) {
 	if m == nil {
@@ -698,12 +691,10 @@ type QosStoreEnableDisable struct {
 	Store  QosStore `binapi:"qos_store,name=store" json:"store,omitempty"`
 }
 
-func (m *QosStoreEnableDisable) Reset()               { *m = QosStoreEnableDisable{} }
-func (*QosStoreEnableDisable) GetMessageName() string { return "qos_store_enable_disable" }
-func (*QosStoreEnableDisable) GetCrcString() string   { return "f3abcc8b" }
-func (*QosStoreEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *QosStoreEnableDisable) Reset()                        { *m = QosStoreEnableDisable{} }
+func (*QosStoreEnableDisable) GetMessageName() string          { return "qos_store_enable_disable" }
+func (*QosStoreEnableDisable) GetCrcString() string            { return "f3abcc8b" }
+func (*QosStoreEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *QosStoreEnableDisable) Size() (size int) {
 	if m == nil {
@@ -740,11 +731,12 @@ type QosStoreEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *QosStoreEnableDisableReply) Reset()               { *m = QosStoreEnableDisableReply{} }
-func (*QosStoreEnableDisableReply) GetMessageName() string { return "qos_store_enable_disable_reply" }
-func (*QosStoreEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*QosStoreEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *QosStoreEnableDisableReply) Reset()                        { *m = QosStoreEnableDisableReply{} }
+func (*QosStoreEnableDisableReply) GetMessageName() string          { return "qos_store_enable_disable_reply" }
+func (*QosStoreEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*QosStoreEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *QosStoreEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *QosStoreEnableDisableReply) Size() (size int) {

@@ -37,12 +37,10 @@ type NsimConfigure struct {
 	PacketsPerDrop           uint32 `binapi:"u32,name=packets_per_drop" json:"packets_per_drop,omitempty"`
 }
 
-func (m *NsimConfigure) Reset()               { *m = NsimConfigure{} }
-func (*NsimConfigure) GetMessageName() string { return "nsim_configure" }
-func (*NsimConfigure) GetCrcString() string   { return "16ed400f" }
-func (*NsimConfigure) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NsimConfigure) Reset()                        { *m = NsimConfigure{} }
+func (*NsimConfigure) GetMessageName() string          { return "nsim_configure" }
+func (*NsimConfigure) GetCrcString() string            { return "16ed400f" }
+func (*NsimConfigure) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NsimConfigure) Size() (size int) {
 	if m == nil {
@@ -83,12 +81,10 @@ type NsimConfigure2 struct {
 	PacketsPerReorder        uint32 `binapi:"u32,name=packets_per_reorder" json:"packets_per_reorder,omitempty"`
 }
 
-func (m *NsimConfigure2) Reset()               { *m = NsimConfigure2{} }
-func (*NsimConfigure2) GetMessageName() string { return "nsim_configure2" }
-func (*NsimConfigure2) GetCrcString() string   { return "64de8ed3" }
-func (*NsimConfigure2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NsimConfigure2) Reset()                        { *m = NsimConfigure2{} }
+func (*NsimConfigure2) GetMessageName() string          { return "nsim_configure2" }
+func (*NsimConfigure2) GetCrcString() string            { return "64de8ed3" }
+func (*NsimConfigure2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NsimConfigure2) Size() (size int) {
 	if m == nil {
@@ -128,11 +124,12 @@ type NsimConfigure2Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *NsimConfigure2Reply) Reset()               { *m = NsimConfigure2Reply{} }
-func (*NsimConfigure2Reply) GetMessageName() string { return "nsim_configure2_reply" }
-func (*NsimConfigure2Reply) GetCrcString() string   { return "e8d4e804" }
-func (*NsimConfigure2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NsimConfigure2Reply) Reset()                        { *m = NsimConfigure2Reply{} }
+func (*NsimConfigure2Reply) GetMessageName() string          { return "nsim_configure2_reply" }
+func (*NsimConfigure2Reply) GetCrcString() string            { return "e8d4e804" }
+func (*NsimConfigure2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NsimConfigure2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimConfigure2Reply) Size() (size int) {
@@ -162,11 +159,12 @@ type NsimConfigureReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *NsimConfigureReply) Reset()               { *m = NsimConfigureReply{} }
-func (*NsimConfigureReply) GetMessageName() string { return "nsim_configure_reply" }
-func (*NsimConfigureReply) GetCrcString() string   { return "e8d4e804" }
-func (*NsimConfigureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NsimConfigureReply) Reset()                        { *m = NsimConfigureReply{} }
+func (*NsimConfigureReply) GetMessageName() string          { return "nsim_configure_reply" }
+func (*NsimConfigureReply) GetCrcString() string            { return "e8d4e804" }
+func (*NsimConfigureReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NsimConfigureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimConfigureReply) Size() (size int) {
@@ -201,10 +199,8 @@ func (m *NsimCrossConnectEnableDisable) Reset() { *m = NsimCrossConnectEnableDis
 func (*NsimCrossConnectEnableDisable) GetMessageName() string {
 	return "nsim_cross_connect_enable_disable"
 }
-func (*NsimCrossConnectEnableDisable) GetCrcString() string { return "9c3ead86" }
-func (*NsimCrossConnectEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (*NsimCrossConnectEnableDisable) GetCrcString() string            { return "9c3ead86" }
+func (*NsimCrossConnectEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NsimCrossConnectEnableDisable) Size() (size int) {
 	if m == nil {
@@ -245,6 +241,9 @@ func (*NsimCrossConnectEnableDisableReply) GetMessageName() string {
 func (*NsimCrossConnectEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*NsimCrossConnectEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
+}
+func (m *NsimCrossConnectEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimCrossConnectEnableDisableReply) Size() (size int) {
@@ -319,6 +318,9 @@ func (*NsimOutputFeatureEnableDisableReply) GetMessageName() string {
 func (*NsimOutputFeatureEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*NsimOutputFeatureEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
+}
+func (m *NsimOutputFeatureEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NsimOutputFeatureEnableDisableReply) Size() (size int) {

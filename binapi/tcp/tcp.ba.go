@@ -35,12 +35,10 @@ type TCPConfigureSrcAddresses struct {
 	LastAddress  ip_types.Address `binapi:"address,name=last_address" json:"last_address,omitempty"`
 }
 
-func (m *TCPConfigureSrcAddresses) Reset()               { *m = TCPConfigureSrcAddresses{} }
-func (*TCPConfigureSrcAddresses) GetMessageName() string { return "tcp_configure_src_addresses" }
-func (*TCPConfigureSrcAddresses) GetCrcString() string   { return "67eede0d" }
-func (*TCPConfigureSrcAddresses) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TCPConfigureSrcAddresses) Reset()                        { *m = TCPConfigureSrcAddresses{} }
+func (*TCPConfigureSrcAddresses) GetMessageName() string          { return "tcp_configure_src_addresses" }
+func (*TCPConfigureSrcAddresses) GetCrcString() string            { return "67eede0d" }
+func (*TCPConfigureSrcAddresses) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TCPConfigureSrcAddresses) Size() (size int) {
 	if m == nil {
@@ -84,9 +82,10 @@ func (m *TCPConfigureSrcAddressesReply) Reset() { *m = TCPConfigureSrcAddressesR
 func (*TCPConfigureSrcAddressesReply) GetMessageName() string {
 	return "tcp_configure_src_addresses_reply"
 }
-func (*TCPConfigureSrcAddressesReply) GetCrcString() string { return "e8d4e804" }
-func (*TCPConfigureSrcAddressesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*TCPConfigureSrcAddressesReply) GetCrcString() string            { return "e8d4e804" }
+func (*TCPConfigureSrcAddressesReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TCPConfigureSrcAddressesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TCPConfigureSrcAddressesReply) Size() (size int) {

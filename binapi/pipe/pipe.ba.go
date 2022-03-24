@@ -34,12 +34,10 @@ type PipeCreate struct {
 	UserInstance uint32 `binapi:"u32,name=user_instance" json:"user_instance,omitempty"`
 }
 
-func (m *PipeCreate) Reset()               { *m = PipeCreate{} }
-func (*PipeCreate) GetMessageName() string { return "pipe_create" }
-func (*PipeCreate) GetCrcString() string   { return "bb263bd3" }
-func (*PipeCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PipeCreate) Reset()                        { *m = PipeCreate{} }
+func (*PipeCreate) GetMessageName() string          { return "pipe_create" }
+func (*PipeCreate) GetCrcString() string            { return "bb263bd3" }
+func (*PipeCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PipeCreate) Size() (size int) {
 	if m == nil {
@@ -72,11 +70,12 @@ type PipeCreateReply struct {
 	PipeSwIfIndex [2]interface_types.InterfaceIndex `binapi:"interface_index[2],name=pipe_sw_if_index" json:"pipe_sw_if_index,omitempty"`
 }
 
-func (m *PipeCreateReply) Reset()               { *m = PipeCreateReply{} }
-func (*PipeCreateReply) GetMessageName() string { return "pipe_create_reply" }
-func (*PipeCreateReply) GetCrcString() string   { return "b7ce310c" }
-func (*PipeCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PipeCreateReply) Reset()                        { *m = PipeCreateReply{} }
+func (*PipeCreateReply) GetMessageName() string          { return "pipe_create_reply" }
+func (*PipeCreateReply) GetCrcString() string            { return "b7ce310c" }
+func (*PipeCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PipeCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PipeCreateReply) Size() (size int) {
@@ -117,12 +116,10 @@ type PipeDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PipeDelete) Reset()               { *m = PipeDelete{} }
-func (*PipeDelete) GetMessageName() string { return "pipe_delete" }
-func (*PipeDelete) GetCrcString() string   { return "f9e6675e" }
-func (*PipeDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PipeDelete) Reset()                        { *m = PipeDelete{} }
+func (*PipeDelete) GetMessageName() string          { return "pipe_delete" }
+func (*PipeDelete) GetCrcString() string            { return "f9e6675e" }
+func (*PipeDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PipeDelete) Size() (size int) {
 	if m == nil {
@@ -150,11 +147,12 @@ type PipeDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PipeDeleteReply) Reset()               { *m = PipeDeleteReply{} }
-func (*PipeDeleteReply) GetMessageName() string { return "pipe_delete_reply" }
-func (*PipeDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*PipeDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PipeDeleteReply) Reset()                        { *m = PipeDeleteReply{} }
+func (*PipeDeleteReply) GetMessageName() string          { return "pipe_delete_reply" }
+func (*PipeDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*PipeDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PipeDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PipeDeleteReply) Size() (size int) {
@@ -185,11 +183,12 @@ type PipeDetails struct {
 	Instance      uint32                            `binapi:"u32,name=instance" json:"instance,omitempty"`
 }
 
-func (m *PipeDetails) Reset()               { *m = PipeDetails{} }
-func (*PipeDetails) GetMessageName() string { return "pipe_details" }
-func (*PipeDetails) GetCrcString() string   { return "c52b799d" }
-func (*PipeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PipeDetails) Reset()                        { *m = PipeDetails{} }
+func (*PipeDetails) GetMessageName() string          { return "pipe_details" }
+func (*PipeDetails) GetCrcString() string            { return "c52b799d" }
+func (*PipeDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PipeDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PipeDetails) Size() (size int) {
@@ -228,12 +227,10 @@ func (m *PipeDetails) Unmarshal(b []byte) error {
 // PipeDump defines message 'pipe_dump'.
 type PipeDump struct{}
 
-func (m *PipeDump) Reset()               { *m = PipeDump{} }
-func (*PipeDump) GetMessageName() string { return "pipe_dump" }
-func (*PipeDump) GetCrcString() string   { return "51077d14" }
-func (*PipeDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PipeDump) Reset()                        { *m = PipeDump{} }
+func (*PipeDump) GetMessageName() string          { return "pipe_dump" }
+func (*PipeDump) GetCrcString() string            { return "51077d14" }
+func (*PipeDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PipeDump) Size() (size int) {
 	if m == nil {

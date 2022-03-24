@@ -34,6 +34,7 @@ type ControlPingReply struct {
 func (*ControlPingReply) GetMessageName() string          { return "control_ping_reply" }
 func (*ControlPingReply) GetCrcString() string            { return "f6b0b8ca" }
 func (*ControlPingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (*ControlPingReply) GetRetVal() error                { return nil }
 
 func init() {
 	api.RegisterMessage((*ControlPing)(nil), "ControlPing")

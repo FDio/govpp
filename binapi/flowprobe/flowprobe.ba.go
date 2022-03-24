@@ -193,12 +193,10 @@ func (x FlowprobeWhichFlags) String() string {
 // InProgress: the message form may change in the future versions
 type FlowprobeGetParams struct{}
 
-func (m *FlowprobeGetParams) Reset()               { *m = FlowprobeGetParams{} }
-func (*FlowprobeGetParams) GetMessageName() string { return "flowprobe_get_params" }
-func (*FlowprobeGetParams) GetCrcString() string   { return "51077d14" }
-func (*FlowprobeGetParams) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeGetParams) Reset()                        { *m = FlowprobeGetParams{} }
+func (*FlowprobeGetParams) GetMessageName() string          { return "flowprobe_get_params" }
+func (*FlowprobeGetParams) GetCrcString() string            { return "51077d14" }
+func (*FlowprobeGetParams) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeGetParams) Size() (size int) {
 	if m == nil {
@@ -226,11 +224,12 @@ type FlowprobeGetParamsReply struct {
 	PassiveTimer uint32               `binapi:"u32,name=passive_timer" json:"passive_timer,omitempty"`
 }
 
-func (m *FlowprobeGetParamsReply) Reset()               { *m = FlowprobeGetParamsReply{} }
-func (*FlowprobeGetParamsReply) GetMessageName() string { return "flowprobe_get_params_reply" }
-func (*FlowprobeGetParamsReply) GetCrcString() string   { return "f350d621" }
-func (*FlowprobeGetParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FlowprobeGetParamsReply) Reset()                        { *m = FlowprobeGetParamsReply{} }
+func (*FlowprobeGetParamsReply) GetMessageName() string          { return "flowprobe_get_params_reply" }
+func (*FlowprobeGetParamsReply) GetCrcString() string            { return "f350d621" }
+func (*FlowprobeGetParamsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeGetParamsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowprobeGetParamsReply) Size() (size int) {
@@ -272,12 +271,10 @@ type FlowprobeInterfaceAddDel struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *FlowprobeInterfaceAddDel) Reset()               { *m = FlowprobeInterfaceAddDel{} }
-func (*FlowprobeInterfaceAddDel) GetMessageName() string { return "flowprobe_interface_add_del" }
-func (*FlowprobeInterfaceAddDel) GetCrcString() string   { return "3420739c" }
-func (*FlowprobeInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeInterfaceAddDel) Reset()                        { *m = FlowprobeInterfaceAddDel{} }
+func (*FlowprobeInterfaceAddDel) GetMessageName() string          { return "flowprobe_interface_add_del" }
+func (*FlowprobeInterfaceAddDel) GetCrcString() string            { return "3420739c" }
+func (*FlowprobeInterfaceAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeInterfaceAddDel) Size() (size int) {
 	if m == nil {
@@ -319,9 +316,10 @@ func (m *FlowprobeInterfaceAddDelReply) Reset() { *m = FlowprobeInterfaceAddDelR
 func (*FlowprobeInterfaceAddDelReply) GetMessageName() string {
 	return "flowprobe_interface_add_del_reply"
 }
-func (*FlowprobeInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
-func (*FlowprobeInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*FlowprobeInterfaceAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*FlowprobeInterfaceAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeInterfaceAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowprobeInterfaceAddDelReply) Size() (size int) {
@@ -353,11 +351,12 @@ type FlowprobeInterfaceDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *FlowprobeInterfaceDetails) Reset()               { *m = FlowprobeInterfaceDetails{} }
-func (*FlowprobeInterfaceDetails) GetMessageName() string { return "flowprobe_interface_details" }
-func (*FlowprobeInterfaceDetails) GetCrcString() string   { return "427d77e0" }
-func (*FlowprobeInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FlowprobeInterfaceDetails) Reset()                        { *m = FlowprobeInterfaceDetails{} }
+func (*FlowprobeInterfaceDetails) GetMessageName() string          { return "flowprobe_interface_details" }
+func (*FlowprobeInterfaceDetails) GetCrcString() string            { return "427d77e0" }
+func (*FlowprobeInterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *FlowprobeInterfaceDetails) Size() (size int) {
@@ -393,12 +392,10 @@ type FlowprobeInterfaceDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *FlowprobeInterfaceDump) Reset()               { *m = FlowprobeInterfaceDump{} }
-func (*FlowprobeInterfaceDump) GetMessageName() string { return "flowprobe_interface_dump" }
-func (*FlowprobeInterfaceDump) GetCrcString() string   { return "f9e6675e" }
-func (*FlowprobeInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeInterfaceDump) Reset()                        { *m = FlowprobeInterfaceDump{} }
+func (*FlowprobeInterfaceDump) GetMessageName() string          { return "flowprobe_interface_dump" }
+func (*FlowprobeInterfaceDump) GetCrcString() string            { return "f9e6675e" }
+func (*FlowprobeInterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeInterfaceDump) Size() (size int) {
 	if m == nil {
@@ -428,12 +425,10 @@ type FlowprobeParams struct {
 	PassiveTimer uint32               `binapi:"u32,name=passive_timer" json:"passive_timer,omitempty"`
 }
 
-func (m *FlowprobeParams) Reset()               { *m = FlowprobeParams{} }
-func (*FlowprobeParams) GetMessageName() string { return "flowprobe_params" }
-func (*FlowprobeParams) GetCrcString() string   { return "baa46c09" }
-func (*FlowprobeParams) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeParams) Reset()                        { *m = FlowprobeParams{} }
+func (*FlowprobeParams) GetMessageName() string          { return "flowprobe_params" }
+func (*FlowprobeParams) GetCrcString() string            { return "baa46c09" }
+func (*FlowprobeParams) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeParams) Size() (size int) {
 	if m == nil {
@@ -467,11 +462,12 @@ type FlowprobeParamsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *FlowprobeParamsReply) Reset()               { *m = FlowprobeParamsReply{} }
-func (*FlowprobeParamsReply) GetMessageName() string { return "flowprobe_params_reply" }
-func (*FlowprobeParamsReply) GetCrcString() string   { return "e8d4e804" }
-func (*FlowprobeParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FlowprobeParamsReply) Reset()                        { *m = FlowprobeParamsReply{} }
+func (*FlowprobeParamsReply) GetMessageName() string          { return "flowprobe_params_reply" }
+func (*FlowprobeParamsReply) GetCrcString() string            { return "e8d4e804" }
+func (*FlowprobeParamsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeParamsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowprobeParamsReply) Size() (size int) {
@@ -503,12 +499,10 @@ type FlowprobeSetParams struct {
 	PassiveTimer uint32               `binapi:"u32,name=passive_timer,default=4294967295" json:"passive_timer,omitempty"`
 }
 
-func (m *FlowprobeSetParams) Reset()               { *m = FlowprobeSetParams{} }
-func (*FlowprobeSetParams) GetMessageName() string { return "flowprobe_set_params" }
-func (*FlowprobeSetParams) GetCrcString() string   { return "baa46c09" }
-func (*FlowprobeSetParams) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeSetParams) Reset()                        { *m = FlowprobeSetParams{} }
+func (*FlowprobeSetParams) GetMessageName() string          { return "flowprobe_set_params" }
+func (*FlowprobeSetParams) GetCrcString() string            { return "baa46c09" }
+func (*FlowprobeSetParams) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeSetParams) Size() (size int) {
 	if m == nil {
@@ -543,11 +537,12 @@ type FlowprobeSetParamsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *FlowprobeSetParamsReply) Reset()               { *m = FlowprobeSetParamsReply{} }
-func (*FlowprobeSetParamsReply) GetMessageName() string { return "flowprobe_set_params_reply" }
-func (*FlowprobeSetParamsReply) GetCrcString() string   { return "e8d4e804" }
-func (*FlowprobeSetParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FlowprobeSetParamsReply) Reset()                        { *m = FlowprobeSetParamsReply{} }
+func (*FlowprobeSetParamsReply) GetMessageName() string          { return "flowprobe_set_params_reply" }
+func (*FlowprobeSetParamsReply) GetCrcString() string            { return "e8d4e804" }
+func (*FlowprobeSetParamsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeSetParamsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowprobeSetParamsReply) Size() (size int) {
@@ -578,12 +573,10 @@ type FlowprobeTxInterfaceAddDel struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *FlowprobeTxInterfaceAddDel) Reset()               { *m = FlowprobeTxInterfaceAddDel{} }
-func (*FlowprobeTxInterfaceAddDel) GetMessageName() string { return "flowprobe_tx_interface_add_del" }
-func (*FlowprobeTxInterfaceAddDel) GetCrcString() string   { return "b782c976" }
-func (*FlowprobeTxInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowprobeTxInterfaceAddDel) Reset()                        { *m = FlowprobeTxInterfaceAddDel{} }
+func (*FlowprobeTxInterfaceAddDel) GetMessageName() string          { return "flowprobe_tx_interface_add_del" }
+func (*FlowprobeTxInterfaceAddDel) GetCrcString() string            { return "b782c976" }
+func (*FlowprobeTxInterfaceAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowprobeTxInterfaceAddDel) Size() (size int) {
 	if m == nil {
@@ -621,9 +614,10 @@ func (m *FlowprobeTxInterfaceAddDelReply) Reset() { *m = FlowprobeTxInterfaceAdd
 func (*FlowprobeTxInterfaceAddDelReply) GetMessageName() string {
 	return "flowprobe_tx_interface_add_del_reply"
 }
-func (*FlowprobeTxInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
-func (*FlowprobeTxInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*FlowprobeTxInterfaceAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*FlowprobeTxInterfaceAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowprobeTxInterfaceAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowprobeTxInterfaceAddDelReply) Size() (size int) {

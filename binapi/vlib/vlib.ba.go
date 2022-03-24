@@ -45,12 +45,10 @@ type AddNodeNext struct {
 	NextName string `binapi:"string[64],name=next_name" json:"next_name,omitempty"`
 }
 
-func (m *AddNodeNext) Reset()               { *m = AddNodeNext{} }
-func (*AddNodeNext) GetMessageName() string { return "add_node_next" }
-func (*AddNodeNext) GetCrcString() string   { return "2457116d" }
-func (*AddNodeNext) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *AddNodeNext) Reset()                        { *m = AddNodeNext{} }
+func (*AddNodeNext) GetMessageName() string          { return "add_node_next" }
+func (*AddNodeNext) GetCrcString() string            { return "2457116d" }
+func (*AddNodeNext) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *AddNodeNext) Size() (size int) {
 	if m == nil {
@@ -82,11 +80,12 @@ type AddNodeNextReply struct {
 	NextIndex uint32 `binapi:"u32,name=next_index" json:"next_index,omitempty"`
 }
 
-func (m *AddNodeNextReply) Reset()               { *m = AddNodeNextReply{} }
-func (*AddNodeNextReply) GetMessageName() string { return "add_node_next_reply" }
-func (*AddNodeNextReply) GetCrcString() string   { return "2ed75f32" }
-func (*AddNodeNextReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *AddNodeNextReply) Reset()                        { *m = AddNodeNextReply{} }
+func (*AddNodeNextReply) GetMessageName() string          { return "add_node_next_reply" }
+func (*AddNodeNextReply) GetCrcString() string            { return "2ed75f32" }
+func (*AddNodeNextReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *AddNodeNextReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *AddNodeNextReply) Size() (size int) {
@@ -118,12 +117,10 @@ type Cli struct {
 	CmdInShmem uint64 `binapi:"u64,name=cmd_in_shmem" json:"cmd_in_shmem,omitempty"`
 }
 
-func (m *Cli) Reset()               { *m = Cli{} }
-func (*Cli) GetMessageName() string { return "cli" }
-func (*Cli) GetCrcString() string   { return "23bfbfff" }
-func (*Cli) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Cli) Reset()                        { *m = Cli{} }
+func (*Cli) GetMessageName() string          { return "cli" }
+func (*Cli) GetCrcString() string            { return "23bfbfff" }
+func (*Cli) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Cli) Size() (size int) {
 	if m == nil {
@@ -151,12 +148,10 @@ type CliInband struct {
 	Cmd string `binapi:"string[],name=cmd" json:"cmd,omitempty"`
 }
 
-func (m *CliInband) Reset()               { *m = CliInband{} }
-func (*CliInband) GetMessageName() string { return "cli_inband" }
-func (*CliInband) GetCrcString() string   { return "f8377302" }
-func (*CliInband) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *CliInband) Reset()                        { *m = CliInband{} }
+func (*CliInband) GetMessageName() string          { return "cli_inband" }
+func (*CliInband) GetCrcString() string            { return "f8377302" }
+func (*CliInband) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *CliInband) Size() (size int) {
 	if m == nil {
@@ -185,11 +180,12 @@ type CliInbandReply struct {
 	Reply  string `binapi:"string[],name=reply" json:"reply,omitempty"`
 }
 
-func (m *CliInbandReply) Reset()               { *m = CliInbandReply{} }
-func (*CliInbandReply) GetMessageName() string { return "cli_inband_reply" }
-func (*CliInbandReply) GetCrcString() string   { return "05879051" }
-func (*CliInbandReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *CliInbandReply) Reset()                        { *m = CliInbandReply{} }
+func (*CliInbandReply) GetMessageName() string          { return "cli_inband_reply" }
+func (*CliInbandReply) GetCrcString() string            { return "05879051" }
+func (*CliInbandReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CliInbandReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CliInbandReply) Size() (size int) {
@@ -222,11 +218,12 @@ type CliReply struct {
 	ReplyInShmem uint64 `binapi:"u64,name=reply_in_shmem" json:"reply_in_shmem,omitempty"`
 }
 
-func (m *CliReply) Reset()               { *m = CliReply{} }
-func (*CliReply) GetMessageName() string { return "cli_reply" }
-func (*CliReply) GetCrcString() string   { return "06d68297" }
-func (*CliReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *CliReply) Reset()                        { *m = CliReply{} }
+func (*CliReply) GetMessageName() string          { return "cli_reply" }
+func (*CliReply) GetCrcString() string            { return "06d68297" }
+func (*CliReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *CliReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *CliReply) Size() (size int) {
@@ -258,12 +255,10 @@ type GetF64EndianValue struct {
 	F64One float64 `binapi:"f64,name=f64_one,default=1" json:"f64_one,omitempty"`
 }
 
-func (m *GetF64EndianValue) Reset()               { *m = GetF64EndianValue{} }
-func (*GetF64EndianValue) GetMessageName() string { return "get_f64_endian_value" }
-func (*GetF64EndianValue) GetCrcString() string   { return "809fcd44" }
-func (*GetF64EndianValue) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GetF64EndianValue) Reset()                        { *m = GetF64EndianValue{} }
+func (*GetF64EndianValue) GetMessageName() string          { return "get_f64_endian_value" }
+func (*GetF64EndianValue) GetCrcString() string            { return "809fcd44" }
+func (*GetF64EndianValue) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GetF64EndianValue) Size() (size int) {
 	if m == nil {
@@ -292,11 +287,12 @@ type GetF64EndianValueReply struct {
 	F64OneResult float64 `binapi:"f64,name=f64_one_result" json:"f64_one_result,omitempty"`
 }
 
-func (m *GetF64EndianValueReply) Reset()               { *m = GetF64EndianValueReply{} }
-func (*GetF64EndianValueReply) GetMessageName() string { return "get_f64_endian_value_reply" }
-func (*GetF64EndianValueReply) GetCrcString() string   { return "7e02e404" }
-func (*GetF64EndianValueReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GetF64EndianValueReply) Reset()                        { *m = GetF64EndianValueReply{} }
+func (*GetF64EndianValueReply) GetMessageName() string          { return "get_f64_endian_value_reply" }
+func (*GetF64EndianValueReply) GetCrcString() string            { return "7e02e404" }
+func (*GetF64EndianValueReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GetF64EndianValueReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetF64EndianValueReply) Size() (size int) {
@@ -328,12 +324,10 @@ type GetF64IncrementByOne struct {
 	F64Value float64 `binapi:"f64,name=f64_value,default=1" json:"f64_value,omitempty"`
 }
 
-func (m *GetF64IncrementByOne) Reset()               { *m = GetF64IncrementByOne{} }
-func (*GetF64IncrementByOne) GetMessageName() string { return "get_f64_increment_by_one" }
-func (*GetF64IncrementByOne) GetCrcString() string   { return "b64f027e" }
-func (*GetF64IncrementByOne) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GetF64IncrementByOne) Reset()                        { *m = GetF64IncrementByOne{} }
+func (*GetF64IncrementByOne) GetMessageName() string          { return "get_f64_increment_by_one" }
+func (*GetF64IncrementByOne) GetCrcString() string            { return "b64f027e" }
+func (*GetF64IncrementByOne) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GetF64IncrementByOne) Size() (size int) {
 	if m == nil {
@@ -362,11 +356,12 @@ type GetF64IncrementByOneReply struct {
 	F64Value float64 `binapi:"f64,name=f64_value" json:"f64_value,omitempty"`
 }
 
-func (m *GetF64IncrementByOneReply) Reset()               { *m = GetF64IncrementByOneReply{} }
-func (*GetF64IncrementByOneReply) GetMessageName() string { return "get_f64_increment_by_one_reply" }
-func (*GetF64IncrementByOneReply) GetCrcString() string   { return "d25dbaa3" }
-func (*GetF64IncrementByOneReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GetF64IncrementByOneReply) Reset()                        { *m = GetF64IncrementByOneReply{} }
+func (*GetF64IncrementByOneReply) GetMessageName() string          { return "get_f64_increment_by_one_reply" }
+func (*GetF64IncrementByOneReply) GetCrcString() string            { return "d25dbaa3" }
+func (*GetF64IncrementByOneReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GetF64IncrementByOneReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetF64IncrementByOneReply) Size() (size int) {
@@ -399,12 +394,10 @@ type GetNextIndex struct {
 	NextName string `binapi:"string[64],name=next_name" json:"next_name,omitempty"`
 }
 
-func (m *GetNextIndex) Reset()               { *m = GetNextIndex{} }
-func (*GetNextIndex) GetMessageName() string { return "get_next_index" }
-func (*GetNextIndex) GetCrcString() string   { return "2457116d" }
-func (*GetNextIndex) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GetNextIndex) Reset()                        { *m = GetNextIndex{} }
+func (*GetNextIndex) GetMessageName() string          { return "get_next_index" }
+func (*GetNextIndex) GetCrcString() string            { return "2457116d" }
+func (*GetNextIndex) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GetNextIndex) Size() (size int) {
 	if m == nil {
@@ -436,11 +429,12 @@ type GetNextIndexReply struct {
 	NextIndex uint32 `binapi:"u32,name=next_index" json:"next_index,omitempty"`
 }
 
-func (m *GetNextIndexReply) Reset()               { *m = GetNextIndexReply{} }
-func (*GetNextIndexReply) GetMessageName() string { return "get_next_index_reply" }
-func (*GetNextIndexReply) GetCrcString() string   { return "2ed75f32" }
-func (*GetNextIndexReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GetNextIndexReply) Reset()                        { *m = GetNextIndexReply{} }
+func (*GetNextIndexReply) GetMessageName() string          { return "get_next_index_reply" }
+func (*GetNextIndexReply) GetCrcString() string            { return "2ed75f32" }
+func (*GetNextIndexReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GetNextIndexReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetNextIndexReply) Size() (size int) {
@@ -470,12 +464,10 @@ func (m *GetNextIndexReply) Unmarshal(b []byte) error {
 // GetNodeGraph defines message 'get_node_graph'.
 type GetNodeGraph struct{}
 
-func (m *GetNodeGraph) Reset()               { *m = GetNodeGraph{} }
-func (*GetNodeGraph) GetMessageName() string { return "get_node_graph" }
-func (*GetNodeGraph) GetCrcString() string   { return "51077d14" }
-func (*GetNodeGraph) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GetNodeGraph) Reset()                        { *m = GetNodeGraph{} }
+func (*GetNodeGraph) GetMessageName() string          { return "get_node_graph" }
+func (*GetNodeGraph) GetCrcString() string            { return "51077d14" }
+func (*GetNodeGraph) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GetNodeGraph) Size() (size int) {
 	if m == nil {
@@ -500,11 +492,12 @@ type GetNodeGraphReply struct {
 	ReplyInShmem uint64 `binapi:"u64,name=reply_in_shmem" json:"reply_in_shmem,omitempty"`
 }
 
-func (m *GetNodeGraphReply) Reset()               { *m = GetNodeGraphReply{} }
-func (*GetNodeGraphReply) GetMessageName() string { return "get_node_graph_reply" }
-func (*GetNodeGraphReply) GetCrcString() string   { return "06d68297" }
-func (*GetNodeGraphReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GetNodeGraphReply) Reset()                        { *m = GetNodeGraphReply{} }
+func (*GetNodeGraphReply) GetMessageName() string          { return "get_node_graph_reply" }
+func (*GetNodeGraphReply) GetCrcString() string            { return "06d68297" }
+func (*GetNodeGraphReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GetNodeGraphReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetNodeGraphReply) Size() (size int) {
@@ -536,12 +529,10 @@ type GetNodeIndex struct {
 	NodeName string `binapi:"string[64],name=node_name" json:"node_name,omitempty"`
 }
 
-func (m *GetNodeIndex) Reset()               { *m = GetNodeIndex{} }
-func (*GetNodeIndex) GetMessageName() string { return "get_node_index" }
-func (*GetNodeIndex) GetCrcString() string   { return "f1984c64" }
-func (*GetNodeIndex) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *GetNodeIndex) Reset()                        { *m = GetNodeIndex{} }
+func (*GetNodeIndex) GetMessageName() string          { return "get_node_index" }
+func (*GetNodeIndex) GetCrcString() string            { return "f1984c64" }
+func (*GetNodeIndex) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *GetNodeIndex) Size() (size int) {
 	if m == nil {
@@ -570,11 +561,12 @@ type GetNodeIndexReply struct {
 	NodeIndex uint32 `binapi:"u32,name=node_index" json:"node_index,omitempty"`
 }
 
-func (m *GetNodeIndexReply) Reset()               { *m = GetNodeIndexReply{} }
-func (*GetNodeIndexReply) GetMessageName() string { return "get_node_index_reply" }
-func (*GetNodeIndexReply) GetCrcString() string   { return "a8600b89" }
-func (*GetNodeIndexReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *GetNodeIndexReply) Reset()                        { *m = GetNodeIndexReply{} }
+func (*GetNodeIndexReply) GetMessageName() string          { return "get_node_index_reply" }
+func (*GetNodeIndexReply) GetCrcString() string            { return "a8600b89" }
+func (*GetNodeIndexReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *GetNodeIndexReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *GetNodeIndexReply) Size() (size int) {
@@ -604,12 +596,10 @@ func (m *GetNodeIndexReply) Unmarshal(b []byte) error {
 // ShowThreads defines message 'show_threads'.
 type ShowThreads struct{}
 
-func (m *ShowThreads) Reset()               { *m = ShowThreads{} }
-func (*ShowThreads) GetMessageName() string { return "show_threads" }
-func (*ShowThreads) GetCrcString() string   { return "51077d14" }
-func (*ShowThreads) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowThreads) Reset()                        { *m = ShowThreads{} }
+func (*ShowThreads) GetMessageName() string          { return "show_threads" }
+func (*ShowThreads) GetCrcString() string            { return "51077d14" }
+func (*ShowThreads) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowThreads) Size() (size int) {
 	if m == nil {
@@ -635,11 +625,12 @@ type ShowThreadsReply struct {
 	ThreadData []ThreadData `binapi:"thread_data[count],name=thread_data" json:"thread_data,omitempty"`
 }
 
-func (m *ShowThreadsReply) Reset()               { *m = ShowThreadsReply{} }
-func (*ShowThreadsReply) GetMessageName() string { return "show_threads_reply" }
-func (*ShowThreadsReply) GetCrcString() string   { return "efd78e83" }
-func (*ShowThreadsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowThreadsReply) Reset()                        { *m = ShowThreadsReply{} }
+func (*ShowThreadsReply) GetMessageName() string          { return "show_threads_reply" }
+func (*ShowThreadsReply) GetCrcString() string            { return "efd78e83" }
+func (*ShowThreadsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowThreadsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowThreadsReply) Size() (size int) {

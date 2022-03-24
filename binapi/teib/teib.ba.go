@@ -43,11 +43,12 @@ type TeibDetails struct {
 	Entry TeibEntry `binapi:"teib_entry,name=entry" json:"entry,omitempty"`
 }
 
-func (m *TeibDetails) Reset()               { *m = TeibDetails{} }
-func (*TeibDetails) GetMessageName() string { return "teib_details" }
-func (*TeibDetails) GetCrcString() string   { return "981ee1a1" }
-func (*TeibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *TeibDetails) Reset()                        { *m = TeibDetails{} }
+func (*TeibDetails) GetMessageName() string          { return "teib_details" }
+func (*TeibDetails) GetCrcString() string            { return "981ee1a1" }
+func (*TeibDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TeibDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *TeibDetails) Size() (size int) {
@@ -89,12 +90,10 @@ func (m *TeibDetails) Unmarshal(b []byte) error {
 // TeibDump defines message 'teib_dump'.
 type TeibDump struct{}
 
-func (m *TeibDump) Reset()               { *m = TeibDump{} }
-func (*TeibDump) GetMessageName() string { return "teib_dump" }
-func (*TeibDump) GetCrcString() string   { return "51077d14" }
-func (*TeibDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TeibDump) Reset()                        { *m = TeibDump{} }
+func (*TeibDump) GetMessageName() string          { return "teib_dump" }
+func (*TeibDump) GetCrcString() string            { return "51077d14" }
+func (*TeibDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TeibDump) Size() (size int) {
 	if m == nil {
@@ -119,12 +118,10 @@ type TeibEntryAddDel struct {
 	Entry TeibEntry `binapi:"teib_entry,name=entry" json:"entry,omitempty"`
 }
 
-func (m *TeibEntryAddDel) Reset()               { *m = TeibEntryAddDel{} }
-func (*TeibEntryAddDel) GetMessageName() string { return "teib_entry_add_del" }
-func (*TeibEntryAddDel) GetCrcString() string   { return "8016cfd2" }
-func (*TeibEntryAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *TeibEntryAddDel) Reset()                        { *m = TeibEntryAddDel{} }
+func (*TeibEntryAddDel) GetMessageName() string          { return "teib_entry_add_del" }
+func (*TeibEntryAddDel) GetCrcString() string            { return "8016cfd2" }
+func (*TeibEntryAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *TeibEntryAddDel) Size() (size int) {
 	if m == nil {
@@ -170,11 +167,12 @@ type TeibEntryAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *TeibEntryAddDelReply) Reset()               { *m = TeibEntryAddDelReply{} }
-func (*TeibEntryAddDelReply) GetMessageName() string { return "teib_entry_add_del_reply" }
-func (*TeibEntryAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*TeibEntryAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *TeibEntryAddDelReply) Reset()                        { *m = TeibEntryAddDelReply{} }
+func (*TeibEntryAddDelReply) GetMessageName() string          { return "teib_entry_add_del_reply" }
+func (*TeibEntryAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*TeibEntryAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *TeibEntryAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *TeibEntryAddDelReply) Size() (size int) {

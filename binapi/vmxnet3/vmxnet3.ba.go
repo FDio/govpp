@@ -61,11 +61,12 @@ type SwVmxnet3InterfaceDetails struct {
 	TxList      [8]Vmxnet3TxList               `binapi:"vmxnet3_tx_list[8],name=tx_list" json:"tx_list,omitempty"`
 }
 
-func (m *SwVmxnet3InterfaceDetails) Reset()               { *m = SwVmxnet3InterfaceDetails{} }
-func (*SwVmxnet3InterfaceDetails) GetMessageName() string { return "sw_vmxnet3_interface_details" }
-func (*SwVmxnet3InterfaceDetails) GetCrcString() string   { return "6a1a5498" }
-func (*SwVmxnet3InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwVmxnet3InterfaceDetails) Reset()                        { *m = SwVmxnet3InterfaceDetails{} }
+func (*SwVmxnet3InterfaceDetails) GetMessageName() string          { return "sw_vmxnet3_interface_details" }
+func (*SwVmxnet3InterfaceDetails) GetCrcString() string            { return "6a1a5498" }
+func (*SwVmxnet3InterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwVmxnet3InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwVmxnet3InterfaceDetails) Size() (size int) {
@@ -181,12 +182,10 @@ type SwVmxnet3InterfaceDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwVmxnet3InterfaceDump) Reset()               { *m = SwVmxnet3InterfaceDump{} }
-func (*SwVmxnet3InterfaceDump) GetMessageName() string { return "sw_vmxnet3_interface_dump" }
-func (*SwVmxnet3InterfaceDump) GetCrcString() string   { return "f9e6675e" }
-func (*SwVmxnet3InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwVmxnet3InterfaceDump) Reset()                        { *m = SwVmxnet3InterfaceDump{} }
+func (*SwVmxnet3InterfaceDump) GetMessageName() string          { return "sw_vmxnet3_interface_dump" }
+func (*SwVmxnet3InterfaceDump) GetCrcString() string            { return "f9e6675e" }
+func (*SwVmxnet3InterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwVmxnet3InterfaceDump) Size() (size int) {
 	if m == nil {
@@ -221,12 +220,10 @@ type Vmxnet3Create struct {
 	EnableGso  bool   `binapi:"bool,name=enable_gso" json:"enable_gso,omitempty"`
 }
 
-func (m *Vmxnet3Create) Reset()               { *m = Vmxnet3Create{} }
-func (*Vmxnet3Create) GetMessageName() string { return "vmxnet3_create" }
-func (*Vmxnet3Create) GetCrcString() string   { return "71a07314" }
-func (*Vmxnet3Create) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Vmxnet3Create) Reset()                        { *m = Vmxnet3Create{} }
+func (*Vmxnet3Create) GetMessageName() string          { return "vmxnet3_create" }
+func (*Vmxnet3Create) GetCrcString() string            { return "71a07314" }
+func (*Vmxnet3Create) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Vmxnet3Create) Size() (size int) {
 	if m == nil {
@@ -276,11 +273,12 @@ type Vmxnet3CreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Vmxnet3CreateReply) Reset()               { *m = Vmxnet3CreateReply{} }
-func (*Vmxnet3CreateReply) GetMessageName() string { return "vmxnet3_create_reply" }
-func (*Vmxnet3CreateReply) GetCrcString() string   { return "5383d31f" }
-func (*Vmxnet3CreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Vmxnet3CreateReply) Reset()                        { *m = Vmxnet3CreateReply{} }
+func (*Vmxnet3CreateReply) GetMessageName() string          { return "vmxnet3_create_reply" }
+func (*Vmxnet3CreateReply) GetCrcString() string            { return "5383d31f" }
+func (*Vmxnet3CreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Vmxnet3CreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Vmxnet3CreateReply) Size() (size int) {
@@ -312,12 +310,10 @@ type Vmxnet3Delete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Vmxnet3Delete) Reset()               { *m = Vmxnet3Delete{} }
-func (*Vmxnet3Delete) GetMessageName() string { return "vmxnet3_delete" }
-func (*Vmxnet3Delete) GetCrcString() string   { return "f9e6675e" }
-func (*Vmxnet3Delete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Vmxnet3Delete) Reset()                        { *m = Vmxnet3Delete{} }
+func (*Vmxnet3Delete) GetMessageName() string          { return "vmxnet3_delete" }
+func (*Vmxnet3Delete) GetCrcString() string            { return "f9e6675e" }
+func (*Vmxnet3Delete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Vmxnet3Delete) Size() (size int) {
 	if m == nil {
@@ -345,11 +341,12 @@ type Vmxnet3DeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Vmxnet3DeleteReply) Reset()               { *m = Vmxnet3DeleteReply{} }
-func (*Vmxnet3DeleteReply) GetMessageName() string { return "vmxnet3_delete_reply" }
-func (*Vmxnet3DeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*Vmxnet3DeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Vmxnet3DeleteReply) Reset()                        { *m = Vmxnet3DeleteReply{} }
+func (*Vmxnet3DeleteReply) GetMessageName() string          { return "vmxnet3_delete_reply" }
+func (*Vmxnet3DeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*Vmxnet3DeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Vmxnet3DeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Vmxnet3DeleteReply) Size() (size int) {
@@ -387,11 +384,12 @@ type Vmxnet3Details struct {
 	TxList      [8]Vmxnet3TxList               `binapi:"vmxnet3_tx_list[8],name=tx_list" json:"tx_list,omitempty"`
 }
 
-func (m *Vmxnet3Details) Reset()               { *m = Vmxnet3Details{} }
-func (*Vmxnet3Details) GetMessageName() string { return "vmxnet3_details" }
-func (*Vmxnet3Details) GetCrcString() string   { return "6a1a5498" }
-func (*Vmxnet3Details) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Vmxnet3Details) Reset()                        { *m = Vmxnet3Details{} }
+func (*Vmxnet3Details) GetMessageName() string          { return "vmxnet3_details" }
+func (*Vmxnet3Details) GetCrcString() string            { return "6a1a5498" }
+func (*Vmxnet3Details) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Vmxnet3Details) GetRetVal() error {
+	return nil
 }
 
 func (m *Vmxnet3Details) Size() (size int) {
@@ -506,12 +504,10 @@ func (m *Vmxnet3Details) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type Vmxnet3Dump struct{}
 
-func (m *Vmxnet3Dump) Reset()               { *m = Vmxnet3Dump{} }
-func (*Vmxnet3Dump) GetMessageName() string { return "vmxnet3_dump" }
-func (*Vmxnet3Dump) GetCrcString() string   { return "51077d14" }
-func (*Vmxnet3Dump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Vmxnet3Dump) Reset()                        { *m = Vmxnet3Dump{} }
+func (*Vmxnet3Dump) GetMessageName() string          { return "vmxnet3_dump" }
+func (*Vmxnet3Dump) GetCrcString() string            { return "51077d14" }
+func (*Vmxnet3Dump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Vmxnet3Dump) Size() (size int) {
 	if m == nil {

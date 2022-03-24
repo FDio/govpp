@@ -134,12 +134,10 @@ type ClassifyAddDelSession struct {
 	Match        []byte         `binapi:"u8[match_len],name=match" json:"match,omitempty"`
 }
 
-func (m *ClassifyAddDelSession) Reset()               { *m = ClassifyAddDelSession{} }
-func (*ClassifyAddDelSession) GetMessageName() string { return "classify_add_del_session" }
-func (*ClassifyAddDelSession) GetCrcString() string   { return "f20879f0" }
-func (*ClassifyAddDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyAddDelSession) Reset()                        { *m = ClassifyAddDelSession{} }
+func (*ClassifyAddDelSession) GetMessageName() string          { return "classify_add_del_session" }
+func (*ClassifyAddDelSession) GetCrcString() string            { return "f20879f0" }
+func (*ClassifyAddDelSession) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyAddDelSession) Size() (size int) {
 	if m == nil {
@@ -192,11 +190,12 @@ type ClassifyAddDelSessionReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *ClassifyAddDelSessionReply) Reset()               { *m = ClassifyAddDelSessionReply{} }
-func (*ClassifyAddDelSessionReply) GetMessageName() string { return "classify_add_del_session_reply" }
-func (*ClassifyAddDelSessionReply) GetCrcString() string   { return "e8d4e804" }
-func (*ClassifyAddDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyAddDelSessionReply) Reset()                        { *m = ClassifyAddDelSessionReply{} }
+func (*ClassifyAddDelSessionReply) GetMessageName() string          { return "classify_add_del_session_reply" }
+func (*ClassifyAddDelSessionReply) GetCrcString() string            { return "e8d4e804" }
+func (*ClassifyAddDelSessionReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyAddDelSessionReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyAddDelSessionReply) Size() (size int) {
@@ -237,12 +236,10 @@ type ClassifyAddDelTable struct {
 	Mask              []byte `binapi:"u8[mask_len],name=mask" json:"mask,omitempty"`
 }
 
-func (m *ClassifyAddDelTable) Reset()               { *m = ClassifyAddDelTable{} }
-func (*ClassifyAddDelTable) GetMessageName() string { return "classify_add_del_table" }
-func (*ClassifyAddDelTable) GetCrcString() string   { return "6849e39e" }
-func (*ClassifyAddDelTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyAddDelTable) Reset()                        { *m = ClassifyAddDelTable{} }
+func (*ClassifyAddDelTable) GetMessageName() string          { return "classify_add_del_table" }
+func (*ClassifyAddDelTable) GetCrcString() string            { return "6849e39e" }
+func (*ClassifyAddDelTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyAddDelTable) Size() (size int) {
 	if m == nil {
@@ -310,11 +307,12 @@ type ClassifyAddDelTableReply struct {
 	MatchNVectors uint32 `binapi:"u32,name=match_n_vectors" json:"match_n_vectors,omitempty"`
 }
 
-func (m *ClassifyAddDelTableReply) Reset()               { *m = ClassifyAddDelTableReply{} }
-func (*ClassifyAddDelTableReply) GetMessageName() string { return "classify_add_del_table_reply" }
-func (*ClassifyAddDelTableReply) GetCrcString() string   { return "05486349" }
-func (*ClassifyAddDelTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyAddDelTableReply) Reset()                        { *m = ClassifyAddDelTableReply{} }
+func (*ClassifyAddDelTableReply) GetMessageName() string          { return "classify_add_del_table_reply" }
+func (*ClassifyAddDelTableReply) GetCrcString() string            { return "05486349" }
+func (*ClassifyAddDelTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyAddDelTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyAddDelTableReply) Size() (size int) {
@@ -352,12 +350,10 @@ type ClassifyPcapGetTables struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *ClassifyPcapGetTables) Reset()               { *m = ClassifyPcapGetTables{} }
-func (*ClassifyPcapGetTables) GetMessageName() string { return "classify_pcap_get_tables" }
-func (*ClassifyPcapGetTables) GetCrcString() string   { return "f9e6675e" }
-func (*ClassifyPcapGetTables) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyPcapGetTables) Reset()                        { *m = ClassifyPcapGetTables{} }
+func (*ClassifyPcapGetTables) GetMessageName() string          { return "classify_pcap_get_tables" }
+func (*ClassifyPcapGetTables) GetCrcString() string            { return "f9e6675e" }
+func (*ClassifyPcapGetTables) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyPcapGetTables) Size() (size int) {
 	if m == nil {
@@ -387,11 +383,12 @@ type ClassifyPcapGetTablesReply struct {
 	Indices []uint32 `binapi:"u32[count],name=indices" json:"indices,omitempty"`
 }
 
-func (m *ClassifyPcapGetTablesReply) Reset()               { *m = ClassifyPcapGetTablesReply{} }
-func (*ClassifyPcapGetTablesReply) GetMessageName() string { return "classify_pcap_get_tables_reply" }
-func (*ClassifyPcapGetTablesReply) GetCrcString() string   { return "5f5bc9e6" }
-func (*ClassifyPcapGetTablesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyPcapGetTablesReply) Reset()                        { *m = ClassifyPcapGetTablesReply{} }
+func (*ClassifyPcapGetTablesReply) GetMessageName() string          { return "classify_pcap_get_tables_reply" }
+func (*ClassifyPcapGetTablesReply) GetCrcString() string            { return "5f5bc9e6" }
+func (*ClassifyPcapGetTablesReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyPcapGetTablesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyPcapGetTablesReply) Size() (size int) {
@@ -439,12 +436,10 @@ type ClassifyPcapLookupTable struct {
 	Mask          []byte                         `binapi:"u8[mask_len],name=mask" json:"mask,omitempty"`
 }
 
-func (m *ClassifyPcapLookupTable) Reset()               { *m = ClassifyPcapLookupTable{} }
-func (*ClassifyPcapLookupTable) GetMessageName() string { return "classify_pcap_lookup_table" }
-func (*ClassifyPcapLookupTable) GetCrcString() string   { return "e1b4cc6b" }
-func (*ClassifyPcapLookupTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyPcapLookupTable) Reset()                        { *m = ClassifyPcapLookupTable{} }
+func (*ClassifyPcapLookupTable) GetMessageName() string          { return "classify_pcap_lookup_table" }
+func (*ClassifyPcapLookupTable) GetCrcString() string            { return "e1b4cc6b" }
+func (*ClassifyPcapLookupTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyPcapLookupTable) Size() (size int) {
 	if m == nil {
@@ -490,9 +485,10 @@ func (m *ClassifyPcapLookupTableReply) Reset() { *m = ClassifyPcapLookupTableRep
 func (*ClassifyPcapLookupTableReply) GetMessageName() string {
 	return "classify_pcap_lookup_table_reply"
 }
-func (*ClassifyPcapLookupTableReply) GetCrcString() string { return "9c6c6773" }
-func (*ClassifyPcapLookupTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ClassifyPcapLookupTableReply) GetCrcString() string            { return "9c6c6773" }
+func (*ClassifyPcapLookupTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyPcapLookupTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyPcapLookupTableReply) Size() (size int) {
@@ -526,12 +522,10 @@ type ClassifyPcapSetTable struct {
 	SortMasks  bool                           `binapi:"bool,name=sort_masks,default=0" json:"sort_masks,omitempty"`
 }
 
-func (m *ClassifyPcapSetTable) Reset()               { *m = ClassifyPcapSetTable{} }
-func (*ClassifyPcapSetTable) GetMessageName() string { return "classify_pcap_set_table" }
-func (*ClassifyPcapSetTable) GetCrcString() string   { return "006051b3" }
-func (*ClassifyPcapSetTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyPcapSetTable) Reset()                        { *m = ClassifyPcapSetTable{} }
+func (*ClassifyPcapSetTable) GetMessageName() string          { return "classify_pcap_set_table" }
+func (*ClassifyPcapSetTable) GetCrcString() string            { return "006051b3" }
+func (*ClassifyPcapSetTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyPcapSetTable) Size() (size int) {
 	if m == nil {
@@ -566,11 +560,12 @@ type ClassifyPcapSetTableReply struct {
 	TableIndex uint32 `binapi:"u32,name=table_index" json:"table_index,omitempty"`
 }
 
-func (m *ClassifyPcapSetTableReply) Reset()               { *m = ClassifyPcapSetTableReply{} }
-func (*ClassifyPcapSetTableReply) GetMessageName() string { return "classify_pcap_set_table_reply" }
-func (*ClassifyPcapSetTableReply) GetCrcString() string   { return "9c6c6773" }
-func (*ClassifyPcapSetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyPcapSetTableReply) Reset()                        { *m = ClassifyPcapSetTableReply{} }
+func (*ClassifyPcapSetTableReply) GetMessageName() string          { return "classify_pcap_set_table_reply" }
+func (*ClassifyPcapSetTableReply) GetCrcString() string            { return "9c6c6773" }
+func (*ClassifyPcapSetTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyPcapSetTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyPcapSetTableReply) Size() (size int) {
@@ -608,11 +603,12 @@ type ClassifySessionDetails struct {
 	Match        []byte `binapi:"u8[match_length],name=match" json:"match,omitempty"`
 }
 
-func (m *ClassifySessionDetails) Reset()               { *m = ClassifySessionDetails{} }
-func (*ClassifySessionDetails) GetMessageName() string { return "classify_session_details" }
-func (*ClassifySessionDetails) GetCrcString() string   { return "60e3ef94" }
-func (*ClassifySessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifySessionDetails) Reset()                        { *m = ClassifySessionDetails{} }
+func (*ClassifySessionDetails) GetMessageName() string          { return "classify_session_details" }
+func (*ClassifySessionDetails) GetCrcString() string            { return "60e3ef94" }
+func (*ClassifySessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifySessionDetails) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifySessionDetails) Size() (size int) {
@@ -660,12 +656,10 @@ type ClassifySessionDump struct {
 	TableID uint32 `binapi:"u32,name=table_id" json:"table_id,omitempty"`
 }
 
-func (m *ClassifySessionDump) Reset()               { *m = ClassifySessionDump{} }
-func (*ClassifySessionDump) GetMessageName() string { return "classify_session_dump" }
-func (*ClassifySessionDump) GetCrcString() string   { return "0cca2cd9" }
-func (*ClassifySessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifySessionDump) Reset()                        { *m = ClassifySessionDump{} }
+func (*ClassifySessionDump) GetMessageName() string          { return "classify_session_dump" }
+func (*ClassifySessionDump) GetCrcString() string            { return "0cca2cd9" }
+func (*ClassifySessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifySessionDump) Size() (size int) {
 	if m == nil {
@@ -695,12 +689,10 @@ type ClassifySetInterfaceIPTable struct {
 	TableIndex uint32                         `binapi:"u32,name=table_index" json:"table_index,omitempty"`
 }
 
-func (m *ClassifySetInterfaceIPTable) Reset()               { *m = ClassifySetInterfaceIPTable{} }
-func (*ClassifySetInterfaceIPTable) GetMessageName() string { return "classify_set_interface_ip_table" }
-func (*ClassifySetInterfaceIPTable) GetCrcString() string   { return "e0b097c7" }
-func (*ClassifySetInterfaceIPTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifySetInterfaceIPTable) Reset()                        { *m = ClassifySetInterfaceIPTable{} }
+func (*ClassifySetInterfaceIPTable) GetMessageName() string          { return "classify_set_interface_ip_table" }
+func (*ClassifySetInterfaceIPTable) GetCrcString() string            { return "e0b097c7" }
+func (*ClassifySetInterfaceIPTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifySetInterfaceIPTable) Size() (size int) {
 	if m == nil {
@@ -742,6 +734,9 @@ func (*ClassifySetInterfaceIPTableReply) GetCrcString() string { return "e8d4e80
 func (*ClassifySetInterfaceIPTableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *ClassifySetInterfaceIPTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ClassifySetInterfaceIPTableReply) Size() (size int) {
 	if m == nil {
@@ -777,10 +772,8 @@ func (m *ClassifySetInterfaceL2Tables) Reset() { *m = ClassifySetInterfaceL2Tabl
 func (*ClassifySetInterfaceL2Tables) GetMessageName() string {
 	return "classify_set_interface_l2_tables"
 }
-func (*ClassifySetInterfaceL2Tables) GetCrcString() string { return "5a6ddf65" }
-func (*ClassifySetInterfaceL2Tables) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (*ClassifySetInterfaceL2Tables) GetCrcString() string            { return "5a6ddf65" }
+func (*ClassifySetInterfaceL2Tables) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifySetInterfaceL2Tables) Size() (size int) {
 	if m == nil {
@@ -828,6 +821,9 @@ func (*ClassifySetInterfaceL2TablesReply) GetCrcString() string { return "e8d4e8
 func (*ClassifySetInterfaceL2TablesReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *ClassifySetInterfaceL2TablesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ClassifySetInterfaceL2TablesReply) Size() (size int) {
 	if m == nil {
@@ -855,12 +851,10 @@ type ClassifyTableByInterface struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *ClassifyTableByInterface) Reset()               { *m = ClassifyTableByInterface{} }
-func (*ClassifyTableByInterface) GetMessageName() string { return "classify_table_by_interface" }
-func (*ClassifyTableByInterface) GetCrcString() string   { return "f9e6675e" }
-func (*ClassifyTableByInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTableByInterface) Reset()                        { *m = ClassifyTableByInterface{} }
+func (*ClassifyTableByInterface) GetMessageName() string          { return "classify_table_by_interface" }
+func (*ClassifyTableByInterface) GetCrcString() string            { return "f9e6675e" }
+func (*ClassifyTableByInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTableByInterface) Size() (size int) {
 	if m == nil {
@@ -896,9 +890,10 @@ func (m *ClassifyTableByInterfaceReply) Reset() { *m = ClassifyTableByInterfaceR
 func (*ClassifyTableByInterfaceReply) GetMessageName() string {
 	return "classify_table_by_interface_reply"
 }
-func (*ClassifyTableByInterfaceReply) GetCrcString() string { return "ed4197db" }
-func (*ClassifyTableByInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ClassifyTableByInterfaceReply) GetCrcString() string            { return "ed4197db" }
+func (*ClassifyTableByInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTableByInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTableByInterfaceReply) Size() (size int) {
@@ -937,12 +932,10 @@ func (m *ClassifyTableByInterfaceReply) Unmarshal(b []byte) error {
 // ClassifyTableIds defines message 'classify_table_ids'.
 type ClassifyTableIds struct{}
 
-func (m *ClassifyTableIds) Reset()               { *m = ClassifyTableIds{} }
-func (*ClassifyTableIds) GetMessageName() string { return "classify_table_ids" }
-func (*ClassifyTableIds) GetCrcString() string   { return "51077d14" }
-func (*ClassifyTableIds) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTableIds) Reset()                        { *m = ClassifyTableIds{} }
+func (*ClassifyTableIds) GetMessageName() string          { return "classify_table_ids" }
+func (*ClassifyTableIds) GetCrcString() string            { return "51077d14" }
+func (*ClassifyTableIds) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTableIds) Size() (size int) {
 	if m == nil {
@@ -968,11 +961,12 @@ type ClassifyTableIdsReply struct {
 	Ids    []uint32 `binapi:"u32[count],name=ids" json:"ids,omitempty"`
 }
 
-func (m *ClassifyTableIdsReply) Reset()               { *m = ClassifyTableIdsReply{} }
-func (*ClassifyTableIdsReply) GetMessageName() string { return "classify_table_ids_reply" }
-func (*ClassifyTableIdsReply) GetCrcString() string   { return "d1d20e1d" }
-func (*ClassifyTableIdsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyTableIdsReply) Reset()                        { *m = ClassifyTableIdsReply{} }
+func (*ClassifyTableIdsReply) GetMessageName() string          { return "classify_table_ids_reply" }
+func (*ClassifyTableIdsReply) GetCrcString() string            { return "d1d20e1d" }
+func (*ClassifyTableIdsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTableIdsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTableIdsReply) Size() (size int) {
@@ -1016,12 +1010,10 @@ type ClassifyTableInfo struct {
 	TableID uint32 `binapi:"u32,name=table_id" json:"table_id,omitempty"`
 }
 
-func (m *ClassifyTableInfo) Reset()               { *m = ClassifyTableInfo{} }
-func (*ClassifyTableInfo) GetMessageName() string { return "classify_table_info" }
-func (*ClassifyTableInfo) GetCrcString() string   { return "0cca2cd9" }
-func (*ClassifyTableInfo) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTableInfo) Reset()                        { *m = ClassifyTableInfo{} }
+func (*ClassifyTableInfo) GetMessageName() string          { return "classify_table_info" }
+func (*ClassifyTableInfo) GetCrcString() string            { return "0cca2cd9" }
+func (*ClassifyTableInfo) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTableInfo) Size() (size int) {
 	if m == nil {
@@ -1058,11 +1050,12 @@ type ClassifyTableInfoReply struct {
 	Mask           []byte `binapi:"u8[mask_length],name=mask" json:"mask,omitempty"`
 }
 
-func (m *ClassifyTableInfoReply) Reset()               { *m = ClassifyTableInfoReply{} }
-func (*ClassifyTableInfoReply) GetMessageName() string { return "classify_table_info_reply" }
-func (*ClassifyTableInfoReply) GetCrcString() string   { return "4a573c0e" }
-func (*ClassifyTableInfoReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyTableInfoReply) Reset()                        { *m = ClassifyTableInfoReply{} }
+func (*ClassifyTableInfoReply) GetMessageName() string          { return "classify_table_info_reply" }
+func (*ClassifyTableInfoReply) GetCrcString() string            { return "4a573c0e" }
+func (*ClassifyTableInfoReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTableInfoReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTableInfoReply) Size() (size int) {
@@ -1117,12 +1110,10 @@ func (m *ClassifyTableInfoReply) Unmarshal(b []byte) error {
 // ClassifyTraceGetTables defines message 'classify_trace_get_tables'.
 type ClassifyTraceGetTables struct{}
 
-func (m *ClassifyTraceGetTables) Reset()               { *m = ClassifyTraceGetTables{} }
-func (*ClassifyTraceGetTables) GetMessageName() string { return "classify_trace_get_tables" }
-func (*ClassifyTraceGetTables) GetCrcString() string   { return "51077d14" }
-func (*ClassifyTraceGetTables) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTraceGetTables) Reset()                        { *m = ClassifyTraceGetTables{} }
+func (*ClassifyTraceGetTables) GetMessageName() string          { return "classify_trace_get_tables" }
+func (*ClassifyTraceGetTables) GetCrcString() string            { return "51077d14" }
+func (*ClassifyTraceGetTables) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTraceGetTables) Size() (size int) {
 	if m == nil {
@@ -1148,11 +1139,12 @@ type ClassifyTraceGetTablesReply struct {
 	Indices []uint32 `binapi:"u32[count],name=indices" json:"indices,omitempty"`
 }
 
-func (m *ClassifyTraceGetTablesReply) Reset()               { *m = ClassifyTraceGetTablesReply{} }
-func (*ClassifyTraceGetTablesReply) GetMessageName() string { return "classify_trace_get_tables_reply" }
-func (*ClassifyTraceGetTablesReply) GetCrcString() string   { return "5f5bc9e6" }
-func (*ClassifyTraceGetTablesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyTraceGetTablesReply) Reset()                        { *m = ClassifyTraceGetTablesReply{} }
+func (*ClassifyTraceGetTablesReply) GetMessageName() string          { return "classify_trace_get_tables_reply" }
+func (*ClassifyTraceGetTablesReply) GetCrcString() string            { return "5f5bc9e6" }
+func (*ClassifyTraceGetTablesReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTraceGetTablesReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTraceGetTablesReply) Size() (size int) {
@@ -1199,12 +1191,10 @@ type ClassifyTraceLookupTable struct {
 	Mask          []byte `binapi:"u8[mask_len],name=mask" json:"mask,omitempty"`
 }
 
-func (m *ClassifyTraceLookupTable) Reset()               { *m = ClassifyTraceLookupTable{} }
-func (*ClassifyTraceLookupTable) GetMessageName() string { return "classify_trace_lookup_table" }
-func (*ClassifyTraceLookupTable) GetCrcString() string   { return "3f7b72e4" }
-func (*ClassifyTraceLookupTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTraceLookupTable) Reset()                        { *m = ClassifyTraceLookupTable{} }
+func (*ClassifyTraceLookupTable) GetMessageName() string          { return "classify_trace_lookup_table" }
+func (*ClassifyTraceLookupTable) GetCrcString() string            { return "3f7b72e4" }
+func (*ClassifyTraceLookupTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTraceLookupTable) Size() (size int) {
 	if m == nil {
@@ -1247,9 +1237,10 @@ func (m *ClassifyTraceLookupTableReply) Reset() { *m = ClassifyTraceLookupTableR
 func (*ClassifyTraceLookupTableReply) GetMessageName() string {
 	return "classify_trace_lookup_table_reply"
 }
-func (*ClassifyTraceLookupTableReply) GetCrcString() string { return "9c6c6773" }
-func (*ClassifyTraceLookupTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ClassifyTraceLookupTableReply) GetCrcString() string            { return "9c6c6773" }
+func (*ClassifyTraceLookupTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTraceLookupTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTraceLookupTableReply) Size() (size int) {
@@ -1282,12 +1273,10 @@ type ClassifyTraceSetTable struct {
 	SortMasks  bool   `binapi:"bool,name=sort_masks,default=0" json:"sort_masks,omitempty"`
 }
 
-func (m *ClassifyTraceSetTable) Reset()               { *m = ClassifyTraceSetTable{} }
-func (*ClassifyTraceSetTable) GetMessageName() string { return "classify_trace_set_table" }
-func (*ClassifyTraceSetTable) GetCrcString() string   { return "3909b55a" }
-func (*ClassifyTraceSetTable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ClassifyTraceSetTable) Reset()                        { *m = ClassifyTraceSetTable{} }
+func (*ClassifyTraceSetTable) GetMessageName() string          { return "classify_trace_set_table" }
+func (*ClassifyTraceSetTable) GetCrcString() string            { return "3909b55a" }
+func (*ClassifyTraceSetTable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ClassifyTraceSetTable) Size() (size int) {
 	if m == nil {
@@ -1319,11 +1308,12 @@ type ClassifyTraceSetTableReply struct {
 	TableIndex uint32 `binapi:"u32,name=table_index" json:"table_index,omitempty"`
 }
 
-func (m *ClassifyTraceSetTableReply) Reset()               { *m = ClassifyTraceSetTableReply{} }
-func (*ClassifyTraceSetTableReply) GetMessageName() string { return "classify_trace_set_table_reply" }
-func (*ClassifyTraceSetTableReply) GetCrcString() string   { return "9c6c6773" }
-func (*ClassifyTraceSetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ClassifyTraceSetTableReply) Reset()                        { *m = ClassifyTraceSetTableReply{} }
+func (*ClassifyTraceSetTableReply) GetMessageName() string          { return "classify_trace_set_table_reply" }
+func (*ClassifyTraceSetTableReply) GetCrcString() string            { return "9c6c6773" }
+func (*ClassifyTraceSetTableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ClassifyTraceSetTableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ClassifyTraceSetTableReply) Size() (size int) {
@@ -1356,11 +1346,12 @@ type FlowClassifyDetails struct {
 	TableIndex uint32                         `binapi:"u32,name=table_index" json:"table_index,omitempty"`
 }
 
-func (m *FlowClassifyDetails) Reset()               { *m = FlowClassifyDetails{} }
-func (*FlowClassifyDetails) GetMessageName() string { return "flow_classify_details" }
-func (*FlowClassifyDetails) GetCrcString() string   { return "dfd08765" }
-func (*FlowClassifyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FlowClassifyDetails) Reset()                        { *m = FlowClassifyDetails{} }
+func (*FlowClassifyDetails) GetMessageName() string          { return "flow_classify_details" }
+func (*FlowClassifyDetails) GetCrcString() string            { return "dfd08765" }
+func (*FlowClassifyDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowClassifyDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *FlowClassifyDetails) Size() (size int) {
@@ -1393,12 +1384,10 @@ type FlowClassifyDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *FlowClassifyDump) Reset()               { *m = FlowClassifyDump{} }
-func (*FlowClassifyDump) GetMessageName() string { return "flow_classify_dump" }
-func (*FlowClassifyDump) GetCrcString() string   { return "25dd3e4c" }
-func (*FlowClassifyDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowClassifyDump) Reset()                        { *m = FlowClassifyDump{} }
+func (*FlowClassifyDump) GetMessageName() string          { return "flow_classify_dump" }
+func (*FlowClassifyDump) GetCrcString() string            { return "25dd3e4c" }
+func (*FlowClassifyDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowClassifyDump) Size() (size int) {
 	if m == nil {
@@ -1432,12 +1421,10 @@ type FlowClassifySetInterface struct {
 	IsAdd         bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *FlowClassifySetInterface) Reset()               { *m = FlowClassifySetInterface{} }
-func (*FlowClassifySetInterface) GetMessageName() string { return "flow_classify_set_interface" }
-func (*FlowClassifySetInterface) GetCrcString() string   { return "b6192f1c" }
-func (*FlowClassifySetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FlowClassifySetInterface) Reset()                        { *m = FlowClassifySetInterface{} }
+func (*FlowClassifySetInterface) GetMessageName() string          { return "flow_classify_set_interface" }
+func (*FlowClassifySetInterface) GetCrcString() string            { return "b6192f1c" }
+func (*FlowClassifySetInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FlowClassifySetInterface) Size() (size int) {
 	if m == nil {
@@ -1478,9 +1465,10 @@ func (m *FlowClassifySetInterfaceReply) Reset() { *m = FlowClassifySetInterfaceR
 func (*FlowClassifySetInterfaceReply) GetMessageName() string {
 	return "flow_classify_set_interface_reply"
 }
-func (*FlowClassifySetInterfaceReply) GetCrcString() string { return "e8d4e804" }
-func (*FlowClassifySetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*FlowClassifySetInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*FlowClassifySetInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FlowClassifySetInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FlowClassifySetInterfaceReply) Size() (size int) {
@@ -1513,12 +1501,10 @@ type InputACLSetInterface struct {
 	IsAdd         bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *InputACLSetInterface) Reset()               { *m = InputACLSetInterface{} }
-func (*InputACLSetInterface) GetMessageName() string { return "input_acl_set_interface" }
-func (*InputACLSetInterface) GetCrcString() string   { return "de7ad708" }
-func (*InputACLSetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *InputACLSetInterface) Reset()                        { *m = InputACLSetInterface{} }
+func (*InputACLSetInterface) GetMessageName() string          { return "input_acl_set_interface" }
+func (*InputACLSetInterface) GetCrcString() string            { return "de7ad708" }
+func (*InputACLSetInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *InputACLSetInterface) Size() (size int) {
 	if m == nil {
@@ -1558,11 +1544,12 @@ type InputACLSetInterfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *InputACLSetInterfaceReply) Reset()               { *m = InputACLSetInterfaceReply{} }
-func (*InputACLSetInterfaceReply) GetMessageName() string { return "input_acl_set_interface_reply" }
-func (*InputACLSetInterfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*InputACLSetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *InputACLSetInterfaceReply) Reset()                        { *m = InputACLSetInterfaceReply{} }
+func (*InputACLSetInterfaceReply) GetMessageName() string          { return "input_acl_set_interface_reply" }
+func (*InputACLSetInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*InputACLSetInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *InputACLSetInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *InputACLSetInterfaceReply) Size() (size int) {
@@ -1595,12 +1582,10 @@ type OutputACLSetInterface struct {
 	IsAdd         bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *OutputACLSetInterface) Reset()               { *m = OutputACLSetInterface{} }
-func (*OutputACLSetInterface) GetMessageName() string { return "output_acl_set_interface" }
-func (*OutputACLSetInterface) GetCrcString() string   { return "de7ad708" }
-func (*OutputACLSetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OutputACLSetInterface) Reset()                        { *m = OutputACLSetInterface{} }
+func (*OutputACLSetInterface) GetMessageName() string          { return "output_acl_set_interface" }
+func (*OutputACLSetInterface) GetCrcString() string            { return "de7ad708" }
+func (*OutputACLSetInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OutputACLSetInterface) Size() (size int) {
 	if m == nil {
@@ -1640,11 +1625,12 @@ type OutputACLSetInterfaceReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OutputACLSetInterfaceReply) Reset()               { *m = OutputACLSetInterfaceReply{} }
-func (*OutputACLSetInterfaceReply) GetMessageName() string { return "output_acl_set_interface_reply" }
-func (*OutputACLSetInterfaceReply) GetCrcString() string   { return "e8d4e804" }
-func (*OutputACLSetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OutputACLSetInterfaceReply) Reset()                        { *m = OutputACLSetInterfaceReply{} }
+func (*OutputACLSetInterfaceReply) GetMessageName() string          { return "output_acl_set_interface_reply" }
+func (*OutputACLSetInterfaceReply) GetCrcString() string            { return "e8d4e804" }
+func (*OutputACLSetInterfaceReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OutputACLSetInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OutputACLSetInterfaceReply) Size() (size int) {
@@ -1674,11 +1660,12 @@ type PolicerClassifyDetails struct {
 	TableIndex uint32                         `binapi:"u32,name=table_index" json:"table_index,omitempty"`
 }
 
-func (m *PolicerClassifyDetails) Reset()               { *m = PolicerClassifyDetails{} }
-func (*PolicerClassifyDetails) GetMessageName() string { return "policer_classify_details" }
-func (*PolicerClassifyDetails) GetCrcString() string   { return "dfd08765" }
-func (*PolicerClassifyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PolicerClassifyDetails) Reset()                        { *m = PolicerClassifyDetails{} }
+func (*PolicerClassifyDetails) GetMessageName() string          { return "policer_classify_details" }
+func (*PolicerClassifyDetails) GetCrcString() string            { return "dfd08765" }
+func (*PolicerClassifyDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PolicerClassifyDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *PolicerClassifyDetails) Size() (size int) {
@@ -1711,12 +1698,10 @@ type PolicerClassifyDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *PolicerClassifyDump) Reset()               { *m = PolicerClassifyDump{} }
-func (*PolicerClassifyDump) GetMessageName() string { return "policer_classify_dump" }
-func (*PolicerClassifyDump) GetCrcString() string   { return "56cbb5fb" }
-func (*PolicerClassifyDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerClassifyDump) Reset()                        { *m = PolicerClassifyDump{} }
+func (*PolicerClassifyDump) GetMessageName() string          { return "policer_classify_dump" }
+func (*PolicerClassifyDump) GetCrcString() string            { return "56cbb5fb" }
+func (*PolicerClassifyDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerClassifyDump) Size() (size int) {
 	if m == nil {
@@ -1751,12 +1736,10 @@ type PolicerClassifySetInterface struct {
 	IsAdd         bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`
 }
 
-func (m *PolicerClassifySetInterface) Reset()               { *m = PolicerClassifySetInterface{} }
-func (*PolicerClassifySetInterface) GetMessageName() string { return "policer_classify_set_interface" }
-func (*PolicerClassifySetInterface) GetCrcString() string   { return "de7ad708" }
-func (*PolicerClassifySetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PolicerClassifySetInterface) Reset()                        { *m = PolicerClassifySetInterface{} }
+func (*PolicerClassifySetInterface) GetMessageName() string          { return "policer_classify_set_interface" }
+func (*PolicerClassifySetInterface) GetCrcString() string            { return "de7ad708" }
+func (*PolicerClassifySetInterface) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PolicerClassifySetInterface) Size() (size int) {
 	if m == nil {
@@ -1804,6 +1787,9 @@ func (*PolicerClassifySetInterfaceReply) GetCrcString() string { return "e8d4e80
 func (*PolicerClassifySetInterfaceReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *PolicerClassifySetInterfaceReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *PolicerClassifySetInterfaceReply) Size() (size int) {
 	if m == nil {
@@ -1833,12 +1819,10 @@ type PuntACLAddDel struct {
 	IsAdd         bool   `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *PuntACLAddDel) Reset()               { *m = PuntACLAddDel{} }
-func (*PuntACLAddDel) GetMessageName() string { return "punt_acl_add_del" }
-func (*PuntACLAddDel) GetCrcString() string   { return "a93bf3a0" }
-func (*PuntACLAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PuntACLAddDel) Reset()                        { *m = PuntACLAddDel{} }
+func (*PuntACLAddDel) GetMessageName() string          { return "punt_acl_add_del" }
+func (*PuntACLAddDel) GetCrcString() string            { return "a93bf3a0" }
+func (*PuntACLAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntACLAddDel) Size() (size int) {
 	if m == nil {
@@ -1872,11 +1856,12 @@ type PuntACLAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *PuntACLAddDelReply) Reset()               { *m = PuntACLAddDelReply{} }
-func (*PuntACLAddDelReply) GetMessageName() string { return "punt_acl_add_del_reply" }
-func (*PuntACLAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*PuntACLAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PuntACLAddDelReply) Reset()                        { *m = PuntACLAddDelReply{} }
+func (*PuntACLAddDelReply) GetMessageName() string          { return "punt_acl_add_del_reply" }
+func (*PuntACLAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*PuntACLAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntACLAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PuntACLAddDelReply) Size() (size int) {
@@ -1903,12 +1888,10 @@ func (m *PuntACLAddDelReply) Unmarshal(b []byte) error {
 // PuntACLGet defines message 'punt_acl_get'.
 type PuntACLGet struct{}
 
-func (m *PuntACLGet) Reset()               { *m = PuntACLGet{} }
-func (*PuntACLGet) GetMessageName() string { return "punt_acl_get" }
-func (*PuntACLGet) GetCrcString() string   { return "51077d14" }
-func (*PuntACLGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *PuntACLGet) Reset()                        { *m = PuntACLGet{} }
+func (*PuntACLGet) GetMessageName() string          { return "punt_acl_get" }
+func (*PuntACLGet) GetCrcString() string            { return "51077d14" }
+func (*PuntACLGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *PuntACLGet) Size() (size int) {
 	if m == nil {
@@ -1934,11 +1917,12 @@ type PuntACLGetReply struct {
 	IP6TableIndex uint32 `binapi:"u32,name=ip6_table_index" json:"ip6_table_index,omitempty"`
 }
 
-func (m *PuntACLGetReply) Reset()               { *m = PuntACLGetReply{} }
-func (*PuntACLGetReply) GetMessageName() string { return "punt_acl_get_reply" }
-func (*PuntACLGetReply) GetCrcString() string   { return "8409b9dd" }
-func (*PuntACLGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *PuntACLGetReply) Reset()                        { *m = PuntACLGetReply{} }
+func (*PuntACLGetReply) GetMessageName() string          { return "punt_acl_get_reply" }
+func (*PuntACLGetReply) GetCrcString() string            { return "8409b9dd" }
+func (*PuntACLGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *PuntACLGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *PuntACLGetReply) Size() (size int) {

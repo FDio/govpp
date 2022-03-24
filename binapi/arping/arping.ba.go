@@ -38,12 +38,10 @@ type Arping struct {
 	Interval  float64                        `binapi:"f64,name=interval,default=1" json:"interval,omitempty"`
 }
 
-func (m *Arping) Reset()               { *m = Arping{} }
-func (*Arping) GetMessageName() string { return "arping" }
-func (*Arping) GetCrcString() string   { return "48817482" }
-func (*Arping) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Arping) Reset()                        { *m = Arping{} }
+func (*Arping) GetMessageName() string          { return "arping" }
+func (*Arping) GetCrcString() string            { return "48817482" }
+func (*Arping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Arping) Size() (size int) {
 	if m == nil {
@@ -87,11 +85,12 @@ type ArpingReply struct {
 	ReplyCount uint32 `binapi:"u32,name=reply_count" json:"reply_count,omitempty"`
 }
 
-func (m *ArpingReply) Reset()               { *m = ArpingReply{} }
-func (*ArpingReply) GetMessageName() string { return "arping_reply" }
-func (*ArpingReply) GetCrcString() string   { return "bb9d1cbd" }
-func (*ArpingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ArpingReply) Reset()                        { *m = ArpingReply{} }
+func (*ArpingReply) GetMessageName() string          { return "arping_reply" }
+func (*ArpingReply) GetCrcString() string            { return "bb9d1cbd" }
+func (*ArpingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ArpingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ArpingReply) Size() (size int) {

@@ -37,12 +37,10 @@ type MapAddDelRule struct {
 	Psid   uint16              `binapi:"u16,name=psid" json:"psid,omitempty"`
 }
 
-func (m *MapAddDelRule) Reset()               { *m = MapAddDelRule{} }
-func (*MapAddDelRule) GetMessageName() string { return "map_add_del_rule" }
-func (*MapAddDelRule) GetCrcString() string   { return "c65b32f7" }
-func (*MapAddDelRule) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapAddDelRule) Reset()                        { *m = MapAddDelRule{} }
+func (*MapAddDelRule) GetMessageName() string          { return "map_add_del_rule" }
+func (*MapAddDelRule) GetCrcString() string            { return "c65b32f7" }
+func (*MapAddDelRule) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapAddDelRule) Size() (size int) {
 	if m == nil {
@@ -79,11 +77,12 @@ type MapAddDelRuleReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapAddDelRuleReply) Reset()               { *m = MapAddDelRuleReply{} }
-func (*MapAddDelRuleReply) GetMessageName() string { return "map_add_del_rule_reply" }
-func (*MapAddDelRuleReply) GetCrcString() string   { return "e8d4e804" }
-func (*MapAddDelRuleReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapAddDelRuleReply) Reset()                        { *m = MapAddDelRuleReply{} }
+func (*MapAddDelRuleReply) GetMessageName() string          { return "map_add_del_rule_reply" }
+func (*MapAddDelRuleReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapAddDelRuleReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapAddDelRuleReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapAddDelRuleReply) Size() (size int) {
@@ -119,12 +118,10 @@ type MapAddDomain struct {
 	Tag        string             `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *MapAddDomain) Reset()               { *m = MapAddDomain{} }
-func (*MapAddDomain) GetMessageName() string { return "map_add_domain" }
-func (*MapAddDomain) GetCrcString() string   { return "249f195c" }
-func (*MapAddDomain) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapAddDomain) Reset()                        { *m = MapAddDomain{} }
+func (*MapAddDomain) GetMessageName() string          { return "map_add_domain" }
+func (*MapAddDomain) GetCrcString() string            { return "249f195c" }
+func (*MapAddDomain) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapAddDomain) Size() (size int) {
 	if m == nil {
@@ -183,11 +180,12 @@ type MapAddDomainReply struct {
 	Retval int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapAddDomainReply) Reset()               { *m = MapAddDomainReply{} }
-func (*MapAddDomainReply) GetMessageName() string { return "map_add_domain_reply" }
-func (*MapAddDomainReply) GetCrcString() string   { return "3e6d4e2c" }
-func (*MapAddDomainReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapAddDomainReply) Reset()                        { *m = MapAddDomainReply{} }
+func (*MapAddDomainReply) GetMessageName() string          { return "map_add_domain_reply" }
+func (*MapAddDomainReply) GetCrcString() string            { return "3e6d4e2c" }
+func (*MapAddDomainReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapAddDomainReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapAddDomainReply) Size() (size int) {
@@ -219,12 +217,10 @@ type MapDelDomain struct {
 	Index uint32 `binapi:"u32,name=index" json:"index,omitempty"`
 }
 
-func (m *MapDelDomain) Reset()               { *m = MapDelDomain{} }
-func (*MapDelDomain) GetMessageName() string { return "map_del_domain" }
-func (*MapDelDomain) GetCrcString() string   { return "8ac76db6" }
-func (*MapDelDomain) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapDelDomain) Reset()                        { *m = MapDelDomain{} }
+func (*MapDelDomain) GetMessageName() string          { return "map_del_domain" }
+func (*MapDelDomain) GetCrcString() string            { return "8ac76db6" }
+func (*MapDelDomain) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapDelDomain) Size() (size int) {
 	if m == nil {
@@ -252,11 +248,12 @@ type MapDelDomainReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapDelDomainReply) Reset()               { *m = MapDelDomainReply{} }
-func (*MapDelDomainReply) GetMessageName() string { return "map_del_domain_reply" }
-func (*MapDelDomainReply) GetCrcString() string   { return "e8d4e804" }
-func (*MapDelDomainReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapDelDomainReply) Reset()                        { *m = MapDelDomainReply{} }
+func (*MapDelDomainReply) GetMessageName() string          { return "map_del_domain_reply" }
+func (*MapDelDomainReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapDelDomainReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapDelDomainReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapDelDomainReply) Size() (size int) {
@@ -294,11 +291,12 @@ type MapDomainDetails struct {
 	Tag         string             `binapi:"string[64],name=tag" json:"tag,omitempty"`
 }
 
-func (m *MapDomainDetails) Reset()               { *m = MapDomainDetails{} }
-func (*MapDomainDetails) GetMessageName() string { return "map_domain_details" }
-func (*MapDomainDetails) GetCrcString() string   { return "796edb50" }
-func (*MapDomainDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapDomainDetails) Reset()                        { *m = MapDomainDetails{} }
+func (*MapDomainDetails) GetMessageName() string          { return "map_domain_details" }
+func (*MapDomainDetails) GetCrcString() string            { return "796edb50" }
+func (*MapDomainDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapDomainDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MapDomainDetails) Size() (size int) {
@@ -362,12 +360,10 @@ func (m *MapDomainDetails) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type MapDomainDump struct{}
 
-func (m *MapDomainDump) Reset()               { *m = MapDomainDump{} }
-func (*MapDomainDump) GetMessageName() string { return "map_domain_dump" }
-func (*MapDomainDump) GetCrcString() string   { return "51077d14" }
-func (*MapDomainDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapDomainDump) Reset()                        { *m = MapDomainDump{} }
+func (*MapDomainDump) GetMessageName() string          { return "map_domain_dump" }
+func (*MapDomainDump) GetCrcString() string            { return "51077d14" }
+func (*MapDomainDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapDomainDump) Size() (size int) {
 	if m == nil {
@@ -391,12 +387,10 @@ type MapDomainsGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *MapDomainsGet) Reset()               { *m = MapDomainsGet{} }
-func (*MapDomainsGet) GetMessageName() string { return "map_domains_get" }
-func (*MapDomainsGet) GetCrcString() string   { return "f75ba505" }
-func (*MapDomainsGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapDomainsGet) Reset()                        { *m = MapDomainsGet{} }
+func (*MapDomainsGet) GetMessageName() string          { return "map_domains_get" }
+func (*MapDomainsGet) GetCrcString() string            { return "f75ba505" }
+func (*MapDomainsGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapDomainsGet) Size() (size int) {
 	if m == nil {
@@ -425,11 +419,12 @@ type MapDomainsGetReply struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
 
-func (m *MapDomainsGetReply) Reset()               { *m = MapDomainsGetReply{} }
-func (*MapDomainsGetReply) GetMessageName() string { return "map_domains_get_reply" }
-func (*MapDomainsGetReply) GetCrcString() string   { return "53b48f5d" }
-func (*MapDomainsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapDomainsGetReply) Reset()                        { *m = MapDomainsGetReply{} }
+func (*MapDomainsGetReply) GetMessageName() string          { return "map_domains_get_reply" }
+func (*MapDomainsGetReply) GetCrcString() string            { return "53b48f5d" }
+func (*MapDomainsGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapDomainsGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapDomainsGetReply) Size() (size int) {
@@ -463,12 +458,10 @@ type MapIfEnableDisable struct {
 	IsTranslation bool                           `binapi:"bool,name=is_translation" json:"is_translation,omitempty"`
 }
 
-func (m *MapIfEnableDisable) Reset()               { *m = MapIfEnableDisable{} }
-func (*MapIfEnableDisable) GetMessageName() string { return "map_if_enable_disable" }
-func (*MapIfEnableDisable) GetCrcString() string   { return "59bb32f4" }
-func (*MapIfEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapIfEnableDisable) Reset()                        { *m = MapIfEnableDisable{} }
+func (*MapIfEnableDisable) GetMessageName() string          { return "map_if_enable_disable" }
+func (*MapIfEnableDisable) GetCrcString() string            { return "59bb32f4" }
+func (*MapIfEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapIfEnableDisable) Size() (size int) {
 	if m == nil {
@@ -502,11 +495,12 @@ type MapIfEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapIfEnableDisableReply) Reset()               { *m = MapIfEnableDisableReply{} }
-func (*MapIfEnableDisableReply) GetMessageName() string { return "map_if_enable_disable_reply" }
-func (*MapIfEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapIfEnableDisableReply) Reset()                        { *m = MapIfEnableDisableReply{} }
+func (*MapIfEnableDisableReply) GetMessageName() string          { return "map_if_enable_disable_reply" }
+func (*MapIfEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapIfEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapIfEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapIfEnableDisableReply) Size() (size int) {
@@ -537,12 +531,10 @@ type MapParamAddDelPreResolve struct {
 	IP6NhAddress ip_types.IP6Address `binapi:"ip6_address,name=ip6_nh_address" json:"ip6_nh_address,omitempty"`
 }
 
-func (m *MapParamAddDelPreResolve) Reset()               { *m = MapParamAddDelPreResolve{} }
-func (*MapParamAddDelPreResolve) GetMessageName() string { return "map_param_add_del_pre_resolve" }
-func (*MapParamAddDelPreResolve) GetCrcString() string   { return "dae5af03" }
-func (*MapParamAddDelPreResolve) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamAddDelPreResolve) Reset()                        { *m = MapParamAddDelPreResolve{} }
+func (*MapParamAddDelPreResolve) GetMessageName() string          { return "map_param_add_del_pre_resolve" }
+func (*MapParamAddDelPreResolve) GetCrcString() string            { return "dae5af03" }
+func (*MapParamAddDelPreResolve) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamAddDelPreResolve) Size() (size int) {
 	if m == nil {
@@ -580,9 +572,10 @@ func (m *MapParamAddDelPreResolveReply) Reset() { *m = MapParamAddDelPreResolveR
 func (*MapParamAddDelPreResolveReply) GetMessageName() string {
 	return "map_param_add_del_pre_resolve_reply"
 }
-func (*MapParamAddDelPreResolveReply) GetCrcString() string { return "e8d4e804" }
-func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*MapParamAddDelPreResolveReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamAddDelPreResolveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamAddDelPreResolveReply) Size() (size int) {
@@ -609,12 +602,10 @@ func (m *MapParamAddDelPreResolveReply) Unmarshal(b []byte) error {
 // MapParamGet defines message 'map_param_get'.
 type MapParamGet struct{}
 
-func (m *MapParamGet) Reset()               { *m = MapParamGet{} }
-func (*MapParamGet) GetMessageName() string { return "map_param_get" }
-func (*MapParamGet) GetCrcString() string   { return "51077d14" }
-func (*MapParamGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamGet) Reset()                        { *m = MapParamGet{} }
+func (*MapParamGet) GetMessageName() string          { return "map_param_get" }
+func (*MapParamGet) GetCrcString() string            { return "51077d14" }
+func (*MapParamGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamGet) Size() (size int) {
 	if m == nil {
@@ -652,11 +643,12 @@ type MapParamGetReply struct {
 	TcClass                uint8               `binapi:"u8,name=tc_class" json:"tc_class,omitempty"`
 }
 
-func (m *MapParamGetReply) Reset()               { *m = MapParamGetReply{} }
-func (*MapParamGetReply) GetMessageName() string { return "map_param_get_reply" }
-func (*MapParamGetReply) GetCrcString() string   { return "26272c90" }
-func (*MapParamGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapParamGetReply) Reset()                        { *m = MapParamGetReply{} }
+func (*MapParamGetReply) GetMessageName() string          { return "map_param_get_reply" }
+func (*MapParamGetReply) GetCrcString() string            { return "26272c90" }
+func (*MapParamGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamGetReply) Size() (size int) {
@@ -728,12 +720,10 @@ type MapParamSetFragmentation struct {
 	IgnoreDf bool `binapi:"bool,name=ignore_df" json:"ignore_df,omitempty"`
 }
 
-func (m *MapParamSetFragmentation) Reset()               { *m = MapParamSetFragmentation{} }
-func (*MapParamSetFragmentation) GetMessageName() string { return "map_param_set_fragmentation" }
-func (*MapParamSetFragmentation) GetCrcString() string   { return "9ff54d90" }
-func (*MapParamSetFragmentation) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetFragmentation) Reset()                        { *m = MapParamSetFragmentation{} }
+func (*MapParamSetFragmentation) GetMessageName() string          { return "map_param_set_fragmentation" }
+func (*MapParamSetFragmentation) GetCrcString() string            { return "9ff54d90" }
+func (*MapParamSetFragmentation) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetFragmentation) Size() (size int) {
 	if m == nil {
@@ -768,9 +758,10 @@ func (m *MapParamSetFragmentationReply) Reset() { *m = MapParamSetFragmentationR
 func (*MapParamSetFragmentationReply) GetMessageName() string {
 	return "map_param_set_fragmentation_reply"
 }
-func (*MapParamSetFragmentationReply) GetCrcString() string { return "e8d4e804" }
-func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*MapParamSetFragmentationReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetFragmentationReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetFragmentationReply) Size() (size int) {
@@ -799,12 +790,10 @@ type MapParamSetICMP struct {
 	IP4ErrRelaySrc ip_types.IP4Address `binapi:"ip4_address,name=ip4_err_relay_src" json:"ip4_err_relay_src,omitempty"`
 }
 
-func (m *MapParamSetICMP) Reset()               { *m = MapParamSetICMP{} }
-func (*MapParamSetICMP) GetMessageName() string { return "map_param_set_icmp" }
-func (*MapParamSetICMP) GetCrcString() string   { return "58210cbf" }
-func (*MapParamSetICMP) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetICMP) Reset()                        { *m = MapParamSetICMP{} }
+func (*MapParamSetICMP) GetMessageName() string          { return "map_param_set_icmp" }
+func (*MapParamSetICMP) GetCrcString() string            { return "58210cbf" }
+func (*MapParamSetICMP) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetICMP) Size() (size int) {
 	if m == nil {
@@ -832,12 +821,10 @@ type MapParamSetICMP6 struct {
 	EnableUnreachable bool `binapi:"bool,name=enable_unreachable" json:"enable_unreachable,omitempty"`
 }
 
-func (m *MapParamSetICMP6) Reset()               { *m = MapParamSetICMP6{} }
-func (*MapParamSetICMP6) GetMessageName() string { return "map_param_set_icmp6" }
-func (*MapParamSetICMP6) GetCrcString() string   { return "5d01f8c1" }
-func (*MapParamSetICMP6) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetICMP6) Reset()                        { *m = MapParamSetICMP6{} }
+func (*MapParamSetICMP6) GetMessageName() string          { return "map_param_set_icmp6" }
+func (*MapParamSetICMP6) GetCrcString() string            { return "5d01f8c1" }
+func (*MapParamSetICMP6) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetICMP6) Size() (size int) {
 	if m == nil {
@@ -865,11 +852,12 @@ type MapParamSetICMP6Reply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapParamSetICMP6Reply) Reset()               { *m = MapParamSetICMP6Reply{} }
-func (*MapParamSetICMP6Reply) GetMessageName() string { return "map_param_set_icmp6_reply" }
-func (*MapParamSetICMP6Reply) GetCrcString() string   { return "e8d4e804" }
-func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapParamSetICMP6Reply) Reset()                        { *m = MapParamSetICMP6Reply{} }
+func (*MapParamSetICMP6Reply) GetMessageName() string          { return "map_param_set_icmp6_reply" }
+func (*MapParamSetICMP6Reply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetICMP6Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetICMP6Reply) Size() (size int) {
@@ -898,11 +886,12 @@ type MapParamSetICMPReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapParamSetICMPReply) Reset()               { *m = MapParamSetICMPReply{} }
-func (*MapParamSetICMPReply) GetMessageName() string { return "map_param_set_icmp_reply" }
-func (*MapParamSetICMPReply) GetCrcString() string   { return "e8d4e804" }
-func (*MapParamSetICMPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapParamSetICMPReply) Reset()                        { *m = MapParamSetICMPReply{} }
+func (*MapParamSetICMPReply) GetMessageName() string          { return "map_param_set_icmp_reply" }
+func (*MapParamSetICMPReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetICMPReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetICMPReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetICMPReply) Size() (size int) {
@@ -932,12 +921,10 @@ type MapParamSetSecurityCheck struct {
 	Fragments bool `binapi:"bool,name=fragments" json:"fragments,omitempty"`
 }
 
-func (m *MapParamSetSecurityCheck) Reset()               { *m = MapParamSetSecurityCheck{} }
-func (*MapParamSetSecurityCheck) GetMessageName() string { return "map_param_set_security_check" }
-func (*MapParamSetSecurityCheck) GetCrcString() string   { return "6abe9836" }
-func (*MapParamSetSecurityCheck) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetSecurityCheck) Reset()                        { *m = MapParamSetSecurityCheck{} }
+func (*MapParamSetSecurityCheck) GetMessageName() string          { return "map_param_set_security_check" }
+func (*MapParamSetSecurityCheck) GetCrcString() string            { return "6abe9836" }
+func (*MapParamSetSecurityCheck) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetSecurityCheck) Size() (size int) {
 	if m == nil {
@@ -972,9 +959,10 @@ func (m *MapParamSetSecurityCheckReply) Reset() { *m = MapParamSetSecurityCheckR
 func (*MapParamSetSecurityCheckReply) GetMessageName() string {
 	return "map_param_set_security_check_reply"
 }
-func (*MapParamSetSecurityCheckReply) GetCrcString() string { return "e8d4e804" }
-func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*MapParamSetSecurityCheckReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetSecurityCheckReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetSecurityCheckReply) Size() (size int) {
@@ -1003,12 +991,10 @@ type MapParamSetTCP struct {
 	TCPMss uint16 `binapi:"u16,name=tcp_mss" json:"tcp_mss,omitempty"`
 }
 
-func (m *MapParamSetTCP) Reset()               { *m = MapParamSetTCP{} }
-func (*MapParamSetTCP) GetMessageName() string { return "map_param_set_tcp" }
-func (*MapParamSetTCP) GetCrcString() string   { return "87a825d9" }
-func (*MapParamSetTCP) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetTCP) Reset()                        { *m = MapParamSetTCP{} }
+func (*MapParamSetTCP) GetMessageName() string          { return "map_param_set_tcp" }
+func (*MapParamSetTCP) GetCrcString() string            { return "87a825d9" }
+func (*MapParamSetTCP) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetTCP) Size() (size int) {
 	if m == nil {
@@ -1036,11 +1022,12 @@ type MapParamSetTCPReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MapParamSetTCPReply) Reset()               { *m = MapParamSetTCPReply{} }
-func (*MapParamSetTCPReply) GetMessageName() string { return "map_param_set_tcp_reply" }
-func (*MapParamSetTCPReply) GetCrcString() string   { return "e8d4e804" }
-func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapParamSetTCPReply) Reset()                        { *m = MapParamSetTCPReply{} }
+func (*MapParamSetTCPReply) GetMessageName() string          { return "map_param_set_tcp_reply" }
+func (*MapParamSetTCPReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetTCPReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetTCPReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetTCPReply) Size() (size int) {
@@ -1070,12 +1057,10 @@ type MapParamSetTrafficClass struct {
 	TcClass uint8 `binapi:"u8,name=tc_class" json:"tc_class,omitempty"`
 }
 
-func (m *MapParamSetTrafficClass) Reset()               { *m = MapParamSetTrafficClass{} }
-func (*MapParamSetTrafficClass) GetMessageName() string { return "map_param_set_traffic_class" }
-func (*MapParamSetTrafficClass) GetCrcString() string   { return "9cac455c" }
-func (*MapParamSetTrafficClass) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapParamSetTrafficClass) Reset()                        { *m = MapParamSetTrafficClass{} }
+func (*MapParamSetTrafficClass) GetMessageName() string          { return "map_param_set_traffic_class" }
+func (*MapParamSetTrafficClass) GetCrcString() string            { return "9cac455c" }
+func (*MapParamSetTrafficClass) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapParamSetTrafficClass) Size() (size int) {
 	if m == nil {
@@ -1110,9 +1095,10 @@ func (m *MapParamSetTrafficClassReply) Reset() { *m = MapParamSetTrafficClassRep
 func (*MapParamSetTrafficClassReply) GetMessageName() string {
 	return "map_param_set_traffic_class_reply"
 }
-func (*MapParamSetTrafficClassReply) GetCrcString() string { return "e8d4e804" }
-func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*MapParamSetTrafficClassReply) GetCrcString() string            { return "e8d4e804" }
+func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapParamSetTrafficClassReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapParamSetTrafficClassReply) Size() (size int) {
@@ -1142,11 +1128,12 @@ type MapRuleDetails struct {
 	Psid   uint16              `binapi:"u16,name=psid" json:"psid,omitempty"`
 }
 
-func (m *MapRuleDetails) Reset()               { *m = MapRuleDetails{} }
-func (*MapRuleDetails) GetMessageName() string { return "map_rule_details" }
-func (*MapRuleDetails) GetCrcString() string   { return "c7cbeea5" }
-func (*MapRuleDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapRuleDetails) Reset()                        { *m = MapRuleDetails{} }
+func (*MapRuleDetails) GetMessageName() string          { return "map_rule_details" }
+func (*MapRuleDetails) GetCrcString() string            { return "c7cbeea5" }
+func (*MapRuleDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapRuleDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MapRuleDetails) Size() (size int) {
@@ -1178,12 +1165,10 @@ type MapRuleDump struct {
 	DomainIndex uint32 `binapi:"u32,name=domain_index" json:"domain_index,omitempty"`
 }
 
-func (m *MapRuleDump) Reset()               { *m = MapRuleDump{} }
-func (*MapRuleDump) GetMessageName() string { return "map_rule_dump" }
-func (*MapRuleDump) GetCrcString() string   { return "e43e6ff6" }
-func (*MapRuleDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapRuleDump) Reset()                        { *m = MapRuleDump{} }
+func (*MapRuleDump) GetMessageName() string          { return "map_rule_dump" }
+func (*MapRuleDump) GetCrcString() string            { return "e43e6ff6" }
+func (*MapRuleDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapRuleDump) Size() (size int) {
 	if m == nil {
@@ -1209,12 +1194,10 @@ func (m *MapRuleDump) Unmarshal(b []byte) error {
 // MapSummaryStats defines message 'map_summary_stats'.
 type MapSummaryStats struct{}
 
-func (m *MapSummaryStats) Reset()               { *m = MapSummaryStats{} }
-func (*MapSummaryStats) GetMessageName() string { return "map_summary_stats" }
-func (*MapSummaryStats) GetCrcString() string   { return "51077d14" }
-func (*MapSummaryStats) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MapSummaryStats) Reset()                        { *m = MapSummaryStats{} }
+func (*MapSummaryStats) GetMessageName() string          { return "map_summary_stats" }
+func (*MapSummaryStats) GetCrcString() string            { return "51077d14" }
+func (*MapSummaryStats) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MapSummaryStats) Size() (size int) {
 	if m == nil {
@@ -1243,11 +1226,12 @@ type MapSummaryStatsReply struct {
 	TotalSecurityCheck []uint64 `binapi:"u64[2],name=total_security_check" json:"total_security_check,omitempty"`
 }
 
-func (m *MapSummaryStatsReply) Reset()               { *m = MapSummaryStatsReply{} }
-func (*MapSummaryStatsReply) GetMessageName() string { return "map_summary_stats_reply" }
-func (*MapSummaryStatsReply) GetCrcString() string   { return "0e4ace0e" }
-func (*MapSummaryStatsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MapSummaryStatsReply) Reset()                        { *m = MapSummaryStatsReply{} }
+func (*MapSummaryStatsReply) GetMessageName() string          { return "map_summary_stats_reply" }
+func (*MapSummaryStatsReply) GetCrcString() string            { return "0e4ace0e" }
+func (*MapSummaryStatsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MapSummaryStatsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MapSummaryStatsReply) Size() (size int) {

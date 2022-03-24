@@ -68,12 +68,10 @@ type MplsIPBindUnbind struct {
 	MbPrefix      ip_types.Prefix `binapi:"prefix,name=mb_prefix" json:"mb_prefix,omitempty"`
 }
 
-func (m *MplsIPBindUnbind) Reset()               { *m = MplsIPBindUnbind{} }
-func (*MplsIPBindUnbind) GetMessageName() string { return "mpls_ip_bind_unbind" }
-func (*MplsIPBindUnbind) GetCrcString() string   { return "c7533b32" }
-func (*MplsIPBindUnbind) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsIPBindUnbind) Reset()                        { *m = MplsIPBindUnbind{} }
+func (*MplsIPBindUnbind) GetMessageName() string          { return "mpls_ip_bind_unbind" }
+func (*MplsIPBindUnbind) GetCrcString() string            { return "c7533b32" }
+func (*MplsIPBindUnbind) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsIPBindUnbind) Size() (size int) {
 	if m == nil {
@@ -119,11 +117,12 @@ type MplsIPBindUnbindReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MplsIPBindUnbindReply) Reset()               { *m = MplsIPBindUnbindReply{} }
-func (*MplsIPBindUnbindReply) GetMessageName() string { return "mpls_ip_bind_unbind_reply" }
-func (*MplsIPBindUnbindReply) GetCrcString() string   { return "e8d4e804" }
-func (*MplsIPBindUnbindReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsIPBindUnbindReply) Reset()                        { *m = MplsIPBindUnbindReply{} }
+func (*MplsIPBindUnbindReply) GetMessageName() string          { return "mpls_ip_bind_unbind_reply" }
+func (*MplsIPBindUnbindReply) GetCrcString() string            { return "e8d4e804" }
+func (*MplsIPBindUnbindReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsIPBindUnbindReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MplsIPBindUnbindReply) Size() (size int) {
@@ -154,12 +153,10 @@ type MplsRouteAddDel struct {
 	MrRoute       MplsRoute `binapi:"mpls_route,name=mr_route" json:"mr_route,omitempty"`
 }
 
-func (m *MplsRouteAddDel) Reset()               { *m = MplsRouteAddDel{} }
-func (*MplsRouteAddDel) GetMessageName() string { return "mpls_route_add_del" }
-func (*MplsRouteAddDel) GetCrcString() string   { return "8e1d1e07" }
-func (*MplsRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsRouteAddDel) Reset()                        { *m = MplsRouteAddDel{} }
+func (*MplsRouteAddDel) GetMessageName() string          { return "mpls_route_add_del" }
+func (*MplsRouteAddDel) GetCrcString() string            { return "8e1d1e07" }
+func (*MplsRouteAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsRouteAddDel) Size() (size int) {
 	if m == nil {
@@ -282,11 +279,12 @@ type MplsRouteAddDelReply struct {
 	StatsIndex uint32 `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
 }
 
-func (m *MplsRouteAddDelReply) Reset()               { *m = MplsRouteAddDelReply{} }
-func (*MplsRouteAddDelReply) GetMessageName() string { return "mpls_route_add_del_reply" }
-func (*MplsRouteAddDelReply) GetCrcString() string   { return "1992deab" }
-func (*MplsRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsRouteAddDelReply) Reset()                        { *m = MplsRouteAddDelReply{} }
+func (*MplsRouteAddDelReply) GetMessageName() string          { return "mpls_route_add_del_reply" }
+func (*MplsRouteAddDelReply) GetCrcString() string            { return "1992deab" }
+func (*MplsRouteAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsRouteAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MplsRouteAddDelReply) Size() (size int) {
@@ -318,11 +316,12 @@ type MplsRouteDetails struct {
 	MrRoute MplsRoute `binapi:"mpls_route,name=mr_route" json:"mr_route,omitempty"`
 }
 
-func (m *MplsRouteDetails) Reset()               { *m = MplsRouteDetails{} }
-func (*MplsRouteDetails) GetMessageName() string { return "mpls_route_details" }
-func (*MplsRouteDetails) GetCrcString() string   { return "9b5043dc" }
-func (*MplsRouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsRouteDetails) Reset()                        { *m = MplsRouteDetails{} }
+func (*MplsRouteDetails) GetMessageName() string          { return "mpls_route_details" }
+func (*MplsRouteDetails) GetCrcString() string            { return "9b5043dc" }
+func (*MplsRouteDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsRouteDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MplsRouteDetails) Size() (size int) {
@@ -439,12 +438,10 @@ type MplsRouteDump struct {
 	Table MplsTable `binapi:"mpls_table,name=table" json:"table,omitempty"`
 }
 
-func (m *MplsRouteDump) Reset()               { *m = MplsRouteDump{} }
-func (*MplsRouteDump) GetMessageName() string { return "mpls_route_dump" }
-func (*MplsRouteDump) GetCrcString() string   { return "935fdefa" }
-func (*MplsRouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsRouteDump) Reset()                        { *m = MplsRouteDump{} }
+func (*MplsRouteDump) GetMessageName() string          { return "mpls_route_dump" }
+func (*MplsRouteDump) GetCrcString() string            { return "935fdefa" }
+func (*MplsRouteDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsRouteDump) Size() (size int) {
 	if m == nil {
@@ -476,12 +473,10 @@ type MplsTableAddDel struct {
 	MtTable MplsTable `binapi:"mpls_table,name=mt_table" json:"mt_table,omitempty"`
 }
 
-func (m *MplsTableAddDel) Reset()               { *m = MplsTableAddDel{} }
-func (*MplsTableAddDel) GetMessageName() string { return "mpls_table_add_del" }
-func (*MplsTableAddDel) GetCrcString() string   { return "57817512" }
-func (*MplsTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsTableAddDel) Reset()                        { *m = MplsTableAddDel{} }
+func (*MplsTableAddDel) GetMessageName() string          { return "mpls_table_add_del" }
+func (*MplsTableAddDel) GetCrcString() string            { return "57817512" }
+func (*MplsTableAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsTableAddDel) Size() (size int) {
 	if m == nil {
@@ -515,11 +510,12 @@ type MplsTableAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *MplsTableAddDelReply) Reset()               { *m = MplsTableAddDelReply{} }
-func (*MplsTableAddDelReply) GetMessageName() string { return "mpls_table_add_del_reply" }
-func (*MplsTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*MplsTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsTableAddDelReply) Reset()                        { *m = MplsTableAddDelReply{} }
+func (*MplsTableAddDelReply) GetMessageName() string          { return "mpls_table_add_del_reply" }
+func (*MplsTableAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*MplsTableAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsTableAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MplsTableAddDelReply) Size() (size int) {
@@ -548,11 +544,12 @@ type MplsTableDetails struct {
 	MtTable MplsTable `binapi:"mpls_table,name=mt_table" json:"mt_table,omitempty"`
 }
 
-func (m *MplsTableDetails) Reset()               { *m = MplsTableDetails{} }
-func (*MplsTableDetails) GetMessageName() string { return "mpls_table_details" }
-func (*MplsTableDetails) GetCrcString() string   { return "f03ecdc8" }
-func (*MplsTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsTableDetails) Reset()                        { *m = MplsTableDetails{} }
+func (*MplsTableDetails) GetMessageName() string          { return "mpls_table_details" }
+func (*MplsTableDetails) GetCrcString() string            { return "f03ecdc8" }
+func (*MplsTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MplsTableDetails) Size() (size int) {
@@ -582,12 +579,10 @@ func (m *MplsTableDetails) Unmarshal(b []byte) error {
 // MplsTableDump defines message 'mpls_table_dump'.
 type MplsTableDump struct{}
 
-func (m *MplsTableDump) Reset()               { *m = MplsTableDump{} }
-func (*MplsTableDump) GetMessageName() string { return "mpls_table_dump" }
-func (*MplsTableDump) GetCrcString() string   { return "51077d14" }
-func (*MplsTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsTableDump) Reset()                        { *m = MplsTableDump{} }
+func (*MplsTableDump) GetMessageName() string          { return "mpls_table_dump" }
+func (*MplsTableDump) GetCrcString() string            { return "51077d14" }
+func (*MplsTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsTableDump) Size() (size int) {
 	if m == nil {
@@ -612,12 +607,10 @@ type MplsTunnelAddDel struct {
 	MtTunnel MplsTunnel `binapi:"mpls_tunnel,name=mt_tunnel" json:"mt_tunnel,omitempty"`
 }
 
-func (m *MplsTunnelAddDel) Reset()               { *m = MplsTunnelAddDel{} }
-func (*MplsTunnelAddDel) GetMessageName() string { return "mpls_tunnel_add_del" }
-func (*MplsTunnelAddDel) GetCrcString() string   { return "44350ac1" }
-func (*MplsTunnelAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsTunnelAddDel) Reset()                        { *m = MplsTunnelAddDel{} }
+func (*MplsTunnelAddDel) GetMessageName() string          { return "mpls_tunnel_add_del" }
+func (*MplsTunnelAddDel) GetCrcString() string            { return "44350ac1" }
+func (*MplsTunnelAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsTunnelAddDel) Size() (size int) {
 	if m == nil {
@@ -738,11 +731,12 @@ type MplsTunnelAddDelReply struct {
 	TunnelIndex uint32                         `binapi:"u32,name=tunnel_index" json:"tunnel_index,omitempty"`
 }
 
-func (m *MplsTunnelAddDelReply) Reset()               { *m = MplsTunnelAddDelReply{} }
-func (*MplsTunnelAddDelReply) GetMessageName() string { return "mpls_tunnel_add_del_reply" }
-func (*MplsTunnelAddDelReply) GetCrcString() string   { return "afb01472" }
-func (*MplsTunnelAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsTunnelAddDelReply) Reset()                        { *m = MplsTunnelAddDelReply{} }
+func (*MplsTunnelAddDelReply) GetMessageName() string          { return "mpls_tunnel_add_del_reply" }
+func (*MplsTunnelAddDelReply) GetCrcString() string            { return "afb01472" }
+func (*MplsTunnelAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsTunnelAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *MplsTunnelAddDelReply) Size() (size int) {
@@ -777,11 +771,12 @@ type MplsTunnelDetails struct {
 	MtTunnel MplsTunnel `binapi:"mpls_tunnel,name=mt_tunnel" json:"mt_tunnel,omitempty"`
 }
 
-func (m *MplsTunnelDetails) Reset()               { *m = MplsTunnelDetails{} }
-func (*MplsTunnelDetails) GetMessageName() string { return "mpls_tunnel_details" }
-func (*MplsTunnelDetails) GetCrcString() string   { return "57118ae3" }
-func (*MplsTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *MplsTunnelDetails) Reset()                        { *m = MplsTunnelDetails{} }
+func (*MplsTunnelDetails) GetMessageName() string          { return "mpls_tunnel_details" }
+func (*MplsTunnelDetails) GetCrcString() string            { return "57118ae3" }
+func (*MplsTunnelDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *MplsTunnelDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *MplsTunnelDetails) Size() (size int) {
@@ -898,12 +893,10 @@ type MplsTunnelDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *MplsTunnelDump) Reset()               { *m = MplsTunnelDump{} }
-func (*MplsTunnelDump) GetMessageName() string { return "mpls_tunnel_dump" }
-func (*MplsTunnelDump) GetCrcString() string   { return "f9e6675e" }
-func (*MplsTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *MplsTunnelDump) Reset()                        { *m = MplsTunnelDump{} }
+func (*MplsTunnelDump) GetMessageName() string          { return "mpls_tunnel_dump" }
+func (*MplsTunnelDump) GetCrcString() string            { return "f9e6675e" }
+func (*MplsTunnelDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *MplsTunnelDump) Size() (size int) {
 	if m == nil {
@@ -932,12 +925,10 @@ type SwInterfaceSetMplsEnable struct {
 	Enable    bool                           `binapi:"bool,name=enable,default=true" json:"enable,omitempty"`
 }
 
-func (m *SwInterfaceSetMplsEnable) Reset()               { *m = SwInterfaceSetMplsEnable{} }
-func (*SwInterfaceSetMplsEnable) GetMessageName() string { return "sw_interface_set_mpls_enable" }
-func (*SwInterfaceSetMplsEnable) GetCrcString() string   { return "ae6cfcfb" }
-func (*SwInterfaceSetMplsEnable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetMplsEnable) Reset()                        { *m = SwInterfaceSetMplsEnable{} }
+func (*SwInterfaceSetMplsEnable) GetMessageName() string          { return "sw_interface_set_mpls_enable" }
+func (*SwInterfaceSetMplsEnable) GetCrcString() string            { return "ae6cfcfb" }
+func (*SwInterfaceSetMplsEnable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetMplsEnable) Size() (size int) {
 	if m == nil {
@@ -972,9 +963,10 @@ func (m *SwInterfaceSetMplsEnableReply) Reset() { *m = SwInterfaceSetMplsEnableR
 func (*SwInterfaceSetMplsEnableReply) GetMessageName() string {
 	return "sw_interface_set_mpls_enable_reply"
 }
-func (*SwInterfaceSetMplsEnableReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetMplsEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceSetMplsEnableReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetMplsEnableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetMplsEnableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetMplsEnableReply) Size() (size int) {

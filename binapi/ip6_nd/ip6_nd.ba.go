@@ -52,11 +52,12 @@ type IP6RaEvent struct {
 	Prefixes                                            []IP6RaPrefixInfo              `binapi:"ip6_ra_prefix_info[n_prefixes],name=prefixes" json:"prefixes,omitempty"`
 }
 
-func (m *IP6RaEvent) Reset()               { *m = IP6RaEvent{} }
-func (*IP6RaEvent) GetMessageName() string { return "ip6_ra_event" }
-func (*IP6RaEvent) GetCrcString() string   { return "0364c1c5" }
-func (*IP6RaEvent) GetMessageType() api.MessageType {
-	return api.EventMessageType
+func (m *IP6RaEvent) Reset()                        { *m = IP6RaEvent{} }
+func (*IP6RaEvent) GetMessageName() string          { return "ip6_ra_event" }
+func (*IP6RaEvent) GetCrcString() string            { return "0364c1c5" }
+func (*IP6RaEvent) GetMessageType() api.MessageType { return api.EventMessageType }
+func (m *IP6RaEvent) GetRetVal() error {
+	return nil
 }
 
 func (m *IP6RaEvent) Size() (size int) {
@@ -145,12 +146,10 @@ type IP6ndProxyAddDel struct {
 	IP        ip_types.IP6Address            `binapi:"ip6_address,name=ip" json:"ip,omitempty"`
 }
 
-func (m *IP6ndProxyAddDel) Reset()               { *m = IP6ndProxyAddDel{} }
-func (*IP6ndProxyAddDel) GetMessageName() string { return "ip6nd_proxy_add_del" }
-func (*IP6ndProxyAddDel) GetCrcString() string   { return "c2e4a686" }
-func (*IP6ndProxyAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IP6ndProxyAddDel) Reset()                        { *m = IP6ndProxyAddDel{} }
+func (*IP6ndProxyAddDel) GetMessageName() string          { return "ip6nd_proxy_add_del" }
+func (*IP6ndProxyAddDel) GetCrcString() string            { return "c2e4a686" }
+func (*IP6ndProxyAddDel) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IP6ndProxyAddDel) Size() (size int) {
 	if m == nil {
@@ -184,11 +183,12 @@ type IP6ndProxyAddDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *IP6ndProxyAddDelReply) Reset()               { *m = IP6ndProxyAddDelReply{} }
-func (*IP6ndProxyAddDelReply) GetMessageName() string { return "ip6nd_proxy_add_del_reply" }
-func (*IP6ndProxyAddDelReply) GetCrcString() string   { return "e8d4e804" }
-func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IP6ndProxyAddDelReply) Reset()                        { *m = IP6ndProxyAddDelReply{} }
+func (*IP6ndProxyAddDelReply) GetMessageName() string          { return "ip6nd_proxy_add_del_reply" }
+func (*IP6ndProxyAddDelReply) GetCrcString() string            { return "e8d4e804" }
+func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IP6ndProxyAddDelReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IP6ndProxyAddDelReply) Size() (size int) {
@@ -218,11 +218,12 @@ type IP6ndProxyDetails struct {
 	IP        ip_types.IP6Address            `binapi:"ip6_address,name=ip" json:"ip,omitempty"`
 }
 
-func (m *IP6ndProxyDetails) Reset()               { *m = IP6ndProxyDetails{} }
-func (*IP6ndProxyDetails) GetMessageName() string { return "ip6nd_proxy_details" }
-func (*IP6ndProxyDetails) GetCrcString() string   { return "30b9ff4a" }
-func (*IP6ndProxyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *IP6ndProxyDetails) Reset()                        { *m = IP6ndProxyDetails{} }
+func (*IP6ndProxyDetails) GetMessageName() string          { return "ip6nd_proxy_details" }
+func (*IP6ndProxyDetails) GetCrcString() string            { return "30b9ff4a" }
+func (*IP6ndProxyDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IP6ndProxyDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *IP6ndProxyDetails) Size() (size int) {
@@ -252,12 +253,10 @@ func (m *IP6ndProxyDetails) Unmarshal(b []byte) error {
 // IP6ndProxyDump defines message 'ip6nd_proxy_dump'.
 type IP6ndProxyDump struct{}
 
-func (m *IP6ndProxyDump) Reset()               { *m = IP6ndProxyDump{} }
-func (*IP6ndProxyDump) GetMessageName() string { return "ip6nd_proxy_dump" }
-func (*IP6ndProxyDump) GetCrcString() string   { return "51077d14" }
-func (*IP6ndProxyDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IP6ndProxyDump) Reset()                        { *m = IP6ndProxyDump{} }
+func (*IP6ndProxyDump) GetMessageName() string          { return "ip6nd_proxy_dump" }
+func (*IP6ndProxyDump) GetCrcString() string            { return "51077d14" }
+func (*IP6ndProxyDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IP6ndProxyDump) Size() (size int) {
 	if m == nil {
@@ -282,12 +281,10 @@ type IP6ndProxyEnableDisable struct {
 	IsEnable  bool                           `binapi:"bool,name=is_enable" json:"is_enable,omitempty"`
 }
 
-func (m *IP6ndProxyEnableDisable) Reset()               { *m = IP6ndProxyEnableDisable{} }
-func (*IP6ndProxyEnableDisable) GetMessageName() string { return "ip6nd_proxy_enable_disable" }
-func (*IP6ndProxyEnableDisable) GetCrcString() string   { return "7daa1e3a" }
-func (*IP6ndProxyEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IP6ndProxyEnableDisable) Reset()                        { *m = IP6ndProxyEnableDisable{} }
+func (*IP6ndProxyEnableDisable) GetMessageName() string          { return "ip6nd_proxy_enable_disable" }
+func (*IP6ndProxyEnableDisable) GetCrcString() string            { return "7daa1e3a" }
+func (*IP6ndProxyEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IP6ndProxyEnableDisable) Size() (size int) {
 	if m == nil {
@@ -322,9 +319,10 @@ func (m *IP6ndProxyEnableDisableReply) Reset() { *m = IP6ndProxyEnableDisableRep
 func (*IP6ndProxyEnableDisableReply) GetMessageName() string {
 	return "ip6nd_proxy_enable_disable_reply"
 }
-func (*IP6ndProxyEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*IP6ndProxyEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*IP6ndProxyEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*IP6ndProxyEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *IP6ndProxyEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *IP6ndProxyEnableDisableReply) Size() (size int) {
@@ -358,12 +356,10 @@ type IP6ndSendRouterSolicitation struct {
 	Stop      bool                           `binapi:"bool,name=stop" json:"stop,omitempty"`
 }
 
-func (m *IP6ndSendRouterSolicitation) Reset()               { *m = IP6ndSendRouterSolicitation{} }
-func (*IP6ndSendRouterSolicitation) GetMessageName() string { return "ip6nd_send_router_solicitation" }
-func (*IP6ndSendRouterSolicitation) GetCrcString() string   { return "e5de609c" }
-func (*IP6ndSendRouterSolicitation) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *IP6ndSendRouterSolicitation) Reset()                        { *m = IP6ndSendRouterSolicitation{} }
+func (*IP6ndSendRouterSolicitation) GetMessageName() string          { return "ip6nd_send_router_solicitation" }
+func (*IP6ndSendRouterSolicitation) GetCrcString() string            { return "e5de609c" }
+func (*IP6ndSendRouterSolicitation) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *IP6ndSendRouterSolicitation) Size() (size int) {
 	if m == nil {
@@ -414,6 +410,9 @@ func (*IP6ndSendRouterSolicitationReply) GetCrcString() string { return "e8d4e80
 func (*IP6ndSendRouterSolicitationReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *IP6ndSendRouterSolicitationReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *IP6ndSendRouterSolicitationReply) Size() (size int) {
 	if m == nil {
@@ -454,12 +453,10 @@ type SwInterfaceIP6ndRaConfig struct {
 	InitialInterval uint32                         `binapi:"u32,name=initial_interval" json:"initial_interval,omitempty"`
 }
 
-func (m *SwInterfaceIP6ndRaConfig) Reset()               { *m = SwInterfaceIP6ndRaConfig{} }
-func (*SwInterfaceIP6ndRaConfig) GetMessageName() string { return "sw_interface_ip6nd_ra_config" }
-func (*SwInterfaceIP6ndRaConfig) GetCrcString() string   { return "3eb00b1c" }
-func (*SwInterfaceIP6ndRaConfig) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceIP6ndRaConfig) Reset()                        { *m = SwInterfaceIP6ndRaConfig{} }
+func (*SwInterfaceIP6ndRaConfig) GetMessageName() string          { return "sw_interface_ip6nd_ra_config" }
+func (*SwInterfaceIP6ndRaConfig) GetCrcString() string            { return "3eb00b1c" }
+func (*SwInterfaceIP6ndRaConfig) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceIP6ndRaConfig) Size() (size int) {
 	if m == nil {
@@ -530,9 +527,10 @@ func (m *SwInterfaceIP6ndRaConfigReply) Reset() { *m = SwInterfaceIP6ndRaConfigR
 func (*SwInterfaceIP6ndRaConfigReply) GetMessageName() string {
 	return "sw_interface_ip6nd_ra_config_reply"
 }
-func (*SwInterfaceIP6ndRaConfigReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceIP6ndRaConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceIP6ndRaConfigReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceIP6ndRaConfigReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceIP6ndRaConfigReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceIP6ndRaConfigReply) Size() (size int) {
@@ -570,12 +568,10 @@ type SwInterfaceIP6ndRaPrefix struct {
 	PrefLifetime uint32                         `binapi:"u32,name=pref_lifetime" json:"pref_lifetime,omitempty"`
 }
 
-func (m *SwInterfaceIP6ndRaPrefix) Reset()               { *m = SwInterfaceIP6ndRaPrefix{} }
-func (*SwInterfaceIP6ndRaPrefix) GetMessageName() string { return "sw_interface_ip6nd_ra_prefix" }
-func (*SwInterfaceIP6ndRaPrefix) GetCrcString() string   { return "82cc1b28" }
-func (*SwInterfaceIP6ndRaPrefix) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceIP6ndRaPrefix) Reset()                        { *m = SwInterfaceIP6ndRaPrefix{} }
+func (*SwInterfaceIP6ndRaPrefix) GetMessageName() string          { return "sw_interface_ip6nd_ra_prefix" }
+func (*SwInterfaceIP6ndRaPrefix) GetCrcString() string            { return "82cc1b28" }
+func (*SwInterfaceIP6ndRaPrefix) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceIP6ndRaPrefix) Size() (size int) {
 	if m == nil {
@@ -640,9 +636,10 @@ func (m *SwInterfaceIP6ndRaPrefixReply) Reset() { *m = SwInterfaceIP6ndRaPrefixR
 func (*SwInterfaceIP6ndRaPrefixReply) GetMessageName() string {
 	return "sw_interface_ip6nd_ra_prefix_reply"
 }
-func (*SwInterfaceIP6ndRaPrefixReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceIP6ndRaPrefixReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceIP6ndRaPrefixReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceIP6ndRaPrefixReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceIP6ndRaPrefixReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceIP6ndRaPrefixReply) Size() (size int) {
@@ -672,12 +669,10 @@ type WantIP6RaEvents struct {
 	PID    uint32 `binapi:"u32,name=pid" json:"pid,omitempty"`
 }
 
-func (m *WantIP6RaEvents) Reset()               { *m = WantIP6RaEvents{} }
-func (*WantIP6RaEvents) GetMessageName() string { return "want_ip6_ra_events" }
-func (*WantIP6RaEvents) GetCrcString() string   { return "3ec6d6c2" }
-func (*WantIP6RaEvents) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *WantIP6RaEvents) Reset()                        { *m = WantIP6RaEvents{} }
+func (*WantIP6RaEvents) GetMessageName() string          { return "want_ip6_ra_events" }
+func (*WantIP6RaEvents) GetCrcString() string            { return "3ec6d6c2" }
+func (*WantIP6RaEvents) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *WantIP6RaEvents) Size() (size int) {
 	if m == nil {
@@ -708,11 +703,12 @@ type WantIP6RaEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *WantIP6RaEventsReply) Reset()               { *m = WantIP6RaEventsReply{} }
-func (*WantIP6RaEventsReply) GetMessageName() string { return "want_ip6_ra_events_reply" }
-func (*WantIP6RaEventsReply) GetCrcString() string   { return "e8d4e804" }
-func (*WantIP6RaEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *WantIP6RaEventsReply) Reset()                        { *m = WantIP6RaEventsReply{} }
+func (*WantIP6RaEventsReply) GetMessageName() string          { return "want_ip6_ra_events_reply" }
+func (*WantIP6RaEventsReply) GetCrcString() string            { return "e8d4e804" }
+func (*WantIP6RaEventsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *WantIP6RaEventsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *WantIP6RaEventsReply) Size() (size int) {

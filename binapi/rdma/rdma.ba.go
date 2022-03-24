@@ -138,12 +138,10 @@ type RdmaCreate struct {
 	Mode    RdmaMode `binapi:"rdma_mode,name=mode,default=0" json:"mode,omitempty"`
 }
 
-func (m *RdmaCreate) Reset()               { *m = RdmaCreate{} }
-func (*RdmaCreate) GetMessageName() string { return "rdma_create" }
-func (*RdmaCreate) GetCrcString() string   { return "076fe418" }
-func (*RdmaCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *RdmaCreate) Reset()                        { *m = RdmaCreate{} }
+func (*RdmaCreate) GetMessageName() string          { return "rdma_create" }
+func (*RdmaCreate) GetCrcString() string            { return "076fe418" }
+func (*RdmaCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *RdmaCreate) Size() (size int) {
 	if m == nil {
@@ -187,11 +185,12 @@ type RdmaCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *RdmaCreateReply) Reset()               { *m = RdmaCreateReply{} }
-func (*RdmaCreateReply) GetMessageName() string { return "rdma_create_reply" }
-func (*RdmaCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*RdmaCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *RdmaCreateReply) Reset()                        { *m = RdmaCreateReply{} }
+func (*RdmaCreateReply) GetMessageName() string          { return "rdma_create_reply" }
+func (*RdmaCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*RdmaCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *RdmaCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *RdmaCreateReply) Size() (size int) {
@@ -231,12 +230,10 @@ type RdmaCreateV2 struct {
 	MaxPktlen  uint16   `binapi:"u16,name=max_pktlen,default=0" json:"max_pktlen,omitempty"`
 }
 
-func (m *RdmaCreateV2) Reset()               { *m = RdmaCreateV2{} }
-func (*RdmaCreateV2) GetMessageName() string { return "rdma_create_v2" }
-func (*RdmaCreateV2) GetCrcString() string   { return "5826a4f3" }
-func (*RdmaCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *RdmaCreateV2) Reset()                        { *m = RdmaCreateV2{} }
+func (*RdmaCreateV2) GetMessageName() string          { return "rdma_create_v2" }
+func (*RdmaCreateV2) GetCrcString() string            { return "5826a4f3" }
+func (*RdmaCreateV2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *RdmaCreateV2) Size() (size int) {
 	if m == nil {
@@ -286,11 +283,12 @@ type RdmaCreateV2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *RdmaCreateV2Reply) Reset()               { *m = RdmaCreateV2Reply{} }
-func (*RdmaCreateV2Reply) GetMessageName() string { return "rdma_create_v2_reply" }
-func (*RdmaCreateV2Reply) GetCrcString() string   { return "5383d31f" }
-func (*RdmaCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *RdmaCreateV2Reply) Reset()                        { *m = RdmaCreateV2Reply{} }
+func (*RdmaCreateV2Reply) GetMessageName() string          { return "rdma_create_v2_reply" }
+func (*RdmaCreateV2Reply) GetCrcString() string            { return "5383d31f" }
+func (*RdmaCreateV2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *RdmaCreateV2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *RdmaCreateV2Reply) Size() (size int) {
@@ -331,12 +329,10 @@ type RdmaCreateV3 struct {
 	Rss6       RdmaRss6 `binapi:"rdma_rss6,name=rss6,default=0" json:"rss6,omitempty"`
 }
 
-func (m *RdmaCreateV3) Reset()               { *m = RdmaCreateV3{} }
-func (*RdmaCreateV3) GetMessageName() string { return "rdma_create_v3" }
-func (*RdmaCreateV3) GetCrcString() string   { return "c6287ea8" }
-func (*RdmaCreateV3) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *RdmaCreateV3) Reset()                        { *m = RdmaCreateV3{} }
+func (*RdmaCreateV3) GetMessageName() string          { return "rdma_create_v3" }
+func (*RdmaCreateV3) GetCrcString() string            { return "c6287ea8" }
+func (*RdmaCreateV3) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *RdmaCreateV3) Size() (size int) {
 	if m == nil {
@@ -392,11 +388,12 @@ type RdmaCreateV3Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *RdmaCreateV3Reply) Reset()               { *m = RdmaCreateV3Reply{} }
-func (*RdmaCreateV3Reply) GetMessageName() string { return "rdma_create_v3_reply" }
-func (*RdmaCreateV3Reply) GetCrcString() string   { return "5383d31f" }
-func (*RdmaCreateV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *RdmaCreateV3Reply) Reset()                        { *m = RdmaCreateV3Reply{} }
+func (*RdmaCreateV3Reply) GetMessageName() string          { return "rdma_create_v3_reply" }
+func (*RdmaCreateV3Reply) GetCrcString() string            { return "5383d31f" }
+func (*RdmaCreateV3Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *RdmaCreateV3Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *RdmaCreateV3Reply) Size() (size int) {
@@ -428,12 +425,10 @@ type RdmaDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *RdmaDelete) Reset()               { *m = RdmaDelete{} }
-func (*RdmaDelete) GetMessageName() string { return "rdma_delete" }
-func (*RdmaDelete) GetCrcString() string   { return "f9e6675e" }
-func (*RdmaDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *RdmaDelete) Reset()                        { *m = RdmaDelete{} }
+func (*RdmaDelete) GetMessageName() string          { return "rdma_delete" }
+func (*RdmaDelete) GetCrcString() string            { return "f9e6675e" }
+func (*RdmaDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *RdmaDelete) Size() (size int) {
 	if m == nil {
@@ -461,11 +456,12 @@ type RdmaDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *RdmaDeleteReply) Reset()               { *m = RdmaDeleteReply{} }
-func (*RdmaDeleteReply) GetMessageName() string { return "rdma_delete_reply" }
-func (*RdmaDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*RdmaDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *RdmaDeleteReply) Reset()                        { *m = RdmaDeleteReply{} }
+func (*RdmaDeleteReply) GetMessageName() string          { return "rdma_delete_reply" }
+func (*RdmaDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*RdmaDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *RdmaDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *RdmaDeleteReply) Size() (size int) {

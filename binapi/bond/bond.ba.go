@@ -115,12 +115,10 @@ type BondAddMember struct {
 	IsLongTimeout bool                           `binapi:"bool,name=is_long_timeout" json:"is_long_timeout,omitempty"`
 }
 
-func (m *BondAddMember) Reset()               { *m = BondAddMember{} }
-func (*BondAddMember) GetMessageName() string { return "bond_add_member" }
-func (*BondAddMember) GetCrcString() string   { return "e7d14948" }
-func (*BondAddMember) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondAddMember) Reset()                        { *m = BondAddMember{} }
+func (*BondAddMember) GetMessageName() string          { return "bond_add_member" }
+func (*BondAddMember) GetCrcString() string            { return "e7d14948" }
+func (*BondAddMember) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondAddMember) Size() (size int) {
 	if m == nil {
@@ -157,11 +155,12 @@ type BondAddMemberReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BondAddMemberReply) Reset()               { *m = BondAddMemberReply{} }
-func (*BondAddMemberReply) GetMessageName() string { return "bond_add_member_reply" }
-func (*BondAddMemberReply) GetCrcString() string   { return "e8d4e804" }
-func (*BondAddMemberReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondAddMemberReply) Reset()                        { *m = BondAddMemberReply{} }
+func (*BondAddMemberReply) GetMessageName() string          { return "bond_add_member_reply" }
+func (*BondAddMemberReply) GetCrcString() string            { return "e8d4e804" }
+func (*BondAddMemberReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondAddMemberReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondAddMemberReply) Size() (size int) {
@@ -196,12 +195,10 @@ type BondCreate struct {
 	NumaOnly     bool                      `binapi:"bool,name=numa_only" json:"numa_only,omitempty"`
 }
 
-func (m *BondCreate) Reset()               { *m = BondCreate{} }
-func (*BondCreate) GetMessageName() string { return "bond_create" }
-func (*BondCreate) GetCrcString() string   { return "f1dbd4ff" }
-func (*BondCreate) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondCreate) Reset()                        { *m = BondCreate{} }
+func (*BondCreate) GetMessageName() string          { return "bond_create" }
+func (*BondCreate) GetCrcString() string            { return "f1dbd4ff" }
+func (*BondCreate) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondCreate) Size() (size int) {
 	if m == nil {
@@ -250,12 +247,10 @@ type BondCreate2 struct {
 	ID           uint32                    `binapi:"u32,name=id,default=4294967295" json:"id,omitempty"`
 }
 
-func (m *BondCreate2) Reset()               { *m = BondCreate2{} }
-func (*BondCreate2) GetMessageName() string { return "bond_create2" }
-func (*BondCreate2) GetCrcString() string   { return "912fda76" }
-func (*BondCreate2) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondCreate2) Reset()                        { *m = BondCreate2{} }
+func (*BondCreate2) GetMessageName() string          { return "bond_create2" }
+func (*BondCreate2) GetCrcString() string            { return "912fda76" }
+func (*BondCreate2) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondCreate2) Size() (size int) {
 	if m == nil {
@@ -302,11 +297,12 @@ type BondCreate2Reply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BondCreate2Reply) Reset()               { *m = BondCreate2Reply{} }
-func (*BondCreate2Reply) GetMessageName() string { return "bond_create2_reply" }
-func (*BondCreate2Reply) GetCrcString() string   { return "5383d31f" }
-func (*BondCreate2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondCreate2Reply) Reset()                        { *m = BondCreate2Reply{} }
+func (*BondCreate2Reply) GetMessageName() string          { return "bond_create2_reply" }
+func (*BondCreate2Reply) GetCrcString() string            { return "5383d31f" }
+func (*BondCreate2Reply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondCreate2Reply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondCreate2Reply) Size() (size int) {
@@ -339,11 +335,12 @@ type BondCreateReply struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BondCreateReply) Reset()               { *m = BondCreateReply{} }
-func (*BondCreateReply) GetMessageName() string { return "bond_create_reply" }
-func (*BondCreateReply) GetCrcString() string   { return "5383d31f" }
-func (*BondCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondCreateReply) Reset()                        { *m = BondCreateReply{} }
+func (*BondCreateReply) GetMessageName() string          { return "bond_create_reply" }
+func (*BondCreateReply) GetCrcString() string            { return "5383d31f" }
+func (*BondCreateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondCreateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondCreateReply) Size() (size int) {
@@ -375,12 +372,10 @@ type BondDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BondDelete) Reset()               { *m = BondDelete{} }
-func (*BondDelete) GetMessageName() string { return "bond_delete" }
-func (*BondDelete) GetCrcString() string   { return "f9e6675e" }
-func (*BondDelete) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondDelete) Reset()                        { *m = BondDelete{} }
+func (*BondDelete) GetMessageName() string          { return "bond_delete" }
+func (*BondDelete) GetCrcString() string            { return "f9e6675e" }
+func (*BondDelete) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondDelete) Size() (size int) {
 	if m == nil {
@@ -408,11 +403,12 @@ type BondDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BondDeleteReply) Reset()               { *m = BondDeleteReply{} }
-func (*BondDeleteReply) GetMessageName() string { return "bond_delete_reply" }
-func (*BondDeleteReply) GetCrcString() string   { return "e8d4e804" }
-func (*BondDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondDeleteReply) Reset()                        { *m = BondDeleteReply{} }
+func (*BondDeleteReply) GetMessageName() string          { return "bond_delete_reply" }
+func (*BondDeleteReply) GetCrcString() string            { return "e8d4e804" }
+func (*BondDeleteReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondDeleteReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondDeleteReply) Size() (size int) {
@@ -441,12 +437,10 @@ type BondDetachMember struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BondDetachMember) Reset()               { *m = BondDetachMember{} }
-func (*BondDetachMember) GetMessageName() string { return "bond_detach_member" }
-func (*BondDetachMember) GetCrcString() string   { return "f9e6675e" }
-func (*BondDetachMember) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondDetachMember) Reset()                        { *m = BondDetachMember{} }
+func (*BondDetachMember) GetMessageName() string          { return "bond_detach_member" }
+func (*BondDetachMember) GetCrcString() string            { return "f9e6675e" }
+func (*BondDetachMember) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondDetachMember) Size() (size int) {
 	if m == nil {
@@ -474,11 +468,12 @@ type BondDetachMemberReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BondDetachMemberReply) Reset()               { *m = BondDetachMemberReply{} }
-func (*BondDetachMemberReply) GetMessageName() string { return "bond_detach_member_reply" }
-func (*BondDetachMemberReply) GetCrcString() string   { return "e8d4e804" }
-func (*BondDetachMemberReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondDetachMemberReply) Reset()                        { *m = BondDetachMemberReply{} }
+func (*BondDetachMemberReply) GetMessageName() string          { return "bond_detach_member_reply" }
+func (*BondDetachMemberReply) GetCrcString() string            { return "e8d4e804" }
+func (*BondDetachMemberReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondDetachMemberReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondDetachMemberReply) Size() (size int) {
@@ -508,12 +503,10 @@ type BondDetachSlave struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *BondDetachSlave) Reset()               { *m = BondDetachSlave{} }
-func (*BondDetachSlave) GetMessageName() string { return "bond_detach_slave" }
-func (*BondDetachSlave) GetCrcString() string   { return "f9e6675e" }
-func (*BondDetachSlave) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondDetachSlave) Reset()                        { *m = BondDetachSlave{} }
+func (*BondDetachSlave) GetMessageName() string          { return "bond_detach_slave" }
+func (*BondDetachSlave) GetCrcString() string            { return "f9e6675e" }
+func (*BondDetachSlave) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondDetachSlave) Size() (size int) {
 	if m == nil {
@@ -542,11 +535,12 @@ type BondDetachSlaveReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BondDetachSlaveReply) Reset()               { *m = BondDetachSlaveReply{} }
-func (*BondDetachSlaveReply) GetMessageName() string { return "bond_detach_slave_reply" }
-func (*BondDetachSlaveReply) GetCrcString() string   { return "e8d4e804" }
-func (*BondDetachSlaveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondDetachSlaveReply) Reset()                        { *m = BondDetachSlaveReply{} }
+func (*BondDetachSlaveReply) GetMessageName() string          { return "bond_detach_slave_reply" }
+func (*BondDetachSlaveReply) GetCrcString() string            { return "e8d4e804" }
+func (*BondDetachSlaveReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondDetachSlaveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondDetachSlaveReply) Size() (size int) {
@@ -579,12 +573,10 @@ type BondEnslave struct {
 	IsLongTimeout bool                           `binapi:"bool,name=is_long_timeout" json:"is_long_timeout,omitempty"`
 }
 
-func (m *BondEnslave) Reset()               { *m = BondEnslave{} }
-func (*BondEnslave) GetMessageName() string { return "bond_enslave" }
-func (*BondEnslave) GetCrcString() string   { return "e7d14948" }
-func (*BondEnslave) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *BondEnslave) Reset()                        { *m = BondEnslave{} }
+func (*BondEnslave) GetMessageName() string          { return "bond_enslave" }
+func (*BondEnslave) GetCrcString() string            { return "e7d14948" }
+func (*BondEnslave) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *BondEnslave) Size() (size int) {
 	if m == nil {
@@ -621,11 +613,12 @@ type BondEnslaveReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *BondEnslaveReply) Reset()               { *m = BondEnslaveReply{} }
-func (*BondEnslaveReply) GetMessageName() string { return "bond_enslave_reply" }
-func (*BondEnslaveReply) GetCrcString() string   { return "e8d4e804" }
-func (*BondEnslaveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *BondEnslaveReply) Reset()                        { *m = BondEnslaveReply{} }
+func (*BondEnslaveReply) GetMessageName() string          { return "bond_enslave_reply" }
+func (*BondEnslaveReply) GetCrcString() string            { return "e8d4e804" }
+func (*BondEnslaveReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *BondEnslaveReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *BondEnslaveReply) Size() (size int) {
@@ -661,11 +654,12 @@ type SwBondInterfaceDetails struct {
 	InterfaceName string                         `binapi:"string[64],name=interface_name" json:"interface_name,omitempty"`
 }
 
-func (m *SwBondInterfaceDetails) Reset()               { *m = SwBondInterfaceDetails{} }
-func (*SwBondInterfaceDetails) GetMessageName() string { return "sw_bond_interface_details" }
-func (*SwBondInterfaceDetails) GetCrcString() string   { return "9428a69c" }
-func (*SwBondInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwBondInterfaceDetails) Reset()                        { *m = SwBondInterfaceDetails{} }
+func (*SwBondInterfaceDetails) GetMessageName() string          { return "sw_bond_interface_details" }
+func (*SwBondInterfaceDetails) GetCrcString() string            { return "9428a69c" }
+func (*SwBondInterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwBondInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwBondInterfaceDetails) Size() (size int) {
@@ -715,12 +709,10 @@ type SwBondInterfaceDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwBondInterfaceDump) Reset()               { *m = SwBondInterfaceDump{} }
-func (*SwBondInterfaceDump) GetMessageName() string { return "sw_bond_interface_dump" }
-func (*SwBondInterfaceDump) GetCrcString() string   { return "f9e6675e" }
-func (*SwBondInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwBondInterfaceDump) Reset()                        { *m = SwBondInterfaceDump{} }
+func (*SwBondInterfaceDump) GetMessageName() string          { return "sw_bond_interface_dump" }
+func (*SwBondInterfaceDump) GetCrcString() string            { return "f9e6675e" }
+func (*SwBondInterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwBondInterfaceDump) Size() (size int) {
 	if m == nil {
@@ -755,11 +747,12 @@ type SwInterfaceBondDetails struct {
 	InterfaceName string                         `binapi:"string[64],name=interface_name" json:"interface_name,omitempty"`
 }
 
-func (m *SwInterfaceBondDetails) Reset()               { *m = SwInterfaceBondDetails{} }
-func (*SwInterfaceBondDetails) GetMessageName() string { return "sw_interface_bond_details" }
-func (*SwInterfaceBondDetails) GetCrcString() string   { return "bb7c929b" }
-func (*SwInterfaceBondDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwInterfaceBondDetails) Reset()                        { *m = SwInterfaceBondDetails{} }
+func (*SwInterfaceBondDetails) GetMessageName() string          { return "sw_interface_bond_details" }
+func (*SwInterfaceBondDetails) GetCrcString() string            { return "bb7c929b" }
+func (*SwInterfaceBondDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceBondDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceBondDetails) Size() (size int) {
@@ -808,12 +801,10 @@ func (m *SwInterfaceBondDetails) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type SwInterfaceBondDump struct{}
 
-func (m *SwInterfaceBondDump) Reset()               { *m = SwInterfaceBondDump{} }
-func (*SwInterfaceBondDump) GetMessageName() string { return "sw_interface_bond_dump" }
-func (*SwInterfaceBondDump) GetCrcString() string   { return "51077d14" }
-func (*SwInterfaceBondDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceBondDump) Reset()                        { *m = SwInterfaceBondDump{} }
+func (*SwInterfaceBondDump) GetMessageName() string          { return "sw_interface_bond_dump" }
+func (*SwInterfaceBondDump) GetCrcString() string            { return "51077d14" }
+func (*SwInterfaceBondDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceBondDump) Size() (size int) {
 	if m == nil {
@@ -838,12 +829,10 @@ type SwInterfaceSetBondWeight struct {
 	Weight    uint32                         `binapi:"u32,name=weight" json:"weight,omitempty"`
 }
 
-func (m *SwInterfaceSetBondWeight) Reset()               { *m = SwInterfaceSetBondWeight{} }
-func (*SwInterfaceSetBondWeight) GetMessageName() string { return "sw_interface_set_bond_weight" }
-func (*SwInterfaceSetBondWeight) GetCrcString() string   { return "deb510a0" }
-func (*SwInterfaceSetBondWeight) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSetBondWeight) Reset()                        { *m = SwInterfaceSetBondWeight{} }
+func (*SwInterfaceSetBondWeight) GetMessageName() string          { return "sw_interface_set_bond_weight" }
+func (*SwInterfaceSetBondWeight) GetCrcString() string            { return "deb510a0" }
+func (*SwInterfaceSetBondWeight) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSetBondWeight) Size() (size int) {
 	if m == nil {
@@ -878,9 +867,10 @@ func (m *SwInterfaceSetBondWeightReply) Reset() { *m = SwInterfaceSetBondWeightR
 func (*SwInterfaceSetBondWeightReply) GetMessageName() string {
 	return "sw_interface_set_bond_weight_reply"
 }
-func (*SwInterfaceSetBondWeightReply) GetCrcString() string { return "e8d4e804" }
-func (*SwInterfaceSetBondWeightReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*SwInterfaceSetBondWeightReply) GetCrcString() string            { return "e8d4e804" }
+func (*SwInterfaceSetBondWeightReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSetBondWeightReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *SwInterfaceSetBondWeightReply) Size() (size int) {
@@ -914,11 +904,12 @@ type SwInterfaceSlaveDetails struct {
 	Weight        uint32                         `binapi:"u32,name=weight" json:"weight,omitempty"`
 }
 
-func (m *SwInterfaceSlaveDetails) Reset()               { *m = SwInterfaceSlaveDetails{} }
-func (*SwInterfaceSlaveDetails) GetMessageName() string { return "sw_interface_slave_details" }
-func (*SwInterfaceSlaveDetails) GetCrcString() string   { return "3c4a0e23" }
-func (*SwInterfaceSlaveDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwInterfaceSlaveDetails) Reset()                        { *m = SwInterfaceSlaveDetails{} }
+func (*SwInterfaceSlaveDetails) GetMessageName() string          { return "sw_interface_slave_details" }
+func (*SwInterfaceSlaveDetails) GetCrcString() string            { return "3c4a0e23" }
+func (*SwInterfaceSlaveDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwInterfaceSlaveDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwInterfaceSlaveDetails) Size() (size int) {
@@ -963,12 +954,10 @@ type SwInterfaceSlaveDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwInterfaceSlaveDump) Reset()               { *m = SwInterfaceSlaveDump{} }
-func (*SwInterfaceSlaveDump) GetMessageName() string { return "sw_interface_slave_dump" }
-func (*SwInterfaceSlaveDump) GetCrcString() string   { return "f9e6675e" }
-func (*SwInterfaceSlaveDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwInterfaceSlaveDump) Reset()                        { *m = SwInterfaceSlaveDump{} }
+func (*SwInterfaceSlaveDump) GetMessageName() string          { return "sw_interface_slave_dump" }
+func (*SwInterfaceSlaveDump) GetCrcString() string            { return "f9e6675e" }
+func (*SwInterfaceSlaveDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwInterfaceSlaveDump) Size() (size int) {
 	if m == nil {
@@ -1001,11 +990,12 @@ type SwMemberInterfaceDetails struct {
 	Weight        uint32                         `binapi:"u32,name=weight" json:"weight,omitempty"`
 }
 
-func (m *SwMemberInterfaceDetails) Reset()               { *m = SwMemberInterfaceDetails{} }
-func (*SwMemberInterfaceDetails) GetMessageName() string { return "sw_member_interface_details" }
-func (*SwMemberInterfaceDetails) GetCrcString() string   { return "3c4a0e23" }
-func (*SwMemberInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *SwMemberInterfaceDetails) Reset()                        { *m = SwMemberInterfaceDetails{} }
+func (*SwMemberInterfaceDetails) GetMessageName() string          { return "sw_member_interface_details" }
+func (*SwMemberInterfaceDetails) GetCrcString() string            { return "3c4a0e23" }
+func (*SwMemberInterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *SwMemberInterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *SwMemberInterfaceDetails) Size() (size int) {
@@ -1049,12 +1039,10 @@ type SwMemberInterfaceDump struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *SwMemberInterfaceDump) Reset()               { *m = SwMemberInterfaceDump{} }
-func (*SwMemberInterfaceDump) GetMessageName() string { return "sw_member_interface_dump" }
-func (*SwMemberInterfaceDump) GetCrcString() string   { return "f9e6675e" }
-func (*SwMemberInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *SwMemberInterfaceDump) Reset()                        { *m = SwMemberInterfaceDump{} }
+func (*SwMemberInterfaceDump) GetMessageName() string          { return "sw_member_interface_dump" }
+func (*SwMemberInterfaceDump) GetCrcString() string            { return "f9e6675e" }
+func (*SwMemberInterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *SwMemberInterfaceDump) Size() (size int) {
 	if m == nil {

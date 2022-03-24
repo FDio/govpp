@@ -118,12 +118,10 @@ type OneAddDelAdjacency struct {
 	Leid  lisp_types.Eid `binapi:"eid,name=leid" json:"leid,omitempty"`
 }
 
-func (m *OneAddDelAdjacency) Reset()               { *m = OneAddDelAdjacency{} }
-func (*OneAddDelAdjacency) GetMessageName() string { return "one_add_del_adjacency" }
-func (*OneAddDelAdjacency) GetCrcString() string   { return "9e830312" }
-func (*OneAddDelAdjacency) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelAdjacency) Reset()                        { *m = OneAddDelAdjacency{} }
+func (*OneAddDelAdjacency) GetMessageName() string          { return "one_add_del_adjacency" }
+func (*OneAddDelAdjacency) GetCrcString() string            { return "9e830312" }
+func (*OneAddDelAdjacency) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelAdjacency) Size() (size int) {
 	if m == nil {
@@ -166,11 +164,12 @@ type OneAddDelAdjacencyReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelAdjacencyReply) Reset()               { *m = OneAddDelAdjacencyReply{} }
-func (*OneAddDelAdjacencyReply) GetMessageName() string { return "one_add_del_adjacency_reply" }
-func (*OneAddDelAdjacencyReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelAdjacencyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelAdjacencyReply) Reset()                        { *m = OneAddDelAdjacencyReply{} }
+func (*OneAddDelAdjacencyReply) GetMessageName() string          { return "one_add_del_adjacency_reply" }
+func (*OneAddDelAdjacencyReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelAdjacencyReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelAdjacencyReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelAdjacencyReply) Size() (size int) {
@@ -201,12 +200,10 @@ type OneAddDelL2ArpEntry struct {
 	Entry OneL2ArpEntry `binapi:"one_l2_arp_entry,name=entry" json:"entry,omitempty"`
 }
 
-func (m *OneAddDelL2ArpEntry) Reset()               { *m = OneAddDelL2ArpEntry{} }
-func (*OneAddDelL2ArpEntry) GetMessageName() string { return "one_add_del_l2_arp_entry" }
-func (*OneAddDelL2ArpEntry) GetCrcString() string   { return "1aa5e8b3" }
-func (*OneAddDelL2ArpEntry) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelL2ArpEntry) Reset()                        { *m = OneAddDelL2ArpEntry{} }
+func (*OneAddDelL2ArpEntry) GetMessageName() string          { return "one_add_del_l2_arp_entry" }
+func (*OneAddDelL2ArpEntry) GetCrcString() string            { return "1aa5e8b3" }
+func (*OneAddDelL2ArpEntry) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelL2ArpEntry) Size() (size int) {
 	if m == nil {
@@ -243,11 +240,12 @@ type OneAddDelL2ArpEntryReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelL2ArpEntryReply) Reset()               { *m = OneAddDelL2ArpEntryReply{} }
-func (*OneAddDelL2ArpEntryReply) GetMessageName() string { return "one_add_del_l2_arp_entry_reply" }
-func (*OneAddDelL2ArpEntryReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelL2ArpEntryReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelL2ArpEntryReply) Reset()                        { *m = OneAddDelL2ArpEntryReply{} }
+func (*OneAddDelL2ArpEntryReply) GetMessageName() string          { return "one_add_del_l2_arp_entry_reply" }
+func (*OneAddDelL2ArpEntryReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelL2ArpEntryReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelL2ArpEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelL2ArpEntryReply) Size() (size int) {
@@ -280,12 +278,10 @@ type OneAddDelLocalEid struct {
 	Key            lisp_types.HmacKey `binapi:"hmac_key,name=key" json:"key,omitempty"`
 }
 
-func (m *OneAddDelLocalEid) Reset()               { *m = OneAddDelLocalEid{} }
-func (*OneAddDelLocalEid) GetMessageName() string { return "one_add_del_local_eid" }
-func (*OneAddDelLocalEid) GetCrcString() string   { return "4e5a83a2" }
-func (*OneAddDelLocalEid) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelLocalEid) Reset()                        { *m = OneAddDelLocalEid{} }
+func (*OneAddDelLocalEid) GetMessageName() string          { return "one_add_del_local_eid" }
+func (*OneAddDelLocalEid) GetCrcString() string            { return "4e5a83a2" }
+func (*OneAddDelLocalEid) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelLocalEid) Size() (size int) {
 	if m == nil {
@@ -332,11 +328,12 @@ type OneAddDelLocalEidReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelLocalEidReply) Reset()               { *m = OneAddDelLocalEidReply{} }
-func (*OneAddDelLocalEidReply) GetMessageName() string { return "one_add_del_local_eid_reply" }
-func (*OneAddDelLocalEidReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelLocalEidReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelLocalEidReply) Reset()                        { *m = OneAddDelLocalEidReply{} }
+func (*OneAddDelLocalEidReply) GetMessageName() string          { return "one_add_del_local_eid_reply" }
+func (*OneAddDelLocalEidReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelLocalEidReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelLocalEidReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelLocalEidReply) Size() (size int) {
@@ -369,12 +366,10 @@ type OneAddDelLocator struct {
 	Weight         uint8                          `binapi:"u8,name=weight" json:"weight,omitempty"`
 }
 
-func (m *OneAddDelLocator) Reset()               { *m = OneAddDelLocator{} }
-func (*OneAddDelLocator) GetMessageName() string { return "one_add_del_locator" }
-func (*OneAddDelLocator) GetCrcString() string   { return "af4d8f13" }
-func (*OneAddDelLocator) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelLocator) Reset()                        { *m = OneAddDelLocator{} }
+func (*OneAddDelLocator) GetMessageName() string          { return "one_add_del_locator" }
+func (*OneAddDelLocator) GetCrcString() string            { return "af4d8f13" }
+func (*OneAddDelLocator) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelLocator) Size() (size int) {
 	if m == nil {
@@ -414,11 +409,12 @@ type OneAddDelLocatorReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelLocatorReply) Reset()               { *m = OneAddDelLocatorReply{} }
-func (*OneAddDelLocatorReply) GetMessageName() string { return "one_add_del_locator_reply" }
-func (*OneAddDelLocatorReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelLocatorReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelLocatorReply) Reset()                        { *m = OneAddDelLocatorReply{} }
+func (*OneAddDelLocatorReply) GetMessageName() string          { return "one_add_del_locator_reply" }
+func (*OneAddDelLocatorReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelLocatorReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelLocatorReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelLocatorReply) Size() (size int) {
@@ -450,12 +446,10 @@ type OneAddDelLocatorSet struct {
 	Locators       []lisp_types.LocalLocator `binapi:"local_locator[locator_num],name=locators" json:"locators,omitempty"`
 }
 
-func (m *OneAddDelLocatorSet) Reset()               { *m = OneAddDelLocatorSet{} }
-func (*OneAddDelLocatorSet) GetMessageName() string { return "one_add_del_locator_set" }
-func (*OneAddDelLocatorSet) GetCrcString() string   { return "6fcd6471" }
-func (*OneAddDelLocatorSet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelLocatorSet) Reset()                        { *m = OneAddDelLocatorSet{} }
+func (*OneAddDelLocatorSet) GetMessageName() string          { return "one_add_del_locator_set" }
+func (*OneAddDelLocatorSet) GetCrcString() string            { return "6fcd6471" }
+func (*OneAddDelLocatorSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelLocatorSet) Size() (size int) {
 	if m == nil {
@@ -515,11 +509,12 @@ type OneAddDelLocatorSetReply struct {
 	LsIndex uint32 `binapi:"u32,name=ls_index" json:"ls_index,omitempty"`
 }
 
-func (m *OneAddDelLocatorSetReply) Reset()               { *m = OneAddDelLocatorSetReply{} }
-func (*OneAddDelLocatorSetReply) GetMessageName() string { return "one_add_del_locator_set_reply" }
-func (*OneAddDelLocatorSetReply) GetCrcString() string   { return "b6666db4" }
-func (*OneAddDelLocatorSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelLocatorSetReply) Reset()                        { *m = OneAddDelLocatorSetReply{} }
+func (*OneAddDelLocatorSetReply) GetMessageName() string          { return "one_add_del_locator_set_reply" }
+func (*OneAddDelLocatorSetReply) GetCrcString() string            { return "b6666db4" }
+func (*OneAddDelLocatorSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelLocatorSetReply) Size() (size int) {
@@ -556,10 +551,8 @@ func (m *OneAddDelMapRequestItrRlocs) Reset() { *m = OneAddDelMapRequestItrRlocs
 func (*OneAddDelMapRequestItrRlocs) GetMessageName() string {
 	return "one_add_del_map_request_itr_rlocs"
 }
-func (*OneAddDelMapRequestItrRlocs) GetCrcString() string { return "6be88e45" }
-func (*OneAddDelMapRequestItrRlocs) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (*OneAddDelMapRequestItrRlocs) GetCrcString() string            { return "6be88e45" }
+func (*OneAddDelMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
@@ -598,6 +591,9 @@ func (*OneAddDelMapRequestItrRlocsReply) GetCrcString() string { return "e8d4e80
 func (*OneAddDelMapRequestItrRlocsReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *OneAddDelMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneAddDelMapRequestItrRlocsReply) Size() (size int) {
 	if m == nil {
@@ -626,12 +622,10 @@ type OneAddDelMapResolver struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *OneAddDelMapResolver) Reset()               { *m = OneAddDelMapResolver{} }
-func (*OneAddDelMapResolver) GetMessageName() string { return "one_add_del_map_resolver" }
-func (*OneAddDelMapResolver) GetCrcString() string   { return "ce19e32d" }
-func (*OneAddDelMapResolver) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelMapResolver) Reset()                        { *m = OneAddDelMapResolver{} }
+func (*OneAddDelMapResolver) GetMessageName() string          { return "one_add_del_map_resolver" }
+func (*OneAddDelMapResolver) GetCrcString() string            { return "ce19e32d" }
+func (*OneAddDelMapResolver) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelMapResolver) Size() (size int) {
 	if m == nil {
@@ -665,11 +659,12 @@ type OneAddDelMapResolverReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelMapResolverReply) Reset()               { *m = OneAddDelMapResolverReply{} }
-func (*OneAddDelMapResolverReply) GetMessageName() string { return "one_add_del_map_resolver_reply" }
-func (*OneAddDelMapResolverReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelMapResolverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelMapResolverReply) Reset()                        { *m = OneAddDelMapResolverReply{} }
+func (*OneAddDelMapResolverReply) GetMessageName() string          { return "one_add_del_map_resolver_reply" }
+func (*OneAddDelMapResolverReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelMapResolverReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelMapResolverReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelMapResolverReply) Size() (size int) {
@@ -699,12 +694,10 @@ type OneAddDelMapServer struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *OneAddDelMapServer) Reset()               { *m = OneAddDelMapServer{} }
-func (*OneAddDelMapServer) GetMessageName() string { return "one_add_del_map_server" }
-func (*OneAddDelMapServer) GetCrcString() string   { return "ce19e32d" }
-func (*OneAddDelMapServer) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelMapServer) Reset()                        { *m = OneAddDelMapServer{} }
+func (*OneAddDelMapServer) GetMessageName() string          { return "one_add_del_map_server" }
+func (*OneAddDelMapServer) GetCrcString() string            { return "ce19e32d" }
+func (*OneAddDelMapServer) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelMapServer) Size() (size int) {
 	if m == nil {
@@ -738,11 +731,12 @@ type OneAddDelMapServerReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelMapServerReply) Reset()               { *m = OneAddDelMapServerReply{} }
-func (*OneAddDelMapServerReply) GetMessageName() string { return "one_add_del_map_server_reply" }
-func (*OneAddDelMapServerReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelMapServerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelMapServerReply) Reset()                        { *m = OneAddDelMapServerReply{} }
+func (*OneAddDelMapServerReply) GetMessageName() string          { return "one_add_del_map_server_reply" }
+func (*OneAddDelMapServerReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelMapServerReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelMapServerReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelMapServerReply) Size() (size int) {
@@ -773,12 +767,10 @@ type OneAddDelNdpEntry struct {
 	Entry OneNdpEntry `binapi:"one_ndp_entry,name=entry" json:"entry,omitempty"`
 }
 
-func (m *OneAddDelNdpEntry) Reset()               { *m = OneAddDelNdpEntry{} }
-func (*OneAddDelNdpEntry) GetMessageName() string { return "one_add_del_ndp_entry" }
-func (*OneAddDelNdpEntry) GetCrcString() string   { return "0f8a287c" }
-func (*OneAddDelNdpEntry) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelNdpEntry) Reset()                        { *m = OneAddDelNdpEntry{} }
+func (*OneAddDelNdpEntry) GetMessageName() string          { return "one_add_del_ndp_entry" }
+func (*OneAddDelNdpEntry) GetCrcString() string            { return "0f8a287c" }
+func (*OneAddDelNdpEntry) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelNdpEntry) Size() (size int) {
 	if m == nil {
@@ -815,11 +807,12 @@ type OneAddDelNdpEntryReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneAddDelNdpEntryReply) Reset()               { *m = OneAddDelNdpEntryReply{} }
-func (*OneAddDelNdpEntryReply) GetMessageName() string { return "one_add_del_ndp_entry_reply" }
-func (*OneAddDelNdpEntryReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneAddDelNdpEntryReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAddDelNdpEntryReply) Reset()                        { *m = OneAddDelNdpEntryReply{} }
+func (*OneAddDelNdpEntryReply) GetMessageName() string          { return "one_add_del_ndp_entry_reply" }
+func (*OneAddDelNdpEntryReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelNdpEntryReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelNdpEntryReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelNdpEntryReply) Size() (size int) {
@@ -856,12 +849,10 @@ type OneAddDelRemoteMapping struct {
 	Rlocs    []lisp_types.RemoteLocator `binapi:"remote_locator[rloc_num],name=rlocs" json:"rlocs,omitempty"`
 }
 
-func (m *OneAddDelRemoteMapping) Reset()               { *m = OneAddDelRemoteMapping{} }
-func (*OneAddDelRemoteMapping) GetMessageName() string { return "one_add_del_remote_mapping" }
-func (*OneAddDelRemoteMapping) GetCrcString() string   { return "6d5c789e" }
-func (*OneAddDelRemoteMapping) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAddDelRemoteMapping) Reset()                        { *m = OneAddDelRemoteMapping{} }
+func (*OneAddDelRemoteMapping) GetMessageName() string          { return "one_add_del_remote_mapping" }
+func (*OneAddDelRemoteMapping) GetCrcString() string            { return "6d5c789e" }
+func (*OneAddDelRemoteMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAddDelRemoteMapping) Size() (size int) {
 	if m == nil {
@@ -948,9 +939,10 @@ func (m *OneAddDelRemoteMappingReply) Reset() { *m = OneAddDelRemoteMappingReply
 func (*OneAddDelRemoteMappingReply) GetMessageName() string {
 	return "one_add_del_remote_mapping_reply"
 }
-func (*OneAddDelRemoteMappingReply) GetCrcString() string { return "e8d4e804" }
-func (*OneAddDelRemoteMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneAddDelRemoteMappingReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneAddDelRemoteMappingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAddDelRemoteMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAddDelRemoteMappingReply) Size() (size int) {
@@ -979,12 +971,10 @@ type OneAdjacenciesGet struct {
 	Vni uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *OneAdjacenciesGet) Reset()               { *m = OneAdjacenciesGet{} }
-func (*OneAdjacenciesGet) GetMessageName() string { return "one_adjacencies_get" }
-func (*OneAdjacenciesGet) GetCrcString() string   { return "8d1f2fe9" }
-func (*OneAdjacenciesGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneAdjacenciesGet) Reset()                        { *m = OneAdjacenciesGet{} }
+func (*OneAdjacenciesGet) GetMessageName() string          { return "one_adjacencies_get" }
+func (*OneAdjacenciesGet) GetCrcString() string            { return "8d1f2fe9" }
+func (*OneAdjacenciesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneAdjacenciesGet) Size() (size int) {
 	if m == nil {
@@ -1014,11 +1004,12 @@ type OneAdjacenciesGetReply struct {
 	Adjacencies []OneAdjacency `binapi:"one_adjacency[count],name=adjacencies" json:"adjacencies,omitempty"`
 }
 
-func (m *OneAdjacenciesGetReply) Reset()               { *m = OneAdjacenciesGetReply{} }
-func (*OneAdjacenciesGetReply) GetMessageName() string { return "one_adjacencies_get_reply" }
-func (*OneAdjacenciesGetReply) GetCrcString() string   { return "085bab89" }
-func (*OneAdjacenciesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneAdjacenciesGetReply) Reset()                        { *m = OneAdjacenciesGetReply{} }
+func (*OneAdjacenciesGetReply) GetMessageName() string          { return "one_adjacencies_get_reply" }
+func (*OneAdjacenciesGetReply) GetCrcString() string            { return "085bab89" }
+func (*OneAdjacenciesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneAdjacenciesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneAdjacenciesGetReply) Size() (size int) {
@@ -1081,12 +1072,10 @@ type OneEidTableAddDelMap struct {
 	IsL2    bool   `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *OneEidTableAddDelMap) Reset()               { *m = OneEidTableAddDelMap{} }
-func (*OneEidTableAddDelMap) GetMessageName() string { return "one_eid_table_add_del_map" }
-func (*OneEidTableAddDelMap) GetCrcString() string   { return "9481416b" }
-func (*OneEidTableAddDelMap) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEidTableAddDelMap) Reset()                        { *m = OneEidTableAddDelMap{} }
+func (*OneEidTableAddDelMap) GetMessageName() string          { return "one_eid_table_add_del_map" }
+func (*OneEidTableAddDelMap) GetCrcString() string            { return "9481416b" }
+func (*OneEidTableAddDelMap) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEidTableAddDelMap) Size() (size int) {
 	if m == nil {
@@ -1123,11 +1112,12 @@ type OneEidTableAddDelMapReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneEidTableAddDelMapReply) Reset()               { *m = OneEidTableAddDelMapReply{} }
-func (*OneEidTableAddDelMapReply) GetMessageName() string { return "one_eid_table_add_del_map_reply" }
-func (*OneEidTableAddDelMapReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneEidTableAddDelMapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneEidTableAddDelMapReply) Reset()                        { *m = OneEidTableAddDelMapReply{} }
+func (*OneEidTableAddDelMapReply) GetMessageName() string          { return "one_eid_table_add_del_map_reply" }
+func (*OneEidTableAddDelMapReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneEidTableAddDelMapReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEidTableAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEidTableAddDelMapReply) Size() (size int) {
@@ -1165,11 +1155,12 @@ type OneEidTableDetails struct {
 	Key             lisp_types.HmacKey `binapi:"hmac_key,name=key" json:"key,omitempty"`
 }
 
-func (m *OneEidTableDetails) Reset()               { *m = OneEidTableDetails{} }
-func (*OneEidTableDetails) GetMessageName() string { return "one_eid_table_details" }
-func (*OneEidTableDetails) GetCrcString() string   { return "1c29f792" }
-func (*OneEidTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneEidTableDetails) Reset()                        { *m = OneEidTableDetails{} }
+func (*OneEidTableDetails) GetMessageName() string          { return "one_eid_table_details" }
+func (*OneEidTableDetails) GetCrcString() string            { return "1c29f792" }
+func (*OneEidTableDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEidTableDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneEidTableDetails) Size() (size int) {
@@ -1238,12 +1229,10 @@ type OneEidTableDump struct {
 	Filter OneFilter      `binapi:"one_filter,name=filter" json:"filter,omitempty"`
 }
 
-func (m *OneEidTableDump) Reset()               { *m = OneEidTableDump{} }
-func (*OneEidTableDump) GetMessageName() string { return "one_eid_table_dump" }
-func (*OneEidTableDump) GetCrcString() string   { return "bd190269" }
-func (*OneEidTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEidTableDump) Reset()                        { *m = OneEidTableDump{} }
+func (*OneEidTableDump) GetMessageName() string          { return "one_eid_table_dump" }
+func (*OneEidTableDump) GetCrcString() string            { return "bd190269" }
+func (*OneEidTableDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEidTableDump) Size() (size int) {
 	if m == nil {
@@ -1284,11 +1273,12 @@ type OneEidTableMapDetails struct {
 	DpTable uint32 `binapi:"u32,name=dp_table" json:"dp_table,omitempty"`
 }
 
-func (m *OneEidTableMapDetails) Reset()               { *m = OneEidTableMapDetails{} }
-func (*OneEidTableMapDetails) GetMessageName() string { return "one_eid_table_map_details" }
-func (*OneEidTableMapDetails) GetCrcString() string   { return "0b6859e2" }
-func (*OneEidTableMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneEidTableMapDetails) Reset()                        { *m = OneEidTableMapDetails{} }
+func (*OneEidTableMapDetails) GetMessageName() string          { return "one_eid_table_map_details" }
+func (*OneEidTableMapDetails) GetCrcString() string            { return "0b6859e2" }
+func (*OneEidTableMapDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEidTableMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneEidTableMapDetails) Size() (size int) {
@@ -1320,12 +1310,10 @@ type OneEidTableMapDump struct {
 	IsL2 bool `binapi:"bool,name=is_l2" json:"is_l2,omitempty"`
 }
 
-func (m *OneEidTableMapDump) Reset()               { *m = OneEidTableMapDump{} }
-func (*OneEidTableMapDump) GetMessageName() string { return "one_eid_table_map_dump" }
-func (*OneEidTableMapDump) GetCrcString() string   { return "d6cf0c3d" }
-func (*OneEidTableMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEidTableMapDump) Reset()                        { *m = OneEidTableMapDump{} }
+func (*OneEidTableMapDump) GetMessageName() string          { return "one_eid_table_map_dump" }
+func (*OneEidTableMapDump) GetCrcString() string            { return "d6cf0c3d" }
+func (*OneEidTableMapDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEidTableMapDump) Size() (size int) {
 	if m == nil {
@@ -1353,11 +1341,12 @@ type OneEidTableVniDetails struct {
 	Vni uint32 `binapi:"u32,name=vni" json:"vni,omitempty"`
 }
 
-func (m *OneEidTableVniDetails) Reset()               { *m = OneEidTableVniDetails{} }
-func (*OneEidTableVniDetails) GetMessageName() string { return "one_eid_table_vni_details" }
-func (*OneEidTableVniDetails) GetCrcString() string   { return "64abc01e" }
-func (*OneEidTableVniDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneEidTableVniDetails) Reset()                        { *m = OneEidTableVniDetails{} }
+func (*OneEidTableVniDetails) GetMessageName() string          { return "one_eid_table_vni_details" }
+func (*OneEidTableVniDetails) GetCrcString() string            { return "64abc01e" }
+func (*OneEidTableVniDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEidTableVniDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneEidTableVniDetails) Size() (size int) {
@@ -1384,12 +1373,10 @@ func (m *OneEidTableVniDetails) Unmarshal(b []byte) error {
 // OneEidTableVniDump defines message 'one_eid_table_vni_dump'.
 type OneEidTableVniDump struct{}
 
-func (m *OneEidTableVniDump) Reset()               { *m = OneEidTableVniDump{} }
-func (*OneEidTableVniDump) GetMessageName() string { return "one_eid_table_vni_dump" }
-func (*OneEidTableVniDump) GetCrcString() string   { return "51077d14" }
-func (*OneEidTableVniDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEidTableVniDump) Reset()                        { *m = OneEidTableVniDump{} }
+func (*OneEidTableVniDump) GetMessageName() string          { return "one_eid_table_vni_dump" }
+func (*OneEidTableVniDump) GetCrcString() string            { return "51077d14" }
+func (*OneEidTableVniDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEidTableVniDump) Size() (size int) {
 	if m == nil {
@@ -1413,12 +1400,10 @@ type OneEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneEnableDisable) Reset()               { *m = OneEnableDisable{} }
-func (*OneEnableDisable) GetMessageName() string { return "one_enable_disable" }
-func (*OneEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*OneEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEnableDisable) Reset()                        { *m = OneEnableDisable{} }
+func (*OneEnableDisable) GetMessageName() string          { return "one_enable_disable" }
+func (*OneEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*OneEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEnableDisable) Size() (size int) {
 	if m == nil {
@@ -1446,12 +1431,10 @@ type OneEnableDisablePetrMode struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneEnableDisablePetrMode) Reset()               { *m = OneEnableDisablePetrMode{} }
-func (*OneEnableDisablePetrMode) GetMessageName() string { return "one_enable_disable_petr_mode" }
-func (*OneEnableDisablePetrMode) GetCrcString() string   { return "c264d7bf" }
-func (*OneEnableDisablePetrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEnableDisablePetrMode) Reset()                        { *m = OneEnableDisablePetrMode{} }
+func (*OneEnableDisablePetrMode) GetMessageName() string          { return "one_enable_disable_petr_mode" }
+func (*OneEnableDisablePetrMode) GetCrcString() string            { return "c264d7bf" }
+func (*OneEnableDisablePetrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEnableDisablePetrMode) Size() (size int) {
 	if m == nil {
@@ -1483,9 +1466,10 @@ func (m *OneEnableDisablePetrModeReply) Reset() { *m = OneEnableDisablePetrModeR
 func (*OneEnableDisablePetrModeReply) GetMessageName() string {
 	return "one_enable_disable_petr_mode_reply"
 }
-func (*OneEnableDisablePetrModeReply) GetCrcString() string { return "e8d4e804" }
-func (*OneEnableDisablePetrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneEnableDisablePetrModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneEnableDisablePetrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEnableDisablePetrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEnableDisablePetrModeReply) Size() (size int) {
@@ -1514,12 +1498,10 @@ type OneEnableDisablePitrMode struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneEnableDisablePitrMode) Reset()               { *m = OneEnableDisablePitrMode{} }
-func (*OneEnableDisablePitrMode) GetMessageName() string { return "one_enable_disable_pitr_mode" }
-func (*OneEnableDisablePitrMode) GetCrcString() string   { return "c264d7bf" }
-func (*OneEnableDisablePitrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEnableDisablePitrMode) Reset()                        { *m = OneEnableDisablePitrMode{} }
+func (*OneEnableDisablePitrMode) GetMessageName() string          { return "one_enable_disable_pitr_mode" }
+func (*OneEnableDisablePitrMode) GetCrcString() string            { return "c264d7bf" }
+func (*OneEnableDisablePitrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEnableDisablePitrMode) Size() (size int) {
 	if m == nil {
@@ -1551,9 +1533,10 @@ func (m *OneEnableDisablePitrModeReply) Reset() { *m = OneEnableDisablePitrModeR
 func (*OneEnableDisablePitrModeReply) GetMessageName() string {
 	return "one_enable_disable_pitr_mode_reply"
 }
-func (*OneEnableDisablePitrModeReply) GetCrcString() string { return "e8d4e804" }
-func (*OneEnableDisablePitrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneEnableDisablePitrModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneEnableDisablePitrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEnableDisablePitrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEnableDisablePitrModeReply) Size() (size int) {
@@ -1582,11 +1565,12 @@ type OneEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneEnableDisableReply) Reset()               { *m = OneEnableDisableReply{} }
-func (*OneEnableDisableReply) GetMessageName() string { return "one_enable_disable_reply" }
-func (*OneEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneEnableDisableReply) Reset()                        { *m = OneEnableDisableReply{} }
+func (*OneEnableDisableReply) GetMessageName() string          { return "one_enable_disable_reply" }
+func (*OneEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEnableDisableReply) Size() (size int) {
@@ -1615,12 +1599,10 @@ type OneEnableDisableXtrMode struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneEnableDisableXtrMode) Reset()               { *m = OneEnableDisableXtrMode{} }
-func (*OneEnableDisableXtrMode) GetMessageName() string { return "one_enable_disable_xtr_mode" }
-func (*OneEnableDisableXtrMode) GetCrcString() string   { return "c264d7bf" }
-func (*OneEnableDisableXtrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneEnableDisableXtrMode) Reset()                        { *m = OneEnableDisableXtrMode{} }
+func (*OneEnableDisableXtrMode) GetMessageName() string          { return "one_enable_disable_xtr_mode" }
+func (*OneEnableDisableXtrMode) GetCrcString() string            { return "c264d7bf" }
+func (*OneEnableDisableXtrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneEnableDisableXtrMode) Size() (size int) {
 	if m == nil {
@@ -1652,9 +1634,10 @@ func (m *OneEnableDisableXtrModeReply) Reset() { *m = OneEnableDisableXtrModeRep
 func (*OneEnableDisableXtrModeReply) GetMessageName() string {
 	return "one_enable_disable_xtr_mode_reply"
 }
-func (*OneEnableDisableXtrModeReply) GetCrcString() string { return "e8d4e804" }
-func (*OneEnableDisableXtrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneEnableDisableXtrModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneEnableDisableXtrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneEnableDisableXtrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneEnableDisableXtrModeReply) Size() (size int) {
@@ -1681,12 +1664,10 @@ func (m *OneEnableDisableXtrModeReply) Unmarshal(b []byte) error {
 // OneGetMapRequestItrRlocs defines message 'one_get_map_request_itr_rlocs'.
 type OneGetMapRequestItrRlocs struct{}
 
-func (m *OneGetMapRequestItrRlocs) Reset()               { *m = OneGetMapRequestItrRlocs{} }
-func (*OneGetMapRequestItrRlocs) GetMessageName() string { return "one_get_map_request_itr_rlocs" }
-func (*OneGetMapRequestItrRlocs) GetCrcString() string   { return "51077d14" }
-func (*OneGetMapRequestItrRlocs) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneGetMapRequestItrRlocs) Reset()                        { *m = OneGetMapRequestItrRlocs{} }
+func (*OneGetMapRequestItrRlocs) GetMessageName() string          { return "one_get_map_request_itr_rlocs" }
+func (*OneGetMapRequestItrRlocs) GetCrcString() string            { return "51077d14" }
+func (*OneGetMapRequestItrRlocs) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneGetMapRequestItrRlocs) Size() (size int) {
 	if m == nil {
@@ -1715,9 +1696,10 @@ func (m *OneGetMapRequestItrRlocsReply) Reset() { *m = OneGetMapRequestItrRlocsR
 func (*OneGetMapRequestItrRlocsReply) GetMessageName() string {
 	return "one_get_map_request_itr_rlocs_reply"
 }
-func (*OneGetMapRequestItrRlocsReply) GetCrcString() string { return "76580f3a" }
-func (*OneGetMapRequestItrRlocsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneGetMapRequestItrRlocsReply) GetCrcString() string            { return "76580f3a" }
+func (*OneGetMapRequestItrRlocsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneGetMapRequestItrRlocsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneGetMapRequestItrRlocsReply) Size() (size int) {
@@ -1747,12 +1729,10 @@ func (m *OneGetMapRequestItrRlocsReply) Unmarshal(b []byte) error {
 // OneGetTransportProtocol defines message 'one_get_transport_protocol'.
 type OneGetTransportProtocol struct{}
 
-func (m *OneGetTransportProtocol) Reset()               { *m = OneGetTransportProtocol{} }
-func (*OneGetTransportProtocol) GetMessageName() string { return "one_get_transport_protocol" }
-func (*OneGetTransportProtocol) GetCrcString() string   { return "51077d14" }
-func (*OneGetTransportProtocol) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneGetTransportProtocol) Reset()                        { *m = OneGetTransportProtocol{} }
+func (*OneGetTransportProtocol) GetMessageName() string          { return "one_get_transport_protocol" }
+func (*OneGetTransportProtocol) GetCrcString() string            { return "51077d14" }
+func (*OneGetTransportProtocol) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneGetTransportProtocol) Size() (size int) {
 	if m == nil {
@@ -1781,9 +1761,10 @@ func (m *OneGetTransportProtocolReply) Reset() { *m = OneGetTransportProtocolRep
 func (*OneGetTransportProtocolReply) GetMessageName() string {
 	return "one_get_transport_protocol_reply"
 }
-func (*OneGetTransportProtocolReply) GetCrcString() string { return "62a28eb3" }
-func (*OneGetTransportProtocolReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneGetTransportProtocolReply) GetCrcString() string            { return "62a28eb3" }
+func (*OneGetTransportProtocolReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneGetTransportProtocolReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneGetTransportProtocolReply) Size() (size int) {
@@ -1813,12 +1794,10 @@ func (m *OneGetTransportProtocolReply) Unmarshal(b []byte) error {
 // OneL2ArpBdGet defines message 'one_l2_arp_bd_get'.
 type OneL2ArpBdGet struct{}
 
-func (m *OneL2ArpBdGet) Reset()               { *m = OneL2ArpBdGet{} }
-func (*OneL2ArpBdGet) GetMessageName() string { return "one_l2_arp_bd_get" }
-func (*OneL2ArpBdGet) GetCrcString() string   { return "51077d14" }
-func (*OneL2ArpBdGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneL2ArpBdGet) Reset()                        { *m = OneL2ArpBdGet{} }
+func (*OneL2ArpBdGet) GetMessageName() string          { return "one_l2_arp_bd_get" }
+func (*OneL2ArpBdGet) GetCrcString() string            { return "51077d14" }
+func (*OneL2ArpBdGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneL2ArpBdGet) Size() (size int) {
 	if m == nil {
@@ -1844,11 +1823,12 @@ type OneL2ArpBdGetReply struct {
 	BridgeDomains []uint32 `binapi:"u32[count],name=bridge_domains" json:"bridge_domains,omitempty"`
 }
 
-func (m *OneL2ArpBdGetReply) Reset()               { *m = OneL2ArpBdGetReply{} }
-func (*OneL2ArpBdGetReply) GetMessageName() string { return "one_l2_arp_bd_get_reply" }
-func (*OneL2ArpBdGetReply) GetCrcString() string   { return "221ac888" }
-func (*OneL2ArpBdGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneL2ArpBdGetReply) Reset()                        { *m = OneL2ArpBdGetReply{} }
+func (*OneL2ArpBdGetReply) GetMessageName() string          { return "one_l2_arp_bd_get_reply" }
+func (*OneL2ArpBdGetReply) GetCrcString() string            { return "221ac888" }
+func (*OneL2ArpBdGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneL2ArpBdGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneL2ArpBdGetReply) Size() (size int) {
@@ -1892,12 +1872,10 @@ type OneL2ArpEntriesGet struct {
 	Bd uint32 `binapi:"u32,name=bd" json:"bd,omitempty"`
 }
 
-func (m *OneL2ArpEntriesGet) Reset()               { *m = OneL2ArpEntriesGet{} }
-func (*OneL2ArpEntriesGet) GetMessageName() string { return "one_l2_arp_entries_get" }
-func (*OneL2ArpEntriesGet) GetCrcString() string   { return "4d418cf4" }
-func (*OneL2ArpEntriesGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneL2ArpEntriesGet) Reset()                        { *m = OneL2ArpEntriesGet{} }
+func (*OneL2ArpEntriesGet) GetMessageName() string          { return "one_l2_arp_entries_get" }
+func (*OneL2ArpEntriesGet) GetCrcString() string            { return "4d418cf4" }
+func (*OneL2ArpEntriesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneL2ArpEntriesGet) Size() (size int) {
 	if m == nil {
@@ -1927,11 +1905,12 @@ type OneL2ArpEntriesGetReply struct {
 	Entries []OneL2ArpEntry `binapi:"one_l2_arp_entry[count],name=entries" json:"entries,omitempty"`
 }
 
-func (m *OneL2ArpEntriesGetReply) Reset()               { *m = OneL2ArpEntriesGetReply{} }
-func (*OneL2ArpEntriesGetReply) GetMessageName() string { return "one_l2_arp_entries_get_reply" }
-func (*OneL2ArpEntriesGetReply) GetCrcString() string   { return "b0dd200f" }
-func (*OneL2ArpEntriesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneL2ArpEntriesGetReply) Reset()                        { *m = OneL2ArpEntriesGetReply{} }
+func (*OneL2ArpEntriesGetReply) GetMessageName() string          { return "one_l2_arp_entries_get_reply" }
+func (*OneL2ArpEntriesGetReply) GetCrcString() string            { return "b0dd200f" }
+func (*OneL2ArpEntriesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneL2ArpEntriesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneL2ArpEntriesGetReply) Size() (size int) {
@@ -1989,11 +1968,12 @@ type OneLocatorDetails struct {
 	Weight    uint8                          `binapi:"u8,name=weight" json:"weight,omitempty"`
 }
 
-func (m *OneLocatorDetails) Reset()               { *m = OneLocatorDetails{} }
-func (*OneLocatorDetails) GetMessageName() string { return "one_locator_details" }
-func (*OneLocatorDetails) GetCrcString() string   { return "2c620ffe" }
-func (*OneLocatorDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneLocatorDetails) Reset()                        { *m = OneLocatorDetails{} }
+func (*OneLocatorDetails) GetMessageName() string          { return "one_locator_details" }
+func (*OneLocatorDetails) GetCrcString() string            { return "2c620ffe" }
+func (*OneLocatorDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneLocatorDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneLocatorDetails) Size() (size int) {
@@ -2039,12 +2019,10 @@ type OneLocatorDump struct {
 	IsIndexSet bool   `binapi:"bool,name=is_index_set" json:"is_index_set,omitempty"`
 }
 
-func (m *OneLocatorDump) Reset()               { *m = OneLocatorDump{} }
-func (*OneLocatorDump) GetMessageName() string { return "one_locator_dump" }
-func (*OneLocatorDump) GetCrcString() string   { return "9b11076c" }
-func (*OneLocatorDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneLocatorDump) Reset()                        { *m = OneLocatorDump{} }
+func (*OneLocatorDump) GetMessageName() string          { return "one_locator_dump" }
+func (*OneLocatorDump) GetCrcString() string            { return "9b11076c" }
+func (*OneLocatorDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneLocatorDump) Size() (size int) {
 	if m == nil {
@@ -2079,11 +2057,12 @@ type OneLocatorSetDetails struct {
 	LsName  string `binapi:"string[64],name=ls_name" json:"ls_name,omitempty"`
 }
 
-func (m *OneLocatorSetDetails) Reset()               { *m = OneLocatorSetDetails{} }
-func (*OneLocatorSetDetails) GetMessageName() string { return "one_locator_set_details" }
-func (*OneLocatorSetDetails) GetCrcString() string   { return "5b33a105" }
-func (*OneLocatorSetDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneLocatorSetDetails) Reset()                        { *m = OneLocatorSetDetails{} }
+func (*OneLocatorSetDetails) GetMessageName() string          { return "one_locator_set_details" }
+func (*OneLocatorSetDetails) GetCrcString() string            { return "5b33a105" }
+func (*OneLocatorSetDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneLocatorSetDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneLocatorSetDetails) Size() (size int) {
@@ -2115,12 +2094,10 @@ type OneLocatorSetDump struct {
 	Filter OneFilter `binapi:"one_filter,name=filter" json:"filter,omitempty"`
 }
 
-func (m *OneLocatorSetDump) Reset()               { *m = OneLocatorSetDump{} }
-func (*OneLocatorSetDump) GetMessageName() string { return "one_locator_set_dump" }
-func (*OneLocatorSetDump) GetCrcString() string   { return "71190768" }
-func (*OneLocatorSetDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneLocatorSetDump) Reset()                        { *m = OneLocatorSetDump{} }
+func (*OneLocatorSetDump) GetMessageName() string          { return "one_locator_set_dump" }
+func (*OneLocatorSetDump) GetCrcString() string            { return "71190768" }
+func (*OneLocatorSetDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneLocatorSetDump) Size() (size int) {
 	if m == nil {
@@ -2148,12 +2125,10 @@ type OneMapRegisterEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneMapRegisterEnableDisable) Reset()               { *m = OneMapRegisterEnableDisable{} }
-func (*OneMapRegisterEnableDisable) GetMessageName() string { return "one_map_register_enable_disable" }
-func (*OneMapRegisterEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*OneMapRegisterEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneMapRegisterEnableDisable) Reset()                        { *m = OneMapRegisterEnableDisable{} }
+func (*OneMapRegisterEnableDisable) GetMessageName() string          { return "one_map_register_enable_disable" }
+func (*OneMapRegisterEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*OneMapRegisterEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneMapRegisterEnableDisable) Size() (size int) {
 	if m == nil {
@@ -2188,6 +2163,9 @@ func (*OneMapRegisterEnableDisableReply) GetMessageName() string {
 func (*OneMapRegisterEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*OneMapRegisterEnableDisableReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
+}
+func (m *OneMapRegisterEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneMapRegisterEnableDisableReply) Size() (size int) {
@@ -2259,6 +2237,9 @@ func (*OneMapRegisterFallbackThresholdReply) GetCrcString() string { return "e8d
 func (*OneMapRegisterFallbackThresholdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *OneMapRegisterFallbackThresholdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *OneMapRegisterFallbackThresholdReply) Size() (size int) {
 	if m == nil {
@@ -2286,12 +2267,10 @@ type OneMapRegisterSetTTL struct {
 	TTL uint32 `binapi:"u32,name=ttl" json:"ttl,omitempty"`
 }
 
-func (m *OneMapRegisterSetTTL) Reset()               { *m = OneMapRegisterSetTTL{} }
-func (*OneMapRegisterSetTTL) GetMessageName() string { return "one_map_register_set_ttl" }
-func (*OneMapRegisterSetTTL) GetCrcString() string   { return "dd59f1f3" }
-func (*OneMapRegisterSetTTL) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneMapRegisterSetTTL) Reset()                        { *m = OneMapRegisterSetTTL{} }
+func (*OneMapRegisterSetTTL) GetMessageName() string          { return "one_map_register_set_ttl" }
+func (*OneMapRegisterSetTTL) GetCrcString() string            { return "dd59f1f3" }
+func (*OneMapRegisterSetTTL) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneMapRegisterSetTTL) Size() (size int) {
 	if m == nil {
@@ -2319,11 +2298,12 @@ type OneMapRegisterSetTTLReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneMapRegisterSetTTLReply) Reset()               { *m = OneMapRegisterSetTTLReply{} }
-func (*OneMapRegisterSetTTLReply) GetMessageName() string { return "one_map_register_set_ttl_reply" }
-func (*OneMapRegisterSetTTLReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneMapRegisterSetTTLReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneMapRegisterSetTTLReply) Reset()                        { *m = OneMapRegisterSetTTLReply{} }
+func (*OneMapRegisterSetTTLReply) GetMessageName() string          { return "one_map_register_set_ttl_reply" }
+func (*OneMapRegisterSetTTLReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneMapRegisterSetTTLReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneMapRegisterSetTTLReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneMapRegisterSetTTLReply) Size() (size int) {
@@ -2352,12 +2332,10 @@ type OneMapRequestMode struct {
 	Mode OneMapMode `binapi:"one_map_mode,name=mode" json:"mode,omitempty"`
 }
 
-func (m *OneMapRequestMode) Reset()               { *m = OneMapRequestMode{} }
-func (*OneMapRequestMode) GetMessageName() string { return "one_map_request_mode" }
-func (*OneMapRequestMode) GetCrcString() string   { return "ffa5d2f5" }
-func (*OneMapRequestMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneMapRequestMode) Reset()                        { *m = OneMapRequestMode{} }
+func (*OneMapRequestMode) GetMessageName() string          { return "one_map_request_mode" }
+func (*OneMapRequestMode) GetCrcString() string            { return "ffa5d2f5" }
+func (*OneMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneMapRequestMode) Size() (size int) {
 	if m == nil {
@@ -2385,11 +2363,12 @@ type OneMapRequestModeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneMapRequestModeReply) Reset()               { *m = OneMapRequestModeReply{} }
-func (*OneMapRequestModeReply) GetMessageName() string { return "one_map_request_mode_reply" }
-func (*OneMapRequestModeReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneMapRequestModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneMapRequestModeReply) Reset()                        { *m = OneMapRequestModeReply{} }
+func (*OneMapRequestModeReply) GetMessageName() string          { return "one_map_request_mode_reply" }
+func (*OneMapRequestModeReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneMapRequestModeReply) Size() (size int) {
@@ -2418,11 +2397,12 @@ type OneMapResolverDetails struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *OneMapResolverDetails) Reset()               { *m = OneMapResolverDetails{} }
-func (*OneMapResolverDetails) GetMessageName() string { return "one_map_resolver_details" }
-func (*OneMapResolverDetails) GetCrcString() string   { return "3e78fc57" }
-func (*OneMapResolverDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneMapResolverDetails) Reset()                        { *m = OneMapResolverDetails{} }
+func (*OneMapResolverDetails) GetMessageName() string          { return "one_map_resolver_details" }
+func (*OneMapResolverDetails) GetCrcString() string            { return "3e78fc57" }
+func (*OneMapResolverDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneMapResolverDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneMapResolverDetails) Size() (size int) {
@@ -2452,12 +2432,10 @@ func (m *OneMapResolverDetails) Unmarshal(b []byte) error {
 // OneMapResolverDump defines message 'one_map_resolver_dump'.
 type OneMapResolverDump struct{}
 
-func (m *OneMapResolverDump) Reset()               { *m = OneMapResolverDump{} }
-func (*OneMapResolverDump) GetMessageName() string { return "one_map_resolver_dump" }
-func (*OneMapResolverDump) GetCrcString() string   { return "51077d14" }
-func (*OneMapResolverDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneMapResolverDump) Reset()                        { *m = OneMapResolverDump{} }
+func (*OneMapResolverDump) GetMessageName() string          { return "one_map_resolver_dump" }
+func (*OneMapResolverDump) GetCrcString() string            { return "51077d14" }
+func (*OneMapResolverDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneMapResolverDump) Size() (size int) {
 	if m == nil {
@@ -2481,11 +2459,12 @@ type OneMapServerDetails struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *OneMapServerDetails) Reset()               { *m = OneMapServerDetails{} }
-func (*OneMapServerDetails) GetMessageName() string { return "one_map_server_details" }
-func (*OneMapServerDetails) GetCrcString() string   { return "3e78fc57" }
-func (*OneMapServerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneMapServerDetails) Reset()                        { *m = OneMapServerDetails{} }
+func (*OneMapServerDetails) GetMessageName() string          { return "one_map_server_details" }
+func (*OneMapServerDetails) GetCrcString() string            { return "3e78fc57" }
+func (*OneMapServerDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneMapServerDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneMapServerDetails) Size() (size int) {
@@ -2515,12 +2494,10 @@ func (m *OneMapServerDetails) Unmarshal(b []byte) error {
 // OneMapServerDump defines message 'one_map_server_dump'.
 type OneMapServerDump struct{}
 
-func (m *OneMapServerDump) Reset()               { *m = OneMapServerDump{} }
-func (*OneMapServerDump) GetMessageName() string { return "one_map_server_dump" }
-func (*OneMapServerDump) GetCrcString() string   { return "51077d14" }
-func (*OneMapServerDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneMapServerDump) Reset()                        { *m = OneMapServerDump{} }
+func (*OneMapServerDump) GetMessageName() string          { return "one_map_server_dump" }
+func (*OneMapServerDump) GetCrcString() string            { return "51077d14" }
+func (*OneMapServerDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneMapServerDump) Size() (size int) {
 	if m == nil {
@@ -2542,12 +2519,10 @@ func (m *OneMapServerDump) Unmarshal(b []byte) error {
 // OneNdpBdGet defines message 'one_ndp_bd_get'.
 type OneNdpBdGet struct{}
 
-func (m *OneNdpBdGet) Reset()               { *m = OneNdpBdGet{} }
-func (*OneNdpBdGet) GetMessageName() string { return "one_ndp_bd_get" }
-func (*OneNdpBdGet) GetCrcString() string   { return "51077d14" }
-func (*OneNdpBdGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneNdpBdGet) Reset()                        { *m = OneNdpBdGet{} }
+func (*OneNdpBdGet) GetMessageName() string          { return "one_ndp_bd_get" }
+func (*OneNdpBdGet) GetCrcString() string            { return "51077d14" }
+func (*OneNdpBdGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneNdpBdGet) Size() (size int) {
 	if m == nil {
@@ -2573,11 +2548,12 @@ type OneNdpBdGetReply struct {
 	BridgeDomains []uint32 `binapi:"u32[count],name=bridge_domains" json:"bridge_domains,omitempty"`
 }
 
-func (m *OneNdpBdGetReply) Reset()               { *m = OneNdpBdGetReply{} }
-func (*OneNdpBdGetReply) GetMessageName() string { return "one_ndp_bd_get_reply" }
-func (*OneNdpBdGetReply) GetCrcString() string   { return "221ac888" }
-func (*OneNdpBdGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneNdpBdGetReply) Reset()                        { *m = OneNdpBdGetReply{} }
+func (*OneNdpBdGetReply) GetMessageName() string          { return "one_ndp_bd_get_reply" }
+func (*OneNdpBdGetReply) GetCrcString() string            { return "221ac888" }
+func (*OneNdpBdGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneNdpBdGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneNdpBdGetReply) Size() (size int) {
@@ -2621,12 +2597,10 @@ type OneNdpEntriesGet struct {
 	Bd uint32 `binapi:"u32,name=bd" json:"bd,omitempty"`
 }
 
-func (m *OneNdpEntriesGet) Reset()               { *m = OneNdpEntriesGet{} }
-func (*OneNdpEntriesGet) GetMessageName() string { return "one_ndp_entries_get" }
-func (*OneNdpEntriesGet) GetCrcString() string   { return "4d418cf4" }
-func (*OneNdpEntriesGet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneNdpEntriesGet) Reset()                        { *m = OneNdpEntriesGet{} }
+func (*OneNdpEntriesGet) GetMessageName() string          { return "one_ndp_entries_get" }
+func (*OneNdpEntriesGet) GetCrcString() string            { return "4d418cf4" }
+func (*OneNdpEntriesGet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneNdpEntriesGet) Size() (size int) {
 	if m == nil {
@@ -2656,11 +2630,12 @@ type OneNdpEntriesGetReply struct {
 	Entries []OneNdpEntry `binapi:"one_ndp_entry[count],name=entries" json:"entries,omitempty"`
 }
 
-func (m *OneNdpEntriesGetReply) Reset()               { *m = OneNdpEntriesGetReply{} }
-func (*OneNdpEntriesGetReply) GetMessageName() string { return "one_ndp_entries_get_reply" }
-func (*OneNdpEntriesGetReply) GetCrcString() string   { return "70719b1a" }
-func (*OneNdpEntriesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneNdpEntriesGetReply) Reset()                        { *m = OneNdpEntriesGetReply{} }
+func (*OneNdpEntriesGetReply) GetMessageName() string          { return "one_ndp_entries_get_reply" }
+func (*OneNdpEntriesGetReply) GetCrcString() string            { return "70719b1a" }
+func (*OneNdpEntriesGetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneNdpEntriesGetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneNdpEntriesGetReply) Size() (size int) {
@@ -2715,12 +2690,10 @@ type OneNshSetLocatorSet struct {
 	LsName string `binapi:"string[64],name=ls_name" json:"ls_name,omitempty"`
 }
 
-func (m *OneNshSetLocatorSet) Reset()               { *m = OneNshSetLocatorSet{} }
-func (*OneNshSetLocatorSet) GetMessageName() string { return "one_nsh_set_locator_set" }
-func (*OneNshSetLocatorSet) GetCrcString() string   { return "486e2b76" }
-func (*OneNshSetLocatorSet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneNshSetLocatorSet) Reset()                        { *m = OneNshSetLocatorSet{} }
+func (*OneNshSetLocatorSet) GetMessageName() string          { return "one_nsh_set_locator_set" }
+func (*OneNshSetLocatorSet) GetCrcString() string            { return "486e2b76" }
+func (*OneNshSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneNshSetLocatorSet) Size() (size int) {
 	if m == nil {
@@ -2751,11 +2724,12 @@ type OneNshSetLocatorSetReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneNshSetLocatorSetReply) Reset()               { *m = OneNshSetLocatorSetReply{} }
-func (*OneNshSetLocatorSetReply) GetMessageName() string { return "one_nsh_set_locator_set_reply" }
-func (*OneNshSetLocatorSetReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneNshSetLocatorSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneNshSetLocatorSetReply) Reset()                        { *m = OneNshSetLocatorSetReply{} }
+func (*OneNshSetLocatorSetReply) GetMessageName() string          { return "one_nsh_set_locator_set_reply" }
+func (*OneNshSetLocatorSetReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneNshSetLocatorSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneNshSetLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneNshSetLocatorSetReply) Size() (size int) {
@@ -2785,12 +2759,10 @@ type OnePitrSetLocatorSet struct {
 	LsName string `binapi:"string[64],name=ls_name" json:"ls_name,omitempty"`
 }
 
-func (m *OnePitrSetLocatorSet) Reset()               { *m = OnePitrSetLocatorSet{} }
-func (*OnePitrSetLocatorSet) GetMessageName() string { return "one_pitr_set_locator_set" }
-func (*OnePitrSetLocatorSet) GetCrcString() string   { return "486e2b76" }
-func (*OnePitrSetLocatorSet) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OnePitrSetLocatorSet) Reset()                        { *m = OnePitrSetLocatorSet{} }
+func (*OnePitrSetLocatorSet) GetMessageName() string          { return "one_pitr_set_locator_set" }
+func (*OnePitrSetLocatorSet) GetCrcString() string            { return "486e2b76" }
+func (*OnePitrSetLocatorSet) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OnePitrSetLocatorSet) Size() (size int) {
 	if m == nil {
@@ -2821,11 +2793,12 @@ type OnePitrSetLocatorSetReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OnePitrSetLocatorSetReply) Reset()               { *m = OnePitrSetLocatorSetReply{} }
-func (*OnePitrSetLocatorSetReply) GetMessageName() string { return "one_pitr_set_locator_set_reply" }
-func (*OnePitrSetLocatorSetReply) GetCrcString() string   { return "e8d4e804" }
-func (*OnePitrSetLocatorSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OnePitrSetLocatorSetReply) Reset()                        { *m = OnePitrSetLocatorSetReply{} }
+func (*OnePitrSetLocatorSetReply) GetMessageName() string          { return "one_pitr_set_locator_set_reply" }
+func (*OnePitrSetLocatorSetReply) GetCrcString() string            { return "e8d4e804" }
+func (*OnePitrSetLocatorSetReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OnePitrSetLocatorSetReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OnePitrSetLocatorSetReply) Size() (size int) {
@@ -2854,12 +2827,10 @@ type OneRlocProbeEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneRlocProbeEnableDisable) Reset()               { *m = OneRlocProbeEnableDisable{} }
-func (*OneRlocProbeEnableDisable) GetMessageName() string { return "one_rloc_probe_enable_disable" }
-func (*OneRlocProbeEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*OneRlocProbeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneRlocProbeEnableDisable) Reset()                        { *m = OneRlocProbeEnableDisable{} }
+func (*OneRlocProbeEnableDisable) GetMessageName() string          { return "one_rloc_probe_enable_disable" }
+func (*OneRlocProbeEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*OneRlocProbeEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneRlocProbeEnableDisable) Size() (size int) {
 	if m == nil {
@@ -2891,9 +2862,10 @@ func (m *OneRlocProbeEnableDisableReply) Reset() { *m = OneRlocProbeEnableDisabl
 func (*OneRlocProbeEnableDisableReply) GetMessageName() string {
 	return "one_rloc_probe_enable_disable_reply"
 }
-func (*OneRlocProbeEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*OneRlocProbeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneRlocProbeEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneRlocProbeEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneRlocProbeEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneRlocProbeEnableDisableReply) Size() (size int) {
@@ -2922,12 +2894,10 @@ type OneSetTransportProtocol struct {
 	Protocol uint8 `binapi:"u8,name=protocol" json:"protocol,omitempty"`
 }
 
-func (m *OneSetTransportProtocol) Reset()               { *m = OneSetTransportProtocol{} }
-func (*OneSetTransportProtocol) GetMessageName() string { return "one_set_transport_protocol" }
-func (*OneSetTransportProtocol) GetCrcString() string   { return "07b6b85f" }
-func (*OneSetTransportProtocol) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneSetTransportProtocol) Reset()                        { *m = OneSetTransportProtocol{} }
+func (*OneSetTransportProtocol) GetMessageName() string          { return "one_set_transport_protocol" }
+func (*OneSetTransportProtocol) GetCrcString() string            { return "07b6b85f" }
+func (*OneSetTransportProtocol) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneSetTransportProtocol) Size() (size int) {
 	if m == nil {
@@ -2959,9 +2929,10 @@ func (m *OneSetTransportProtocolReply) Reset() { *m = OneSetTransportProtocolRep
 func (*OneSetTransportProtocolReply) GetMessageName() string {
 	return "one_set_transport_protocol_reply"
 }
-func (*OneSetTransportProtocolReply) GetCrcString() string { return "e8d4e804" }
-func (*OneSetTransportProtocolReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*OneSetTransportProtocolReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneSetTransportProtocolReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneSetTransportProtocolReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneSetTransportProtocolReply) Size() (size int) {
@@ -2988,12 +2959,10 @@ func (m *OneSetTransportProtocolReply) Unmarshal(b []byte) error {
 // OneShowPetrMode defines message 'one_show_petr_mode'.
 type OneShowPetrMode struct{}
 
-func (m *OneShowPetrMode) Reset()               { *m = OneShowPetrMode{} }
-func (*OneShowPetrMode) GetMessageName() string { return "one_show_petr_mode" }
-func (*OneShowPetrMode) GetCrcString() string   { return "51077d14" }
-func (*OneShowPetrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneShowPetrMode) Reset()                        { *m = OneShowPetrMode{} }
+func (*OneShowPetrMode) GetMessageName() string          { return "one_show_petr_mode" }
+func (*OneShowPetrMode) GetCrcString() string            { return "51077d14" }
+func (*OneShowPetrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneShowPetrMode) Size() (size int) {
 	if m == nil {
@@ -3018,11 +2987,12 @@ type OneShowPetrModeReply struct {
 	IsEnable bool  `binapi:"bool,name=is_enable" json:"is_enable,omitempty"`
 }
 
-func (m *OneShowPetrModeReply) Reset()               { *m = OneShowPetrModeReply{} }
-func (*OneShowPetrModeReply) GetMessageName() string { return "one_show_petr_mode_reply" }
-func (*OneShowPetrModeReply) GetCrcString() string   { return "f15abb16" }
-func (*OneShowPetrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneShowPetrModeReply) Reset()                        { *m = OneShowPetrModeReply{} }
+func (*OneShowPetrModeReply) GetMessageName() string          { return "one_show_petr_mode_reply" }
+func (*OneShowPetrModeReply) GetCrcString() string            { return "f15abb16" }
+func (*OneShowPetrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneShowPetrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneShowPetrModeReply) Size() (size int) {
@@ -3052,12 +3022,10 @@ func (m *OneShowPetrModeReply) Unmarshal(b []byte) error {
 // OneShowPitrMode defines message 'one_show_pitr_mode'.
 type OneShowPitrMode struct{}
 
-func (m *OneShowPitrMode) Reset()               { *m = OneShowPitrMode{} }
-func (*OneShowPitrMode) GetMessageName() string { return "one_show_pitr_mode" }
-func (*OneShowPitrMode) GetCrcString() string   { return "51077d14" }
-func (*OneShowPitrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneShowPitrMode) Reset()                        { *m = OneShowPitrMode{} }
+func (*OneShowPitrMode) GetMessageName() string          { return "one_show_pitr_mode" }
+func (*OneShowPitrMode) GetCrcString() string            { return "51077d14" }
+func (*OneShowPitrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneShowPitrMode) Size() (size int) {
 	if m == nil {
@@ -3082,11 +3050,12 @@ type OneShowPitrModeReply struct {
 	IsEnable bool  `binapi:"bool,name=is_enable" json:"is_enable,omitempty"`
 }
 
-func (m *OneShowPitrModeReply) Reset()               { *m = OneShowPitrModeReply{} }
-func (*OneShowPitrModeReply) GetMessageName() string { return "one_show_pitr_mode_reply" }
-func (*OneShowPitrModeReply) GetCrcString() string   { return "f15abb16" }
-func (*OneShowPitrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneShowPitrModeReply) Reset()                        { *m = OneShowPitrModeReply{} }
+func (*OneShowPitrModeReply) GetMessageName() string          { return "one_show_pitr_mode_reply" }
+func (*OneShowPitrModeReply) GetCrcString() string            { return "f15abb16" }
+func (*OneShowPitrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneShowPitrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneShowPitrModeReply) Size() (size int) {
@@ -3116,12 +3085,10 @@ func (m *OneShowPitrModeReply) Unmarshal(b []byte) error {
 // OneShowXtrMode defines message 'one_show_xtr_mode'.
 type OneShowXtrMode struct{}
 
-func (m *OneShowXtrMode) Reset()               { *m = OneShowXtrMode{} }
-func (*OneShowXtrMode) GetMessageName() string { return "one_show_xtr_mode" }
-func (*OneShowXtrMode) GetCrcString() string   { return "51077d14" }
-func (*OneShowXtrMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneShowXtrMode) Reset()                        { *m = OneShowXtrMode{} }
+func (*OneShowXtrMode) GetMessageName() string          { return "one_show_xtr_mode" }
+func (*OneShowXtrMode) GetCrcString() string            { return "51077d14" }
+func (*OneShowXtrMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneShowXtrMode) Size() (size int) {
 	if m == nil {
@@ -3146,11 +3113,12 @@ type OneShowXtrModeReply struct {
 	IsEnable bool  `binapi:"bool,name=is_enable" json:"is_enable,omitempty"`
 }
 
-func (m *OneShowXtrModeReply) Reset()               { *m = OneShowXtrModeReply{} }
-func (*OneShowXtrModeReply) GetMessageName() string { return "one_show_xtr_mode_reply" }
-func (*OneShowXtrModeReply) GetCrcString() string   { return "f15abb16" }
-func (*OneShowXtrModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneShowXtrModeReply) Reset()                        { *m = OneShowXtrModeReply{} }
+func (*OneShowXtrModeReply) GetMessageName() string          { return "one_show_xtr_mode_reply" }
+func (*OneShowXtrModeReply) GetCrcString() string            { return "f15abb16" }
+func (*OneShowXtrModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneShowXtrModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneShowXtrModeReply) Size() (size int) {
@@ -3188,11 +3156,12 @@ type OneStatsDetails struct {
 	Bytes    uint32           `binapi:"u32,name=bytes" json:"bytes,omitempty"`
 }
 
-func (m *OneStatsDetails) Reset()               { *m = OneStatsDetails{} }
-func (*OneStatsDetails) GetMessageName() string { return "one_stats_details" }
-func (*OneStatsDetails) GetCrcString() string   { return "2eb74678" }
-func (*OneStatsDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneStatsDetails) Reset()                        { *m = OneStatsDetails{} }
+func (*OneStatsDetails) GetMessageName() string          { return "one_stats_details" }
+func (*OneStatsDetails) GetCrcString() string            { return "2eb74678" }
+func (*OneStatsDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneStatsDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *OneStatsDetails) Size() (size int) {
@@ -3249,12 +3218,10 @@ func (m *OneStatsDetails) Unmarshal(b []byte) error {
 // OneStatsDump defines message 'one_stats_dump'.
 type OneStatsDump struct{}
 
-func (m *OneStatsDump) Reset()               { *m = OneStatsDump{} }
-func (*OneStatsDump) GetMessageName() string { return "one_stats_dump" }
-func (*OneStatsDump) GetCrcString() string   { return "51077d14" }
-func (*OneStatsDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneStatsDump) Reset()                        { *m = OneStatsDump{} }
+func (*OneStatsDump) GetMessageName() string          { return "one_stats_dump" }
+func (*OneStatsDump) GetCrcString() string            { return "51077d14" }
+func (*OneStatsDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneStatsDump) Size() (size int) {
 	if m == nil {
@@ -3278,12 +3245,10 @@ type OneStatsEnableDisable struct {
 	IsEnable bool `binapi:"bool,name=is_enable,default=true" json:"is_enable,omitempty"`
 }
 
-func (m *OneStatsEnableDisable) Reset()               { *m = OneStatsEnableDisable{} }
-func (*OneStatsEnableDisable) GetMessageName() string { return "one_stats_enable_disable" }
-func (*OneStatsEnableDisable) GetCrcString() string   { return "c264d7bf" }
-func (*OneStatsEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneStatsEnableDisable) Reset()                        { *m = OneStatsEnableDisable{} }
+func (*OneStatsEnableDisable) GetMessageName() string          { return "one_stats_enable_disable" }
+func (*OneStatsEnableDisable) GetCrcString() string            { return "c264d7bf" }
+func (*OneStatsEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneStatsEnableDisable) Size() (size int) {
 	if m == nil {
@@ -3311,11 +3276,12 @@ type OneStatsEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneStatsEnableDisableReply) Reset()               { *m = OneStatsEnableDisableReply{} }
-func (*OneStatsEnableDisableReply) GetMessageName() string { return "one_stats_enable_disable_reply" }
-func (*OneStatsEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneStatsEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneStatsEnableDisableReply) Reset()                        { *m = OneStatsEnableDisableReply{} }
+func (*OneStatsEnableDisableReply) GetMessageName() string          { return "one_stats_enable_disable_reply" }
+func (*OneStatsEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneStatsEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneStatsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneStatsEnableDisableReply) Size() (size int) {
@@ -3342,12 +3308,10 @@ func (m *OneStatsEnableDisableReply) Unmarshal(b []byte) error {
 // OneStatsFlush defines message 'one_stats_flush'.
 type OneStatsFlush struct{}
 
-func (m *OneStatsFlush) Reset()               { *m = OneStatsFlush{} }
-func (*OneStatsFlush) GetMessageName() string { return "one_stats_flush" }
-func (*OneStatsFlush) GetCrcString() string   { return "51077d14" }
-func (*OneStatsFlush) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneStatsFlush) Reset()                        { *m = OneStatsFlush{} }
+func (*OneStatsFlush) GetMessageName() string          { return "one_stats_flush" }
+func (*OneStatsFlush) GetCrcString() string            { return "51077d14" }
+func (*OneStatsFlush) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneStatsFlush) Size() (size int) {
 	if m == nil {
@@ -3371,11 +3335,12 @@ type OneStatsFlushReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneStatsFlushReply) Reset()               { *m = OneStatsFlushReply{} }
-func (*OneStatsFlushReply) GetMessageName() string { return "one_stats_flush_reply" }
-func (*OneStatsFlushReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneStatsFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneStatsFlushReply) Reset()                        { *m = OneStatsFlushReply{} }
+func (*OneStatsFlushReply) GetMessageName() string          { return "one_stats_flush_reply" }
+func (*OneStatsFlushReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneStatsFlushReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneStatsFlushReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneStatsFlushReply) Size() (size int) {
@@ -3405,12 +3370,10 @@ type OneUsePetr struct {
 	IsAdd     bool             `binapi:"bool,name=is_add,default=true" json:"is_add,omitempty"`
 }
 
-func (m *OneUsePetr) Reset()               { *m = OneUsePetr{} }
-func (*OneUsePetr) GetMessageName() string { return "one_use_petr" }
-func (*OneUsePetr) GetCrcString() string   { return "d87dbad9" }
-func (*OneUsePetr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *OneUsePetr) Reset()                        { *m = OneUsePetr{} }
+func (*OneUsePetr) GetMessageName() string          { return "one_use_petr" }
+func (*OneUsePetr) GetCrcString() string            { return "d87dbad9" }
+func (*OneUsePetr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *OneUsePetr) Size() (size int) {
 	if m == nil {
@@ -3444,11 +3407,12 @@ type OneUsePetrReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *OneUsePetrReply) Reset()               { *m = OneUsePetrReply{} }
-func (*OneUsePetrReply) GetMessageName() string { return "one_use_petr_reply" }
-func (*OneUsePetrReply) GetCrcString() string   { return "e8d4e804" }
-func (*OneUsePetrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *OneUsePetrReply) Reset()                        { *m = OneUsePetrReply{} }
+func (*OneUsePetrReply) GetMessageName() string          { return "one_use_petr_reply" }
+func (*OneUsePetrReply) GetCrcString() string            { return "e8d4e804" }
+func (*OneUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *OneUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *OneUsePetrReply) Size() (size int) {
@@ -3517,6 +3481,9 @@ func (*ShowOneMapRegisterFallbackThresholdReply) GetCrcString() string { return 
 func (*ShowOneMapRegisterFallbackThresholdReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *ShowOneMapRegisterFallbackThresholdReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *ShowOneMapRegisterFallbackThresholdReply) Size() (size int) {
 	if m == nil {
@@ -3545,12 +3512,10 @@ func (m *ShowOneMapRegisterFallbackThresholdReply) Unmarshal(b []byte) error {
 // ShowOneMapRegisterState defines message 'show_one_map_register_state'.
 type ShowOneMapRegisterState struct{}
 
-func (m *ShowOneMapRegisterState) Reset()               { *m = ShowOneMapRegisterState{} }
-func (*ShowOneMapRegisterState) GetMessageName() string { return "show_one_map_register_state" }
-func (*ShowOneMapRegisterState) GetCrcString() string   { return "51077d14" }
-func (*ShowOneMapRegisterState) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneMapRegisterState) Reset()                        { *m = ShowOneMapRegisterState{} }
+func (*ShowOneMapRegisterState) GetMessageName() string          { return "show_one_map_register_state" }
+func (*ShowOneMapRegisterState) GetCrcString() string            { return "51077d14" }
+func (*ShowOneMapRegisterState) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneMapRegisterState) Size() (size int) {
 	if m == nil {
@@ -3579,9 +3544,10 @@ func (m *ShowOneMapRegisterStateReply) Reset() { *m = ShowOneMapRegisterStateRep
 func (*ShowOneMapRegisterStateReply) GetMessageName() string {
 	return "show_one_map_register_state_reply"
 }
-func (*ShowOneMapRegisterStateReply) GetCrcString() string { return "f15abb16" }
-func (*ShowOneMapRegisterStateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ShowOneMapRegisterStateReply) GetCrcString() string            { return "f15abb16" }
+func (*ShowOneMapRegisterStateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneMapRegisterStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneMapRegisterStateReply) Size() (size int) {
@@ -3611,12 +3577,10 @@ func (m *ShowOneMapRegisterStateReply) Unmarshal(b []byte) error {
 // ShowOneMapRegisterTTL defines message 'show_one_map_register_ttl'.
 type ShowOneMapRegisterTTL struct{}
 
-func (m *ShowOneMapRegisterTTL) Reset()               { *m = ShowOneMapRegisterTTL{} }
-func (*ShowOneMapRegisterTTL) GetMessageName() string { return "show_one_map_register_ttl" }
-func (*ShowOneMapRegisterTTL) GetCrcString() string   { return "51077d14" }
-func (*ShowOneMapRegisterTTL) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneMapRegisterTTL) Reset()                        { *m = ShowOneMapRegisterTTL{} }
+func (*ShowOneMapRegisterTTL) GetMessageName() string          { return "show_one_map_register_ttl" }
+func (*ShowOneMapRegisterTTL) GetCrcString() string            { return "51077d14" }
+func (*ShowOneMapRegisterTTL) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneMapRegisterTTL) Size() (size int) {
 	if m == nil {
@@ -3641,11 +3605,12 @@ type ShowOneMapRegisterTTLReply struct {
 	TTL    uint32 `binapi:"u32,name=ttl" json:"ttl,omitempty"`
 }
 
-func (m *ShowOneMapRegisterTTLReply) Reset()               { *m = ShowOneMapRegisterTTLReply{} }
-func (*ShowOneMapRegisterTTLReply) GetMessageName() string { return "show_one_map_register_ttl_reply" }
-func (*ShowOneMapRegisterTTLReply) GetCrcString() string   { return "fa83dd66" }
-func (*ShowOneMapRegisterTTLReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneMapRegisterTTLReply) Reset()                        { *m = ShowOneMapRegisterTTLReply{} }
+func (*ShowOneMapRegisterTTLReply) GetMessageName() string          { return "show_one_map_register_ttl_reply" }
+func (*ShowOneMapRegisterTTLReply) GetCrcString() string            { return "fa83dd66" }
+func (*ShowOneMapRegisterTTLReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneMapRegisterTTLReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneMapRegisterTTLReply) Size() (size int) {
@@ -3675,12 +3640,10 @@ func (m *ShowOneMapRegisterTTLReply) Unmarshal(b []byte) error {
 // ShowOneMapRequestMode defines message 'show_one_map_request_mode'.
 type ShowOneMapRequestMode struct{}
 
-func (m *ShowOneMapRequestMode) Reset()               { *m = ShowOneMapRequestMode{} }
-func (*ShowOneMapRequestMode) GetMessageName() string { return "show_one_map_request_mode" }
-func (*ShowOneMapRequestMode) GetCrcString() string   { return "51077d14" }
-func (*ShowOneMapRequestMode) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneMapRequestMode) Reset()                        { *m = ShowOneMapRequestMode{} }
+func (*ShowOneMapRequestMode) GetMessageName() string          { return "show_one_map_request_mode" }
+func (*ShowOneMapRequestMode) GetCrcString() string            { return "51077d14" }
+func (*ShowOneMapRequestMode) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneMapRequestMode) Size() (size int) {
 	if m == nil {
@@ -3705,11 +3668,12 @@ type ShowOneMapRequestModeReply struct {
 	Mode   OneMapMode `binapi:"one_map_mode,name=mode" json:"mode,omitempty"`
 }
 
-func (m *ShowOneMapRequestModeReply) Reset()               { *m = ShowOneMapRequestModeReply{} }
-func (*ShowOneMapRequestModeReply) GetMessageName() string { return "show_one_map_request_mode_reply" }
-func (*ShowOneMapRequestModeReply) GetCrcString() string   { return "d41f3c1d" }
-func (*ShowOneMapRequestModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneMapRequestModeReply) Reset()                        { *m = ShowOneMapRequestModeReply{} }
+func (*ShowOneMapRequestModeReply) GetMessageName() string          { return "show_one_map_request_mode_reply" }
+func (*ShowOneMapRequestModeReply) GetCrcString() string            { return "d41f3c1d" }
+func (*ShowOneMapRequestModeReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneMapRequestModeReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneMapRequestModeReply) Size() (size int) {
@@ -3739,12 +3703,10 @@ func (m *ShowOneMapRequestModeReply) Unmarshal(b []byte) error {
 // ShowOneNshMapping defines message 'show_one_nsh_mapping'.
 type ShowOneNshMapping struct{}
 
-func (m *ShowOneNshMapping) Reset()               { *m = ShowOneNshMapping{} }
-func (*ShowOneNshMapping) GetMessageName() string { return "show_one_nsh_mapping" }
-func (*ShowOneNshMapping) GetCrcString() string   { return "51077d14" }
-func (*ShowOneNshMapping) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneNshMapping) Reset()                        { *m = ShowOneNshMapping{} }
+func (*ShowOneNshMapping) GetMessageName() string          { return "show_one_nsh_mapping" }
+func (*ShowOneNshMapping) GetCrcString() string            { return "51077d14" }
+func (*ShowOneNshMapping) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneNshMapping) Size() (size int) {
 	if m == nil {
@@ -3770,11 +3732,12 @@ type ShowOneNshMappingReply struct {
 	LocatorSetName string `binapi:"string[64],name=locator_set_name" json:"locator_set_name,omitempty"`
 }
 
-func (m *ShowOneNshMappingReply) Reset()               { *m = ShowOneNshMappingReply{} }
-func (*ShowOneNshMappingReply) GetMessageName() string { return "show_one_nsh_mapping_reply" }
-func (*ShowOneNshMappingReply) GetCrcString() string   { return "46478c02" }
-func (*ShowOneNshMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneNshMappingReply) Reset()                        { *m = ShowOneNshMappingReply{} }
+func (*ShowOneNshMappingReply) GetMessageName() string          { return "show_one_nsh_mapping_reply" }
+func (*ShowOneNshMappingReply) GetCrcString() string            { return "46478c02" }
+func (*ShowOneNshMappingReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneNshMappingReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneNshMappingReply) Size() (size int) {
@@ -3807,12 +3770,10 @@ func (m *ShowOneNshMappingReply) Unmarshal(b []byte) error {
 // ShowOnePitr defines message 'show_one_pitr'.
 type ShowOnePitr struct{}
 
-func (m *ShowOnePitr) Reset()               { *m = ShowOnePitr{} }
-func (*ShowOnePitr) GetMessageName() string { return "show_one_pitr" }
-func (*ShowOnePitr) GetCrcString() string   { return "51077d14" }
-func (*ShowOnePitr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOnePitr) Reset()                        { *m = ShowOnePitr{} }
+func (*ShowOnePitr) GetMessageName() string          { return "show_one_pitr" }
+func (*ShowOnePitr) GetCrcString() string            { return "51077d14" }
+func (*ShowOnePitr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOnePitr) Size() (size int) {
 	if m == nil {
@@ -3838,11 +3799,12 @@ type ShowOnePitrReply struct {
 	LocatorSetName string `binapi:"string[64],name=locator_set_name" json:"locator_set_name,omitempty"`
 }
 
-func (m *ShowOnePitrReply) Reset()               { *m = ShowOnePitrReply{} }
-func (*ShowOnePitrReply) GetMessageName() string { return "show_one_pitr_reply" }
-func (*ShowOnePitrReply) GetCrcString() string   { return "a2d1a49f" }
-func (*ShowOnePitrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOnePitrReply) Reset()                        { *m = ShowOnePitrReply{} }
+func (*ShowOnePitrReply) GetMessageName() string          { return "show_one_pitr_reply" }
+func (*ShowOnePitrReply) GetCrcString() string            { return "a2d1a49f" }
+func (*ShowOnePitrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOnePitrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOnePitrReply) Size() (size int) {
@@ -3875,12 +3837,10 @@ func (m *ShowOnePitrReply) Unmarshal(b []byte) error {
 // ShowOneRlocProbeState defines message 'show_one_rloc_probe_state'.
 type ShowOneRlocProbeState struct{}
 
-func (m *ShowOneRlocProbeState) Reset()               { *m = ShowOneRlocProbeState{} }
-func (*ShowOneRlocProbeState) GetMessageName() string { return "show_one_rloc_probe_state" }
-func (*ShowOneRlocProbeState) GetCrcString() string   { return "51077d14" }
-func (*ShowOneRlocProbeState) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneRlocProbeState) Reset()                        { *m = ShowOneRlocProbeState{} }
+func (*ShowOneRlocProbeState) GetMessageName() string          { return "show_one_rloc_probe_state" }
+func (*ShowOneRlocProbeState) GetCrcString() string            { return "51077d14" }
+func (*ShowOneRlocProbeState) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneRlocProbeState) Size() (size int) {
 	if m == nil {
@@ -3905,11 +3865,12 @@ type ShowOneRlocProbeStateReply struct {
 	IsEnable bool  `binapi:"bool,name=is_enable" json:"is_enable,omitempty"`
 }
 
-func (m *ShowOneRlocProbeStateReply) Reset()               { *m = ShowOneRlocProbeStateReply{} }
-func (*ShowOneRlocProbeStateReply) GetMessageName() string { return "show_one_rloc_probe_state_reply" }
-func (*ShowOneRlocProbeStateReply) GetCrcString() string   { return "f15abb16" }
-func (*ShowOneRlocProbeStateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneRlocProbeStateReply) Reset()                        { *m = ShowOneRlocProbeStateReply{} }
+func (*ShowOneRlocProbeStateReply) GetMessageName() string          { return "show_one_rloc_probe_state_reply" }
+func (*ShowOneRlocProbeStateReply) GetCrcString() string            { return "f15abb16" }
+func (*ShowOneRlocProbeStateReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneRlocProbeStateReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneRlocProbeStateReply) Size() (size int) {
@@ -3939,12 +3900,10 @@ func (m *ShowOneRlocProbeStateReply) Unmarshal(b []byte) error {
 // ShowOneStatsEnableDisable defines message 'show_one_stats_enable_disable'.
 type ShowOneStatsEnableDisable struct{}
 
-func (m *ShowOneStatsEnableDisable) Reset()               { *m = ShowOneStatsEnableDisable{} }
-func (*ShowOneStatsEnableDisable) GetMessageName() string { return "show_one_stats_enable_disable" }
-func (*ShowOneStatsEnableDisable) GetCrcString() string   { return "51077d14" }
-func (*ShowOneStatsEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneStatsEnableDisable) Reset()                        { *m = ShowOneStatsEnableDisable{} }
+func (*ShowOneStatsEnableDisable) GetMessageName() string          { return "show_one_stats_enable_disable" }
+func (*ShowOneStatsEnableDisable) GetCrcString() string            { return "51077d14" }
+func (*ShowOneStatsEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneStatsEnableDisable) Size() (size int) {
 	if m == nil {
@@ -3973,9 +3932,10 @@ func (m *ShowOneStatsEnableDisableReply) Reset() { *m = ShowOneStatsEnableDisabl
 func (*ShowOneStatsEnableDisableReply) GetMessageName() string {
 	return "show_one_stats_enable_disable_reply"
 }
-func (*ShowOneStatsEnableDisableReply) GetCrcString() string { return "f15abb16" }
-func (*ShowOneStatsEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*ShowOneStatsEnableDisableReply) GetCrcString() string            { return "f15abb16" }
+func (*ShowOneStatsEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneStatsEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneStatsEnableDisableReply) Size() (size int) {
@@ -4005,12 +3965,10 @@ func (m *ShowOneStatsEnableDisableReply) Unmarshal(b []byte) error {
 // ShowOneStatus defines message 'show_one_status'.
 type ShowOneStatus struct{}
 
-func (m *ShowOneStatus) Reset()               { *m = ShowOneStatus{} }
-func (*ShowOneStatus) GetMessageName() string { return "show_one_status" }
-func (*ShowOneStatus) GetCrcString() string   { return "51077d14" }
-func (*ShowOneStatus) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneStatus) Reset()                        { *m = ShowOneStatus{} }
+func (*ShowOneStatus) GetMessageName() string          { return "show_one_status" }
+func (*ShowOneStatus) GetCrcString() string            { return "51077d14" }
+func (*ShowOneStatus) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneStatus) Size() (size int) {
 	if m == nil {
@@ -4036,11 +3994,12 @@ type ShowOneStatusReply struct {
 	GpeStatus     bool  `binapi:"bool,name=gpe_status" json:"gpe_status,omitempty"`
 }
 
-func (m *ShowOneStatusReply) Reset()               { *m = ShowOneStatusReply{} }
-func (*ShowOneStatusReply) GetMessageName() string { return "show_one_status_reply" }
-func (*ShowOneStatusReply) GetCrcString() string   { return "961bb25b" }
-func (*ShowOneStatusReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneStatusReply) Reset()                        { *m = ShowOneStatusReply{} }
+func (*ShowOneStatusReply) GetMessageName() string          { return "show_one_status_reply" }
+func (*ShowOneStatusReply) GetCrcString() string            { return "961bb25b" }
+func (*ShowOneStatusReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneStatusReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneStatusReply) Size() (size int) {
@@ -4073,12 +4032,10 @@ func (m *ShowOneStatusReply) Unmarshal(b []byte) error {
 // ShowOneUsePetr defines message 'show_one_use_petr'.
 type ShowOneUsePetr struct{}
 
-func (m *ShowOneUsePetr) Reset()               { *m = ShowOneUsePetr{} }
-func (*ShowOneUsePetr) GetMessageName() string { return "show_one_use_petr" }
-func (*ShowOneUsePetr) GetCrcString() string   { return "51077d14" }
-func (*ShowOneUsePetr) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *ShowOneUsePetr) Reset()                        { *m = ShowOneUsePetr{} }
+func (*ShowOneUsePetr) GetMessageName() string          { return "show_one_use_petr" }
+func (*ShowOneUsePetr) GetCrcString() string            { return "51077d14" }
+func (*ShowOneUsePetr) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *ShowOneUsePetr) Size() (size int) {
 	if m == nil {
@@ -4104,11 +4061,12 @@ type ShowOneUsePetrReply struct {
 	IPAddress ip_types.Address `binapi:"address,name=ip_address" json:"ip_address,omitempty"`
 }
 
-func (m *ShowOneUsePetrReply) Reset()               { *m = ShowOneUsePetrReply{} }
-func (*ShowOneUsePetrReply) GetMessageName() string { return "show_one_use_petr_reply" }
-func (*ShowOneUsePetrReply) GetCrcString() string   { return "84a03528" }
-func (*ShowOneUsePetrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *ShowOneUsePetrReply) Reset()                        { *m = ShowOneUsePetrReply{} }
+func (*ShowOneUsePetrReply) GetMessageName() string          { return "show_one_use_petr_reply" }
+func (*ShowOneUsePetrReply) GetCrcString() string            { return "84a03528" }
+func (*ShowOneUsePetrReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *ShowOneUsePetrReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *ShowOneUsePetrReply) Size() (size int) {

@@ -39,12 +39,10 @@ type Det44AddDelMap struct {
 	OutPlen uint8               `binapi:"u8,name=out_plen" json:"out_plen,omitempty"`
 }
 
-func (m *Det44AddDelMap) Reset()               { *m = Det44AddDelMap{} }
-func (*Det44AddDelMap) GetMessageName() string { return "det44_add_del_map" }
-func (*Det44AddDelMap) GetCrcString() string   { return "1150a190" }
-func (*Det44AddDelMap) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44AddDelMap) Reset()                        { *m = Det44AddDelMap{} }
+func (*Det44AddDelMap) GetMessageName() string          { return "det44_add_del_map" }
+func (*Det44AddDelMap) GetCrcString() string            { return "1150a190" }
+func (*Det44AddDelMap) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44AddDelMap) Size() (size int) {
 	if m == nil {
@@ -84,11 +82,12 @@ type Det44AddDelMapReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Det44AddDelMapReply) Reset()               { *m = Det44AddDelMapReply{} }
-func (*Det44AddDelMapReply) GetMessageName() string { return "det44_add_del_map_reply" }
-func (*Det44AddDelMapReply) GetCrcString() string   { return "e8d4e804" }
-func (*Det44AddDelMapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44AddDelMapReply) Reset()                        { *m = Det44AddDelMapReply{} }
+func (*Det44AddDelMapReply) GetMessageName() string          { return "det44_add_del_map_reply" }
+func (*Det44AddDelMapReply) GetCrcString() string            { return "e8d4e804" }
+func (*Det44AddDelMapReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44AddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44AddDelMapReply) Size() (size int) {
@@ -120,12 +119,10 @@ type Det44CloseSessionIn struct {
 	ExtPort uint16              `binapi:"u16,name=ext_port" json:"ext_port,omitempty"`
 }
 
-func (m *Det44CloseSessionIn) Reset()               { *m = Det44CloseSessionIn{} }
-func (*Det44CloseSessionIn) GetMessageName() string { return "det44_close_session_in" }
-func (*Det44CloseSessionIn) GetCrcString() string   { return "3c68e073" }
-func (*Det44CloseSessionIn) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44CloseSessionIn) Reset()                        { *m = Det44CloseSessionIn{} }
+func (*Det44CloseSessionIn) GetMessageName() string          { return "det44_close_session_in" }
+func (*Det44CloseSessionIn) GetCrcString() string            { return "3c68e073" }
+func (*Det44CloseSessionIn) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44CloseSessionIn) Size() (size int) {
 	if m == nil {
@@ -162,11 +159,12 @@ type Det44CloseSessionInReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Det44CloseSessionInReply) Reset()               { *m = Det44CloseSessionInReply{} }
-func (*Det44CloseSessionInReply) GetMessageName() string { return "det44_close_session_in_reply" }
-func (*Det44CloseSessionInReply) GetCrcString() string   { return "e8d4e804" }
-func (*Det44CloseSessionInReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44CloseSessionInReply) Reset()                        { *m = Det44CloseSessionInReply{} }
+func (*Det44CloseSessionInReply) GetMessageName() string          { return "det44_close_session_in_reply" }
+func (*Det44CloseSessionInReply) GetCrcString() string            { return "e8d4e804" }
+func (*Det44CloseSessionInReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44CloseSessionInReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44CloseSessionInReply) Size() (size int) {
@@ -198,12 +196,10 @@ type Det44CloseSessionOut struct {
 	ExtPort uint16              `binapi:"u16,name=ext_port" json:"ext_port,omitempty"`
 }
 
-func (m *Det44CloseSessionOut) Reset()               { *m = Det44CloseSessionOut{} }
-func (*Det44CloseSessionOut) GetMessageName() string { return "det44_close_session_out" }
-func (*Det44CloseSessionOut) GetCrcString() string   { return "f6b259d1" }
-func (*Det44CloseSessionOut) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44CloseSessionOut) Reset()                        { *m = Det44CloseSessionOut{} }
+func (*Det44CloseSessionOut) GetMessageName() string          { return "det44_close_session_out" }
+func (*Det44CloseSessionOut) GetCrcString() string            { return "f6b259d1" }
+func (*Det44CloseSessionOut) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44CloseSessionOut) Size() (size int) {
 	if m == nil {
@@ -240,11 +236,12 @@ type Det44CloseSessionOutReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Det44CloseSessionOutReply) Reset()               { *m = Det44CloseSessionOutReply{} }
-func (*Det44CloseSessionOutReply) GetMessageName() string { return "det44_close_session_out_reply" }
-func (*Det44CloseSessionOutReply) GetCrcString() string   { return "e8d4e804" }
-func (*Det44CloseSessionOutReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44CloseSessionOutReply) Reset()                        { *m = Det44CloseSessionOutReply{} }
+func (*Det44CloseSessionOutReply) GetMessageName() string          { return "det44_close_session_out_reply" }
+func (*Det44CloseSessionOutReply) GetCrcString() string            { return "e8d4e804" }
+func (*Det44CloseSessionOutReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44CloseSessionOutReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44CloseSessionOutReply) Size() (size int) {
@@ -273,12 +270,10 @@ type Det44Forward struct {
 	InAddr ip_types.IP4Address `binapi:"ip4_address,name=in_addr" json:"in_addr,omitempty"`
 }
 
-func (m *Det44Forward) Reset()               { *m = Det44Forward{} }
-func (*Det44Forward) GetMessageName() string { return "det44_forward" }
-func (*Det44Forward) GetCrcString() string   { return "7f8a89cd" }
-func (*Det44Forward) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44Forward) Reset()                        { *m = Det44Forward{} }
+func (*Det44Forward) GetMessageName() string          { return "det44_forward" }
+func (*Det44Forward) GetCrcString() string            { return "7f8a89cd" }
+func (*Det44Forward) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44Forward) Size() (size int) {
 	if m == nil {
@@ -309,11 +304,12 @@ type Det44ForwardReply struct {
 	OutAddr   ip_types.IP4Address `binapi:"ip4_address,name=out_addr" json:"out_addr,omitempty"`
 }
 
-func (m *Det44ForwardReply) Reset()               { *m = Det44ForwardReply{} }
-func (*Det44ForwardReply) GetMessageName() string { return "det44_forward_reply" }
-func (*Det44ForwardReply) GetCrcString() string   { return "a8ccbdc0" }
-func (*Det44ForwardReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44ForwardReply) Reset()                        { *m = Det44ForwardReply{} }
+func (*Det44ForwardReply) GetMessageName() string          { return "det44_forward_reply" }
+func (*Det44ForwardReply) GetCrcString() string            { return "a8ccbdc0" }
+func (*Det44ForwardReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44ForwardReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44ForwardReply) Size() (size int) {
@@ -349,12 +345,10 @@ func (m *Det44ForwardReply) Unmarshal(b []byte) error {
 // Det44GetTimeouts defines message 'det44_get_timeouts'.
 type Det44GetTimeouts struct{}
 
-func (m *Det44GetTimeouts) Reset()               { *m = Det44GetTimeouts{} }
-func (*Det44GetTimeouts) GetMessageName() string { return "det44_get_timeouts" }
-func (*Det44GetTimeouts) GetCrcString() string   { return "51077d14" }
-func (*Det44GetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44GetTimeouts) Reset()                        { *m = Det44GetTimeouts{} }
+func (*Det44GetTimeouts) GetMessageName() string          { return "det44_get_timeouts" }
+func (*Det44GetTimeouts) GetCrcString() string            { return "51077d14" }
+func (*Det44GetTimeouts) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44GetTimeouts) Size() (size int) {
 	if m == nil {
@@ -383,11 +377,12 @@ type Det44GetTimeoutsReply struct {
 	ICMP           uint32 `binapi:"u32,name=icmp" json:"icmp,omitempty"`
 }
 
-func (m *Det44GetTimeoutsReply) Reset()               { *m = Det44GetTimeoutsReply{} }
-func (*Det44GetTimeoutsReply) GetMessageName() string { return "det44_get_timeouts_reply" }
-func (*Det44GetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
-func (*Det44GetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44GetTimeoutsReply) Reset()                        { *m = Det44GetTimeoutsReply{} }
+func (*Det44GetTimeoutsReply) GetMessageName() string          { return "det44_get_timeouts_reply" }
+func (*Det44GetTimeoutsReply) GetCrcString() string            { return "3c4df4e1" }
+func (*Det44GetTimeoutsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44GetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44GetTimeoutsReply) Size() (size int) {
@@ -431,12 +426,10 @@ type Det44InterfaceAddDelFeature struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Det44InterfaceAddDelFeature) Reset()               { *m = Det44InterfaceAddDelFeature{} }
-func (*Det44InterfaceAddDelFeature) GetMessageName() string { return "det44_interface_add_del_feature" }
-func (*Det44InterfaceAddDelFeature) GetCrcString() string   { return "dc17a836" }
-func (*Det44InterfaceAddDelFeature) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44InterfaceAddDelFeature) Reset()                        { *m = Det44InterfaceAddDelFeature{} }
+func (*Det44InterfaceAddDelFeature) GetMessageName() string          { return "det44_interface_add_del_feature" }
+func (*Det44InterfaceAddDelFeature) GetCrcString() string            { return "dc17a836" }
+func (*Det44InterfaceAddDelFeature) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44InterfaceAddDelFeature) Size() (size int) {
 	if m == nil {
@@ -479,6 +472,9 @@ func (*Det44InterfaceAddDelFeatureReply) GetCrcString() string { return "e8d4e80
 func (*Det44InterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
 	return api.ReplyMessageType
 }
+func (m *Det44InterfaceAddDelFeatureReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
+}
 
 func (m *Det44InterfaceAddDelFeatureReply) Size() (size int) {
 	if m == nil {
@@ -509,11 +505,12 @@ type Det44InterfaceDetails struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
 
-func (m *Det44InterfaceDetails) Reset()               { *m = Det44InterfaceDetails{} }
-func (*Det44InterfaceDetails) GetMessageName() string { return "det44_interface_details" }
-func (*Det44InterfaceDetails) GetCrcString() string   { return "e60cc5be" }
-func (*Det44InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44InterfaceDetails) Reset()                        { *m = Det44InterfaceDetails{} }
+func (*Det44InterfaceDetails) GetMessageName() string          { return "det44_interface_details" }
+func (*Det44InterfaceDetails) GetCrcString() string            { return "e60cc5be" }
+func (*Det44InterfaceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44InterfaceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44InterfaceDetails) Size() (size int) {
@@ -547,12 +544,10 @@ func (m *Det44InterfaceDetails) Unmarshal(b []byte) error {
 // InProgress: the message form may change in the future versions
 type Det44InterfaceDump struct{}
 
-func (m *Det44InterfaceDump) Reset()               { *m = Det44InterfaceDump{} }
-func (*Det44InterfaceDump) GetMessageName() string { return "det44_interface_dump" }
-func (*Det44InterfaceDump) GetCrcString() string   { return "51077d14" }
-func (*Det44InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44InterfaceDump) Reset()                        { *m = Det44InterfaceDump{} }
+func (*Det44InterfaceDump) GetMessageName() string          { return "det44_interface_dump" }
+func (*Det44InterfaceDump) GetCrcString() string            { return "51077d14" }
+func (*Det44InterfaceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44InterfaceDump) Size() (size int) {
 	if m == nil {
@@ -582,11 +577,12 @@ type Det44MapDetails struct {
 	SesNum       uint32              `binapi:"u32,name=ses_num" json:"ses_num,omitempty"`
 }
 
-func (m *Det44MapDetails) Reset()               { *m = Det44MapDetails{} }
-func (*Det44MapDetails) GetMessageName() string { return "det44_map_details" }
-func (*Det44MapDetails) GetCrcString() string   { return "ad91dc83" }
-func (*Det44MapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44MapDetails) Reset()                        { *m = Det44MapDetails{} }
+func (*Det44MapDetails) GetMessageName() string          { return "det44_map_details" }
+func (*Det44MapDetails) GetCrcString() string            { return "ad91dc83" }
+func (*Det44MapDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44MapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44MapDetails) Size() (size int) {
@@ -631,12 +627,10 @@ func (m *Det44MapDetails) Unmarshal(b []byte) error {
 // Det44MapDump defines message 'det44_map_dump'.
 type Det44MapDump struct{}
 
-func (m *Det44MapDump) Reset()               { *m = Det44MapDump{} }
-func (*Det44MapDump) GetMessageName() string { return "det44_map_dump" }
-func (*Det44MapDump) GetCrcString() string   { return "51077d14" }
-func (*Det44MapDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44MapDump) Reset()                        { *m = Det44MapDump{} }
+func (*Det44MapDump) GetMessageName() string          { return "det44_map_dump" }
+func (*Det44MapDump) GetCrcString() string            { return "51077d14" }
+func (*Det44MapDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44MapDump) Size() (size int) {
 	if m == nil {
@@ -663,12 +657,10 @@ type Det44PluginEnableDisable struct {
 	Enable     bool   `binapi:"bool,name=enable" json:"enable,omitempty"`
 }
 
-func (m *Det44PluginEnableDisable) Reset()               { *m = Det44PluginEnableDisable{} }
-func (*Det44PluginEnableDisable) GetMessageName() string { return "det44_plugin_enable_disable" }
-func (*Det44PluginEnableDisable) GetCrcString() string   { return "617b6bf8" }
-func (*Det44PluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44PluginEnableDisable) Reset()                        { *m = Det44PluginEnableDisable{} }
+func (*Det44PluginEnableDisable) GetMessageName() string          { return "det44_plugin_enable_disable" }
+func (*Det44PluginEnableDisable) GetCrcString() string            { return "617b6bf8" }
+func (*Det44PluginEnableDisable) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44PluginEnableDisable) Size() (size int) {
 	if m == nil {
@@ -707,9 +699,10 @@ func (m *Det44PluginEnableDisableReply) Reset() { *m = Det44PluginEnableDisableR
 func (*Det44PluginEnableDisableReply) GetMessageName() string {
 	return "det44_plugin_enable_disable_reply"
 }
-func (*Det44PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
-func (*Det44PluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (*Det44PluginEnableDisableReply) GetCrcString() string            { return "e8d4e804" }
+func (*Det44PluginEnableDisableReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44PluginEnableDisableReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44PluginEnableDisableReply) Size() (size int) {
@@ -739,12 +732,10 @@ type Det44Reverse struct {
 	OutAddr ip_types.IP4Address `binapi:"ip4_address,name=out_addr" json:"out_addr,omitempty"`
 }
 
-func (m *Det44Reverse) Reset()               { *m = Det44Reverse{} }
-func (*Det44Reverse) GetMessageName() string { return "det44_reverse" }
-func (*Det44Reverse) GetCrcString() string   { return "a7573fe1" }
-func (*Det44Reverse) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44Reverse) Reset()                        { *m = Det44Reverse{} }
+func (*Det44Reverse) GetMessageName() string          { return "det44_reverse" }
+func (*Det44Reverse) GetCrcString() string            { return "a7573fe1" }
+func (*Det44Reverse) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44Reverse) Size() (size int) {
 	if m == nil {
@@ -776,11 +767,12 @@ type Det44ReverseReply struct {
 	InAddr ip_types.IP4Address `binapi:"ip4_address,name=in_addr" json:"in_addr,omitempty"`
 }
 
-func (m *Det44ReverseReply) Reset()               { *m = Det44ReverseReply{} }
-func (*Det44ReverseReply) GetMessageName() string { return "det44_reverse_reply" }
-func (*Det44ReverseReply) GetCrcString() string   { return "34066d48" }
-func (*Det44ReverseReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44ReverseReply) Reset()                        { *m = Det44ReverseReply{} }
+func (*Det44ReverseReply) GetMessageName() string          { return "det44_reverse_reply" }
+func (*Det44ReverseReply) GetCrcString() string            { return "34066d48" }
+func (*Det44ReverseReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44ReverseReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44ReverseReply) Size() (size int) {
@@ -817,11 +809,12 @@ type Det44SessionDetails struct {
 	Expire  uint32              `binapi:"u32,name=expire" json:"expire,omitempty"`
 }
 
-func (m *Det44SessionDetails) Reset()               { *m = Det44SessionDetails{} }
-func (*Det44SessionDetails) GetMessageName() string { return "det44_session_details" }
-func (*Det44SessionDetails) GetCrcString() string   { return "27f3c171" }
-func (*Det44SessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44SessionDetails) Reset()                        { *m = Det44SessionDetails{} }
+func (*Det44SessionDetails) GetMessageName() string          { return "det44_session_details" }
+func (*Det44SessionDetails) GetCrcString() string            { return "27f3c171" }
+func (*Det44SessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44SessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *Det44SessionDetails) Size() (size int) {
@@ -865,12 +858,10 @@ type Det44SessionDump struct {
 	UserAddr ip_types.IP4Address `binapi:"ip4_address,name=user_addr" json:"user_addr,omitempty"`
 }
 
-func (m *Det44SessionDump) Reset()               { *m = Det44SessionDump{} }
-func (*Det44SessionDump) GetMessageName() string { return "det44_session_dump" }
-func (*Det44SessionDump) GetCrcString() string   { return "e45a3af7" }
-func (*Det44SessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44SessionDump) Reset()                        { *m = Det44SessionDump{} }
+func (*Det44SessionDump) GetMessageName() string          { return "det44_session_dump" }
+func (*Det44SessionDump) GetCrcString() string            { return "e45a3af7" }
+func (*Det44SessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44SessionDump) Size() (size int) {
 	if m == nil {
@@ -902,12 +893,10 @@ type Det44SetTimeouts struct {
 	ICMP           uint32 `binapi:"u32,name=icmp" json:"icmp,omitempty"`
 }
 
-func (m *Det44SetTimeouts) Reset()               { *m = Det44SetTimeouts{} }
-func (*Det44SetTimeouts) GetMessageName() string { return "det44_set_timeouts" }
-func (*Det44SetTimeouts) GetCrcString() string   { return "d4746b16" }
-func (*Det44SetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *Det44SetTimeouts) Reset()                        { *m = Det44SetTimeouts{} }
+func (*Det44SetTimeouts) GetMessageName() string          { return "det44_set_timeouts" }
+func (*Det44SetTimeouts) GetCrcString() string            { return "d4746b16" }
+func (*Det44SetTimeouts) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *Det44SetTimeouts) Size() (size int) {
 	if m == nil {
@@ -945,11 +934,12 @@ type Det44SetTimeoutsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *Det44SetTimeoutsReply) Reset()               { *m = Det44SetTimeoutsReply{} }
-func (*Det44SetTimeoutsReply) GetMessageName() string { return "det44_set_timeouts_reply" }
-func (*Det44SetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
-func (*Det44SetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *Det44SetTimeoutsReply) Reset()                        { *m = Det44SetTimeoutsReply{} }
+func (*Det44SetTimeoutsReply) GetMessageName() string          { return "det44_set_timeouts_reply" }
+func (*Det44SetTimeoutsReply) GetCrcString() string            { return "e8d4e804" }
+func (*Det44SetTimeoutsReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *Det44SetTimeoutsReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *Det44SetTimeoutsReply) Size() (size int) {
@@ -983,12 +973,10 @@ type NatDetAddDelMap struct {
 	OutPlen uint8               `binapi:"u8,name=out_plen" json:"out_plen,omitempty"`
 }
 
-func (m *NatDetAddDelMap) Reset()               { *m = NatDetAddDelMap{} }
-func (*NatDetAddDelMap) GetMessageName() string { return "nat_det_add_del_map" }
-func (*NatDetAddDelMap) GetCrcString() string   { return "1150a190" }
-func (*NatDetAddDelMap) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetAddDelMap) Reset()                        { *m = NatDetAddDelMap{} }
+func (*NatDetAddDelMap) GetMessageName() string          { return "nat_det_add_del_map" }
+func (*NatDetAddDelMap) GetCrcString() string            { return "1150a190" }
+func (*NatDetAddDelMap) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetAddDelMap) Size() (size int) {
 	if m == nil {
@@ -1029,11 +1017,12 @@ type NatDetAddDelMapReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *NatDetAddDelMapReply) Reset()               { *m = NatDetAddDelMapReply{} }
-func (*NatDetAddDelMapReply) GetMessageName() string { return "nat_det_add_del_map_reply" }
-func (*NatDetAddDelMapReply) GetCrcString() string   { return "e8d4e804" }
-func (*NatDetAddDelMapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetAddDelMapReply) Reset()                        { *m = NatDetAddDelMapReply{} }
+func (*NatDetAddDelMapReply) GetMessageName() string          { return "nat_det_add_del_map_reply" }
+func (*NatDetAddDelMapReply) GetCrcString() string            { return "e8d4e804" }
+func (*NatDetAddDelMapReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetAddDelMapReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetAddDelMapReply) Size() (size int) {
@@ -1066,12 +1055,10 @@ type NatDetCloseSessionIn struct {
 	ExtPort uint16              `binapi:"u16,name=ext_port" json:"ext_port,omitempty"`
 }
 
-func (m *NatDetCloseSessionIn) Reset()               { *m = NatDetCloseSessionIn{} }
-func (*NatDetCloseSessionIn) GetMessageName() string { return "nat_det_close_session_in" }
-func (*NatDetCloseSessionIn) GetCrcString() string   { return "3c68e073" }
-func (*NatDetCloseSessionIn) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetCloseSessionIn) Reset()                        { *m = NatDetCloseSessionIn{} }
+func (*NatDetCloseSessionIn) GetMessageName() string          { return "nat_det_close_session_in" }
+func (*NatDetCloseSessionIn) GetCrcString() string            { return "3c68e073" }
+func (*NatDetCloseSessionIn) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetCloseSessionIn) Size() (size int) {
 	if m == nil {
@@ -1109,11 +1096,12 @@ type NatDetCloseSessionInReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *NatDetCloseSessionInReply) Reset()               { *m = NatDetCloseSessionInReply{} }
-func (*NatDetCloseSessionInReply) GetMessageName() string { return "nat_det_close_session_in_reply" }
-func (*NatDetCloseSessionInReply) GetCrcString() string   { return "e8d4e804" }
-func (*NatDetCloseSessionInReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetCloseSessionInReply) Reset()                        { *m = NatDetCloseSessionInReply{} }
+func (*NatDetCloseSessionInReply) GetMessageName() string          { return "nat_det_close_session_in_reply" }
+func (*NatDetCloseSessionInReply) GetCrcString() string            { return "e8d4e804" }
+func (*NatDetCloseSessionInReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetCloseSessionInReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetCloseSessionInReply) Size() (size int) {
@@ -1146,12 +1134,10 @@ type NatDetCloseSessionOut struct {
 	ExtPort uint16              `binapi:"u16,name=ext_port" json:"ext_port,omitempty"`
 }
 
-func (m *NatDetCloseSessionOut) Reset()               { *m = NatDetCloseSessionOut{} }
-func (*NatDetCloseSessionOut) GetMessageName() string { return "nat_det_close_session_out" }
-func (*NatDetCloseSessionOut) GetCrcString() string   { return "f6b259d1" }
-func (*NatDetCloseSessionOut) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetCloseSessionOut) Reset()                        { *m = NatDetCloseSessionOut{} }
+func (*NatDetCloseSessionOut) GetMessageName() string          { return "nat_det_close_session_out" }
+func (*NatDetCloseSessionOut) GetCrcString() string            { return "f6b259d1" }
+func (*NatDetCloseSessionOut) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetCloseSessionOut) Size() (size int) {
 	if m == nil {
@@ -1189,11 +1175,12 @@ type NatDetCloseSessionOutReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
 
-func (m *NatDetCloseSessionOutReply) Reset()               { *m = NatDetCloseSessionOutReply{} }
-func (*NatDetCloseSessionOutReply) GetMessageName() string { return "nat_det_close_session_out_reply" }
-func (*NatDetCloseSessionOutReply) GetCrcString() string   { return "e8d4e804" }
-func (*NatDetCloseSessionOutReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetCloseSessionOutReply) Reset()                        { *m = NatDetCloseSessionOutReply{} }
+func (*NatDetCloseSessionOutReply) GetMessageName() string          { return "nat_det_close_session_out_reply" }
+func (*NatDetCloseSessionOutReply) GetCrcString() string            { return "e8d4e804" }
+func (*NatDetCloseSessionOutReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetCloseSessionOutReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetCloseSessionOutReply) Size() (size int) {
@@ -1223,12 +1210,10 @@ type NatDetForward struct {
 	InAddr ip_types.IP4Address `binapi:"ip4_address,name=in_addr" json:"in_addr,omitempty"`
 }
 
-func (m *NatDetForward) Reset()               { *m = NatDetForward{} }
-func (*NatDetForward) GetMessageName() string { return "nat_det_forward" }
-func (*NatDetForward) GetCrcString() string   { return "7f8a89cd" }
-func (*NatDetForward) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetForward) Reset()                        { *m = NatDetForward{} }
+func (*NatDetForward) GetMessageName() string          { return "nat_det_forward" }
+func (*NatDetForward) GetCrcString() string            { return "7f8a89cd" }
+func (*NatDetForward) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetForward) Size() (size int) {
 	if m == nil {
@@ -1260,11 +1245,12 @@ type NatDetForwardReply struct {
 	OutAddr   ip_types.IP4Address `binapi:"ip4_address,name=out_addr" json:"out_addr,omitempty"`
 }
 
-func (m *NatDetForwardReply) Reset()               { *m = NatDetForwardReply{} }
-func (*NatDetForwardReply) GetMessageName() string { return "nat_det_forward_reply" }
-func (*NatDetForwardReply) GetCrcString() string   { return "a8ccbdc0" }
-func (*NatDetForwardReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetForwardReply) Reset()                        { *m = NatDetForwardReply{} }
+func (*NatDetForwardReply) GetMessageName() string          { return "nat_det_forward_reply" }
+func (*NatDetForwardReply) GetCrcString() string            { return "a8ccbdc0" }
+func (*NatDetForwardReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetForwardReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetForwardReply) Size() (size int) {
@@ -1309,11 +1295,12 @@ type NatDetMapDetails struct {
 	SesNum       uint32              `binapi:"u32,name=ses_num" json:"ses_num,omitempty"`
 }
 
-func (m *NatDetMapDetails) Reset()               { *m = NatDetMapDetails{} }
-func (*NatDetMapDetails) GetMessageName() string { return "nat_det_map_details" }
-func (*NatDetMapDetails) GetCrcString() string   { return "ad91dc83" }
-func (*NatDetMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetMapDetails) Reset()                        { *m = NatDetMapDetails{} }
+func (*NatDetMapDetails) GetMessageName() string          { return "nat_det_map_details" }
+func (*NatDetMapDetails) GetCrcString() string            { return "ad91dc83" }
+func (*NatDetMapDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetMapDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NatDetMapDetails) Size() (size int) {
@@ -1359,12 +1346,10 @@ func (m *NatDetMapDetails) Unmarshal(b []byte) error {
 // Deprecated: the message will be removed in the future versions
 type NatDetMapDump struct{}
 
-func (m *NatDetMapDump) Reset()               { *m = NatDetMapDump{} }
-func (*NatDetMapDump) GetMessageName() string { return "nat_det_map_dump" }
-func (*NatDetMapDump) GetCrcString() string   { return "51077d14" }
-func (*NatDetMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetMapDump) Reset()                        { *m = NatDetMapDump{} }
+func (*NatDetMapDump) GetMessageName() string          { return "nat_det_map_dump" }
+func (*NatDetMapDump) GetCrcString() string            { return "51077d14" }
+func (*NatDetMapDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetMapDump) Size() (size int) {
 	if m == nil {
@@ -1390,12 +1375,10 @@ type NatDetReverse struct {
 	OutAddr ip_types.IP4Address `binapi:"ip4_address,name=out_addr" json:"out_addr,omitempty"`
 }
 
-func (m *NatDetReverse) Reset()               { *m = NatDetReverse{} }
-func (*NatDetReverse) GetMessageName() string { return "nat_det_reverse" }
-func (*NatDetReverse) GetCrcString() string   { return "a7573fe1" }
-func (*NatDetReverse) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetReverse) Reset()                        { *m = NatDetReverse{} }
+func (*NatDetReverse) GetMessageName() string          { return "nat_det_reverse" }
+func (*NatDetReverse) GetCrcString() string            { return "a7573fe1" }
+func (*NatDetReverse) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetReverse) Size() (size int) {
 	if m == nil {
@@ -1428,11 +1411,12 @@ type NatDetReverseReply struct {
 	InAddr ip_types.IP4Address `binapi:"ip4_address,name=in_addr" json:"in_addr,omitempty"`
 }
 
-func (m *NatDetReverseReply) Reset()               { *m = NatDetReverseReply{} }
-func (*NatDetReverseReply) GetMessageName() string { return "nat_det_reverse_reply" }
-func (*NatDetReverseReply) GetCrcString() string   { return "34066d48" }
-func (*NatDetReverseReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetReverseReply) Reset()                        { *m = NatDetReverseReply{} }
+func (*NatDetReverseReply) GetMessageName() string          { return "nat_det_reverse_reply" }
+func (*NatDetReverseReply) GetCrcString() string            { return "34066d48" }
+func (*NatDetReverseReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetReverseReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *NatDetReverseReply) Size() (size int) {
@@ -1470,11 +1454,12 @@ type NatDetSessionDetails struct {
 	Expire  uint32              `binapi:"u32,name=expire" json:"expire,omitempty"`
 }
 
-func (m *NatDetSessionDetails) Reset()               { *m = NatDetSessionDetails{} }
-func (*NatDetSessionDetails) GetMessageName() string { return "nat_det_session_details" }
-func (*NatDetSessionDetails) GetCrcString() string   { return "27f3c171" }
-func (*NatDetSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *NatDetSessionDetails) Reset()                        { *m = NatDetSessionDetails{} }
+func (*NatDetSessionDetails) GetMessageName() string          { return "nat_det_session_details" }
+func (*NatDetSessionDetails) GetCrcString() string            { return "27f3c171" }
+func (*NatDetSessionDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *NatDetSessionDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *NatDetSessionDetails) Size() (size int) {
@@ -1519,12 +1504,10 @@ type NatDetSessionDump struct {
 	UserAddr ip_types.IP4Address `binapi:"ip4_address,name=user_addr" json:"user_addr,omitempty"`
 }
 
-func (m *NatDetSessionDump) Reset()               { *m = NatDetSessionDump{} }
-func (*NatDetSessionDump) GetMessageName() string { return "nat_det_session_dump" }
-func (*NatDetSessionDump) GetCrcString() string   { return "e45a3af7" }
-func (*NatDetSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *NatDetSessionDump) Reset()                        { *m = NatDetSessionDump{} }
+func (*NatDetSessionDump) GetMessageName() string          { return "nat_det_session_dump" }
+func (*NatDetSessionDump) GetCrcString() string            { return "e45a3af7" }
+func (*NatDetSessionDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *NatDetSessionDump) Size() (size int) {
 	if m == nil {

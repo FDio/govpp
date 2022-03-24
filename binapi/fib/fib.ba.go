@@ -42,12 +42,10 @@ type FibSourceAdd struct {
 	Src FibSource `binapi:"fib_source,name=src" json:"src,omitempty"`
 }
 
-func (m *FibSourceAdd) Reset()               { *m = FibSourceAdd{} }
-func (*FibSourceAdd) GetMessageName() string { return "fib_source_add" }
-func (*FibSourceAdd) GetCrcString() string   { return "b3ac2aec" }
-func (*FibSourceAdd) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FibSourceAdd) Reset()                        { *m = FibSourceAdd{} }
+func (*FibSourceAdd) GetMessageName() string          { return "fib_source_add" }
+func (*FibSourceAdd) GetCrcString() string            { return "b3ac2aec" }
+func (*FibSourceAdd) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FibSourceAdd) Size() (size int) {
 	if m == nil {
@@ -82,11 +80,12 @@ type FibSourceAddReply struct {
 	ID     uint8 `binapi:"u8,name=id" json:"id,omitempty"`
 }
 
-func (m *FibSourceAddReply) Reset()               { *m = FibSourceAddReply{} }
-func (*FibSourceAddReply) GetMessageName() string { return "fib_source_add_reply" }
-func (*FibSourceAddReply) GetCrcString() string   { return "604fd6f1" }
-func (*FibSourceAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FibSourceAddReply) Reset()                        { *m = FibSourceAddReply{} }
+func (*FibSourceAddReply) GetMessageName() string          { return "fib_source_add_reply" }
+func (*FibSourceAddReply) GetCrcString() string            { return "604fd6f1" }
+func (*FibSourceAddReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FibSourceAddReply) GetRetVal() error {
+	return api.RetvalToVPPApiError(int32(m.Retval))
 }
 
 func (m *FibSourceAddReply) Size() (size int) {
@@ -118,11 +117,12 @@ type FibSourceDetails struct {
 	Src FibSource `binapi:"fib_source,name=src" json:"src,omitempty"`
 }
 
-func (m *FibSourceDetails) Reset()               { *m = FibSourceDetails{} }
-func (*FibSourceDetails) GetMessageName() string { return "fib_source_details" }
-func (*FibSourceDetails) GetCrcString() string   { return "8668acdb" }
-func (*FibSourceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessageType
+func (m *FibSourceDetails) Reset()                        { *m = FibSourceDetails{} }
+func (*FibSourceDetails) GetMessageName() string          { return "fib_source_details" }
+func (*FibSourceDetails) GetCrcString() string            { return "8668acdb" }
+func (*FibSourceDetails) GetMessageType() api.MessageType { return api.ReplyMessageType }
+func (m *FibSourceDetails) GetRetVal() error {
+	return nil
 }
 
 func (m *FibSourceDetails) Size() (size int) {
@@ -155,12 +155,10 @@ func (m *FibSourceDetails) Unmarshal(b []byte) error {
 // FibSourceDump defines message 'fib_source_dump'.
 type FibSourceDump struct{}
 
-func (m *FibSourceDump) Reset()               { *m = FibSourceDump{} }
-func (*FibSourceDump) GetMessageName() string { return "fib_source_dump" }
-func (*FibSourceDump) GetCrcString() string   { return "51077d14" }
-func (*FibSourceDump) GetMessageType() api.MessageType {
-	return api.RequestMessageType
-}
+func (m *FibSourceDump) Reset()                        { *m = FibSourceDump{} }
+func (*FibSourceDump) GetMessageName() string          { return "fib_source_dump" }
+func (*FibSourceDump) GetCrcString() string            { return "51077d14" }
+func (*FibSourceDump) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 func (m *FibSourceDump) Size() (size int) {
 	if m == nil {

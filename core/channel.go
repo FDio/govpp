@@ -17,8 +17,6 @@ package core
 import (
 	"errors"
 	"fmt"
-	"reflect"
-	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -213,7 +211,7 @@ func (ch *Channel) Close() {
 	close(ch.reqChan)
 }
 
-func (req *requestCtx) ReceiveReply(msg api.Message) error {
+func (req *requestCtx) ReceiveReply(msg api.ReplyMessage) error {
 	if req == nil || req.ch == nil {
 		return ErrInvalidRequestCtx
 	}
@@ -228,7 +226,7 @@ func (req *requestCtx) ReceiveReply(msg api.Message) error {
 	return nil
 }
 
-func (req *multiRequestCtx) ReceiveReply(msg api.Message) (lastReplyReceived bool, err error) {
+func (req *multiRequestCtx) ReceiveReply(msg api.ReplyMessage) (lastReplyReceived bool, err error) {
 	if req == nil || req.ch == nil {
 		return false, ErrInvalidRequestCtx
 	}
@@ -262,7 +260,7 @@ func (sub *subscriptionCtx) Unsubscribe() error {
 const maxInt64 = 1<<63 - 1
 
 // receiveReplyInternal receives a reply from the reply channel into the provided msg structure.
-func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (lastReplyReceived bool, err error) {
+func (ch *Channel) receiveReplyInternal(msg api.ReplyMessage, expSeqNum uint16) (lastReplyReceived bool, err error) {
 	if msg == nil {
 		return false, errors.New("nil message passed in")
 	}
@@ -315,7 +313,7 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 	}
 }
 
-func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Message) (ignore bool, lastReplyReceived bool, err error) {
+func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.ReplyMessage) (ignore bool, lastReplyReceived bool, err error) {
 	// check the sequence number
 	cmpSeqNums := compareSeqNumbers(reply.seqNum, expSeqNum)
 	if cmpSeqNums == -1 {
@@ -370,21 +368,7 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 	}
 
 	// check Retval and convert it into VnetAPIError error
-	if strings.HasSuffix(msg.GetMessageName(), "_reply") {
-		// TODO: use categories for messages to avoid checking message name
-		if f := reflect.Indirect(reflect.ValueOf(msg)).FieldByName("Retval"); f.IsValid() {
-			var retval int32
-			switch f.Kind() {
-			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-				retval = int32(f.Int())
-			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-				retval = int32(f.Uint())
-			default:
-				logrus.Warnf("invalid kind (%v) for Retval field of message %v", f.Kind(), msg.GetMessageName())
-			}
-			err = api.RetvalToVPPApiError(retval)
-		}
-	}
+	err = msg.GetRetVal()
 
 	return
 }
