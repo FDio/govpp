@@ -16,6 +16,7 @@ package core_test
 
 import (
 	"testing"
+	"time"
 
 	. "github.com/onsi/gomega"
 
@@ -89,6 +90,28 @@ func TestAsyncConnection(t *testing.T) {
 
 	ev := <-statusChan
 	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
+}
+
+func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
+	ctx := setupTest(t, false)
+	defer ctx.teardownTest()
+
+	ctx.conn.Disconnect()
+	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
+	ctx.conn = conn
+
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(conn).ShouldNot(BeNil())
+
+	ev := <-statusChan
+	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
+
+	// make control ping reply fail so that connection.healthCheckLoop()
+	// initiates reconnection.
+	ctx.mockVpp.MockReply(&vpe.ControlPingReply{
+		Retval: -1,
+	})
+	time.Sleep(time.Duration(1+core.HealthCheckThreshold) * (core.HealthCheckInterval + 2*core.HealthCheckReplyTimeout))
 }
 
 func TestCodec(t *testing.T) {
