@@ -108,7 +108,7 @@ func (v *Vpp) Close() error {
 	return nil
 }
 
-func (v *Vpp) SendRequestAwaitReply(request vppapi.Message, response vppapi.ResponseMessage) error {
+func (v *Vpp) SendRequestAwaitReply(request vppapi.Message, response vppapi.ReplyMessage) error {
 	v.Lock()
 	defer v.Unlock()
 
