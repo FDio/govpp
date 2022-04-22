@@ -367,6 +367,9 @@ func (sc *StatsClient) connect() (ss statSegment, err error) {
 	case 2:
 		ss = newStatSegmentV2(sc.headerData, size)
 	default:
+		if err = syscall.Munmap(sc.headerData); err != nil {
+			Log.Debugf("unmapping shared memory failed: %v", err)
+		}
 		return nil, fmt.Errorf("stat segment version is not supported: %v (min: %v, max: %v)",
 			version, minVersion, maxVersion)
 	}
