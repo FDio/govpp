@@ -29,6 +29,12 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
+const (
+	APIFile    = "lisp_types"
+	APIVersion = "1.0.0"
+	VersionCrc = 0xf05d92a6
+)
+
 // EidType defines enum 'eid_type'.
 type EidType uint8
 

@@ -21,6 +21,12 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
+const (
+	APIFile    = "pci_types"
+	APIVersion = "1.0.0"
+	VersionCrc = 0x5d418665
+)
+
 // PciAddress defines type 'pci_address'.
 type PciAddress struct {
 	Domain   uint16 `binapi:"u16,name=domain" json:"domain,omitempty"`
