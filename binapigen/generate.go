@@ -90,14 +90,12 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	g.P("const _ = ", govppApiPkg.Ident("GoVppAPIPackageIsVersion"), generatedCodeVersion)
 	g.P()
 
-	if !file.isTypesFile() {
-		g.P("const (")
-		g.P(apiName, " = ", strconv.Quote(g.file.Desc.Name))
-		g.P(apiVersion, " = ", strconv.Quote(g.file.Version))
-		g.P(apiCrc, " = ", g.file.Desc.CRC)
-		g.P(")")
-		g.P()
-	}
+	g.P("const (")
+	g.P(apiName, " = ", strconv.Quote(g.file.Desc.Name))
+	g.P(apiVersion, " = ", strconv.Quote(g.file.Version))
+	g.P(apiCrc, " = ", g.file.Desc.CRC)
+	g.P(")")
+	g.P()
 
 	for _, enum := range g.file.Enums {
 		genEnum(g, enum)
