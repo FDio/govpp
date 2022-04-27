@@ -24,6 +24,12 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
+const (
+	APIFile    = "policer_types"
+	APIVersion = "1.0.0"
+	VersionCrc = 0xae54624b
+)
+
 // Sse2QosActionType defines enum 'sse2_qos_action_type'.
 type Sse2QosActionType uint8
 

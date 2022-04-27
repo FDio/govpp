@@ -25,6 +25,12 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
+const (
+	APIFile    = "lb_types"
+	APIVersion = "1.0.0"
+	VersionCrc = 0xba19340c
+)
+
 // LbEncapType defines enum 'lb_encap_type'.
 type LbEncapType uint32
 
