@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service det44.
@@ -105,7 +105,7 @@ func (c *serviceClient) Det44InterfaceDump(ctx context.Context, in *Det44Interfa
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -128,7 +128,7 @@ func (c *serviceClient_Det44InterfaceDumpClient) Recv() (*Det44InterfaceDetails,
 	switch m := msg.(type) {
 	case *Det44InterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -148,7 +148,7 @@ func (c *serviceClient) Det44MapDump(ctx context.Context, in *Det44MapDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -171,7 +171,7 @@ func (c *serviceClient_Det44MapDumpClient) Recv() (*Det44MapDetails, error) {
 	switch m := msg.(type) {
 	case *Det44MapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -209,7 +209,7 @@ func (c *serviceClient) Det44SessionDump(ctx context.Context, in *Det44SessionDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -232,7 +232,7 @@ func (c *serviceClient_Det44SessionDumpClient) Recv() (*Det44SessionDetails, err
 	switch m := msg.(type) {
 	case *Det44SessionDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -297,7 +297,7 @@ func (c *serviceClient) NatDetMapDump(ctx context.Context, in *NatDetMapDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -320,7 +320,7 @@ func (c *serviceClient_NatDetMapDumpClient) Recv() (*NatDetMapDetails, error) {
 	switch m := msg.(type) {
 	case *NatDetMapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -349,7 +349,7 @@ func (c *serviceClient) NatDetSessionDump(ctx context.Context, in *NatDetSession
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -372,7 +372,7 @@ func (c *serviceClient_NatDetSessionDumpClient) Recv() (*NatDetSessionDetails, e
 	switch m := msg.(type) {
 	case *NatDetSessionDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

@@ -5,12 +5,13 @@ package bier
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  bier.
+// RPCService defines RPC service bier.
 type RPCService interface {
 	BierDispEntryAddDel(ctx context.Context, in *BierDispEntryAddDel) (*BierDispEntryAddDelReply, error)
 	BierDispEntryDump(ctx context.Context, in *BierDispEntryDump) (RPCService_BierDispEntryDumpClient, error)
@@ -39,7 +40,7 @@ func (c *serviceClient) BierDispEntryAddDel(ctx context.Context, in *BierDispEnt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierDispEntryDump(ctx context.Context, in *BierDispEntryDump) (RPCService_BierDispEntryDumpClient, error) {
@@ -75,6 +76,10 @@ func (c *serviceClient_BierDispEntryDumpClient) Recv() (*BierDispEntryDetails, e
 	case *BierDispEntryDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -87,7 +92,7 @@ func (c *serviceClient) BierDispTableAddDel(ctx context.Context, in *BierDispTab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierDispTableDump(ctx context.Context, in *BierDispTableDump) (RPCService_BierDispTableDumpClient, error) {
@@ -123,6 +128,10 @@ func (c *serviceClient_BierDispTableDumpClient) Recv() (*BierDispTableDetails, e
 	case *BierDispTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -135,7 +144,7 @@ func (c *serviceClient) BierImpAdd(ctx context.Context, in *BierImpAdd) (*BierIm
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierImpDel(ctx context.Context, in *BierImpDel) (*BierImpDelReply, error) {
@@ -144,7 +153,7 @@ func (c *serviceClient) BierImpDel(ctx context.Context, in *BierImpDel) (*BierIm
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierImpDump(ctx context.Context, in *BierImpDump) (RPCService_BierImpDumpClient, error) {
@@ -180,6 +189,10 @@ func (c *serviceClient_BierImpDumpClient) Recv() (*BierImpDetails, error) {
 	case *BierImpDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -192,7 +205,7 @@ func (c *serviceClient) BierRouteAddDel(ctx context.Context, in *BierRouteAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierRouteDump(ctx context.Context, in *BierRouteDump) (RPCService_BierRouteDumpClient, error) {
@@ -228,6 +241,10 @@ func (c *serviceClient_BierRouteDumpClient) Recv() (*BierRouteDetails, error) {
 	case *BierRouteDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -240,7 +257,7 @@ func (c *serviceClient) BierTableAddDel(ctx context.Context, in *BierTableAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BierTableDump(ctx context.Context, in *BierTableDump) (RPCService_BierTableDumpClient, error) {
@@ -276,6 +293,10 @@ func (c *serviceClient_BierTableDumpClient) Recv() (*BierTableDetails, error) {
 	case *BierTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

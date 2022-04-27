@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service session.
@@ -17,6 +17,8 @@ type RPCService interface {
 	AppAttach(ctx context.Context, in *AppAttach) (*AppAttachReply, error)
 	AppDelCertKeyPair(ctx context.Context, in *AppDelCertKeyPair) (*AppDelCertKeyPairReply, error)
 	AppNamespaceAddDel(ctx context.Context, in *AppNamespaceAddDel) (*AppNamespaceAddDelReply, error)
+	AppNamespaceAddDelV2(ctx context.Context, in *AppNamespaceAddDelV2) (*AppNamespaceAddDelV2Reply, error)
+	AppNamespaceAddDelV3(ctx context.Context, in *AppNamespaceAddDelV3) (*AppNamespaceAddDelV3Reply, error)
 	AppWorkerAddDel(ctx context.Context, in *AppWorkerAddDel) (*AppWorkerAddDelReply, error)
 	ApplicationDetach(ctx context.Context, in *ApplicationDetach) (*ApplicationDetachReply, error)
 	ApplicationTLSCertAdd(ctx context.Context, in *ApplicationTLSCertAdd) (*ApplicationTLSCertAddReply, error)
@@ -24,6 +26,7 @@ type RPCService interface {
 	SessionEnableDisable(ctx context.Context, in *SessionEnableDisable) (*SessionEnableDisableReply, error)
 	SessionRuleAddDel(ctx context.Context, in *SessionRuleAddDel) (*SessionRuleAddDelReply, error)
 	SessionRulesDump(ctx context.Context, in *SessionRulesDump) (RPCService_SessionRulesDumpClient, error)
+	SessionSapiEnableDisable(ctx context.Context, in *SessionSapiEnableDisable) (*SessionSapiEnableDisableReply, error)
 }
 
 type serviceClient struct {
@@ -63,6 +66,24 @@ func (c *serviceClient) AppDelCertKeyPair(ctx context.Context, in *AppDelCertKey
 
 func (c *serviceClient) AppNamespaceAddDel(ctx context.Context, in *AppNamespaceAddDel) (*AppNamespaceAddDelReply, error) {
 	out := new(AppNamespaceAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) AppNamespaceAddDelV2(ctx context.Context, in *AppNamespaceAddDelV2) (*AppNamespaceAddDelV2Reply, error) {
+	out := new(AppNamespaceAddDelV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) AppNamespaceAddDelV3(ctx context.Context, in *AppNamespaceAddDelV3) (*AppNamespaceAddDelV3Reply, error) {
+	out := new(AppNamespaceAddDelV3Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -133,7 +154,7 @@ func (c *serviceClient) SessionRulesDump(ctx context.Context, in *SessionRulesDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -156,7 +177,7 @@ func (c *serviceClient_SessionRulesDumpClient) Recv() (*SessionRulesDetails, err
 	switch m := msg.(type) {
 	case *SessionRulesDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -165,4 +186,13 @@ func (c *serviceClient_SessionRulesDumpClient) Recv() (*SessionRulesDetails, err
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) SessionSapiEnableDisable(ctx context.Context, in *SessionSapiEnableDisable) (*SessionSapiEnableDisableReply, error) {
+	out := new(SessionSapiEnableDisableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

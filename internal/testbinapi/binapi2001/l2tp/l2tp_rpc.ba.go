@@ -5,12 +5,13 @@ package l2tp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  l2tp.
+// RPCService defines RPC service l2tp.
 type RPCService interface {
 	L2tpv3CreateTunnel(ctx context.Context, in *L2tpv3CreateTunnel) (*L2tpv3CreateTunnelReply, error)
 	L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2tpv3InterfaceEnableDisable) (*L2tpv3InterfaceEnableDisableReply, error)
@@ -33,7 +34,7 @@ func (c *serviceClient) L2tpv3CreateTunnel(ctx context.Context, in *L2tpv3Create
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2tpv3InterfaceEnableDisable) (*L2tpv3InterfaceEnableDisableReply, error) {
@@ -42,7 +43,7 @@ func (c *serviceClient) L2tpv3InterfaceEnableDisable(ctx context.Context, in *L2
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3SetLookupKey(ctx context.Context, in *L2tpv3SetLookupKey) (*L2tpv3SetLookupKeyReply, error) {
@@ -51,7 +52,7 @@ func (c *serviceClient) L2tpv3SetLookupKey(ctx context.Context, in *L2tpv3SetLoo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2tpv3SetTunnelCookies(ctx context.Context, in *L2tpv3SetTunnelCookies) (*L2tpv3SetTunnelCookiesReply, error) {
@@ -60,7 +61,7 @@ func (c *serviceClient) L2tpv3SetTunnelCookies(ctx context.Context, in *L2tpv3Se
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwIfL2tpv3TunnelDump(ctx context.Context, in *SwIfL2tpv3TunnelDump) (RPCService_SwIfL2tpv3TunnelDumpClient, error) {
@@ -96,6 +97,10 @@ func (c *serviceClient_SwIfL2tpv3TunnelDumpClient) Recv() (*SwIfL2tpv3TunnelDeta
 	case *SwIfL2tpv3TunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

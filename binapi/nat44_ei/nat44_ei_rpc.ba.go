@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service nat44_ei.
@@ -16,6 +16,7 @@ type RPCService interface {
 	Nat44EiAddDelAddressRange(ctx context.Context, in *Nat44EiAddDelAddressRange) (*Nat44EiAddDelAddressRangeReply, error)
 	Nat44EiAddDelIdentityMapping(ctx context.Context, in *Nat44EiAddDelIdentityMapping) (*Nat44EiAddDelIdentityMappingReply, error)
 	Nat44EiAddDelInterfaceAddr(ctx context.Context, in *Nat44EiAddDelInterfaceAddr) (*Nat44EiAddDelInterfaceAddrReply, error)
+	Nat44EiAddDelOutputInterface(ctx context.Context, in *Nat44EiAddDelOutputInterface) (*Nat44EiAddDelOutputInterfaceReply, error)
 	Nat44EiAddDelStaticMapping(ctx context.Context, in *Nat44EiAddDelStaticMapping) (*Nat44EiAddDelStaticMappingReply, error)
 	Nat44EiAddressDump(ctx context.Context, in *Nat44EiAddressDump) (RPCService_Nat44EiAddressDumpClient, error)
 	Nat44EiDelSession(ctx context.Context, in *Nat44EiDelSession) (*Nat44EiDelSessionReply, error)
@@ -36,6 +37,7 @@ type RPCService interface {
 	Nat44EiInterfaceDump(ctx context.Context, in *Nat44EiInterfaceDump) (RPCService_Nat44EiInterfaceDumpClient, error)
 	Nat44EiInterfaceOutputFeatureDump(ctx context.Context, in *Nat44EiInterfaceOutputFeatureDump) (RPCService_Nat44EiInterfaceOutputFeatureDumpClient, error)
 	Nat44EiIpfixEnableDisable(ctx context.Context, in *Nat44EiIpfixEnableDisable) (*Nat44EiIpfixEnableDisableReply, error)
+	Nat44EiOutputInterfaceGet(ctx context.Context, in *Nat44EiOutputInterfaceGet) (RPCService_Nat44EiOutputInterfaceGetClient, error)
 	Nat44EiPluginEnableDisable(ctx context.Context, in *Nat44EiPluginEnableDisable) (*Nat44EiPluginEnableDisableReply, error)
 	Nat44EiSetAddrAndPortAllocAlg(ctx context.Context, in *Nat44EiSetAddrAndPortAllocAlg) (*Nat44EiSetAddrAndPortAllocAlgReply, error)
 	Nat44EiSetFqOptions(ctx context.Context, in *Nat44EiSetFqOptions) (*Nat44EiSetFqOptionsReply, error)
@@ -86,6 +88,15 @@ func (c *serviceClient) Nat44EiAddDelInterfaceAddr(ctx context.Context, in *Nat4
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) Nat44EiAddDelOutputInterface(ctx context.Context, in *Nat44EiAddDelOutputInterface) (*Nat44EiAddDelOutputInterfaceReply, error) {
+	out := new(Nat44EiAddDelOutputInterfaceReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) Nat44EiAddDelStaticMapping(ctx context.Context, in *Nat44EiAddDelStaticMapping) (*Nat44EiAddDelStaticMappingReply, error) {
 	out := new(Nat44EiAddDelStaticMappingReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -104,7 +115,7 @@ func (c *serviceClient) Nat44EiAddressDump(ctx context.Context, in *Nat44EiAddre
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -127,7 +138,7 @@ func (c *serviceClient_Nat44EiAddressDumpClient) Recv() (*Nat44EiAddressDetails,
 	switch m := msg.(type) {
 	case *Nat44EiAddressDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -246,7 +257,7 @@ func (c *serviceClient) Nat44EiIdentityMappingDump(ctx context.Context, in *Nat4
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -269,7 +280,7 @@ func (c *serviceClient_Nat44EiIdentityMappingDumpClient) Recv() (*Nat44EiIdentit
 	switch m := msg.(type) {
 	case *Nat44EiIdentityMappingDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -307,7 +318,7 @@ func (c *serviceClient) Nat44EiInterfaceAddrDump(ctx context.Context, in *Nat44E
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -330,7 +341,7 @@ func (c *serviceClient_Nat44EiInterfaceAddrDumpClient) Recv() (*Nat44EiInterface
 	switch m := msg.(type) {
 	case *Nat44EiInterfaceAddrDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -350,7 +361,7 @@ func (c *serviceClient) Nat44EiInterfaceDump(ctx context.Context, in *Nat44EiInt
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -373,7 +384,7 @@ func (c *serviceClient_Nat44EiInterfaceDumpClient) Recv() (*Nat44EiInterfaceDeta
 	switch m := msg.(type) {
 	case *Nat44EiInterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -393,7 +404,7 @@ func (c *serviceClient) Nat44EiInterfaceOutputFeatureDump(ctx context.Context, i
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -416,7 +427,7 @@ func (c *serviceClient_Nat44EiInterfaceOutputFeatureDumpClient) Recv() (*Nat44Ei
 	switch m := msg.(type) {
 	case *Nat44EiInterfaceOutputFeatureDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -434,6 +445,46 @@ func (c *serviceClient) Nat44EiIpfixEnableDisable(ctx context.Context, in *Nat44
 		return nil, err
 	}
 	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) Nat44EiOutputInterfaceGet(ctx context.Context, in *Nat44EiOutputInterfaceGet) (RPCService_Nat44EiOutputInterfaceGetClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_Nat44EiOutputInterfaceGetClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_Nat44EiOutputInterfaceGetClient interface {
+	Recv() (*Nat44EiOutputInterfaceDetails, error)
+	api.Stream
+}
+
+type serviceClient_Nat44EiOutputInterfaceGetClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_Nat44EiOutputInterfaceGetClient) Recv() (*Nat44EiOutputInterfaceDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *Nat44EiOutputInterfaceDetails:
+		return m, nil
+	case *Nat44EiOutputInterfaceGetReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) Nat44EiPluginEnableDisable(ctx context.Context, in *Nat44EiPluginEnableDisable) (*Nat44EiPluginEnableDisableReply, error) {
@@ -526,7 +577,7 @@ func (c *serviceClient) Nat44EiStaticMappingDump(ctx context.Context, in *Nat44E
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -549,7 +600,7 @@ func (c *serviceClient_Nat44EiStaticMappingDumpClient) Recv() (*Nat44EiStaticMap
 	switch m := msg.(type) {
 	case *Nat44EiStaticMappingDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -569,7 +620,7 @@ func (c *serviceClient) Nat44EiUserDump(ctx context.Context, in *Nat44EiUserDump
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -592,7 +643,7 @@ func (c *serviceClient_Nat44EiUserDumpClient) Recv() (*Nat44EiUserDetails, error
 	switch m := msg.(type) {
 	case *Nat44EiUserDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -612,7 +663,7 @@ func (c *serviceClient) Nat44EiUserSessionDump(ctx context.Context, in *Nat44EiU
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -635,7 +686,7 @@ func (c *serviceClient_Nat44EiUserSessionDumpClient) Recv() (*Nat44EiUserSession
 	switch m := msg.(type) {
 	case *Nat44EiUserSessionDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -655,7 +706,7 @@ func (c *serviceClient) Nat44EiWorkerDump(ctx context.Context, in *Nat44EiWorker
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -678,7 +729,7 @@ func (c *serviceClient_Nat44EiWorkerDumpClient) Recv() (*Nat44EiWorkerDetails, e
 	switch m := msg.(type) {
 	case *Nat44EiWorkerDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

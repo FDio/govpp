@@ -5,12 +5,13 @@ package pipe
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  pipe.
+// RPCService defines RPC service pipe.
 type RPCService interface {
 	PipeCreate(ctx context.Context, in *PipeCreate) (*PipeCreateReply, error)
 	PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDeleteReply, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) PipeCreate(ctx context.Context, in *PipeCreate) (*PipeCr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDeleteReply, error) {
@@ -40,7 +41,7 @@ func (c *serviceClient) PipeDelete(ctx context.Context, in *PipeDelete) (*PipeDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PipeDump(ctx context.Context, in *PipeDump) (RPCService_PipeDumpClient, error) {
@@ -76,6 +77,10 @@ func (c *serviceClient_PipeDumpClient) Recv() (*PipeDetails, error) {
 	case *PipeDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

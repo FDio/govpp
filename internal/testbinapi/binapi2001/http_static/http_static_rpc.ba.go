@@ -4,10 +4,11 @@ package http_static
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  http_static.
+// RPCService defines RPC service http_static.
 type RPCService interface {
 	HTTPStaticEnable(ctx context.Context, in *HTTPStaticEnable) (*HTTPStaticEnableReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) HTTPStaticEnable(ctx context.Context, in *HTTPStaticEnab
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

@@ -4,10 +4,11 @@ package ioam_vxlan_gpe
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  ioam_vxlan_gpe.
+// RPCService defines RPC service ioam_vxlan_gpe.
 type RPCService interface {
 	VxlanGpeIoamDisable(ctx context.Context, in *VxlanGpeIoamDisable) (*VxlanGpeIoamDisableReply, error)
 	VxlanGpeIoamEnable(ctx context.Context, in *VxlanGpeIoamEnable) (*VxlanGpeIoamEnableReply, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) VxlanGpeIoamDisable(ctx context.Context, in *VxlanGpeIoa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGpeIoamEnable(ctx context.Context, in *VxlanGpeIoamEnable) (*VxlanGpeIoamEnableReply, error) {
@@ -40,7 +41,7 @@ func (c *serviceClient) VxlanGpeIoamEnable(ctx context.Context, in *VxlanGpeIoam
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGpeIoamTransitDisable(ctx context.Context, in *VxlanGpeIoamTransitDisable) (*VxlanGpeIoamTransitDisableReply, error) {
@@ -49,7 +50,7 @@ func (c *serviceClient) VxlanGpeIoamTransitDisable(ctx context.Context, in *Vxla
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGpeIoamTransitEnable(ctx context.Context, in *VxlanGpeIoamTransitEnable) (*VxlanGpeIoamTransitEnableReply, error) {
@@ -58,7 +59,7 @@ func (c *serviceClient) VxlanGpeIoamTransitEnable(ctx context.Context, in *Vxlan
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGpeIoamVniDisable(ctx context.Context, in *VxlanGpeIoamVniDisable) (*VxlanGpeIoamVniDisableReply, error) {
@@ -67,7 +68,7 @@ func (c *serviceClient) VxlanGpeIoamVniDisable(ctx context.Context, in *VxlanGpe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGpeIoamVniEnable(ctx context.Context, in *VxlanGpeIoamVniEnable) (*VxlanGpeIoamVniEnableReply, error) {
@@ -76,5 +77,5 @@ func (c *serviceClient) VxlanGpeIoamVniEnable(ctx context.Context, in *VxlanGpeI
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

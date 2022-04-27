@@ -4,10 +4,11 @@ package sctp
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  sctp.
+// RPCService defines RPC service sctp.
 type RPCService interface {
 	SctpAddSrcDstConnection(ctx context.Context, in *SctpAddSrcDstConnection) (*SctpAddSrcDstConnectionReply, error)
 	SctpConfig(ctx context.Context, in *SctpConfig) (*SctpConfigReply, error)
@@ -28,7 +29,7 @@ func (c *serviceClient) SctpAddSrcDstConnection(ctx context.Context, in *SctpAdd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SctpConfig(ctx context.Context, in *SctpConfig) (*SctpConfigReply, error) {
@@ -37,7 +38,7 @@ func (c *serviceClient) SctpConfig(ctx context.Context, in *SctpConfig) (*SctpCo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SctpDelSrcDstConnection(ctx context.Context, in *SctpDelSrcDstConnection) (*SctpDelSrcDstConnectionReply, error) {
@@ -46,5 +47,5 @@ func (c *serviceClient) SctpDelSrcDstConnection(ctx context.Context, in *SctpDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

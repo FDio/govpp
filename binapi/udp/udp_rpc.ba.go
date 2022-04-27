@@ -8,11 +8,12 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service udp.
 type RPCService interface {
+	UDPDecapAddDel(ctx context.Context, in *UDPDecapAddDel) (*UDPDecapAddDelReply, error)
 	UDPEncapAdd(ctx context.Context, in *UDPEncapAdd) (*UDPEncapAddReply, error)
 	UDPEncapDel(ctx context.Context, in *UDPEncapDel) (*UDPEncapDelReply, error)
 	UDPEncapDump(ctx context.Context, in *UDPEncapDump) (RPCService_UDPEncapDumpClient, error)
@@ -24,6 +25,15 @@ type serviceClient struct {
 
 func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
+}
+
+func (c *serviceClient) UDPDecapAddDel(ctx context.Context, in *UDPDecapAddDel) (*UDPDecapAddDelReply, error) {
+	out := new(UDPDecapAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UDPEncapAdd(ctx context.Context, in *UDPEncapAdd) (*UDPEncapAddReply, error) {
@@ -53,7 +63,7 @@ func (c *serviceClient) UDPEncapDump(ctx context.Context, in *UDPEncapDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -76,7 +86,7 @@ func (c *serviceClient_UDPEncapDumpClient) Recv() (*UDPEncapDetails, error) {
 	switch m := msg.(type) {
 	case *UDPEncapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

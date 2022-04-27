@@ -5,12 +5,13 @@ package vxlan_gbp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  vxlan_gbp.
+// RPCService defines RPC service vxlan_gbp.
 type RPCService interface {
 	SwInterfaceSetVxlanGbpBypass(ctx context.Context, in *SwInterfaceSetVxlanGbpBypass) (*SwInterfaceSetVxlanGbpBypassReply, error)
 	VxlanGbpTunnelAddDel(ctx context.Context, in *VxlanGbpTunnelAddDel) (*VxlanGbpTunnelAddDelReply, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) SwInterfaceSetVxlanGbpBypass(ctx context.Context, in *Sw
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGbpTunnelAddDel(ctx context.Context, in *VxlanGbpTunnelAddDel) (*VxlanGbpTunnelAddDelReply, error) {
@@ -40,7 +41,7 @@ func (c *serviceClient) VxlanGbpTunnelAddDel(ctx context.Context, in *VxlanGbpTu
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanGbpTunnelDump(ctx context.Context, in *VxlanGbpTunnelDump) (RPCService_VxlanGbpTunnelDumpClient, error) {
@@ -76,6 +77,10 @@ func (c *serviceClient_VxlanGbpTunnelDumpClient) Recv() (*VxlanGbpTunnelDetails,
 	case *VxlanGbpTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

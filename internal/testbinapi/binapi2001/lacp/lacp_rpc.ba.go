@@ -5,12 +5,13 @@ package lacp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  lacp.
+// RPCService defines RPC service lacp.
 type RPCService interface {
 	SwInterfaceLacpDump(ctx context.Context, in *SwInterfaceLacpDump) (RPCService_SwInterfaceLacpDumpClient, error)
 }
@@ -56,6 +57,10 @@ func (c *serviceClient_SwInterfaceLacpDumpClient) Recv() (*SwInterfaceLacpDetail
 	case *SwInterfaceLacpDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

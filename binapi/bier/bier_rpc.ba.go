@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service bier.
@@ -52,7 +52,7 @@ func (c *serviceClient) BierDispEntryDump(ctx context.Context, in *BierDispEntry
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -75,7 +75,7 @@ func (c *serviceClient_BierDispEntryDumpClient) Recv() (*BierDispEntryDetails, e
 	switch m := msg.(type) {
 	case *BierDispEntryDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -104,7 +104,7 @@ func (c *serviceClient) BierDispTableDump(ctx context.Context, in *BierDispTable
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -127,7 +127,7 @@ func (c *serviceClient_BierDispTableDumpClient) Recv() (*BierDispTableDetails, e
 	switch m := msg.(type) {
 	case *BierDispTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -165,7 +165,7 @@ func (c *serviceClient) BierImpDump(ctx context.Context, in *BierImpDump) (RPCSe
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -188,7 +188,7 @@ func (c *serviceClient_BierImpDumpClient) Recv() (*BierImpDetails, error) {
 	switch m := msg.(type) {
 	case *BierImpDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -217,7 +217,7 @@ func (c *serviceClient) BierRouteDump(ctx context.Context, in *BierRouteDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -240,7 +240,7 @@ func (c *serviceClient_BierRouteDumpClient) Recv() (*BierRouteDetails, error) {
 	switch m := msg.(type) {
 	case *BierRouteDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -269,7 +269,7 @@ func (c *serviceClient) BierTableDump(ctx context.Context, in *BierTableDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -292,7 +292,7 @@ func (c *serviceClient_BierTableDumpClient) Recv() (*BierTableDetails, error) {
 	switch m := msg.(type) {
 	case *BierTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

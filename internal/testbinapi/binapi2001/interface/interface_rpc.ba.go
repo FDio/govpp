@@ -5,12 +5,13 @@ package interfaces
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  interface.
+// RPCService defines RPC service interface.
 type RPCService interface {
 	CollectDetailedInterfaceStats(ctx context.Context, in *CollectDetailedInterfaceStats) (*CollectDetailedInterfaceStatsReply, error)
 	CreateLoopback(ctx context.Context, in *CreateLoopback) (*CreateLoopbackReply, error)
@@ -54,7 +55,7 @@ func (c *serviceClient) CollectDetailedInterfaceStats(ctx context.Context, in *C
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CreateLoopback(ctx context.Context, in *CreateLoopback) (*CreateLoopbackReply, error) {
@@ -63,7 +64,7 @@ func (c *serviceClient) CreateLoopback(ctx context.Context, in *CreateLoopback) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CreateLoopbackInstance(ctx context.Context, in *CreateLoopbackInstance) (*CreateLoopbackInstanceReply, error) {
@@ -72,7 +73,7 @@ func (c *serviceClient) CreateLoopbackInstance(ctx context.Context, in *CreateLo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CreateSubif(ctx context.Context, in *CreateSubif) (*CreateSubifReply, error) {
@@ -81,7 +82,7 @@ func (c *serviceClient) CreateSubif(ctx context.Context, in *CreateSubif) (*Crea
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CreateVlanSubif(ctx context.Context, in *CreateVlanSubif) (*CreateVlanSubifReply, error) {
@@ -90,7 +91,7 @@ func (c *serviceClient) CreateVlanSubif(ctx context.Context, in *CreateVlanSubif
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DeleteLoopback(ctx context.Context, in *DeleteLoopback) (*DeleteLoopbackReply, error) {
@@ -99,7 +100,7 @@ func (c *serviceClient) DeleteLoopback(ctx context.Context, in *DeleteLoopback) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DeleteSubif(ctx context.Context, in *DeleteSubif) (*DeleteSubifReply, error) {
@@ -108,7 +109,7 @@ func (c *serviceClient) DeleteSubif(ctx context.Context, in *DeleteSubif) (*Dele
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) HwInterfaceSetMtu(ctx context.Context, in *HwInterfaceSetMtu) (*HwInterfaceSetMtuReply, error) {
@@ -117,7 +118,7 @@ func (c *serviceClient) HwInterfaceSetMtu(ctx context.Context, in *HwInterfaceSe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) InterfaceNameRenumber(ctx context.Context, in *InterfaceNameRenumber) (*InterfaceNameRenumberReply, error) {
@@ -126,7 +127,7 @@ func (c *serviceClient) InterfaceNameRenumber(ctx context.Context, in *Interface
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceAddDelAddress(ctx context.Context, in *SwInterfaceAddDelAddress) (*SwInterfaceAddDelAddressReply, error) {
@@ -135,7 +136,7 @@ func (c *serviceClient) SwInterfaceAddDelAddress(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceAddDelMacAddress(ctx context.Context, in *SwInterfaceAddDelMacAddress) (*SwInterfaceAddDelMacAddressReply, error) {
@@ -144,7 +145,7 @@ func (c *serviceClient) SwInterfaceAddDelMacAddress(ctx context.Context, in *SwI
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceClearStats(ctx context.Context, in *SwInterfaceClearStats) (*SwInterfaceClearStatsReply, error) {
@@ -153,7 +154,7 @@ func (c *serviceClient) SwInterfaceClearStats(ctx context.Context, in *SwInterfa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceDump(ctx context.Context, in *SwInterfaceDump) (RPCService_SwInterfaceDumpClient, error) {
@@ -189,6 +190,10 @@ func (c *serviceClient_SwInterfaceDumpClient) Recv() (*SwInterfaceDetails, error
 	case *SwInterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -201,7 +206,7 @@ func (c *serviceClient) SwInterfaceGetMacAddress(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceGetTable(ctx context.Context, in *SwInterfaceGetTable) (*SwInterfaceGetTableReply, error) {
@@ -210,7 +215,7 @@ func (c *serviceClient) SwInterfaceGetTable(ctx context.Context, in *SwInterface
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceRxPlacementDump(ctx context.Context, in *SwInterfaceRxPlacementDump) (RPCService_SwInterfaceRxPlacementDumpClient, error) {
@@ -246,6 +251,10 @@ func (c *serviceClient_SwInterfaceRxPlacementDumpClient) Recv() (*SwInterfaceRxP
 	case *SwInterfaceRxPlacementDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -258,7 +267,7 @@ func (c *serviceClient) SwInterfaceSetFlags(ctx context.Context, in *SwInterface
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetIPDirectedBroadcast(ctx context.Context, in *SwInterfaceSetIPDirectedBroadcast) (*SwInterfaceSetIPDirectedBroadcastReply, error) {
@@ -267,7 +276,7 @@ func (c *serviceClient) SwInterfaceSetIPDirectedBroadcast(ctx context.Context, i
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetMacAddress(ctx context.Context, in *SwInterfaceSetMacAddress) (*SwInterfaceSetMacAddressReply, error) {
@@ -276,7 +285,7 @@ func (c *serviceClient) SwInterfaceSetMacAddress(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetMtu(ctx context.Context, in *SwInterfaceSetMtu) (*SwInterfaceSetMtuReply, error) {
@@ -285,7 +294,7 @@ func (c *serviceClient) SwInterfaceSetMtu(ctx context.Context, in *SwInterfaceSe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetRxMode(ctx context.Context, in *SwInterfaceSetRxMode) (*SwInterfaceSetRxModeReply, error) {
@@ -294,7 +303,7 @@ func (c *serviceClient) SwInterfaceSetRxMode(ctx context.Context, in *SwInterfac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetRxPlacement(ctx context.Context, in *SwInterfaceSetRxPlacement) (*SwInterfaceSetRxPlacementReply, error) {
@@ -303,7 +312,7 @@ func (c *serviceClient) SwInterfaceSetRxPlacement(ctx context.Context, in *SwInt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetTable(ctx context.Context, in *SwInterfaceSetTable) (*SwInterfaceSetTableReply, error) {
@@ -312,7 +321,7 @@ func (c *serviceClient) SwInterfaceSetTable(ctx context.Context, in *SwInterface
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetUnnumbered(ctx context.Context, in *SwInterfaceSetUnnumbered) (*SwInterfaceSetUnnumberedReply, error) {
@@ -321,7 +330,7 @@ func (c *serviceClient) SwInterfaceSetUnnumbered(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceTagAddDel(ctx context.Context, in *SwInterfaceTagAddDel) (*SwInterfaceTagAddDelReply, error) {
@@ -330,7 +339,7 @@ func (c *serviceClient) SwInterfaceTagAddDel(ctx context.Context, in *SwInterfac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantInterfaceEvents(ctx context.Context, in *WantInterfaceEvents) (*WantInterfaceEventsReply, error) {
@@ -339,5 +348,5 @@ func (c *serviceClient) WantInterfaceEvents(ctx context.Context, in *WantInterfa
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

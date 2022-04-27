@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service lisp.
@@ -152,7 +152,7 @@ func (c *serviceClient) LispEidTableDump(ctx context.Context, in *LispEidTableDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -175,7 +175,7 @@ func (c *serviceClient_LispEidTableDumpClient) Recv() (*LispEidTableDetails, err
 	switch m := msg.(type) {
 	case *LispEidTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -195,7 +195,7 @@ func (c *serviceClient) LispEidTableMapDump(ctx context.Context, in *LispEidTabl
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -218,7 +218,7 @@ func (c *serviceClient_LispEidTableMapDumpClient) Recv() (*LispEidTableMapDetail
 	switch m := msg.(type) {
 	case *LispEidTableMapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -238,7 +238,7 @@ func (c *serviceClient) LispEidTableVniDump(ctx context.Context, in *LispEidTabl
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -261,7 +261,7 @@ func (c *serviceClient_LispEidTableVniDumpClient) Recv() (*LispEidTableVniDetail
 	switch m := msg.(type) {
 	case *LispEidTableVniDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -299,7 +299,7 @@ func (c *serviceClient) LispLocatorDump(ctx context.Context, in *LispLocatorDump
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -322,7 +322,7 @@ func (c *serviceClient_LispLocatorDumpClient) Recv() (*LispLocatorDetails, error
 	switch m := msg.(type) {
 	case *LispLocatorDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -342,7 +342,7 @@ func (c *serviceClient) LispLocatorSetDump(ctx context.Context, in *LispLocatorS
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -365,7 +365,7 @@ func (c *serviceClient_LispLocatorSetDumpClient) Recv() (*LispLocatorSetDetails,
 	switch m := msg.(type) {
 	case *LispLocatorSetDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -403,7 +403,7 @@ func (c *serviceClient) LispMapResolverDump(ctx context.Context, in *LispMapReso
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -426,7 +426,7 @@ func (c *serviceClient_LispMapResolverDumpClient) Recv() (*LispMapResolverDetail
 	switch m := msg.(type) {
 	case *LispMapResolverDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -446,7 +446,7 @@ func (c *serviceClient) LispMapServerDump(ctx context.Context, in *LispMapServer
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -469,7 +469,7 @@ func (c *serviceClient_LispMapServerDumpClient) Recv() (*LispMapServerDetails, e
 	switch m := msg.(type) {
 	case *LispMapServerDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

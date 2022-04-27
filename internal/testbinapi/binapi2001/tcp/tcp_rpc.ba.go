@@ -4,10 +4,11 @@ package tcp
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  tcp.
+// RPCService defines RPC service tcp.
 type RPCService interface {
 	TCPConfigureSrcAddresses(ctx context.Context, in *TCPConfigureSrcAddresses) (*TCPConfigureSrcAddressesReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) TCPConfigureSrcAddresses(ctx context.Context, in *TCPCon
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

@@ -5,12 +5,13 @@ package classify
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  classify.
+// RPCService defines RPC service classify.
 type RPCService interface {
 	ClassifyAddDelSession(ctx context.Context, in *ClassifyAddDelSession) (*ClassifyAddDelSessionReply, error)
 	ClassifyAddDelTable(ctx context.Context, in *ClassifyAddDelTable) (*ClassifyAddDelTableReply, error)
@@ -42,7 +43,7 @@ func (c *serviceClient) ClassifyAddDelSession(ctx context.Context, in *ClassifyA
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifyAddDelTable(ctx context.Context, in *ClassifyAddDelTable) (*ClassifyAddDelTableReply, error) {
@@ -51,7 +52,7 @@ func (c *serviceClient) ClassifyAddDelTable(ctx context.Context, in *ClassifyAdd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifySessionDump(ctx context.Context, in *ClassifySessionDump) (RPCService_ClassifySessionDumpClient, error) {
@@ -87,6 +88,10 @@ func (c *serviceClient_ClassifySessionDumpClient) Recv() (*ClassifySessionDetail
 	case *ClassifySessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -99,7 +104,7 @@ func (c *serviceClient) ClassifySetInterfaceIPTable(ctx context.Context, in *Cla
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifySetInterfaceL2Tables(ctx context.Context, in *ClassifySetInterfaceL2Tables) (*ClassifySetInterfaceL2TablesReply, error) {
@@ -108,7 +113,7 @@ func (c *serviceClient) ClassifySetInterfaceL2Tables(ctx context.Context, in *Cl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifyTableByInterface(ctx context.Context, in *ClassifyTableByInterface) (*ClassifyTableByInterfaceReply, error) {
@@ -117,7 +122,7 @@ func (c *serviceClient) ClassifyTableByInterface(ctx context.Context, in *Classi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifyTableIds(ctx context.Context, in *ClassifyTableIds) (*ClassifyTableIdsReply, error) {
@@ -126,7 +131,7 @@ func (c *serviceClient) ClassifyTableIds(ctx context.Context, in *ClassifyTableI
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ClassifyTableInfo(ctx context.Context, in *ClassifyTableInfo) (*ClassifyTableInfoReply, error) {
@@ -135,7 +140,7 @@ func (c *serviceClient) ClassifyTableInfo(ctx context.Context, in *ClassifyTable
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) FlowClassifyDump(ctx context.Context, in *FlowClassifyDump) (RPCService_FlowClassifyDumpClient, error) {
@@ -171,6 +176,10 @@ func (c *serviceClient_FlowClassifyDumpClient) Recv() (*FlowClassifyDetails, err
 	case *FlowClassifyDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -183,7 +192,7 @@ func (c *serviceClient) FlowClassifySetInterface(ctx context.Context, in *FlowCl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) InputACLSetInterface(ctx context.Context, in *InputACLSetInterface) (*InputACLSetInterfaceReply, error) {
@@ -192,7 +201,7 @@ func (c *serviceClient) InputACLSetInterface(ctx context.Context, in *InputACLSe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) OutputACLSetInterface(ctx context.Context, in *OutputACLSetInterface) (*OutputACLSetInterfaceReply, error) {
@@ -201,7 +210,7 @@ func (c *serviceClient) OutputACLSetInterface(ctx context.Context, in *OutputACL
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PolicerClassifyDump(ctx context.Context, in *PolicerClassifyDump) (RPCService_PolicerClassifyDumpClient, error) {
@@ -237,6 +246,10 @@ func (c *serviceClient_PolicerClassifyDumpClient) Recv() (*PolicerClassifyDetail
 	case *PolicerClassifyDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -249,5 +262,5 @@ func (c *serviceClient) PolicerClassifySetInterface(ctx context.Context, in *Pol
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

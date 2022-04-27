@@ -30,6 +30,7 @@ import (
 
 	"git.fd.io/govpp.git"
 	"git.fd.io/govpp.git/adapter/socketclient"
+	"git.fd.io/govpp.git/binapi/vlib"
 	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/binapigen"
 	"git.fd.io/govpp.git/binapigen/vppapi"
@@ -154,8 +155,8 @@ func sendCLI(args []string) {
 		log.Fatal(err)
 	}
 
-	client := vpe.NewServiceClient(conn)
-	reply, err := client.CliInband(context.Background(), &vpe.CliInband{
+	client := vlib.NewServiceClient(conn)
+	reply, err := client.CliInband(context.Background(), &vlib.CliInband{
 		Cmd: cmd,
 	})
 	if err != nil {

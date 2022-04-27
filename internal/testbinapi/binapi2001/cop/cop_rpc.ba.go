@@ -4,10 +4,11 @@ package cop
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  cop.
+// RPCService defines RPC service cop.
 type RPCService interface {
 	CopInterfaceEnableDisable(ctx context.Context, in *CopInterfaceEnableDisable) (*CopInterfaceEnableDisableReply, error)
 	CopWhitelistEnableDisable(ctx context.Context, in *CopWhitelistEnableDisable) (*CopWhitelistEnableDisableReply, error)
@@ -27,7 +28,7 @@ func (c *serviceClient) CopInterfaceEnableDisable(ctx context.Context, in *CopIn
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CopWhitelistEnableDisable(ctx context.Context, in *CopWhitelistEnableDisable) (*CopWhitelistEnableDisableReply, error) {
@@ -36,5 +37,5 @@ func (c *serviceClient) CopWhitelistEnableDisable(ctx context.Context, in *CopWh
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

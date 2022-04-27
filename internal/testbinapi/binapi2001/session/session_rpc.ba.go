@@ -5,12 +5,13 @@ package session
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  session.
+// RPCService defines RPC service session.
 type RPCService interface {
 	AppAddCertKeyPair(ctx context.Context, in *AppAddCertKeyPair) (*AppAddCertKeyPairReply, error)
 	AppAttach(ctx context.Context, in *AppAttach) (*AppAttachReply, error)
@@ -50,7 +51,7 @@ func (c *serviceClient) AppAddCertKeyPair(ctx context.Context, in *AppAddCertKey
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppAttach(ctx context.Context, in *AppAttach) (*AppAttachReply, error) {
@@ -59,7 +60,7 @@ func (c *serviceClient) AppAttach(ctx context.Context, in *AppAttach) (*AppAttac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppCutThroughRegistrationAdd(ctx context.Context, in *AppCutThroughRegistrationAdd) (*AppCutThroughRegistrationAddReply, error) {
@@ -68,7 +69,7 @@ func (c *serviceClient) AppCutThroughRegistrationAdd(ctx context.Context, in *Ap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppDelCertKeyPair(ctx context.Context, in *AppDelCertKeyPair) (*AppDelCertKeyPairReply, error) {
@@ -77,7 +78,7 @@ func (c *serviceClient) AppDelCertKeyPair(ctx context.Context, in *AppDelCertKey
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppNamespaceAddDel(ctx context.Context, in *AppNamespaceAddDel) (*AppNamespaceAddDelReply, error) {
@@ -86,7 +87,7 @@ func (c *serviceClient) AppNamespaceAddDel(ctx context.Context, in *AppNamespace
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AppWorkerAddDel(ctx context.Context, in *AppWorkerAddDel) (*AppWorkerAddDelReply, error) {
@@ -95,7 +96,7 @@ func (c *serviceClient) AppWorkerAddDel(ctx context.Context, in *AppWorkerAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationAttach(ctx context.Context, in *ApplicationAttach) (*ApplicationAttachReply, error) {
@@ -104,7 +105,7 @@ func (c *serviceClient) ApplicationAttach(ctx context.Context, in *ApplicationAt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationDetach(ctx context.Context, in *ApplicationDetach) (*ApplicationDetachReply, error) {
@@ -113,7 +114,7 @@ func (c *serviceClient) ApplicationDetach(ctx context.Context, in *ApplicationDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationTLSCertAdd(ctx context.Context, in *ApplicationTLSCertAdd) (*ApplicationTLSCertAddReply, error) {
@@ -122,7 +123,7 @@ func (c *serviceClient) ApplicationTLSCertAdd(ctx context.Context, in *Applicati
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ApplicationTLSKeyAdd(ctx context.Context, in *ApplicationTLSKeyAdd) (*ApplicationTLSKeyAddReply, error) {
@@ -131,7 +132,7 @@ func (c *serviceClient) ApplicationTLSKeyAdd(ctx context.Context, in *Applicatio
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BindSock(ctx context.Context, in *BindSock) (*BindSockReply, error) {
@@ -140,7 +141,7 @@ func (c *serviceClient) BindSock(ctx context.Context, in *BindSock) (*BindSockRe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BindURI(ctx context.Context, in *BindURI) (*BindURIReply, error) {
@@ -149,7 +150,7 @@ func (c *serviceClient) BindURI(ctx context.Context, in *BindURI) (*BindURIReply
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ConnectSock(ctx context.Context, in *ConnectSock) (*ConnectSockReply, error) {
@@ -158,7 +159,7 @@ func (c *serviceClient) ConnectSock(ctx context.Context, in *ConnectSock) (*Conn
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ConnectURI(ctx context.Context, in *ConnectURI) (*ConnectURIReply, error) {
@@ -167,7 +168,7 @@ func (c *serviceClient) ConnectURI(ctx context.Context, in *ConnectURI) (*Connec
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DisconnectSession(ctx context.Context, in *DisconnectSession) (*DisconnectSessionReply, error) {
@@ -176,7 +177,7 @@ func (c *serviceClient) DisconnectSession(ctx context.Context, in *DisconnectSes
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MapAnotherSegment(ctx context.Context, in *MapAnotherSegment) (*MapAnotherSegmentReply, error) {
@@ -185,7 +186,7 @@ func (c *serviceClient) MapAnotherSegment(ctx context.Context, in *MapAnotherSeg
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionEnableDisable(ctx context.Context, in *SessionEnableDisable) (*SessionEnableDisableReply, error) {
@@ -194,7 +195,7 @@ func (c *serviceClient) SessionEnableDisable(ctx context.Context, in *SessionEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionRuleAddDel(ctx context.Context, in *SessionRuleAddDel) (*SessionRuleAddDelReply, error) {
@@ -203,7 +204,7 @@ func (c *serviceClient) SessionRuleAddDel(ctx context.Context, in *SessionRuleAd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SessionRulesDump(ctx context.Context, in *SessionRulesDump) (RPCService_SessionRulesDumpClient, error) {
@@ -239,6 +240,10 @@ func (c *serviceClient_SessionRulesDumpClient) Recv() (*SessionRulesDetails, err
 	case *SessionRulesDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -251,7 +256,7 @@ func (c *serviceClient) UnbindSock(ctx context.Context, in *UnbindSock) (*Unbind
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UnbindURI(ctx context.Context, in *UnbindURI) (*UnbindURIReply, error) {
@@ -260,7 +265,7 @@ func (c *serviceClient) UnbindURI(ctx context.Context, in *UnbindURI) (*UnbindUR
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UnmapSegment(ctx context.Context, in *UnmapSegment) (*UnmapSegmentReply, error) {
@@ -269,5 +274,5 @@ func (c *serviceClient) UnmapSegment(ctx context.Context, in *UnmapSegment) (*Un
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

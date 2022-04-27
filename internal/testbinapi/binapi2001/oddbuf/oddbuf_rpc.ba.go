@@ -4,10 +4,11 @@ package oddbuf
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  oddbuf.
+// RPCService defines RPC service oddbuf.
 type RPCService interface {
 	OddbufEnableDisable(ctx context.Context, in *OddbufEnableDisable) (*OddbufEnableDisableReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) OddbufEnableDisable(ctx context.Context, in *OddbufEnabl
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

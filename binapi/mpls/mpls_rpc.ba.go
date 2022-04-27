@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service mpls.
@@ -58,7 +58,7 @@ func (c *serviceClient) MplsRouteDump(ctx context.Context, in *MplsRouteDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -81,7 +81,7 @@ func (c *serviceClient_MplsRouteDumpClient) Recv() (*MplsRouteDetails, error) {
 	switch m := msg.(type) {
 	case *MplsRouteDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -110,7 +110,7 @@ func (c *serviceClient) MplsTableDump(ctx context.Context, in *MplsTableDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -133,7 +133,7 @@ func (c *serviceClient_MplsTableDumpClient) Recv() (*MplsTableDetails, error) {
 	switch m := msg.(type) {
 	case *MplsTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -162,7 +162,7 @@ func (c *serviceClient) MplsTunnelDump(ctx context.Context, in *MplsTunnelDump) 
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -185,7 +185,7 @@ func (c *serviceClient_MplsTunnelDumpClient) Recv() (*MplsTunnelDetails, error) 
 	switch m := msg.(type) {
 	case *MplsTunnelDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

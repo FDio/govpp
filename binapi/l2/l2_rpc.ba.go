@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service l2.
@@ -71,7 +71,7 @@ func (c *serviceClient) BdIPMacDump(ctx context.Context, in *BdIPMacDump) (RPCSe
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -94,7 +94,7 @@ func (c *serviceClient_BdIPMacDumpClient) Recv() (*BdIPMacDetails, error) {
 	switch m := msg.(type) {
 	case *BdIPMacDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -132,7 +132,7 @@ func (c *serviceClient) BridgeDomainDump(ctx context.Context, in *BridgeDomainDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -155,7 +155,7 @@ func (c *serviceClient_BridgeDomainDumpClient) Recv() (*BridgeDomainDetails, err
 	switch m := msg.(type) {
 	case *BridgeDomainDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -238,7 +238,7 @@ func (c *serviceClient) L2FibTableDump(ctx context.Context, in *L2FibTableDump) 
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -261,7 +261,7 @@ func (c *serviceClient_L2FibTableDumpClient) Recv() (*L2FibTableDetails, error) 
 	switch m := msg.(type) {
 	case *L2FibTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -326,7 +326,7 @@ func (c *serviceClient) L2XconnectDump(ctx context.Context, in *L2XconnectDump) 
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -349,7 +349,7 @@ func (c *serviceClient_L2XconnectDumpClient) Recv() (*L2XconnectDetails, error) 
 	switch m := msg.(type) {
 	case *L2XconnectDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

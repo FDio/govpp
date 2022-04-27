@@ -5,12 +5,13 @@ package ip_neighbor
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  ip_neighbor.
+// RPCService defines RPC service ip_neighbor.
 type RPCService interface {
 	IPNeighborAddDel(ctx context.Context, in *IPNeighborAddDel) (*IPNeighborAddDelReply, error)
 	IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) IPNeighborAddDel(ctx context.Context, in *IPNeighborAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error) {
@@ -41,7 +42,7 @@ func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConf
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IPNeighborDump(ctx context.Context, in *IPNeighborDump) (RPCService_IPNeighborDumpClient, error) {
@@ -77,6 +78,10 @@ func (c *serviceClient_IPNeighborDumpClient) Recv() (*IPNeighborDetails, error) 
 	case *IPNeighborDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -89,5 +94,5 @@ func (c *serviceClient) WantIPNeighborEvents(ctx context.Context, in *WantIPNeig
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

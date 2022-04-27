@@ -5,12 +5,13 @@ package geneve
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  geneve.
+// RPCService defines RPC service geneve.
 type RPCService interface {
 	GeneveAddDelTunnel(ctx context.Context, in *GeneveAddDelTunnel) (*GeneveAddDelTunnelReply, error)
 	GeneveTunnelDump(ctx context.Context, in *GeneveTunnelDump) (RPCService_GeneveTunnelDumpClient, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) GeneveAddDelTunnel(ctx context.Context, in *GeneveAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GeneveTunnelDump(ctx context.Context, in *GeneveTunnelDump) (RPCService_GeneveTunnelDumpClient, error) {
@@ -67,6 +68,10 @@ func (c *serviceClient_GeneveTunnelDumpClient) Recv() (*GeneveTunnelDetails, err
 	case *GeneveTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -79,5 +84,5 @@ func (c *serviceClient) SwInterfaceSetGeneveBypass(ctx context.Context, in *SwIn
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

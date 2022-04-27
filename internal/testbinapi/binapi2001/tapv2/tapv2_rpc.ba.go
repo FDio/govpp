@@ -5,12 +5,13 @@ package tapv2
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  tapv2.
+// RPCService defines RPC service tapv2.
 type RPCService interface {
 	SwInterfaceTapV2Dump(ctx context.Context, in *SwInterfaceTapV2Dump) (RPCService_SwInterfaceTapV2DumpClient, error)
 	TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapCreateV2Reply, error)
@@ -58,6 +59,10 @@ func (c *serviceClient_SwInterfaceTapV2DumpClient) Recv() (*SwInterfaceTapV2Deta
 	case *SwInterfaceTapV2Details:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -70,7 +75,7 @@ func (c *serviceClient) TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapC
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) TapDeleteV2(ctx context.Context, in *TapDeleteV2) (*TapDeleteV2Reply, error) {
@@ -79,5 +84,5 @@ func (c *serviceClient) TapDeleteV2(ctx context.Context, in *TapDeleteV2) (*TapD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

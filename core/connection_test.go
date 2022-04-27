@@ -25,7 +25,7 @@ import (
 	"git.fd.io/govpp.git/binapi/ethernet_types"
 	interfaces "git.fd.io/govpp.git/binapi/interface"
 	"git.fd.io/govpp.git/binapi/interface_types"
-	"git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 	"git.fd.io/govpp.git/codec"
 	"git.fd.io/govpp.git/core"
 )
@@ -108,7 +108,7 @@ func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
 
 	// make control ping reply fail so that connection.healthCheckLoop()
 	// initiates reconnection.
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{
+	ctx.mockVpp.MockReply(&memclnt.ControlPingReply{
 		Retval: -1,
 	})
 	time.Sleep(time.Duration(1+core.HealthCheckThreshold) * (core.HealthCheckInterval + 2*core.HealthCheckReplyTimeout))
@@ -130,11 +130,11 @@ func TestCodec(t *testing.T) {
 	Expect(msg1.MacAddress).To(BeEquivalentTo(ethernet_types.MacAddress{1, 2, 3, 4, 5, 6}))
 
 	// reply
-	data, err = msgCodec.EncodeMsg(&vpe.ControlPingReply{Retval: 55}, 22)
+	data, err = msgCodec.EncodeMsg(&memclnt.ControlPingReply{Retval: 55}, 22)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(data).ShouldNot(BeEmpty())
 
-	msg2 := &vpe.ControlPingReply{}
+	msg2 := &memclnt.ControlPingReply{}
 	err = msgCodec.DecodeMsg(data, msg2)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(msg2.Retval).To(BeEquivalentTo(55))
@@ -157,7 +157,7 @@ func TestCodecNegative(t *testing.T) {
 	Expect(err.Error()).To(ContainSubstring("nil message"))
 
 	// nil data for decoding
-	err = msgCodec.DecodeMsg(nil, &vpe.ControlPingReply{})
+	err = msgCodec.DecodeMsg(nil, &memclnt.ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("panic"))
 }
@@ -168,13 +168,13 @@ func TestSimpleRequestsWithSequenceNumbers(t *testing.T) {
 
 	var reqCtx []api.RequestCtx
 	for i := 0; i < 10; i++ {
-		ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
-		req := &vpe.ControlPing{}
+		ctx.mockVpp.MockReply(&memclnt.ControlPingReply{})
+		req := &memclnt.ControlPing{}
 		reqCtx = append(reqCtx, ctx.ch.SendRequest(req))
 	}
 
 	for i := 0; i < 10; i++ {
-		reply := &vpe.ControlPingReply{}
+		reply := &memclnt.ControlPingReply{}
 		err := reqCtx[i].ReceiveReply(reply)
 		Expect(err).ShouldNot(HaveOccurred())
 	}
@@ -189,7 +189,7 @@ func TestMultiRequestsWithSequenceNumbers(t *testing.T) {
 		msgs = append(msgs, &interfaces.SwInterfaceDetails{SwIfIndex: interface_types.InterfaceIndex(i)})
 	}
 	ctx.mockVpp.MockReply(msgs...)
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
+	ctx.mockVpp.MockReply(&memclnt.ControlPingReply{})
 
 	// send multipart request
 	reqCtx := ctx.ch.SendMultiRequest(&interfaces.SwInterfaceDump{})
@@ -221,15 +221,15 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 
 	// reply for a previous timeouted requests to be ignored
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{
-		Msg:    &vpe.ControlPingReply{},
+		Msg:    &memclnt.ControlPingReply{},
 		SeqNum: 0,
 	})
 
 	// send reply later
-	req1 := &vpe.ControlPing{}
+	req1 := &memclnt.ControlPing{}
 	reqCtx1 := ctx.ch.SendRequest(req1)
 
-	reply := &vpe.ControlPingReply{}
+	reply := &memclnt.ControlPingReply{}
 	err := reqCtx1.ReceiveReply(reply)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
@@ -237,21 +237,21 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	ctx.mockVpp.MockReplyWithContext(
 		// reply for the previous request
 		mock.MsgWithContext{
-			Msg:    &vpe.ControlPingReply{},
+			Msg:    &memclnt.ControlPingReply{},
 			SeqNum: 1,
 		},
 		// reply for the next request
 		mock.MsgWithContext{
-			Msg:    &vpe.ControlPingReply{},
+			Msg:    &memclnt.ControlPingReply{},
 			SeqNum: 2,
 		})
 
 	// next request
-	req2 := &vpe.ControlPing{}
+	req2 := &memclnt.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
 	// second request should ignore the first reply and return the second one
-	reply = &vpe.ControlPingReply{}
+	reply = &memclnt.ControlPingReply{}
 	err = reqCtx2.ReceiveReply(reply)
 	Expect(err).To(BeNil())
 }
@@ -261,34 +261,34 @@ func TestSimpleRequestsWithMissingReply(t *testing.T) {
 	defer ctx.teardownTest()
 
 	// request without reply
-	req1 := &vpe.ControlPing{}
+	req1 := &memclnt.ControlPing{}
 	reqCtx1 := ctx.ch.SendRequest(req1)
 
 	// another request without reply
-	req2 := &vpe.ControlPing{}
+	req2 := &memclnt.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
 	// third request with reply
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{
-		Msg:    &vpe.ControlPingReply{},
+		Msg:    &memclnt.ControlPingReply{},
 		SeqNum: 3,
 	})
-	req3 := &vpe.ControlPing{}
+	req3 := &memclnt.ControlPing{}
 	reqCtx3 := ctx.ch.SendRequest(req3)
 
 	// the first two should fail, but not consume reply for the 3rd
-	reply := &vpe.ControlPingReply{}
+	reply := &memclnt.ControlPingReply{}
 	err := reqCtx1.ReceiveReply(reply)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(Equal("missing binary API reply with sequence number: 1"))
 
-	reply = &vpe.ControlPingReply{}
+	reply = &memclnt.ControlPingReply{}
 	err = reqCtx2.ReceiveReply(reply)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(Equal("missing binary API reply with sequence number: 2"))
 
 	// the second request should succeed
-	reply = &vpe.ControlPingReply{}
+	reply = &memclnt.ControlPingReply{}
 	err = reqCtx3.ReceiveReply(reply)
 	Expect(err).To(BeNil())
 }
@@ -299,9 +299,9 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 
 	// replies for a previous timeouted requests to be ignored
 	msgs := []mock.MsgWithContext{
-		{Msg: &vpe.ControlPingReply{}, SeqNum: 0xffff - 1},
-		{Msg: &vpe.ControlPingReply{}, SeqNum: 0xffff},
-		{Msg: &vpe.ControlPingReply{}, SeqNum: 0},
+		{Msg: &memclnt.ControlPingReply{}, SeqNum: 0xffff - 1},
+		{Msg: &memclnt.ControlPingReply{}, SeqNum: 0xffff},
+		{Msg: &memclnt.ControlPingReply{}, SeqNum: 0},
 	}
 	for i := 0; i < 10; i++ {
 		msgs = append(msgs, mock.MsgWithContext{
@@ -314,7 +314,7 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 
 	// reply for a next request
 	msgs = append(msgs, mock.MsgWithContext{
-		Msg:    &vpe.ControlPingReply{},
+		Msg:    &memclnt.ControlPingReply{},
 		SeqNum: 2,
 	})
 
@@ -346,8 +346,8 @@ func TestMultiRequestsWithErrors(t *testing.T) {
 	Expect(err.Error()).To(Equal("missing binary API reply with sequence number: 1"))
 
 	// reply for the second request has not been consumed
-	reqCtx2 := ctx.ch.SendRequest(&vpe.ControlPing{})
-	reply2 := &vpe.ControlPingReply{}
+	reqCtx2 := ctx.ch.SendRequest(&memclnt.ControlPing{})
+	reply2 := &memclnt.ControlPingReply{}
 	err = reqCtx2.ReceiveReply(reply2)
 	Expect(err).To(BeNil())
 }
@@ -360,23 +360,23 @@ func TestRequestsOrdering(t *testing.T) {
 	// some replies will get thrown away
 
 	// first request
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
-	req1 := &vpe.ControlPing{}
+	ctx.mockVpp.MockReply(&memclnt.ControlPingReply{})
+	req1 := &memclnt.ControlPing{}
 	reqCtx1 := ctx.ch.SendRequest(req1)
 
 	// second request
-	ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
-	req2 := &vpe.ControlPing{}
+	ctx.mockVpp.MockReply(&memclnt.ControlPingReply{})
+	req2 := &memclnt.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
 
 	// if reply for the second request is read first, the reply for the first
 	// request gets thrown away.
-	reply2 := &vpe.ControlPingReply{}
+	reply2 := &memclnt.ControlPingReply{}
 	err := reqCtx2.ReceiveReply(reply2)
 	Expect(err).To(BeNil())
 
 	// first request has already been considered closed
-	reply1 := &vpe.ControlPingReply{}
+	reply1 := &memclnt.ControlPingReply{}
 	err = reqCtx1.ReceiveReply(reply1)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
@@ -391,12 +391,12 @@ func TestCycleOverSetOfSequenceNumbers(t *testing.T) {
 
 	for i := 0; i < numIters+30; i++ {
 		if i < numIters {
-			ctx.mockVpp.MockReply(&vpe.ControlPingReply{})
-			req := &vpe.ControlPing{}
+			ctx.mockVpp.MockReply(&memclnt.ControlPingReply{})
+			req := &memclnt.ControlPing{}
 			reqCtx[i] = ctx.ch.SendRequest(req)
 		}
 		if i > 30 {
-			reply := &vpe.ControlPingReply{}
+			reply := &memclnt.ControlPingReply{}
 			err := reqCtx[i-30].ReceiveReply(reply)
 			Expect(err).ShouldNot(HaveOccurred())
 		}

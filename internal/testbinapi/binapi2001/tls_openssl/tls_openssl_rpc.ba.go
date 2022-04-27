@@ -4,10 +4,11 @@ package tls_openssl
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  tls_openssl.
+// RPCService defines RPC service tls_openssl.
 type RPCService interface {
 	TLSOpensslSetEngine(ctx context.Context, in *TLSOpensslSetEngine) (*TLSOpensslSetEngineReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) TLSOpensslSetEngine(ctx context.Context, in *TLSOpensslS
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

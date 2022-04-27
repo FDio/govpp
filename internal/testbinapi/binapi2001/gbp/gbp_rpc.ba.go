@@ -5,12 +5,13 @@ package gbp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  gbp.
+// RPCService defines RPC service gbp.
 type RPCService interface {
 	GbpBridgeDomainAdd(ctx context.Context, in *GbpBridgeDomainAdd) (*GbpBridgeDomainAddReply, error)
 	GbpBridgeDomainDel(ctx context.Context, in *GbpBridgeDomainDel) (*GbpBridgeDomainDelReply, error)
@@ -51,7 +52,7 @@ func (c *serviceClient) GbpBridgeDomainAdd(ctx context.Context, in *GbpBridgeDom
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpBridgeDomainDel(ctx context.Context, in *GbpBridgeDomainDel) (*GbpBridgeDomainDelReply, error) {
@@ -60,7 +61,7 @@ func (c *serviceClient) GbpBridgeDomainDel(ctx context.Context, in *GbpBridgeDom
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpBridgeDomainDump(ctx context.Context, in *GbpBridgeDomainDump) (RPCService_GbpBridgeDomainDumpClient, error) {
@@ -96,6 +97,10 @@ func (c *serviceClient_GbpBridgeDomainDumpClient) Recv() (*GbpBridgeDomainDetail
 	case *GbpBridgeDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -108,7 +113,7 @@ func (c *serviceClient) GbpContractAddDel(ctx context.Context, in *GbpContractAd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpContractDump(ctx context.Context, in *GbpContractDump) (RPCService_GbpContractDumpClient, error) {
@@ -144,6 +149,10 @@ func (c *serviceClient_GbpContractDumpClient) Recv() (*GbpContractDetails, error
 	case *GbpContractDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -156,7 +165,7 @@ func (c *serviceClient) GbpEndpointAdd(ctx context.Context, in *GbpEndpointAdd) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpEndpointDel(ctx context.Context, in *GbpEndpointDel) (*GbpEndpointDelReply, error) {
@@ -165,7 +174,7 @@ func (c *serviceClient) GbpEndpointDel(ctx context.Context, in *GbpEndpointDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpEndpointDump(ctx context.Context, in *GbpEndpointDump) (RPCService_GbpEndpointDumpClient, error) {
@@ -201,6 +210,10 @@ func (c *serviceClient_GbpEndpointDumpClient) Recv() (*GbpEndpointDetails, error
 	case *GbpEndpointDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -213,7 +226,7 @@ func (c *serviceClient) GbpEndpointGroupAdd(ctx context.Context, in *GbpEndpoint
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpEndpointGroupDel(ctx context.Context, in *GbpEndpointGroupDel) (*GbpEndpointGroupDelReply, error) {
@@ -222,7 +235,7 @@ func (c *serviceClient) GbpEndpointGroupDel(ctx context.Context, in *GbpEndpoint
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpEndpointGroupDump(ctx context.Context, in *GbpEndpointGroupDump) (RPCService_GbpEndpointGroupDumpClient, error) {
@@ -258,6 +271,10 @@ func (c *serviceClient_GbpEndpointGroupDumpClient) Recv() (*GbpEndpointGroupDeta
 	case *GbpEndpointGroupDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -270,7 +287,7 @@ func (c *serviceClient) GbpExtItfAddDel(ctx context.Context, in *GbpExtItfAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpExtItfDump(ctx context.Context, in *GbpExtItfDump) (RPCService_GbpExtItfDumpClient, error) {
@@ -306,6 +323,10 @@ func (c *serviceClient_GbpExtItfDumpClient) Recv() (*GbpExtItfDetails, error) {
 	case *GbpExtItfDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -318,7 +339,7 @@ func (c *serviceClient) GbpRecircAddDel(ctx context.Context, in *GbpRecircAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpRecircDump(ctx context.Context, in *GbpRecircDump) (RPCService_GbpRecircDumpClient, error) {
@@ -354,6 +375,10 @@ func (c *serviceClient_GbpRecircDumpClient) Recv() (*GbpRecircDetails, error) {
 	case *GbpRecircDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -366,7 +391,7 @@ func (c *serviceClient) GbpRouteDomainAdd(ctx context.Context, in *GbpRouteDomai
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpRouteDomainDel(ctx context.Context, in *GbpRouteDomainDel) (*GbpRouteDomainDelReply, error) {
@@ -375,7 +400,7 @@ func (c *serviceClient) GbpRouteDomainDel(ctx context.Context, in *GbpRouteDomai
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpRouteDomainDump(ctx context.Context, in *GbpRouteDomainDump) (RPCService_GbpRouteDomainDumpClient, error) {
@@ -411,6 +436,10 @@ func (c *serviceClient_GbpRouteDomainDumpClient) Recv() (*GbpRouteDomainDetails,
 	case *GbpRouteDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -423,7 +452,7 @@ func (c *serviceClient) GbpSubnetAddDel(ctx context.Context, in *GbpSubnetAddDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpSubnetDump(ctx context.Context, in *GbpSubnetDump) (RPCService_GbpSubnetDumpClient, error) {
@@ -459,6 +488,10 @@ func (c *serviceClient_GbpSubnetDumpClient) Recv() (*GbpSubnetDetails, error) {
 	case *GbpSubnetDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -471,7 +504,7 @@ func (c *serviceClient) GbpVxlanTunnelAdd(ctx context.Context, in *GbpVxlanTunne
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpVxlanTunnelDel(ctx context.Context, in *GbpVxlanTunnelDel) (*GbpVxlanTunnelDelReply, error) {
@@ -480,7 +513,7 @@ func (c *serviceClient) GbpVxlanTunnelDel(ctx context.Context, in *GbpVxlanTunne
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GbpVxlanTunnelDump(ctx context.Context, in *GbpVxlanTunnelDump) (RPCService_GbpVxlanTunnelDumpClient, error) {
@@ -516,6 +549,10 @@ func (c *serviceClient_GbpVxlanTunnelDumpClient) Recv() (*GbpVxlanTunnelDetails,
 	case *GbpVxlanTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

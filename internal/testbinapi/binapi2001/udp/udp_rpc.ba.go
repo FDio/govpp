@@ -5,12 +5,13 @@ package udp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  udp.
+// RPCService defines RPC service udp.
 type RPCService interface {
 	UDPEncapAdd(ctx context.Context, in *UDPEncapAdd) (*UDPEncapAddReply, error)
 	UDPEncapDel(ctx context.Context, in *UDPEncapDel) (*UDPEncapDelReply, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) UDPEncapAdd(ctx context.Context, in *UDPEncapAdd) (*UDPE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UDPEncapDel(ctx context.Context, in *UDPEncapDel) (*UDPEncapDelReply, error) {
@@ -40,7 +41,7 @@ func (c *serviceClient) UDPEncapDel(ctx context.Context, in *UDPEncapDel) (*UDPE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) UDPEncapDump(ctx context.Context, in *UDPEncapDump) (RPCService_UDPEncapDumpClient, error) {
@@ -76,6 +77,10 @@ func (c *serviceClient_UDPEncapDumpClient) Recv() (*UDPEncapDetails, error) {
 	case *UDPEncapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

@@ -5,12 +5,13 @@ package nsh
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  nsh.
+// RPCService defines RPC service nsh.
 type RPCService interface {
 	NshAddDelEntry(ctx context.Context, in *NshAddDelEntry) (*NshAddDelEntryReply, error)
 	NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*NshAddDelMapReply, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) NshAddDelEntry(ctx context.Context, in *NshAddDelEntry) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*NshAddDelMapReply, error) {
@@ -41,7 +42,7 @@ func (c *serviceClient) NshAddDelMap(ctx context.Context, in *NshAddDelMap) (*Ns
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NshEntryDump(ctx context.Context, in *NshEntryDump) (RPCService_NshEntryDumpClient, error) {
@@ -77,6 +78,10 @@ func (c *serviceClient_NshEntryDumpClient) Recv() (*NshEntryDetails, error) {
 	case *NshEntryDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -116,6 +121,10 @@ func (c *serviceClient_NshMapDumpClient) Recv() (*NshMapDetails, error) {
 	case *NshMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

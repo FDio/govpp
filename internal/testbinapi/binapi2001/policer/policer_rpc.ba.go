@@ -5,12 +5,13 @@ package policer
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  policer.
+// RPCService defines RPC service policer.
 type RPCService interface {
 	PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*PolicerAddDelReply, error)
 	PolicerDump(ctx context.Context, in *PolicerDump) (RPCService_PolicerDumpClient, error)
@@ -30,7 +31,7 @@ func (c *serviceClient) PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PolicerDump(ctx context.Context, in *PolicerDump) (RPCService_PolicerDumpClient, error) {
@@ -66,6 +67,10 @@ func (c *serviceClient_PolicerDumpClient) Recv() (*PolicerDetails, error) {
 	case *PolicerDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

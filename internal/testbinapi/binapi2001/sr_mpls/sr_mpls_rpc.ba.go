@@ -4,10 +4,11 @@ package sr_mpls
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  sr_mpls.
+// RPCService defines RPC service sr_mpls.
 type RPCService interface {
 	SrMplsPolicyAdd(ctx context.Context, in *SrMplsPolicyAdd) (*SrMplsPolicyAddReply, error)
 	SrMplsPolicyAssignEndpointColor(ctx context.Context, in *SrMplsPolicyAssignEndpointColor) (*SrMplsPolicyAssignEndpointColorReply, error)
@@ -30,7 +31,7 @@ func (c *serviceClient) SrMplsPolicyAdd(ctx context.Context, in *SrMplsPolicyAdd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrMplsPolicyAssignEndpointColor(ctx context.Context, in *SrMplsPolicyAssignEndpointColor) (*SrMplsPolicyAssignEndpointColorReply, error) {
@@ -39,7 +40,7 @@ func (c *serviceClient) SrMplsPolicyAssignEndpointColor(ctx context.Context, in 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrMplsPolicyDel(ctx context.Context, in *SrMplsPolicyDel) (*SrMplsPolicyDelReply, error) {
@@ -48,7 +49,7 @@ func (c *serviceClient) SrMplsPolicyDel(ctx context.Context, in *SrMplsPolicyDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrMplsPolicyMod(ctx context.Context, in *SrMplsPolicyMod) (*SrMplsPolicyModReply, error) {
@@ -57,7 +58,7 @@ func (c *serviceClient) SrMplsPolicyMod(ctx context.Context, in *SrMplsPolicyMod
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SrMplsSteeringAddDel(ctx context.Context, in *SrMplsSteeringAddDel) (*SrMplsSteeringAddDelReply, error) {
@@ -66,5 +67,5 @@ func (c *serviceClient) SrMplsSteeringAddDel(ctx context.Context, in *SrMplsStee
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

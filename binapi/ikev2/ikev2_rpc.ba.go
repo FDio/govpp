@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service ikev2.
@@ -57,7 +57,7 @@ func (c *serviceClient) Ikev2ChildSaDump(ctx context.Context, in *Ikev2ChildSaDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -80,7 +80,7 @@ func (c *serviceClient_Ikev2ChildSaDumpClient) Recv() (*Ikev2ChildSaDetails, err
 	switch m := msg.(type) {
 	case *Ikev2ChildSaDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -172,7 +172,7 @@ func (c *serviceClient) Ikev2ProfileDump(ctx context.Context, in *Ikev2ProfileDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -195,7 +195,7 @@ func (c *serviceClient_Ikev2ProfileDumpClient) Recv() (*Ikev2ProfileDetails, err
 	switch m := msg.(type) {
 	case *Ikev2ProfileDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -269,7 +269,7 @@ func (c *serviceClient) Ikev2SaDump(ctx context.Context, in *Ikev2SaDump) (RPCSe
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -292,7 +292,7 @@ func (c *serviceClient_Ikev2SaDumpClient) Recv() (*Ikev2SaDetails, error) {
 	switch m := msg.(type) {
 	case *Ikev2SaDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -375,7 +375,7 @@ func (c *serviceClient) Ikev2TrafficSelectorDump(ctx context.Context, in *Ikev2T
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -398,7 +398,7 @@ func (c *serviceClient_Ikev2TrafficSelectorDumpClient) Recv() (*Ikev2TrafficSele
 	switch m := msg.(type) {
 	case *Ikev2TrafficSelectorDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

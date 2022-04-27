@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service vhost_user.
@@ -83,7 +83,7 @@ func (c *serviceClient) SwInterfaceVhostUserDump(ctx context.Context, in *SwInte
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -106,7 +106,7 @@ func (c *serviceClient_SwInterfaceVhostUserDumpClient) Recv() (*SwInterfaceVhost
 	switch m := msg.(type) {
 	case *SwInterfaceVhostUserDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

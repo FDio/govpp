@@ -12,6 +12,8 @@ BUILD_USER ?= $(shell id -un)
 
 GOVPP_PKG := git.fd.io/govpp.git
 
+VPP_API_DIR ?= ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api
+
 VERSION_PKG := $(GOVPP_PKG)/internal/version
 LDFLAGS = \
 	-X $(VERSION_PKG).version=$(VERSION) \
@@ -47,62 +49,81 @@ BINAPI_DIR	      ?= ./binapi
 # Binapi generator path
 BINAPI_GENERATOR  = ./bin/binapi-generator
 
+INTERNAL_BINAPI_DIR ?= ./internal/testbinapi/binapi2001
+
 .DEFAULT_GOAL = help
 
+check-%:
+	@: $(if $(value $*),,$(error $* is undefined))
+
 bin:
-	mkdir -p bin
+	@mkdir -p bin
 
-build: ## Build all
-	@echo "# building ${VERSION}"
-	go build ${GO_BUILD_ARGS} ./...
+.PHONY: build
+build: cmd examples ## Build all
 
+.PHONY: cmd
 cmd: bin ## Build commands
-	go build ${GO_BUILD_ARGS} -o bin ./cmd/...
+	@go build ${GO_BUILD_ARGS} -o bin ./cmd/...
 
+.PHONY: binapi-generator
+binapi-generator: bin ## Build only the binapi generator
+	@go build ${GO_BUILD_ARGS} -o bin ./cmd/binapi-generator/
+
+.PHONY: examples
 examples: bin ## Build examples
-	go build ${GO_BUILD_ARGS} -o bin ./examples/...
+	@go build ${GO_BUILD_ARGS} -o bin ./examples/...
 
+.PHONY: test
 test: ## Run unit tests
 	@echo "# running tests"
 	go test -tags="${GO_BUILD_TAGS}" ./...
 
+.PHONY: test-integration
 test-integration: ## Run integration tests
 	@echo "# running integration tests"
 	go test -tags="integration ${GO_BUILD_TAGS}" ./test/integration
 
+.PHONY: lint
 lint: ## Run code linter
 	@echo "# running linter"
 	@golint ./...
 
+.PHONY: install
 install: install-generator install-proxy ## Install all
 
+.PHONY: install-generator
 install-generator: ## Install binapi-generator
 	@echo "# installing binapi-generator ${VERSION}"
 	@go install ${GO_BUILD_ARGS} ./cmd/binapi-generator
 
+.PHONY: install-proxy
 install-proxy: ## Install vpp-proxy
 	@echo "# installing vpp-proxy ${VERSION}"
-	go install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
+	@go install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
 
+.PHONY: generate
 generate: generate-binapi ## Generate all
 
+.PHONY: generate-binapi
 generate-binapi: install-generator ## Generate binapi code
 	@echo "# generating binapi"
-	go generate -x "$(BINAPI_DIR)"
+	@go generate -x "$(BINAPI_DIR)"
 
-gen-binapi-from-code: cmd-binapi-generator
-	$(eval VPP_API_DIR := ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api/)
-	@echo "Generating vpp API.json and go bindings"
-	@echo "Vpp Directory ${VPP_DIR}"
-	@echo "Vpp API files ${VPP_API_DIR}"
-	@echo "Go bindings   ${BINAPI_DIR}"
-	@cd ${VPP_DIR} && make json-api-files
-	@${BINAPI_GENERATOR} \
-		--input-dir=${VPP_API_DIR} \
-	    --output-dir=${BINAPI_DIR} \
-	    --gen rpc,rest \
-	    --no-source-path-info
+.PHONY: gen-binapi-internal
+gen-binapi-internal:
+	@go generate $(INTERNAL_BINAPI_DIR)
 
+.PHONY: gen-binapi-local
+gen-binapi-local: binapi-generator check-VPP_DIR ## Generate binapi code (using locally cloned VPP)
+	@make -C ${VPP_DIR} json-api-files
+	@find $(BINAPI_DIR)/*/*.ba.go -delete
+	@find $(BINAPI_DIR)/* -type d -delete
+	@./bin/binapi-generator -input-dir=$(VPP_API_DIR) -output-dir=$(BINAPI_DIR) -gen=rpc
+	@./bin/binapi-generator -input-dir=$(VPP_API_DIR) -input-file=$(VPP_API_DIR)/core/vpe.api.json -output-dir=$(BINAPI_DIR) -gen=http
+	@sed -i 's@$(VPP_API_DIR)@/usr/share/vpp/api@g' $(BINAPI_DIR)/*/*.ba.go
+
+.PHONY: gen-binapi-docker
 gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 	@echo "# generating binapi in docker image ${VPP_IMG}"
 	$(eval cmds := $(shell go generate -n $(BINAPI_DIR) 2>&1 | tr "\n" ";"))
@@ -115,13 +136,8 @@ gen-binapi-docker: install-generator ## Generate binapi code (using Docker)
 		"${VPP_IMG}" \
 	  sh -ec "cd $(BINAPI_DIR) && $(cmds)"
 
+.PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-.PHONY: help \
-    build cmd examples clean \
-	lint test integration \
-	install install-generator install-proxy \
-	generate generate-binapi gen-binapi-docker \
-	extras
 

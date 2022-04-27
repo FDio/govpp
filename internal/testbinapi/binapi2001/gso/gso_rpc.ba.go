@@ -4,10 +4,11 @@ package gso
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  gso.
+// RPCService defines RPC service gso.
 type RPCService interface {
 	FeatureGsoEnableDisable(ctx context.Context, in *FeatureGsoEnableDisable) (*FeatureGsoEnableDisableReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) FeatureGsoEnableDisable(ctx context.Context, in *Feature
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

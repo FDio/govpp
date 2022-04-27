@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service memclnt.
 type RPCService interface {
 	APIVersions(ctx context.Context, in *APIVersions) (*APIVersionsReply, error)
+	ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error)
 	GetFirstMsgID(ctx context.Context, in *GetFirstMsgID) (*GetFirstMsgIDReply, error)
 	MemclntCreate(ctx context.Context, in *MemclntCreate) (*MemclntCreateReply, error)
 	MemclntDelete(ctx context.Context, in *MemclntDelete) (*MemclntDeleteReply, error)
@@ -35,6 +36,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) APIVersions(ctx context.Context, in *APIVersions) (*APIVersionsReply, error) {
 	out := new(APIVersionsReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error) {
+	out := new(ControlPingReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

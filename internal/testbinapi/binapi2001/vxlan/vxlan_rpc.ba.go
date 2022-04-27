@@ -5,12 +5,13 @@ package vxlan
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  vxlan.
+// RPCService defines RPC service vxlan.
 type RPCService interface {
 	SwInterfaceSetVxlanBypass(ctx context.Context, in *SwInterfaceSetVxlanBypass) (*SwInterfaceSetVxlanBypassReply, error)
 	VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTunnel) (*VxlanAddDelTunnelReply, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) SwInterfaceSetVxlanBypass(ctx context.Context, in *SwInt
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTunnel) (*VxlanAddDelTunnelReply, error) {
@@ -41,7 +42,7 @@ func (c *serviceClient) VxlanAddDelTunnel(ctx context.Context, in *VxlanAddDelTu
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanOffloadRx(ctx context.Context, in *VxlanOffloadRx) (*VxlanOffloadRxReply, error) {
@@ -50,7 +51,7 @@ func (c *serviceClient) VxlanOffloadRx(ctx context.Context, in *VxlanOffloadRx) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) VxlanTunnelDump(ctx context.Context, in *VxlanTunnelDump) (RPCService_VxlanTunnelDumpClient, error) {
@@ -86,6 +87,10 @@ func (c *serviceClient_VxlanTunnelDumpClient) Recv() (*VxlanTunnelDetails, error
 	case *VxlanTunnelDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

@@ -5,12 +5,13 @@ package pot
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  pot.
+// RPCService defines RPC service pot.
 type RPCService interface {
 	PotProfileActivate(ctx context.Context, in *PotProfileActivate) (*PotProfileActivateReply, error)
 	PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*PotProfileAddReply, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) PotProfileActivate(ctx context.Context, in *PotProfileAc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*PotProfileAddReply, error) {
@@ -41,7 +42,7 @@ func (c *serviceClient) PotProfileAdd(ctx context.Context, in *PotProfileAdd) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileDel(ctx context.Context, in *PotProfileDel) (*PotProfileDelReply, error) {
@@ -50,7 +51,7 @@ func (c *serviceClient) PotProfileDel(ctx context.Context, in *PotProfileDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PotProfileShowConfigDump(ctx context.Context, in *PotProfileShowConfigDump) (RPCService_PotProfileShowConfigDumpClient, error) {
@@ -86,6 +87,10 @@ func (c *serviceClient_PotProfileShowConfigDumpClient) Recv() (*PotProfileShowCo
 	case *PotProfileShowConfigDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

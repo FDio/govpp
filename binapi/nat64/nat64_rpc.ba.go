@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service nat64.
@@ -90,7 +90,7 @@ func (c *serviceClient) Nat64BibDump(ctx context.Context, in *Nat64BibDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -113,7 +113,7 @@ func (c *serviceClient_Nat64BibDumpClient) Recv() (*Nat64BibDetails, error) {
 	switch m := msg.(type) {
 	case *Nat64BibDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -142,7 +142,7 @@ func (c *serviceClient) Nat64InterfaceDump(ctx context.Context, in *Nat64Interfa
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -165,7 +165,7 @@ func (c *serviceClient_Nat64InterfaceDumpClient) Recv() (*Nat64InterfaceDetails,
 	switch m := msg.(type) {
 	case *Nat64InterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -194,7 +194,7 @@ func (c *serviceClient) Nat64PoolAddrDump(ctx context.Context, in *Nat64PoolAddr
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -217,7 +217,7 @@ func (c *serviceClient_Nat64PoolAddrDumpClient) Recv() (*Nat64PoolAddrDetails, e
 	switch m := msg.(type) {
 	case *Nat64PoolAddrDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -237,7 +237,7 @@ func (c *serviceClient) Nat64PrefixDump(ctx context.Context, in *Nat64PrefixDump
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -260,7 +260,7 @@ func (c *serviceClient_Nat64PrefixDumpClient) Recv() (*Nat64PrefixDetails, error
 	switch m := msg.(type) {
 	case *Nat64PrefixDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -289,7 +289,7 @@ func (c *serviceClient) Nat64StDump(ctx context.Context, in *Nat64StDump) (RPCSe
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -312,7 +312,7 @@ func (c *serviceClient_Nat64StDumpClient) Recv() (*Nat64StDetails, error) {
 	switch m := msg.(type) {
 	case *Nat64StDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

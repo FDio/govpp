@@ -4,10 +4,11 @@ package feature
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  feature.
+// RPCService defines RPC service feature.
 type RPCService interface {
 	FeatureEnableDisable(ctx context.Context, in *FeatureEnableDisable) (*FeatureEnableDisableReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) FeatureEnableDisable(ctx context.Context, in *FeatureEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

@@ -4,10 +4,11 @@ package netmap
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  netmap.
+// RPCService defines RPC service netmap.
 type RPCService interface {
 	NetmapCreate(ctx context.Context, in *NetmapCreate) (*NetmapCreateReply, error)
 	NetmapDelete(ctx context.Context, in *NetmapDelete) (*NetmapDeleteReply, error)
@@ -27,7 +28,7 @@ func (c *serviceClient) NetmapCreate(ctx context.Context, in *NetmapCreate) (*Ne
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NetmapDelete(ctx context.Context, in *NetmapDelete) (*NetmapDeleteReply, error) {
@@ -36,5 +37,5 @@ func (c *serviceClient) NetmapDelete(ctx context.Context, in *NetmapDelete) (*Ne
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

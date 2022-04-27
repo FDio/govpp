@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service acl.
@@ -24,6 +24,8 @@ type RPCService interface {
 	ACLPluginControlPing(ctx context.Context, in *ACLPluginControlPing) (*ACLPluginControlPingReply, error)
 	ACLPluginGetConnTableMaxEntries(ctx context.Context, in *ACLPluginGetConnTableMaxEntries) (*ACLPluginGetConnTableMaxEntriesReply, error)
 	ACLPluginGetVersion(ctx context.Context, in *ACLPluginGetVersion) (*ACLPluginGetVersionReply, error)
+	ACLPluginUseHashLookupGet(ctx context.Context, in *ACLPluginUseHashLookupGet) (*ACLPluginUseHashLookupGetReply, error)
+	ACLPluginUseHashLookupSet(ctx context.Context, in *ACLPluginUseHashLookupSet) (*ACLPluginUseHashLookupSetReply, error)
 	ACLStatsIntfCountersEnable(ctx context.Context, in *ACLStatsIntfCountersEnable) (*ACLStatsIntfCountersEnableReply, error)
 	MacipACLAdd(ctx context.Context, in *MacipACLAdd) (*MacipACLAddReply, error)
 	MacipACLAddReplace(ctx context.Context, in *MacipACLAddReplace) (*MacipACLAddReplaceReply, error)
@@ -69,7 +71,7 @@ func (c *serviceClient) ACLDump(ctx context.Context, in *ACLDump) (RPCService_AC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -92,7 +94,7 @@ func (c *serviceClient_ACLDumpClient) Recv() (*ACLDetails, error) {
 	switch m := msg.(type) {
 	case *ACLDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -121,7 +123,7 @@ func (c *serviceClient) ACLInterfaceEtypeWhitelistDump(ctx context.Context, in *
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -144,7 +146,7 @@ func (c *serviceClient_ACLInterfaceEtypeWhitelistDumpClient) Recv() (*ACLInterfa
 	switch m := msg.(type) {
 	case *ACLInterfaceEtypeWhitelistDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -164,7 +166,7 @@ func (c *serviceClient) ACLInterfaceListDump(ctx context.Context, in *ACLInterfa
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -187,7 +189,7 @@ func (c *serviceClient_ACLInterfaceListDumpClient) Recv() (*ACLInterfaceListDeta
 	switch m := msg.(type) {
 	case *ACLInterfaceListDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -243,6 +245,24 @@ func (c *serviceClient) ACLPluginGetVersion(ctx context.Context, in *ACLPluginGe
 	return out, nil
 }
 
+func (c *serviceClient) ACLPluginUseHashLookupGet(ctx context.Context, in *ACLPluginUseHashLookupGet) (*ACLPluginUseHashLookupGetReply, error) {
+	out := new(ACLPluginUseHashLookupGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) ACLPluginUseHashLookupSet(ctx context.Context, in *ACLPluginUseHashLookupSet) (*ACLPluginUseHashLookupSetReply, error) {
+	out := new(ACLPluginUseHashLookupSetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) ACLStatsIntfCountersEnable(ctx context.Context, in *ACLStatsIntfCountersEnable) (*ACLStatsIntfCountersEnableReply, error) {
 	out := new(ACLStatsIntfCountersEnableReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -288,7 +308,7 @@ func (c *serviceClient) MacipACLDump(ctx context.Context, in *MacipACLDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -311,7 +331,7 @@ func (c *serviceClient_MacipACLDumpClient) Recv() (*MacipACLDetails, error) {
 	switch m := msg.(type) {
 	case *MacipACLDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -349,7 +369,7 @@ func (c *serviceClient) MacipACLInterfaceListDump(ctx context.Context, in *Macip
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -372,7 +392,7 @@ func (c *serviceClient_MacipACLInterfaceListDumpClient) Recv() (*MacipACLInterfa
 	switch m := msg.(type) {
 	case *MacipACLInterfaceListDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

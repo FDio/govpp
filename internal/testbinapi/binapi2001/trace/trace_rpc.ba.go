@@ -4,10 +4,11 @@ package trace
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  trace.
+// RPCService defines RPC service trace.
 type RPCService interface {
 	TraceProfileAdd(ctx context.Context, in *TraceProfileAdd) (*TraceProfileAddReply, error)
 	TraceProfileDel(ctx context.Context, in *TraceProfileDel) (*TraceProfileDelReply, error)
@@ -28,7 +29,7 @@ func (c *serviceClient) TraceProfileAdd(ctx context.Context, in *TraceProfileAdd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) TraceProfileDel(ctx context.Context, in *TraceProfileDel) (*TraceProfileDelReply, error) {
@@ -37,7 +38,7 @@ func (c *serviceClient) TraceProfileDel(ctx context.Context, in *TraceProfileDel
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) TraceProfileShowConfig(ctx context.Context, in *TraceProfileShowConfig) (*TraceProfileShowConfigReply, error) {
@@ -46,5 +47,5 @@ func (c *serviceClient) TraceProfileShowConfig(ctx context.Context, in *TracePro
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

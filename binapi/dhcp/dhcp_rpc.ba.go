@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service dhcp.
@@ -90,7 +90,7 @@ func (c *serviceClient) DHCPClientDump(ctx context.Context, in *DHCPClientDump) 
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -113,7 +113,7 @@ func (c *serviceClient_DHCPClientDumpClient) Recv() (*DHCPClientDetails, error) 
 	switch m := msg.(type) {
 	case *DHCPClientDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -160,7 +160,7 @@ func (c *serviceClient) DHCPProxyDump(ctx context.Context, in *DHCPProxyDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -183,7 +183,7 @@ func (c *serviceClient_DHCPProxyDumpClient) Recv() (*DHCPProxyDetails, error) {
 	switch m := msg.(type) {
 	case *DHCPProxyDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

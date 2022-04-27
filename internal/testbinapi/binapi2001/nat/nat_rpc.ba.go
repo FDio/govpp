@@ -5,12 +5,13 @@ package nat
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  nat.
+// RPCService defines RPC service nat.
 type RPCService interface {
 	DsliteAddDelPoolAddrRange(ctx context.Context, in *DsliteAddDelPoolAddrRange) (*DsliteAddDelPoolAddrRangeReply, error)
 	DsliteAddressDump(ctx context.Context, in *DsliteAddressDump) (RPCService_DsliteAddressDumpClient, error)
@@ -93,7 +94,7 @@ func (c *serviceClient) DsliteAddDelPoolAddrRange(ctx context.Context, in *Dslit
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteAddressDump(ctx context.Context, in *DsliteAddressDump) (RPCService_DsliteAddressDumpClient, error) {
@@ -129,6 +130,10 @@ func (c *serviceClient_DsliteAddressDumpClient) Recv() (*DsliteAddressDetails, e
 	case *DsliteAddressDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -141,7 +146,7 @@ func (c *serviceClient) DsliteGetAftrAddr(ctx context.Context, in *DsliteGetAftr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteGetB4Addr(ctx context.Context, in *DsliteGetB4Addr) (*DsliteGetB4AddrReply, error) {
@@ -150,7 +155,7 @@ func (c *serviceClient) DsliteGetB4Addr(ctx context.Context, in *DsliteGetB4Addr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteSetAftrAddr(ctx context.Context, in *DsliteSetAftrAddr) (*DsliteSetAftrAddrReply, error) {
@@ -159,7 +164,7 @@ func (c *serviceClient) DsliteSetAftrAddr(ctx context.Context, in *DsliteSetAftr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DsliteSetB4Addr(ctx context.Context, in *DsliteSetB4Addr) (*DsliteSetB4AddrReply, error) {
@@ -168,7 +173,7 @@ func (c *serviceClient) DsliteSetB4Addr(ctx context.Context, in *DsliteSetB4Addr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddDelAddressRange(ctx context.Context, in *Nat44AddDelAddressRange) (*Nat44AddDelAddressRangeReply, error) {
@@ -177,7 +182,7 @@ func (c *serviceClient) Nat44AddDelAddressRange(ctx context.Context, in *Nat44Ad
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddDelIdentityMapping(ctx context.Context, in *Nat44AddDelIdentityMapping) (*Nat44AddDelIdentityMappingReply, error) {
@@ -186,7 +191,7 @@ func (c *serviceClient) Nat44AddDelIdentityMapping(ctx context.Context, in *Nat4
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddDelInterfaceAddr(ctx context.Context, in *Nat44AddDelInterfaceAddr) (*Nat44AddDelInterfaceAddrReply, error) {
@@ -195,7 +200,7 @@ func (c *serviceClient) Nat44AddDelInterfaceAddr(ctx context.Context, in *Nat44A
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddDelLbStaticMapping(ctx context.Context, in *Nat44AddDelLbStaticMapping) (*Nat44AddDelLbStaticMappingReply, error) {
@@ -204,7 +209,7 @@ func (c *serviceClient) Nat44AddDelLbStaticMapping(ctx context.Context, in *Nat4
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddDelStaticMapping(ctx context.Context, in *Nat44AddDelStaticMapping) (*Nat44AddDelStaticMappingReply, error) {
@@ -213,7 +218,7 @@ func (c *serviceClient) Nat44AddDelStaticMapping(ctx context.Context, in *Nat44A
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44AddressDump(ctx context.Context, in *Nat44AddressDump) (RPCService_Nat44AddressDumpClient, error) {
@@ -249,6 +254,10 @@ func (c *serviceClient_Nat44AddressDumpClient) Recv() (*Nat44AddressDetails, err
 	case *Nat44AddressDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -261,7 +270,7 @@ func (c *serviceClient) Nat44DelSession(ctx context.Context, in *Nat44DelSession
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44ForwardingEnableDisable(ctx context.Context, in *Nat44ForwardingEnableDisable) (*Nat44ForwardingEnableDisableReply, error) {
@@ -270,7 +279,7 @@ func (c *serviceClient) Nat44ForwardingEnableDisable(ctx context.Context, in *Na
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44ForwardingIsEnabled(ctx context.Context, in *Nat44ForwardingIsEnabled) (*Nat44ForwardingIsEnabledReply, error) {
@@ -315,6 +324,10 @@ func (c *serviceClient_Nat44IdentityMappingDumpClient) Recv() (*Nat44IdentityMap
 	case *Nat44IdentityMappingDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -327,7 +340,7 @@ func (c *serviceClient) Nat44InterfaceAddDelFeature(ctx context.Context, in *Nat
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44InterfaceAddDelOutputFeature(ctx context.Context, in *Nat44InterfaceAddDelOutputFeature) (*Nat44InterfaceAddDelOutputFeatureReply, error) {
@@ -336,7 +349,7 @@ func (c *serviceClient) Nat44InterfaceAddDelOutputFeature(ctx context.Context, i
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44InterfaceAddrDump(ctx context.Context, in *Nat44InterfaceAddrDump) (RPCService_Nat44InterfaceAddrDumpClient, error) {
@@ -372,6 +385,10 @@ func (c *serviceClient_Nat44InterfaceAddrDumpClient) Recv() (*Nat44InterfaceAddr
 	case *Nat44InterfaceAddrDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -411,6 +428,10 @@ func (c *serviceClient_Nat44InterfaceDumpClient) Recv() (*Nat44InterfaceDetails,
 	case *Nat44InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -450,6 +471,10 @@ func (c *serviceClient_Nat44InterfaceOutputFeatureDumpClient) Recv() (*Nat44Inte
 	case *Nat44InterfaceOutputFeatureDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -462,7 +487,7 @@ func (c *serviceClient) Nat44LbStaticMappingAddDelLocal(ctx context.Context, in 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat44LbStaticMappingDump(ctx context.Context, in *Nat44LbStaticMappingDump) (RPCService_Nat44LbStaticMappingDumpClient, error) {
@@ -498,6 +523,10 @@ func (c *serviceClient_Nat44LbStaticMappingDumpClient) Recv() (*Nat44LbStaticMap
 	case *Nat44LbStaticMappingDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -537,6 +566,10 @@ func (c *serviceClient_Nat44StaticMappingDumpClient) Recv() (*Nat44StaticMapping
 	case *Nat44StaticMappingDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -576,6 +609,10 @@ func (c *serviceClient_Nat44UserDumpClient) Recv() (*Nat44UserDetails, error) {
 	case *Nat44UserDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -615,6 +652,10 @@ func (c *serviceClient_Nat44UserSessionDumpClient) Recv() (*Nat44UserSessionDeta
 	case *Nat44UserSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -627,7 +668,7 @@ func (c *serviceClient) Nat64AddDelInterface(ctx context.Context, in *Nat64AddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat64AddDelInterfaceAddr(ctx context.Context, in *Nat64AddDelInterfaceAddr) (*Nat64AddDelInterfaceAddrReply, error) {
@@ -636,7 +677,7 @@ func (c *serviceClient) Nat64AddDelInterfaceAddr(ctx context.Context, in *Nat64A
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat64AddDelPoolAddrRange(ctx context.Context, in *Nat64AddDelPoolAddrRange) (*Nat64AddDelPoolAddrRangeReply, error) {
@@ -645,7 +686,7 @@ func (c *serviceClient) Nat64AddDelPoolAddrRange(ctx context.Context, in *Nat64A
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat64AddDelPrefix(ctx context.Context, in *Nat64AddDelPrefix) (*Nat64AddDelPrefixReply, error) {
@@ -654,7 +695,7 @@ func (c *serviceClient) Nat64AddDelPrefix(ctx context.Context, in *Nat64AddDelPr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat64AddDelStaticBib(ctx context.Context, in *Nat64AddDelStaticBib) (*Nat64AddDelStaticBibReply, error) {
@@ -663,7 +704,7 @@ func (c *serviceClient) Nat64AddDelStaticBib(ctx context.Context, in *Nat64AddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat64BibDump(ctx context.Context, in *Nat64BibDump) (RPCService_Nat64BibDumpClient, error) {
@@ -699,6 +740,10 @@ func (c *serviceClient_Nat64BibDumpClient) Recv() (*Nat64BibDetails, error) {
 	case *Nat64BibDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -738,6 +783,10 @@ func (c *serviceClient_Nat64InterfaceDumpClient) Recv() (*Nat64InterfaceDetails,
 	case *Nat64InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -777,6 +826,10 @@ func (c *serviceClient_Nat64PoolAddrDumpClient) Recv() (*Nat64PoolAddrDetails, e
 	case *Nat64PoolAddrDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -816,6 +869,10 @@ func (c *serviceClient_Nat64PrefixDumpClient) Recv() (*Nat64PrefixDetails, error
 	case *Nat64PrefixDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -855,6 +912,10 @@ func (c *serviceClient_Nat64StDumpClient) Recv() (*Nat64StDetails, error) {
 	case *Nat64StDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -867,7 +928,7 @@ func (c *serviceClient) Nat66AddDelInterface(ctx context.Context, in *Nat66AddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat66AddDelStaticMapping(ctx context.Context, in *Nat66AddDelStaticMapping) (*Nat66AddDelStaticMappingReply, error) {
@@ -876,7 +937,7 @@ func (c *serviceClient) Nat66AddDelStaticMapping(ctx context.Context, in *Nat66A
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Nat66InterfaceDump(ctx context.Context, in *Nat66InterfaceDump) (RPCService_Nat66InterfaceDumpClient, error) {
@@ -912,6 +973,10 @@ func (c *serviceClient_Nat66InterfaceDumpClient) Recv() (*Nat66InterfaceDetails,
 	case *Nat66InterfaceDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -951,6 +1016,10 @@ func (c *serviceClient_Nat66StaticMappingDumpClient) Recv() (*Nat66StaticMapping
 	case *Nat66StaticMappingDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -963,7 +1032,7 @@ func (c *serviceClient) NatControlPing(ctx context.Context, in *NatControlPing) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetAddDelMap(ctx context.Context, in *NatDetAddDelMap) (*NatDetAddDelMapReply, error) {
@@ -972,7 +1041,7 @@ func (c *serviceClient) NatDetAddDelMap(ctx context.Context, in *NatDetAddDelMap
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetCloseSessionIn(ctx context.Context, in *NatDetCloseSessionIn) (*NatDetCloseSessionInReply, error) {
@@ -981,7 +1050,7 @@ func (c *serviceClient) NatDetCloseSessionIn(ctx context.Context, in *NatDetClos
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetCloseSessionOut(ctx context.Context, in *NatDetCloseSessionOut) (*NatDetCloseSessionOutReply, error) {
@@ -990,7 +1059,7 @@ func (c *serviceClient) NatDetCloseSessionOut(ctx context.Context, in *NatDetClo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetForward(ctx context.Context, in *NatDetForward) (*NatDetForwardReply, error) {
@@ -999,7 +1068,7 @@ func (c *serviceClient) NatDetForward(ctx context.Context, in *NatDetForward) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetMapDump(ctx context.Context, in *NatDetMapDump) (RPCService_NatDetMapDumpClient, error) {
@@ -1035,6 +1104,10 @@ func (c *serviceClient_NatDetMapDumpClient) Recv() (*NatDetMapDetails, error) {
 	case *NatDetMapDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -1047,7 +1120,7 @@ func (c *serviceClient) NatDetReverse(ctx context.Context, in *NatDetReverse) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatDetSessionDump(ctx context.Context, in *NatDetSessionDump) (RPCService_NatDetSessionDumpClient, error) {
@@ -1083,6 +1156,10 @@ func (c *serviceClient_NatDetSessionDumpClient) Recv() (*NatDetSessionDetails, e
 	case *NatDetSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -1095,7 +1172,7 @@ func (c *serviceClient) NatGetAddrAndPortAllocAlg(ctx context.Context, in *NatGe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatGetMssClamping(ctx context.Context, in *NatGetMssClamping) (*NatGetMssClampingReply, error) {
@@ -1104,7 +1181,7 @@ func (c *serviceClient) NatGetMssClamping(ctx context.Context, in *NatGetMssClam
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatGetTimeouts(ctx context.Context, in *NatGetTimeouts) (*NatGetTimeoutsReply, error) {
@@ -1113,7 +1190,7 @@ func (c *serviceClient) NatGetTimeouts(ctx context.Context, in *NatGetTimeouts) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaFlush(ctx context.Context, in *NatHaFlush) (*NatHaFlushReply, error) {
@@ -1122,7 +1199,7 @@ func (c *serviceClient) NatHaFlush(ctx context.Context, in *NatHaFlush) (*NatHaF
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaGetFailover(ctx context.Context, in *NatHaGetFailover) (*NatHaGetFailoverReply, error) {
@@ -1131,7 +1208,7 @@ func (c *serviceClient) NatHaGetFailover(ctx context.Context, in *NatHaGetFailov
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaGetListener(ctx context.Context, in *NatHaGetListener) (*NatHaGetListenerReply, error) {
@@ -1140,7 +1217,7 @@ func (c *serviceClient) NatHaGetListener(ctx context.Context, in *NatHaGetListen
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaResync(ctx context.Context, in *NatHaResync) (*NatHaResyncReply, error) {
@@ -1149,7 +1226,7 @@ func (c *serviceClient) NatHaResync(ctx context.Context, in *NatHaResync) (*NatH
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaSetFailover(ctx context.Context, in *NatHaSetFailover) (*NatHaSetFailoverReply, error) {
@@ -1158,7 +1235,7 @@ func (c *serviceClient) NatHaSetFailover(ctx context.Context, in *NatHaSetFailov
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatHaSetListener(ctx context.Context, in *NatHaSetListener) (*NatHaSetListenerReply, error) {
@@ -1167,7 +1244,7 @@ func (c *serviceClient) NatHaSetListener(ctx context.Context, in *NatHaSetListen
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatIpfixEnableDisable(ctx context.Context, in *NatIpfixEnableDisable) (*NatIpfixEnableDisableReply, error) {
@@ -1176,7 +1253,7 @@ func (c *serviceClient) NatIpfixEnableDisable(ctx context.Context, in *NatIpfixE
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatSetAddrAndPortAllocAlg(ctx context.Context, in *NatSetAddrAndPortAllocAlg) (*NatSetAddrAndPortAllocAlgReply, error) {
@@ -1185,7 +1262,7 @@ func (c *serviceClient) NatSetAddrAndPortAllocAlg(ctx context.Context, in *NatSe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatSetLogLevel(ctx context.Context, in *NatSetLogLevel) (*NatSetLogLevelReply, error) {
@@ -1194,7 +1271,7 @@ func (c *serviceClient) NatSetLogLevel(ctx context.Context, in *NatSetLogLevel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatSetMssClamping(ctx context.Context, in *NatSetMssClamping) (*NatSetMssClampingReply, error) {
@@ -1203,7 +1280,7 @@ func (c *serviceClient) NatSetMssClamping(ctx context.Context, in *NatSetMssClam
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatSetTimeouts(ctx context.Context, in *NatSetTimeouts) (*NatSetTimeoutsReply, error) {
@@ -1212,7 +1289,7 @@ func (c *serviceClient) NatSetTimeouts(ctx context.Context, in *NatSetTimeouts) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatSetWorkers(ctx context.Context, in *NatSetWorkers) (*NatSetWorkersReply, error) {
@@ -1221,7 +1298,7 @@ func (c *serviceClient) NatSetWorkers(ctx context.Context, in *NatSetWorkers) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatShowConfig(ctx context.Context, in *NatShowConfig) (*NatShowConfigReply, error) {
@@ -1230,7 +1307,7 @@ func (c *serviceClient) NatShowConfig(ctx context.Context, in *NatShowConfig) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) NatWorkerDump(ctx context.Context, in *NatWorkerDump) (RPCService_NatWorkerDumpClient, error) {
@@ -1266,6 +1343,10 @@ func (c *serviceClient_NatWorkerDumpClient) Recv() (*NatWorkerDetails, error) {
 	case *NatWorkerDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

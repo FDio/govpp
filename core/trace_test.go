@@ -5,8 +5,8 @@ import (
 	interfaces "git.fd.io/govpp.git/binapi/interface"
 	"git.fd.io/govpp.git/binapi/ip"
 	"git.fd.io/govpp.git/binapi/l2"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 	"git.fd.io/govpp.git/binapi/memif"
-	"git.fd.io/govpp.git/binapi/vpe"
 	"git.fd.io/govpp.git/core"
 	. "github.com/onsi/gomega"
 	"strings"
@@ -78,7 +78,7 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 		&interfaces.SwInterfaceDetails{
 			SwIfIndex: 3,
 		},
-		&vpe.ControlPingReply{},
+		&memclnt.ControlPingReply{},
 	}
 
 	ctx.mockVpp.MockReply(reply...)
@@ -109,7 +109,7 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 		if i == 0 {
 			Expect(request[0].GetMessageName()).To(Equal(entry.Message.GetMessageName()))
 		} else if i == len(traced)-1 {
-			msg := vpe.ControlPing{}
+			msg := memclnt.ControlPing{}
 			Expect(msg.GetMessageName()).To(Equal(entry.Message.GetMessageName()))
 		} else {
 			Expect(reply[i-1].GetMessageName()).To(Equal(entry.Message.GetMessageName()))

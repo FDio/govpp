@@ -5,12 +5,13 @@ package mactime
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  mactime.
+// RPCService defines RPC service mactime.
 type RPCService interface {
 	MactimeAddDelRange(ctx context.Context, in *MactimeAddDelRange) (*MactimeAddDelRangeReply, error)
 	MactimeDump(ctx context.Context, in *MactimeDump) (RPCService_MactimeDumpClient, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) MactimeAddDelRange(ctx context.Context, in *MactimeAddDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) MactimeDump(ctx context.Context, in *MactimeDump) (RPCService_MactimeDumpClient, error) {
@@ -67,6 +68,10 @@ func (c *serviceClient_MactimeDumpClient) Recv() (*MactimeDetails, error) {
 	case *MactimeDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -79,5 +84,5 @@ func (c *serviceClient) MactimeEnableDisable(ctx context.Context, in *MactimeEna
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

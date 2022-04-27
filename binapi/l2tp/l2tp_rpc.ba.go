@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service l2tp.
@@ -73,7 +73,7 @@ func (c *serviceClient) SwIfL2tpv3TunnelDump(ctx context.Context, in *SwIfL2tpv3
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -96,7 +96,7 @@ func (c *serviceClient_SwIfL2tpv3TunnelDumpClient) Recv() (*SwIfL2tpv3TunnelDeta
 	switch m := msg.(type) {
 	case *SwIfL2tpv3TunnelDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

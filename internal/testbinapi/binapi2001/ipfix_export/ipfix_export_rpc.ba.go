@@ -5,12 +5,13 @@ package ipfix_export
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  ipfix_export.
+// RPCService defines RPC service ipfix_export.
 type RPCService interface {
 	IpfixClassifyStreamDump(ctx context.Context, in *IpfixClassifyStreamDump) (RPCService_IpfixClassifyStreamDumpClient, error)
 	IpfixClassifyTableAddDel(ctx context.Context, in *IpfixClassifyTableAddDel) (*IpfixClassifyTableAddDelReply, error)
@@ -62,6 +63,10 @@ func (c *serviceClient_IpfixClassifyStreamDumpClient) Recv() (*IpfixClassifyStre
 	case *IpfixClassifyStreamDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -74,7 +79,7 @@ func (c *serviceClient) IpfixClassifyTableAddDel(ctx context.Context, in *IpfixC
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IpfixClassifyTableDump(ctx context.Context, in *IpfixClassifyTableDump) (RPCService_IpfixClassifyTableDumpClient, error) {
@@ -110,6 +115,10 @@ func (c *serviceClient_IpfixClassifyTableDumpClient) Recv() (*IpfixClassifyTable
 	case *IpfixClassifyTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -149,6 +158,10 @@ func (c *serviceClient_IpfixExporterDumpClient) Recv() (*IpfixExporterDetails, e
 	case *IpfixExporterDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -161,7 +174,7 @@ func (c *serviceClient) IpfixFlush(ctx context.Context, in *IpfixFlush) (*IpfixF
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SetIpfixClassifyStream(ctx context.Context, in *SetIpfixClassifyStream) (*SetIpfixClassifyStreamReply, error) {
@@ -170,7 +183,7 @@ func (c *serviceClient) SetIpfixClassifyStream(ctx context.Context, in *SetIpfix
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SetIpfixExporter(ctx context.Context, in *SetIpfixExporter) (*SetIpfixExporterReply, error) {
@@ -179,5 +192,5 @@ func (c *serviceClient) SetIpfixExporter(ctx context.Context, in *SetIpfixExport
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

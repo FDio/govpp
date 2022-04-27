@@ -5,12 +5,13 @@ package vhost_user
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  vhost_user.
+// RPCService defines RPC service vhost_user.
 type RPCService interface {
 	CreateVhostUserIf(ctx context.Context, in *CreateVhostUserIf) (*CreateVhostUserIfReply, error)
 	DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) CreateVhostUserIf(ctx context.Context, in *CreateVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error) {
@@ -41,7 +42,7 @@ func (c *serviceClient) DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUserIf) (*ModifyVhostUserIfReply, error) {
@@ -50,7 +51,7 @@ func (c *serviceClient) ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUs
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceVhostUserDump(ctx context.Context, in *SwInterfaceVhostUserDump) (RPCService_SwInterfaceVhostUserDumpClient, error) {
@@ -86,6 +87,10 @@ func (c *serviceClient_SwInterfaceVhostUserDumpClient) Recv() (*SwInterfaceVhost
 	case *SwInterfaceVhostUserDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

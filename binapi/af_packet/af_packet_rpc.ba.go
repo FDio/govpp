@@ -8,12 +8,13 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service af_packet.
 type RPCService interface {
 	AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error)
+	AfPacketCreateV2(ctx context.Context, in *AfPacketCreateV2) (*AfPacketCreateV2Reply, error)
 	AfPacketDelete(ctx context.Context, in *AfPacketDelete) (*AfPacketDeleteReply, error)
 	AfPacketDump(ctx context.Context, in *AfPacketDump) (RPCService_AfPacketDumpClient, error)
 	AfPacketSetL4CksumOffload(ctx context.Context, in *AfPacketSetL4CksumOffload) (*AfPacketSetL4CksumOffloadReply, error)
@@ -29,6 +30,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) AfPacketCreate(ctx context.Context, in *AfPacketCreate) (*AfPacketCreateReply, error) {
 	out := new(AfPacketCreateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) AfPacketCreateV2(ctx context.Context, in *AfPacketCreateV2) (*AfPacketCreateV2Reply, error) {
+	out := new(AfPacketCreateV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -54,7 +64,7 @@ func (c *serviceClient) AfPacketDump(ctx context.Context, in *AfPacketDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -77,7 +87,7 @@ func (c *serviceClient_AfPacketDumpClient) Recv() (*AfPacketDetails, error) {
 	switch m := msg.(type) {
 	case *AfPacketDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

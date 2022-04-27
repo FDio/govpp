@@ -4,10 +4,11 @@ package avf
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  avf.
+// RPCService defines RPC service avf.
 type RPCService interface {
 	AvfCreate(ctx context.Context, in *AvfCreate) (*AvfCreateReply, error)
 	AvfDelete(ctx context.Context, in *AvfDelete) (*AvfDeleteReply, error)
@@ -27,7 +28,7 @@ func (c *serviceClient) AvfCreate(ctx context.Context, in *AvfCreate) (*AvfCreat
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) AvfDelete(ctx context.Context, in *AvfDelete) (*AvfDeleteReply, error) {
@@ -36,5 +37,5 @@ func (c *serviceClient) AvfDelete(ctx context.Context, in *AvfDelete) (*AvfDelet
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

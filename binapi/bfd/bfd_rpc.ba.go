@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service bfd.
@@ -55,7 +55,7 @@ func (c *serviceClient) BfdAuthKeysDump(ctx context.Context, in *BfdAuthKeysDump
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -78,7 +78,7 @@ func (c *serviceClient_BfdAuthKeysDumpClient) Recv() (*BfdAuthKeysDetails, error
 	switch m := msg.(type) {
 	case *BfdAuthKeysDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -170,7 +170,7 @@ func (c *serviceClient) BfdUDPSessionDump(ctx context.Context, in *BfdUDPSession
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -193,7 +193,7 @@ func (c *serviceClient_BfdUDPSessionDumpClient) Recv() (*BfdUDPSessionDetails, e
 	switch m := msg.(type) {
 	case *BfdUDPSessionDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

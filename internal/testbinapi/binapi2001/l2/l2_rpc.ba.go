@@ -5,12 +5,13 @@ package l2
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  l2.
+// RPCService defines RPC service l2.
 type RPCService interface {
 	BdIPMacAddDel(ctx context.Context, in *BdIPMacAddDel) (*BdIPMacAddDelReply, error)
 	BdIPMacDump(ctx context.Context, in *BdIPMacDump) (RPCService_BdIPMacDumpClient, error)
@@ -54,7 +55,7 @@ func (c *serviceClient) BdIPMacAddDel(ctx context.Context, in *BdIPMacAddDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BdIPMacDump(ctx context.Context, in *BdIPMacDump) (RPCService_BdIPMacDumpClient, error) {
@@ -90,6 +91,10 @@ func (c *serviceClient_BdIPMacDumpClient) Recv() (*BdIPMacDetails, error) {
 	case *BdIPMacDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -102,7 +107,7 @@ func (c *serviceClient) BdIPMacFlush(ctx context.Context, in *BdIPMacFlush) (*Bd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BridgeDomainAddDel(ctx context.Context, in *BridgeDomainAddDel) (*BridgeDomainAddDelReply, error) {
@@ -111,7 +116,7 @@ func (c *serviceClient) BridgeDomainAddDel(ctx context.Context, in *BridgeDomain
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BridgeDomainDump(ctx context.Context, in *BridgeDomainDump) (RPCService_BridgeDomainDumpClient, error) {
@@ -147,6 +152,10 @@ func (c *serviceClient_BridgeDomainDumpClient) Recv() (*BridgeDomainDetails, err
 	case *BridgeDomainDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -159,7 +168,7 @@ func (c *serviceClient) BridgeDomainSetMacAge(ctx context.Context, in *BridgeDom
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BridgeFlags(ctx context.Context, in *BridgeFlags) (*BridgeFlagsReply, error) {
@@ -168,7 +177,7 @@ func (c *serviceClient) BridgeFlags(ctx context.Context, in *BridgeFlags) (*Brid
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BviCreate(ctx context.Context, in *BviCreate) (*BviCreateReply, error) {
@@ -177,7 +186,7 @@ func (c *serviceClient) BviCreate(ctx context.Context, in *BviCreate) (*BviCreat
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BviDelete(ctx context.Context, in *BviDelete) (*BviDeleteReply, error) {
@@ -186,7 +195,7 @@ func (c *serviceClient) BviDelete(ctx context.Context, in *BviDelete) (*BviDelet
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2FibClearTable(ctx context.Context, in *L2FibClearTable) (*L2FibClearTableReply, error) {
@@ -195,7 +204,7 @@ func (c *serviceClient) L2FibClearTable(ctx context.Context, in *L2FibClearTable
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2FibTableDump(ctx context.Context, in *L2FibTableDump) (RPCService_L2FibTableDumpClient, error) {
@@ -231,6 +240,10 @@ func (c *serviceClient_L2FibTableDumpClient) Recv() (*L2FibTableDetails, error) 
 	case *L2FibTableDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -243,7 +256,7 @@ func (c *serviceClient) L2Flags(ctx context.Context, in *L2Flags) (*L2FlagsReply
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2InterfaceEfpFilter(ctx context.Context, in *L2InterfaceEfpFilter) (*L2InterfaceEfpFilterReply, error) {
@@ -252,7 +265,7 @@ func (c *serviceClient) L2InterfaceEfpFilter(ctx context.Context, in *L2Interfac
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2InterfacePbbTagRewrite(ctx context.Context, in *L2InterfacePbbTagRewrite) (*L2InterfacePbbTagRewriteReply, error) {
@@ -261,7 +274,7 @@ func (c *serviceClient) L2InterfacePbbTagRewrite(ctx context.Context, in *L2Inte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2InterfaceVlanTagRewrite(ctx context.Context, in *L2InterfaceVlanTagRewrite) (*L2InterfaceVlanTagRewriteReply, error) {
@@ -270,7 +283,7 @@ func (c *serviceClient) L2InterfaceVlanTagRewrite(ctx context.Context, in *L2Int
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2PatchAddDel(ctx context.Context, in *L2PatchAddDel) (*L2PatchAddDelReply, error) {
@@ -279,7 +292,7 @@ func (c *serviceClient) L2PatchAddDel(ctx context.Context, in *L2PatchAddDel) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2XconnectDump(ctx context.Context, in *L2XconnectDump) (RPCService_L2XconnectDumpClient, error) {
@@ -315,6 +328,10 @@ func (c *serviceClient_L2XconnectDumpClient) Recv() (*L2XconnectDetails, error) 
 	case *L2XconnectDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -327,7 +344,7 @@ func (c *serviceClient) L2fibAddDel(ctx context.Context, in *L2fibAddDel) (*L2fi
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2fibFlushAll(ctx context.Context, in *L2fibFlushAll) (*L2fibFlushAllReply, error) {
@@ -336,7 +353,7 @@ func (c *serviceClient) L2fibFlushAll(ctx context.Context, in *L2fibFlushAll) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2fibFlushBd(ctx context.Context, in *L2fibFlushBd) (*L2fibFlushBdReply, error) {
@@ -345,7 +362,7 @@ func (c *serviceClient) L2fibFlushBd(ctx context.Context, in *L2fibFlushBd) (*L2
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) L2fibFlushInt(ctx context.Context, in *L2fibFlushInt) (*L2fibFlushIntReply, error) {
@@ -354,7 +371,7 @@ func (c *serviceClient) L2fibFlushInt(ctx context.Context, in *L2fibFlushInt) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetL2Bridge(ctx context.Context, in *SwInterfaceSetL2Bridge) (*SwInterfaceSetL2BridgeReply, error) {
@@ -363,7 +380,7 @@ func (c *serviceClient) SwInterfaceSetL2Bridge(ctx context.Context, in *SwInterf
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetL2Xconnect(ctx context.Context, in *SwInterfaceSetL2Xconnect) (*SwInterfaceSetL2XconnectReply, error) {
@@ -372,7 +389,7 @@ func (c *serviceClient) SwInterfaceSetL2Xconnect(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetVpath(ctx context.Context, in *SwInterfaceSetVpath) (*SwInterfaceSetVpathReply, error) {
@@ -381,7 +398,7 @@ func (c *serviceClient) SwInterfaceSetVpath(ctx context.Context, in *SwInterface
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantL2ArpTermEvents(ctx context.Context, in *WantL2ArpTermEvents) (*WantL2ArpTermEventsReply, error) {
@@ -390,7 +407,7 @@ func (c *serviceClient) WantL2ArpTermEvents(ctx context.Context, in *WantL2ArpTe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantL2MacsEvents(ctx context.Context, in *WantL2MacsEvents) (*WantL2MacsEventsReply, error) {
@@ -399,5 +416,5 @@ func (c *serviceClient) WantL2MacsEvents(ctx context.Context, in *WantL2MacsEven
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

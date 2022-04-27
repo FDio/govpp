@@ -5,12 +5,13 @@ package arp
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  arp.
+// RPCService defines RPC service arp.
 type RPCService interface {
 	ProxyArpAddDel(ctx context.Context, in *ProxyArpAddDel) (*ProxyArpAddDelReply, error)
 	ProxyArpDump(ctx context.Context, in *ProxyArpDump) (RPCService_ProxyArpDumpClient, error)
@@ -32,7 +33,7 @@ func (c *serviceClient) ProxyArpAddDel(ctx context.Context, in *ProxyArpAddDel) 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ProxyArpDump(ctx context.Context, in *ProxyArpDump) (RPCService_ProxyArpDumpClient, error) {
@@ -68,6 +69,10 @@ func (c *serviceClient_ProxyArpDumpClient) Recv() (*ProxyArpDetails, error) {
 	case *ProxyArpDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -107,6 +112,10 @@ func (c *serviceClient_ProxyArpIntfcDumpClient) Recv() (*ProxyArpIntfcDetails, e
 	case *ProxyArpIntfcDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -119,5 +128,5 @@ func (c *serviceClient) ProxyArpIntfcEnableDisable(ctx context.Context, in *Prox
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

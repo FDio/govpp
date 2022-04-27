@@ -4,10 +4,11 @@ package l2e
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  l2e.
+// RPCService defines RPC service l2e.
 type RPCService interface {
 	L2Emulation(ctx context.Context, in *L2Emulation) (*L2EmulationReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) L2Emulation(ctx context.Context, in *L2Emulation) (*L2Em
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

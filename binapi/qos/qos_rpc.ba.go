@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service qos.
@@ -50,7 +50,7 @@ func (c *serviceClient) QosEgressMapDump(ctx context.Context, in *QosEgressMapDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -73,7 +73,7 @@ func (c *serviceClient_QosEgressMapDumpClient) Recv() (*QosEgressMapDetails, err
 	switch m := msg.(type) {
 	case *QosEgressMapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -102,7 +102,7 @@ func (c *serviceClient) QosMarkDump(ctx context.Context, in *QosMarkDump) (RPCSe
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -125,7 +125,7 @@ func (c *serviceClient_QosMarkDumpClient) Recv() (*QosMarkDetails, error) {
 	switch m := msg.(type) {
 	case *QosMarkDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -154,7 +154,7 @@ func (c *serviceClient) QosRecordDump(ctx context.Context, in *QosRecordDump) (R
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -177,7 +177,7 @@ func (c *serviceClient_QosRecordDumpClient) Recv() (*QosRecordDetails, error) {
 	switch m := msg.(type) {
 	case *QosRecordDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -206,7 +206,7 @@ func (c *serviceClient) QosStoreDump(ctx context.Context, in *QosStoreDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -229,7 +229,7 @@ func (c *serviceClient_QosStoreDumpClient) Recv() (*QosStoreDetails, error) {
 	switch m := msg.(type) {
 	case *QosStoreDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

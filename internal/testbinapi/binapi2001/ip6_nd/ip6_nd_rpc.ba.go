@@ -5,12 +5,13 @@ package ip6_nd
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  ip6_nd.
+// RPCService defines RPC service ip6_nd.
 type RPCService interface {
 	IP6ndProxyAddDel(ctx context.Context, in *IP6ndProxyAddDel) (*IP6ndProxyAddDelReply, error)
 	IP6ndProxyDump(ctx context.Context, in *IP6ndProxyDump) (RPCService_IP6ndProxyDumpClient, error)
@@ -34,7 +35,7 @@ func (c *serviceClient) IP6ndProxyAddDel(ctx context.Context, in *IP6ndProxyAddD
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) IP6ndProxyDump(ctx context.Context, in *IP6ndProxyDump) (RPCService_IP6ndProxyDumpClient, error) {
@@ -70,6 +71,10 @@ func (c *serviceClient_IP6ndProxyDumpClient) Recv() (*IP6ndProxyDetails, error) 
 	case *IP6ndProxyDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -82,7 +87,7 @@ func (c *serviceClient) IP6ndSendRouterSolicitation(ctx context.Context, in *IP6
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceIP6ndRaConfig(ctx context.Context, in *SwInterfaceIP6ndRaConfig) (*SwInterfaceIP6ndRaConfigReply, error) {
@@ -91,7 +96,7 @@ func (c *serviceClient) SwInterfaceIP6ndRaConfig(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceIP6ndRaPrefix(ctx context.Context, in *SwInterfaceIP6ndRaPrefix) (*SwInterfaceIP6ndRaPrefixReply, error) {
@@ -100,7 +105,7 @@ func (c *serviceClient) SwInterfaceIP6ndRaPrefix(ctx context.Context, in *SwInte
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantIP6RaEvents(ctx context.Context, in *WantIP6RaEvents) (*WantIP6RaEventsReply, error) {
@@ -109,5 +114,5 @@ func (c *serviceClient) WantIP6RaEvents(ctx context.Context, in *WantIP6RaEvents
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

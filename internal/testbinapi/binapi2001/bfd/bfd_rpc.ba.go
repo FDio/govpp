@@ -5,12 +5,13 @@ package bfd
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  bfd.
+// RPCService defines RPC service bfd.
 type RPCService interface {
 	BfdAuthDelKey(ctx context.Context, in *BfdAuthDelKey) (*BfdAuthDelKeyReply, error)
 	BfdAuthKeysDump(ctx context.Context, in *BfdAuthKeysDump) (RPCService_BfdAuthKeysDumpClient, error)
@@ -42,7 +43,7 @@ func (c *serviceClient) BfdAuthDelKey(ctx context.Context, in *BfdAuthDelKey) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdAuthKeysDump(ctx context.Context, in *BfdAuthKeysDump) (RPCService_BfdAuthKeysDumpClient, error) {
@@ -78,6 +79,10 @@ func (c *serviceClient_BfdAuthKeysDumpClient) Recv() (*BfdAuthKeysDetails, error
 	case *BfdAuthKeysDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -90,7 +95,7 @@ func (c *serviceClient) BfdAuthSetKey(ctx context.Context, in *BfdAuthSetKey) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPAdd(ctx context.Context, in *BfdUDPAdd) (*BfdUDPAddReply, error) {
@@ -99,7 +104,7 @@ func (c *serviceClient) BfdUDPAdd(ctx context.Context, in *BfdUDPAdd) (*BfdUDPAd
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPAuthActivate(ctx context.Context, in *BfdUDPAuthActivate) (*BfdUDPAuthActivateReply, error) {
@@ -108,7 +113,7 @@ func (c *serviceClient) BfdUDPAuthActivate(ctx context.Context, in *BfdUDPAuthAc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPAuthDeactivate(ctx context.Context, in *BfdUDPAuthDeactivate) (*BfdUDPAuthDeactivateReply, error) {
@@ -117,7 +122,7 @@ func (c *serviceClient) BfdUDPAuthDeactivate(ctx context.Context, in *BfdUDPAuth
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPDel(ctx context.Context, in *BfdUDPDel) (*BfdUDPDelReply, error) {
@@ -126,7 +131,7 @@ func (c *serviceClient) BfdUDPDel(ctx context.Context, in *BfdUDPDel) (*BfdUDPDe
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPDelEchoSource(ctx context.Context, in *BfdUDPDelEchoSource) (*BfdUDPDelEchoSourceReply, error) {
@@ -135,7 +140,7 @@ func (c *serviceClient) BfdUDPDelEchoSource(ctx context.Context, in *BfdUDPDelEc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPGetEchoSource(ctx context.Context, in *BfdUDPGetEchoSource) (*BfdUDPGetEchoSourceReply, error) {
@@ -144,7 +149,7 @@ func (c *serviceClient) BfdUDPGetEchoSource(ctx context.Context, in *BfdUDPGetEc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPMod(ctx context.Context, in *BfdUDPMod) (*BfdUDPModReply, error) {
@@ -153,7 +158,7 @@ func (c *serviceClient) BfdUDPMod(ctx context.Context, in *BfdUDPMod) (*BfdUDPMo
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPSessionDump(ctx context.Context, in *BfdUDPSessionDump) (RPCService_BfdUDPSessionDumpClient, error) {
@@ -189,6 +194,10 @@ func (c *serviceClient_BfdUDPSessionDumpClient) Recv() (*BfdUDPSessionDetails, e
 	case *BfdUDPSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -201,7 +210,7 @@ func (c *serviceClient) BfdUDPSessionSetFlags(ctx context.Context, in *BfdUDPSes
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) BfdUDPSetEchoSource(ctx context.Context, in *BfdUDPSetEchoSource) (*BfdUDPSetEchoSourceReply, error) {
@@ -210,7 +219,7 @@ func (c *serviceClient) BfdUDPSetEchoSource(ctx context.Context, in *BfdUDPSetEc
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) WantBfdEvents(ctx context.Context, in *WantBfdEvents) (*WantBfdEventsReply, error) {
@@ -219,5 +228,5 @@ func (c *serviceClient) WantBfdEvents(ctx context.Context, in *WantBfdEvents) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

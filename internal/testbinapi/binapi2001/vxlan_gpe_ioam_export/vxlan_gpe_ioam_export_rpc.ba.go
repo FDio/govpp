@@ -4,10 +4,11 @@ package vxlan_gpe_ioam_export
 
 import (
 	"context"
+
 	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  vxlan_gpe_ioam_export.
+// RPCService defines RPC service vxlan_gpe_ioam_export.
 type RPCService interface {
 	VxlanGpeIoamExportEnableDisable(ctx context.Context, in *VxlanGpeIoamExportEnableDisable) (*VxlanGpeIoamExportEnableDisableReply, error)
 }
@@ -26,5 +27,5 @@ func (c *serviceClient) VxlanGpeIoamExportEnableDisable(ctx context.Context, in 
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

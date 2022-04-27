@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service nat66.
@@ -55,7 +55,7 @@ func (c *serviceClient) Nat66InterfaceDump(ctx context.Context, in *Nat66Interfa
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -78,7 +78,7 @@ func (c *serviceClient_Nat66InterfaceDumpClient) Recv() (*Nat66InterfaceDetails,
 	switch m := msg.(type) {
 	case *Nat66InterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -107,7 +107,7 @@ func (c *serviceClient) Nat66StaticMappingDump(ctx context.Context, in *Nat66Sta
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -130,7 +130,7 @@ func (c *serviceClient_Nat66StaticMappingDumpClient) Recv() (*Nat66StaticMapping
 	switch m := msg.(type) {
 	case *Nat66StaticMappingDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

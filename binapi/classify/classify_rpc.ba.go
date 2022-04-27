@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service classify.
@@ -33,6 +33,7 @@ type RPCService interface {
 	OutputACLSetInterface(ctx context.Context, in *OutputACLSetInterface) (*OutputACLSetInterfaceReply, error)
 	PolicerClassifyDump(ctx context.Context, in *PolicerClassifyDump) (RPCService_PolicerClassifyDumpClient, error)
 	PolicerClassifySetInterface(ctx context.Context, in *PolicerClassifySetInterface) (*PolicerClassifySetInterfaceReply, error)
+	PuntACLAddDel(ctx context.Context, in *PuntACLAddDel) (*PuntACLAddDelReply, error)
 }
 
 type serviceClient struct {
@@ -97,7 +98,7 @@ func (c *serviceClient) ClassifySessionDump(ctx context.Context, in *ClassifySes
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -120,7 +121,7 @@ func (c *serviceClient_ClassifySessionDumpClient) Recv() (*ClassifySessionDetail
 	switch m := msg.(type) {
 	case *ClassifySessionDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -212,7 +213,7 @@ func (c *serviceClient) FlowClassifyDump(ctx context.Context, in *FlowClassifyDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -235,7 +236,7 @@ func (c *serviceClient_FlowClassifyDumpClient) Recv() (*FlowClassifyDetails, err
 	switch m := msg.(type) {
 	case *FlowClassifyDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -282,7 +283,7 @@ func (c *serviceClient) PolicerClassifyDump(ctx context.Context, in *PolicerClas
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -305,7 +306,7 @@ func (c *serviceClient_PolicerClassifyDumpClient) Recv() (*PolicerClassifyDetail
 	switch m := msg.(type) {
 	case *PolicerClassifyDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -318,6 +319,15 @@ func (c *serviceClient_PolicerClassifyDumpClient) Recv() (*PolicerClassifyDetail
 
 func (c *serviceClient) PolicerClassifySetInterface(ctx context.Context, in *PolicerClassifySetInterface) (*PolicerClassifySetInterfaceReply, error) {
 	out := new(PolicerClassifySetInterfaceReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PuntACLAddDel(ctx context.Context, in *PuntACLAddDel) (*PuntACLAddDelReply, error) {
+	out := new(PuntACLAddDelReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

@@ -5,12 +5,13 @@ package pppoe
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  pppoe.
+// RPCService defines RPC service pppoe.
 type RPCService interface {
 	PppoeAddDelSession(ctx context.Context, in *PppoeAddDelSession) (*PppoeAddDelSessionReply, error)
 	PppoeSessionDump(ctx context.Context, in *PppoeSessionDump) (RPCService_PppoeSessionDumpClient, error)
@@ -30,7 +31,7 @@ func (c *serviceClient) PppoeAddDelSession(ctx context.Context, in *PppoeAddDelS
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PppoeSessionDump(ctx context.Context, in *PppoeSessionDump) (RPCService_PppoeSessionDumpClient, error) {
@@ -66,6 +67,10 @@ func (c *serviceClient_PppoeSessionDumpClient) Recv() (*PppoeSessionDetails, err
 	case *PppoeSessionDetails:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

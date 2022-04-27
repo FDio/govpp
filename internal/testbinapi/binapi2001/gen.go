@@ -14,4 +14,4 @@
 
 package binapi2001
 
-//go:generate env VPP_VERSION=20.01 binapi-generator -input-dir=.vppapi -output-dir=.
+//go:generate env VPP_VERSION=20.01 ../../../bin/binapi-generator -input-dir=.vppapi -output-dir=.

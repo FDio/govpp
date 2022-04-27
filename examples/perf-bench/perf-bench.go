@@ -30,7 +30,7 @@ import (
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/binapi/vpe"
+	"git.fd.io/govpp.git/binapi/memclnt"
 	"git.fd.io/govpp.git/core"
 )
 
@@ -117,8 +117,8 @@ func syncTest(ch api.Channel, cnt int) {
 	fmt.Printf("Running synchronous perf test with %d requests...\n", cnt)
 
 	for i := 0; i < cnt; i++ {
-		req := &vpe.ControlPing{}
-		reply := &vpe.ControlPingReply{}
+		req := &memclnt.ControlPing{}
+		reply := &memclnt.ControlPingReply{}
 
 		if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
 			log.Fatalln("Error in reply:", err)
@@ -134,12 +134,12 @@ func syncTest2(conn api.Connection, cnt int) {
 		log.Fatalln("Error NewStream:", err)
 	}
 	for i := 0; i < cnt; i++ {
-		if err := stream.SendMsg(&vpe.ControlPing{}); err != nil {
+		if err := stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 			log.Fatalln("Error SendMsg:", err)
 		}
 		if msg, err := stream.RecvMsg(); err != nil {
 			log.Fatalln("Error RecvMsg:", err)
-		} else if _, ok := msg.(*vpe.ControlPingReply); ok {
+		} else if _, ok := msg.(*memclnt.ControlPingReply); ok {
 			// ok
 		} else {
 			log.Fatalf("unexpected reply: %v", msg.GetMessageName())
@@ -154,14 +154,14 @@ func asyncTest(ch api.Channel, cnt int) {
 
 	go func() {
 		for i := 0; i < cnt; i++ {
-			ctxChan <- ch.SendRequest(&vpe.ControlPing{})
+			ctxChan <- ch.SendRequest(&memclnt.ControlPing{})
 		}
 		close(ctxChan)
 		fmt.Printf("Sending asynchronous requests finished\n")
 	}()
 
 	for ctx := range ctxChan {
-		reply := &vpe.ControlPingReply{}
+		reply := &memclnt.ControlPingReply{}
 		if err := ctx.ReceiveReply(reply); err != nil {
 			log.Fatalln("Error in reply:", err)
 		}
@@ -179,7 +179,7 @@ func asyncTest2(conn api.Connection, cnt int) {
 			if err != nil {
 				log.Fatalln("Error NewStream:", err)
 			}
-			if err := stream.SendMsg(&vpe.ControlPing{}); err != nil {
+			if err := stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 				log.Fatalln("Error SendMsg:", err)
 			}
 			ctxChan <- stream
@@ -191,7 +191,7 @@ func asyncTest2(conn api.Connection, cnt int) {
 	for ctx := range ctxChan {
 		if msg, err := ctx.RecvMsg(); err != nil {
 			log.Fatalln("Error RecvMsg:", err)
-		} else if _, ok := msg.(*vpe.ControlPingReply); ok {
+		} else if _, ok := msg.(*memclnt.ControlPingReply); ok {
 			// ok
 		} else {
 			log.Fatalf("unexpected reply: %v", msg.GetMessageName())

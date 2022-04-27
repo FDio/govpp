@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service igmp.
@@ -50,7 +50,7 @@ func (c *serviceClient) IgmpDump(ctx context.Context, in *IgmpDump) (RPCService_
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -73,7 +73,7 @@ func (c *serviceClient_IgmpDumpClient) Recv() (*IgmpDetails, error) {
 	switch m := msg.(type) {
 	case *IgmpDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -102,7 +102,7 @@ func (c *serviceClient) IgmpGroupPrefixDump(ctx context.Context, in *IgmpGroupPr
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -125,7 +125,7 @@ func (c *serviceClient_IgmpGroupPrefixDumpClient) Recv() (*IgmpGroupPrefixDetail
 	switch m := msg.(type) {
 	case *IgmpGroupPrefixDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

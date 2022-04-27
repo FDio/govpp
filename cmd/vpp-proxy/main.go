@@ -23,6 +23,7 @@ import (
 	"git.fd.io/govpp.git/adapter/statsclient"
 	"git.fd.io/govpp.git/api"
 	interfaces "git.fd.io/govpp.git/binapi/interface"
+	"git.fd.io/govpp.git/binapi/vlib"
 	"git.fd.io/govpp.git/binapi/vpe"
 	_ "git.fd.io/govpp.git/core"
 	"git.fd.io/govpp.git/proxy"
@@ -93,8 +94,8 @@ func runClient() {
 		panic(err)
 	}
 
-	req := &vpe.CliInband{Cmd: "show version"}
-	reply := new(vpe.CliInbandReply)
+	req := &vlib.CliInband{Cmd: "show version"}
+	reply := new(vlib.CliInbandReply)
 	if err := binapiChannel.SendRequest(req).ReceiveReply(reply); err != nil {
 		log.Fatalln("binapi request failed:", err)
 	}

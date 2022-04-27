@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service bond.
@@ -107,7 +107,7 @@ func (c *serviceClient) SwBondInterfaceDump(ctx context.Context, in *SwBondInter
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -130,7 +130,7 @@ func (c *serviceClient_SwBondInterfaceDumpClient) Recv() (*SwBondInterfaceDetail
 	switch m := msg.(type) {
 	case *SwBondInterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -150,7 +150,7 @@ func (c *serviceClient) SwInterfaceBondDump(ctx context.Context, in *SwInterface
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -173,7 +173,7 @@ func (c *serviceClient_SwInterfaceBondDumpClient) Recv() (*SwInterfaceBondDetail
 	switch m := msg.(type) {
 	case *SwInterfaceBondDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -202,7 +202,7 @@ func (c *serviceClient) SwInterfaceSlaveDump(ctx context.Context, in *SwInterfac
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -225,7 +225,7 @@ func (c *serviceClient_SwInterfaceSlaveDumpClient) Recv() (*SwInterfaceSlaveDeta
 	switch m := msg.(type) {
 	case *SwInterfaceSlaveDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -245,7 +245,7 @@ func (c *serviceClient) SwMemberInterfaceDump(ctx context.Context, in *SwMemberI
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -268,7 +268,7 @@ func (c *serviceClient_SwMemberInterfaceDumpClient) Recv() (*SwMemberInterfaceDe
 	switch m := msg.(type) {
 	case *SwMemberInterfaceDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

@@ -8,13 +8,14 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service tapv2.
 type RPCService interface {
 	SwInterfaceTapV2Dump(ctx context.Context, in *SwInterfaceTapV2Dump) (RPCService_SwInterfaceTapV2DumpClient, error)
 	TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapCreateV2Reply, error)
+	TapCreateV3(ctx context.Context, in *TapCreateV3) (*TapCreateV3Reply, error)
 	TapDeleteV2(ctx context.Context, in *TapDeleteV2) (*TapDeleteV2Reply, error)
 }
 
@@ -35,7 +36,7 @@ func (c *serviceClient) SwInterfaceTapV2Dump(ctx context.Context, in *SwInterfac
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -58,7 +59,7 @@ func (c *serviceClient_SwInterfaceTapV2DumpClient) Recv() (*SwInterfaceTapV2Deta
 	switch m := msg.(type) {
 	case *SwInterfaceTapV2Details:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -71,6 +72,15 @@ func (c *serviceClient_SwInterfaceTapV2DumpClient) Recv() (*SwInterfaceTapV2Deta
 
 func (c *serviceClient) TapCreateV2(ctx context.Context, in *TapCreateV2) (*TapCreateV2Reply, error) {
 	out := new(TapCreateV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) TapCreateV3(ctx context.Context, in *TapCreateV3) (*TapCreateV3Reply, error) {
+	out := new(TapCreateV3Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

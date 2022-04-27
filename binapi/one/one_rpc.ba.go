@@ -8,7 +8,7 @@ import (
 	"io"
 
 	api "git.fd.io/govpp.git/api"
-	vpe "git.fd.io/govpp.git/binapi/vpe"
+	memclnt "git.fd.io/govpp.git/binapi/memclnt"
 )
 
 // RPCService defines RPC service one.
@@ -194,7 +194,7 @@ func (c *serviceClient) OneEidTableDump(ctx context.Context, in *OneEidTableDump
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -217,7 +217,7 @@ func (c *serviceClient_OneEidTableDumpClient) Recv() (*OneEidTableDetails, error
 	switch m := msg.(type) {
 	case *OneEidTableDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -237,7 +237,7 @@ func (c *serviceClient) OneEidTableMapDump(ctx context.Context, in *OneEidTableM
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -260,7 +260,7 @@ func (c *serviceClient_OneEidTableMapDumpClient) Recv() (*OneEidTableMapDetails,
 	switch m := msg.(type) {
 	case *OneEidTableMapDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -280,7 +280,7 @@ func (c *serviceClient) OneEidTableVniDump(ctx context.Context, in *OneEidTableV
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -303,7 +303,7 @@ func (c *serviceClient_OneEidTableVniDumpClient) Recv() (*OneEidTableVniDetails,
 	switch m := msg.(type) {
 	case *OneEidTableVniDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -395,7 +395,7 @@ func (c *serviceClient) OneLocatorDump(ctx context.Context, in *OneLocatorDump) 
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -418,7 +418,7 @@ func (c *serviceClient_OneLocatorDumpClient) Recv() (*OneLocatorDetails, error) 
 	switch m := msg.(type) {
 	case *OneLocatorDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -438,7 +438,7 @@ func (c *serviceClient) OneLocatorSetDump(ctx context.Context, in *OneLocatorSet
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -461,7 +461,7 @@ func (c *serviceClient_OneLocatorSetDumpClient) Recv() (*OneLocatorSetDetails, e
 	switch m := msg.(type) {
 	case *OneLocatorSetDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -517,7 +517,7 @@ func (c *serviceClient) OneMapResolverDump(ctx context.Context, in *OneMapResolv
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -540,7 +540,7 @@ func (c *serviceClient_OneMapResolverDumpClient) Recv() (*OneMapResolverDetails,
 	switch m := msg.(type) {
 	case *OneMapResolverDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -560,7 +560,7 @@ func (c *serviceClient) OneMapServerDump(ctx context.Context, in *OneMapServerDu
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -583,7 +583,7 @@ func (c *serviceClient_OneMapServerDumpClient) Recv() (*OneMapServerDetails, err
 	switch m := msg.(type) {
 	case *OneMapServerDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err
@@ -684,7 +684,7 @@ func (c *serviceClient) OneStatsDump(ctx context.Context, in *OneStatsDump) (RPC
 	if err := x.Stream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	if err = x.Stream.SendMsg(&vpe.ControlPing{}); err != nil {
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
 		return nil, err
 	}
 	return x, nil
@@ -707,7 +707,7 @@ func (c *serviceClient_OneStatsDumpClient) Recv() (*OneStatsDetails, error) {
 	switch m := msg.(type) {
 	case *OneStatsDetails:
 		return m, nil
-	case *vpe.ControlPingReply:
+	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, err

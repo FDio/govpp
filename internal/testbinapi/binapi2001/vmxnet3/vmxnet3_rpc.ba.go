@@ -5,12 +5,13 @@ package vmxnet3
 import (
 	"context"
 	"fmt"
+	"io"
+
 	api "git.fd.io/govpp.git/api"
 	vpe "git.fd.io/govpp.git/internal/testbinapi/binapi2001/vpe"
-	"io"
 )
 
-// RPCService defines RPC service  vmxnet3.
+// RPCService defines RPC service vmxnet3.
 type RPCService interface {
 	Vmxnet3Create(ctx context.Context, in *Vmxnet3Create) (*Vmxnet3CreateReply, error)
 	Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*Vmxnet3DeleteReply, error)
@@ -31,7 +32,7 @@ func (c *serviceClient) Vmxnet3Create(ctx context.Context, in *Vmxnet3Create) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*Vmxnet3DeleteReply, error) {
@@ -40,7 +41,7 @@ func (c *serviceClient) Vmxnet3Delete(ctx context.Context, in *Vmxnet3Delete) (*
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Vmxnet3Dump(ctx context.Context, in *Vmxnet3Dump) (RPCService_Vmxnet3DumpClient, error) {
@@ -76,6 +77,10 @@ func (c *serviceClient_Vmxnet3DumpClient) Recv() (*Vmxnet3Details, error) {
 	case *Vmxnet3Details:
 		return m, nil
 	case *vpe.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)

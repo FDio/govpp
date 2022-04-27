@@ -5,11 +5,12 @@ package vpe
 import (
 	"context"
 	"fmt"
-	api "git.fd.io/govpp.git/api"
 	"io"
+
+	api "git.fd.io/govpp.git/api"
 )
 
-// RPCService defines RPC service  vpe.
+// RPCService defines RPC service vpe.
 type RPCService interface {
 	AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddNodeNextReply, error)
 	Cli(ctx context.Context, in *Cli) (*CliReply, error)
@@ -40,7 +41,7 @@ func (c *serviceClient) AddNodeNext(ctx context.Context, in *AddNodeNext) (*AddN
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Cli(ctx context.Context, in *Cli) (*CliReply, error) {
@@ -49,7 +50,7 @@ func (c *serviceClient) Cli(ctx context.Context, in *Cli) (*CliReply, error) {
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) CliInband(ctx context.Context, in *CliInband) (*CliInbandReply, error) {
@@ -58,7 +59,7 @@ func (c *serviceClient) CliInband(ctx context.Context, in *CliInband) (*CliInban
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error) {
@@ -67,7 +68,7 @@ func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*Cont
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GetF64EndianValue(ctx context.Context, in *GetF64EndianValue) (*GetF64EndianValueReply, error) {
@@ -76,7 +77,7 @@ func (c *serviceClient) GetF64EndianValue(ctx context.Context, in *GetF64EndianV
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(int32(out.Retval))
 }
 
 func (c *serviceClient) GetF64IncrementByOne(ctx context.Context, in *GetF64IncrementByOne) (*GetF64IncrementByOneReply, error) {
@@ -85,7 +86,7 @@ func (c *serviceClient) GetF64IncrementByOne(ctx context.Context, in *GetF64Incr
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(int32(out.Retval))
 }
 
 func (c *serviceClient) GetNextIndex(ctx context.Context, in *GetNextIndex) (*GetNextIndexReply, error) {
@@ -94,7 +95,7 @@ func (c *serviceClient) GetNextIndex(ctx context.Context, in *GetNextIndex) (*Ge
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*GetNodeGraphReply, error) {
@@ -103,7 +104,7 @@ func (c *serviceClient) GetNodeGraph(ctx context.Context, in *GetNodeGraph) (*Ge
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) GetNodeIndex(ctx context.Context, in *GetNodeIndex) (*GetNodeIndexReply, error) {
@@ -112,7 +113,7 @@ func (c *serviceClient) GetNodeIndex(ctx context.Context, in *GetNodeIndex) (*Ge
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) LogDump(ctx context.Context, in *LogDump) (RPCService_LogDumpClient, error) {
@@ -148,6 +149,10 @@ func (c *serviceClient_LogDumpClient) Recv() (*LogDetails, error) {
 	case *LogDetails:
 		return m, nil
 	case *ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
 		return nil, io.EOF
 	default:
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
@@ -160,7 +165,7 @@ func (c *serviceClient) ShowThreads(ctx context.Context, in *ShowThreads) (*Show
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowVersion(ctx context.Context, in *ShowVersion) (*ShowVersionReply, error) {
@@ -169,7 +174,7 @@ func (c *serviceClient) ShowVersion(ctx context.Context, in *ShowVersion) (*Show
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystemTime) (*ShowVpeSystemTimeReply, error) {
@@ -178,5 +183,5 @@ func (c *serviceClient) ShowVpeSystemTime(ctx context.Context, in *ShowVpeSystem
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
