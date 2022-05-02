@@ -117,6 +117,23 @@ type BufferPool struct {
 
 // MemoryStats represents memory stats segment counters.
 type MemoryStats struct {
+	// Deprecated: /mem/statseg total memory directory
 	Total float64
-	Used  float64
+	// Deprecated: /mem/statseg used memory directory
+	Used float64
+
+	// stat/main memory usage per-heap
+	Stat map[int]MemoryCounters
+	Main map[int]MemoryCounters
+}
+
+// MemoryCounters represents values of various memory usage
+type MemoryCounters struct {
+	Total      uint64
+	Used       uint64
+	Free       uint64
+	UsedMMap   uint64
+	TotalAlloc uint64
+	FreeChunks uint64
+	Releasable uint64
 }
