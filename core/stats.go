@@ -40,8 +40,8 @@ const (
 	CounterStatsPrefix = "/err/"
 
 	MemoryStatSegPrefix = "/mem/statseg"
-	MemoryStatPrefix    = "/mem/stat"
-	MemoryMainPrefix    = "/mem/main"
+	MemoryStatSegment   = "/mem/stat segment"
+	MemoryMainHeap      = "/mem/main heap"
 	MemoryStats_Total   = "total"
 	MemoryStats_Used    = "used"
 
@@ -303,9 +303,6 @@ func (c *StatsConnection) GetErrorStats(errorStats *api.ErrorStats) (err error) 
 	}
 
 	for i, stat := range c.errorStatsData.Entries {
-		if stat.Type != adapter.ErrorIndex {
-			continue
-		}
 		if errStat, ok := stat.Data.(adapter.ErrorStat); ok {
 			values := make([]uint64, len(errStat))
 			for j, errStatW := range errStat {
@@ -313,8 +310,16 @@ func (c *StatsConnection) GetErrorStats(errorStats *api.ErrorStats) (err error) 
 			}
 			errorStats.Errors[i].Values = values
 		}
+		if errStat, ok := stat.Data.(adapter.SimpleCounterStat); ok {
+			values := make([]uint64, len(errStat))
+			for j, errStatW := range errStat {
+				for _, val := range errStatW {
+					values[j] += uint64(val)
+				}
+			}
+			errorStats.Errors[i].Values = values
+		}
 	}
-
 	return nil
 }
 
@@ -547,7 +552,7 @@ func (c *StatsConnection) GetBufferStats(bufStats *api.BufferStats) (err error) 
 }
 
 func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) {
-	if err := c.updateStats(&c.memStatsData, MemoryStatSegPrefix, MemoryStatPrefix, MemoryMainPrefix); err != nil {
+	if err := c.updateStats(&c.memStatsData, MemoryStatSegPrefix, MemoryStatSegment, MemoryMainHeap); err != nil {
 		return err
 	}
 	convertStats := func(stats []adapter.Counter) api.MemoryCounters {
@@ -573,7 +578,7 @@ func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) 
 			case MemoryStats_Used:
 				memStats.Used = val
 			}
-		} else if strings.Contains(string(stat.Name), MemoryStatPrefix) {
+		} else if string(stat.Name) == MemoryStatSegment {
 			if perHeapStats, ok := stat.Data.(adapter.SimpleCounterStat); ok {
 				if memStats.Stat == nil {
 					memStats.Stat = make(map[int]api.MemoryCounters)
@@ -582,7 +587,7 @@ func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) 
 					memStats.Stat[heap] = convertStats(stats)
 				}
 			}
-		} else if strings.Contains(string(stat.Name), MemoryMainPrefix) {
+		} else if string(stat.Name) == MemoryMainHeap {
 			if perHeapStats, ok := stat.Data.(adapter.SimpleCounterStat); ok {
 				if memStats.Main == nil {
 					memStats.Main = make(map[int]api.MemoryCounters)

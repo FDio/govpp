@@ -16,7 +16,6 @@ package adapter
 
 import (
 	"errors"
-	"fmt"
 )
 
 const (
@@ -53,38 +52,18 @@ type StatsAPI interface {
 
 // StatType represents type of stat directory and simply
 // defines what type of stat data is stored in the stat entry.
-type StatType int
+type StatType string
 
 const (
-	_                     StatType = 0
-	ScalarIndex           StatType = 1
-	SimpleCounterVector   StatType = 2
-	CombinedCounterVector StatType = 3
-	ErrorIndex            StatType = 4
-	NameVector            StatType = 5
-	Empty                 StatType = 6
-	Symlink               StatType = 7
+	Unknown               StatType = "UnknownStatType"
+	ScalarIndex           StatType = "ScalarIndex"
+	SimpleCounterVector   StatType = "SimpleCounterVector"
+	CombinedCounterVector StatType = "CombinedCounterVector"
+	ErrorIndex            StatType = "ErrorIndex"
+	NameVector            StatType = "NameVector"
+	Empty                 StatType = "Empty"
+	Symlink               StatType = "Symlink"
 )
-
-func (d StatType) String() string {
-	switch d {
-	case ScalarIndex:
-		return "ScalarIndex"
-	case SimpleCounterVector:
-		return "SimpleCounterVector"
-	case CombinedCounterVector:
-		return "CombinedCounterVector"
-	case ErrorIndex:
-		return "ErrorIndex"
-	case NameVector:
-		return "NameVector"
-	case Empty:
-		return "Empty"
-	case Symlink:
-		return "Symlink"
-	}
-	return fmt.Sprintf("UnknownStatType(%d)", d)
-}
 
 // StatDir defines directory of stats entries created by PrepareDir.
 type StatDir struct {

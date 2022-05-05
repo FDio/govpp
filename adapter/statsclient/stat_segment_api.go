@@ -38,16 +38,24 @@ const (
 	maxVersion = 2
 )
 
-const (
-	statDirIllegal               = 0
-	statDirScalarIndex           = 1
-	statDirCounterVectorSimple   = 2
-	statDirCounterVectorCombined = 3
-	statDirErrorIndex            = 4
-	statDirNameVector            = 5
-	statDirEmpty                 = 6
-	statDirSymlink               = 7
-)
+var dirTypeMapping = map[dirType]adapter.StatType{
+	1: adapter.ScalarIndex,
+	2: adapter.SimpleCounterVector,
+	3: adapter.CombinedCounterVector,
+	4: adapter.NameVector,
+	5: adapter.Empty,
+	6: adapter.Symlink,
+}
+
+var dirTypeMappingLegacy = map[dirType]adapter.StatType{
+	1: adapter.ScalarIndex,
+	2: adapter.SimpleCounterVector,
+	3: adapter.CombinedCounterVector,
+	4: adapter.ErrorIndex,
+	5: adapter.NameVector,
+	6: adapter.Empty,
+	7: adapter.Symlink,
+}
 
 type (
 	dirVector  unsafe.Pointer
@@ -92,10 +100,6 @@ type vecHeader struct {
 	vectorData [0]uint8
 }
 
-func (t dirType) String() string {
-	return adapter.StatType(t).String()
-}
-
 func getVersion(data []byte) uint64 {
 	type apiVersion struct {
 		value uint64
@@ -111,6 +115,19 @@ func getVersion(data []byte) uint64 {
 func vectorLen(v dirVector) dirVector {
 	vec := *(*vecHeader)(unsafe.Pointer(uintptr(v) - unsafe.Sizeof(uint64(0))))
 	return dirVector(&vec.length)
+}
+
+func getStatType(dirTypeNum dirType, useLegacyMapping bool) (dirTyp adapter.StatType) {
+	var exists bool
+	if useLegacyMapping {
+		dirTyp, exists = dirTypeMappingLegacy[dirTypeNum]
+	} else {
+		dirTyp, exists = dirTypeMapping[dirTypeNum]
+	}
+	if exists {
+		return dirTyp
+	}
+	return adapter.Unknown
 }
 
 //go:nosplit

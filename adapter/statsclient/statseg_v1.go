@@ -85,7 +85,7 @@ func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 			break
 		}
 	}
-	return statSegDir, dirName(name), dir.directoryType
+	return statSegDir, name, dir.directoryType
 }
 
 func (ss *statSegmentV1) GetEpoch() (int64, bool) {
@@ -95,13 +95,13 @@ func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 
 func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV1)(segment)
-	dirType := adapter.StatType(dirEntry.directoryType)
+	typ := getStatType(dirEntry.directoryType, true)
 
-	switch dirType {
-	case statDirScalarIndex:
+	switch typ {
+	case adapter.ScalarIndex:
 		return adapter.ScalarStat(dirEntry.unionData)
 
-	case statDirErrorIndex:
+	case adapter.ErrorIndex:
 		if dirEntry.unionData == 0 {
 			debugf("offset invalid for %s", dirEntry.name)
 			break
@@ -125,7 +125,7 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Sta
 		}
 		return adapter.ErrorStat(errData)
 
-	case statDirCounterVectorSimple:
+	case adapter.SimpleCounterVector:
 		if dirEntry.unionData == 0 {
 			debugf("offset invalid for %s", dirEntry.name)
 			break
@@ -151,7 +151,7 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Sta
 		}
 		return adapter.SimpleCounterStat(data)
 
-	case statDirCounterVectorCombined:
+	case adapter.CombinedCounterVector:
 		if dirEntry.unionData == 0 {
 			debugf("offset invalid for %s", dirEntry.name)
 			break
@@ -177,7 +177,7 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Sta
 		}
 		return adapter.CombinedCounterStat(data)
 
-	case statDirNameVector:
+	case adapter.NameVector:
 		if dirEntry.unionData == 0 {
 			debugf("offset invalid for %s", dirEntry.name)
 			break
@@ -211,10 +211,10 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Sta
 		}
 		return adapter.NameStat(data)
 
-	case statDirEmpty:
+	case adapter.Empty:
 		// no-op
 
-	case statDirSymlink:
+	case adapter.Symlink:
 		debugf("Symlinks are not supported for stats v1")
 
 	default:

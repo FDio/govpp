@@ -92,18 +92,18 @@ func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 
 func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
-	typ := adapter.StatType(dirEntry.directoryType)
+	typ := getStatType(dirEntry.directoryType, ss.getErrorVector() != nil)
 	// skip zero pointer value
-	if typ != statDirScalarIndex && typ != statDirEmpty && dirEntry.unionData == 0 {
+	if typ != adapter.ScalarIndex && typ != adapter.Empty && dirEntry.unionData == 0 {
 		debugf("data pointer not defined for %s", dirEntry.name)
 		return nil
 	}
 
 	switch typ {
-	case statDirScalarIndex:
+	case adapter.ScalarIndex:
 		return adapter.ScalarStat(dirEntry.unionData)
 
-	case statDirErrorIndex:
+	case adapter.ErrorIndex:
 		dirVector := ss.getErrorVector()
 		if dirVector == nil {
 			debugf("error vector pointer is out of range for %s", dirEntry.name)
@@ -124,7 +124,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		}
 		return adapter.ErrorStat(errData)
 
-	case statDirCounterVectorSimple:
+	case adapter.SimpleCounterVector:
 		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
@@ -159,7 +159,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		}
 		return adapter.SimpleCounterStat(data)
 
-	case statDirCounterVectorCombined:
+	case adapter.CombinedCounterVector:
 		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
@@ -194,7 +194,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		}
 		return adapter.CombinedCounterStat(data)
 
-	case statDirNameVector:
+	case adapter.NameVector:
 		dirVector := ss.adjust(dirVector(&dirEntry.unionData))
 		if dirVector == nil {
 			debugf("data vector pointer is out of range for %s", dirEntry.name)
@@ -226,11 +226,11 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		}
 		return adapter.NameStat(data)
 
-	case statDirEmpty:
+	case adapter.Empty:
 		return adapter.EmptyStat("<none>")
 		// no-op
 
-	case statDirSymlink:
+	case adapter.Symlink:
 		// prevent recursion loops
 		if index != ^uint32(0) {
 			debugf("received symlink with defined item index")
