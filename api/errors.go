@@ -40,6 +40,11 @@ func (e VPPApiError) Error() string {
 	return fmt.Sprintf("VPPApiError: %s", errstr)
 }
 
+// RetVal returns the original RetVal value
+func (e VPPApiError) RetVal() int32 {
+	return int32(e)
+}
+
 // definitions from: vpp/src/vnet/api_errno.h
 const (
 	_                                  VPPApiError = 0

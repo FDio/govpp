@@ -12,6 +12,7 @@ func TestUnspecified(t *testing.T) {
 	var err error = VPPApiError(-1)
 	errstr := err.Error()
 	Expect(errstr).Should(BeEquivalentTo("VPPApiError: Unspecified Error (-1)"))
+	Expect(err.(VPPApiError).RetVal()).To(Equal(int32(-1)))
 }
 
 func TestUnknown(t *testing.T) {
@@ -20,4 +21,5 @@ func TestUnknown(t *testing.T) {
 	var err error = VPPApiError(-999)
 	errstr := err.Error()
 	Expect(errstr).Should(BeEquivalentTo("VPPApiError: -999"))
+	Expect(err.(VPPApiError).RetVal()).To(Equal(int32(-999)))
 }
