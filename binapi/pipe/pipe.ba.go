@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "pipe"
-	APIVersion = "1.0.1"
-	VersionCrc = 0xc159134a
-)
-
 // PipeCreate defines message 'pipe_create'.
 type PipeCreate struct {
 	IsSpecified  bool   `binapi:"bool,name=is_specified" json:"is_specified,omitempty"`

@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "l2"
-	APIVersion = "3.1.0"
-	VersionCrc = 0xfc6b8fd2
-)
-
 // BdFlags defines enum 'bd_flags'.
 type BdFlags uint32
 

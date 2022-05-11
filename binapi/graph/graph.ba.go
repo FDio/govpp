@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "graph"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xa0b3fd1c
-)
-
 // NodeFlag defines enum 'node_flag'.
 type NodeFlag uint32
 

@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lldp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x8a7e7049
-)
-
 // LldpConfig defines message 'lldp_config'.
 type LldpConfig struct {
 	TxHold     uint32 `binapi:"u32,name=tx_hold" json:"tx_hold,omitempty"`

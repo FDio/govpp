@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "tls_openssl"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x7386fbcd
-)
-
 // TLSOpensslSetEngine defines message 'tls_openssl_set_engine'.
 type TLSOpensslSetEngine struct {
 	AsyncEnable uint32 `binapi:"u32,name=async_enable" json:"async_enable,omitempty"`

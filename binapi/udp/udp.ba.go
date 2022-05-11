@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "udp"
-	APIVersion = "1.1.0"
-	VersionCrc = 0x65e4a4b3
-)
-
 // UDPEncap defines type 'udp_encap'.
 type UDPEncap struct {
 	TableID uint32           `binapi:"u32,name=table_id" json:"table_id,omitempty"`

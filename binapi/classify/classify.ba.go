@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "classify"
-	APIVersion = "3.1.0"
-	VersionCrc = 0x24ea656e
-)
-
 // ClassifyAction defines enum 'classify_action'.
 type ClassifyAction uint8
 

@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "pnat"
-	APIVersion = "0.1.1"
-	VersionCrc = 0x108d3b87
-)
-
 // PnatAttachmentPoint defines enum 'pnat_attachment_point'.
 type PnatAttachmentPoint uint32
 

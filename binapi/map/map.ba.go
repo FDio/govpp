@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "map"
-	APIVersion = "4.2.1"
-	VersionCrc = 0xd1f7f56c
-)
-
 // MapAddDelRule defines message 'map_add_del_rule'.
 type MapAddDelRule struct {
 	Index  uint32              `binapi:"u32,name=index" json:"index,omitempty"`

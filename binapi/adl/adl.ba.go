@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "adl"
-	APIVersion = "0.0.1"
-	VersionCrc = 0xb752b7a2
-)
-
 // AdlAllowlistEnableDisable defines message 'adl_allowlist_enable_disable'.
 // InProgress: the message form may change in the future versions
 type AdlAllowlistEnableDisable struct {

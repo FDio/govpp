@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "builtinurl"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x25045d63
-)
-
 // BuiltinurlEnable defines message 'builtinurl_enable'.
 type BuiltinurlEnable struct{}
 

@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ip_neighbor"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xfde4a69a
-)
-
 // IPNeighborEventFlags defines enum 'ip_neighbor_event_flags'.
 type IPNeighborEventFlags uint32
 

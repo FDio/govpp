@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "l2e"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x6e8abdfb
-)
-
 // L2Emulation defines message 'l2_emulation'.
 // InProgress: the message form may change in the future versions
 type L2Emulation struct {

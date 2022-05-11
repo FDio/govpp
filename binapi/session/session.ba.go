@@ -27,12 +27,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "session"
-	APIVersion = "4.0.0"
-	VersionCrc = 0x32fe1c77
-)
-
 // SessionRuleScope defines enum 'session_rule_scope'.
 type SessionRuleScope uint32
 

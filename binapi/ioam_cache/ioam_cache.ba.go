@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ioam_cache"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xd0a0cf20
-)
-
 // IoamCacheIP6EnableDisable defines message 'ioam_cache_ip6_enable_disable'.
 type IoamCacheIP6EnableDisable struct {
 	IsDisable bool `binapi:"bool,name=is_disable" json:"is_disable,omitempty"`

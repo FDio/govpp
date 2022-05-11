@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vxlan"
-	APIVersion = "2.1.0"
-	VersionCrc = 0x95381587
-)
-
 // SwInterfaceSetVxlanBypass defines message 'sw_interface_set_vxlan_bypass'.
 type SwInterfaceSetVxlanBypass struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ipfix_export"
-	APIVersion = "2.0.3"
-	VersionCrc = 0x6ae99522
-)
-
 // IpfixClassifyStreamDetails defines message 'ipfix_classify_stream_details'.
 type IpfixClassifyStreamDetails struct {
 	DomainID uint32 `binapi:"u32,name=domain_id" json:"domain_id,omitempty"`

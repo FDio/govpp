@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lcp"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xd6fdb642
-)
-
 // LcpItfHostType defines enum 'lcp_itf_host_type'.
 type LcpItfHostType uint8
 

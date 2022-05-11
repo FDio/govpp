@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vxlan_gbp"
-	APIVersion = "1.1.1"
-	VersionCrc = 0xb40203a1
-)
-
 // VxlanGbpAPITunnelMode defines enum 'vxlan_gbp_api_tunnel_mode'.
 type VxlanGbpAPITunnelMode uint32
 

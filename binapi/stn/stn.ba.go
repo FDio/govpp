@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "stn"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x9cfaef64
-)
-
 // StnAddDelRule defines message 'stn_add_del_rule'.
 type StnAddDelRule struct {
 	IPAddress ip_types.Address               `binapi:"address,name=ip_address" json:"ip_address,omitempty"`

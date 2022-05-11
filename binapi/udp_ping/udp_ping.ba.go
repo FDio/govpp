@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "udp_ping"
-	APIVersion = "3.0.0"
-	VersionCrc = 0x16d961db
-)
-
 // UDPPingAddDel defines message 'udp_ping_add_del'.
 type UDPPingAddDel struct {
 	SrcIPAddress ip_types.Address `binapi:"address,name=src_ip_address" json:"src_ip_address,omitempty"`

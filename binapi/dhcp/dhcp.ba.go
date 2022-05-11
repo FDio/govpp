@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "dhcp"
-	APIVersion = "3.0.1"
-	VersionCrc = 0x3cf8291a
-)
-
 // DHCPClientState defines enum 'dhcp_client_state'.
 type DHCPClientState uint32
 

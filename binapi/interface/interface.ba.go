@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "interface"
-	APIVersion = "3.2.2"
-	VersionCrc = 0x29a0076c
-)
-
 // CollectDetailedInterfaceStats defines message 'collect_detailed_interface_stats'.
 type CollectDetailedInterfaceStats struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

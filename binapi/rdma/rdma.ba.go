@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "rdma"
-	APIVersion = "3.0.0"
-	VersionCrc = 0xdab70fa9
-)
-
 // RdmaMode defines enum 'rdma_mode'.
 type RdmaMode uint32
 

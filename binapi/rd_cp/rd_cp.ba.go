@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "rd_cp"
-	APIVersion = "1.0.1"
-	VersionCrc = 0x871c3bee
-)
-
 // IP6NdAddressAutoconfig defines message 'ip6_nd_address_autoconfig'.
 type IP6NdAddressAutoconfig struct {
 	SwIfIndex            interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

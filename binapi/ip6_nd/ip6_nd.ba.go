@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ip6_nd"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x90f5895b
-)
-
 // IP6RaPrefixInfo defines type 'ip6_ra_prefix_info'.
 type IP6RaPrefixInfo struct {
 	Prefix        ip_types.Prefix `binapi:"prefix,name=prefix" json:"prefix,omitempty"`

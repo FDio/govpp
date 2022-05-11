@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "dhcp6_pd_client_cp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xd4418668
-)
-
 // DHCP6PdClientEnableDisable defines message 'dhcp6_pd_client_enable_disable'.
 type DHCP6PdClientEnableDisable struct {
 	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "avf"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x9f5a6a20
-)
-
 // AvfCreate defines message 'avf_create'.
 type AvfCreate struct {
 	PciAddr    uint32 `binapi:"u32,name=pci_addr" json:"pci_addr,omitempty"`

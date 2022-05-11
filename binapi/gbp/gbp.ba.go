@@ -30,12 +30,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "gbp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x5b2d93
-)
-
 // GbpBridgeDomainFlags defines enum 'gbp_bridge_domain_flags'.
 type GbpBridgeDomainFlags uint32
 

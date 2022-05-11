@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lb"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x50c0a6c9
-)
-
 // LbAddDelAs defines message 'lb_add_del_as'.
 type LbAddDelAs struct {
 	Pfx       ip_types.AddressWithPrefix `binapi:"address_with_prefix,name=pfx" json:"pfx,omitempty"`

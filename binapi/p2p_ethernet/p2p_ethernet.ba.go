@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "p2p_ethernet"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x3cfe55da
-)
-
 // P2pEthernetAdd defines message 'p2p_ethernet_add'.
 type P2pEthernetAdd struct {
 	ParentIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=parent_if_index" json:"parent_if_index,omitempty"`

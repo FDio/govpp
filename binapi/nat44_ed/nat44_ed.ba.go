@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "nat44_ed"
-	APIVersion = "5.3.0"
-	VersionCrc = 0xfd9ae40f
-)
-
 // Nat44ConfigFlags defines enum 'nat44_config_flags'.
 type Nat44ConfigFlags uint8
 

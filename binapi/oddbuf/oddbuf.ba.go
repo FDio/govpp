@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "oddbuf"
-	APIVersion = "0.1.0"
-	VersionCrc = 0x3a1a2c50
-)
-
 // OddbufEnableDisable defines message 'oddbuf_enable_disable'.
 // InProgress: the message form may change in the future versions
 type OddbufEnableDisable struct {

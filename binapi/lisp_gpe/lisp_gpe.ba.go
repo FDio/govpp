@@ -27,12 +27,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lisp_gpe"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x92611b0
-)
-
 // GpeFwdEntry defines type 'gpe_fwd_entry'.
 type GpeFwdEntry struct {
 	FwdEntryIndex uint32         `binapi:"u32,name=fwd_entry_index" json:"fwd_entry_index,omitempty"`

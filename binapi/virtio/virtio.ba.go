@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "virtio"
-	APIVersion = "3.0.0"
-	VersionCrc = 0xa507d784
-)
-
 // VirtioFlags defines enum 'virtio_flags'.
 type VirtioFlags uint32
 

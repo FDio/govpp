@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "flow"
-	APIVersion = "0.0.2"
-	VersionCrc = 0x140d3585
-)
-
 // FlowAdd defines message 'flow_add'.
 // InProgress: the message form may change in the future versions
 type FlowAdd struct {

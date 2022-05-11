@@ -30,12 +30,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lisp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xcb04530f
-)
-
 // LispLocatorSetFilter defines enum 'lisp_locator_set_filter'.
 type LispLocatorSetFilter uint8
 

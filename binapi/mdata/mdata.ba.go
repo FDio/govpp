@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "mdata"
-	APIVersion = "0.1.0"
-	VersionCrc = 0x5bd69477
-)
-
 // MdataEnableDisable defines message 'mdata_enable_disable'.
 // InProgress: the message form may change in the future versions
 type MdataEnableDisable struct {

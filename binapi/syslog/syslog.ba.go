@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "syslog"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x5ad12a74
-)
-
 // SyslogSeverity defines enum 'syslog_severity'.
 type SyslogSeverity uint32
 

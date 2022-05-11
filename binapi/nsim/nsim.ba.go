@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "nsim"
-	APIVersion = "2.2.1"
-	VersionCrc = 0x3b179b8f
-)
-
 // NsimConfigure defines message 'nsim_configure'.
 // Deprecated: the message will be removed in the future versions
 type NsimConfigure struct {

@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "flow_types"
-	APIVersion = "0.0.3"
-	VersionCrc = 0xd789ede8
-)
-
 // FlowAction defines enum 'flow_action'.
 type FlowAction uint32
 

@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "det44"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x6d6e88dd
-)
-
 // Det44AddDelMap defines message 'det44_add_del_map'.
 type Det44AddDelMap struct {
 	IsAdd   bool                `binapi:"bool,name=is_add" json:"is_add,omitempty"`

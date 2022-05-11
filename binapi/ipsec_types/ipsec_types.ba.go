@@ -27,12 +27,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ipsec_types"
-	APIVersion = "3.0.1"
-	VersionCrc = 0x48f74470
-)
-
 // IpsecCryptoAlg defines enum 'ipsec_crypto_alg'.
 type IpsecCryptoAlg uint32
 

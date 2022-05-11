@@ -31,12 +31,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ip"
-	APIVersion = "3.1.0"
-	VersionCrc = 0x972432b4
-)
-
 // IPReassType defines enum 'ip_reass_type'.
 type IPReassType uint32
 

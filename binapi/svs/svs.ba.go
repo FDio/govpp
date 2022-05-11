@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "svs"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x816cf275
-)
-
 // SvsDetails defines message 'svs_details'.
 type SvsDetails struct {
 	TableID   uint32                         `binapi:"u32,name=table_id" json:"table_id,omitempty"`

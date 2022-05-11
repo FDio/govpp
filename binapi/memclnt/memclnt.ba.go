@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "memclnt"
-	APIVersion = "2.1.0"
-	VersionCrc = 0x8d3dd881
-)
-
 // MessageTableEntry defines type 'message_table_entry'.
 type MessageTableEntry struct {
 	Index uint16 `binapi:"u16,name=index" json:"index,omitempty"`

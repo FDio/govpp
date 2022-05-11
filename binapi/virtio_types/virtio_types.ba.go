@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "virtio_types"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x7a70a44e
-)
-
 // VirtioNetFeaturesFirst32 defines enum 'virtio_net_features_first_32'.
 type VirtioNetFeaturesFirst32 uint32
 

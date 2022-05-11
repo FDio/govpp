@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "gtpu"
-	APIVersion = "2.0.1"
-	VersionCrc = 0x1462473
-)
-
 // GtpuAddDelTunnel defines message 'gtpu_add_del_tunnel'.
 type GtpuAddDelTunnel struct {
 	IsAdd          bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`

@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ct6"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x5c824a95
-)
-
 // Ct6EnableDisable defines message 'ct6_enable_disable'.
 type Ct6EnableDisable struct {
 	EnableDisable bool                           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`

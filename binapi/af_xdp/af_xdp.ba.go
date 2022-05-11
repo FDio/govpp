@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "af_xdp"
-	APIVersion = "0.2.0"
-	VersionCrc = 0x31450826
-)
-
 // AfXdpMode defines enum 'af_xdp_mode'.
 type AfXdpMode uint32
 

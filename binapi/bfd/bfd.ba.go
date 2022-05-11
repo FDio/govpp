@@ -27,12 +27,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "bfd"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xa8eb4aac
-)
-
 // BfdState defines enum 'bfd_state'.
 type BfdState uint32
 

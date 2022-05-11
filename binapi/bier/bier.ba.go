@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "bier"
-	APIVersion = "1.2.1"
-	VersionCrc = 0x8d1cd497
-)
-
 // BierRoute defines type 'bier_route'.
 type BierRoute struct {
 	BrBp     uint32              `binapi:"u32,name=br_bp" json:"br_bp,omitempty"`

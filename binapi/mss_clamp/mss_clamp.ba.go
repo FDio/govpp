@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "mss_clamp"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xea8186c0
-)
-
 // MssClampDir defines enum 'mss_clamp_dir'.
 type MssClampDir uint8
 

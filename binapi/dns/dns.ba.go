@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "dns"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x269575cd
-)
-
 // DNSEnableDisable defines message 'dns_enable_disable'.
 type DNSEnableDisable struct {
 	Enable uint8 `binapi:"u8,name=enable" json:"enable,omitempty"`

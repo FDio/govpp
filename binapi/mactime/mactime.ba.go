@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "mactime"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xc72e296e
-)
-
 // MactimeTimeRange defines type 'mactime_time_range'.
 type MactimeTimeRange struct {
 	Start float64 `binapi:"f64,name=start" json:"start,omitempty"`

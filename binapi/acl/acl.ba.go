@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "acl"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x4a805ebc
-)
-
 // ACLAddReplace defines message 'acl_add_replace'.
 type ACLAddReplace struct {
 	ACLIndex uint32              `binapi:"u32,name=acl_index" json:"acl_index,omitempty"`

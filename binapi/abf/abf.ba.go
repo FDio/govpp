@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "abf"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xf2367b47
-)
-
 // AbfItfAttach defines type 'abf_itf_attach'.
 type AbfItfAttach struct {
 	PolicyID  uint32                         `binapi:"u32,name=policy_id" json:"policy_id,omitempty"`

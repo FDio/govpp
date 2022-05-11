@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "arping"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x666f91cc
-)
-
 // Arping defines message 'arping'.
 type Arping struct {
 	Address   ip_types.Address               `binapi:"address,name=address" json:"address,omitempty"`

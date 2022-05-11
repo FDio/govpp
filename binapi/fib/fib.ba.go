@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "fib"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x4ef4abc1
-)
-
 // FibSource defines type 'fib_source'.
 type FibSource struct {
 	Priority uint8  `binapi:"u8,name=priority" json:"priority,omitempty"`

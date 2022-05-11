@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "http_static"
-	APIVersion = "2.1.0"
-	VersionCrc = 0xd29e72e9
-)
-
 // HTTPStaticEnable defines message 'http_static_enable'.
 type HTTPStaticEnable struct {
 	FifoSize           uint32 `binapi:"u32,name=fifo_size" json:"fifo_size,omitempty"`

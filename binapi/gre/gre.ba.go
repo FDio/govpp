@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "gre"
-	APIVersion = "2.1.1"
-	VersionCrc = 0x98b44dd1
-)
-
 // GreTunnelType defines enum 'gre_tunnel_type'.
 type GreTunnelType uint8
 

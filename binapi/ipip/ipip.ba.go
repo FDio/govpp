@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ipip"
-	APIVersion = "2.0.2"
-	VersionCrc = 0x4609caba
-)
-
 // IpipTunnel defines type 'ipip_tunnel'.
 type IpipTunnel struct {
 	Instance  uint32                             `binapi:"u32,name=instance" json:"instance,omitempty"`

@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ioam_vxlan_gpe"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xb49eb0b9
-)
-
 // VxlanGpeIoamDisable defines message 'vxlan_gpe_ioam_disable'.
 type VxlanGpeIoamDisable struct {
 	ID uint16 `binapi:"u16,name=id" json:"id,omitempty"`

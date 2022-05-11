@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "geneve"
-	APIVersion = "2.1.0"
-	VersionCrc = 0xe3dbb8a3
-)
-
 // GeneveAddDelTunnel defines message 'geneve_add_del_tunnel'.
 // Deprecated: the message will be removed in the future versions
 type GeneveAddDelTunnel struct {

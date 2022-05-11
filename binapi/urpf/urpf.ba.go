@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "urpf"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xb2bfd2c4
-)
-
 // UrpfMode defines enum 'urpf_mode'.
 type UrpfMode uint8
 

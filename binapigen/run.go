@@ -85,6 +85,7 @@ func GenerateDefault(gen *Generator) {
 		if !file.Generate {
 			continue
 		}
+		GenerateVersion(gen, file)
 		GenerateAPI(gen, file)
 		GenerateRPC(gen, file)
 	}

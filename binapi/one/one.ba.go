@@ -30,12 +30,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "one"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x9f64600e
-)
-
 // OneFilter defines enum 'one_filter'.
 type OneFilter uint32
 

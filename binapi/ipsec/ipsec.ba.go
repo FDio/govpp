@@ -30,12 +30,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ipsec"
-	APIVersion = "5.0.1"
-	VersionCrc = 0x196d64b0
-)
-
 // IpsecSpdAction defines enum 'ipsec_spd_action'.
 type IpsecSpdAction uint32
 

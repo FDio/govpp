@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vmxnet3"
-	APIVersion = "1.2.0"
-	VersionCrc = 0x609454ea
-)
-
 // Vmxnet3RxList defines type 'vmxnet3_rx_list'.
 type Vmxnet3RxList struct {
 	RxQsize   uint16   `binapi:"u16,name=rx_qsize" json:"rx_qsize,omitempty"`

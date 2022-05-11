@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "cdp"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x8cfa825e
-)
-
 // CdpEnableDisable defines message 'cdp_enable_disable'.
 type CdpEnableDisable struct {
 	EnableDisable bool `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`

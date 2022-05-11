@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "tracedump"
-	APIVersion = "0.1.0"
-	VersionCrc = 0x691543d5
-)
-
 // TraceFilterFlag defines enum 'trace_filter_flag'.
 type TraceFilterFlag uint32
 

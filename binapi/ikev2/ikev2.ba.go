@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ikev2"
-	APIVersion = "1.0.1"
-	VersionCrc = 0x8eb2437c
-)
-
 // Ikev2ChildSaDetails defines message 'ikev2_child_sa_details'.
 // InProgress: the message form may change in the future versions
 type Ikev2ChildSaDetails struct {

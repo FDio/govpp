@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "policer"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xf14848c
-)
-
 // PolicerAddDel defines message 'policer_add_del'.
 type PolicerAddDel struct {
 	IsAdd         bool                             `binapi:"bool,name=is_add" json:"is_add,omitempty"`

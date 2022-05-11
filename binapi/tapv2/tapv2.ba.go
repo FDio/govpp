@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "tapv2"
-	APIVersion = "4.0.0"
-	VersionCrc = 0xc20c291f
-)
-
 // TapFlags defines enum 'tap_flags'.
 type TapFlags uint32
 

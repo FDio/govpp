@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "nsh"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xc2f3127d
-)
-
 // NshAddDelEntry defines message 'nsh_add_del_entry'.
 type NshAddDelEntry struct {
 	IsAdd        bool   `binapi:"bool,name=is_add" json:"is_add,omitempty"`

@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "punt"
-	APIVersion = "2.2.1"
-	VersionCrc = 0xee63b6c7
-)
-
 // PuntType defines enum 'punt_type'.
 type PuntType uint32
 

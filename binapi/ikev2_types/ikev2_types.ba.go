@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "ikev2_types"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xe7510e
-)
-
 // Ikev2Auth defines type 'ikev2_auth'.
 type Ikev2Auth struct {
 	Method  uint8  `binapi:"u8,name=method" json:"method,omitempty"`

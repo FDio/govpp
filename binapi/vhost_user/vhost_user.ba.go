@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vhost_user"
-	APIVersion = "4.1.1"
-	VersionCrc = 0xd49ae8cd
-)
-
 // CreateVhostUserIf defines message 'create_vhost_user_if'.
 // Deprecated: the message will be removed in the future versions
 type CreateVhostUserIf struct {

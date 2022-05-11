@@ -27,12 +27,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "bond"
-	APIVersion = "2.1.0"
-	VersionCrc = 0xa03f5330
-)
-
 // BondLbAlgo defines enum 'bond_lb_algo'.
 type BondLbAlgo uint32
 

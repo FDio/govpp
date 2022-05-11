@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "mpls"
-	APIVersion = "1.1.1"
-	VersionCrc = 0x46824f02
-)
-
 // MplsRoute defines type 'mpls_route'.
 type MplsRoute struct {
 	MrTableID     uint32              `binapi:"u32,name=mr_table_id" json:"mr_table_id,omitempty"`

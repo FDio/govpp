@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "pot"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xa9d8e55c
-)
-
 // PotProfileActivate defines message 'pot_profile_activate'.
 type PotProfileActivate struct {
 	ID       uint8  `binapi:"u8,name=id" json:"id,omitempty"`

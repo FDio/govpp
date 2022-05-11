@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vxlan_gpe_ioam_export"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x26bebf64
-)
-
 // VxlanGpeIoamExportEnableDisable defines message 'vxlan_gpe_ioam_export_enable_disable'.
 type VxlanGpeIoamExportEnableDisable struct {
 	IsDisable        bool                `binapi:"bool,name=is_disable" json:"is_disable,omitempty"`

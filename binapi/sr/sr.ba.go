@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "sr"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xb17a64be
-)
-
 // Srv6SidList defines type 'srv6_sid_list'.
 type Srv6SidList struct {
 	NumSids uint8                   `binapi:"u8,name=num_sids" json:"num_sids,omitempty"`

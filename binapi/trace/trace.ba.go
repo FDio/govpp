@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "trace"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x397cbf90
-)
-
 // TraceProfileAdd defines message 'trace_profile_add'.
 type TraceProfileAdd struct {
 	TraceType uint8  `binapi:"u8,name=trace_type" json:"trace_type,omitempty"`

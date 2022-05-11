@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "crypto"
-	APIVersion = "1.0.1"
-	VersionCrc = 0x22355ec6
-)
-
 // CryptoDispatchMode defines enum 'crypto_dispatch_mode'.
 type CryptoDispatchMode uint8
 

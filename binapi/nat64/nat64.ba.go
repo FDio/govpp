@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "nat64"
-	APIVersion = "1.0.0"
-	VersionCrc = 0xfbd06e33
-)
-
 // Nat64AddDelInterface defines message 'nat64_add_del_interface'.
 type Nat64AddDelInterface struct {
 	IsAdd     bool                           `binapi:"bool,name=is_add" json:"is_add,omitempty"`

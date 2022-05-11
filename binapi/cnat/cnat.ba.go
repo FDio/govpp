@@ -29,12 +29,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "cnat"
-	APIVersion = "0.2.0"
-	VersionCrc = 0xfd05573b
-)
-
 // CnatEndpointTupleFlags defines enum 'cnat_endpoint_tuple_flags'.
 type CnatEndpointTupleFlags uint8
 

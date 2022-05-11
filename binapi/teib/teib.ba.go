@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "teib"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x14ded985
-)
-
 // TeibEntry defines type 'teib_entry'.
 type TeibEntry struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "qos"
-	APIVersion = "1.1.1"
-	VersionCrc = 0x7b7b5955
-)
-
 // QosSource defines enum 'qos_source'.
 type QosSource uint8
 

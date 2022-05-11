@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "feature"
-	APIVersion = "1.0.2"
-	VersionCrc = 0x8a6e6da1
-)
-
 // FeatureEnableDisable defines message 'feature_enable_disable'.
 type FeatureEnableDisable struct {
 	SwIfIndex   interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

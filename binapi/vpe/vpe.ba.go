@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "vpe"
-	APIVersion = "1.6.1"
-	VersionCrc = 0x40364e00
-)
-
 // ThreadData defines type 'thread_data'.
 type ThreadData struct {
 	ID        uint32 `binapi:"u32,name=id" json:"id,omitempty"`

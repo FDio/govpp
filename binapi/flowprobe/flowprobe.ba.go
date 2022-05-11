@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "flowprobe"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x8da9f1c
-)
-
 // FlowprobeRecordFlags defines enum 'flowprobe_record_flags'.
 type FlowprobeRecordFlags uint8
 

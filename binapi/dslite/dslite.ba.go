@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "dslite"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x1afa049b
-)
-
 // DsliteAddDelPoolAddrRange defines message 'dslite_add_del_pool_addr_range'.
 type DsliteAddDelPoolAddrRange struct {
 	StartAddr ip_types.IP4Address `binapi:"ip4_address,name=start_addr" json:"start_addr,omitempty"`

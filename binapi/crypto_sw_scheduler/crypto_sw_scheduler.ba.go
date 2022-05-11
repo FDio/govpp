@@ -22,12 +22,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "crypto_sw_scheduler"
-	APIVersion = "0.1.0"
-	VersionCrc = 0xf4b02951
-)
-
 // CryptoSwSchedulerSetWorker defines message 'crypto_sw_scheduler_set_worker'.
 // InProgress: the message form may change in the future versions
 type CryptoSwSchedulerSetWorker struct {

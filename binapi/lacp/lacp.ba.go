@@ -24,12 +24,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "lacp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0xe1609dab
-)
-
 // SwInterfaceLacpDetails defines message 'sw_interface_lacp_details'.
 type SwInterfaceLacpDetails struct {
 	SwIfIndex             interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`

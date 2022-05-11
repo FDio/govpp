@@ -26,12 +26,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "span"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x34ee02b
-)
-
 // SpanState defines enum 'span_state'.
 type SpanState uint32
 

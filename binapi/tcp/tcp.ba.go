@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "tcp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x93d07485
-)
-
 // TCPConfigureSrcAddresses defines message 'tcp_configure_src_addresses'.
 type TCPConfigureSrcAddresses struct {
 	VrfID        uint32           `binapi:"u32,name=vrf_id" json:"vrf_id,omitempty"`

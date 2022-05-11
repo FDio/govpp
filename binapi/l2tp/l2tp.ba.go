@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "l2tp"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x256cef81
-)
-
 // L2tLookupKey defines enum 'l2t_lookup_key'.
 type L2tLookupKey uint8
 

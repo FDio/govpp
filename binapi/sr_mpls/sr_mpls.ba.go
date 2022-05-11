@@ -25,12 +25,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "sr_mpls"
-	APIVersion = "3.0.0"
-	VersionCrc = 0x156edb17
-)
-
 // SrMplsPolicyAdd defines message 'sr_mpls_policy_add'.
 type SrMplsPolicyAdd struct {
 	Bsid      uint32   `binapi:"u32,name=bsid" json:"bsid,omitempty"`

@@ -28,12 +28,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "igmp"
-	APIVersion = "1.0.0"
-	VersionCrc = 0x95a4ff29
-)
-
 // FilterMode defines enum 'filter_mode'.
 type FilterMode uint32
 

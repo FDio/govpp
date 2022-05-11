@@ -23,12 +23,6 @@ import (
 // GoVPP api package needs to be updated.
 const _ = api.GoVppAPIPackageIsVersion2
 
-const (
-	APIFile    = "pg"
-	APIVersion = "2.0.0"
-	VersionCrc = 0x3a037a0e
-)
-
 // PgCapture defines message 'pg_capture'.
 type PgCapture struct {
 	InterfaceID  interface_types.InterfaceIndex `binapi:"interface_index,name=interface_id" json:"interface_id,omitempty"`
