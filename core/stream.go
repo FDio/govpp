@@ -160,6 +160,8 @@ func (s *Stream) recvReply() (*vppReply, error) {
 	if s.conn == nil {
 		return nil, errors.New("stream closed")
 	}
+
+	timer := time.NewTimer(s.replyTimeout)
 	select {
 	case reply, ok := <-s.channel.replyChan:
 		if !ok {
@@ -172,6 +174,11 @@ func (s *Stream) recvReply() (*vppReply, error) {
 			return nil, reply.err
 		}
 		return reply, nil
+
+	case <-timer.C:
+		log.Debugf("timeout (%v) waiting for reply", s.replyTimeout)
+		err := fmt.Errorf("no reply received within the timeout period %s", s.replyTimeout)
+		return nil, err
 
 	case <-s.ctx.Done():
 		return nil, s.ctx.Err()
