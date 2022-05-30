@@ -16,7 +16,6 @@ package vppapi
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -68,7 +67,7 @@ func ResolveVPPVersion(apidir string) string {
 	}
 
 	// try to read VPP_VERSION file
-	data, err := ioutil.ReadFile(path.Join(repoDir, "VPP_VERSION"))
+	data, err := os.ReadFile(path.Join(repoDir, "VPP_VERSION"))
 	if err == nil {
 		return strings.TrimSpace(string(data))
 	}

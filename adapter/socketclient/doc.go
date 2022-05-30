@@ -18,8 +18,7 @@
 // The current implementation only supports VPP binary API, the VPP stats API
 // is not supported and clients still have to use vppapiclient for retrieving stats.
 //
-//
-// Requirements
+// # Requirements
 //
 // The socketclient connects to unix domain socket defined in VPP configuration.
 //
@@ -34,5 +33,4 @@
 //	socksvr {
 //		socket-name /run/vpp/api.sock
 //	}
-//
 package socketclient

@@ -110,8 +110,7 @@ func genService(g *GenFile, svc *Service) {
 			streamImpl := fmt.Sprintf("%s_%sClient", serviceImplName, rpc.GoName)
 			streamApi := fmt.Sprintf("%s_%sClient", serviceApiName, rpc.GoName)
 
-			msgDetails := rpc.MsgReply
-			var msgReply *Message
+			var msgReply, msgDetails *Message
 			if rpc.MsgStream != nil {
 				msgDetails = rpc.MsgStream
 				msgReply = rpc.MsgReply

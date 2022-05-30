@@ -16,7 +16,6 @@ package binapigen
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -144,7 +143,7 @@ var modulePathRE = regexp.MustCompile(`module[ \t]+([^ \t\r\n]+)`)
 
 // readModulePath reads module path from go.mod file.
 func readModulePath(gomod string) (string, error) {
-	data, err := ioutil.ReadFile(gomod)
+	data, err := os.ReadFile(gomod)
 	if err != nil {
 		return "", err
 	}

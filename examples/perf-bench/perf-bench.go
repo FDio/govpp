@@ -44,11 +44,13 @@ func main() {
 	var sync bool
 	var cnt int
 	var sock, prof string
+	var testV2 bool
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
 	flag.StringVar(&sock, "api-socket", socketclient.DefaultSocketName, "Path to VPP API socket")
 	flag.String("stats-socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
 	flag.StringVar(&prof, "prof", "", "enable profiling mode [mem, cpu]")
+	flag.BoolVar(&testV2, "v2", false, "Use test function v2")
 	flag.Parse()
 
 	if cnt == 0 {
@@ -96,14 +98,18 @@ func main() {
 	// run the test & measure the time
 	start := time.Now()
 
-	if sync {
-		// run synchronous test
-		syncTest(ch, cnt)
-		//syncTest2(conn, cnt)
+	if testV2 {
+		if sync {
+			syncTest2(conn, cnt)
+		} else {
+			asyncTest2(conn, cnt)
+		}
 	} else {
-		// run asynchronous test
-		asyncTest(ch, cnt)
-		//asyncTest2(conn, cnt)
+		if sync {
+			syncTest(ch, cnt)
+		} else {
+			asyncTest(ch, cnt)
+		}
 	}
 
 	elapsed := time.Since(start)
