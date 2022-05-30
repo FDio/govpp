@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.fd.io/govpp.git/internal/version"
+	"git.fd.io/govpp.git/version"
 )
 
 // library dependencies

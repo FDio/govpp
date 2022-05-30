@@ -20,7 +20,7 @@ import (
 	"git.fd.io/govpp.git/adapter"
 	"git.fd.io/govpp.git/adapter/socketclient"
 	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/internal/version"
+	"git.fd.io/govpp.git/version"
 )
 
 // Connect connects to the VPP API using a new adapter instance created with NewVppAPIAdapter.

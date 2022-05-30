@@ -26,7 +26,7 @@ import (
 
 	"git.fd.io/govpp.git/binapigen"
 	"git.fd.io/govpp.git/binapigen/vppapi"
-	"git.fd.io/govpp.git/internal/version"
+	"git.fd.io/govpp.git/version"
 )
 
 func init() {

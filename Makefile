@@ -14,7 +14,7 @@ GOVPP_PKG := git.fd.io/govpp.git
 
 VPP_API_DIR ?= ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api
 
-VERSION_PKG := $(GOVPP_PKG)/internal/version
+VERSION_PKG := $(GOVPP_PKG)/version
 LDFLAGS = \
 	-X $(VERSION_PKG).version=$(VERSION) \
 	-X $(VERSION_PKG).commitHash=$(COMMIT) \
@@ -48,8 +48,6 @@ VPP_DIR           ?=
 BINAPI_DIR	      ?= ./binapi
 # Binapi generator path
 BINAPI_GENERATOR  = ./bin/binapi-generator
-
-INTERNAL_BINAPI_DIR ?= ./internal/testbinapi/binapi2001
 
 .DEFAULT_GOAL = help
 
@@ -109,10 +107,6 @@ generate: generate-binapi ## Generate all
 generate-binapi: install-generator ## Generate binapi code
 	@echo "# generating binapi"
 	@go generate -x "$(BINAPI_DIR)"
-
-.PHONY: gen-binapi-internal
-gen-binapi-internal:
-	@go generate $(INTERNAL_BINAPI_DIR)
 
 .PHONY: gen-binapi-local
 gen-binapi-local: binapi-generator check-VPP_DIR ## Generate binapi code (using locally cloned VPP)
