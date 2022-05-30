@@ -178,7 +178,7 @@ func (s *StatsRPC) serviceAvailable() bool {
 
 func (s *StatsRPC) GetStats(req StatsRequest, resp *StatsResponse) error {
 	if !s.serviceAvailable() {
-		log.Println(statsErrorMsg)
+		log.Print(statsErrorMsg)
 		return errors.New("server does not support 'get stats' at this time, try again later")
 	}
 	log.Debugf("StatsRPC.GetStats - REQ: %+v", req)
@@ -338,7 +338,7 @@ type RPCStreamReqResp struct {
 
 func (s *BinapiRPC) NewAPIStream(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support RPC calls at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.NewAPIStream - REQ: %#v", req)
@@ -363,7 +363,7 @@ func (s *BinapiRPC) NewAPIStream(req RPCStreamReqResp, resp *RPCStreamReqResp) e
 
 func (s *BinapiRPC) SendMessage(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support RPC calls at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.SendMessage - REQ: %#v", req)
@@ -378,7 +378,7 @@ func (s *BinapiRPC) SendMessage(req RPCStreamReqResp, resp *RPCStreamReqResp) er
 
 func (s *BinapiRPC) ReceiveMessage(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support RPC calls at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.ReceiveMessage - REQ: %#v", req)
@@ -394,7 +394,7 @@ func (s *BinapiRPC) ReceiveMessage(req RPCStreamReqResp, resp *RPCStreamReqResp)
 
 func (s *BinapiRPC) CloseStream(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support RPC calls at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.CloseStream - REQ: %#v", req)
@@ -428,7 +428,7 @@ func (s *BinapiRPC) getStream(id uint32) (api.Stream, error) {
 
 func (s *BinapiRPC) Invoke(req BinapiRequest, resp *BinapiResponse) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support 'invoke' at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.Invoke - REQ: %#v", req)
@@ -470,7 +470,7 @@ func (s *BinapiRPC) Invoke(req BinapiRequest, resp *BinapiResponse) error {
 
 func (s *BinapiRPC) Compatibility(req BinapiCompatibilityRequest, resp *BinapiCompatibilityResponse) error {
 	if !s.serviceAvailable() {
-		log.Println(binapiErrorMsg)
+		log.Print(binapiErrorMsg)
 		return errors.New("server does not support 'compatibility check' at this time, try again later")
 	}
 	log.Debugf("BinapiRPC.Compatiblity - REQ: %#v", req)
