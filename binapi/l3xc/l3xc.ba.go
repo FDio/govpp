@@ -133,6 +133,7 @@ func (m *L3xcDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.L3xc.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.L3xc.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -342,6 +343,7 @@ func (m *L3xcUpdate) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.L3xc.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.L3xc.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex

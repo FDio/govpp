@@ -213,6 +213,7 @@ func (m *AddDelIPPuntRedirectV2) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Punt.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Punt.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -825,6 +826,7 @@ func (m *IPMrouteAddDel) Size() (size int) {
 		var s2 mfib_types.MfibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.ItfFlags
@@ -996,6 +998,7 @@ func (m *IPMrouteDetails) Size() (size int) {
 		var s2 mfib_types.MfibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.ItfFlags
@@ -1779,6 +1782,7 @@ func (m *IPPuntRedirectV2Details) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Punt.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Punt.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -2191,6 +2195,7 @@ func (m *IPRouteAddDel) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -2359,6 +2364,7 @@ func (m *IPRouteAddDelV2) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -2524,6 +2530,7 @@ func (m *IPRouteDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -2733,6 +2740,7 @@ func (m *IPRouteLookupReply) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -2908,6 +2916,7 @@ func (m *IPRouteLookupV2Reply) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -3035,6 +3044,7 @@ func (m *IPRouteV2Details) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Route.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Route.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex

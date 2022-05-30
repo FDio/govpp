@@ -58,6 +58,7 @@ func (m *ACLAddReplace) Size() (size int) {
 		var s1 acl_types.ACLRule
 		_ = s1
 		if j1 < len(m.R) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.R[j1]
 		}
 		size += 1      // s1.IsPermit
@@ -261,6 +262,7 @@ func (m *ACLDetails) Size() (size int) {
 		var s1 acl_types.ACLRule
 		_ = s1
 		if j1 < len(m.R) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.R[j1]
 		}
 		size += 1      // s1.IsPermit
@@ -1226,6 +1228,7 @@ func (m *MacipACLAdd) Size() (size int) {
 		var s1 acl_types.MacipACLRule
 		_ = s1
 		if j1 < len(m.R) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.R[j1]
 		}
 		size += 1      // s1.IsPermit
@@ -1300,6 +1303,7 @@ func (m *MacipACLAddReplace) Size() (size int) {
 		var s1 acl_types.MacipACLRule
 		_ = s1
 		if j1 < len(m.R) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.R[j1]
 		}
 		size += 1      // s1.IsPermit
@@ -1516,6 +1520,7 @@ func (m *MacipACLDetails) Size() (size int) {
 		var s1 acl_types.MacipACLRule
 		_ = s1
 		if j1 < len(m.R) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.R[j1]
 		}
 		size += 1      // s1.IsPermit

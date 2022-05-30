@@ -15,7 +15,6 @@
 package statsclient
 
 import (
-	"fmt"
 	"sync/atomic"
 	"unsafe"
 
@@ -69,10 +68,6 @@ func (ss *statSegmentV1) loadSharedHeader(b []byte) (header sharedHeaderV1) {
 func (ss *statSegmentV1) GetDirectoryVector() dirVector {
 	dirOffset, _, _ := ss.getOffsets()
 	return dirVector(&ss.sharedHeader[dirOffset])
-}
-
-func (ss *statSegmentV1) getErrorVector() (unsafe.Pointer, error) {
-	return nil, fmt.Errorf("error vector is not defined for stats API v1")
 }
 
 func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {

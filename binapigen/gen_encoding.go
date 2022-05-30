@@ -81,7 +81,10 @@ func genMessageSize(g *GenFile, name string, fields []*Field) {
 					char := fmt.Sprintf("s%d", lvl)
 					g.P("var ", char, " ", fieldGoType(g, field))
 					g.P("_ = ", char)
-					g.P("if ", index, " < len(", name, ") { ", char, " = ", name, "[", index, "] }")
+					g.P("if ", index, " < len(", name, ") {")
+					g.P("//lint:ignore SA4006 we might not use this variable")
+					g.P(char, " = ", name, "[", index, "]")
+					g.P("}")
 					name = char
 				} else {
 					name = fmt.Sprintf("%s[%s]", name, index)

@@ -98,7 +98,7 @@ func (*MsgCodec) DecodeMsg(data []byte, msg api.Message) (err error) {
 
 	offset := getOffset(msg)
 
-	err = marshaller.Unmarshal(data[offset:len(data)])
+	err = marshaller.Unmarshal(data[offset:])
 	if err != nil {
 		return err
 	}

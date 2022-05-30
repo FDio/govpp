@@ -353,6 +353,7 @@ func (m *LispAddDelLocatorSet) Size() (size int) {
 		var s1 lisp_types.LocalLocator
 		_ = s1
 		if j1 < len(m.Locators) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Locators[j1]
 		}
 		size += 4 // s1.SwIfIndex
@@ -689,6 +690,7 @@ func (m *LispAddDelRemoteMapping) Size() (size int) {
 		var s1 lisp_types.RemoteLocator
 		_ = s1
 		if j1 < len(m.Rlocs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Rlocs[j1]
 		}
 		size += 1      // s1.Priority
@@ -839,6 +841,7 @@ func (m *LispAdjacenciesGetReply) Size() (size int) {
 		var s1 LispAdjacency
 		_ = s1
 		if j1 < len(m.Adjacencies) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Adjacencies[j1]
 		}
 		size += 1      // s1.Reid.Type

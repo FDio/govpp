@@ -178,6 +178,7 @@ func (m *MplsRouteAddDel) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.MrRoute.MrPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.MrRoute.MrPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -340,6 +341,7 @@ func (m *MplsRouteDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.MrRoute.MrPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.MrRoute.MrPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -635,6 +637,7 @@ func (m *MplsTunnelAddDel) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.MtTunnel.MtPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.MtTunnel.MtPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -799,6 +802,7 @@ func (m *MplsTunnelDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.MtTunnel.MtPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.MtTunnel.MtPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex

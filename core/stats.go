@@ -199,7 +199,7 @@ func (c *StatsConnection) monitorSocket() {
 		case <-c.done:
 			log.Debugf("health check watcher closed")
 			c.sendStatsConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Disconnected, Error: nil})
-			break
+			return
 		}
 	}
 }
@@ -574,8 +574,10 @@ func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) 
 			}
 			switch f {
 			case MemoryStats_Total:
+				//lint:ignore SA1019 deprecated but still update it
 				memStats.Total = val
 			case MemoryStats_Used:
+				//lint:ignore SA1019 deprecated but still update it
 				memStats.Used = val
 			}
 		} else if string(stat.Name) == MemoryStatSegment {

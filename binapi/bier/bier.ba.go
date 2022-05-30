@@ -76,6 +76,7 @@ func (m *BierDispEntryAddDel) Size() (size int) {
 		var s1 fib_types.FibPath
 		_ = s1
 		if j1 < len(m.BdePaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.BdePaths[j1]
 		}
 		size += 4      // s1.SwIfIndex
@@ -232,6 +233,7 @@ func (m *BierDispEntryDetails) Size() (size int) {
 		var s1 fib_types.FibPath
 		_ = s1
 		if j1 < len(m.BdePaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.BdePaths[j1]
 		}
 		size += 4      // s1.SwIfIndex
@@ -751,6 +753,7 @@ func (m *BierRouteAddDel) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.BrRoute.BrPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.BrRoute.BrPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -906,6 +909,7 @@ func (m *BierRouteDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.BrRoute.BrPaths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.BrRoute.BrPaths[j2]
 		}
 		size += 4      // s2.SwIfIndex

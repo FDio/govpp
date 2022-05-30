@@ -902,6 +902,7 @@ func (m *CnatTranslationDetails) Size() (size int) {
 		var s2 CnatEndpointTuple
 		_ = s2
 		if j2 < len(m.Translation.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Translation.Paths[j2]
 		}
 		size += 1      // s2.DstEp.Addr.Af
@@ -1043,6 +1044,7 @@ func (m *CnatTranslationUpdate) Size() (size int) {
 		var s2 CnatEndpointTuple
 		_ = s2
 		if j2 < len(m.Translation.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Translation.Paths[j2]
 		}
 		size += 1      // s2.DstEp.Addr.Af

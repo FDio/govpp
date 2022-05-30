@@ -469,6 +469,7 @@ func (m *OneAddDelLocatorSet) Size() (size int) {
 		var s1 lisp_types.LocalLocator
 		_ = s1
 		if j1 < len(m.Locators) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Locators[j1]
 		}
 		size += 4 // s1.SwIfIndex
@@ -882,6 +883,7 @@ func (m *OneAddDelRemoteMapping) Size() (size int) {
 		var s1 lisp_types.RemoteLocator
 		_ = s1
 		if j1 < len(m.Rlocs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Rlocs[j1]
 		}
 		size += 1      // s1.Priority
@@ -1032,6 +1034,7 @@ func (m *OneAdjacenciesGetReply) Size() (size int) {
 		var s1 OneAdjacency
 		_ = s1
 		if j1 < len(m.Adjacencies) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Adjacencies[j1]
 		}
 		size += 1      // s1.Reid.Type
@@ -1945,6 +1948,7 @@ func (m *OneL2ArpEntriesGetReply) Size() (size int) {
 		var s1 OneL2ArpEntry
 		_ = s1
 		if j1 < len(m.Entries) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Entries[j1]
 		}
 		size += 1 * 6 // s1.Mac
@@ -2674,6 +2678,7 @@ func (m *OneNdpEntriesGetReply) Size() (size int) {
 		var s1 OneNdpEntry
 		_ = s1
 		if j1 < len(m.Entries) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Entries[j1]
 		}
 		size += 1 * 6  // s1.Mac

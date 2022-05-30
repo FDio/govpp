@@ -261,6 +261,7 @@ func (m *SrPoliciesDetails) Size() (size int) {
 		var s1 Srv6SidList
 		_ = s1
 		if j1 < len(m.SidLists) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.SidLists[j1]
 		}
 		size += 1 // s1.NumSids
@@ -372,6 +373,7 @@ func (m *SrPoliciesWithSlIndexDetails) Size() (size int) {
 		var s1 Srv6SidListWithSlIndex
 		_ = s1
 		if j1 < len(m.SidLists) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.SidLists[j1]
 		}
 		size += 1 // s1.NumSids

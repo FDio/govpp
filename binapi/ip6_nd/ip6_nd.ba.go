@@ -77,6 +77,7 @@ func (m *IP6RaEvent) Size() (size int) {
 		var s1 IP6RaPrefixInfo
 		_ = s1
 		if j1 < len(m.Prefixes) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Prefixes[j1]
 		}
 		size += 1      // s1.Prefix.Address.Af

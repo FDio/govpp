@@ -140,11 +140,9 @@ func connectBinapi(socket string, attempts int) (api.Channel, func(), error) {
 	if err != nil {
 		return nil, nil, err
 	}
-	select {
-	case e := <-event:
-		if e.State != core.Connected {
-			return nil, nil, err
-		}
+	e := <-event
+	if e.State != core.Connected {
+		return nil, nil, err
 	}
 	ch, err := getAPIChannel(conn)
 	if err != nil {

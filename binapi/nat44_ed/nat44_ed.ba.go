@@ -390,6 +390,7 @@ func (m *Nat44AddDelLbStaticMapping) Size() (size int) {
 		var s1 Nat44LbAddrPort
 		_ = s1
 		if j1 < len(m.Locals) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Locals[j1]
 		}
 		size += 1 * 4 // s1.Addr
@@ -2035,6 +2036,7 @@ func (m *Nat44LbStaticMappingDetails) Size() (size int) {
 		var s1 Nat44LbAddrPort
 		_ = s1
 		if j1 < len(m.Locals) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Locals[j1]
 		}
 		size += 1 * 4 // s1.Addr

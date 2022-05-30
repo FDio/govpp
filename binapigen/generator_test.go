@@ -17,7 +17,6 @@ package binapigen
 import (
 	"bufio"
 	"fmt"
-	"git.fd.io/govpp.git/binapigen/vppapi"
 	. "github.com/onsi/gomega"
 	"os"
 	"strings"
@@ -95,50 +94,4 @@ func TestBinapiUnionSizes(t *testing.T) {
 	}
 	// ensure all union sizes were found and tested
 	Expect(index).To(Equal(len(sizes)))
-}
-
-// Typed data used for union size evaluation testing.
-type typeTestData struct {
-	typ    string
-	value  string
-	fields []*typeTestData
-}
-
-func (t typeTestData) getUnion(name string) *Union {
-	return &Union{
-		UnionType: vppapi.UnionType{Name: name},
-		Fields:    t.getUnionFields(name),
-	}
-}
-
-func (t typeTestData) getUnionFields(parentName string) (fields []*Field) {
-	for i, field := range t.fields {
-		var (
-			dataType   string
-			aliasType  *Alias
-			enumType   *Enum
-			structType *Struct
-			unionType  *Union
-		)
-		switch field.typ {
-		case "alias":
-			aliasType = &Alias{AliasType: vppapi.AliasType{Name: fmt.Sprintf("%s_alias_%d", parentName, i), Type: field.value}}
-		case "enum":
-			enumType = &Enum{EnumType: vppapi.EnumType{Name: fmt.Sprintf("%s_enum_%d", parentName, i), Type: field.value}}
-		case "struct":
-			structType = &Struct{Fields: field.getUnionFields(fmt.Sprintf("%s_struct_%d", parentName, i))}
-		case "union":
-			unionType = field.getUnion(parentName)
-		default:
-			dataType = field.value
-		}
-		fields = append(fields, &Field{
-			Field:      vppapi.Field{Name: fmt.Sprintf("%s_field_%d", parentName, i), Type: dataType},
-			TypeAlias:  aliasType,
-			TypeEnum:   enumType,
-			TypeStruct: structType,
-			TypeUnion:  unionType,
-		})
-	}
-	return fields
 }

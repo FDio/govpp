@@ -653,6 +653,7 @@ func (m *ShowThreadsReply) Size() (size int) {
 		var s1 ThreadData
 		_ = s1
 		if j1 < len(m.ThreadData) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.ThreadData[j1]
 		}
 		size += 4  // s1.ID

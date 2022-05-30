@@ -383,6 +383,7 @@ func (m *DHCP6PdReplyEvent) Size() (size int) {
 		var s1 DHCP6PdPrefixInfo
 		_ = s1
 		if j1 < len(m.Prefixes) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Prefixes[j1]
 		}
 		size += 1 * 16 // s1.Prefix.Address
@@ -483,6 +484,7 @@ func (m *DHCP6PdSendClientMessage) Size() (size int) {
 		var s1 DHCP6PdPrefixInfo
 		_ = s1
 		if j1 < len(m.Prefixes) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Prefixes[j1]
 		}
 		size += 1 * 16 // s1.Prefix.Address
@@ -618,6 +620,7 @@ func (m *DHCP6ReplyEvent) Size() (size int) {
 		var s1 DHCP6AddressInfo
 		_ = s1
 		if j1 < len(m.Addresses) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Addresses[j1]
 		}
 		size += 1 * 16 // s1.Address
@@ -715,6 +718,7 @@ func (m *DHCP6SendClientMessage) Size() (size int) {
 		var s1 DHCP6AddressInfo
 		_ = s1
 		if j1 < len(m.Addresses) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Addresses[j1]
 		}
 		size += 1 * 16 // s1.Address
@@ -933,6 +937,7 @@ func (m *DHCPClientDetails) Size() (size int) {
 		var s2 DomainServer
 		_ = s2
 		if j2 < len(m.Lease.DomainServer) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Lease.DomainServer[j2]
 		}
 		size += 1      // s2.Address.Af
@@ -1062,6 +1067,7 @@ func (m *DHCPComplEvent) Size() (size int) {
 		var s2 DomainServer
 		_ = s2
 		if j2 < len(m.Lease.DomainServer) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Lease.DomainServer[j2]
 		}
 		size += 1      // s2.Address.Af
@@ -1375,6 +1381,7 @@ func (m *DHCPProxyDetails) Size() (size int) {
 		var s1 DHCPServer
 		_ = s1
 		if j1 < len(m.Servers) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Servers[j1]
 		}
 		size += 4      // s1.ServerVrfID

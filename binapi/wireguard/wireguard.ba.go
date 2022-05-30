@@ -543,6 +543,7 @@ func (m *WireguardPeerAdd) Size() (size int) {
 		var s2 ip_types.Prefix
 		_ = s2
 		if j2 < len(m.Peer.AllowedIps) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Peer.AllowedIps[j2]
 		}
 		size += 1      // s2.Address.Af
@@ -775,6 +776,7 @@ func (m *WireguardPeersDetails) Size() (size int) {
 		var s2 ip_types.Prefix
 		_ = s2
 		if j2 < len(m.Peer.AllowedIps) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Peer.AllowedIps[j2]
 		}
 		size += 1      // s2.Address.Af

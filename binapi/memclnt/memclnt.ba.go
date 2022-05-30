@@ -94,6 +94,7 @@ func (m *APIVersionsReply) Size() (size int) {
 		var s1 ModuleVersion
 		_ = s1
 		if j1 < len(m.APIVersions) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.APIVersions[j1]
 		}
 		size += 4  // s1.Major
@@ -839,6 +840,7 @@ func (m *SockclntCreateReply) Size() (size int) {
 		var s1 MessageTableEntry
 		_ = s1
 		if j1 < len(m.MessageTable) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.MessageTable[j1]
 		}
 		size += 2  // s1.Index

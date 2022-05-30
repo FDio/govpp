@@ -92,6 +92,7 @@ func (m *GpeAddDelFwdEntry) Size() (size int) {
 		var s1 GpeLocator
 		_ = s1
 		if j1 < len(m.Locs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Locs[j1]
 		}
 		size += 1      // s1.Weight
@@ -466,6 +467,7 @@ func (m *GpeFwdEntriesGetReply) Size() (size int) {
 		var s1 GpeFwdEntry
 		_ = s1
 		if j1 < len(m.Entries) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Entries[j1]
 		}
 		size += 4      // s1.FwdEntryIndex
@@ -800,6 +802,7 @@ func (m *GpeNativeFwdRpathsGetReply) Size() (size int) {
 		var s1 GpeNativeFwdRpath
 		_ = s1
 		if j1 < len(m.Entries) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Entries[j1]
 		}
 		size += 4      // s1.FibIndex

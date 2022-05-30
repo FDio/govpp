@@ -19,6 +19,8 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf8"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // commonInitialisms is a set of common initialisms that need to stay in upper case.
@@ -87,7 +89,9 @@ func usesInitialism(s string) string {
 
 // camelCaseName returns correct name identifier (camelCase).
 func camelCaseName(name string) (should string) {
-	name = strings.Title(name)
+
+	name = cases.Title(language.Zulu).String(name)
+	// name = strings.Title(name)
 
 	// Fast path for simple cases: "_" and all lowercase.
 	if name == "_" {

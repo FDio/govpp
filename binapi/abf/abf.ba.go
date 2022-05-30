@@ -292,6 +292,7 @@ func (m *AbfPolicyAddDel) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Policy.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Policy.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex
@@ -441,6 +442,7 @@ func (m *AbfPolicyDetails) Size() (size int) {
 		var s2 fib_types.FibPath
 		_ = s2
 		if j2 < len(m.Policy.Paths) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Policy.Paths[j2]
 		}
 		size += 4      // s2.SwIfIndex

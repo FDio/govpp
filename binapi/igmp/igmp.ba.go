@@ -530,6 +530,7 @@ func (m *IgmpListen) Size() (size int) {
 		var s2 ip_types.IP4Address
 		_ = s2
 		if j2 < len(m.Group.Saddrs) {
+			//lint:ignore SA4006 we might not use this variable
 			s2 = m.Group.Saddrs[j2]
 		}
 		size += 1 * 4 // s2

@@ -81,6 +81,7 @@ func (m *MactimeAddDelRange) Size() (size int) {
 		var s1 TimeRange
 		_ = s1
 		if j1 < len(m.Ranges) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Ranges[j1]
 		}
 		size += 8 // s1.Start
@@ -198,6 +199,7 @@ func (m *MactimeDetails) Size() (size int) {
 		var s1 MactimeTimeRange
 		_ = s1
 		if j1 < len(m.Ranges) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Ranges[j1]
 		}
 		size += 8 // s1.Start

@@ -192,6 +192,7 @@ func (m *VrrpVrAddDel) Size() (size int) {
 		var s1 ip_types.Address
 		_ = s1
 		if j1 < len(m.Addrs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Addrs[j1]
 		}
 		size += 1      // s1.Af
@@ -307,6 +308,7 @@ func (m *VrrpVrDetails) Size() (size int) {
 		var s1 ip_types.Address
 		_ = s1
 		if j1 < len(m.Addrs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Addrs[j1]
 		}
 		size += 1      // s1.Af
@@ -477,6 +479,7 @@ func (m *VrrpVrPeerDetails) Size() (size int) {
 		var s1 ip_types.Address
 		_ = s1
 		if j1 < len(m.PeerAddrs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.PeerAddrs[j1]
 		}
 		size += 1      // s1.Af
@@ -586,6 +589,7 @@ func (m *VrrpVrSetPeers) Size() (size int) {
 		var s1 ip_types.Address
 		_ = s1
 		if j1 < len(m.Addrs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Addrs[j1]
 		}
 		size += 1      // s1.Af
@@ -767,6 +771,7 @@ func (m *VrrpVrTrackIfAddDel) Size() (size int) {
 		var s1 VrrpVrTrackIf
 		_ = s1
 		if j1 < len(m.Ifs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Ifs[j1]
 		}
 		size += 4 // s1.SwIfIndex
@@ -870,6 +875,7 @@ func (m *VrrpVrTrackIfDetails) Size() (size int) {
 		var s1 VrrpVrTrackIf
 		_ = s1
 		if j1 < len(m.Ifs) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Ifs[j1]
 		}
 		size += 4 // s1.SwIfIndex

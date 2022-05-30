@@ -82,10 +82,10 @@ test-integration: ## Run integration tests
 	@echo "# running integration tests"
 	go test -tags="integration ${GO_BUILD_TAGS}" ./test/integration
 
-.PHONY: lint
-lint: ## Run code linter
-	@echo "# running linter"
-	@golint ./...
+.PHONY: lint ## Run code linter
+lint:
+	@go vet ./...
+	@staticcheck ./...
 
 .PHONY: install
 install: install-generator install-proxy ## Install all

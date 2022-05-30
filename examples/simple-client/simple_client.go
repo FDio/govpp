@@ -52,11 +52,9 @@ func main() {
 	defer conn.Disconnect()
 
 	// wait for Connected event
-	select {
-	case e := <-connEv:
-		if e.State != core.Connected {
-			log.Fatalln("ERROR: connecting to VPP failed:", e.Error)
-		}
+	e := <-connEv
+	if e.State != core.Connected {
+		log.Fatalln("ERROR: connecting to VPP failed:", e.Error)
 	}
 
 	// check compatibility of used messages

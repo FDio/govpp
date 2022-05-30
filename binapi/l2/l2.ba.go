@@ -544,6 +544,7 @@ func (m *BridgeDomainDetails) Size() (size int) {
 		var s1 BridgeDomainSwIf
 		_ = s1
 		if j1 < len(m.SwIfDetails) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.SwIfDetails[j1]
 		}
 		size += 4 // s1.Context
@@ -1612,6 +1613,7 @@ func (m *L2MacsEvent) Size() (size int) {
 		var s1 MacEntry
 		_ = s1
 		if j1 < len(m.Mac) {
+			//lint:ignore SA4006 we might not use this variable
 			s1 = m.Mac[j1]
 		}
 		size += 4     // s1.SwIfIndex

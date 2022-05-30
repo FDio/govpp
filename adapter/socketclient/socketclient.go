@@ -108,7 +108,8 @@ func NewVppClient(socket string) *Client {
 		connectTimeout:    DefaultConnectTimeout,
 		disconnectTimeout: DefaultDisconnectTimeout,
 		headerPool: &sync.Pool{New: func() interface{} {
-			return make([]byte, 16)
+			x := make([]byte, 16)
+			return &x
 		}},
 		msgCallback: func(msgID uint16, data []byte) {
 			log.Debugf("no callback set, dropping message: ID=%v len=%d", msgID, len(data))
@@ -375,12 +376,12 @@ func (c *Client) writeMsg(msg []byte) error {
 	c.writeMu.Lock()
 	defer c.writeMu.Unlock()
 
-	header := c.headerPool.Get().([]byte)
-	err := writeMsgHeader(c.writer, header, len(msg))
+	header := c.headerPool.Get().(*[]byte)
+	err := writeMsgHeader(c.writer, *header, len(msg))
 	if err != nil {
 		return err
 	}
-	c.headerPool.Put(header)
+	c.headerPool.Put(&header)
 
 	if err := writeMsgData(c.writer, msg, c.writer.Size()); err != nil {
 		return err
@@ -499,14 +500,17 @@ func (c *Client) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte, erro
 func (c *Client) readMsg(buf []byte) ([]byte, error) {
 	log.Debug("reading msg..")
 
-	header := c.headerPool.Get().([]byte)
-	msgLen, err := readMsgHeader(c.reader, header)
+	header := c.headerPool.Get().(*[]byte)
+	msgLen, err := readMsgHeader(c.reader, *header)
 	if err != nil {
 		return nil, err
 	}
-	c.headerPool.Put(header)
+	c.headerPool.Put(&header)
 
 	msg, err := readMsgData(c.reader, buf, msgLen)
+	if err != nil {
+		return nil, err
+	}
 
 	log.Debugf(" -- readMsg done (buffered: %d)", c.reader.Buffered())
 
