@@ -94,7 +94,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	typ := getStatType(dirEntry.directoryType, ss.getErrorVector() != nil)
 	// skip zero pointer value
-	if typ != adapter.ScalarIndex && typ != adapter.Empty && dirEntry.unionData == 0 {
+	if typ != adapter.ScalarIndex && typ != adapter.Empty && typ != adapter.ErrorIndex && dirEntry.unionData == 0 {
 		debugf("data pointer not defined for %s", dirEntry.name)
 		return nil
 	}
