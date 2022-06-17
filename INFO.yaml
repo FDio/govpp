@@ -40,13 +40,14 @@ committers:
     company: 'cisco'
     email: 'vlavor@cisco.com'
     id: 'vlavor'
+  - name: 'Nathan Skrzypczak'
+    company: 'cisco'
+    email: 'nathan.skrzypczak@gmail.com'
+    id: 'sknat'
 tsc:
   # yamllint disable rule:line-length
   approval: ''
   changes:
-    - type: 'removal'
-      name: ''
-      link: ''
-    - type: 'promotion'
-      name: ''
-      link: ''
+    - type: 'addition'
+      name: 'Nathan Skrzypczak'
+      link: 'https://ircbot.wl.linuxfoundation.org/meetings/fdio-meeting/2022/fd_io_tsc/fdio-meeting-fd_io_tsc.2022-06-16-15.01.html'
