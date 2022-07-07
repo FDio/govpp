@@ -22,7 +22,7 @@ import (
 	"sync"
 	"time"
 
-	"git.fd.io/govpp.git/api"
+	"go.fd.io/govpp/api"
 )
 
 type Stream struct {

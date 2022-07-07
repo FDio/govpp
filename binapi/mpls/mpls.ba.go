@@ -13,11 +13,11 @@
 package mpls
 
 import (
-	api "git.fd.io/govpp.git/api"
-	fib_types "git.fd.io/govpp.git/binapi/fib_types"
-	interface_types "git.fd.io/govpp.git/binapi/interface_types"
-	ip_types "git.fd.io/govpp.git/binapi/ip_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	fib_types "go.fd.io/govpp/binapi/fib_types"
+	interface_types "go.fd.io/govpp/binapi/interface_types"
+	ip_types "go.fd.io/govpp/binapi/ip_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

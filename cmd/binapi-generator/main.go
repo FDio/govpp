@@ -24,9 +24,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/binapigen"
-	"git.fd.io/govpp.git/binapigen/vppapi"
-	"git.fd.io/govpp.git/version"
+	"go.fd.io/govpp/binapigen"
+	"go.fd.io/govpp/binapigen/vppapi"
+	"go.fd.io/govpp/version"
 )
 
 func init() {

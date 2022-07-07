@@ -50,7 +50,7 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 
-	"git.fd.io/govpp.git/extras/libmemif"
+	"go.fd.io/govpp/extras/libmemif"
 )
 
 const (

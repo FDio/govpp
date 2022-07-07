@@ -12,9 +12,9 @@
 package vxlan_gpe_ioam_export
 
 import (
-	api "git.fd.io/govpp.git/api"
-	ip_types "git.fd.io/govpp.git/binapi/ip_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	ip_types "go.fd.io/govpp/binapi/ip_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

@@ -17,7 +17,7 @@
 package vppapiclient
 
 import (
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 )
 
 // stubStatClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real

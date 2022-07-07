@@ -19,7 +19,7 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 func TestGenerator(t *testing.T) {

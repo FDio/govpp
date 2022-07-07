@@ -30,8 +30,8 @@ sudo dpkg -i vpp*.deb
 To build & install GoVPP:
 
 ```sh
-go get -u git.fd.io/govpp.git
-cd $GOPATH/src/git.fd.io/govpp.git
+go get -u go.fd.io/govpp
+cd $GOPATH/src/go.fd.io/govpp
 make test
 make install
 ```

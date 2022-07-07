@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"testing"
 
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/binapi/ip"
-	"git.fd.io/govpp.git/binapi/ip_types"
-	"git.fd.io/govpp.git/binapi/sr"
-	"git.fd.io/govpp.git/binapi/vpe"
-	"git.fd.io/govpp.git/codec"
+	"go.fd.io/govpp/api"
+	"go.fd.io/govpp/binapi/ip"
+	"go.fd.io/govpp/binapi/ip_types"
+	"go.fd.io/govpp/binapi/sr"
+	"go.fd.io/govpp/binapi/vpe"
+	"go.fd.io/govpp/codec"
 )
 
 type MyMsg struct {

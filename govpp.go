@@ -17,10 +17,10 @@ package govpp
 import (
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/socketclient"
-	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/version"
+	"go.fd.io/govpp/adapter"
+	"go.fd.io/govpp/adapter/socketclient"
+	"go.fd.io/govpp/core"
+	"go.fd.io/govpp/version"
 )
 
 // Connect connects to the VPP API using a new adapter instance created with NewVppAPIAdapter.

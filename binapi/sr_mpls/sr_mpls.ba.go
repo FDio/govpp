@@ -12,11 +12,11 @@
 package sr_mpls
 
 import (
-	api "git.fd.io/govpp.git/api"
-	_ "git.fd.io/govpp.git/binapi/interface_types"
-	ip_types "git.fd.io/govpp.git/binapi/ip_types"
-	sr_types "git.fd.io/govpp.git/binapi/sr_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	_ "go.fd.io/govpp/binapi/interface_types"
+	ip_types "go.fd.io/govpp/binapi/ip_types"
+	sr_types "go.fd.io/govpp/binapi/sr_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

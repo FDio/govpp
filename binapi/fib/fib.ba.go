@@ -13,10 +13,10 @@
 package fib
 
 import (
-	api "git.fd.io/govpp.git/api"
-	_ "git.fd.io/govpp.git/binapi/fib_types"
-	_ "git.fd.io/govpp.git/binapi/ip_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	_ "go.fd.io/govpp/binapi/fib_types"
+	_ "go.fd.io/govpp/binapi/ip_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

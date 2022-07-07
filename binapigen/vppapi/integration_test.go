@@ -20,7 +20,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 func TestParse(t *testing.T) {

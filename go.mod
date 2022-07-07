@@ -1,4 +1,4 @@
-module git.fd.io/govpp.git
+module go.fd.io/govpp
 
 go 1.13
 

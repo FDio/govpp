@@ -30,9 +30,9 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/binapi/memclnt"
-	"git.fd.io/govpp.git/codec"
+	"go.fd.io/govpp/adapter"
+	"go.fd.io/govpp/binapi/memclnt"
+	"go.fd.io/govpp/codec"
 )
 
 const (

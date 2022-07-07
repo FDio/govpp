@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/api"
+	"go.fd.io/govpp/adapter"
+	"go.fd.io/govpp/api"
 )
 
 var (

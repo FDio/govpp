@@ -10,7 +10,7 @@ BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 BUILD_HOST ?= $(shell hostname)
 BUILD_USER ?= $(shell id -un)
 
-GOVPP_PKG := git.fd.io/govpp.git
+GOVPP_PKG := go.fd.io/govpp
 
 VPP_API_DIR ?= ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api
 

@@ -21,15 +21,15 @@ import (
 	"strconv"
 	"strings"
 
-	"git.fd.io/govpp.git/version"
+	"go.fd.io/govpp/version"
 )
 
 // library dependencies
 const (
 	strconvPkg = GoImportPath("strconv")
 
-	govppApiPkg   = GoImportPath("git.fd.io/govpp.git/api")
-	govppCodecPkg = GoImportPath("git.fd.io/govpp.git/codec")
+	govppApiPkg   = GoImportPath("go.fd.io/govpp/api")
+	govppCodecPkg = GoImportPath("go.fd.io/govpp/codec")
 )
 
 // generated names

@@ -12,9 +12,9 @@
 package vpe
 
 import (
-	api "git.fd.io/govpp.git/api"
-	vpe_types "git.fd.io/govpp.git/binapi/vpe_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	vpe_types "go.fd.io/govpp/binapi/vpe_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

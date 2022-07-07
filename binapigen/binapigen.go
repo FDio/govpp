@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"strings"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 // generatedCodeVersion indicates a version of the generated code.

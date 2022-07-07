@@ -12,12 +12,12 @@
 package flow
 
 import (
-	api "git.fd.io/govpp.git/api"
-	_ "git.fd.io/govpp.git/binapi/ethernet_types"
-	flow_types "git.fd.io/govpp.git/binapi/flow_types"
-	_ "git.fd.io/govpp.git/binapi/interface_types"
-	_ "git.fd.io/govpp.git/binapi/ip_types"
-	codec "git.fd.io/govpp.git/codec"
+	api "go.fd.io/govpp/api"
+	_ "go.fd.io/govpp/binapi/ethernet_types"
+	flow_types "go.fd.io/govpp/binapi/flow_types"
+	_ "go.fd.io/govpp/binapi/interface_types"
+	_ "go.fd.io/govpp/binapi/ip_types"
+	codec "go.fd.io/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

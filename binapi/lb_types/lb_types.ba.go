@@ -15,8 +15,8 @@ package lb_types
 import (
 	"strconv"
 
-	api "git.fd.io/govpp.git/api"
-	ip_types "git.fd.io/govpp.git/binapi/ip_types"
+	api "go.fd.io/govpp/api"
+	ip_types "go.fd.io/govpp/binapi/ip_types"
 )
 
 // This is a compile-time assertion to ensure that this generated file

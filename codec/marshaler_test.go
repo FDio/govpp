@@ -19,12 +19,12 @@ import (
 	"reflect"
 	"testing"
 
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/binapi/ip_types"
-	"git.fd.io/govpp.git/binapi/sr"
-	"git.fd.io/govpp.git/codec"
-	interfaces "git.fd.io/govpp.git/binapi/interface"
-	"git.fd.io/govpp.git/binapi/interface_types"
+	"go.fd.io/govpp/api"
+	"go.fd.io/govpp/binapi/ip_types"
+	"go.fd.io/govpp/binapi/sr"
+	"go.fd.io/govpp/codec"
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/interface_types"
 )
 
 // CliInband represents VPP binary API message 'cli_inband'.

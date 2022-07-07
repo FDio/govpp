@@ -29,7 +29,7 @@ import (
 	"os"
 	"unsafe"
 
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 )
 
 // global VPP stats API client, library vppapiclient only supports

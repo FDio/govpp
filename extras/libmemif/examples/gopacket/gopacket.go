@@ -43,7 +43,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	"git.fd.io/govpp.git/extras/libmemif"
+	"go.fd.io/govpp/extras/libmemif"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"io"

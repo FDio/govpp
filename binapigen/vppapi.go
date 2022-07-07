@@ -18,7 +18,7 @@ import (
 	"log"
 	"sort"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 func SortFileObjectsByName(file *vppapi.File) {

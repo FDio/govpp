@@ -5,7 +5,7 @@ package feature
 import (
 	"context"
 
-	api "git.fd.io/govpp.git/api"
+	api "go.fd.io/govpp/api"
 )
 
 // RPCService defines RPC service feature.

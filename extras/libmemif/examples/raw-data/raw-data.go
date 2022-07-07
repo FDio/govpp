@@ -28,7 +28,7 @@ import (
 	"sync"
 	"time"
 
-	"git.fd.io/govpp.git/extras/libmemif"
+	"go.fd.io/govpp/extras/libmemif"
 )
 
 const (

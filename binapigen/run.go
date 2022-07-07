@@ -25,7 +25,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/binapigen/vppapi"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 type Options struct {
