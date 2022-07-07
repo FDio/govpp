@@ -9,7 +9,7 @@
 // Contents:
 //   2 enums
 //   2 structs
-//  14 messages
+//  16 messages
 //
 package pnat
 
@@ -31,7 +31,7 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "pnat"
 	APIVersion = "0.1.1"
-	VersionCrc = 0x108d3b87
+	VersionCrc = 0x7296c7ab
 )
 
 // PnatAttachmentPoint defines enum 'pnat_attachment_point'.
@@ -74,6 +74,7 @@ const (
 	PNAT_DPORT      PnatMask = 8
 	PNAT_COPY_BYTE  PnatMask = 16
 	PNAT_CLEAR_BYTE PnatMask = 32
+	PNAT_PROTO      PnatMask = 64
 )
 
 var (
@@ -84,6 +85,7 @@ var (
 		8:  "PNAT_DPORT",
 		16: "PNAT_COPY_BYTE",
 		32: "PNAT_CLEAR_BYTE",
+		64: "PNAT_PROTO",
 	}
 	PnatMask_value = map[string]uint32{
 		"PNAT_SA":         1,
@@ -92,6 +94,7 @@ var (
 		"PNAT_DPORT":      8,
 		"PNAT_COPY_BYTE":  16,
 		"PNAT_CLEAR_BYTE": 32,
+		"PNAT_PROTO":      64,
 	}
 )
 
@@ -134,7 +137,7 @@ type PnatBindingAdd struct {
 
 func (m *PnatBindingAdd) Reset()               { *m = PnatBindingAdd{} }
 func (*PnatBindingAdd) GetMessageName() string { return "pnat_binding_add" }
-func (*PnatBindingAdd) GetCrcString() string   { return "f00f79aa" }
+func (*PnatBindingAdd) GetCrcString() string   { return "946ee0b7" }
 func (*PnatBindingAdd) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
@@ -231,6 +234,118 @@ func (m *PnatBindingAddReply) Marshal(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 func (m *PnatBindingAddReply) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Retval = buf.DecodeInt32()
+	m.BindingIndex = buf.DecodeUint32()
+	return nil
+}
+
+// PnatBindingAddV2 defines message 'pnat_binding_add_v2'.
+// InProgress: the message form may change in the future versions
+type PnatBindingAddV2 struct {
+	Match   PnatMatchTuple   `binapi:"pnat_match_tuple,name=match" json:"match,omitempty"`
+	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
+}
+
+func (m *PnatBindingAddV2) Reset()               { *m = PnatBindingAddV2{} }
+func (*PnatBindingAddV2) GetMessageName() string { return "pnat_binding_add_v2" }
+func (*PnatBindingAddV2) GetCrcString() string   { return "946ee0b7" }
+func (*PnatBindingAddV2) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+func (m *PnatBindingAddV2) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 1 * 4 // m.Match.Src
+	size += 1 * 4 // m.Match.Dst
+	size += 1     // m.Match.Proto
+	size += 2     // m.Match.Sport
+	size += 2     // m.Match.Dport
+	size += 4     // m.Match.Mask
+	size += 1 * 4 // m.Rewrite.Src
+	size += 1 * 4 // m.Rewrite.Dst
+	size += 2     // m.Rewrite.Sport
+	size += 2     // m.Rewrite.Dport
+	size += 4     // m.Rewrite.Mask
+	size += 1     // m.Rewrite.FromOffset
+	size += 1     // m.Rewrite.ToOffset
+	size += 1     // m.Rewrite.ClearOffset
+	return size
+}
+func (m *PnatBindingAddV2) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeBytes(m.Match.Src[:], 4)
+	buf.EncodeBytes(m.Match.Dst[:], 4)
+	buf.EncodeUint8(uint8(m.Match.Proto))
+	buf.EncodeUint16(m.Match.Sport)
+	buf.EncodeUint16(m.Match.Dport)
+	buf.EncodeUint32(uint32(m.Match.Mask))
+	buf.EncodeBytes(m.Rewrite.Src[:], 4)
+	buf.EncodeBytes(m.Rewrite.Dst[:], 4)
+	buf.EncodeUint16(m.Rewrite.Sport)
+	buf.EncodeUint16(m.Rewrite.Dport)
+	buf.EncodeUint32(uint32(m.Rewrite.Mask))
+	buf.EncodeUint8(m.Rewrite.FromOffset)
+	buf.EncodeUint8(m.Rewrite.ToOffset)
+	buf.EncodeUint8(m.Rewrite.ClearOffset)
+	return buf.Bytes(), nil
+}
+func (m *PnatBindingAddV2) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	copy(m.Match.Src[:], buf.DecodeBytes(4))
+	copy(m.Match.Dst[:], buf.DecodeBytes(4))
+	m.Match.Proto = ip_types.IPProto(buf.DecodeUint8())
+	m.Match.Sport = buf.DecodeUint16()
+	m.Match.Dport = buf.DecodeUint16()
+	m.Match.Mask = PnatMask(buf.DecodeUint32())
+	copy(m.Rewrite.Src[:], buf.DecodeBytes(4))
+	copy(m.Rewrite.Dst[:], buf.DecodeBytes(4))
+	m.Rewrite.Sport = buf.DecodeUint16()
+	m.Rewrite.Dport = buf.DecodeUint16()
+	m.Rewrite.Mask = PnatMask(buf.DecodeUint32())
+	m.Rewrite.FromOffset = buf.DecodeUint8()
+	m.Rewrite.ToOffset = buf.DecodeUint8()
+	m.Rewrite.ClearOffset = buf.DecodeUint8()
+	return nil
+}
+
+// PnatBindingAddV2Reply defines message 'pnat_binding_add_v2_reply'.
+// InProgress: the message form may change in the future versions
+type PnatBindingAddV2Reply struct {
+	Retval       int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
+	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
+}
+
+func (m *PnatBindingAddV2Reply) Reset()               { *m = PnatBindingAddV2Reply{} }
+func (*PnatBindingAddV2Reply) GetMessageName() string { return "pnat_binding_add_v2_reply" }
+func (*PnatBindingAddV2Reply) GetCrcString() string   { return "4cd980a7" }
+func (*PnatBindingAddV2Reply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+func (m *PnatBindingAddV2Reply) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4 // m.Retval
+	size += 4 // m.BindingIndex
+	return size
+}
+func (m *PnatBindingAddV2Reply) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.BindingIndex)
+	return buf.Bytes(), nil
+}
+func (m *PnatBindingAddV2Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Retval = buf.DecodeInt32()
 	m.BindingIndex = buf.DecodeUint32()
@@ -466,7 +581,7 @@ type PnatBindingsDetails struct {
 
 func (m *PnatBindingsDetails) Reset()               { *m = PnatBindingsDetails{} }
 func (*PnatBindingsDetails) GetMessageName() string { return "pnat_bindings_details" }
-func (*PnatBindingsDetails) GetCrcString() string   { return "78267a35" }
+func (*PnatBindingsDetails) GetCrcString() string   { return "08fb2815" }
 func (*PnatBindingsDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
@@ -613,7 +728,7 @@ type PnatInterfacesDetails struct {
 
 func (m *PnatInterfacesDetails) Reset()               { *m = PnatInterfacesDetails{} }
 func (*PnatInterfacesDetails) GetMessageName() string { return "pnat_interfaces_details" }
-func (*PnatInterfacesDetails) GetCrcString() string   { return "c7b0c4c0" }
+func (*PnatInterfacesDetails) GetCrcString() string   { return "4cb09493" }
 func (*PnatInterfacesDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
@@ -734,18 +849,20 @@ func (m *PnatInterfacesGetReply) Unmarshal(b []byte) error {
 
 func init() { file_pnat_binapi_init() }
 func file_pnat_binapi_init() {
-	api.RegisterMessage((*PnatBindingAdd)(nil), "pnat_binding_add_f00f79aa")
+	api.RegisterMessage((*PnatBindingAdd)(nil), "pnat_binding_add_946ee0b7")
 	api.RegisterMessage((*PnatBindingAddReply)(nil), "pnat_binding_add_reply_4cd980a7")
+	api.RegisterMessage((*PnatBindingAddV2)(nil), "pnat_binding_add_v2_946ee0b7")
+	api.RegisterMessage((*PnatBindingAddV2Reply)(nil), "pnat_binding_add_v2_reply_4cd980a7")
 	api.RegisterMessage((*PnatBindingAttach)(nil), "pnat_binding_attach_6e074232")
 	api.RegisterMessage((*PnatBindingAttachReply)(nil), "pnat_binding_attach_reply_e8d4e804")
 	api.RegisterMessage((*PnatBindingDel)(nil), "pnat_binding_del_9259df7b")
 	api.RegisterMessage((*PnatBindingDelReply)(nil), "pnat_binding_del_reply_e8d4e804")
 	api.RegisterMessage((*PnatBindingDetach)(nil), "pnat_binding_detach_6e074232")
 	api.RegisterMessage((*PnatBindingDetachReply)(nil), "pnat_binding_detach_reply_e8d4e804")
-	api.RegisterMessage((*PnatBindingsDetails)(nil), "pnat_bindings_details_78267a35")
+	api.RegisterMessage((*PnatBindingsDetails)(nil), "pnat_bindings_details_08fb2815")
 	api.RegisterMessage((*PnatBindingsGet)(nil), "pnat_bindings_get_f75ba505")
 	api.RegisterMessage((*PnatBindingsGetReply)(nil), "pnat_bindings_get_reply_53b48f5d")
-	api.RegisterMessage((*PnatInterfacesDetails)(nil), "pnat_interfaces_details_c7b0c4c0")
+	api.RegisterMessage((*PnatInterfacesDetails)(nil), "pnat_interfaces_details_4cb09493")
 	api.RegisterMessage((*PnatInterfacesGet)(nil), "pnat_interfaces_get_f75ba505")
 	api.RegisterMessage((*PnatInterfacesGetReply)(nil), "pnat_interfaces_get_reply_53b48f5d")
 }
@@ -755,6 +872,8 @@ func AllMessages() []api.Message {
 	return []api.Message{
 		(*PnatBindingAdd)(nil),
 		(*PnatBindingAddReply)(nil),
+		(*PnatBindingAddV2)(nil),
+		(*PnatBindingAddV2Reply)(nil),
 		(*PnatBindingAttach)(nil),
 		(*PnatBindingAttachReply)(nil),
 		(*PnatBindingDel)(nil),

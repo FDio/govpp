@@ -8,7 +8,7 @@
 //
 // Contents:
 //   1 enum
-//  29 messages
+//  31 messages
 //
 package bfd
 
@@ -30,7 +30,7 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "bfd"
 	APIVersion = "2.0.0"
-	VersionCrc = 0xa8eb4aac
+	VersionCrc = 0xe65443a6
 )
 
 // BfdState defines enum 'bfd_state'.
@@ -1206,6 +1206,114 @@ func (m *BfdUDPSetEchoSourceReply) Unmarshal(b []byte) error {
 	return nil
 }
 
+// BfdUDPUpd defines message 'bfd_udp_upd'.
+type BfdUDPUpd struct {
+	SwIfIndex       interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	DesiredMinTx    uint32                         `binapi:"u32,name=desired_min_tx" json:"desired_min_tx,omitempty"`
+	RequiredMinRx   uint32                         `binapi:"u32,name=required_min_rx" json:"required_min_rx,omitempty"`
+	LocalAddr       ip_types.Address               `binapi:"address,name=local_addr" json:"local_addr,omitempty"`
+	PeerAddr        ip_types.Address               `binapi:"address,name=peer_addr" json:"peer_addr,omitempty"`
+	DetectMult      uint8                          `binapi:"u8,name=detect_mult" json:"detect_mult,omitempty"`
+	IsAuthenticated bool                           `binapi:"bool,name=is_authenticated" json:"is_authenticated,omitempty"`
+	BfdKeyID        uint8                          `binapi:"u8,name=bfd_key_id" json:"bfd_key_id,omitempty"`
+	ConfKeyID       uint32                         `binapi:"u32,name=conf_key_id" json:"conf_key_id,omitempty"`
+}
+
+func (m *BfdUDPUpd) Reset()               { *m = BfdUDPUpd{} }
+func (*BfdUDPUpd) GetMessageName() string { return "bfd_udp_upd" }
+func (*BfdUDPUpd) GetCrcString() string   { return "939cd26a" }
+func (*BfdUDPUpd) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+func (m *BfdUDPUpd) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4      // m.SwIfIndex
+	size += 4      // m.DesiredMinTx
+	size += 4      // m.RequiredMinRx
+	size += 1      // m.LocalAddr.Af
+	size += 1 * 16 // m.LocalAddr.Un
+	size += 1      // m.PeerAddr.Af
+	size += 1 * 16 // m.PeerAddr.Un
+	size += 1      // m.DetectMult
+	size += 1      // m.IsAuthenticated
+	size += 1      // m.BfdKeyID
+	size += 4      // m.ConfKeyID
+	return size
+}
+func (m *BfdUDPUpd) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(uint32(m.SwIfIndex))
+	buf.EncodeUint32(m.DesiredMinTx)
+	buf.EncodeUint32(m.RequiredMinRx)
+	buf.EncodeUint8(uint8(m.LocalAddr.Af))
+	buf.EncodeBytes(m.LocalAddr.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(uint8(m.PeerAddr.Af))
+	buf.EncodeBytes(m.PeerAddr.Un.XXX_UnionData[:], 16)
+	buf.EncodeUint8(m.DetectMult)
+	buf.EncodeBool(m.IsAuthenticated)
+	buf.EncodeUint8(m.BfdKeyID)
+	buf.EncodeUint32(m.ConfKeyID)
+	return buf.Bytes(), nil
+}
+func (m *BfdUDPUpd) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
+	m.DesiredMinTx = buf.DecodeUint32()
+	m.RequiredMinRx = buf.DecodeUint32()
+	m.LocalAddr.Af = ip_types.AddressFamily(buf.DecodeUint8())
+	copy(m.LocalAddr.Un.XXX_UnionData[:], buf.DecodeBytes(16))
+	m.PeerAddr.Af = ip_types.AddressFamily(buf.DecodeUint8())
+	copy(m.PeerAddr.Un.XXX_UnionData[:], buf.DecodeBytes(16))
+	m.DetectMult = buf.DecodeUint8()
+	m.IsAuthenticated = buf.DecodeBool()
+	m.BfdKeyID = buf.DecodeUint8()
+	m.ConfKeyID = buf.DecodeUint32()
+	return nil
+}
+
+// BfdUDPUpdReply defines message 'bfd_udp_upd_reply'.
+type BfdUDPUpdReply struct {
+	Retval     int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
+	StatsIndex uint32 `binapi:"u32,name=stats_index" json:"stats_index,omitempty"`
+}
+
+func (m *BfdUDPUpdReply) Reset()               { *m = BfdUDPUpdReply{} }
+func (*BfdUDPUpdReply) GetMessageName() string { return "bfd_udp_upd_reply" }
+func (*BfdUDPUpdReply) GetCrcString() string   { return "1992deab" }
+func (*BfdUDPUpdReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+func (m *BfdUDPUpdReply) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4 // m.Retval
+	size += 4 // m.StatsIndex
+	return size
+}
+func (m *BfdUDPUpdReply) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.StatsIndex)
+	return buf.Bytes(), nil
+}
+func (m *BfdUDPUpdReply) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Retval = buf.DecodeInt32()
+	m.StatsIndex = buf.DecodeUint32()
+	return nil
+}
+
 // WantBfdEvents defines message 'want_bfd_events'.
 type WantBfdEvents struct {
 	EnableDisable bool   `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
@@ -1305,6 +1413,8 @@ func file_bfd_binapi_init() {
 	api.RegisterMessage((*BfdUDPSessionSetFlagsReply)(nil), "bfd_udp_session_set_flags_reply_e8d4e804")
 	api.RegisterMessage((*BfdUDPSetEchoSource)(nil), "bfd_udp_set_echo_source_f9e6675e")
 	api.RegisterMessage((*BfdUDPSetEchoSourceReply)(nil), "bfd_udp_set_echo_source_reply_e8d4e804")
+	api.RegisterMessage((*BfdUDPUpd)(nil), "bfd_udp_upd_939cd26a")
+	api.RegisterMessage((*BfdUDPUpdReply)(nil), "bfd_udp_upd_reply_1992deab")
 	api.RegisterMessage((*WantBfdEvents)(nil), "want_bfd_events_c5e2af94")
 	api.RegisterMessage((*WantBfdEventsReply)(nil), "want_bfd_events_reply_e8d4e804")
 }
@@ -1339,6 +1449,8 @@ func AllMessages() []api.Message {
 		(*BfdUDPSessionSetFlagsReply)(nil),
 		(*BfdUDPSetEchoSource)(nil),
 		(*BfdUDPSetEchoSourceReply)(nil),
+		(*BfdUDPUpd)(nil),
+		(*BfdUDPUpdReply)(nil),
 		(*WantBfdEvents)(nil),
 		(*WantBfdEventsReply)(nil),
 	}
