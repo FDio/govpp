@@ -20,9 +20,9 @@ import (
 	"flag"
 	"testing"
 
-	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
+	"go.fd.io/govpp/adapter/statsclient"
+	"go.fd.io/govpp/api"
+	"go.fd.io/govpp/core"
 )
 
 var (

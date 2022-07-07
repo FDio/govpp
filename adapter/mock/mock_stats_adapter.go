@@ -18,7 +18,7 @@
 package mock
 
 import (
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 )
 
 // implements StatsAPI

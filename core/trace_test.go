@@ -1,13 +1,13 @@
 package core_test
 
 import (
-	"git.fd.io/govpp.git/api"
-	interfaces "git.fd.io/govpp.git/binapi/interface"
-	"git.fd.io/govpp.git/binapi/ip"
-	"git.fd.io/govpp.git/binapi/l2"
-	memclnt "git.fd.io/govpp.git/binapi/memclnt"
-	"git.fd.io/govpp.git/binapi/memif"
-	"git.fd.io/govpp.git/core"
+	"go.fd.io/govpp/api"
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/ip"
+	"go.fd.io/govpp/binapi/l2"
+	memclnt "go.fd.io/govpp/binapi/memclnt"
+	"go.fd.io/govpp/binapi/memif"
+	"go.fd.io/govpp/core"
 	. "github.com/onsi/gomega"
 	"strings"
 	"testing"

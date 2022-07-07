@@ -26,7 +26,7 @@ import (
 	"syscall"
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 	"github.com/fsnotify/fsnotify"
 	"github.com/ftrvxmtrx/fd"
 	logger "github.com/sirupsen/logrus"

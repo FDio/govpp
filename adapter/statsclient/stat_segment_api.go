@@ -20,7 +20,7 @@ import (
 	"time"
 	"unsafe"
 
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 )
 
 var (

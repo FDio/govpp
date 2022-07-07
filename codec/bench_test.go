@@ -18,7 +18,7 @@ package codec_test
 import (
 	"testing"
 
-	"git.fd.io/govpp.git/codec"
+	"go.fd.io/govpp/codec"
 )
 
 var Data []byte

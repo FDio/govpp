@@ -20,7 +20,7 @@ import (
 	"sync/atomic"
 	"unsafe"
 
-	"git.fd.io/govpp.git/adapter"
+	"go.fd.io/govpp/adapter"
 )
 
 type statSegmentV2 struct {

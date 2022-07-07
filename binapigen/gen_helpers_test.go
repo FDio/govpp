@@ -21,9 +21,9 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"git.fd.io/govpp.git/binapi/ethernet_types"
-	"git.fd.io/govpp.git/binapi/ip_types"
-	"git.fd.io/govpp.git/binapi/vpe_types"
+	"go.fd.io/govpp/binapi/ethernet_types"
+	"go.fd.io/govpp/binapi/ip_types"
+	"go.fd.io/govpp/binapi/vpe_types"
 )
 
 func TestGeneratedParseAddress(t *testing.T) {

@@ -19,14 +19,14 @@ import (
 	"flag"
 	"log"
 
-	"git.fd.io/govpp.git/adapter/socketclient"
-	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/api"
-	interfaces "git.fd.io/govpp.git/binapi/interface"
-	"git.fd.io/govpp.git/binapi/vlib"
-	"git.fd.io/govpp.git/binapi/vpe"
-	_ "git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/proxy"
+	"go.fd.io/govpp/adapter/socketclient"
+	"go.fd.io/govpp/adapter/statsclient"
+	"go.fd.io/govpp/api"
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/vlib"
+	"go.fd.io/govpp/binapi/vpe"
+	_ "go.fd.io/govpp/core"
+	"go.fd.io/govpp/proxy"
 )
 
 var (

@@ -1,13 +1,13 @@
-⚠️ The GoVPP project is changing hosting :
-- its import URL will move to [go.fd.io/govpp](https://go.fd.io/govpp)
-- its repository location will move to [https://github.com/FDio/govpp](https://github.com/FDio/govpp). 
+⚠️ The GoVPP project has changed URL :
+- the import URL has moved to [go.fd.io/govpp](https://go.fd.io/govpp)
+- the repository location has moved to [https://github.com/FDio/govpp](https://github.com/FDio/govpp).
 
-The last version archived on [git.fd.io/govpp.git](https://git.fd.io/govpp) will be `v0.5.0`.
+The last version archived on [git.fd.io/govpp.git](https://git.fd.io/govpp) is `v0.5.0`.
 
 
 # GoVPP
 
-[![stable](https://img.shields.io/github/v/tag/fdio/govpp.svg?label=release&logo=github)](https://github.com/ligato/vpp-agent/releases/latest) [![PkgGoDev](https://pkg.go.dev/badge/git.fd.io/govpp.git)](https://pkg.go.dev/git.fd.io/govpp.git)
+[![stable](https://img.shields.io/github/v/tag/fdio/govpp.svg?label=release&logo=github)](https://github.com/ligato/vpp-agent/releases/latest) [![PkgGoDev](https://pkg.go.dev/badge/go.fd.io/govpp)](https://pkg.go.dev/go.fd.io/govpp)
 
 The GoVPP repository contains a Go client library for interacting with the VPP, 
 generator of Go bindings for the VPP binary API and various other tooling for VPP.
@@ -50,9 +50,9 @@ package main
 import (
     "log"
     
-	"git.fd.io/govpp.git"
-	"git.fd.io/govpp.git/binapi/interfaces"
-	"git.fd.io/govpp.git/binapi/vpe"
+	"go.fd.io/govpp"
+	"go.fd.io/govpp/binapi/interfaces"
+	"go.fd.io/govpp/binapi/vpe"
 )
 
 func main() {
@@ -91,8 +91,8 @@ import (
     "context"
     "log"
 
-	"git.fd.io/govpp.git"
-	"git.fd.io/govpp.git/binapi/vpe"
+	"go.fd.io/govpp"
+	"go.fd.io/govpp/binapi/vpe"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package core
 
 import (
-	"git.fd.io/govpp.git/api"
+	"go.fd.io/govpp/api"
 )
 
 var (

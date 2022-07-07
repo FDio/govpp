@@ -24,17 +24,17 @@ import (
 	"os"
 	"time"
 
-	"git.fd.io/govpp.git"
-	"git.fd.io/govpp.git/adapter/socketclient"
-	"git.fd.io/govpp.git/api"
-	interfaces "git.fd.io/govpp.git/binapi/interface"
-	"git.fd.io/govpp.git/binapi/interface_types"
-	"git.fd.io/govpp.git/binapi/ip"
-	"git.fd.io/govpp.git/binapi/ip_types"
-	"git.fd.io/govpp.git/binapi/mactime"
-	"git.fd.io/govpp.git/binapi/memclnt"
-	"git.fd.io/govpp.git/binapi/vpe"
-	"git.fd.io/govpp.git/core"
+	"go.fd.io/govpp"
+	"go.fd.io/govpp/adapter/socketclient"
+	"go.fd.io/govpp/api"
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/interface_types"
+	"go.fd.io/govpp/binapi/ip"
+	"go.fd.io/govpp/binapi/ip_types"
+	"go.fd.io/govpp/binapi/mactime"
+	"go.fd.io/govpp/binapi/memclnt"
+	"go.fd.io/govpp/binapi/vpe"
+	"go.fd.io/govpp/core"
 )
 
 var (

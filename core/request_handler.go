@@ -23,7 +23,7 @@ import (
 
 	logger "github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/api"
+	"go.fd.io/govpp/api"
 )
 
 var ReplyChannelTimeout = time.Millisecond * 100

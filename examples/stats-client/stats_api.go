@@ -23,10 +23,10 @@ import (
 	"strings"
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
+	"go.fd.io/govpp/adapter"
+	"go.fd.io/govpp/adapter/statsclient"
+	"go.fd.io/govpp/api"
+	"go.fd.io/govpp/core"
 )
 
 // ------------------------------------------------------------------

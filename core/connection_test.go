@@ -20,14 +20,14 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"git.fd.io/govpp.git/adapter/mock"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/binapi/ethernet_types"
-	interfaces "git.fd.io/govpp.git/binapi/interface"
-	"git.fd.io/govpp.git/binapi/interface_types"
-	memclnt "git.fd.io/govpp.git/binapi/memclnt"
-	"git.fd.io/govpp.git/codec"
-	"git.fd.io/govpp.git/core"
+	"go.fd.io/govpp/adapter/mock"
+	"go.fd.io/govpp/api"
+	"go.fd.io/govpp/binapi/ethernet_types"
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/interface_types"
+	memclnt "go.fd.io/govpp/binapi/memclnt"
+	"go.fd.io/govpp/codec"
+	"go.fd.io/govpp/core"
 )
 
 type testCtx struct {
