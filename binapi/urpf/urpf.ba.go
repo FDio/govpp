@@ -31,28 +31,28 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "urpf"
 	APIVersion = "1.0.0"
-	VersionCrc = 0xb2bfd2c4
+	VersionCrc = 0x7cef28c9
 )
 
 // UrpfMode defines enum 'urpf_mode'.
 type UrpfMode uint8
 
 const (
-	URPF_API_MODE_OFF    UrpfMode = 1
-	URPF_API_MODE_LOOSE  UrpfMode = 2
-	URPF_API_MODE_STRICT UrpfMode = 3
+	URPF_API_MODE_OFF    UrpfMode = 0
+	URPF_API_MODE_LOOSE  UrpfMode = 1
+	URPF_API_MODE_STRICT UrpfMode = 2
 )
 
 var (
 	UrpfMode_name = map[uint8]string{
-		1: "URPF_API_MODE_OFF",
-		2: "URPF_API_MODE_LOOSE",
-		3: "URPF_API_MODE_STRICT",
+		0: "URPF_API_MODE_OFF",
+		1: "URPF_API_MODE_LOOSE",
+		2: "URPF_API_MODE_STRICT",
 	}
 	UrpfMode_value = map[string]uint8{
-		"URPF_API_MODE_OFF":    1,
-		"URPF_API_MODE_LOOSE":  2,
-		"URPF_API_MODE_STRICT": 3,
+		"URPF_API_MODE_OFF":    0,
+		"URPF_API_MODE_LOOSE":  1,
+		"URPF_API_MODE_STRICT": 2,
 	}
 )
 
@@ -74,7 +74,7 @@ type UrpfUpdate struct {
 
 func (m *UrpfUpdate) Reset()               { *m = UrpfUpdate{} }
 func (*UrpfUpdate) GetMessageName() string { return "urpf_update" }
-func (*UrpfUpdate) GetCrcString() string   { return "2bf8a77c" }
+func (*UrpfUpdate) GetCrcString() string   { return "cc274cd1" }
 func (*UrpfUpdate) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
@@ -144,7 +144,7 @@ func (m *UrpfUpdateReply) Unmarshal(b []byte) error {
 
 func init() { file_urpf_binapi_init() }
 func file_urpf_binapi_init() {
-	api.RegisterMessage((*UrpfUpdate)(nil), "urpf_update_2bf8a77c")
+	api.RegisterMessage((*UrpfUpdate)(nil), "urpf_update_cc274cd1")
 	api.RegisterMessage((*UrpfUpdateReply)(nil), "urpf_update_reply_e8d4e804")
 }
 

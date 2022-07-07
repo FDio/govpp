@@ -7,7 +7,7 @@
 // Package policer contains generated bindings for API file policer.api.
 //
 // Contents:
-//   8 messages
+//  10 messages
 //
 package policer
 
@@ -27,7 +27,7 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "policer"
 	APIVersion = "2.0.0"
-	VersionCrc = 0xf14848c
+	VersionCrc = 0xd11df44e
 )
 
 // PolicerAddDel defines message 'policer_add_del'.
@@ -464,6 +464,80 @@ func (m *PolicerInputReply) Unmarshal(b []byte) error {
 	return nil
 }
 
+// PolicerOutput defines message 'policer_output'.
+type PolicerOutput struct {
+	Name      string                         `binapi:"string[64],name=name" json:"name,omitempty"`
+	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
+	Apply     bool                           `binapi:"bool,name=apply" json:"apply,omitempty"`
+}
+
+func (m *PolicerOutput) Reset()               { *m = PolicerOutput{} }
+func (*PolicerOutput) GetMessageName() string { return "policer_output" }
+func (*PolicerOutput) GetCrcString() string   { return "233f0ef5" }
+func (*PolicerOutput) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+func (m *PolicerOutput) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 64 // m.Name
+	size += 4  // m.SwIfIndex
+	size += 1  // m.Apply
+	return size
+}
+func (m *PolicerOutput) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeString(m.Name, 64)
+	buf.EncodeUint32(uint32(m.SwIfIndex))
+	buf.EncodeBool(m.Apply)
+	return buf.Bytes(), nil
+}
+func (m *PolicerOutput) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Name = buf.DecodeString(64)
+	m.SwIfIndex = interface_types.InterfaceIndex(buf.DecodeUint32())
+	m.Apply = buf.DecodeBool()
+	return nil
+}
+
+// PolicerOutputReply defines message 'policer_output_reply'.
+type PolicerOutputReply struct {
+	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
+}
+
+func (m *PolicerOutputReply) Reset()               { *m = PolicerOutputReply{} }
+func (*PolicerOutputReply) GetMessageName() string { return "policer_output_reply" }
+func (*PolicerOutputReply) GetCrcString() string   { return "e8d4e804" }
+func (*PolicerOutputReply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+func (m *PolicerOutputReply) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4 // m.Retval
+	return size
+}
+func (m *PolicerOutputReply) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	return buf.Bytes(), nil
+}
+func (m *PolicerOutputReply) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Retval = buf.DecodeInt32()
+	return nil
+}
+
 func init() { file_policer_binapi_init() }
 func file_policer_binapi_init() {
 	api.RegisterMessage((*PolicerAddDel)(nil), "policer_add_del_2b31dd38")
@@ -474,6 +548,8 @@ func file_policer_binapi_init() {
 	api.RegisterMessage((*PolicerDump)(nil), "policer_dump_35f1ae0f")
 	api.RegisterMessage((*PolicerInput)(nil), "policer_input_233f0ef5")
 	api.RegisterMessage((*PolicerInputReply)(nil), "policer_input_reply_e8d4e804")
+	api.RegisterMessage((*PolicerOutput)(nil), "policer_output_233f0ef5")
+	api.RegisterMessage((*PolicerOutputReply)(nil), "policer_output_reply_e8d4e804")
 }
 
 // Messages returns list of all messages in this module.
@@ -487,5 +563,7 @@ func AllMessages() []api.Message {
 		(*PolicerDump)(nil),
 		(*PolicerInput)(nil),
 		(*PolicerInputReply)(nil),
+		(*PolicerOutput)(nil),
+		(*PolicerOutputReply)(nil),
 	}
 }
