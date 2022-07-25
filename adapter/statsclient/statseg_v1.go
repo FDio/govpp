@@ -102,10 +102,7 @@ func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Sta
 		return adapter.ScalarStat(dirEntry.unionData)
 
 	case adapter.ErrorIndex:
-		if dirEntry.unionData == 0 {
-			debugf("offset invalid for %s", dirEntry.name)
-			break
-		} else if dirEntry.unionData >= uint64(len(ss.sharedHeader)) {
+		if dirEntry.unionData >= uint64(len(ss.sharedHeader)) {
 			debugf("offset out of range for %s", dirEntry.name)
 			break
 		}
