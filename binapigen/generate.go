@@ -318,7 +318,7 @@ func genUnion(g *GenFile, union *Union) {
 	// generate field comments
 	g.P("// ", union.GoName, " can be one of:")
 	for _, field := range union.Fields {
-		g.P("// - ", field.GoName, " *", getFieldType(g, field))
+		g.P("// - ", field.GoName, " *", GetFieldType(g, field))
 	}
 
 	// generate data field
@@ -378,7 +378,7 @@ func genField(g *GenFile, fields []*Field, i int) {
 
 	logf(" gen FIELD[%d] %s (%s) - type: %q (array: %v/%v)", i, field.GoName, field.Name, field.Type, field.Array, field.Length)
 
-	gotype := getFieldType(g, field)
+	gotype := GetFieldType(g, field)
 	tags := structTags{
 		"binapi": fieldTagBinapi(field),
 		"json":   fieldTagJson(field),
@@ -520,10 +520,10 @@ func genMessageMethods(g *GenFile, msg *Message) {
 	g.P("	return ", apiMsgType(msg.msgType))
 	g.P("}")
 
-    if msg.msgType == msgTypeReply || msg.msgType == msgTypeEvent {
+	if msg.msgType == msgTypeReply || msg.msgType == msgTypeEvent {
 		// GetRetVal method
 		g.P("func (m *", msg.GoIdent.GoName, ") GetRetVal() error {")
-		if getRetvalField(msg) != nil {
+		if GetRetvalField(msg) != nil {
 			g.P("	return api.RetvalToVPPApiError(int32(m.Retval))")
 		} else {
 			g.P("	return nil")

@@ -26,20 +26,14 @@ import (
 
 const testOutputDir = "test_output_dir"
 
-func GenerateFromFile(file string, opts Options) error {
-	apifile, err := vppapi.ParseFile(file)
+func GenerateFromFile(filename string) error {
+	os.Setenv(vppapi.VPPVersionEnvVar, "test-version")
+	gen, err := New(Options{
+		OutputDir: testOutputDir,
+		ApiDir:    filename,
+	})
 	if err != nil {
 		return err
-	}
-	gen, err := New(opts, []*vppapi.File{apifile}, nil)
-	if err != nil {
-		return err
-	}
-	for _, file := range gen.Files {
-		if !file.Generate {
-			continue
-		}
-		GenerateAPI(gen, file)
 	}
 	if err = gen.Generate(); err != nil {
 		return err
@@ -53,8 +47,7 @@ func TestGenerateFromFileACL(t *testing.T) {
 	// remove directory created during test
 	defer os.RemoveAll(testOutputDir)
 
-	opts := Options{OutputDir: testOutputDir}
-	err := GenerateFromFile("vppapi/testdata/acl.api.json", opts)
+	err := GenerateFromFile("vppapi/testdata/acl.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(testOutputDir + "/acl/acl.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -68,8 +61,7 @@ func TestGenerateFromFileIP(t *testing.T) {
 	// remove directory created during test
 	defer os.RemoveAll(testOutputDir)
 
-	opts := Options{OutputDir: testOutputDir}
-	err := GenerateFromFile("vppapi/testdata/ip.api.json", opts)
+	err := GenerateFromFile("vppapi/testdata/ip.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	fileInfo, err := os.Stat(testOutputDir + "/ip/ip.ba.go")
 	Expect(err).ShouldNot(HaveOccurred())
@@ -80,17 +72,15 @@ func TestGenerateFromFileIP(t *testing.T) {
 func TestGenerateFromFileInputError(t *testing.T) {
 	RegisterTestingT(t)
 
-	opts := Options{OutputDir: testOutputDir}
-	err := GenerateFromFile("vppapi/testdata/nonexisting.json", opts)
+	err := GenerateFromFile("vppapi/testdata/nonexisting.json")
 	Expect(err).Should(HaveOccurred())
-	Expect(err.Error()).To(ContainSubstring("unsupported"))
+	Expect(err.Error()).To(ContainSubstring("vppapi/testdata/nonexisting.json does not exist"))
 }
 
 func TestGenerateFromFileReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 
-	opts := Options{OutputDir: testOutputDir}
-	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json", opts)
+	err := GenerateFromFile("vppapi/testdata/input-read-json-error.json")
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("unsupported"))
 }
@@ -106,8 +96,7 @@ func TestGenerateFromFileGeneratePackageError(t *testing.T) {
 		os.RemoveAll(testOutputDir)
 	}()
 
-	opts := Options{OutputDir: testOutputDir}
-	err := GenerateFromFile("vppapi/testdata/input-generate-error.json", opts)
+	err := GenerateFromFile("vppapi/testdata/input-generate-error.json")
 	Expect(err).Should(HaveOccurred())
 }
 

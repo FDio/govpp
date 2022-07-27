@@ -17,6 +17,7 @@ package vppapi
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -58,9 +59,16 @@ func Parse() ([]*File, error) {
 // ParseDir finds and parses API files in given directory and returns parsed files.
 // Supports API files in JSON format (.api.json) only.
 func ParseDir(apiDir string) ([]*File, error) {
-	list, err := FindFiles(apiDir, 1)
-	if err != nil {
-		return nil, err
+	info, err := os.Stat(apiDir)
+	if os.IsNotExist(err) {
+		return nil, fmt.Errorf("%s does not exist.", apiDir)
+	}
+	list := []string{apiDir} // in tests we pass a single file name
+	if info.IsDir() {
+		list, err = FindFiles(apiDir, 1)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	logf("found %d files in API dir %q", len(list), apiDir)

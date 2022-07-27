@@ -20,7 +20,10 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
+	"regexp"
 	"strings"
+	"unicode"
 
 	"github.com/sirupsen/logrus"
 )
@@ -29,6 +32,7 @@ const (
 	VPPVersionEnvVar  = "VPP_VERSION"
 	VPPDirEnvVar      = "VPP_DIR"
 	versionScriptPath = "./src/scripts/version"
+	generatedJsonPath = "build-root/install-vpp-native/vpp/share/vpp/api/"
 )
 
 // ResolveVPPVersion resolves version of the VPP for target directory.
@@ -46,14 +50,14 @@ func ResolveVPPVersion(apidir string) string {
 		version, err := GetVPPVersionInstalled()
 		if err != nil {
 			logrus.Warnf("resolving VPP version from installed package failed: %v", err)
-		} else {
+		} else if version != "" {
 			logrus.Infof("resolved VPP version from installed package: %v", version)
 			return version
 		}
 	}
 
 	// check if inside VPP repo
-	repoDir, err := findGitRepoRootDir(apidir)
+	repoDir, err := FindGitRepoRootDir(apidir)
 	if err != nil {
 		logrus.Warnf("checking VPP git repo failed: %v", err)
 	} else {
@@ -61,7 +65,7 @@ func ResolveVPPVersion(apidir string) string {
 		version, err := GetVPPVersionRepo(repoDir)
 		if err != nil {
 			logrus.Warnf("resolving VPP version from version script failed: %v", err)
-		} else {
+		} else if version != "" {
 			logrus.Infof("resolved VPP version from version script: %v", version)
 			return version
 		}
@@ -74,7 +78,7 @@ func ResolveVPPVersion(apidir string) string {
 	}
 
 	logrus.Warnf("VPP version could not be resolved, you can set it manually using %s env var", VPPVersionEnvVar)
-	return ""
+	return "unknown"
 }
 
 // GetVPPVersionInstalled retrieves VPP version of installed package using dpkg-query.
@@ -102,7 +106,7 @@ func GetVPPVersionRepo(repoDir string) (string, error) {
 	return strings.TrimSpace(string(out)), nil
 }
 
-func findGitRepoRootDir(dir string) (string, error) {
+func FindGitRepoRootDir(dir string) (string, error) {
 	if conf := os.Getenv(VPPDirEnvVar); conf != "" {
 		logrus.Infof("VPP directory was manually set to %q via %s env var", conf, VPPDirEnvVar)
 		return conf, nil
@@ -114,4 +118,126 @@ func findGitRepoRootDir(dir string) (string, error) {
 		return "", fmt.Errorf("git command failed: %v\noutput: %s", err, out)
 	}
 	return strings.TrimSpace(string(out)), nil
+}
+
+// resolveImportPath tries to resolve import path for a directory.
+func ResolveImportPath(dir string) (string, error) {
+	absPath, err := filepath.Abs(dir)
+	if err != nil {
+		return "", err
+	}
+	modRoot := FindGoModuleRoot(absPath)
+	if modRoot == "" {
+		return "", err
+	}
+	modPath, err := ReadModulePath(path.Join(modRoot, "go.mod"))
+	if err != nil {
+		return "", err
+	}
+	relDir, err := filepath.Rel(modRoot, absPath)
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(modPath, relDir), nil
+}
+
+// FindGoModuleRoot looks for enclosing Go module.
+func FindGoModuleRoot(dir string) (root string) {
+	dir = filepath.Clean(dir)
+	for {
+		if fi, err := os.Stat(filepath.Join(dir, "go.mod")); err == nil && !fi.IsDir() {
+			return dir
+		}
+		d := filepath.Dir(dir)
+		if d == dir {
+			break
+		}
+		dir = d
+	}
+	return ""
+}
+
+var modulePathRE = regexp.MustCompile(`module[ \t]+([^ \t\r\n]+)`)
+
+// ReadModulePath reads module path from go.mod file.
+func ReadModulePath(gomod string) (string, error) {
+	data, err := ioutil.ReadFile(gomod)
+	if err != nil {
+		return "", err
+	}
+	m := modulePathRE.FindSubmatch(data)
+	if m == nil {
+		return "", err
+	}
+	return string(m[1]), nil
+}
+
+// SplitAndStrip takes a string and splits it any separator
+func SplitAndStrip(s string) []string {
+	return strings.FieldsFunc(s, func(c rune) bool {
+		return !unicode.IsLetter(c) && !unicode.IsNumber(c) && c != '_'
+	})
+}
+
+func ExpandPaths(paths ...string) string {
+	if strings.HasPrefix(paths[0], "~/") {
+		dirname, _ := os.UserHomeDir()
+		paths[0] = filepath.Join(dirname, paths[0][2:])
+	}
+	return os.ExpandEnv(filepath.Join(paths...))
+}
+
+func GetApiFileDirectory(apiSrcDir, vppSrcDir string) string {
+	if apiSrcDir != "" {
+		return ExpandPaths(apiSrcDir)
+	} else if vppSrcDir != "" {
+		// Get directory containing the binAPI package
+		cmd := exec.Command("make", "json-api-files")
+		cmd.Dir = ExpandPaths(vppSrcDir)
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		err := cmd.Run()
+		if err != nil {
+			logrus.Fatalf("Failed to 'make json-api-files' : %s", err)
+			return ""
+		}
+		return ExpandPaths(vppSrcDir, generatedJsonPath)
+	} else {
+		return DefaultDir
+	}
+}
+
+func getGoModuleFromPath(path string) string {
+	cmd := exec.Command("go", "list")
+	cmd.Dir = path
+	cmd.Stderr = os.Stderr
+	output, err := cmd.Output()
+	if err != nil {
+		logrus.Debugf("Failed to 'go list' : %s", err)
+		return ""
+	}
+	soutput := strings.TrimSpace(string(output))
+	if soutput == "" {
+		logrus.Debugf("'go list' did not return anything")
+		return ""
+	}
+	return soutput
+}
+
+func GetTargetPackagePath(userPackageName string, outputPath string) string {
+	if userPackageName != "" {
+		return userPackageName
+	}
+	modPath := getGoModuleFromPath(outputPath)
+	if modPath != "" {
+		return modPath
+	} else if filepath.IsAbs(outputPath) {
+		logrus.Fatalf("Failed find go module name for %s", outputPath)
+	}
+	modPath = getGoModuleFromPath(".")
+	if modPath == "" {
+		logrus.Fatalf("Failed find relative go module name for %s", outputPath)
+	}
+
+	return filepath.Join(modPath, outputPath)
 }
