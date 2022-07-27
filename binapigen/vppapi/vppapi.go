@@ -17,6 +17,7 @@ package vppapi
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -29,8 +30,8 @@ const (
 	APIFileExtension = ".api.json"
 )
 
-// FindFiles finds API files located in dir or in a nested directory that is not nested deeper than deep.
-func FindFiles(dir string, deep int) (files []string, err error) {
+// findFiles finds API files located in dir or in a nested directory that is not nested deeper than deep.
+func findFiles(dir string, deep int) (files []string, err error) {
 	entries, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("reading directory %s failed: %v", dir, err)
@@ -38,7 +39,7 @@ func FindFiles(dir string, deep int) (files []string, err error) {
 	for _, e := range entries {
 		if e.IsDir() && deep > 0 {
 			nestedDir := filepath.Join(dir, e.Name())
-			if nested, err := FindFiles(nestedDir, deep-1); err != nil {
+			if nested, err := findFiles(nestedDir, deep-1); err != nil {
 				return nil, err
 			} else {
 				files = append(files, nested...)
@@ -50,24 +51,26 @@ func FindFiles(dir string, deep int) (files []string, err error) {
 	return files, nil
 }
 
-// Parse parses API files in directory DefaultDir.
-func Parse() ([]*File, error) {
-	return ParseDir(DefaultDir)
-}
-
 // ParseDir finds and parses API files in given directory and returns parsed files.
 // Supports API files in JSON format (.api.json) only.
 func ParseDir(apiDir string) ([]*File, error) {
-	list, err := FindFiles(apiDir, 1)
-	if err != nil {
-		return nil, err
+	info, err := os.Stat(apiDir)
+	if os.IsNotExist(err) {
+		return nil, fmt.Errorf("%s does not exist.", apiDir)
+	}
+	list := []string{apiDir} // in tests we pass a single file name
+	if info.IsDir() {
+		list, err = findFiles(apiDir, 1)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	logf("found %d files in API dir %q", len(list), apiDir)
 
 	var files []*File
 	for _, file := range list {
-		module, err := ParseFile(file)
+		module, err := parseFile(file)
 		if err != nil {
 			return nil, err
 		}
@@ -76,8 +79,8 @@ func ParseDir(apiDir string) ([]*File, error) {
 	return files, nil
 }
 
-// ParseFile parses API file and returns File.
-func ParseFile(apiFile string) (*File, error) {
+// parseFile parses API file and returns File.
+func parseFile(apiFile string) (*File, error) {
 	if !strings.HasSuffix(apiFile, APIFileExtension) {
 		return nil, fmt.Errorf("unsupported file format: %q", apiFile)
 	}
@@ -92,7 +95,7 @@ func ParseFile(apiFile string) (*File, error) {
 
 	logf("parsing file %q", base)
 
-	module, err := ParseRaw(data)
+	module, err := parseRaw(data)
 	if err != nil {
 		return nil, fmt.Errorf("parsing file %s failed: %v", base, err)
 	}
@@ -102,8 +105,8 @@ func ParseFile(apiFile string) (*File, error) {
 	return module, nil
 }
 
-// ParseRaw parses raw API file data and returns File.
-func ParseRaw(data []byte) (file *File, err error) {
+// parseRaw parses raw API file data and returns File.
+func parseRaw(data []byte) (file *File, err error) {
 	defer func() {
 		if e := recover(); e != nil {
 			err = fmt.Errorf("panic occurred: %v", e)

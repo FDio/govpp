@@ -25,7 +25,7 @@ import (
 func TestGetInputFiles(t *testing.T) {
 	RegisterTestingT(t)
 
-	result, err := FindFiles("testdata", 1)
+	result, err := findFiles("testdata", 1)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).To(HaveLen(6))
 	for _, file := range result {
@@ -36,7 +36,7 @@ func TestGetInputFiles(t *testing.T) {
 func TestGetInputFilesError(t *testing.T) {
 	RegisterTestingT(t)
 
-	result, err := FindFiles("nonexisting_directory", 1)
+	result, err := findFiles("nonexisting_directory", 1)
 	Expect(err).Should(HaveOccurred())
 	Expect(result).To(BeNil())
 }
@@ -46,7 +46,7 @@ func TestReadJson(t *testing.T) {
 
 	inputData, err := ioutil.ReadFile("testdata/af_packet.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	result, err := ParseRaw(inputData)
+	result, err := parseRaw(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).ToNot(BeNil())
 	Expect(result.EnumTypes).To(HaveLen(0))
@@ -60,13 +60,13 @@ func TestReadJsonError(t *testing.T) {
 
 	inputData, err := ioutil.ReadFile("testdata/input-read-json-error.json")
 	Expect(err).ShouldNot(HaveOccurred())
-	result, err := ParseRaw(inputData)
+	result, err := parseRaw(inputData)
 	Expect(err).Should(HaveOccurred())
 	Expect(result).To(BeNil())
 }
 
 func TestParseFile(t *testing.T) {
-	module, err := ParseFile("testdata/vpe.api.json")
+	module, err := parseFile("testdata/vpe.api.json")
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
@@ -111,7 +111,7 @@ func TestParseFile(t *testing.T) {
 }
 
 func TestParseFileUnsupported(t *testing.T) {
-	_, err := ParseFile("testdata/input.txt")
+	_, err := parseFile("testdata/input.txt")
 	if err == nil {
 		t.Fatal("expected error")
 	}

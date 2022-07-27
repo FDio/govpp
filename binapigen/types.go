@@ -111,7 +111,7 @@ func fieldGoType(g *GenFile, field *Field) string {
 	return t
 }
 
-func getFieldType(g *GenFile, field *Field) string {
+func GetFieldType(g *GenFile, field *Field) string {
 	gotype := fieldGoType(g, field)
 	if field.Array {
 		switch gotype {

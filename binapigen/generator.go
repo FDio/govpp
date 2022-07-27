@@ -35,17 +35,42 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+var Logger = logrus.New()
+
+func init() {
+	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
+		Logger.SetLevel(logrus.DebugLevel)
+		logrus.SetLevel(logrus.DebugLevel)
+	}
+}
+
+func logf(f string, v ...interface{}) {
+	Logger.Debugf(f, v...)
+}
+
+func (*Generator) Logf(f string, v ...interface{}) {
+	logf(f, v...)
+}
+
+type Options struct {
+	OutputDir         string // output directory for generated files
+	ImportPrefix      string // prefix for import paths
+	NoVersionInfo     bool   // disables generating version info
+	NoSourcePathInfo  bool   // disables the 'source: /path' comment
+	ActivePluginNames []string
+	ApiDir            string
+	FileFilter        []string
+}
+
 type Generator struct {
 	Files       []*File
 	FilesByName map[string]*File
 	FilesByPath map[string]*File
 
 	opts       Options
-	apifiles   []*vppapi.File
 	vppVersion string
 
-	filesToGen []string
-	genfiles   []*GenFile
+	genfiles []*GenFile
 
 	enumsByName    map[string]*Enum
 	aliasesByName  map[string]*Alias
@@ -54,39 +79,61 @@ type Generator struct {
 	messagesByName map[string]*Message
 }
 
-func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator, error) {
-	gen := &Generator{
+func (g *Generator) GetMessagesByName(name string) *Message {
+	msg, ok := g.messagesByName[name]
+	if !ok {
+		logrus.Fatalf("no message named %v found", name)
+	}
+	return msg
+}
+
+func (g *Generator) GetOpts() *Options { return &g.opts }
+
+func New(opts Options) (gen *Generator, err error) {
+	if opts.ImportPrefix == "" {
+		opts.ImportPrefix, err = ResolveImportPath(opts.OutputDir)
+		if err != nil {
+			return nil, fmt.Errorf("cannot resolve import path for output dir %s: %w", opts.OutputDir, err)
+		}
+		logrus.Debugf("resolved import path prefix: %s", opts.ImportPrefix)
+	}
+
+	apiFiles, err := vppapi.ParseDir(opts.ApiDir)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse directory %s for api files: %w", opts.ApiDir, err)
+	}
+
+	gen = &Generator{
 		FilesByName:    make(map[string]*File),
 		FilesByPath:    make(map[string]*File),
 		opts:           opts,
-		apifiles:       apiFiles,
-		filesToGen:     filesToGen,
 		enumsByName:    map[string]*Enum{},
 		aliasesByName:  map[string]*Alias{},
 		structsByName:  map[string]*Struct{},
 		unionsByName:   map[string]*Union{},
 		messagesByName: map[string]*Message{},
+		vppVersion:     ResolveVPPVersion(opts.ApiDir),
 	}
 
 	// Normalize API files
-	SortFilesByImports(gen.apifiles)
+	SortFilesByImports(apiFiles)
 	for _, apiFile := range apiFiles {
-		RemoveImportedTypes(gen.apifiles, apiFile)
+		RemoveImportedTypes(apiFiles, apiFile)
 		SortFileObjectsByName(apiFile)
 	}
 
 	// prepare package names and import paths
 	packageNames := make(map[string]GoPackageName)
 	importPaths := make(map[string]GoImportPath)
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range apiFiles {
 		filename := getFilename(apifile)
 		packageNames[filename] = cleanPackageName(apifile.Name)
 		importPaths[filename] = GoImportPath(path.Join(gen.opts.ImportPrefix, baseName(apifile.Name)))
 	}
 
-	logrus.Debugf("adding %d VPP API files to generator", len(gen.apifiles))
+	logrus.Debugf("adding %d VPP API files to generator", len(apiFiles))
 
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range apiFiles {
 		if _, ok := gen.FilesByName[apifile.Name]; ok {
 			return nil, fmt.Errorf("duplicate file: %q", apifile.Name)
 		}
@@ -104,9 +151,9 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	}
 
 	// mark files for generation
-	if len(gen.filesToGen) > 0 {
-		logrus.Debugf("Checking %d files to generate: %v", len(gen.filesToGen), gen.filesToGen)
-		for _, genFile := range gen.filesToGen {
+	if len(opts.FileFilter) > 0 {
+		logrus.Debugf("Checking %d files to generate: %v", len(opts.FileFilter), opts.FileFilter)
+		for _, genFile := range opts.FileFilter {
 			markGen := func(file *File) {
 				file.Generate = true
 				// generate all imported files
@@ -143,6 +190,19 @@ func getFilename(file *vppapi.File) string {
 }
 
 func (g *Generator) Generate() error {
+	for _, file := range g.Files {
+		if !file.Generate {
+			continue
+		}
+		GenerateAPI(g, file)
+	}
+	for _, pluginName := range g.opts.ActivePluginNames {
+		err := g.RunPlugin(pluginName)
+		if err != nil {
+			return fmt.Errorf("error running plugin %s %s", pluginName, err)
+		}
+	}
+
 	if len(g.genfiles) == 0 {
 		return fmt.Errorf("no files to generate")
 	}
@@ -165,24 +225,29 @@ type GenFile struct {
 	gen           *Generator
 	file          *File
 	filename      string
-	goImportPath  GoImportPath
 	buf           bytes.Buffer
 	manualImports map[GoImportPath]bool
 	packageNames  map[GoImportPath]GoPackageName
 }
 
+func (*GenFile) Logf(f string, v ...interface{}) {
+	logf(f, v...)
+}
+
 // NewGenFile creates new generated file with
-func (g *Generator) NewGenFile(filename string, importPath GoImportPath) *GenFile {
+func (g *Generator) NewGenFile(filename string, file *File) *GenFile {
 	f := &GenFile{
 		gen:           g,
+		file:          file,
 		filename:      filename,
-		goImportPath:  importPath,
 		manualImports: make(map[GoImportPath]bool),
 		packageNames:  make(map[GoImportPath]GoPackageName),
 	}
 	g.genfiles = append(g.genfiles, f)
 	return f
 }
+
+func (g *GenFile) GetFile() *File { return g.file }
 
 func (g *GenFile) Write(p []byte) (n int, err error) {
 	return g.buf.Write(p)
@@ -193,7 +258,7 @@ func (g *GenFile) Import(importPath GoImportPath) {
 }
 
 func (g *GenFile) GoIdent(ident GoIdent) string {
-	if ident.GoImportPath == g.goImportPath {
+	if ident.GoImportPath == g.file.GoImportPath {
 		return ident.GoName
 	}
 	if packageName, ok := g.packageNames[ident.GoImportPath]; ok {

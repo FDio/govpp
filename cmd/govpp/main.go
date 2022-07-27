@@ -39,7 +39,7 @@ import (
 func main() {
 	flag.Parse()
 
-	apifiles, err := vppapi.Parse()
+	apifiles, err := vppapi.ParseDir(vppapi.DefaultDir)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -17,17 +17,19 @@ package binapigen
 import (
 	"bufio"
 	"fmt"
-	"go.fd.io/govpp/binapigen/vppapi"
-	. "github.com/onsi/gomega"
 	"os"
 	"strings"
 	"testing"
+
+	. "github.com/onsi/gomega"
+
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 func TestGoModule(t *testing.T) {
 	const expected = "go.fd.io/govpp/binapi"
 
-	impPath, err := resolveImportPath("../binapi")
+	impPath, err := ResolveImportPath("../binapi")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -71,7 +73,7 @@ func TestBinapiUnionSizes(t *testing.T) {
 		Expect(err).ToNot(HaveOccurred())
 	}()
 
-	err := GenerateFromFile("vppapi/testdata/union.api.json", Options{OutputDir: testOutputDir})
+	err := GenerateFromFile("vppapi/testdata/union.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 
 	file, err := os.Open(testOutputDir + "/union/union.ba.go")
