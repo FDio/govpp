@@ -1,4 +1,4 @@
-//  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2022 Cisco and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -12,31 +12,4 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-//go:build integration
-// +build integration
-
-package vppapi_test
-
-import (
-	"encoding/json"
-	"testing"
-
-	"go.fd.io/govpp/binapigen/vppapi"
-)
-
-func TestParse(t *testing.T) {
-	files, err := vppapi.ParseDir(vppapi.DefaultDir)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	for _, file := range files {
-		b, err := json.MarshalIndent(file, "\t", "  ")
-		if err != nil {
-			t.Fatal(err)
-		}
-		t.Logf(" - %s:\n%s", file.Name, b)
-	}
-
-	t.Logf("parsed %d files", len(files))
-}
+package plugins

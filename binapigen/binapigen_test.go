@@ -15,43 +15,56 @@
 package binapigen
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	. "github.com/onsi/gomega"
-
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+var sampleJson = `{
+    "types": [],
+    "messages": [],
+    "unions": [],
+    "enums": [],
+    "enumflags": [],
+    "services": {},
+    "options": {
+        "version": "1.7.0"
+    },
+    "aliases": {},
+    "vl_api_version": "0x12345678",
+    "imports": [],
+    "counters": [],
+    "paths": []
+}`
+
 func TestGenerator(t *testing.T) {
-	tests := []struct {
-		name          string
-		file          *vppapi.File
-		expectPackage string
-	}{
-		{name: "vpe", file: &vppapi.File{
-			Name: "vpe",
-			Path: "/usr/share/vpp/api/core/vpe.api.json",
-			CRC:  "0x12345678",
-		},
-			expectPackage: "vpe",
-		},
+	RegisterTestingT(t)
+
+	dir, err := os.MkdirTemp("", "govpp-test")
+	if err != nil {
+		t.Fatal(err)
 	}
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			RegisterTestingT(t)
+	defer os.RemoveAll(dir)
 
-			apiFiles := []*vppapi.File{test.file}
-
-			gen, err := New(Options{
-				ImportPrefix: "test",
-			}, apiFiles, nil)
-			Expect(err).ToNot(HaveOccurred(), "unexpected generator error: %v", err)
-
-			Expect(gen.Files).To(HaveLen(1))
-			Expect(gen.Files[0].PackageName).To(BeEquivalentTo(test.expectPackage))
-			Expect(gen.Files[0].GoImportPath).To(BeEquivalentTo("test/" + test.expectPackage))
-		})
+	file := filepath.Join(dir, "vpe.api.json")
+	if err := os.WriteFile(file, []byte(sampleJson), 0666); err != nil {
+		t.Fatal(err)
 	}
+
+	os.Setenv(VPPVersionEnvVar, "test-version")
+	gen, err := New(Options{
+		ApiDir:       dir,
+		FileFilter:   []string{file},
+		ImportPrefix: "test",
+	})
+	Expect(err).ToNot(HaveOccurred(), "unexpected generator error: %v", err)
+
+	Expect(gen.Files).To(HaveLen(1))
+	Expect(gen.Files[0].PackageName).To(BeEquivalentTo("vpe"))
+	Expect(gen.Files[0].GoImportPath).To(BeEquivalentTo("test/vpe"))
+	Expect(gen.Files[0].Desc.CRC).To(BeEquivalentTo("0x12345678"))
 }
 
 func TestSanitize(t *testing.T) {

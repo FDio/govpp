@@ -380,7 +380,7 @@ func getMsgType(m vppapi.Message) (msgType, error) {
 	return typ, nil
 }
 
-func getRetvalField(m *Message) *Field {
+func GetRetvalField(m *Message) *Field {
 	for _, field := range m.Fields {
 		if field.Name == fieldRetval {
 			return field
