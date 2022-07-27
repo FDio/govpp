@@ -12,25 +12,27 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package binapigen
+package plugins
 
 import (
 	"path"
 	"strconv"
+
+	"go.fd.io/govpp/binapigen"
 )
 
 func init() {
-	RegisterPlugin("http", GenerateHTTP)
+	binapigen.RegisterPlugin("http", GenerateHTTP)
 }
 
 // library dependencies
 const (
-	httpPkg   = GoImportPath("net/http")
-	ioutilPkg = GoImportPath("io/ioutil")
-	jsonPkg   = GoImportPath("encoding/json")
+	httpPkg   = binapigen.GoImportPath("net/http")
+	ioutilPkg = binapigen.GoImportPath("io/ioutil")
+	jsonPkg   = binapigen.GoImportPath("encoding/json")
 )
 
-func GenerateHTTP(gen *Generator) {
+func GenerateHTTP(gen *binapigen.Generator) {
 	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
@@ -39,14 +41,14 @@ func GenerateHTTP(gen *Generator) {
 	}
 }
 
-func generateOneHTTP(gen *Generator, file *File) *GenFile {
+func generateOneHTTP(gen *binapigen.Generator, file *binapigen.File) *binapigen.GenFile {
 	if file.Service == nil {
 		return nil
 	}
 
-	logf("----------------------------")
-	logf(" Generate HTTP - %s", file.Desc.Name)
-	logf("----------------------------")
+	gen.Logf("----------------------------")
+	gen.Logf(" Generate HTTP - %s", file.Desc.Name)
+	gen.Logf("----------------------------")
 
 	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_http.ba.go")
 	g := gen.NewGenFile(filename, file)
@@ -65,7 +67,7 @@ func generateOneHTTP(gen *Generator, file *File) *GenFile {
 	return g
 }
 
-func genHTTPHandler(g *GenFile, svc *Service) {
+func genHTTPHandler(g *binapigen.GenFile, svc *binapigen.Service) {
 	// generate handler constructor
 	g.P("func HTTPHandler(rpc ", serviceApiName, ") ", httpPkg.Ident("Handler"), " {")
 	g.P("	mux := ", httpPkg.Ident("NewServeMux"), "()")

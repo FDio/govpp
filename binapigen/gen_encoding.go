@@ -310,7 +310,7 @@ func decodeField(g *GenFile, field *Field, name string, getFieldName func(string
 		if field.Length > 0 {
 			g.P("for ", index, " := 0; ", index, " < ", field.Length, ";", index, "++ {")
 		} else if field.SizeFrom != "" {
-			g.P(name, " = make(", getFieldType(g, field), ", ", sizeFromName, ")")
+			g.P(name, " = make(", GetFieldType(g, field), ", ", sizeFromName, ")")
 			g.P("for ", index, " := 0; ", index, " < len(", name, ");", index, "++ {")
 		}
 		name = fmt.Sprintf("%s[%s]", name, index)

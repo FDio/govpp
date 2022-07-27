@@ -316,7 +316,7 @@ func genUnion(g *GenFile, union *Union) {
 	// generate field comments
 	g.P("// ", union.GoName, " can be one of:")
 	for _, field := range union.Fields {
-		g.P("// - ", field.GoName, " *", getFieldType(g, field))
+		g.P("// - ", field.GoName, " *", GetFieldType(g, field))
 	}
 
 	// generate data field
@@ -376,7 +376,7 @@ func genField(g *GenFile, fields []*Field, i int) {
 
 	logf(" gen FIELD[%d] %s (%s) - type: %q (array: %v/%v)", i, field.GoName, field.Name, field.Type, field.Array, field.Length)
 
-	gotype := getFieldType(g, field)
+	gotype := GetFieldType(g, field)
 	tags := structTags{
 		"binapi": fieldTagBinapi(field),
 		"json":   fieldTagJson(field),

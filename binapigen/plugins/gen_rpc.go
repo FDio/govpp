@@ -12,23 +12,25 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package binapigen
+package plugins
 
 import (
 	"fmt"
 	"path"
 
-	"github.com/sirupsen/logrus"
+	"go.fd.io/govpp/binapigen"
 )
 
 func init() {
-	RegisterPlugin("rpc", GenerateRPC)
+	binapigen.RegisterPlugin("rpc", GenerateRPC)
 }
 
 // library dependencies
 const (
-	contextPkg = GoImportPath("context")
-	ioPkg      = GoImportPath("io")
+	contextPkg  = binapigen.GoImportPath("context")
+	ioPkg       = binapigen.GoImportPath("io")
+	govppApiPkg = binapigen.GoImportPath("go.fd.io/govpp/api")
+	fmtPkg      = binapigen.GoImportPath("fmt")
 )
 
 // generated names
@@ -42,7 +44,7 @@ const (
 	//serviceDescName = "_ServiceRPC_serviceDesc" // name for service descriptor var
 )
 
-func GenerateRPC(gen *Generator) {
+func GenerateRPC(gen *binapigen.Generator) {
 	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
@@ -51,14 +53,14 @@ func GenerateRPC(gen *Generator) {
 	}
 }
 
-func generateOneRPC(gen *Generator, file *File) *GenFile {
+func generateOneRPC(gen *binapigen.Generator, file *binapigen.File) *binapigen.GenFile {
 	if file.Service == nil {
 		return nil
 	}
 
-	logf("----------------------------")
-	logf(" Generate RPC - %s", file.Desc.Name)
-	logf("----------------------------")
+	gen.Logf("----------------------------")
+	gen.Logf(" Generate RPC - %s", file.Desc.Name)
+	gen.Logf("----------------------------")
 
 	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_rpc.ba.go")
 	g := gen.NewGenFile(filename, file)
@@ -71,15 +73,15 @@ func generateOneRPC(gen *Generator, file *File) *GenFile {
 
 	// generate RPC service
 	if len(file.Service.RPCs) > 0 {
-		genService(g, file.Service)
+		genService(g, file.Service, gen)
 	}
 
 	return g
 }
 
-func genService(g *GenFile, svc *Service) {
+func genService(g *binapigen.GenFile, svc *binapigen.Service, gen *binapigen.Generator) {
 	// generate comment
-	g.P("// ", serviceApiName, " defines RPC service ", g.file.Desc.Name, ".")
+	g.P("// ", serviceApiName, " defines RPC service ", g.GetFile().Desc.Name, ".")
 
 	// generate service interface
 	g.P("type ", serviceApiName, " interface {")
@@ -101,24 +103,18 @@ func genService(g *GenFile, svc *Service) {
 	g.P("}")
 	g.P()
 
-	msgControlPingReply, ok := g.gen.messagesByName["control_ping_reply"]
-	if !ok {
-		logrus.Fatalf("no message for %v", "control_ping_reply")
-	}
-	msgControlPing, ok := g.gen.messagesByName["control_ping"]
-	if !ok {
-		logrus.Fatalf("no message for %v", "control_ping")
-	}
+	msgControlPingReply := gen.GetMessagesByName("control_ping_reply")
+	msgControlPing := gen.GetMessagesByName("control_ping")
 
 	for _, rpc := range svc.RPCs {
-		logf(" gen RPC: %v (%s)", rpc.GoName, rpc.VPP.Request)
+		g.Logf(" gen RPC: %v (%s)", rpc.GoName, rpc.VPP.Request)
 
 		g.P("func (c *", serviceImplName, ") ", rpcMethodSignature(g, rpc), " {")
 		if rpc.VPP.Stream {
 			streamImpl := fmt.Sprintf("%s_%sClient", serviceImplName, rpc.GoName)
 			streamApi := fmt.Sprintf("%s_%sClient", serviceApiName, rpc.GoName)
 
-			var msgReply, msgDetails *Message
+			var msgReply, msgDetails *binapigen.Message
 			if rpc.MsgStream != nil {
 				msgDetails = rpc.MsgStream
 				msgReply = rpc.MsgReply
@@ -176,9 +172,9 @@ func genService(g *GenFile, svc *Service) {
 			}
 			g.P("	case *", msgReply.GoIdent, ":")
 			if msgReply != msgControlPingReply {
-				if retvalField := getRetvalField(msgReply); retvalField != nil {
+				if retvalField := binapigen.GetRetvalField(msgReply); retvalField != nil {
 					s := fmt.Sprint("(m.", retvalField.GoName, ")")
-					if fieldType := getFieldType(g, retvalField); fieldType != "int32" {
+					if fieldType := binapigen.GetFieldType(g, retvalField); fieldType != "int32" {
 						s = fmt.Sprint("(int32(m.", retvalField.GoName, "))")
 					}
 					g.P("if err := ", govppApiPkg.Ident("RetvalToVPPApiError"), s, "; err != nil {")
@@ -212,8 +208,8 @@ func genService(g *GenFile, svc *Service) {
 			g.P("out := new(", rpc.MsgReply.GoIdent, ")")
 			g.P("err := c.conn.Invoke(ctx, in, out)")
 			g.P("if err != nil { return nil, err }")
-			if retvalField := getRetvalField(rpc.MsgReply); retvalField != nil {
-				if fieldType := getFieldType(g, retvalField); fieldType == "int32" {
+			if retvalField := binapigen.GetRetvalField(rpc.MsgReply); retvalField != nil {
+				if fieldType := binapigen.GetFieldType(g, retvalField); fieldType == "int32" {
 					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(out.", retvalField.GoName, ")")
 				} else {
 					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(int32(out.", retvalField.GoName, "))")
@@ -253,7 +249,7 @@ func genService(g *GenFile, svc *Service) {
 	g.P()
 }
 
-func rpcMethodSignature(g *GenFile, rpc *RPC) string {
+func rpcMethodSignature(g *binapigen.GenFile, rpc *binapigen.RPC) string {
 	s := rpc.GoName + "(ctx " + g.GoIdent(contextPkg.Ident("Context"))
 	s += ", in *" + g.GoIdent(rpc.MsgRequest.GoIdent) + ") ("
 	if rpc.VPP.Stream {

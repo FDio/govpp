@@ -111,7 +111,7 @@ func New(opts Options) (gen *Generator, err error) {
 		structsByName:  map[string]*Struct{},
 		unionsByName:   map[string]*Union{},
 		messagesByName: map[string]*Message{},
-		vppVersion:     vppapi.ResolveVPPVersion(opts.ApiDir),
+		vppVersion:     ResolveVPPVersion(opts.ApiDir),
 	}
 
 	// Normalize API files

@@ -21,13 +21,12 @@ import (
 	. "github.com/onsi/gomega"
 
 	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 const testOutputDir = "test_output_dir"
 
 func GenerateFromFile(filename string) error {
-	os.Setenv(vppapi.VPPVersionEnvVar, "test-version")
+	os.Setenv(VPPVersionEnvVar, "test-version")
 	gen, err := New(Options{
 		OutputDir: testOutputDir,
 		ApiDir:    filename,

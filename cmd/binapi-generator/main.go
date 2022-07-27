@@ -23,6 +23,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/binapigen"
+	_ "go.fd.io/govpp/binapigen/plugins"
 	"go.fd.io/govpp/binapigen/vppapi"
 	"go.fd.io/govpp/version"
 )

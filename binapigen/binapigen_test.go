@@ -20,7 +20,6 @@ import (
 	"testing"
 
 	. "github.com/onsi/gomega"
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 var sampleJson = `{
@@ -54,7 +53,7 @@ func TestGenerator(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	os.Setenv(vppapi.VPPVersionEnvVar, "test-version")
+	os.Setenv(VPPVersionEnvVar, "test-version")
 	gen, err := New(Options{
 		ApiDir:       dir,
 		FileFilter:   []string{file},
