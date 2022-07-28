@@ -11,6 +11,10 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.6.0
+
+> _Upcoming_
+
 ## 0.5.0
 
 > _28 July 2022_
