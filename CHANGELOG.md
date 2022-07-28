@@ -13,9 +13,18 @@ This file lists changes for the GoVPP releases.
 
 ## 0.5.0
 
-> _TO BE RELESASED_
+> _28 July 2022_
 
+### Features
 
+- Also generate APIName/APIVersion/CrcVersion constants for the types packages
+- Stat segment client fixes & improvements
+
+### Fixes
+
+- Fix go 1.18 support
+- Fixed data race in core.Connection.Close()
+- Fix channel ID overlap
 
 ## 0.4.0
 
