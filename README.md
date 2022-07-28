@@ -1,10 +1,3 @@
-⚠️ The GoVPP project is changing hosting :
-- its import URL will move to [go.fd.io/govpp](https://go.fd.io/govpp)
-- its repository location will move to [https://github.com/FDio/govpp](https://github.com/FDio/govpp). 
-
-The last version archived on [git.fd.io/govpp.git](https://git.fd.io/govpp) will be `v0.5.0`.
-
-
 # GoVPP
 
 [![stable](https://img.shields.io/github/v/tag/fdio/govpp.svg?label=release&logo=github)](https://github.com/ligato/vpp-agent/releases/latest) [![PkgGoDev](https://pkg.go.dev/badge/git.fd.io/govpp.git)](https://pkg.go.dev/git.fd.io/govpp.git)
