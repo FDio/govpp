@@ -518,7 +518,7 @@ func (sc *StatsClient) getStatEntriesOnIndex(vector dirVector, indexes ...uint32
 			},
 			Type:    t,
 			Data:    d,
-			Symlink: adapter.StatType(dirType) == adapter.Symlink,
+			Symlink: dirType == adapter.Symlink,
 		})
 	}
 	return entries, nil
@@ -602,7 +602,7 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 	dirPtr, dirName, dirType := sc.GetStatDirOnIndex(vector, entry.Index)
 	if len(dirName) == 0 ||
 		!bytes.Equal(dirName, entry.Name) ||
-		adapter.StatType(dirType) != entry.Type ||
+		dirType != entry.Type ||
 		entry.Data == nil {
 		return nil
 	}

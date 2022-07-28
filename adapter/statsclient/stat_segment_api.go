@@ -16,10 +16,11 @@ package statsclient
 
 import (
 	"fmt"
-	"git.fd.io/govpp.git/adapter"
 	"sync/atomic"
 	"time"
 	"unsafe"
+
+	"git.fd.io/govpp.git/adapter"
 )
 
 var (
@@ -77,7 +78,7 @@ type statSegment interface {
 	//
 	// Note that if the index is equal to 0, the result pointer points to
 	// the same memory address as the argument.
-	GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType)
+	GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, adapter.StatType)
 
 	// GetEpoch re-loads stats header and returns current epoch
 	//and 'inProgress' value

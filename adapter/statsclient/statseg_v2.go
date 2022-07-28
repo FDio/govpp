@@ -72,7 +72,7 @@ func (ss *statSegmentV2) GetDirectoryVector() dirVector {
 	return ss.adjust(dirVector(&header.dirVector))
 }
 
-func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {
+func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, adapter.StatType) {
 	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
 	dir := (*statSegDirectoryEntryV2)(statSegDir)
 	var name []byte
@@ -82,7 +82,7 @@ func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 			break
 		}
 	}
-	return statSegDir, name, dir.directoryType
+	return statSegDir, name, getStatType(dir.directoryType, ss.getErrorVector() != nil)
 }
 
 func (ss *statSegmentV2) GetEpoch() (int64, bool) {

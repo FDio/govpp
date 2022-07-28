@@ -75,7 +75,7 @@ func (ss *statSegmentV1) getErrorVector() (unsafe.Pointer, error) {
 	return nil, fmt.Errorf("error vector is not defined for stats API v1")
 }
 
-func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, dirType) {
+func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, adapter.StatType) {
 	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV1{}))
 	dir := (*statSegDirectoryEntryV1)(statSegDir)
 	var name []byte
@@ -85,7 +85,7 @@ func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 			break
 		}
 	}
-	return statSegDir, name, dir.directoryType
+	return statSegDir, name, getStatType(dir.directoryType, true)
 }
 
 func (ss *statSegmentV1) GetEpoch() (int64, bool) {
