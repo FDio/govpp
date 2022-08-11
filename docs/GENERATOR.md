@@ -23,8 +23,8 @@ NOTE: Using `go install` to install programs is only supported in Go 1.16+ ([mor
 ### Install from source
 
 ```sh
-# Clone repository anywhere
-git clone https://gerrit.fd.io/r/govpp.git
+# Clone repository
+git clone https://github.com/FDio/govpp
 cd govpp
 
 # Install binapi-generator
