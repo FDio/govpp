@@ -9,17 +9,16 @@ project_lead: &govpp_ptl
   id: 'ondrej-fabry'
 primary_contact: *govpp_ptl
 issue_tracking:
-  type: 'jira'
-  url: 'https://jira.fd.io/projects/GOVPP'
-  key: 'GOVPP'
+  type: 'github'
+  url: 'https://github.com/FDio/govpp/issues'
 mailing_list:
   type: 'groups.io'
   url: 'https://lists.fd.io/g/govpp-dev'
   tag: '<[sub-project_name]>'
 realtime_discussion:
-  type: ''
-  server: ''
-  channel: ''
+  type: 'slack'
+  server: 'fdio-project.slack.com'
+  channel: 'govpp'
 repositories:
   - 'govpp'
 committers:
