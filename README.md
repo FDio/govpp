@@ -1,9 +1,14 @@
-⚠️ The GoVPP project has changed URL :
-- the import URL has moved to [go.fd.io/govpp](https://go.fd.io/govpp)
-- the repository location has moved to [https://github.com/FDio/govpp](https://github.com/FDio/govpp).
+### ⚠️The GoVPP project has been migrated from Gerrit to GitHub
 
-The last version archived on [git.fd.io/govpp.git](https://git.fd.io/govpp) is `v0.5.0`.
+#### What changed?
+- the Go module path was changed from `git.fd.io/govpp.git` => `go.fd.io/govpp`
+  - the final release for the old import path is [v0.5.0](https://pkg.go.dev/git.fd.io/govpp.git@v0.5.0) 
+  - new module path can be imported with [v0.6.0-alpha](https://pkg.go.dev/go.fd.io/govpp@v0.6.0-alpha)
+- repository is now located at [https://github.com/FDio/govpp](https://github.com/FDio/govpp)
+  - any new contributions should be created as [pull requests](https://github.com/FDio/govpp/pulls)
+  - any new issues should be tracked under [Issues](https://github.com/FDio/govpp/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 
+---
 
 # GoVPP
 
