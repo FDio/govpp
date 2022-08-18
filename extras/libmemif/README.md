@@ -7,6 +7,7 @@ labels `Go-libmemif` and `C-libmemif` are used in the documentation.
 
 ### Requirements
 
+This version is compatible with libmemif v4.0 which is part of vpp v22.02 and newer.
 libmemif for Golang is build on the top of the original, C-written
 libmemif library using `cgo`. It is therefore necessary to have C-libmemif
 header files, and the library itself installed in locations known

@@ -349,11 +349,13 @@ func main() {
 	// Initialize libmemif first.
 	appName := "ICMP-Responder" + appSuffix
 	fmt.Println("Initializing libmemif as ", appName)
+
 	err = libmemif.Init(appName)
 	if err != nil {
 		fmt.Printf("libmemif.Init() error: %v\n", err)
 		return
 	}
+
 	// Schedule automatic cleanup.
 	defer libmemif.Cleanup()
 
@@ -375,6 +377,7 @@ func main() {
 			Secret:         Secret,
 			IsMaster:       isMaster,
 			Mode:           libmemif.IfModeEthernet,
+			AppName:        appName,
 		},
 		MemifShmSpecs: libmemif.MemifShmSpecs{
 			NumRxQueues:  NumQueues,
