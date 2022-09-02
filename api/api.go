@@ -70,6 +70,12 @@ type ChannelProvider interface {
 	NewAPIChannelBuffered(reqChanBufSize, replyChanBufSize int) (Channel, error)
 }
 
+// ChannelProvidingConnection provides both the Connection and ChannelProvider interface
+type ChannelProvidingConnection interface {
+	Connection
+	ChannelProvider
+}
+
 // Channel provides methods for direct communication with VPP channel.
 type Channel interface {
 	// SendRequest asynchronously sends a request to VPP. Returns a request context, that can be used to call ReceiveReply.
