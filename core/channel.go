@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync/atomic"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -127,8 +128,9 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 		return nil, errors.New("all channel IDs are used")
 	}
 	for {
-		c.nextChannelID++
-		chID := c.nextChannelID & 0x7fff
+		nextChannelID := atomic.AddUint32(&c.nextChannelID, 1)
+		nextChannelID = nextChannelID & 0x7fff
+		chID := uint16(nextChannelID)
 		_, ok := c.channels[chID]
 		if !ok {
 			channel.id = chID
