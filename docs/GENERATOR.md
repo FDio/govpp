@@ -6,7 +6,7 @@ This document contains information about GoVPP generator which is used for gener
 
 ### Prerequisites
 
-- Go 1.13+ ([download](https://golang.org/dl))
+- Go 1.18+ ([download](https://golang.org/dl))
 
 ### Install via Go toolchain
 
@@ -18,8 +18,6 @@ go install go.fd.io/govpp/cmd/binapi-generator@latest
 go install go.fd.io/govpp/cmd/binapi-generator@master
 ```
 
-NOTE: Using `go install` to install programs is only supported in Go 1.16+ ([more info](https://go.dev/doc/go1.16#go-command)). For Go 1.15 or older, use `go get` instead of `go install`.
-
 ### Install from source
 
 ```sh
@@ -30,9 +28,6 @@ cd govpp
 # Install binapi-generator
 make install-generator
 ```
-
-NOTE: There is no need to setup or clone inside `GOPATH` for Go 1.13+ ([more info](https://go.dev/doc/go1.13#modules))
-and you can simply clone the repository _anywhere_ you want.
 
 ### Generating binapi
 

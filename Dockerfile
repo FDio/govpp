@@ -24,7 +24,7 @@ RUN VPP_INSTALL_SKIP_SYSCTL=false apt install -f -y --no-install-recommends /vpp
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /pkg
 
-FROM golang:1.17.9-alpine3.15 as binapi-generator
+FROM golang:1.18-alpine3.15 as binapi-generator
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 ENV GOBIN=/bin
