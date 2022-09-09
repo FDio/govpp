@@ -17,9 +17,9 @@ VPP_API_DIR ?= ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api
 VERSION_PKG := $(GOVPP_PKG)/version
 LDFLAGS = \
 	-X $(VERSION_PKG).version=$(VERSION) \
-	-X $(VERSION_PKG).commitHash=$(COMMIT) \
+	-X $(VERSION_PKG).commit=$(COMMIT) \
+	-X $(VERSION_PKG).branch=$(BUILD_BRANCH) \
 	-X $(VERSION_PKG).buildStamp=$(BUILD_STAMP) \
-	-X $(VERSION_PKG).buildBranch=$(BUILD_BRANCH) \
 	-X $(VERSION_PKG).buildUser=$(BUILD_USER) \
 	-X $(VERSION_PKG).buildHost=$(BUILD_HOST)
 
