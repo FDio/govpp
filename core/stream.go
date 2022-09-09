@@ -89,6 +89,25 @@ func (c *Connection) Invoke(ctx context.Context, req api.Message, reply api.Mess
 	return nil
 }
 
+func (c *Connection) SubscribeNotification(ctx context.Context, event api.Message, bufferSize int) (chan api.Message, error) {
+	notifChan := make(chan api.Message, bufferSize)
+	ch, err := c.NewAPIChannel()
+	if err != nil {
+		return nil, err
+	}
+	subscription, err := ch.SubscribeNotification(notifChan, event)
+	if err != nil {
+		return nil, err
+	}
+	go func(ctx context.Context, subscription api.SubscriptionCtx, notifChan chan api.Message) {
+		<-ctx.Done()
+		subscription.Unsubscribe()
+		close(notifChan)
+		ch.Close()
+	}(ctx, subscription, notifChan)
+	return notifChan, nil
+}
+
 func (s *Stream) Context() context.Context {
 	return s.ctx
 }

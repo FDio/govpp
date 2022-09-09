@@ -31,6 +31,12 @@ type Connection interface {
 	// It creates stream and calls SendMsg with req and RecvMsg which returns
 	// reply.
 	Invoke(ctx context.Context, req Message, reply Message) error
+
+	// SubscribeNotification subscribes for receiving of the specified notification messages via the returned Go channel.
+	// bufferSize is used to set the buffer size of the go channel returned. If the channel's
+	// buffer is full, the notifications will not be delivered into it.  When the provided ctx is 'Done'
+	// the return go channel will be closed and no further notifications will be deli
+	SubscribeNotification(ctx context.Context, event Message, bufferSize int) (chan Message, error)
 }
 
 // Stream provides low-level access for sending and receiving messages.
