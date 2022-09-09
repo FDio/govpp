@@ -13,7 +13,18 @@ This file lists changes for the GoVPP releases.
 
 ## 0.6.0
 
-> _Upcoming_
+> _09 September 2022_
+
+### Changes
+
+- Added GitHub CI
+- Remove deprecated vppapiclient
+- Remove unused Travis CI
+- Remove gerrit remains
+
+### Fixes
+
+- Call munmap when failed to check stat segment version (#34)
 
 ## 0.5.0
 
