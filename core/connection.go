@@ -290,24 +290,11 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 		"channel": ch.id,
 	}).Debug("API channel released")
 
-	go func(ch *Channel, channelPool *genericpool.Pool[*Channel]) {
-		// Drain any lingering items in the buffers
-		empty := false
-		for !empty {
-			select {
-			case <-ch.reqChan:
-			case <-ch.replyChan:
-			default:
-				empty = true
-			}
-		}
-		channelPool.Put(ch)
-	}(ch, c.channelPool)
-
 	// delete the channel from channels map
 	c.channelsLock.Lock()
 	delete(c.channels, ch.id)
 	c.channelsLock.Unlock()
+	c.channelPool.Put(ch)
 }
 
 // connectLoop attempts to connect to VPP until it succeeds.

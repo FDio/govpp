@@ -375,3 +375,16 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 
 	return
 }
+
+func (ch *Channel) Reset() {
+	// Drain any lingering items in the buffers
+	empty := false
+	for !empty {
+		select {
+		case <-ch.reqChan:
+		case <-ch.replyChan:
+		default:
+			empty = true
+		}
+	}
+}

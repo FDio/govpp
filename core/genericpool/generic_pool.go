@@ -4,6 +4,10 @@ import (
 	"sync"
 )
 
+type Resettable interface {
+	Reset()
+}
+
 type Pool[T any] struct {
 	p sync.Pool
 }
@@ -13,7 +17,12 @@ func (p *Pool[T]) Get() T {
 }
 
 func (p *Pool[T]) Put(x T) {
-	p.p.Put(x)
+	go func(p *Pool[T], x T) {
+		if res, ok := any(x).(Resettable); ok {
+			res.Reset()
+		}
+		p.p.Put(x)
+	}(p, x)
 }
 
 func New[T any](f func() T) *Pool[T] {
