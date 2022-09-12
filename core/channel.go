@@ -121,16 +121,6 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 	if cap(channel.replyChan) != replyChanBufSize {
 		channel.replyChan = make(chan *vppReply, replyChanBufSize)
 	}
-	// Drain any lingering items in the buffers
-	empty := false
-	for !empty {
-		select {
-		case <-channel.reqChan:
-		case <-channel.replyChan:
-		default:
-			empty = true
-		}
-	}
 
 	// store API channel within the client
 	c.channelsLock.Lock()
