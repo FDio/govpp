@@ -115,11 +115,21 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 	if channel == nil {
 		return nil, errors.New("all channel IDs are in use")
 	}
-	if len(channel.reqChan) != reqChanBufSize {
+	if cap(channel.reqChan) != reqChanBufSize {
 		channel.reqChan = make(chan *vppRequest, reqChanBufSize)
 	}
-	if len(channel.replyChan) != replyChanBufSize {
+	if cap(channel.replyChan) != replyChanBufSize {
 		channel.replyChan = make(chan *vppReply, replyChanBufSize)
+	}
+	// Drain any lingering items in the buffers
+	empty := false
+	for !empty {
+		select {
+		case <-channel.reqChan:
+		case <-channel.replyChan:
+		default:
+			empty = true
+		}
 	}
 
 	// store API channel within the client
