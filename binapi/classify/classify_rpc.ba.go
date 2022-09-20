@@ -34,6 +34,7 @@ type RPCService interface {
 	PolicerClassifyDump(ctx context.Context, in *PolicerClassifyDump) (RPCService_PolicerClassifyDumpClient, error)
 	PolicerClassifySetInterface(ctx context.Context, in *PolicerClassifySetInterface) (*PolicerClassifySetInterfaceReply, error)
 	PuntACLAddDel(ctx context.Context, in *PuntACLAddDel) (*PuntACLAddDelReply, error)
+	PuntACLGet(ctx context.Context, in *PuntACLGet) (*PuntACLGetReply, error)
 }
 
 type serviceClient struct {
@@ -328,6 +329,15 @@ func (c *serviceClient) PolicerClassifySetInterface(ctx context.Context, in *Pol
 
 func (c *serviceClient) PuntACLAddDel(ctx context.Context, in *PuntACLAddDel) (*PuntACLAddDelReply, error) {
 	out := new(PuntACLAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PuntACLGet(ctx context.Context, in *PuntACLGet) (*PuntACLGetReply, error) {
+	out := new(PuntACLGetReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

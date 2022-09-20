@@ -30,28 +30,28 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "udp"
 	APIVersion = "1.1.0"
-	VersionCrc = 0x2d3db5fa
+	VersionCrc = 0x6804c5af
 )
 
 // UDPDecapNextProto defines enum 'udp_decap_next_proto'.
 type UDPDecapNextProto uint32
 
 const (
-	UDP_API_DECAP_PROTO_IP4  UDPDecapNextProto = 1
-	UDP_API_DECAP_PROTO_IP6  UDPDecapNextProto = 2
-	UDP_API_DECAP_PROTO_MPLS UDPDecapNextProto = 3
+	UDP_API_DECAP_PROTO_IP4  UDPDecapNextProto = 0
+	UDP_API_DECAP_PROTO_IP6  UDPDecapNextProto = 1
+	UDP_API_DECAP_PROTO_MPLS UDPDecapNextProto = 2
 )
 
 var (
 	UDPDecapNextProto_name = map[uint32]string{
-		1: "UDP_API_DECAP_PROTO_IP4",
-		2: "UDP_API_DECAP_PROTO_IP6",
-		3: "UDP_API_DECAP_PROTO_MPLS",
+		0: "UDP_API_DECAP_PROTO_IP4",
+		1: "UDP_API_DECAP_PROTO_IP6",
+		2: "UDP_API_DECAP_PROTO_MPLS",
 	}
 	UDPDecapNextProto_value = map[string]uint32{
-		"UDP_API_DECAP_PROTO_IP4":  1,
-		"UDP_API_DECAP_PROTO_IP6":  2,
-		"UDP_API_DECAP_PROTO_MPLS": 3,
+		"UDP_API_DECAP_PROTO_IP4":  0,
+		"UDP_API_DECAP_PROTO_IP6":  1,
+		"UDP_API_DECAP_PROTO_MPLS": 2,
 	}
 )
 
@@ -88,7 +88,7 @@ type UDPDecapAddDel struct {
 
 func (m *UDPDecapAddDel) Reset()               { *m = UDPDecapAddDel{} }
 func (*UDPDecapAddDel) GetMessageName() string { return "udp_decap_add_del" }
-func (*UDPDecapAddDel) GetCrcString() string   { return "d155c6ac" }
+func (*UDPDecapAddDel) GetCrcString() string   { return "d14a4f47" }
 func (*UDPDecapAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
@@ -396,7 +396,7 @@ func (m *UDPEncapDump) Unmarshal(b []byte) error {
 
 func init() { file_udp_binapi_init() }
 func file_udp_binapi_init() {
-	api.RegisterMessage((*UDPDecapAddDel)(nil), "udp_decap_add_del_d155c6ac")
+	api.RegisterMessage((*UDPDecapAddDel)(nil), "udp_decap_add_del_d14a4f47")
 	api.RegisterMessage((*UDPDecapAddDelReply)(nil), "udp_decap_add_del_reply_e8d4e804")
 	api.RegisterMessage((*UDPEncapAdd)(nil), "udp_encap_add_f74a60b1")
 	api.RegisterMessage((*UDPEncapAddReply)(nil), "udp_encap_add_reply_e2fc8294")

@@ -13,6 +13,7 @@ import (
 // RPCService defines RPC service pnat.
 type RPCService interface {
 	PnatBindingAdd(ctx context.Context, in *PnatBindingAdd) (*PnatBindingAddReply, error)
+	PnatBindingAddV2(ctx context.Context, in *PnatBindingAddV2) (*PnatBindingAddV2Reply, error)
 	PnatBindingAttach(ctx context.Context, in *PnatBindingAttach) (*PnatBindingAttachReply, error)
 	PnatBindingDel(ctx context.Context, in *PnatBindingDel) (*PnatBindingDelReply, error)
 	PnatBindingDetach(ctx context.Context, in *PnatBindingDetach) (*PnatBindingDetachReply, error)
@@ -30,6 +31,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) PnatBindingAdd(ctx context.Context, in *PnatBindingAdd) (*PnatBindingAddReply, error) {
 	out := new(PnatBindingAddReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PnatBindingAddV2(ctx context.Context, in *PnatBindingAddV2) (*PnatBindingAddV2Reply, error) {
+	out := new(PnatBindingAddV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
