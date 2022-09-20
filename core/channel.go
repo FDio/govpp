@@ -259,6 +259,8 @@ func (sub *subscriptionCtx) Unsubscribe() error {
 	return fmt.Errorf("subscription for %q not found", sub.event.GetMessageName())
 }
 
+const maxInt64 = 1<<63 - 1
+
 // receiveReplyInternal receives a reply from the reply channel into the provided msg structure.
 func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (lastReplyReceived bool, err error) {
 	if msg == nil {
@@ -276,7 +278,11 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 		}
 	}
 
-	timer := time.NewTimer(ch.replyTimeout)
+	timeout := ch.replyTimeout
+	if timeout <= 0 {
+		timeout = maxInt64
+	}
+	timer := time.NewTimer(timeout)
 	for {
 		select {
 		// blocks until a reply comes to ReplyChan or until timeout expires
@@ -295,8 +301,8 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 			log.WithFields(logrus.Fields{
 				"expSeqNum": expSeqNum,
 				"channel":   ch.id,
-			}).Debugf("timeout (%v) waiting for reply: %s", ch.replyTimeout, msg.GetMessageName())
-			err = fmt.Errorf("no reply received within the timeout period %s", ch.replyTimeout)
+			}).Debugf("timeout (%v) waiting for reply: %s", timeout, msg.GetMessageName())
+			err = fmt.Errorf("no reply received within the timeout period %s", timeout)
 			return false, err
 		}
 	}

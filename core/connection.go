@@ -47,7 +47,7 @@ var (
 	HealthCheckProbeInterval = time.Second            // default health check probe interval
 	HealthCheckReplyTimeout  = time.Millisecond * 250 // timeout for reply to a health check probe
 	HealthCheckThreshold     = 2                      // number of failed health checks until the error is reported
-	DefaultReplyTimeout      = time.Second            // default timeout for replies from VPP
+	DefaultReplyTimeout      = time.Duration(0)       // default timeout for replies from VPP is disabled
 )
 
 // ConnectionState represents the current state of the connection to VPP.

@@ -86,8 +86,9 @@ type Channel interface {
 	// buffer is full, the notifications will not be delivered into it.
 	SubscribeNotification(notifChan chan Message, event Message) (SubscriptionCtx, error)
 
-	// SetReplyTimeout sets the timeout for replies from VPP. It represents the maximum time the API waits for a reply
-	// from VPP before returning an error.
+	// SetReplyTimeout sets the timeout for replies from VPP. It represents the maximum time the client waits for a reply
+	// from VPP before returning a timeout error. Setting the reply timeout to 0 disables it. The initial reply timeout is
+	//set to the value of core.DefaultReplyTimeout.
 	SetReplyTimeout(timeout time.Duration)
 
 	// CheckCompatibility checks the compatiblity for the given messages.
