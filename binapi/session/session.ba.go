@@ -30,7 +30,7 @@ const _ = api.GoVppAPIPackageIsVersion2
 const (
 	APIFile    = "session"
 	APIVersion = "4.0.0"
-	VersionCrc = 0x44a59e26
+	VersionCrc = 0x72bfc653
 )
 
 // SessionRuleScope defines enum 'session_rule_scope'.
@@ -67,27 +67,27 @@ func (x SessionRuleScope) String() string {
 type TransportProto uint8
 
 const (
-	TRANSPORT_PROTO_API_TCP  TransportProto = 1
-	TRANSPORT_PROTO_API_UDP  TransportProto = 2
-	TRANSPORT_PROTO_API_NONE TransportProto = 3
-	TRANSPORT_PROTO_API_TLS  TransportProto = 4
-	TRANSPORT_PROTO_API_QUIC TransportProto = 5
+	TRANSPORT_PROTO_API_TCP  TransportProto = 0
+	TRANSPORT_PROTO_API_UDP  TransportProto = 1
+	TRANSPORT_PROTO_API_NONE TransportProto = 2
+	TRANSPORT_PROTO_API_TLS  TransportProto = 3
+	TRANSPORT_PROTO_API_QUIC TransportProto = 4
 )
 
 var (
 	TransportProto_name = map[uint8]string{
-		1: "TRANSPORT_PROTO_API_TCP",
-		2: "TRANSPORT_PROTO_API_UDP",
-		3: "TRANSPORT_PROTO_API_NONE",
-		4: "TRANSPORT_PROTO_API_TLS",
-		5: "TRANSPORT_PROTO_API_QUIC",
+		0: "TRANSPORT_PROTO_API_TCP",
+		1: "TRANSPORT_PROTO_API_UDP",
+		2: "TRANSPORT_PROTO_API_NONE",
+		3: "TRANSPORT_PROTO_API_TLS",
+		4: "TRANSPORT_PROTO_API_QUIC",
 	}
 	TransportProto_value = map[string]uint8{
-		"TRANSPORT_PROTO_API_TCP":  1,
-		"TRANSPORT_PROTO_API_UDP":  2,
-		"TRANSPORT_PROTO_API_NONE": 3,
-		"TRANSPORT_PROTO_API_TLS":  4,
-		"TRANSPORT_PROTO_API_QUIC": 5,
+		"TRANSPORT_PROTO_API_TCP":  0,
+		"TRANSPORT_PROTO_API_UDP":  1,
+		"TRANSPORT_PROTO_API_NONE": 2,
+		"TRANSPORT_PROTO_API_TLS":  3,
+		"TRANSPORT_PROTO_API_QUIC": 4,
 	}
 )
 
@@ -1033,7 +1033,7 @@ type SessionRuleAddDel struct {
 
 func (m *SessionRuleAddDel) Reset()               { *m = SessionRuleAddDel{} }
 func (*SessionRuleAddDel) GetMessageName() string { return "session_rule_add_del" }
-func (*SessionRuleAddDel) GetCrcString() string   { return "e4895422" }
+func (*SessionRuleAddDel) GetCrcString() string   { return "82a90af5" }
 func (*SessionRuleAddDel) GetMessageType() api.MessageType {
 	return api.RequestMessage
 }
@@ -1146,7 +1146,7 @@ type SessionRulesDetails struct {
 
 func (m *SessionRulesDetails) Reset()               { *m = SessionRulesDetails{} }
 func (*SessionRulesDetails) GetMessageName() string { return "session_rules_details" }
-func (*SessionRulesDetails) GetCrcString() string   { return "28d71830" }
+func (*SessionRulesDetails) GetCrcString() string   { return "4ef746e7" }
 func (*SessionRulesDetails) GetMessageType() api.MessageType {
 	return api.ReplyMessage
 }
@@ -1327,9 +1327,9 @@ func file_session_binapi_init() {
 	api.RegisterMessage((*ApplicationTLSKeyAddReply)(nil), "application_tls_key_add_reply_e8d4e804")
 	api.RegisterMessage((*SessionEnableDisable)(nil), "session_enable_disable_c264d7bf")
 	api.RegisterMessage((*SessionEnableDisableReply)(nil), "session_enable_disable_reply_e8d4e804")
-	api.RegisterMessage((*SessionRuleAddDel)(nil), "session_rule_add_del_e4895422")
+	api.RegisterMessage((*SessionRuleAddDel)(nil), "session_rule_add_del_82a90af5")
 	api.RegisterMessage((*SessionRuleAddDelReply)(nil), "session_rule_add_del_reply_e8d4e804")
-	api.RegisterMessage((*SessionRulesDetails)(nil), "session_rules_details_28d71830")
+	api.RegisterMessage((*SessionRulesDetails)(nil), "session_rules_details_4ef746e7")
 	api.RegisterMessage((*SessionRulesDump)(nil), "session_rules_dump_51077d14")
 	api.RegisterMessage((*SessionSapiEnableDisable)(nil), "session_sapi_enable_disable_c264d7bf")
 	api.RegisterMessage((*SessionSapiEnableDisableReply)(nil), "session_sapi_enable_disable_reply_e8d4e804")

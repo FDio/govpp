@@ -7,7 +7,7 @@
 // Package flow contains generated bindings for API file flow.api.
 //
 // Contents:
-//   8 messages
+//  10 messages
 //
 package flow
 
@@ -28,8 +28,8 @@ const _ = api.GoVppAPIPackageIsVersion2
 
 const (
 	APIFile    = "flow"
-	APIVersion = "0.0.2"
-	VersionCrc = 0x140d3585
+	APIVersion = "0.0.3"
+	VersionCrc = 0xe17512
 )
 
 // FlowAdd defines message 'flow_add'.
@@ -122,6 +122,114 @@ func (m *FlowAddReply) Marshal(b []byte) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 func (m *FlowAddReply) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Retval = buf.DecodeInt32()
+	m.FlowIndex = buf.DecodeUint32()
+	return nil
+}
+
+// FlowAddV2 defines message 'flow_add_v2'.
+// InProgress: the message form may change in the future versions
+type FlowAddV2 struct {
+	Flow flow_types.FlowRuleV2 `binapi:"flow_rule_v2,name=flow" json:"flow,omitempty"`
+}
+
+func (m *FlowAddV2) Reset()               { *m = FlowAddV2{} }
+func (*FlowAddV2) GetMessageName() string { return "flow_add_v2" }
+func (*FlowAddV2) GetCrcString() string   { return "5b757558" }
+func (*FlowAddV2) GetMessageType() api.MessageType {
+	return api.RequestMessage
+}
+
+func (m *FlowAddV2) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4        // m.Flow.Type
+	size += 4        // m.Flow.Index
+	size += 4        // m.Flow.Actions
+	size += 4        // m.Flow.MarkFlowID
+	size += 4        // m.Flow.RedirectNodeIndex
+	size += 4        // m.Flow.RedirectDeviceInputNextIndex
+	size += 4        // m.Flow.RedirectQueue
+	size += 4        // m.Flow.QueueIndex
+	size += 4        // m.Flow.QueueNum
+	size += 4        // m.Flow.BufferAdvance
+	size += 8        // m.Flow.RssTypes
+	size += 4        // m.Flow.RssFun
+	size += 1 * 2052 // m.Flow.Flow
+	return size
+}
+func (m *FlowAddV2) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeUint32(uint32(m.Flow.Type))
+	buf.EncodeUint32(m.Flow.Index)
+	buf.EncodeUint32(uint32(m.Flow.Actions))
+	buf.EncodeUint32(m.Flow.MarkFlowID)
+	buf.EncodeUint32(m.Flow.RedirectNodeIndex)
+	buf.EncodeUint32(m.Flow.RedirectDeviceInputNextIndex)
+	buf.EncodeUint32(m.Flow.RedirectQueue)
+	buf.EncodeUint32(m.Flow.QueueIndex)
+	buf.EncodeUint32(m.Flow.QueueNum)
+	buf.EncodeInt32(m.Flow.BufferAdvance)
+	buf.EncodeUint64(m.Flow.RssTypes)
+	buf.EncodeUint32(uint32(m.Flow.RssFun))
+	buf.EncodeBytes(m.Flow.Flow.XXX_UnionData[:], 2052)
+	return buf.Bytes(), nil
+}
+func (m *FlowAddV2) Unmarshal(b []byte) error {
+	buf := codec.NewBuffer(b)
+	m.Flow.Type = flow_types.FlowTypeV2(buf.DecodeUint32())
+	m.Flow.Index = buf.DecodeUint32()
+	m.Flow.Actions = flow_types.FlowActionV2(buf.DecodeUint32())
+	m.Flow.MarkFlowID = buf.DecodeUint32()
+	m.Flow.RedirectNodeIndex = buf.DecodeUint32()
+	m.Flow.RedirectDeviceInputNextIndex = buf.DecodeUint32()
+	m.Flow.RedirectQueue = buf.DecodeUint32()
+	m.Flow.QueueIndex = buf.DecodeUint32()
+	m.Flow.QueueNum = buf.DecodeUint32()
+	m.Flow.BufferAdvance = buf.DecodeInt32()
+	m.Flow.RssTypes = buf.DecodeUint64()
+	m.Flow.RssFun = flow_types.RssFunction(buf.DecodeUint32())
+	copy(m.Flow.Flow.XXX_UnionData[:], buf.DecodeBytes(2052))
+	return nil
+}
+
+// FlowAddV2Reply defines message 'flow_add_v2_reply'.
+// InProgress: the message form may change in the future versions
+type FlowAddV2Reply struct {
+	Retval    int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
+	FlowIndex uint32 `binapi:"u32,name=flow_index" json:"flow_index,omitempty"`
+}
+
+func (m *FlowAddV2Reply) Reset()               { *m = FlowAddV2Reply{} }
+func (*FlowAddV2Reply) GetMessageName() string { return "flow_add_v2_reply" }
+func (*FlowAddV2Reply) GetCrcString() string   { return "8587dc85" }
+func (*FlowAddV2Reply) GetMessageType() api.MessageType {
+	return api.ReplyMessage
+}
+
+func (m *FlowAddV2Reply) Size() (size int) {
+	if m == nil {
+		return 0
+	}
+	size += 4 // m.Retval
+	size += 4 // m.FlowIndex
+	return size
+}
+func (m *FlowAddV2Reply) Marshal(b []byte) ([]byte, error) {
+	if b == nil {
+		b = make([]byte, m.Size())
+	}
+	buf := codec.NewBuffer(b)
+	buf.EncodeInt32(m.Retval)
+	buf.EncodeUint32(m.FlowIndex)
+	return buf.Bytes(), nil
+}
+func (m *FlowAddV2Reply) Unmarshal(b []byte) error {
 	buf := codec.NewBuffer(b)
 	m.Retval = buf.DecodeInt32()
 	m.FlowIndex = buf.DecodeUint32()
@@ -344,6 +452,8 @@ func init() { file_flow_binapi_init() }
 func file_flow_binapi_init() {
 	api.RegisterMessage((*FlowAdd)(nil), "flow_add_f946ed84")
 	api.RegisterMessage((*FlowAddReply)(nil), "flow_add_reply_8587dc85")
+	api.RegisterMessage((*FlowAddV2)(nil), "flow_add_v2_5b757558")
+	api.RegisterMessage((*FlowAddV2Reply)(nil), "flow_add_v2_reply_8587dc85")
 	api.RegisterMessage((*FlowDel)(nil), "flow_del_b6b9b02c")
 	api.RegisterMessage((*FlowDelReply)(nil), "flow_del_reply_e8d4e804")
 	api.RegisterMessage((*FlowDisable)(nil), "flow_disable_2024be69")
@@ -357,6 +467,8 @@ func AllMessages() []api.Message {
 	return []api.Message{
 		(*FlowAdd)(nil),
 		(*FlowAddReply)(nil),
+		(*FlowAddV2)(nil),
+		(*FlowAddV2Reply)(nil),
 		(*FlowDel)(nil),
 		(*FlowDelReply)(nil),
 		(*FlowDisable)(nil),

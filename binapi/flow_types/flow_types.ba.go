@@ -7,9 +7,9 @@
 // Package flow_types contains generated bindings for API file flow_types.api.
 //
 // Contents:
-//   2 enums
-//  17 structs
-//   1 union
+//   5 enums
+//  20 structs
+//   2 unions
 //
 package flow_types
 
@@ -30,8 +30,8 @@ const _ = api.GoVppAPIPackageIsVersion2
 
 const (
 	APIFile    = "flow_types"
-	APIVersion = "0.0.3"
-	VersionCrc = 0xd789ede8
+	APIVersion = "0.0.4"
+	VersionCrc = 0x5657caac
 )
 
 // FlowAction defines enum 'flow_action'.
@@ -71,6 +71,48 @@ func (x FlowAction) String() string {
 		return s
 	}
 	return "FlowAction(" + strconv.Itoa(int(x)) + ")"
+}
+
+// FlowActionV2 defines enum 'flow_action_v2'.
+type FlowActionV2 uint32
+
+const (
+	FLOW_ACTION_COUNT_V2             FlowActionV2 = 1
+	FLOW_ACTION_MARK_V2              FlowActionV2 = 2
+	FLOW_ACTION_BUFFER_ADVANCE_V2    FlowActionV2 = 4
+	FLOW_ACTION_REDIRECT_TO_NODE_V2  FlowActionV2 = 8
+	FLOW_ACTION_REDIRECT_TO_QUEUE_V2 FlowActionV2 = 16
+	FLOW_ACTION_RSS_V2               FlowActionV2 = 32
+	FLOW_ACTION_DROP_V2              FlowActionV2 = 64
+)
+
+var (
+	FlowActionV2_name = map[uint32]string{
+		1:  "FLOW_ACTION_COUNT_V2",
+		2:  "FLOW_ACTION_MARK_V2",
+		4:  "FLOW_ACTION_BUFFER_ADVANCE_V2",
+		8:  "FLOW_ACTION_REDIRECT_TO_NODE_V2",
+		16: "FLOW_ACTION_REDIRECT_TO_QUEUE_V2",
+		32: "FLOW_ACTION_RSS_V2",
+		64: "FLOW_ACTION_DROP_V2",
+	}
+	FlowActionV2_value = map[string]uint32{
+		"FLOW_ACTION_COUNT_V2":             1,
+		"FLOW_ACTION_MARK_V2":              2,
+		"FLOW_ACTION_BUFFER_ADVANCE_V2":    4,
+		"FLOW_ACTION_REDIRECT_TO_NODE_V2":  8,
+		"FLOW_ACTION_REDIRECT_TO_QUEUE_V2": 16,
+		"FLOW_ACTION_RSS_V2":               32,
+		"FLOW_ACTION_DROP_V2":              64,
+	}
+)
+
+func (x FlowActionV2) String() string {
+	s, ok := FlowActionV2_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "FlowActionV2(" + strconv.Itoa(int(x)) + ")"
 }
 
 // FlowType defines enum 'flow_type'.
@@ -136,12 +178,117 @@ func (x FlowType) String() string {
 	return "FlowType(" + strconv.Itoa(int(x)) + ")"
 }
 
+// FlowTypeV2 defines enum 'flow_type_v2'.
+type FlowTypeV2 uint32
+
+const (
+	FLOW_TYPE_ETHERNET_V2           FlowTypeV2 = 1
+	FLOW_TYPE_IP4_V2                FlowTypeV2 = 2
+	FLOW_TYPE_IP6_V2                FlowTypeV2 = 3
+	FLOW_TYPE_IP4_L2TPV3OIP_V2      FlowTypeV2 = 4
+	FLOW_TYPE_IP4_IPSEC_ESP_V2      FlowTypeV2 = 5
+	FLOW_TYPE_IP4_IPSEC_AH_V2       FlowTypeV2 = 6
+	FLOW_TYPE_IP4_N_TUPLE_V2        FlowTypeV2 = 7
+	FLOW_TYPE_IP6_N_TUPLE_V2        FlowTypeV2 = 8
+	FLOW_TYPE_IP4_N_TUPLE_TAGGED_V2 FlowTypeV2 = 9
+	FLOW_TYPE_IP6_N_TUPLE_TAGGED_V2 FlowTypeV2 = 10
+	FLOW_TYPE_IP4_VXLAN_V2          FlowTypeV2 = 11
+	FLOW_TYPE_IP6_VXLAN_V2          FlowTypeV2 = 12
+	FLOW_TYPE_IP4_GTPC_V2           FlowTypeV2 = 13
+	FLOW_TYPE_IP4_GTPU_V2           FlowTypeV2 = 14
+	FLOW_TYPE_GENERIC_V2            FlowTypeV2 = 15
+)
+
+var (
+	FlowTypeV2_name = map[uint32]string{
+		1:  "FLOW_TYPE_ETHERNET_V2",
+		2:  "FLOW_TYPE_IP4_V2",
+		3:  "FLOW_TYPE_IP6_V2",
+		4:  "FLOW_TYPE_IP4_L2TPV3OIP_V2",
+		5:  "FLOW_TYPE_IP4_IPSEC_ESP_V2",
+		6:  "FLOW_TYPE_IP4_IPSEC_AH_V2",
+		7:  "FLOW_TYPE_IP4_N_TUPLE_V2",
+		8:  "FLOW_TYPE_IP6_N_TUPLE_V2",
+		9:  "FLOW_TYPE_IP4_N_TUPLE_TAGGED_V2",
+		10: "FLOW_TYPE_IP6_N_TUPLE_TAGGED_V2",
+		11: "FLOW_TYPE_IP4_VXLAN_V2",
+		12: "FLOW_TYPE_IP6_VXLAN_V2",
+		13: "FLOW_TYPE_IP4_GTPC_V2",
+		14: "FLOW_TYPE_IP4_GTPU_V2",
+		15: "FLOW_TYPE_GENERIC_V2",
+	}
+	FlowTypeV2_value = map[string]uint32{
+		"FLOW_TYPE_ETHERNET_V2":           1,
+		"FLOW_TYPE_IP4_V2":                2,
+		"FLOW_TYPE_IP6_V2":                3,
+		"FLOW_TYPE_IP4_L2TPV3OIP_V2":      4,
+		"FLOW_TYPE_IP4_IPSEC_ESP_V2":      5,
+		"FLOW_TYPE_IP4_IPSEC_AH_V2":       6,
+		"FLOW_TYPE_IP4_N_TUPLE_V2":        7,
+		"FLOW_TYPE_IP6_N_TUPLE_V2":        8,
+		"FLOW_TYPE_IP4_N_TUPLE_TAGGED_V2": 9,
+		"FLOW_TYPE_IP6_N_TUPLE_TAGGED_V2": 10,
+		"FLOW_TYPE_IP4_VXLAN_V2":          11,
+		"FLOW_TYPE_IP6_VXLAN_V2":          12,
+		"FLOW_TYPE_IP4_GTPC_V2":           13,
+		"FLOW_TYPE_IP4_GTPU_V2":           14,
+		"FLOW_TYPE_GENERIC_V2":            15,
+	}
+)
+
+func (x FlowTypeV2) String() string {
+	s, ok := FlowTypeV2_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "FlowTypeV2(" + strconv.Itoa(int(x)) + ")"
+}
+
+// RssFunction defines enum 'rss_function'.
+type RssFunction uint32
+
+const (
+	RSS_FUNC_DEFAULT            RssFunction = 0
+	RSS_FUNC_TOEPLITZ           RssFunction = 1
+	RSS_FUNC_SIMPLE_XOR         RssFunction = 2
+	RSS_FUNC_SYMMETRIC_TOEPLITZ RssFunction = 3
+)
+
+var (
+	RssFunction_name = map[uint32]string{
+		0: "RSS_FUNC_DEFAULT",
+		1: "RSS_FUNC_TOEPLITZ",
+		2: "RSS_FUNC_SIMPLE_XOR",
+		3: "RSS_FUNC_SYMMETRIC_TOEPLITZ",
+	}
+	RssFunction_value = map[string]uint32{
+		"RSS_FUNC_DEFAULT":            0,
+		"RSS_FUNC_TOEPLITZ":           1,
+		"RSS_FUNC_SIMPLE_XOR":         2,
+		"RSS_FUNC_SYMMETRIC_TOEPLITZ": 3,
+	}
+)
+
+func (x RssFunction) String() string {
+	s, ok := RssFunction_name[uint32(x)]
+	if ok {
+		return s
+	}
+	return "RssFunction(" + strconv.Itoa(int(x)) + ")"
+}
+
 // FlowEthernet defines type 'flow_ethernet'.
 type FlowEthernet struct {
 	Foo     int32                     `binapi:"i32,name=foo" json:"foo,omitempty"`
 	SrcAddr ethernet_types.MacAddress `binapi:"mac_address,name=src_addr" json:"src_addr,omitempty"`
 	DstAddr ethernet_types.MacAddress `binapi:"mac_address,name=dst_addr" json:"dst_addr,omitempty"`
 	Type    uint16                    `binapi:"u16,name=type" json:"type,omitempty"`
+}
+
+// FlowGeneric defines type 'flow_generic'.
+type FlowGeneric struct {
+	Foo     int32          `binapi:"i32,name=foo" json:"foo,omitempty"`
+	Pattern GenericPattern `binapi:"generic_pattern,name=pattern" json:"pattern,omitempty"`
 }
 
 // FlowIP4 defines type 'flow_ip4'.
@@ -282,6 +429,29 @@ type FlowRule struct {
 	RedirectQueue                uint32     `binapi:"u32,name=redirect_queue" json:"redirect_queue,omitempty"`
 	BufferAdvance                int32      `binapi:"i32,name=buffer_advance" json:"buffer_advance,omitempty"`
 	Flow                         FlowUnion  `binapi:"flow,name=flow" json:"flow,omitempty"`
+}
+
+// FlowRuleV2 defines type 'flow_rule_v2'.
+type FlowRuleV2 struct {
+	Type                         FlowTypeV2   `binapi:"flow_type_v2,name=type" json:"type,omitempty"`
+	Index                        uint32       `binapi:"u32,name=index" json:"index,omitempty"`
+	Actions                      FlowActionV2 `binapi:"flow_action_v2,name=actions" json:"actions,omitempty"`
+	MarkFlowID                   uint32       `binapi:"u32,name=mark_flow_id" json:"mark_flow_id,omitempty"`
+	RedirectNodeIndex            uint32       `binapi:"u32,name=redirect_node_index" json:"redirect_node_index,omitempty"`
+	RedirectDeviceInputNextIndex uint32       `binapi:"u32,name=redirect_device_input_next_index" json:"redirect_device_input_next_index,omitempty"`
+	RedirectQueue                uint32       `binapi:"u32,name=redirect_queue" json:"redirect_queue,omitempty"`
+	QueueIndex                   uint32       `binapi:"u32,name=queue_index" json:"queue_index,omitempty"`
+	QueueNum                     uint32       `binapi:"u32,name=queue_num" json:"queue_num,omitempty"`
+	BufferAdvance                int32        `binapi:"i32,name=buffer_advance" json:"buffer_advance,omitempty"`
+	RssTypes                     uint64       `binapi:"u64,name=rss_types" json:"rss_types,omitempty"`
+	RssFun                       RssFunction  `binapi:"rss_function,name=rss_fun" json:"rss_fun,omitempty"`
+	Flow                         FlowV2Union  `binapi:"flow_v2,name=flow" json:"flow,omitempty"`
+}
+
+// GenericPattern defines type 'generic_pattern'.
+type GenericPattern struct {
+	Spec []byte `binapi:"u8[1024],name=spec" json:"spec,omitempty"`
+	Mask []byte `binapi:"u8[1024],name=mask" json:"mask,omitempty"`
 }
 
 // IPPortAndMask defines type 'ip_port_and_mask'.
@@ -749,5 +919,482 @@ func (u *FlowUnion) GetIP4Gtpu() (a FlowIP4Gtpu) {
 	a.DstPort.Port = buf.DecodeUint16()
 	a.DstPort.Mask = buf.DecodeUint16()
 	a.Teid = buf.DecodeUint32()
+	return
+}
+
+// FlowV2Union defines union 'flow_v2'.
+type FlowV2Union struct {
+	// FlowV2Union can be one of:
+	// - Ethernet *FlowEthernet
+	// - IP4 *FlowIP4
+	// - IP6 *FlowIP6
+	// - IP4L2tpv3oip *FlowIP4L2tpv3oip
+	// - IP4IpsecEsp *FlowIP4IpsecEsp
+	// - IP4IpsecAh *FlowIP4IpsecAh
+	// - IP4NTuple *FlowIP4NTuple
+	// - IP6NTuple *FlowIP6NTuple
+	// - IP4NTupleTagged *FlowIP4NTupleTagged
+	// - IP6NTupleTagged *FlowIP6NTupleTagged
+	// - IP4Vxlan *FlowIP4Vxlan
+	// - IP6Vxlan *FlowIP6Vxlan
+	// - IP4Gtpc *FlowIP4Gtpc
+	// - IP4Gtpu *FlowIP4Gtpu
+	// - Generic *FlowGeneric
+	XXX_UnionData [2052]byte
+}
+
+func FlowV2UnionEthernet(a FlowEthernet) (u FlowV2Union) {
+	u.SetEthernet(a)
+	return
+}
+func (u *FlowV2Union) SetEthernet(a FlowEthernet) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr[:], 6)
+	buf.EncodeBytes(a.DstAddr[:], 6)
+	buf.EncodeUint16(a.Type)
+}
+func (u *FlowV2Union) GetEthernet() (a FlowEthernet) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr[:], buf.DecodeBytes(6))
+	copy(a.DstAddr[:], buf.DecodeBytes(6))
+	a.Type = buf.DecodeUint16()
+	return
+}
+
+func FlowV2UnionIP4(a FlowIP4) (u FlowV2Union) {
+	u.SetIP4(a)
+	return
+}
+func (u *FlowV2Union) SetIP4(a FlowIP4) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+}
+func (u *FlowV2Union) GetIP4() (a FlowIP4) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	return
+}
+
+func FlowV2UnionIP6(a FlowIP6) (u FlowV2Union) {
+	u.SetIP6(a)
+	return
+}
+func (u *FlowV2Union) SetIP6(a FlowIP6) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 16)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 16)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 16)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 16)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+}
+func (u *FlowV2Union) GetIP6() (a FlowIP6) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(16))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	return
+}
+
+func FlowV2UnionIP4L2tpv3oip(a FlowIP4L2tpv3oip) (u FlowV2Union) {
+	u.SetIP4L2tpv3oip(a)
+	return
+}
+func (u *FlowV2Union) SetIP4L2tpv3oip(a FlowIP4L2tpv3oip) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint32(a.SessionID)
+}
+func (u *FlowV2Union) GetIP4L2tpv3oip() (a FlowIP4L2tpv3oip) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SessionID = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP4IpsecEsp(a FlowIP4IpsecEsp) (u FlowV2Union) {
+	u.SetIP4IpsecEsp(a)
+	return
+}
+func (u *FlowV2Union) SetIP4IpsecEsp(a FlowIP4IpsecEsp) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint32(a.Spi)
+}
+func (u *FlowV2Union) GetIP4IpsecEsp() (a FlowIP4IpsecEsp) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.Spi = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP4IpsecAh(a FlowIP4IpsecAh) (u FlowV2Union) {
+	u.SetIP4IpsecAh(a)
+	return
+}
+func (u *FlowV2Union) SetIP4IpsecAh(a FlowIP4IpsecAh) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint32(a.Spi)
+}
+func (u *FlowV2Union) GetIP4IpsecAh() (a FlowIP4IpsecAh) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.Spi = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP4NTuple(a FlowIP4NTuple) (u FlowV2Union) {
+	u.SetIP4NTuple(a)
+	return
+}
+func (u *FlowV2Union) SetIP4NTuple(a FlowIP4NTuple) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+}
+func (u *FlowV2Union) GetIP4NTuple() (a FlowIP4NTuple) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	return
+}
+
+func FlowV2UnionIP6NTuple(a FlowIP6NTuple) (u FlowV2Union) {
+	u.SetIP6NTuple(a)
+	return
+}
+func (u *FlowV2Union) SetIP6NTuple(a FlowIP6NTuple) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 16)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 16)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 16)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 16)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+}
+func (u *FlowV2Union) GetIP6NTuple() (a FlowIP6NTuple) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(16))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	return
+}
+
+func FlowV2UnionIP4NTupleTagged(a FlowIP4NTupleTagged) (u FlowV2Union) {
+	u.SetIP4NTupleTagged(a)
+	return
+}
+func (u *FlowV2Union) SetIP4NTupleTagged(a FlowIP4NTupleTagged) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+}
+func (u *FlowV2Union) GetIP4NTupleTagged() (a FlowIP4NTupleTagged) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	return
+}
+
+func FlowV2UnionIP6NTupleTagged(a FlowIP6NTupleTagged) (u FlowV2Union) {
+	u.SetIP6NTupleTagged(a)
+	return
+}
+func (u *FlowV2Union) SetIP6NTupleTagged(a FlowIP6NTupleTagged) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 16)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 16)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 16)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 16)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+}
+func (u *FlowV2Union) GetIP6NTupleTagged() (a FlowIP6NTupleTagged) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(16))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	return
+}
+
+func FlowV2UnionIP4Vxlan(a FlowIP4Vxlan) (u FlowV2Union) {
+	u.SetIP4Vxlan(a)
+	return
+}
+func (u *FlowV2Union) SetIP4Vxlan(a FlowIP4Vxlan) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+	buf.EncodeUint32(a.Vni)
+}
+func (u *FlowV2Union) GetIP4Vxlan() (a FlowIP4Vxlan) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	a.Vni = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP6Vxlan(a FlowIP6Vxlan) (u FlowV2Union) {
+	u.SetIP6Vxlan(a)
+	return
+}
+func (u *FlowV2Union) SetIP6Vxlan(a FlowIP6Vxlan) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 16)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 16)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 16)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 16)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+	buf.EncodeUint32(a.Vni)
+}
+func (u *FlowV2Union) GetIP6Vxlan() (a FlowIP6Vxlan) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(16))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(16))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	a.Vni = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP4Gtpc(a FlowIP4Gtpc) (u FlowV2Union) {
+	u.SetIP4Gtpc(a)
+	return
+}
+func (u *FlowV2Union) SetIP4Gtpc(a FlowIP4Gtpc) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+	buf.EncodeUint32(a.Teid)
+}
+func (u *FlowV2Union) GetIP4Gtpc() (a FlowIP4Gtpc) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	a.Teid = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionIP4Gtpu(a FlowIP4Gtpu) (u FlowV2Union) {
+	u.SetIP4Gtpu(a)
+	return
+}
+func (u *FlowV2Union) SetIP4Gtpu(a FlowIP4Gtpu) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.SrcAddr.Addr[:], 4)
+	buf.EncodeBytes(a.SrcAddr.Mask[:], 4)
+	buf.EncodeBytes(a.DstAddr.Addr[:], 4)
+	buf.EncodeBytes(a.DstAddr.Mask[:], 4)
+	buf.EncodeUint8(uint8(a.Protocol.Prot))
+	buf.EncodeUint8(a.Protocol.Mask)
+	buf.EncodeUint16(a.SrcPort.Port)
+	buf.EncodeUint16(a.SrcPort.Mask)
+	buf.EncodeUint16(a.DstPort.Port)
+	buf.EncodeUint16(a.DstPort.Mask)
+	buf.EncodeUint32(a.Teid)
+}
+func (u *FlowV2Union) GetIP4Gtpu() (a FlowIP4Gtpu) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	copy(a.SrcAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.SrcAddr.Mask[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Addr[:], buf.DecodeBytes(4))
+	copy(a.DstAddr.Mask[:], buf.DecodeBytes(4))
+	a.Protocol.Prot = ip_types.IPProto(buf.DecodeUint8())
+	a.Protocol.Mask = buf.DecodeUint8()
+	a.SrcPort.Port = buf.DecodeUint16()
+	a.SrcPort.Mask = buf.DecodeUint16()
+	a.DstPort.Port = buf.DecodeUint16()
+	a.DstPort.Mask = buf.DecodeUint16()
+	a.Teid = buf.DecodeUint32()
+	return
+}
+
+func FlowV2UnionGeneric(a FlowGeneric) (u FlowV2Union) {
+	u.SetGeneric(a)
+	return
+}
+func (u *FlowV2Union) SetGeneric(a FlowGeneric) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	buf.EncodeInt32(a.Foo)
+	buf.EncodeBytes(a.Pattern.Spec, 1024)
+	buf.EncodeBytes(a.Pattern.Mask, 1024)
+}
+func (u *FlowV2Union) GetGeneric() (a FlowGeneric) {
+	buf := codec.NewBuffer(u.XXX_UnionData[:])
+	a.Foo = buf.DecodeInt32()
+	a.Pattern.Spec = make([]byte, 1024)
+	copy(a.Pattern.Spec, buf.DecodeBytes(len(a.Pattern.Spec)))
+	a.Pattern.Mask = make([]byte, 1024)
+	copy(a.Pattern.Mask, buf.DecodeBytes(len(a.Pattern.Mask)))
 	return
 }

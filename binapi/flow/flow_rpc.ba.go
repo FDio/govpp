@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service flow.
 type RPCService interface {
 	FlowAdd(ctx context.Context, in *FlowAdd) (*FlowAddReply, error)
+	FlowAddV2(ctx context.Context, in *FlowAddV2) (*FlowAddV2Reply, error)
 	FlowDel(ctx context.Context, in *FlowDel) (*FlowDelReply, error)
 	FlowDisable(ctx context.Context, in *FlowDisable) (*FlowDisableReply, error)
 	FlowEnable(ctx context.Context, in *FlowEnable) (*FlowEnableReply, error)
@@ -26,6 +27,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) FlowAdd(ctx context.Context, in *FlowAdd) (*FlowAddReply, error) {
 	out := new(FlowAddReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) FlowAddV2(ctx context.Context, in *FlowAddV2) (*FlowAddV2Reply, error) {
+	out := new(FlowAddV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
