@@ -128,7 +128,7 @@ func genPackageComment(g *GenFile) {
 					obj += "s"
 				}
 			}
-			g.P("// ", fmt.Sprintf("%3d", num), " ", obj)
+			g.P("// - ", fmt.Sprintf("%2d", num), " ", obj)
 		}
 	}
 	printObjNum("alias", len(g.file.Aliases))
@@ -136,7 +136,6 @@ func genPackageComment(g *GenFile) {
 	printObjNum("struct", len(g.file.Structs))
 	printObjNum("union", len(g.file.Unions))
 	printObjNum("message", len(g.file.Messages))
-	g.P("//")
 }
 
 func genImport(g *GenFile, imp string) {

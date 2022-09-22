@@ -41,7 +41,7 @@ GO_BUILD_ARGS += -v
 endif
 
 # VPP Docker image to use for api generation (gen-binapi-docker)
-VPP_IMG 	      ?= ligato/vpp-base:latest
+VPP_IMG 	      ?= ligato/vpp-base:22.06-release
 # Local VPP directory used for binary api generation (gen-binapi-from-code)
 VPP_DIR           ?=
 # Target directory for generated go api bindings
