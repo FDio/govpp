@@ -110,34 +110,22 @@ type Channel struct {
 }
 
 func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel, error) {
-	// create new channel
-	channel := &Channel{
-		conn:                c,
-		msgCodec:            c.codec,
-		msgIdentifier:       c,
-		reqChan:             make(chan *vppRequest, reqChanBufSize),
-		replyChan:           make(chan *vppReply, replyChanBufSize),
-		replyTimeout:        DefaultReplyTimeout,
-		receiveReplyTimeout: ReplyChannelTimeout,
+	// get a channel from the pool
+	channel := c.channelPool.Get()
+	if channel == nil {
+		return nil, errors.New("all channel IDs are in use")
+	}
+	if cap(channel.reqChan) != reqChanBufSize {
+		channel.reqChan = make(chan *vppRequest, reqChanBufSize)
+	}
+	if cap(channel.replyChan) != replyChanBufSize {
+		channel.replyChan = make(chan *vppReply, replyChanBufSize)
 	}
 
 	// store API channel within the client
 	c.channelsLock.Lock()
-	if len(c.channels) >= 0x7fff {
-		return nil, errors.New("all channel IDs are used")
-	}
-	for {
-		c.nextChannelID++
-		chID := c.nextChannelID & 0x7fff
-		_, ok := c.channels[chID]
-		if !ok {
-			channel.id = chID
-			c.channels[chID] = channel
-			break
-		}
-	}
+	c.channels[channel.id] = channel
 	c.channelsLock.Unlock()
-
 	return channel, nil
 }
 
@@ -386,4 +374,17 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 	}
 
 	return
+}
+
+func (ch *Channel) Reset() {
+	// Drain any lingering items in the buffers
+	empty := false
+	for !empty {
+		select {
+		case <-ch.reqChan:
+		case <-ch.replyChan:
+		default:
+			empty = true
+		}
+	}
 }
