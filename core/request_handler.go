@@ -379,8 +379,11 @@ func compareSeqNumbers(seqNum1, seqNum2 uint16) int {
 	return 1
 }
 
-// Returns message based on the message ID not depending on message path
+// Returns message based on the message ID not depending on message path.
 func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
+	c.msgMapByPathLock.RLock()
+	defer c.msgMapByPathLock.RUnlock()
+
 	var ok bool
 	for _, messages := range c.msgMapByPath {
 		if msg, ok = messages[msgID]; ok {

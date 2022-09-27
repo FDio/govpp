@@ -106,9 +106,11 @@ type Connection struct {
 	connChan        chan ConnectionEvent // connection status events are sent to this channel
 	healthCheckDone chan struct{}        // used to terminate health check loop
 
-	codec        MessageCodec                      // message codec
-	msgIDs       map[string]uint16                 // map of message IDs indexed by message name + CRC
-	msgMapByPath map[string]map[uint16]api.Message // map of messages indexed by message ID which are indexed by path
+	codec  MessageCodec      // message codec
+	msgIDs map[string]uint16 // map of message IDs indexed by message name + CRC
+
+	msgMapByPathLock sync.RWMutex                      // lock for the msgMapByPath map
+	msgMapByPath     map[string]map[uint16]api.Message // map of messages indexed by message ID which are indexed by path
 
 	channelsLock sync.RWMutex        // lock for the channels map and the channel ID
 	channels     map[uint16]*Channel // map of all API channels indexed by the channel ID
@@ -439,12 +441,17 @@ func (c *Connection) GetMessageID(msg api.Message) (uint16, error) {
 	if err != nil {
 		return 0, err
 	}
-	if pathMsgs, pathOk := c.msgMapByPath[pkgPath]; !pathOk {
-		c.msgMapByPath[pkgPath] = make(map[uint16]api.Message)
-		c.msgMapByPath[pkgPath][msgID] = msg
-	} else if _, msgOk := pathMsgs[msgID]; !msgOk {
-		c.msgMapByPath[pkgPath][msgID] = msg
-	}
+	func() {
+		c.msgMapByPathLock.Lock()
+		defer c.msgMapByPathLock.Unlock()
+
+		if pathMsgs, pathOk := c.msgMapByPath[pkgPath]; !pathOk {
+			c.msgMapByPath[pkgPath] = make(map[uint16]api.Message)
+			c.msgMapByPath[pkgPath][msgID] = msg
+		} else if _, msgOk := pathMsgs[msgID]; !msgOk {
+			c.msgMapByPath[pkgPath][msgID] = msg
+		}
+	}()
 	if _, ok := c.msgIDs[getMsgNameWithCrc(msg)]; ok {
 		return msgID, nil
 	}
@@ -457,6 +464,8 @@ func (c *Connection) LookupByID(path string, msgID uint16) (api.Message, error) 
 	if c == nil {
 		return nil, errors.New("nil connection passed in")
 	}
+	c.msgMapByPathLock.RLock()
+	defer c.msgMapByPathLock.RUnlock()
 	if msg, ok := c.msgMapByPath[path][msgID]; ok {
 		return msg, nil
 	}
