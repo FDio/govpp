@@ -16,7 +16,7 @@ package vppapi
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -31,7 +31,7 @@ const (
 
 // FindFiles finds API files located in dir or in a nested directory that is not nested deeper than deep.
 func FindFiles(dir string, deep int) (files []string, err error) {
-	entries, err := ioutil.ReadDir(dir)
+	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, fmt.Errorf("reading directory %s failed: %v", dir, err)
 	}
@@ -82,7 +82,7 @@ func ParseFile(apiFile string) (*File, error) {
 		return nil, fmt.Errorf("unsupported file format: %q", apiFile)
 	}
 
-	data, err := ioutil.ReadFile(apiFile)
+	data, err := os.ReadFile(apiFile)
 	if err != nil {
 		return nil, fmt.Errorf("reading file %s failed: %v", apiFile, err)
 	}

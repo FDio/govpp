@@ -21,6 +21,5 @@
 // where each Go package will be placed into its own separate directory,
 // for example:
 //
-//    binapi-generator --input-file=/usr/share/vpp/api/core/interface.api.json --output-dir=.
-//
+//	binapi-generator --input-file=/usr/share/vpp/api/core/interface.api.json --output-dir=.
 package main

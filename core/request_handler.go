@@ -36,20 +36,18 @@ var (
 // watchRequests watches for requests on the request API channel and forwards them as messages to VPP.
 func (c *Connection) watchRequests(ch *Channel) {
 	for {
-		select {
-		case req, ok := <-ch.reqChan:
-			// new request on the request channel
-			if !ok {
-				// after closing the request channel, release API channel and return
-				c.releaseAPIChannel(ch)
-				return
-			}
-			if err := c.processRequest(ch, req); err != nil {
-				sendReply(ch, &vppReply{
-					seqNum: req.seqNum,
-					err:    fmt.Errorf("unable to process request: %w", err),
-				})
-			}
+		req, ok := <-ch.reqChan
+		// new request on the request channel
+		if !ok {
+			// after closing the request channel, release API channel and return
+			c.releaseAPIChannel(ch)
+			return
+		}
+		if err := c.processRequest(ch, req); err != nil {
+			sendReply(ch, &vppReply{
+				seqNum: req.seqNum,
+				err:    fmt.Errorf("unable to process request: %w", err),
+			})
 		}
 	}
 }

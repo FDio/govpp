@@ -199,7 +199,7 @@ func (c *StatsConnection) monitorSocket() {
 		case <-c.done:
 			log.Debugf("health check watcher closed")
 			c.sendStatsConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Disconnected, Error: nil})
-			break
+			return
 		}
 	}
 }
@@ -574,9 +574,9 @@ func (c *StatsConnection) GetMemoryStats(memStats *api.MemoryStats) (err error) 
 			}
 			switch f {
 			case MemoryStats_Total:
-				memStats.Total = val
+				memStats.Total = val //nolint:staticcheck
 			case MemoryStats_Used:
-				memStats.Used = val
+				memStats.Used = val //nolint:staticcheck
 			}
 		} else if string(stat.Name) == MemoryStatSegment {
 			if perHeapStats, ok := stat.Data.(adapter.SimpleCounterStat); ok {

@@ -16,6 +16,8 @@ package binapigen
 
 import (
 	"go/token"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"strings"
 	"unicode"
 	"unicode/utf8"
@@ -87,7 +89,9 @@ func usesInitialism(s string) string {
 
 // camelCaseName returns correct name identifier (camelCase).
 func camelCaseName(name string) (should string) {
-	name = strings.Title(name)
+
+	name = cases.Title(language.Zulu).String(name)
+	// name = strings.Title(name)
 
 	// Fast path for simple cases: "_" and all lowercase.
 	if name == "_" {

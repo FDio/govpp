@@ -124,14 +124,6 @@ func newFile(gen *Generator, apifile *vppapi.File, packageName GoPackageName, im
 	return file, nil
 }
 
-func (file *File) isTypesFile() bool {
-	return strings.HasSuffix(file.Desc.Name, "_types")
-}
-
-func (file *File) hasService() bool {
-	return file.Service != nil && len(file.Service.RPCs) > 0
-}
-
 func (file *File) importedFiles(gen *Generator) []*File {
 	var files []*File
 	for _, imp := range file.Imports {
@@ -143,19 +135,6 @@ func (file *File) importedFiles(gen *Generator) []*File {
 		files = append(files, impFile)
 	}
 	return files
-}
-
-func (file *File) dependsOnFile(gen *Generator, dep string) bool {
-	for _, imp := range file.Imports {
-		if imp == dep {
-			return true
-		}
-		impFile, ok := gen.FilesByName[imp]
-		if ok && impFile.dependsOnFile(gen, dep) {
-			return true
-		}
-	}
-	return false
 }
 
 const (

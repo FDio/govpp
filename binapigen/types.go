@@ -27,11 +27,6 @@ const (
 	defineApiSuffix = "_t"
 )
 
-// toApiType returns name that is used as type reference in VPP binary API
-func toApiType(name string) string {
-	return defineApiPrefix + name + defineApiSuffix
-}
-
 func fromApiType(typ string) string {
 	name := typ
 	name = strings.TrimPrefix(name, defineApiPrefix)

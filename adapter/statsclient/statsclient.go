@@ -26,10 +26,10 @@ import (
 	"syscall"
 	"time"
 
-	"go.fd.io/govpp/adapter"
 	"github.com/fsnotify/fsnotify"
 	"github.com/ftrvxmtrx/fd"
 	logger "github.com/sirupsen/logrus"
+	"go.fd.io/govpp/adapter"
 )
 
 const (
@@ -610,7 +610,7 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return nil
 	}
 	if err := sc.UpdateEntryData(dirPtr, &entry.Data); err != nil {
-		err = fmt.Errorf("updating stat data for entry %s failed: %v", dirName, err)
+		return fmt.Errorf("updating stat data for entry %s failed: %v", dirName, err)
 	}
 	return
 }

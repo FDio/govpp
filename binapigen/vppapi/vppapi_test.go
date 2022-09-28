@@ -16,7 +16,7 @@ package vppapi
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"testing"
 
 	. "github.com/onsi/gomega"
@@ -44,7 +44,7 @@ func TestGetInputFilesError(t *testing.T) {
 func TestReadJson(t *testing.T) {
 	RegisterTestingT(t)
 
-	inputData, err := ioutil.ReadFile("testdata/af_packet.api.json")
+	inputData, err := os.ReadFile("testdata/af_packet.api.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	result, err := ParseRaw(inputData)
 	Expect(err).ShouldNot(HaveOccurred())
@@ -58,7 +58,7 @@ func TestReadJson(t *testing.T) {
 func TestReadJsonError(t *testing.T) {
 	RegisterTestingT(t)
 
-	inputData, err := ioutil.ReadFile("testdata/input-read-json-error.json")
+	inputData, err := os.ReadFile("testdata/input-read-json-error.json")
 	Expect(err).ShouldNot(HaveOccurred())
 	result, err := ParseRaw(inputData)
 	Expect(err).Should(HaveOccurred())

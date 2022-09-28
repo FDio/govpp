@@ -39,9 +39,7 @@ func (c *trace) Enable(enable bool) {
 
 func (c *trace) GetRecords() (list []*api.Record) {
 	c.mux.Lock()
-	for _, entry := range c.list {
-		list = append(list, entry)
-	}
+	list = append(list, c.list...)
 	c.mux.Unlock()
 	sort.Slice(list, func(i, j int) bool {
 		return list[i].Timestamp.Before(list[j].Timestamp)
