@@ -21,7 +21,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -204,7 +203,7 @@ func rpcHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			return
 		}
 
-		input, err := ioutil.ReadAll(req.Body)
+		input, err := io.ReadAll(req.Body)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
@@ -239,7 +238,10 @@ func apiHandler(apifiles []*vppapi.File) func(http.ResponseWriter, *http.Request
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		w.Write(b)
+		_, err = w.Write(b)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
 	}
 }
 
@@ -250,17 +252,23 @@ func apiFileHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Reques
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		w.Write(b)
+		_, err = w.Write(b)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
 	}
 }
 
 func rawHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
-		b, err := ioutil.ReadFile(apifile.Path)
+		b, err := os.ReadFile(apifile.Path)
 		if err != nil {
 			http.Error(w, err.Error(), 500)
 			return
 		}
-		w.Write(b)
+		_, err = w.Write(b)
+		if err != nil {
+			http.Error(w, err.Error(), 500)
+		}
 	}
 }

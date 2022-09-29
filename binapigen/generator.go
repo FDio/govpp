@@ -22,7 +22,6 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -327,7 +326,7 @@ func writeSourceTo(outputFile string, b []byte) error {
 	}
 
 	// write generated code to output file
-	if err := ioutil.WriteFile(outputFile, b, 0666); err != nil {
+	if err := os.WriteFile(outputFile, b, 0666); err != nil {
 		return fmt.Errorf("writing to output file %s failed: %v", outputFile, err)
 	}
 

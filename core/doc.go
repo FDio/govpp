@@ -36,67 +36,63 @@
 //	}
 //	defer ch.Close()
 //
-//
-// Simple Request-Reply API
+// # Simple Request-Reply API
 //
 // The simple version of the API is based on blocking SendRequest / ReceiveReply calls, where a single request
 // message is sent  to VPP and a single reply message is filled in when the reply comes from VPP:
 //
-// 	req := &acl.ACLPluginGetVersion{}
-// 	reply := &acl.ACLPluginGetVersionReply{}
+//	req := &acl.ACLPluginGetVersion{}
+//	reply := &acl.ACLPluginGetVersionReply{}
 //
-// 	err := ch.SendRequest(req).ReceiveReply(reply)
-// 	// process the reply
+//	err := ch.SendRequest(req).ReceiveReply(reply)
+//	// process the reply
 //
 // Note that if the reply message type that comes from VPP does not match with provided one, you'll get an error.
 //
-//
-// Multipart Reply API
+// # Multipart Reply API
 //
 // If multiple messages are expected as a reply to a request, SendMultiRequest API must be used:
 //
-// 	req := &interfaces.SwInterfaceDump{}
-// 	reqCtx := ch.SendMultiRequest(req)
+//	req := &interfaces.SwInterfaceDump{}
+//	reqCtx := ch.SendMultiRequest(req)
 //
 //	for {
-// 		reply := &interfaces.SwInterfaceDetails{}
-// 		stop, err := reqCtx.ReceiveReply(reply)
-// 		if stop {
-// 			break // break out of the loop
+//		reply := &interfaces.SwInterfaceDetails{}
+//		stop, err := reqCtx.ReceiveReply(reply)
+//		if stop {
+//			break // break out of the loop
 //		}
 //		// process the reply
-// 	}
+//	}
 //
 // Note that if the last reply has been already consumed, stop boolean return value is set to true.
 // Do not use the message itself if stop is true - it won't be filled with actual data.
 //
-//
-// Go Channels API
+// # Go Channels API
 //
 // The blocking API introduced above may be not sufficient for some management applications that strongly
 // rely on usage of Go channels. In this case, the API allows to access the underlying Go channels directly, e.g.
 // the following replacement of the SendRequest / ReceiveReply API:
 //
-// 	req := &acl.ACLPluginGetVersion{}
-// 	// send the request to the request go channel
-// 	ch.GetRequestChannel <- &api.VppRequest{Message: req}
+//	req := &acl.ACLPluginGetVersion{}
+//	// send the request to the request go channel
+//	ch.GetRequestChannel <- &api.VppRequest{Message: req}
 //
-// 	// receive a reply from the reply go channel
-// 	vppReply := <-ch.GetReplyChannel
+//	// receive a reply from the reply go channel
+//	vppReply := <-ch.GetReplyChannel
 //
-// 	// decode the message
-// 	reply := &acl.ACLPluginGetVersionReply{}
-// 	err := ch.MsgDecoder.DecodeMsg(vppReply.Data, reply)
+//	// decode the message
+//	reply := &acl.ACLPluginGetVersionReply{}
+//	err := ch.MsgDecoder.DecodeMsg(vppReply.Data, reply)
 //
-// 	// process the reply
+//	// process the reply
 //
-//
-// Notifications API
+// # Notifications API
 //
 // to subscribe for receiving of the specified notification messages via provided Go channel, use the
 // SubscribeNotification API:
 //
-// 	// subscribe for specific notification message
+//	// subscribe for specific notification message
 //	notifChan := make(chan api.Message, 100)
 //	subs, _ := ch.SubscribeNotification(notifChan, interfaces.NewSwInterfaceSetFlags)
 //
@@ -107,5 +103,4 @@
 //
 // Note that the caller is responsible for creating the Go channel with preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
-//
 package core

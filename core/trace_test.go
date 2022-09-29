@@ -1,6 +1,7 @@
 package core_test
 
 import (
+	. "github.com/onsi/gomega"
 	"go.fd.io/govpp/api"
 	interfaces "go.fd.io/govpp/binapi/interface"
 	"go.fd.io/govpp/binapi/ip"
@@ -8,7 +9,6 @@ import (
 	memclnt "go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/memif"
 	"go.fd.io/govpp/core"
-	. "github.com/onsi/gomega"
 	"strings"
 	"testing"
 )

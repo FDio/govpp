@@ -36,20 +36,18 @@ var (
 // watchRequests watches for requests on the request API channel and forwards them as messages to VPP.
 func (c *Connection) watchRequests(ch *Channel) {
 	for {
-		select {
-		case req, ok := <-ch.reqChan:
-			// new request on the request channel
-			if !ok {
-				// after closing the request channel, release API channel and return
-				c.releaseAPIChannel(ch)
-				return
-			}
-			if err := c.processRequest(ch, req); err != nil {
-				sendReply(ch, &vppReply{
-					seqNum: req.seqNum,
-					err:    fmt.Errorf("unable to process request: %w", err),
-				})
-			}
+		req, ok := <-ch.reqChan
+		// new request on the request channel
+		if !ok {
+			// after closing the request channel, release API channel and return
+			c.releaseAPIChannel(ch)
+			return
+		}
+		if err := c.processRequest(ch, req); err != nil {
+			sendReply(ch, &vppReply{
+				seqNum: req.seqNum,
+				err:    fmt.Errorf("unable to process request: %w", err),
+			})
 		}
 	}
 }
@@ -379,8 +377,11 @@ func compareSeqNumbers(seqNum1, seqNum2 uint16) int {
 	return 1
 }
 
-// Returns message based on the message ID not depending on message path
+// Returns message based on the message ID not depending on message path.
 func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
+	c.msgMapByPathLock.RLock()
+	defer c.msgMapByPathLock.RUnlock()
+
 	var ok bool
 	for _, messages := range c.msgMapByPath {
 		if msg, ok = messages[msgID]; ok {

@@ -163,7 +163,8 @@ func TestNotificationEvent(t *testing.T) {
 		SwIfIndex: 2,
 		Flags:     interface_types.IF_STATUS_API_FLAG_LINK_UP,
 	})
-	ctx.mockVpp.SendMsg(0, []byte(""))
+	err = ctx.mockVpp.SendMsg(0, []byte(""))
+	Expect(err).ShouldNot(HaveOccurred())
 
 	// receive the notification
 	var notif *interfaces.SwInterfaceEvent

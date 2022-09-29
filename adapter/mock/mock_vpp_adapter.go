@@ -356,17 +356,17 @@ func (a *VppAdapter) WaitReady() error {
 // exactly two calls of this method.
 // For example:
 //
-//    mockVpp.MockReply(  // push multipart messages all at once
-// 			&interfaces.SwInterfaceDetails{SwIfIndex:1},
-// 			&interfaces.SwInterfaceDetails{SwIfIndex:2},
-// 			&interfaces.SwInterfaceDetails{SwIfIndex:3},
-//    )
-//    mockVpp.MockReply(&vpe.ControlPingReply{})
+//	   mockVpp.MockReply(  // push multipart messages all at once
+//				&interfaces.SwInterfaceDetails{SwIfIndex:1},
+//				&interfaces.SwInterfaceDetails{SwIfIndex:2},
+//				&interfaces.SwInterfaceDetails{SwIfIndex:3},
+//	   )
+//	   mockVpp.MockReply(&vpe.ControlPingReply{})
 //
 // Even if the multipart request has no replies, MockReply has to be called twice:
 //
-//    mockVpp.MockReply()  // zero multipart messages
-//    mockVpp.MockReply(&vpe.ControlPingReply{})
+//	mockVpp.MockReply()  // zero multipart messages
+//	mockVpp.MockReply(&vpe.ControlPingReply{})
 func (a *VppAdapter) MockReply(msgs ...api.Message) {
 	a.repliesLock.Lock()
 	defer a.repliesLock.Unlock()

@@ -81,13 +81,11 @@ func main() {
 		if err != nil {
 			log.Fatalln("Asynchronous connecting failed:", err)
 		}
-		select {
-		case e := <-statsChan:
-			if e.State == core.Connected {
-				// OK
-			} else {
-				log.Fatalf("VPP stats asynchronous connection failed: %s\n", e.State.String())
-			}
+		e := <-statsChan
+		if e.State == core.Connected {
+			// OK
+		} else {
+			log.Fatalf("VPP stats asynchronous connection failed: %s\n", e.State.String())
 		}
 	} else {
 		client = statsclient.NewStatsClient(*statsSocket)
@@ -246,9 +244,7 @@ func dumpStats(client adapter.StatsAPI, patterns []string, indexes []uint32, ski
 		if err != nil {
 			log.Fatalln("dumping stats failed:", err)
 		}
-		for _, onIndexSi := range dir.Entries {
-			stats = append(stats, onIndexSi)
-		}
+		stats = append(stats, dir.Entries...)
 	}
 
 	n := 0
@@ -282,17 +278,15 @@ func pollStats(client adapter.StatsAPI, patterns []string, skipZeros bool) {
 		}
 		fmt.Println()
 
-		select {
-		case <-tick:
-			if err := client.UpdateDir(dir); err != nil {
-				if err == adapter.ErrStatsDirStale {
-					if dir, err = client.PrepareDir(patterns...); err != nil {
-						log.Fatalln("preparing dir failed:", err)
-					}
-					continue
+		<-tick
+		if err := client.UpdateDir(dir); err != nil {
+			if err == adapter.ErrStatsDirStale {
+				if dir, err = client.PrepareDir(patterns...); err != nil {
+					log.Fatalln("preparing dir failed:", err)
 				}
-				log.Fatalln("updating dir failed:", err)
+				continue
 			}
+			log.Fatalln("updating dir failed:", err)
 		}
 	}
 }
@@ -309,11 +303,9 @@ func pollSystem(client api.StatsProvider) {
 		fmt.Printf("System stats: %+v\n", stats)
 		fmt.Println()
 
-		select {
-		case <-tick:
-			if err := client.GetSystemStats(stats); err != nil {
-				log.Println("updating system stats failed:", err)
-			}
+		<-tick
+		if err := client.GetSystemStats(stats); err != nil {
+			log.Println("updating system stats failed:", err)
 		}
 	}
 }
@@ -333,11 +325,9 @@ func pollInterfaces(client api.StatsProvider) {
 		}
 		fmt.Println()
 
-		select {
-		case <-tick:
-			if err := client.GetInterfaceStats(stats); err != nil {
-				log.Println("updating system stats failed:", err)
-			}
+		<-tick
+		if err := client.GetInterfaceStats(stats); err != nil {
+			log.Println("updating system stats failed:", err)
 		}
 	}
 }
