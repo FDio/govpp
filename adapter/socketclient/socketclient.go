@@ -375,12 +375,15 @@ func (c *Client) writeMsg(msg []byte) error {
 	c.writeMu.Lock()
 	defer c.writeMu.Unlock()
 
-	header := c.headerPool.Get().(*[]byte)
+	header, ok := c.headerPool.Get().(*[]byte)
+	if !ok {
+		return fmt.Errorf("failed to get header from pool")
+	}
 	err := writeMsgHeader(c.writer, *header, len(msg))
 	if err != nil {
 		return err
 	}
-	c.headerPool.Put(&header)
+	c.headerPool.Put(header)
 
 	if err := writeMsgData(c.writer, msg, c.writer.Size()); err != nil {
 		return err
@@ -498,12 +501,15 @@ func (c *Client) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte, erro
 func (c *Client) readMsg(buf []byte) ([]byte, error) {
 	log.Debug("reading msg..")
 
-	header := c.headerPool.Get().(*[]byte)
+	header, ok := c.headerPool.Get().(*[]byte)
+	if !ok {
+		return nil, fmt.Errorf("failed to get header from pool")
+	}
 	msgLen, err := readMsgHeader(c.reader, *header)
 	if err != nil {
 		return nil, err
 	}
-	c.headerPool.Put(&header)
+	c.headerPool.Put(header)
 
 	msg, err := readMsgData(c.reader, buf, msgLen)
 	if err != nil {

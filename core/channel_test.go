@@ -190,7 +190,7 @@ func TestSetReplyTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
-	ctx.ch.SetReplyTimeout(time.Millisecond)
+	ctx.ch.SetReplyTimeout(time.Millisecond * 10)
 
 	// mock reply
 	ctx.mockVpp.MockReply(&ControlPingReply{})
@@ -343,7 +343,7 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
-	ctx.ch.SetReplyTimeout(time.Millisecond)
+	ctx.ch.SetReplyTimeout(time.Millisecond * 10)
 
 	// mock reply
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{Msg: &ControlPingReply{}, SeqNum: 1})
