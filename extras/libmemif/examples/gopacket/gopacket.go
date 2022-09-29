@@ -47,13 +47,14 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
-	"go.fd.io/govpp/extras/libmemif"
 	"io"
 	"net"
 	"os"
 	"os/signal"
+
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
+	"go.fd.io/govpp/extras/libmemif"
 )
 
 var (
@@ -337,6 +338,7 @@ func main() {
 			Secret:         "secret",                // Secret used to authenticate the memif connection.
 			IsMaster:       isMaster,
 			Mode:           libmemif.IfModeEthernet,
+			AppName:        appName,
 		},
 		MemifShmSpecs: libmemif.MemifShmSpecs{
 			NumRxQueues:  3, // NumQueues is the (configured!) number of queues for both Rx & Tx.

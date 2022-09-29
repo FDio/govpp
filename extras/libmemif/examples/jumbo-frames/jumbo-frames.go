@@ -151,6 +151,7 @@ func main() {
 			Secret:         Secret,
 			IsMaster:       isMaster,
 			Mode:           libmemif.IfModeEthernet,
+			AppName:        appName,
 		},
 		MemifShmSpecs: libmemif.MemifShmSpecs{
 			NumRxQueues:  NumQueues,
