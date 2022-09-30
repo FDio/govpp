@@ -107,6 +107,7 @@ func main() {
 			if !file.Generate {
 				continue
 			}
+			binapigen.GenerateDoc(gen)
 			binapigen.GenerateAPI(gen, file)
 			for _, p := range genPlugins {
 				if err := binapigen.RunPlugin(p, gen, file); err != nil {
