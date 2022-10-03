@@ -381,7 +381,13 @@ func (ch *Channel) Reset() {
 	empty := false
 	for !empty {
 		select {
-		case <-ch.reqChan:
+		case _, ok := <-ch.reqChan:
+			if !ok {
+				// must set reqChan to nil when it gets closed
+				// to prevent selecting this case instantly
+				// and running this loop forever
+				ch.reqChan = nil
+			}
 		case <-ch.replyChan:
 		default:
 			empty = true

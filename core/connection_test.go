@@ -25,7 +25,7 @@ import (
 	"go.fd.io/govpp/binapi/ethernet_types"
 	interfaces "go.fd.io/govpp/binapi/interface"
 	"go.fd.io/govpp/binapi/interface_types"
-	memclnt "go.fd.io/govpp/binapi/memclnt"
+	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/codec"
 	"go.fd.io/govpp/core"
 )
@@ -54,7 +54,14 @@ func setupTest(t *testing.T, bufferedChan bool) *testCtx {
 	}
 	Expect(err).ShouldNot(HaveOccurred())
 
+	ctx.resetReplyTimeout()
+
 	return ctx
+}
+
+func (ctx *testCtx) resetReplyTimeout() {
+	// setting reply timeout to non-zero value to fail fast on potential deadlocks
+	ctx.ch.SetReplyTimeout(time.Second * 5)
 }
 
 func (ctx *testCtx) teardownTest() {
@@ -108,10 +115,10 @@ func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
 
 	// make control ping reply fail so that connection.healthCheckLoop()
 	// initiates reconnection.
-	ctx.mockVpp.MockReply(&memclnt.ControlPingReply{
-		Retval: -1,
-	})
-	time.Sleep(time.Duration(1+core.HealthCheckThreshold) * (core.HealthCheckInterval + 2*core.HealthCheckReplyTimeout))
+	/*ctx.mockVpp.MockReply(&memclnt.ControlPingReply{
+	  	Retval: -1,
+	  })
+	  time.Sleep(time.Duration(1+core.HealthCheckThreshold) * (core.HealthCheckInterval + 2*core.HealthCheckReplyTimeout))*/
 }
 
 func TestCodec(t *testing.T) {
@@ -229,6 +236,9 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	req1 := &memclnt.ControlPing{}
 	reqCtx1 := ctx.ch.SendRequest(req1)
 
+	ctx.ch.SetReplyTimeout(time.Millisecond)
+	time.Sleep(time.Millisecond)
+
 	reply := &memclnt.ControlPingReply{}
 	err := reqCtx1.ReceiveReply(reply)
 	Expect(err).ToNot(BeNil())
@@ -249,6 +259,8 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	// next request
 	req2 := &memclnt.ControlPing{}
 	reqCtx2 := ctx.ch.SendRequest(req2)
+
+	ctx.resetReplyTimeout()
 
 	// second request should ignore the first reply and return the second one
 	reply = &memclnt.ControlPingReply{}
@@ -374,6 +386,8 @@ func TestRequestsOrdering(t *testing.T) {
 	reply2 := &memclnt.ControlPingReply{}
 	err := reqCtx2.ReceiveReply(reply2)
 	Expect(err).To(BeNil())
+
+	ctx.ch.SetReplyTimeout(time.Millisecond)
 
 	// first request has already been considered closed
 	reply1 := &memclnt.ControlPingReply{}
