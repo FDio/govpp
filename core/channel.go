@@ -278,11 +278,13 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 		}
 	}
 
+	slowReplyDur := WarnSlowReplyDuration
 	timeout := ch.replyTimeout
 	if timeout <= 0 {
 		timeout = maxInt64
 	}
-	timer := time.NewTimer(timeout)
+	timeoutTimer := time.NewTimer(timeout)
+	slowTimer := time.NewTimer(slowReplyDur)
 	for {
 		select {
 		// blocks until a reply comes to ReplyChan or until timeout expires
@@ -296,8 +298,13 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 				continue
 			}
 			return lastReplyReceived, err
-
-		case <-timer.C:
+		case <-slowTimer.C:
+			log.WithFields(logrus.Fields{
+				"expSeqNum": expSeqNum,
+				"channel":   ch.id,
+			}).Warnf("reply is taking too long (>%v): %v ", slowReplyDur, msg.GetMessageName())
+			continue
+		case <-timeoutTimer.C:
 			log.WithFields(logrus.Fields{
 				"expSeqNum": expSeqNum,
 				"channel":   ch.id,
