@@ -48,12 +48,54 @@ func setupTest(t *testing.T) *testCtx {
 	ctx.ch, err = ctx.conn.NewAPIChannel()
 	Expect(err).ShouldNot(HaveOccurred())
 
+	ctx.resetReplyTimeout()
+
 	return ctx
+}
+
+func (ctx *testCtx) resetReplyTimeout() {
+	// setting reply timeout to non-zero value to fail fast on potential deadlocks
+	ctx.ch.SetReplyTimeout(time.Second * 5)
 }
 
 func (ctx *testCtx) teardownTest() {
 	ctx.ch.Close()
 	ctx.conn.Disconnect()
+}
+
+func TestChannelReset(t *testing.T) {
+	RegisterTestingT(t)
+
+	mockVpp := mock.NewVppAdapter()
+
+	conn, err := Connect(mockVpp)
+	Expect(err).ShouldNot(HaveOccurred())
+
+	ch, err := conn.NewAPIChannel()
+	Expect(err).ShouldNot(HaveOccurred())
+
+	Ch := ch.(*Channel)
+	Ch.replyChan <- &vppReply{seqNum: 1}
+
+	id := Ch.GetID()
+	Expect(id).To(BeNumerically(">", 0))
+
+	active := func() bool {
+		conn.channelsLock.RLock()
+		_, ok := conn.channels[id]
+		conn.channelsLock.RUnlock()
+		return ok
+	}
+	Expect(active()).To(BeTrue())
+
+	Expect(Ch.replyChan).To(HaveLen(1))
+
+	ch.Close()
+
+	Eventually(active).Should(BeFalse())
+	Eventually(func() int {
+		return len(Ch.replyChan)
+	}).Should(BeZero())
 }
 
 func TestRequestReplyMemifCreate(t *testing.T) {
@@ -190,14 +232,14 @@ func TestSetReplyTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
-	ctx.ch.SetReplyTimeout(time.Millisecond * 10)
-
 	// mock reply
 	ctx.mockVpp.MockReply(&ControlPingReply{})
 
 	// first one request should work
 	err := ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
+
+	ctx.ch.SetReplyTimeout(time.Millisecond * 1)
 
 	// no other reply ready - expect timeout
 	err = ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
@@ -208,8 +250,6 @@ func TestSetReplyTimeout(t *testing.T) {
 func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
-
-	ctx.ch.SetReplyTimeout(time.Millisecond * 100)
 
 	// mock reply
 	ctx.mockVpp.MockReply(
@@ -248,6 +288,8 @@ func TestSetReplyTimeoutMultiRequest(t *testing.T) {
 	// first one request should work
 	err := sendMultiRequest()
 	Expect(err).ShouldNot(HaveOccurred())
+
+	ctx.ch.SetReplyTimeout(time.Millisecond * 1)
 
 	// no other reply ready - expect timeout
 	err = sendMultiRequest()
@@ -343,21 +385,23 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
-	ctx.ch.SetReplyTimeout(time.Millisecond * 10)
-
 	// mock reply
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{Msg: &ControlPingReply{}, SeqNum: 1})
-	// first one request should work
 
+	// first request should succeed
 	err := ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
 
-	err = ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
+	// second request should fail with timeout
+	ctx.ch.SetReplyTimeout(time.Millisecond * 1)
+	req := ctx.ch.SendRequest(&ControlPing{})
+	time.Sleep(time.Millisecond * 2)
+	err = req.ReceiveReply(&ControlPingReply{})
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("timeout"))
 
 	ctx.mockVpp.MockReplyWithContext(
-		// simulating late reply
+		// late reply from previous request
 		mock.MsgWithContext{
 			Msg:    &ControlPingReply{},
 			SeqNum: 2,
@@ -369,14 +413,15 @@ func TestReceiveReplyAfterTimeout(t *testing.T) {
 		},
 	)
 
-	req := &interfaces.SwInterfaceSetFlags{
-		SwIfIndex: 1,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
-	}
 	reply := &interfaces.SwInterfaceSetFlagsReply{}
 
-	// should succeed
-	err = ctx.ch.SendRequest(req).ReceiveReply(reply)
+	ctx.resetReplyTimeout()
+
+	// third request should succeed
+	err = ctx.ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+		SwIfIndex: 1,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+	}).ReceiveReply(reply)
 	Expect(err).ShouldNot(HaveOccurred())
 }
 
@@ -392,14 +437,14 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()
 
-	ctx.ch.SetReplyTimeout(time.Millisecond * 100)
-
 	// mock reply
 	ctx.mockVpp.MockReplyWithContext(mock.MsgWithContext{Msg: &ControlPingReply{}, SeqNum: 1})
 
 	// first one request should work
 	err := ctx.ch.SendRequest(&ControlPing{}).ReceiveReply(&ControlPingReply{})
 	Expect(err).ShouldNot(HaveOccurred())
+
+	ctx.ch.SetReplyTimeout(time.Millisecond * 1)
 
 	cnt := 0
 	var sendMultiRequest = func() error {
@@ -417,11 +462,12 @@ func TestReceiveReplyAfterTimeoutMultiRequest(t *testing.T) {
 		}
 		return nil
 	}
-
 	err = sendMultiRequest()
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(ContainSubstring("timeout"))
 	Expect(cnt).To(BeEquivalentTo(0))
+
+	ctx.resetReplyTimeout()
 
 	// simulating late replies
 	var msgs []mock.MsgWithContext
