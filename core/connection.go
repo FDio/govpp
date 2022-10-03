@@ -25,11 +25,10 @@ import (
 
 	logger "github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/core/genericpool"
-
 	"go.fd.io/govpp/adapter"
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/codec"
+	"go.fd.io/govpp/core/genericpool"
 )
 
 const (
@@ -47,7 +46,11 @@ var (
 	HealthCheckProbeInterval = time.Second            // default health check probe interval
 	HealthCheckReplyTimeout  = time.Millisecond * 250 // timeout for reply to a health check probe
 	HealthCheckThreshold     = 2                      // number of failed health checks until the error is reported
-	DefaultReplyTimeout      = time.Second            // default timeout for replies from VPP
+)
+
+var (
+	DefaultReplyTimeout   = time.Duration(0) // default timeout for replies from VPP is disabled
+	WarnSlowReplyDuration = time.Second * 1  // duration of slow replies after which a warning is printed
 )
 
 // ConnectionState represents the current state of the connection to VPP.
