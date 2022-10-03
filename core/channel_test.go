@@ -63,6 +63,41 @@ func (ctx *testCtx) teardownTest() {
 	ctx.conn.Disconnect()
 }
 
+func TestChannelReset(t *testing.T) {
+	RegisterTestingT(t)
+
+	mockVpp := mock.NewVppAdapter()
+
+	conn, err := Connect(mockVpp)
+	Expect(err).ShouldNot(HaveOccurred())
+
+	ch, err := conn.NewAPIChannel()
+	Expect(err).ShouldNot(HaveOccurred())
+
+	Ch := ch.(*Channel)
+	Ch.replyChan <- &vppReply{seqNum: 1}
+
+	id := Ch.GetID()
+	Expect(id).To(BeNumerically(">", 0))
+
+	active := func() bool {
+		conn.channelsLock.RLock()
+		_, ok := conn.channels[id]
+		conn.channelsLock.RUnlock()
+		return ok
+	}
+	Expect(active()).To(BeTrue())
+
+	Expect(Ch.replyChan).To(HaveLen(1))
+
+	ch.Close()
+
+	Eventually(active).Should(BeFalse())
+	Eventually(func() int {
+		return len(Ch.replyChan)
+	}).Should(BeZero())
+}
+
 func TestRequestReplyMemifCreate(t *testing.T) {
 	ctx := setupTest(t)
 	defer ctx.teardownTest()

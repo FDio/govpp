@@ -24,6 +24,7 @@ import (
 	"time"
 
 	logger "github.com/sirupsen/logrus"
+
 	"go.fd.io/govpp/core/genericpool"
 
 	"go.fd.io/govpp/adapter"
@@ -296,7 +297,7 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 	c.channelsLock.Lock()
 	delete(c.channels, ch.id)
 	c.channelsLock.Unlock()
-	c.channelPool.Put(ch)
+	go c.channelPool.Put(ch)
 }
 
 // connectLoop attempts to connect to VPP until it succeeds.

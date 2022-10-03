@@ -377,18 +377,23 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 }
 
 func (ch *Channel) Reset() {
+	if len(ch.reqChan) > 0 || len(ch.replyChan) > 0 {
+		log.WithField("channel", ch.id).Debugf("draining channel buffers (req: %d, reply: %d)", len(ch.reqChan), len(ch.replyChan))
+	}
 	// Drain any lingering items in the buffers
-	empty := false
-	for !empty {
+	for empty := false; !empty; {
+		// channels must be set to nil when closed to prevent
+		// select below to always run the case immediatelly
+		// which would make the loop run forever
 		select {
 		case _, ok := <-ch.reqChan:
 			if !ok {
-				// must set reqChan to nil when it gets closed
-				// to prevent selecting this case instantly
-				// and running this loop forever
 				ch.reqChan = nil
 			}
-		case <-ch.replyChan:
+		case _, ok := <-ch.replyChan:
+			if !ok {
+				ch.replyChan = nil
+			}
 		default:
 			empty = true
 		}

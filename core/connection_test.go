@@ -112,13 +112,6 @@ func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
 
 	ev := <-statusChan
 	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
-
-	// make control ping reply fail so that connection.healthCheckLoop()
-	// initiates reconnection.
-	/*ctx.mockVpp.MockReply(&memclnt.ControlPingReply{
-	  	Retval: -1,
-	  })
-	  time.Sleep(time.Duration(1+core.HealthCheckThreshold) * (core.HealthCheckInterval + 2*core.HealthCheckReplyTimeout))*/
 }
 
 func TestCodec(t *testing.T) {
