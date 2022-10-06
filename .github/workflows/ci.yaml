@@ -22,7 +22,7 @@ jobs:
           yamllint_strict: true
   
   go-mod:
-    name: Check go.mod
+    name: check go.mod
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
