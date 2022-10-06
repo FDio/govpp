@@ -5,30 +5,60 @@ on:
     branches:
       - master
   pull_request:
+  # Allows running this workflow manually
+  workflow_dispatch:
+
 jobs:
-  yamllint:
-    name: yamllint
+  yaml-lint:
+    name: lint yaml
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the Go module directory
+      - name: Checkout
         uses: actions/checkout@v3
-      - name: yaml-lint
+      - name: Lint YAML
         uses: karancode/yamllint-github-action@master
         with:
           yamllint_file_or_dir: '.github/ci/yamllint.yml'
           yamllint_strict: true
-  build:
+  
+  go-mod:
+    name: Check go.mod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Check go mod
+        run: |
+          go mod tidy
+          git diff --exit-code go.mod
+    
+  build-test:
     name: build and test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest]
     steps:
-      - uses: actions/setup-go@v3
+      - name: Setup Go
+        uses: actions/setup-go@v3
         with:
           go-version: 1.18
-      - uses: actions/checkout@v3
+      - name: Setup gotestsum
+        uses: autero1/action-gotestsum@v1.0.0
+        with:
+          gotestsum_version: 1.8.2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Build
-        run: go build -race  ./...
+        run: go build -v ./...
       - name: Test
-        run: go test -race ./...
+        run: gotestsum --format testname --jsonfile test.json -- -race ./...
+      - name: Annotate tests
+        if: always()
+        uses: guyarb/golang-test-annotations@v0.6.0
+        with:
+          test-results: test.json
