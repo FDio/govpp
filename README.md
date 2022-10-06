@@ -119,7 +119,7 @@ Here is a brief overview of the repository structure.
     - [socketclient](adapter/socketclient) - Go implementation of VPP API client for unix socket
     - [statsclient](adapter/statsclient) - Go implementation of VPP Stats client for shared memory
   - [api](api) - GoVPP client API
-  - [bainapi](binapi) - generated Go bindings for the latest VPP release
+  - [binapi](binapi) - generated Go bindings for the latest VPP release
   - [binapigen](binapigen) - library for generating code from VPP API
     - [vppapi](binapigen/vppapi) - VPP API parser
   - [cmd](cmd)
