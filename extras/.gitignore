@@ -3,3 +3,6 @@ libmemif/examples/gopacket/gopacket
 libmemif/examples/icmp-responder/icmp-responder
 libmemif/examples/jumbo-frames/jumbo-frames
 libmemif/examples/raw-data/raw-data
+gomemif/examples/bridge/bridge
+gomemif/examples/icmp_responder_cb/icmp_responder_cb
+gomemif/examples/icmp_responder_poll/icmp_responder_poll
