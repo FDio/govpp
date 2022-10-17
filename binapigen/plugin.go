@@ -14,38 +14,55 @@
 
 package binapigen
 
-import "fmt"
+import (
+	"fmt"
+	"plugin"
+	"strings"
+)
 
 type Plugin struct {
 	Name         string
-	GenerateFile func(*Generator, *File) *GenFile
+	GenerateFile func(*Generator)
 }
 
-var Plugins = map[string]*Plugin{}
-var plugins []*Plugin
+var registeredPlugins = map[string]*Plugin{}
 
-func RegisterPlugin(name string, genfn func(*Generator, *File) *GenFile) {
+func (g *Generator) RunPlugin(name string) error {
+	if plugin, ok := registeredPlugins[name]; ok {
+		plugin.GenerateFile(g)
+		return nil
+	}
+	// Name can also be the path to an external plugin.
+	plg, err := plugin.Open(name)
+	if err != nil {
+		return fmt.Errorf("plugin %s not found (%s)", name, err)
+	}
+	pluginGenerateFile, err := plg.Lookup("GenerateFile")
+	if err != nil {
+		return err
+	}
+	pluginGenerateFile.(func(*Generator))(g)
+
+	return nil
+}
+
+func RegisterPlugin(name string, genfn func(*Generator)) {
 	if name == "" {
 		panic("plugin name empty")
 	}
-	for _, p := range plugins {
-		if p.Name == name {
-			panic("duplicate plugin name: " + name)
-		}
+	if _, ok := registeredPlugins[name]; ok {
+		panic("plugin name reused")
 	}
-	plugin := &Plugin{
+	registeredPlugins[name] = &Plugin{
 		Name:         name,
 		GenerateFile: genfn,
 	}
-	plugins = append(plugins, plugin)
-	Plugins[name] = plugin
 }
 
-func RunPlugin(name string, gen *Generator, file *File) error {
-	p, ok := Plugins[name]
-	if !ok {
-		return fmt.Errorf("plugin not found: %q", name)
+func GetAvailablePluginNames() string {
+	s := make([]string, 0)
+	for k := range registeredPlugins {
+		s = append(s, k)
 	}
-	p.GenerateFile(gen, file)
-	return nil
+	return strings.Join(s, ",")
 }

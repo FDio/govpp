@@ -18,10 +18,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
-	"unicode"
 
+	"github.com/fatih/color"
 	"github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/binapigen"
@@ -31,40 +29,53 @@ import (
 
 func init() {
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "USAGE\n")
-		fmt.Fprintf(os.Stderr, "  Parse API_FILES and generate Go bindings\n")
-		fmt.Fprintf(os.Stderr, "  Provide API_FILES by file name, or with full path including extension.\n")
-		fmt.Fprintf(os.Stderr, "  %s [OPTION] API_FILES\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "Generating Go bindings for the VPP API\n")
+		fmt.Fprintf(os.Stderr, "--------------------------------------\n\n")
+		fmt.Fprintf(os.Stderr, "This generates VPP api Go bindings based on .api.json files or a VPP repository\n\n")
+		fmt.Fprintf(os.Stderr, "Usage: %s [OPTION]\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "OPTIONS\n")
 		flag.PrintDefaults()
 		fmt.Fprintf(os.Stderr, "\nEXAMPLES:\n")
-		fmt.Fprintf(os.Stderr, "  %s \\\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "    --input-dir=$VPP/build-root/install-vpp-native/vpp/share/vpp/api/ \\\n")
-		fmt.Fprintf(os.Stderr, "    --output-dir=~/output \\\n")
-		fmt.Fprintf(os.Stderr, "    interface ip\n")
-		fmt.Fprintf(os.Stderr, "  Assuming --input-dir contains interface.api.json & ip.api.json\n")
+		fmt.Fprintf(os.Stderr, "  Generate bindings from VPP API files (*.api.json):\n")
+		fmt.Fprintf(os.Stderr, "   %s --api /usr/share/vpp/api --output ./myapp/binding --filter interface,ip\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  Generate bindings from the VPP repository :\n")
+		fmt.Fprintf(os.Stderr, "   %s --vpp ~/vpp --output ./myapp/binding\n", os.Args[0])
 	}
 }
 
 func printErrorAndExit(msg string) {
-	fmt.Fprintf(os.Stderr, "Error: %s\n\n", msg)
+	color.New(color.FgRed).Fprintf(os.Stderr, "Error:\n%s\n\n", msg)
 	flag.Usage()
 	os.Exit(1)
 }
 
 func main() {
-	var (
-		theApiDir        = flag.String("input-dir", vppapi.DefaultDir, "Input directory containing API files. (e.g. )")
-		theOutputDir     = flag.String("output-dir", "binapi", "Output directory where code will be generated.")
-		importPrefix     = flag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
-		generatorPlugins = flag.String("gen", "rpc", "List of generator plugins to run for files.")
-		theInputFile     = flag.String("input-file", "", "DEPRECATED: Use program arguments to define files to generate.")
+	apiSrcDir := flag.String("input-dir", vppapi.DefaultDir, "[DEPRECATED, use --api] Input directory containing API files.")
+	flag.StringVar(apiSrcDir, "api", "", "Generate based on .api files in this directory.")
+	vppSrcDir := flag.String("vpp", "", "Generate based on a vpp cloned in this directory.")
 
-		printVersion     = flag.Bool("version", false, "Prints version and exits.")
-		debugLog         = flag.Bool("debug", false, "Enable verbose logging.")
-		noVersionInfo    = flag.Bool("no-version-info", false, "Disable version info in generated files.")
-		noSourcePathInfo = flag.Bool("no-source-path-info", false, "Disable source path info in generated files.")
-	)
+	// Filtering API files
+	filterList := flag.String("input-file", "", "[DEPRECATED: Use --filter] defines apis to generate.")
+	flag.StringVar(filterList, "filter", "", "Comma separated list of api to generate (e.g. ipip,ipsec, ...)")
+
+	// Where to output the files
+	outputDir := flag.String("output-dir", ".", "[DEPRECATED, use --output] Output directory where code will be generated.")
+	flag.StringVar(outputDir, "output", "", "Output directory for generated files.")
+	flag.StringVar(outputDir, "o", "", "Output directory for generated files.")
+
+	// Package name to use
+	importPrefix := flag.String("import-prefix", "", "[DEPRECATED, use --package] Prefix imports in the generated go code.")
+	flag.StringVar(importPrefix, "package", "", "Package path to generate to e.g. myapp.me.com/myapp/bindings. If omitted, we'll try to guess it from go modules and the output directory")
+
+	// Plugins
+	generatorPlugins := flag.String("gen", "", "[DEPRECATED, use --plugins] List of generator plugins to run for files.")
+	flag.StringVar(generatorPlugins, "plugins", "", fmt.Sprintf("List of generator plugins to run for files. (%s or a path to an external plugin)", binapigen.GetAvailablePluginNames()))
+
+	printVersion := flag.Bool("version", false, "Prints version and exits.")
+	debugLog := flag.Bool("debug", false, "Enable verbose logging.")
+	noVersionInfo := flag.Bool("no-version-info", false, "Disable version info in generated files.")
+	noSourcePathInfo := flag.Bool("no-source-path-info", false, "Disable source path info in generated files.")
+
 	flag.Parse()
 
 	if *printVersion {
@@ -76,44 +87,31 @@ func main() {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
-	var filesToGenerate []string
-	if *theInputFile != "" {
-		if flag.NArg() > 0 {
-			printErrorAndExit("input-file cannot be combined with files to generate in arguments")
-		}
-		filesToGenerate = append(filesToGenerate, *theInputFile)
-	} else {
-		filesToGenerate = append(filesToGenerate, flag.Args()...)
+	if *vppSrcDir == "" && *apiSrcDir == "" {
+		printErrorAndExit("Please provide either --api or --vpp")
 	}
 
-	opts := binapigen.Options{
-		ImportPrefix:     *importPrefix,
-		OutputDir:        *theOutputDir,
-		NoVersionInfo:    *noVersionInfo,
-		NoSourcePathInfo: *noSourcePathInfo,
+	fileFilter := binapigen.SplitAndStrip(*filterList)
+	if flag.NArg() > 0 {
+		logrus.Warnf("Deprecated, use --filter instead to pass the API names")
+		fileFilter = append(fileFilter, flag.Args()...)
 	}
-	if opts.OutputDir == "binapi" {
-		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {
-			opts.OutputDir = "."
-		}
-	}
-	apiDir := *theApiDir
-	genPlugins := strings.FieldsFunc(*generatorPlugins, func(c rune) bool {
-		return !unicode.IsLetter(c) && !unicode.IsNumber(c)
-	})
 
-	binapigen.Run(apiDir, filesToGenerate, opts, func(gen *binapigen.Generator) error {
-		for _, file := range gen.Files {
-			if !file.Generate {
-				continue
-			}
-			binapigen.GenerateAPI(gen, file)
-			for _, p := range genPlugins {
-				if err := binapigen.RunPlugin(p, gen, file); err != nil {
-					return err
-				}
-			}
-		}
-		return nil
+	generator, err := binapigen.New(binapigen.Options{
+		ImportPrefix:      binapigen.GetTargetPackagePath(*importPrefix, *outputDir),
+		OutputDir:         binapigen.ExpandPaths(*outputDir),
+		NoVersionInfo:     *noVersionInfo,
+		NoSourcePathInfo:  *noSourcePathInfo,
+		ActivePluginNames: binapigen.SplitAndStrip(*generatorPlugins),
+		ApiDir:            binapigen.GetApiFileDirectory(*apiSrcDir, *vppSrcDir),
+		FileFilter:        fileFilter,
 	})
+	if err != nil {
+		logrus.Fatalf("error creating generator %s", err)
+	}
+
+	err = generator.Generate()
+	if err != nil {
+		logrus.Fatalf("error generating %s", err)
+	}
 }
