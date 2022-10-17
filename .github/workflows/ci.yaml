@@ -1,12 +1,19 @@
 ---
 name: ci
+
 on:
   push:
+    tags:
+      - v*
     branches:
       - master
+      - ci
   pull_request:
   # Allows running this workflow manually
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   yaml-lint:
@@ -22,13 +29,16 @@ jobs:
           yamllint_strict: true
   
   go-mod:
+    strategy:
+      matrix:
+        go: [1.18, tip]
     name: check go.mod
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: ${{ matrix.go }}
       - name: Checkout
         uses: actions/checkout@v3
       - name: Check go mod
@@ -37,16 +47,17 @@ jobs:
           git diff --exit-code go.mod
     
   build-test:
-    name: build and test
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        go: [1.18]
         os: [ubuntu-latest]
+    name: build and test
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: ${{ matrix.go }}
       - name: Setup gotestsum
         uses: autero1/action-gotestsum@v1.0.0
         with:
@@ -62,3 +73,21 @@ jobs:
         uses: guyarb/golang-test-annotations@v0.6.0
         with:
           test-results: test.json
+  
+  golangci:
+    strategy:
+      matrix:
+        go: [1.18]
+    name: lint go
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3  # docs: https://github.com/golangci/golangci-lint-action
+        with:
+          version: v1.29
