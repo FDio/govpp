@@ -138,7 +138,7 @@ func (m *PnatBindingAdd) Reset()               { *m = PnatBindingAdd{} }
 func (*PnatBindingAdd) GetMessageName() string { return "pnat_binding_add" }
 func (*PnatBindingAdd) GetCrcString() string   { return "946ee0b7" }
 func (*PnatBindingAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingAdd) Size() (size int) {
@@ -212,7 +212,7 @@ func (m *PnatBindingAddReply) Reset()               { *m = PnatBindingAddReply{}
 func (*PnatBindingAddReply) GetMessageName() string { return "pnat_binding_add_reply" }
 func (*PnatBindingAddReply) GetCrcString() string   { return "4cd980a7" }
 func (*PnatBindingAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingAddReply) Size() (size int) {
@@ -250,7 +250,7 @@ func (m *PnatBindingAddV2) Reset()               { *m = PnatBindingAddV2{} }
 func (*PnatBindingAddV2) GetMessageName() string { return "pnat_binding_add_v2" }
 func (*PnatBindingAddV2) GetCrcString() string   { return "946ee0b7" }
 func (*PnatBindingAddV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingAddV2) Size() (size int) {
@@ -324,7 +324,7 @@ func (m *PnatBindingAddV2Reply) Reset()               { *m = PnatBindingAddV2Rep
 func (*PnatBindingAddV2Reply) GetMessageName() string { return "pnat_binding_add_v2_reply" }
 func (*PnatBindingAddV2Reply) GetCrcString() string   { return "4cd980a7" }
 func (*PnatBindingAddV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingAddV2Reply) Size() (size int) {
@@ -363,7 +363,7 @@ func (m *PnatBindingAttach) Reset()               { *m = PnatBindingAttach{} }
 func (*PnatBindingAttach) GetMessageName() string { return "pnat_binding_attach" }
 func (*PnatBindingAttach) GetCrcString() string   { return "6e074232" }
 func (*PnatBindingAttach) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingAttach) Size() (size int) {
@@ -403,7 +403,7 @@ func (m *PnatBindingAttachReply) Reset()               { *m = PnatBindingAttachR
 func (*PnatBindingAttachReply) GetMessageName() string { return "pnat_binding_attach_reply" }
 func (*PnatBindingAttachReply) GetCrcString() string   { return "e8d4e804" }
 func (*PnatBindingAttachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingAttachReply) Size() (size int) {
@@ -437,7 +437,7 @@ func (m *PnatBindingDel) Reset()               { *m = PnatBindingDel{} }
 func (*PnatBindingDel) GetMessageName() string { return "pnat_binding_del" }
 func (*PnatBindingDel) GetCrcString() string   { return "9259df7b" }
 func (*PnatBindingDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingDel) Size() (size int) {
@@ -471,7 +471,7 @@ func (m *PnatBindingDelReply) Reset()               { *m = PnatBindingDelReply{}
 func (*PnatBindingDelReply) GetMessageName() string { return "pnat_binding_del_reply" }
 func (*PnatBindingDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*PnatBindingDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingDelReply) Size() (size int) {
@@ -507,7 +507,7 @@ func (m *PnatBindingDetach) Reset()               { *m = PnatBindingDetach{} }
 func (*PnatBindingDetach) GetMessageName() string { return "pnat_binding_detach" }
 func (*PnatBindingDetach) GetCrcString() string   { return "6e074232" }
 func (*PnatBindingDetach) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingDetach) Size() (size int) {
@@ -547,7 +547,7 @@ func (m *PnatBindingDetachReply) Reset()               { *m = PnatBindingDetachR
 func (*PnatBindingDetachReply) GetMessageName() string { return "pnat_binding_detach_reply" }
 func (*PnatBindingDetachReply) GetCrcString() string   { return "e8d4e804" }
 func (*PnatBindingDetachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingDetachReply) Size() (size int) {
@@ -582,7 +582,7 @@ func (m *PnatBindingsDetails) Reset()               { *m = PnatBindingsDetails{}
 func (*PnatBindingsDetails) GetMessageName() string { return "pnat_bindings_details" }
 func (*PnatBindingsDetails) GetCrcString() string   { return "08fb2815" }
 func (*PnatBindingsDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingsDetails) Size() (size int) {
@@ -655,7 +655,7 @@ func (m *PnatBindingsGet) Reset()               { *m = PnatBindingsGet{} }
 func (*PnatBindingsGet) GetMessageName() string { return "pnat_bindings_get" }
 func (*PnatBindingsGet) GetCrcString() string   { return "f75ba505" }
 func (*PnatBindingsGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatBindingsGet) Size() (size int) {
@@ -690,7 +690,7 @@ func (m *PnatBindingsGetReply) Reset()               { *m = PnatBindingsGetReply
 func (*PnatBindingsGetReply) GetMessageName() string { return "pnat_bindings_get_reply" }
 func (*PnatBindingsGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*PnatBindingsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatBindingsGetReply) Size() (size int) {
@@ -729,7 +729,7 @@ func (m *PnatInterfacesDetails) Reset()               { *m = PnatInterfacesDetai
 func (*PnatInterfacesDetails) GetMessageName() string { return "pnat_interfaces_details" }
 func (*PnatInterfacesDetails) GetCrcString() string   { return "4cb09493" }
 func (*PnatInterfacesDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatInterfacesDetails) Size() (size int) {
@@ -784,7 +784,7 @@ func (m *PnatInterfacesGet) Reset()               { *m = PnatInterfacesGet{} }
 func (*PnatInterfacesGet) GetMessageName() string { return "pnat_interfaces_get" }
 func (*PnatInterfacesGet) GetCrcString() string   { return "f75ba505" }
 func (*PnatInterfacesGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PnatInterfacesGet) Size() (size int) {
@@ -819,7 +819,7 @@ func (m *PnatInterfacesGetReply) Reset()               { *m = PnatInterfacesGetR
 func (*PnatInterfacesGetReply) GetMessageName() string { return "pnat_interfaces_get_reply" }
 func (*PnatInterfacesGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*PnatInterfacesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PnatInterfacesGetReply) Size() (size int) {

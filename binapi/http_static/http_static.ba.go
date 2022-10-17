@@ -41,7 +41,7 @@ func (m *HTTPStaticEnable) Reset()               { *m = HTTPStaticEnable{} }
 func (*HTTPStaticEnable) GetMessageName() string { return "http_static_enable" }
 func (*HTTPStaticEnable) GetCrcString() string   { return "075f8292" }
 func (*HTTPStaticEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *HTTPStaticEnable) Size() (size int) {
@@ -89,7 +89,7 @@ func (m *HTTPStaticEnableReply) Reset()               { *m = HTTPStaticEnableRep
 func (*HTTPStaticEnableReply) GetMessageName() string { return "http_static_enable_reply" }
 func (*HTTPStaticEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*HTTPStaticEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *HTTPStaticEnableReply) Size() (size int) {

@@ -65,7 +65,7 @@ func (m *SwVmxnet3InterfaceDetails) Reset()               { *m = SwVmxnet3Interf
 func (*SwVmxnet3InterfaceDetails) GetMessageName() string { return "sw_vmxnet3_interface_details" }
 func (*SwVmxnet3InterfaceDetails) GetCrcString() string   { return "6a1a5498" }
 func (*SwVmxnet3InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwVmxnet3InterfaceDetails) Size() (size int) {
@@ -185,7 +185,7 @@ func (m *SwVmxnet3InterfaceDump) Reset()               { *m = SwVmxnet3Interface
 func (*SwVmxnet3InterfaceDump) GetMessageName() string { return "sw_vmxnet3_interface_dump" }
 func (*SwVmxnet3InterfaceDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwVmxnet3InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwVmxnet3InterfaceDump) Size() (size int) {
@@ -225,7 +225,7 @@ func (m *Vmxnet3Create) Reset()               { *m = Vmxnet3Create{} }
 func (*Vmxnet3Create) GetMessageName() string { return "vmxnet3_create" }
 func (*Vmxnet3Create) GetCrcString() string   { return "71a07314" }
 func (*Vmxnet3Create) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Vmxnet3Create) Size() (size int) {
@@ -280,7 +280,7 @@ func (m *Vmxnet3CreateReply) Reset()               { *m = Vmxnet3CreateReply{} }
 func (*Vmxnet3CreateReply) GetMessageName() string { return "vmxnet3_create_reply" }
 func (*Vmxnet3CreateReply) GetCrcString() string   { return "5383d31f" }
 func (*Vmxnet3CreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Vmxnet3CreateReply) Size() (size int) {
@@ -316,7 +316,7 @@ func (m *Vmxnet3Delete) Reset()               { *m = Vmxnet3Delete{} }
 func (*Vmxnet3Delete) GetMessageName() string { return "vmxnet3_delete" }
 func (*Vmxnet3Delete) GetCrcString() string   { return "f9e6675e" }
 func (*Vmxnet3Delete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Vmxnet3Delete) Size() (size int) {
@@ -349,7 +349,7 @@ func (m *Vmxnet3DeleteReply) Reset()               { *m = Vmxnet3DeleteReply{} }
 func (*Vmxnet3DeleteReply) GetMessageName() string { return "vmxnet3_delete_reply" }
 func (*Vmxnet3DeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*Vmxnet3DeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Vmxnet3DeleteReply) Size() (size int) {
@@ -391,7 +391,7 @@ func (m *Vmxnet3Details) Reset()               { *m = Vmxnet3Details{} }
 func (*Vmxnet3Details) GetMessageName() string { return "vmxnet3_details" }
 func (*Vmxnet3Details) GetCrcString() string   { return "6a1a5498" }
 func (*Vmxnet3Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Vmxnet3Details) Size() (size int) {
@@ -510,7 +510,7 @@ func (m *Vmxnet3Dump) Reset()               { *m = Vmxnet3Dump{} }
 func (*Vmxnet3Dump) GetMessageName() string { return "vmxnet3_dump" }
 func (*Vmxnet3Dump) GetCrcString() string   { return "51077d14" }
 func (*Vmxnet3Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Vmxnet3Dump) Size() (size int) {

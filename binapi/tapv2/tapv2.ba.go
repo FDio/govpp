@@ -118,7 +118,7 @@ func (m *SwInterfaceTapV2Details) Reset()               { *m = SwInterfaceTapV2D
 func (*SwInterfaceTapV2Details) GetMessageName() string { return "sw_interface_tap_v2_details" }
 func (*SwInterfaceTapV2Details) GetCrcString() string   { return "1e2b2a47" }
 func (*SwInterfaceTapV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceTapV2Details) Size() (size int) {
@@ -193,7 +193,7 @@ func (m *SwInterfaceTapV2Dump) Reset()               { *m = SwInterfaceTapV2Dump
 func (*SwInterfaceTapV2Dump) GetMessageName() string { return "sw_interface_tap_v2_dump" }
 func (*SwInterfaceTapV2Dump) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceTapV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceTapV2Dump) Size() (size int) {
@@ -251,7 +251,7 @@ func (m *TapCreateV2) Reset()               { *m = TapCreateV2{} }
 func (*TapCreateV2) GetMessageName() string { return "tap_create_v2" }
 func (*TapCreateV2) GetCrcString() string   { return "2d0d6570" }
 func (*TapCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TapCreateV2) Size() (size int) {
@@ -366,7 +366,7 @@ func (m *TapCreateV2Reply) Reset()               { *m = TapCreateV2Reply{} }
 func (*TapCreateV2Reply) GetMessageName() string { return "tap_create_v2_reply" }
 func (*TapCreateV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*TapCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TapCreateV2Reply) Size() (size int) {
@@ -428,7 +428,7 @@ func (m *TapCreateV3) Reset()               { *m = TapCreateV3{} }
 func (*TapCreateV3) GetMessageName() string { return "tap_create_v3" }
 func (*TapCreateV3) GetCrcString() string   { return "3f3fd1df" }
 func (*TapCreateV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TapCreateV3) Size() (size int) {
@@ -546,7 +546,7 @@ func (m *TapCreateV3Reply) Reset()               { *m = TapCreateV3Reply{} }
 func (*TapCreateV3Reply) GetMessageName() string { return "tap_create_v3_reply" }
 func (*TapCreateV3Reply) GetCrcString() string   { return "5383d31f" }
 func (*TapCreateV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TapCreateV3Reply) Size() (size int) {
@@ -582,7 +582,7 @@ func (m *TapDeleteV2) Reset()               { *m = TapDeleteV2{} }
 func (*TapDeleteV2) GetMessageName() string { return "tap_delete_v2" }
 func (*TapDeleteV2) GetCrcString() string   { return "f9e6675e" }
 func (*TapDeleteV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TapDeleteV2) Size() (size int) {
@@ -615,7 +615,7 @@ func (m *TapDeleteV2Reply) Reset()               { *m = TapDeleteV2Reply{} }
 func (*TapDeleteV2Reply) GetMessageName() string { return "tap_delete_v2_reply" }
 func (*TapDeleteV2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*TapDeleteV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TapDeleteV2Reply) Size() (size int) {

@@ -49,7 +49,7 @@ func (m *L3xcDel) Reset()               { *m = L3xcDel{} }
 func (*L3xcDel) GetMessageName() string { return "l3xc_del" }
 func (*L3xcDel) GetCrcString() string   { return "e7dbef91" }
 func (*L3xcDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L3xcDel) Size() (size int) {
@@ -85,7 +85,7 @@ func (m *L3xcDelReply) Reset()               { *m = L3xcDelReply{} }
 func (*L3xcDelReply) GetMessageName() string { return "l3xc_del_reply" }
 func (*L3xcDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*L3xcDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L3xcDelReply) Size() (size int) {
@@ -118,7 +118,7 @@ func (m *L3xcDetails) Reset()               { *m = L3xcDetails{} }
 func (*L3xcDetails) GetMessageName() string { return "l3xc_details" }
 func (*L3xcDetails) GetCrcString() string   { return "bc5bf852" }
 func (*L3xcDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L3xcDetails) Size() (size int) {
@@ -230,7 +230,7 @@ func (m *L3xcDump) Reset()               { *m = L3xcDump{} }
 func (*L3xcDump) GetMessageName() string { return "l3xc_dump" }
 func (*L3xcDump) GetCrcString() string   { return "f9e6675e" }
 func (*L3xcDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L3xcDump) Size() (size int) {
@@ -261,7 +261,7 @@ func (m *L3xcPluginGetVersion) Reset()               { *m = L3xcPluginGetVersion
 func (*L3xcPluginGetVersion) GetMessageName() string { return "l3xc_plugin_get_version" }
 func (*L3xcPluginGetVersion) GetCrcString() string   { return "51077d14" }
 func (*L3xcPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L3xcPluginGetVersion) Size() (size int) {
@@ -291,7 +291,7 @@ func (m *L3xcPluginGetVersionReply) Reset()               { *m = L3xcPluginGetVe
 func (*L3xcPluginGetVersionReply) GetMessageName() string { return "l3xc_plugin_get_version_reply" }
 func (*L3xcPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*L3xcPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L3xcPluginGetVersionReply) Size() (size int) {
@@ -327,7 +327,7 @@ func (m *L3xcUpdate) Reset()               { *m = L3xcUpdate{} }
 func (*L3xcUpdate) GetMessageName() string { return "l3xc_update" }
 func (*L3xcUpdate) GetCrcString() string   { return "e96aabdf" }
 func (*L3xcUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L3xcUpdate) Size() (size int) {
@@ -440,7 +440,7 @@ func (m *L3xcUpdateReply) Reset()               { *m = L3xcUpdateReply{} }
 func (*L3xcUpdateReply) GetMessageName() string { return "l3xc_update_reply" }
 func (*L3xcUpdateReply) GetCrcString() string   { return "1992deab" }
 func (*L3xcUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L3xcUpdateReply) Size() (size int) {

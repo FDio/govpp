@@ -50,7 +50,7 @@ func (m *CreateVhostUserIf) Reset()               { *m = CreateVhostUserIf{} }
 func (*CreateVhostUserIf) GetMessageName() string { return "create_vhost_user_if" }
 func (*CreateVhostUserIf) GetCrcString() string   { return "c785c6fc" }
 func (*CreateVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateVhostUserIf) Size() (size int) {
@@ -115,7 +115,7 @@ func (m *CreateVhostUserIfReply) Reset()               { *m = CreateVhostUserIfR
 func (*CreateVhostUserIfReply) GetMessageName() string { return "create_vhost_user_if_reply" }
 func (*CreateVhostUserIfReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateVhostUserIfReply) Size() (size int) {
@@ -162,7 +162,7 @@ func (m *CreateVhostUserIfV2) Reset()               { *m = CreateVhostUserIfV2{}
 func (*CreateVhostUserIfV2) GetMessageName() string { return "create_vhost_user_if_v2" }
 func (*CreateVhostUserIfV2) GetCrcString() string   { return "dba1cc1d" }
 func (*CreateVhostUserIfV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateVhostUserIfV2) Size() (size int) {
@@ -229,7 +229,7 @@ func (m *CreateVhostUserIfV2Reply) Reset()               { *m = CreateVhostUserI
 func (*CreateVhostUserIfV2Reply) GetMessageName() string { return "create_vhost_user_if_v2_reply" }
 func (*CreateVhostUserIfV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*CreateVhostUserIfV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateVhostUserIfV2Reply) Size() (size int) {
@@ -265,7 +265,7 @@ func (m *DeleteVhostUserIf) Reset()               { *m = DeleteVhostUserIf{} }
 func (*DeleteVhostUserIf) GetMessageName() string { return "delete_vhost_user_if" }
 func (*DeleteVhostUserIf) GetCrcString() string   { return "f9e6675e" }
 func (*DeleteVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DeleteVhostUserIf) Size() (size int) {
@@ -298,7 +298,7 @@ func (m *DeleteVhostUserIfReply) Reset()               { *m = DeleteVhostUserIfR
 func (*DeleteVhostUserIfReply) GetMessageName() string { return "delete_vhost_user_if_reply" }
 func (*DeleteVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
 func (*DeleteVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DeleteVhostUserIfReply) Size() (size int) {
@@ -338,7 +338,7 @@ func (m *ModifyVhostUserIf) Reset()               { *m = ModifyVhostUserIf{} }
 func (*ModifyVhostUserIf) GetMessageName() string { return "modify_vhost_user_if" }
 func (*ModifyVhostUserIf) GetCrcString() string   { return "0e71d40b" }
 func (*ModifyVhostUserIf) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ModifyVhostUserIf) Size() (size int) {
@@ -390,7 +390,7 @@ func (m *ModifyVhostUserIfReply) Reset()               { *m = ModifyVhostUserIfR
 func (*ModifyVhostUserIfReply) GetMessageName() string { return "modify_vhost_user_if_reply" }
 func (*ModifyVhostUserIfReply) GetCrcString() string   { return "e8d4e804" }
 func (*ModifyVhostUserIfReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ModifyVhostUserIfReply) Size() (size int) {
@@ -430,7 +430,7 @@ func (m *ModifyVhostUserIfV2) Reset()               { *m = ModifyVhostUserIfV2{}
 func (*ModifyVhostUserIfV2) GetMessageName() string { return "modify_vhost_user_if_v2" }
 func (*ModifyVhostUserIfV2) GetCrcString() string   { return "b2483771" }
 func (*ModifyVhostUserIfV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ModifyVhostUserIfV2) Size() (size int) {
@@ -484,7 +484,7 @@ func (m *ModifyVhostUserIfV2Reply) Reset()               { *m = ModifyVhostUserI
 func (*ModifyVhostUserIfV2Reply) GetMessageName() string { return "modify_vhost_user_if_v2_reply" }
 func (*ModifyVhostUserIfV2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*ModifyVhostUserIfV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ModifyVhostUserIfV2Reply) Size() (size int) {
@@ -525,7 +525,7 @@ func (m *SwInterfaceVhostUserDetails) Reset()               { *m = SwInterfaceVh
 func (*SwInterfaceVhostUserDetails) GetMessageName() string { return "sw_interface_vhost_user_details" }
 func (*SwInterfaceVhostUserDetails) GetCrcString() string   { return "0cee1e53" }
 func (*SwInterfaceVhostUserDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceVhostUserDetails) Size() (size int) {
@@ -582,7 +582,7 @@ func (m *SwInterfaceVhostUserDump) Reset()               { *m = SwInterfaceVhost
 func (*SwInterfaceVhostUserDump) GetMessageName() string { return "sw_interface_vhost_user_dump" }
 func (*SwInterfaceVhostUserDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceVhostUserDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceVhostUserDump) Size() (size int) {

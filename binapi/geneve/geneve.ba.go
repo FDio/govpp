@@ -46,7 +46,7 @@ func (m *GeneveAddDelTunnel) Reset()               { *m = GeneveAddDelTunnel{} }
 func (*GeneveAddDelTunnel) GetMessageName() string { return "geneve_add_del_tunnel" }
 func (*GeneveAddDelTunnel) GetCrcString() string   { return "99445831" }
 func (*GeneveAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GeneveAddDelTunnel) Size() (size int) {
@@ -110,7 +110,7 @@ func (m *GeneveAddDelTunnel2) Reset()               { *m = GeneveAddDelTunnel2{}
 func (*GeneveAddDelTunnel2) GetMessageName() string { return "geneve_add_del_tunnel2" }
 func (*GeneveAddDelTunnel2) GetCrcString() string   { return "8c2a9999" }
 func (*GeneveAddDelTunnel2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GeneveAddDelTunnel2) Size() (size int) {
@@ -171,7 +171,7 @@ func (m *GeneveAddDelTunnel2Reply) Reset()               { *m = GeneveAddDelTunn
 func (*GeneveAddDelTunnel2Reply) GetMessageName() string { return "geneve_add_del_tunnel2_reply" }
 func (*GeneveAddDelTunnel2Reply) GetCrcString() string   { return "5383d31f" }
 func (*GeneveAddDelTunnel2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GeneveAddDelTunnel2Reply) Size() (size int) {
@@ -208,7 +208,7 @@ func (m *GeneveAddDelTunnelReply) Reset()               { *m = GeneveAddDelTunne
 func (*GeneveAddDelTunnelReply) GetMessageName() string { return "geneve_add_del_tunnel_reply" }
 func (*GeneveAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*GeneveAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GeneveAddDelTunnelReply) Size() (size int) {
@@ -250,7 +250,7 @@ func (m *GeneveTunnelDetails) Reset()               { *m = GeneveTunnelDetails{}
 func (*GeneveTunnelDetails) GetMessageName() string { return "geneve_tunnel_details" }
 func (*GeneveTunnelDetails) GetCrcString() string   { return "6b16eb24" }
 func (*GeneveTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GeneveTunnelDetails) Size() (size int) {
@@ -307,7 +307,7 @@ func (m *GeneveTunnelDump) Reset()               { *m = GeneveTunnelDump{} }
 func (*GeneveTunnelDump) GetMessageName() string { return "geneve_tunnel_dump" }
 func (*GeneveTunnelDump) GetCrcString() string   { return "f9e6675e" }
 func (*GeneveTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GeneveTunnelDump) Size() (size int) {
@@ -342,7 +342,7 @@ func (m *SwInterfaceSetGeneveBypass) Reset()               { *m = SwInterfaceSet
 func (*SwInterfaceSetGeneveBypass) GetMessageName() string { return "sw_interface_set_geneve_bypass" }
 func (*SwInterfaceSetGeneveBypass) GetCrcString() string   { return "65247409" }
 func (*SwInterfaceSetGeneveBypass) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetGeneveBypass) Size() (size int) {
@@ -383,7 +383,7 @@ func (*SwInterfaceSetGeneveBypassReply) GetMessageName() string {
 }
 func (*SwInterfaceSetGeneveBypassReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetGeneveBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetGeneveBypassReply) Size() (size int) {

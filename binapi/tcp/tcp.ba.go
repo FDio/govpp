@@ -39,7 +39,7 @@ func (m *TCPConfigureSrcAddresses) Reset()               { *m = TCPConfigureSrcA
 func (*TCPConfigureSrcAddresses) GetMessageName() string { return "tcp_configure_src_addresses" }
 func (*TCPConfigureSrcAddresses) GetCrcString() string   { return "67eede0d" }
 func (*TCPConfigureSrcAddresses) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TCPConfigureSrcAddresses) Size() (size int) {
@@ -86,7 +86,7 @@ func (*TCPConfigureSrcAddressesReply) GetMessageName() string {
 }
 func (*TCPConfigureSrcAddressesReply) GetCrcString() string { return "e8d4e804" }
 func (*TCPConfigureSrcAddressesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TCPConfigureSrcAddressesReply) Size() (size int) {

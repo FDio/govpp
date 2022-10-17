@@ -41,7 +41,7 @@ func (m *NsimConfigure) Reset()               { *m = NsimConfigure{} }
 func (*NsimConfigure) GetMessageName() string { return "nsim_configure" }
 func (*NsimConfigure) GetCrcString() string   { return "16ed400f" }
 func (*NsimConfigure) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NsimConfigure) Size() (size int) {
@@ -87,7 +87,7 @@ func (m *NsimConfigure2) Reset()               { *m = NsimConfigure2{} }
 func (*NsimConfigure2) GetMessageName() string { return "nsim_configure2" }
 func (*NsimConfigure2) GetCrcString() string   { return "64de8ed3" }
 func (*NsimConfigure2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NsimConfigure2) Size() (size int) {
@@ -132,7 +132,7 @@ func (m *NsimConfigure2Reply) Reset()               { *m = NsimConfigure2Reply{}
 func (*NsimConfigure2Reply) GetMessageName() string { return "nsim_configure2_reply" }
 func (*NsimConfigure2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*NsimConfigure2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NsimConfigure2Reply) Size() (size int) {
@@ -166,7 +166,7 @@ func (m *NsimConfigureReply) Reset()               { *m = NsimConfigureReply{} }
 func (*NsimConfigureReply) GetMessageName() string { return "nsim_configure_reply" }
 func (*NsimConfigureReply) GetCrcString() string   { return "e8d4e804" }
 func (*NsimConfigureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NsimConfigureReply) Size() (size int) {
@@ -203,7 +203,7 @@ func (*NsimCrossConnectEnableDisable) GetMessageName() string {
 }
 func (*NsimCrossConnectEnableDisable) GetCrcString() string { return "9c3ead86" }
 func (*NsimCrossConnectEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NsimCrossConnectEnableDisable) Size() (size int) {
@@ -244,7 +244,7 @@ func (*NsimCrossConnectEnableDisableReply) GetMessageName() string {
 }
 func (*NsimCrossConnectEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*NsimCrossConnectEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NsimCrossConnectEnableDisableReply) Size() (size int) {
@@ -280,7 +280,7 @@ func (*NsimOutputFeatureEnableDisable) GetMessageName() string {
 }
 func (*NsimOutputFeatureEnableDisable) GetCrcString() string { return "3865946c" }
 func (*NsimOutputFeatureEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NsimOutputFeatureEnableDisable) Size() (size int) {
@@ -318,7 +318,7 @@ func (*NsimOutputFeatureEnableDisableReply) GetMessageName() string {
 }
 func (*NsimOutputFeatureEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*NsimOutputFeatureEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NsimOutputFeatureEnableDisableReply) Size() (size int) {

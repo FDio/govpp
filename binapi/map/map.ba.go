@@ -41,7 +41,7 @@ func (m *MapAddDelRule) Reset()               { *m = MapAddDelRule{} }
 func (*MapAddDelRule) GetMessageName() string { return "map_add_del_rule" }
 func (*MapAddDelRule) GetCrcString() string   { return "c65b32f7" }
 func (*MapAddDelRule) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapAddDelRule) Size() (size int) {
@@ -83,7 +83,7 @@ func (m *MapAddDelRuleReply) Reset()               { *m = MapAddDelRuleReply{} }
 func (*MapAddDelRuleReply) GetMessageName() string { return "map_add_del_rule_reply" }
 func (*MapAddDelRuleReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapAddDelRuleReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapAddDelRuleReply) Size() (size int) {
@@ -123,7 +123,7 @@ func (m *MapAddDomain) Reset()               { *m = MapAddDomain{} }
 func (*MapAddDomain) GetMessageName() string { return "map_add_domain" }
 func (*MapAddDomain) GetCrcString() string   { return "249f195c" }
 func (*MapAddDomain) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapAddDomain) Size() (size int) {
@@ -187,7 +187,7 @@ func (m *MapAddDomainReply) Reset()               { *m = MapAddDomainReply{} }
 func (*MapAddDomainReply) GetMessageName() string { return "map_add_domain_reply" }
 func (*MapAddDomainReply) GetCrcString() string   { return "3e6d4e2c" }
 func (*MapAddDomainReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapAddDomainReply) Size() (size int) {
@@ -223,7 +223,7 @@ func (m *MapDelDomain) Reset()               { *m = MapDelDomain{} }
 func (*MapDelDomain) GetMessageName() string { return "map_del_domain" }
 func (*MapDelDomain) GetCrcString() string   { return "8ac76db6" }
 func (*MapDelDomain) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapDelDomain) Size() (size int) {
@@ -256,7 +256,7 @@ func (m *MapDelDomainReply) Reset()               { *m = MapDelDomainReply{} }
 func (*MapDelDomainReply) GetMessageName() string { return "map_del_domain_reply" }
 func (*MapDelDomainReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapDelDomainReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapDelDomainReply) Size() (size int) {
@@ -298,7 +298,7 @@ func (m *MapDomainDetails) Reset()               { *m = MapDomainDetails{} }
 func (*MapDomainDetails) GetMessageName() string { return "map_domain_details" }
 func (*MapDomainDetails) GetCrcString() string   { return "796edb50" }
 func (*MapDomainDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapDomainDetails) Size() (size int) {
@@ -366,7 +366,7 @@ func (m *MapDomainDump) Reset()               { *m = MapDomainDump{} }
 func (*MapDomainDump) GetMessageName() string { return "map_domain_dump" }
 func (*MapDomainDump) GetCrcString() string   { return "51077d14" }
 func (*MapDomainDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapDomainDump) Size() (size int) {
@@ -395,7 +395,7 @@ func (m *MapDomainsGet) Reset()               { *m = MapDomainsGet{} }
 func (*MapDomainsGet) GetMessageName() string { return "map_domains_get" }
 func (*MapDomainsGet) GetCrcString() string   { return "f75ba505" }
 func (*MapDomainsGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapDomainsGet) Size() (size int) {
@@ -429,7 +429,7 @@ func (m *MapDomainsGetReply) Reset()               { *m = MapDomainsGetReply{} }
 func (*MapDomainsGetReply) GetMessageName() string { return "map_domains_get_reply" }
 func (*MapDomainsGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*MapDomainsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapDomainsGetReply) Size() (size int) {
@@ -467,7 +467,7 @@ func (m *MapIfEnableDisable) Reset()               { *m = MapIfEnableDisable{} }
 func (*MapIfEnableDisable) GetMessageName() string { return "map_if_enable_disable" }
 func (*MapIfEnableDisable) GetCrcString() string   { return "59bb32f4" }
 func (*MapIfEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapIfEnableDisable) Size() (size int) {
@@ -506,7 +506,7 @@ func (m *MapIfEnableDisableReply) Reset()               { *m = MapIfEnableDisabl
 func (*MapIfEnableDisableReply) GetMessageName() string { return "map_if_enable_disable_reply" }
 func (*MapIfEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapIfEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapIfEnableDisableReply) Size() (size int) {
@@ -541,7 +541,7 @@ func (m *MapParamAddDelPreResolve) Reset()               { *m = MapParamAddDelPr
 func (*MapParamAddDelPreResolve) GetMessageName() string { return "map_param_add_del_pre_resolve" }
 func (*MapParamAddDelPreResolve) GetCrcString() string   { return "dae5af03" }
 func (*MapParamAddDelPreResolve) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamAddDelPreResolve) Size() (size int) {
@@ -582,7 +582,7 @@ func (*MapParamAddDelPreResolveReply) GetMessageName() string {
 }
 func (*MapParamAddDelPreResolveReply) GetCrcString() string { return "e8d4e804" }
 func (*MapParamAddDelPreResolveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamAddDelPreResolveReply) Size() (size int) {
@@ -613,7 +613,7 @@ func (m *MapParamGet) Reset()               { *m = MapParamGet{} }
 func (*MapParamGet) GetMessageName() string { return "map_param_get" }
 func (*MapParamGet) GetCrcString() string   { return "51077d14" }
 func (*MapParamGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamGet) Size() (size int) {
@@ -656,7 +656,7 @@ func (m *MapParamGetReply) Reset()               { *m = MapParamGetReply{} }
 func (*MapParamGetReply) GetMessageName() string { return "map_param_get_reply" }
 func (*MapParamGetReply) GetCrcString() string   { return "26272c90" }
 func (*MapParamGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamGetReply) Size() (size int) {
@@ -732,7 +732,7 @@ func (m *MapParamSetFragmentation) Reset()               { *m = MapParamSetFragm
 func (*MapParamSetFragmentation) GetMessageName() string { return "map_param_set_fragmentation" }
 func (*MapParamSetFragmentation) GetCrcString() string   { return "9ff54d90" }
 func (*MapParamSetFragmentation) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetFragmentation) Size() (size int) {
@@ -770,7 +770,7 @@ func (*MapParamSetFragmentationReply) GetMessageName() string {
 }
 func (*MapParamSetFragmentationReply) GetCrcString() string { return "e8d4e804" }
 func (*MapParamSetFragmentationReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetFragmentationReply) Size() (size int) {
@@ -803,7 +803,7 @@ func (m *MapParamSetICMP) Reset()               { *m = MapParamSetICMP{} }
 func (*MapParamSetICMP) GetMessageName() string { return "map_param_set_icmp" }
 func (*MapParamSetICMP) GetCrcString() string   { return "58210cbf" }
 func (*MapParamSetICMP) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetICMP) Size() (size int) {
@@ -836,7 +836,7 @@ func (m *MapParamSetICMP6) Reset()               { *m = MapParamSetICMP6{} }
 func (*MapParamSetICMP6) GetMessageName() string { return "map_param_set_icmp6" }
 func (*MapParamSetICMP6) GetCrcString() string   { return "5d01f8c1" }
 func (*MapParamSetICMP6) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetICMP6) Size() (size int) {
@@ -869,7 +869,7 @@ func (m *MapParamSetICMP6Reply) Reset()               { *m = MapParamSetICMP6Rep
 func (*MapParamSetICMP6Reply) GetMessageName() string { return "map_param_set_icmp6_reply" }
 func (*MapParamSetICMP6Reply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetICMP6Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetICMP6Reply) Size() (size int) {
@@ -902,7 +902,7 @@ func (m *MapParamSetICMPReply) Reset()               { *m = MapParamSetICMPReply
 func (*MapParamSetICMPReply) GetMessageName() string { return "map_param_set_icmp_reply" }
 func (*MapParamSetICMPReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetICMPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetICMPReply) Size() (size int) {
@@ -936,7 +936,7 @@ func (m *MapParamSetSecurityCheck) Reset()               { *m = MapParamSetSecur
 func (*MapParamSetSecurityCheck) GetMessageName() string { return "map_param_set_security_check" }
 func (*MapParamSetSecurityCheck) GetCrcString() string   { return "6abe9836" }
 func (*MapParamSetSecurityCheck) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetSecurityCheck) Size() (size int) {
@@ -974,7 +974,7 @@ func (*MapParamSetSecurityCheckReply) GetMessageName() string {
 }
 func (*MapParamSetSecurityCheckReply) GetCrcString() string { return "e8d4e804" }
 func (*MapParamSetSecurityCheckReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetSecurityCheckReply) Size() (size int) {
@@ -1007,7 +1007,7 @@ func (m *MapParamSetTCP) Reset()               { *m = MapParamSetTCP{} }
 func (*MapParamSetTCP) GetMessageName() string { return "map_param_set_tcp" }
 func (*MapParamSetTCP) GetCrcString() string   { return "87a825d9" }
 func (*MapParamSetTCP) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetTCP) Size() (size int) {
@@ -1040,7 +1040,7 @@ func (m *MapParamSetTCPReply) Reset()               { *m = MapParamSetTCPReply{}
 func (*MapParamSetTCPReply) GetMessageName() string { return "map_param_set_tcp_reply" }
 func (*MapParamSetTCPReply) GetCrcString() string   { return "e8d4e804" }
 func (*MapParamSetTCPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetTCPReply) Size() (size int) {
@@ -1074,7 +1074,7 @@ func (m *MapParamSetTrafficClass) Reset()               { *m = MapParamSetTraffi
 func (*MapParamSetTrafficClass) GetMessageName() string { return "map_param_set_traffic_class" }
 func (*MapParamSetTrafficClass) GetCrcString() string   { return "9cac455c" }
 func (*MapParamSetTrafficClass) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapParamSetTrafficClass) Size() (size int) {
@@ -1112,7 +1112,7 @@ func (*MapParamSetTrafficClassReply) GetMessageName() string {
 }
 func (*MapParamSetTrafficClassReply) GetCrcString() string { return "e8d4e804" }
 func (*MapParamSetTrafficClassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapParamSetTrafficClassReply) Size() (size int) {
@@ -1146,7 +1146,7 @@ func (m *MapRuleDetails) Reset()               { *m = MapRuleDetails{} }
 func (*MapRuleDetails) GetMessageName() string { return "map_rule_details" }
 func (*MapRuleDetails) GetCrcString() string   { return "c7cbeea5" }
 func (*MapRuleDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapRuleDetails) Size() (size int) {
@@ -1182,7 +1182,7 @@ func (m *MapRuleDump) Reset()               { *m = MapRuleDump{} }
 func (*MapRuleDump) GetMessageName() string { return "map_rule_dump" }
 func (*MapRuleDump) GetCrcString() string   { return "e43e6ff6" }
 func (*MapRuleDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapRuleDump) Size() (size int) {
@@ -1213,7 +1213,7 @@ func (m *MapSummaryStats) Reset()               { *m = MapSummaryStats{} }
 func (*MapSummaryStats) GetMessageName() string { return "map_summary_stats" }
 func (*MapSummaryStats) GetCrcString() string   { return "51077d14" }
 func (*MapSummaryStats) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MapSummaryStats) Size() (size int) {
@@ -1247,7 +1247,7 @@ func (m *MapSummaryStatsReply) Reset()               { *m = MapSummaryStatsReply
 func (*MapSummaryStatsReply) GetMessageName() string { return "map_summary_stats_reply" }
 func (*MapSummaryStatsReply) GetCrcString() string   { return "0e4ace0e" }
 func (*MapSummaryStatsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MapSummaryStatsReply) Size() (size int) {

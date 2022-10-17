@@ -109,7 +109,7 @@ func (m *AppAddCertKeyPair) Reset()               { *m = AppAddCertKeyPair{} }
 func (*AppAddCertKeyPair) GetMessageName() string { return "app_add_cert_key_pair" }
 func (*AppAddCertKeyPair) GetCrcString() string   { return "02eb8016" }
 func (*AppAddCertKeyPair) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppAddCertKeyPair) Size() (size int) {
@@ -150,7 +150,7 @@ func (m *AppAddCertKeyPairReply) Reset()               { *m = AppAddCertKeyPairR
 func (*AppAddCertKeyPairReply) GetMessageName() string { return "app_add_cert_key_pair_reply" }
 func (*AppAddCertKeyPairReply) GetCrcString() string   { return "b42958d0" }
 func (*AppAddCertKeyPairReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppAddCertKeyPairReply) Size() (size int) {
@@ -187,7 +187,7 @@ func (m *AppAttach) Reset()               { *m = AppAttach{} }
 func (*AppAttach) GetMessageName() string { return "app_attach" }
 func (*AppAttach) GetCrcString() string   { return "5f4a260d" }
 func (*AppAttach) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppAttach) Size() (size int) {
@@ -241,7 +241,7 @@ func (m *AppAttachReply) Reset()               { *m = AppAttachReply{} }
 func (*AppAttachReply) GetMessageName() string { return "app_attach_reply" }
 func (*AppAttachReply) GetCrcString() string   { return "5c89c3b0" }
 func (*AppAttachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppAttachReply) Size() (size int) {
@@ -301,7 +301,7 @@ func (m *AppDelCertKeyPair) Reset()               { *m = AppDelCertKeyPair{} }
 func (*AppDelCertKeyPair) GetMessageName() string { return "app_del_cert_key_pair" }
 func (*AppDelCertKeyPair) GetCrcString() string   { return "8ac76db6" }
 func (*AppDelCertKeyPair) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppDelCertKeyPair) Size() (size int) {
@@ -334,7 +334,7 @@ func (m *AppDelCertKeyPairReply) Reset()               { *m = AppDelCertKeyPairR
 func (*AppDelCertKeyPairReply) GetMessageName() string { return "app_del_cert_key_pair_reply" }
 func (*AppDelCertKeyPairReply) GetCrcString() string   { return "e8d4e804" }
 func (*AppDelCertKeyPairReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppDelCertKeyPairReply) Size() (size int) {
@@ -372,7 +372,7 @@ func (m *AppNamespaceAddDel) Reset()               { *m = AppNamespaceAddDel{} }
 func (*AppNamespaceAddDel) GetMessageName() string { return "app_namespace_add_del" }
 func (*AppNamespaceAddDel) GetCrcString() string   { return "6306aecb" }
 func (*AppNamespaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppNamespaceAddDel) Size() (size int) {
@@ -419,7 +419,7 @@ func (m *AppNamespaceAddDelReply) Reset()               { *m = AppNamespaceAddDe
 func (*AppNamespaceAddDelReply) GetMessageName() string { return "app_namespace_add_del_reply" }
 func (*AppNamespaceAddDelReply) GetCrcString() string   { return "85137120" }
 func (*AppNamespaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppNamespaceAddDelReply) Size() (size int) {
@@ -460,7 +460,7 @@ func (m *AppNamespaceAddDelV2) Reset()               { *m = AppNamespaceAddDelV2
 func (*AppNamespaceAddDelV2) GetMessageName() string { return "app_namespace_add_del_v2" }
 func (*AppNamespaceAddDelV2) GetCrcString() string   { return "ee0755cf" }
 func (*AppNamespaceAddDelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppNamespaceAddDelV2) Size() (size int) {
@@ -509,7 +509,7 @@ func (m *AppNamespaceAddDelV2Reply) Reset()               { *m = AppNamespaceAdd
 func (*AppNamespaceAddDelV2Reply) GetMessageName() string { return "app_namespace_add_del_v2_reply" }
 func (*AppNamespaceAddDelV2Reply) GetCrcString() string   { return "85137120" }
 func (*AppNamespaceAddDelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppNamespaceAddDelV2Reply) Size() (size int) {
@@ -552,7 +552,7 @@ func (m *AppNamespaceAddDelV3) Reset()               { *m = AppNamespaceAddDelV3
 func (*AppNamespaceAddDelV3) GetMessageName() string { return "app_namespace_add_del_v3" }
 func (*AppNamespaceAddDelV3) GetCrcString() string   { return "8a7e40a1" }
 func (*AppNamespaceAddDelV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppNamespaceAddDelV3) Size() (size int) {
@@ -607,7 +607,7 @@ func (m *AppNamespaceAddDelV3Reply) Reset()               { *m = AppNamespaceAdd
 func (*AppNamespaceAddDelV3Reply) GetMessageName() string { return "app_namespace_add_del_v3_reply" }
 func (*AppNamespaceAddDelV3Reply) GetCrcString() string   { return "85137120" }
 func (*AppNamespaceAddDelV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppNamespaceAddDelV3Reply) Size() (size int) {
@@ -645,7 +645,7 @@ func (m *AppWorkerAddDel) Reset()               { *m = AppWorkerAddDel{} }
 func (*AppWorkerAddDel) GetMessageName() string { return "app_worker_add_del" }
 func (*AppWorkerAddDel) GetCrcString() string   { return "753253dc" }
 func (*AppWorkerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AppWorkerAddDel) Size() (size int) {
@@ -691,7 +691,7 @@ func (m *AppWorkerAddDelReply) Reset()               { *m = AppWorkerAddDelReply
 func (*AppWorkerAddDelReply) GetMessageName() string { return "app_worker_add_del_reply" }
 func (*AppWorkerAddDelReply) GetCrcString() string   { return "5735ffe7" }
 func (*AppWorkerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AppWorkerAddDelReply) Size() (size int) {
@@ -743,7 +743,7 @@ func (m *ApplicationDetach) Reset()               { *m = ApplicationDetach{} }
 func (*ApplicationDetach) GetMessageName() string { return "application_detach" }
 func (*ApplicationDetach) GetCrcString() string   { return "51077d14" }
 func (*ApplicationDetach) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ApplicationDetach) Size() (size int) {
@@ -772,7 +772,7 @@ func (m *ApplicationDetachReply) Reset()               { *m = ApplicationDetachR
 func (*ApplicationDetachReply) GetMessageName() string { return "application_detach_reply" }
 func (*ApplicationDetachReply) GetCrcString() string   { return "e8d4e804" }
 func (*ApplicationDetachReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ApplicationDetachReply) Size() (size int) {
@@ -808,7 +808,7 @@ func (m *ApplicationTLSCertAdd) Reset()               { *m = ApplicationTLSCertA
 func (*ApplicationTLSCertAdd) GetMessageName() string { return "application_tls_cert_add" }
 func (*ApplicationTLSCertAdd) GetCrcString() string   { return "3f5cfe45" }
 func (*ApplicationTLSCertAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ApplicationTLSCertAdd) Size() (size int) {
@@ -849,7 +849,7 @@ func (m *ApplicationTLSCertAddReply) Reset()               { *m = ApplicationTLS
 func (*ApplicationTLSCertAddReply) GetMessageName() string { return "application_tls_cert_add_reply" }
 func (*ApplicationTLSCertAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*ApplicationTLSCertAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ApplicationTLSCertAddReply) Size() (size int) {
@@ -885,7 +885,7 @@ func (m *ApplicationTLSKeyAdd) Reset()               { *m = ApplicationTLSKeyAdd
 func (*ApplicationTLSKeyAdd) GetMessageName() string { return "application_tls_key_add" }
 func (*ApplicationTLSKeyAdd) GetCrcString() string   { return "5eaf70cd" }
 func (*ApplicationTLSKeyAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ApplicationTLSKeyAdd) Size() (size int) {
@@ -926,7 +926,7 @@ func (m *ApplicationTLSKeyAddReply) Reset()               { *m = ApplicationTLSK
 func (*ApplicationTLSKeyAddReply) GetMessageName() string { return "application_tls_key_add_reply" }
 func (*ApplicationTLSKeyAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*ApplicationTLSKeyAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ApplicationTLSKeyAddReply) Size() (size int) {
@@ -959,7 +959,7 @@ func (m *SessionEnableDisable) Reset()               { *m = SessionEnableDisable
 func (*SessionEnableDisable) GetMessageName() string { return "session_enable_disable" }
 func (*SessionEnableDisable) GetCrcString() string   { return "c264d7bf" }
 func (*SessionEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SessionEnableDisable) Size() (size int) {
@@ -992,7 +992,7 @@ func (m *SessionEnableDisableReply) Reset()               { *m = SessionEnableDi
 func (*SessionEnableDisableReply) GetMessageName() string { return "session_enable_disable_reply" }
 func (*SessionEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*SessionEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SessionEnableDisableReply) Size() (size int) {
@@ -1034,7 +1034,7 @@ func (m *SessionRuleAddDel) Reset()               { *m = SessionRuleAddDel{} }
 func (*SessionRuleAddDel) GetMessageName() string { return "session_rule_add_del" }
 func (*SessionRuleAddDel) GetCrcString() string   { return "82a90af5" }
 func (*SessionRuleAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SessionRuleAddDel) Size() (size int) {
@@ -1106,7 +1106,7 @@ func (m *SessionRuleAddDelReply) Reset()               { *m = SessionRuleAddDelR
 func (*SessionRuleAddDelReply) GetMessageName() string { return "session_rule_add_del_reply" }
 func (*SessionRuleAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SessionRuleAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SessionRuleAddDelReply) Size() (size int) {
@@ -1147,7 +1147,7 @@ func (m *SessionRulesDetails) Reset()               { *m = SessionRulesDetails{}
 func (*SessionRulesDetails) GetMessageName() string { return "session_rules_details" }
 func (*SessionRulesDetails) GetCrcString() string   { return "4ef746e7" }
 func (*SessionRulesDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SessionRulesDetails) Size() (size int) {
@@ -1214,7 +1214,7 @@ func (m *SessionRulesDump) Reset()               { *m = SessionRulesDump{} }
 func (*SessionRulesDump) GetMessageName() string { return "session_rules_dump" }
 func (*SessionRulesDump) GetCrcString() string   { return "51077d14" }
 func (*SessionRulesDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SessionRulesDump) Size() (size int) {
@@ -1243,7 +1243,7 @@ func (m *SessionSapiEnableDisable) Reset()               { *m = SessionSapiEnabl
 func (*SessionSapiEnableDisable) GetMessageName() string { return "session_sapi_enable_disable" }
 func (*SessionSapiEnableDisable) GetCrcString() string   { return "c264d7bf" }
 func (*SessionSapiEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SessionSapiEnableDisable) Size() (size int) {
@@ -1278,7 +1278,7 @@ func (*SessionSapiEnableDisableReply) GetMessageName() string {
 }
 func (*SessionSapiEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*SessionSapiEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SessionSapiEnableDisableReply) Size() (size int) {

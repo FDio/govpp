@@ -37,7 +37,7 @@ func (m *VxlanGpeIoamDisable) Reset()               { *m = VxlanGpeIoamDisable{}
 func (*VxlanGpeIoamDisable) GetMessageName() string { return "vxlan_gpe_ioam_disable" }
 func (*VxlanGpeIoamDisable) GetCrcString() string   { return "6b16a45e" }
 func (*VxlanGpeIoamDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamDisable) Size() (size int) {
@@ -70,7 +70,7 @@ func (m *VxlanGpeIoamDisableReply) Reset()               { *m = VxlanGpeIoamDisa
 func (*VxlanGpeIoamDisableReply) GetMessageName() string { return "vxlan_gpe_ioam_disable_reply" }
 func (*VxlanGpeIoamDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamDisableReply) Size() (size int) {
@@ -106,7 +106,7 @@ func (m *VxlanGpeIoamEnable) Reset()               { *m = VxlanGpeIoamEnable{} }
 func (*VxlanGpeIoamEnable) GetMessageName() string { return "vxlan_gpe_ioam_enable" }
 func (*VxlanGpeIoamEnable) GetCrcString() string   { return "2481bef7" }
 func (*VxlanGpeIoamEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamEnable) Size() (size int) {
@@ -148,7 +148,7 @@ func (m *VxlanGpeIoamEnableReply) Reset()               { *m = VxlanGpeIoamEnabl
 func (*VxlanGpeIoamEnableReply) GetMessageName() string { return "vxlan_gpe_ioam_enable_reply" }
 func (*VxlanGpeIoamEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamEnableReply) Size() (size int) {
@@ -182,7 +182,7 @@ func (m *VxlanGpeIoamTransitDisable) Reset()               { *m = VxlanGpeIoamTr
 func (*VxlanGpeIoamTransitDisable) GetMessageName() string { return "vxlan_gpe_ioam_transit_disable" }
 func (*VxlanGpeIoamTransitDisable) GetCrcString() string   { return "3d3ec657" }
 func (*VxlanGpeIoamTransitDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamTransitDisable) Size() (size int) {
@@ -223,7 +223,7 @@ func (*VxlanGpeIoamTransitDisableReply) GetMessageName() string {
 }
 func (*VxlanGpeIoamTransitDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamTransitDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamTransitDisableReply) Size() (size int) {
@@ -257,7 +257,7 @@ func (m *VxlanGpeIoamTransitEnable) Reset()               { *m = VxlanGpeIoamTra
 func (*VxlanGpeIoamTransitEnable) GetMessageName() string { return "vxlan_gpe_ioam_transit_enable" }
 func (*VxlanGpeIoamTransitEnable) GetCrcString() string   { return "3d3ec657" }
 func (*VxlanGpeIoamTransitEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamTransitEnable) Size() (size int) {
@@ -298,7 +298,7 @@ func (*VxlanGpeIoamTransitEnableReply) GetMessageName() string {
 }
 func (*VxlanGpeIoamTransitEnableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamTransitEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamTransitEnableReply) Size() (size int) {
@@ -333,7 +333,7 @@ func (m *VxlanGpeIoamVniDisable) Reset()               { *m = VxlanGpeIoamVniDis
 func (*VxlanGpeIoamVniDisable) GetMessageName() string { return "vxlan_gpe_ioam_vni_disable" }
 func (*VxlanGpeIoamVniDisable) GetCrcString() string   { return "0fbb5fb1" }
 func (*VxlanGpeIoamVniDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamVniDisable) Size() (size int) {
@@ -380,7 +380,7 @@ func (*VxlanGpeIoamVniDisableReply) GetMessageName() string {
 }
 func (*VxlanGpeIoamVniDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*VxlanGpeIoamVniDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamVniDisableReply) Size() (size int) {
@@ -415,7 +415,7 @@ func (m *VxlanGpeIoamVniEnable) Reset()               { *m = VxlanGpeIoamVniEnab
 func (*VxlanGpeIoamVniEnable) GetMessageName() string { return "vxlan_gpe_ioam_vni_enable" }
 func (*VxlanGpeIoamVniEnable) GetCrcString() string   { return "0fbb5fb1" }
 func (*VxlanGpeIoamVniEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeIoamVniEnable) Size() (size int) {
@@ -460,7 +460,7 @@ func (m *VxlanGpeIoamVniEnableReply) Reset()               { *m = VxlanGpeIoamVn
 func (*VxlanGpeIoamVniEnableReply) GetMessageName() string { return "vxlan_gpe_ioam_vni_enable_reply" }
 func (*VxlanGpeIoamVniEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*VxlanGpeIoamVniEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeIoamVniEnableReply) Size() (size int) {

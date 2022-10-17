@@ -42,7 +42,7 @@ func (m *Arping) Reset()               { *m = Arping{} }
 func (*Arping) GetMessageName() string { return "arping" }
 func (*Arping) GetCrcString() string   { return "48817482" }
 func (*Arping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Arping) Size() (size int) {
@@ -91,7 +91,7 @@ func (m *ArpingReply) Reset()               { *m = ArpingReply{} }
 func (*ArpingReply) GetMessageName() string { return "arping_reply" }
 func (*ArpingReply) GetCrcString() string   { return "bb9d1cbd" }
 func (*ArpingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ArpingReply) Size() (size int) {

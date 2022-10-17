@@ -138,7 +138,7 @@ func (m *ClassifyAddDelSession) Reset()               { *m = ClassifyAddDelSessi
 func (*ClassifyAddDelSession) GetMessageName() string { return "classify_add_del_session" }
 func (*ClassifyAddDelSession) GetCrcString() string   { return "f20879f0" }
 func (*ClassifyAddDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyAddDelSession) Size() (size int) {
@@ -196,7 +196,7 @@ func (m *ClassifyAddDelSessionReply) Reset()               { *m = ClassifyAddDel
 func (*ClassifyAddDelSessionReply) GetMessageName() string { return "classify_add_del_session_reply" }
 func (*ClassifyAddDelSessionReply) GetCrcString() string   { return "e8d4e804" }
 func (*ClassifyAddDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyAddDelSessionReply) Size() (size int) {
@@ -241,7 +241,7 @@ func (m *ClassifyAddDelTable) Reset()               { *m = ClassifyAddDelTable{}
 func (*ClassifyAddDelTable) GetMessageName() string { return "classify_add_del_table" }
 func (*ClassifyAddDelTable) GetCrcString() string   { return "6849e39e" }
 func (*ClassifyAddDelTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyAddDelTable) Size() (size int) {
@@ -314,7 +314,7 @@ func (m *ClassifyAddDelTableReply) Reset()               { *m = ClassifyAddDelTa
 func (*ClassifyAddDelTableReply) GetMessageName() string { return "classify_add_del_table_reply" }
 func (*ClassifyAddDelTableReply) GetCrcString() string   { return "05486349" }
 func (*ClassifyAddDelTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyAddDelTableReply) Size() (size int) {
@@ -356,7 +356,7 @@ func (m *ClassifyPcapGetTables) Reset()               { *m = ClassifyPcapGetTabl
 func (*ClassifyPcapGetTables) GetMessageName() string { return "classify_pcap_get_tables" }
 func (*ClassifyPcapGetTables) GetCrcString() string   { return "f9e6675e" }
 func (*ClassifyPcapGetTables) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyPcapGetTables) Size() (size int) {
@@ -391,7 +391,7 @@ func (m *ClassifyPcapGetTablesReply) Reset()               { *m = ClassifyPcapGe
 func (*ClassifyPcapGetTablesReply) GetMessageName() string { return "classify_pcap_get_tables_reply" }
 func (*ClassifyPcapGetTablesReply) GetCrcString() string   { return "5f5bc9e6" }
 func (*ClassifyPcapGetTablesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyPcapGetTablesReply) Size() (size int) {
@@ -443,7 +443,7 @@ func (m *ClassifyPcapLookupTable) Reset()               { *m = ClassifyPcapLooku
 func (*ClassifyPcapLookupTable) GetMessageName() string { return "classify_pcap_lookup_table" }
 func (*ClassifyPcapLookupTable) GetCrcString() string   { return "e1b4cc6b" }
 func (*ClassifyPcapLookupTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyPcapLookupTable) Size() (size int) {
@@ -492,7 +492,7 @@ func (*ClassifyPcapLookupTableReply) GetMessageName() string {
 }
 func (*ClassifyPcapLookupTableReply) GetCrcString() string { return "9c6c6773" }
 func (*ClassifyPcapLookupTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyPcapLookupTableReply) Size() (size int) {
@@ -530,7 +530,7 @@ func (m *ClassifyPcapSetTable) Reset()               { *m = ClassifyPcapSetTable
 func (*ClassifyPcapSetTable) GetMessageName() string { return "classify_pcap_set_table" }
 func (*ClassifyPcapSetTable) GetCrcString() string   { return "006051b3" }
 func (*ClassifyPcapSetTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyPcapSetTable) Size() (size int) {
@@ -570,7 +570,7 @@ func (m *ClassifyPcapSetTableReply) Reset()               { *m = ClassifyPcapSet
 func (*ClassifyPcapSetTableReply) GetMessageName() string { return "classify_pcap_set_table_reply" }
 func (*ClassifyPcapSetTableReply) GetCrcString() string   { return "9c6c6773" }
 func (*ClassifyPcapSetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyPcapSetTableReply) Size() (size int) {
@@ -612,7 +612,7 @@ func (m *ClassifySessionDetails) Reset()               { *m = ClassifySessionDet
 func (*ClassifySessionDetails) GetMessageName() string { return "classify_session_details" }
 func (*ClassifySessionDetails) GetCrcString() string   { return "60e3ef94" }
 func (*ClassifySessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifySessionDetails) Size() (size int) {
@@ -664,7 +664,7 @@ func (m *ClassifySessionDump) Reset()               { *m = ClassifySessionDump{}
 func (*ClassifySessionDump) GetMessageName() string { return "classify_session_dump" }
 func (*ClassifySessionDump) GetCrcString() string   { return "0cca2cd9" }
 func (*ClassifySessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifySessionDump) Size() (size int) {
@@ -699,7 +699,7 @@ func (m *ClassifySetInterfaceIPTable) Reset()               { *m = ClassifySetIn
 func (*ClassifySetInterfaceIPTable) GetMessageName() string { return "classify_set_interface_ip_table" }
 func (*ClassifySetInterfaceIPTable) GetCrcString() string   { return "e0b097c7" }
 func (*ClassifySetInterfaceIPTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifySetInterfaceIPTable) Size() (size int) {
@@ -740,7 +740,7 @@ func (*ClassifySetInterfaceIPTableReply) GetMessageName() string {
 }
 func (*ClassifySetInterfaceIPTableReply) GetCrcString() string { return "e8d4e804" }
 func (*ClassifySetInterfaceIPTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifySetInterfaceIPTableReply) Size() (size int) {
@@ -779,7 +779,7 @@ func (*ClassifySetInterfaceL2Tables) GetMessageName() string {
 }
 func (*ClassifySetInterfaceL2Tables) GetCrcString() string { return "5a6ddf65" }
 func (*ClassifySetInterfaceL2Tables) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifySetInterfaceL2Tables) Size() (size int) {
@@ -826,7 +826,7 @@ func (*ClassifySetInterfaceL2TablesReply) GetMessageName() string {
 }
 func (*ClassifySetInterfaceL2TablesReply) GetCrcString() string { return "e8d4e804" }
 func (*ClassifySetInterfaceL2TablesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifySetInterfaceL2TablesReply) Size() (size int) {
@@ -859,7 +859,7 @@ func (m *ClassifyTableByInterface) Reset()               { *m = ClassifyTableByI
 func (*ClassifyTableByInterface) GetMessageName() string { return "classify_table_by_interface" }
 func (*ClassifyTableByInterface) GetCrcString() string   { return "f9e6675e" }
 func (*ClassifyTableByInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTableByInterface) Size() (size int) {
@@ -898,7 +898,7 @@ func (*ClassifyTableByInterfaceReply) GetMessageName() string {
 }
 func (*ClassifyTableByInterfaceReply) GetCrcString() string { return "ed4197db" }
 func (*ClassifyTableByInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTableByInterfaceReply) Size() (size int) {
@@ -941,7 +941,7 @@ func (m *ClassifyTableIds) Reset()               { *m = ClassifyTableIds{} }
 func (*ClassifyTableIds) GetMessageName() string { return "classify_table_ids" }
 func (*ClassifyTableIds) GetCrcString() string   { return "51077d14" }
 func (*ClassifyTableIds) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTableIds) Size() (size int) {
@@ -972,7 +972,7 @@ func (m *ClassifyTableIdsReply) Reset()               { *m = ClassifyTableIdsRep
 func (*ClassifyTableIdsReply) GetMessageName() string { return "classify_table_ids_reply" }
 func (*ClassifyTableIdsReply) GetCrcString() string   { return "d1d20e1d" }
 func (*ClassifyTableIdsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTableIdsReply) Size() (size int) {
@@ -1020,7 +1020,7 @@ func (m *ClassifyTableInfo) Reset()               { *m = ClassifyTableInfo{} }
 func (*ClassifyTableInfo) GetMessageName() string { return "classify_table_info" }
 func (*ClassifyTableInfo) GetCrcString() string   { return "0cca2cd9" }
 func (*ClassifyTableInfo) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTableInfo) Size() (size int) {
@@ -1062,7 +1062,7 @@ func (m *ClassifyTableInfoReply) Reset()               { *m = ClassifyTableInfoR
 func (*ClassifyTableInfoReply) GetMessageName() string { return "classify_table_info_reply" }
 func (*ClassifyTableInfoReply) GetCrcString() string   { return "4a573c0e" }
 func (*ClassifyTableInfoReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTableInfoReply) Size() (size int) {
@@ -1121,7 +1121,7 @@ func (m *ClassifyTraceGetTables) Reset()               { *m = ClassifyTraceGetTa
 func (*ClassifyTraceGetTables) GetMessageName() string { return "classify_trace_get_tables" }
 func (*ClassifyTraceGetTables) GetCrcString() string   { return "51077d14" }
 func (*ClassifyTraceGetTables) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTraceGetTables) Size() (size int) {
@@ -1152,7 +1152,7 @@ func (m *ClassifyTraceGetTablesReply) Reset()               { *m = ClassifyTrace
 func (*ClassifyTraceGetTablesReply) GetMessageName() string { return "classify_trace_get_tables_reply" }
 func (*ClassifyTraceGetTablesReply) GetCrcString() string   { return "5f5bc9e6" }
 func (*ClassifyTraceGetTablesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTraceGetTablesReply) Size() (size int) {
@@ -1203,7 +1203,7 @@ func (m *ClassifyTraceLookupTable) Reset()               { *m = ClassifyTraceLoo
 func (*ClassifyTraceLookupTable) GetMessageName() string { return "classify_trace_lookup_table" }
 func (*ClassifyTraceLookupTable) GetCrcString() string   { return "3f7b72e4" }
 func (*ClassifyTraceLookupTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTraceLookupTable) Size() (size int) {
@@ -1249,7 +1249,7 @@ func (*ClassifyTraceLookupTableReply) GetMessageName() string {
 }
 func (*ClassifyTraceLookupTableReply) GetCrcString() string { return "9c6c6773" }
 func (*ClassifyTraceLookupTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTraceLookupTableReply) Size() (size int) {
@@ -1286,7 +1286,7 @@ func (m *ClassifyTraceSetTable) Reset()               { *m = ClassifyTraceSetTab
 func (*ClassifyTraceSetTable) GetMessageName() string { return "classify_trace_set_table" }
 func (*ClassifyTraceSetTable) GetCrcString() string   { return "3909b55a" }
 func (*ClassifyTraceSetTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ClassifyTraceSetTable) Size() (size int) {
@@ -1323,7 +1323,7 @@ func (m *ClassifyTraceSetTableReply) Reset()               { *m = ClassifyTraceS
 func (*ClassifyTraceSetTableReply) GetMessageName() string { return "classify_trace_set_table_reply" }
 func (*ClassifyTraceSetTableReply) GetCrcString() string   { return "9c6c6773" }
 func (*ClassifyTraceSetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ClassifyTraceSetTableReply) Size() (size int) {
@@ -1360,7 +1360,7 @@ func (m *FlowClassifyDetails) Reset()               { *m = FlowClassifyDetails{}
 func (*FlowClassifyDetails) GetMessageName() string { return "flow_classify_details" }
 func (*FlowClassifyDetails) GetCrcString() string   { return "dfd08765" }
 func (*FlowClassifyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowClassifyDetails) Size() (size int) {
@@ -1397,7 +1397,7 @@ func (m *FlowClassifyDump) Reset()               { *m = FlowClassifyDump{} }
 func (*FlowClassifyDump) GetMessageName() string { return "flow_classify_dump" }
 func (*FlowClassifyDump) GetCrcString() string   { return "25dd3e4c" }
 func (*FlowClassifyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowClassifyDump) Size() (size int) {
@@ -1436,7 +1436,7 @@ func (m *FlowClassifySetInterface) Reset()               { *m = FlowClassifySetI
 func (*FlowClassifySetInterface) GetMessageName() string { return "flow_classify_set_interface" }
 func (*FlowClassifySetInterface) GetCrcString() string   { return "b6192f1c" }
 func (*FlowClassifySetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowClassifySetInterface) Size() (size int) {
@@ -1480,7 +1480,7 @@ func (*FlowClassifySetInterfaceReply) GetMessageName() string {
 }
 func (*FlowClassifySetInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*FlowClassifySetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowClassifySetInterfaceReply) Size() (size int) {
@@ -1517,7 +1517,7 @@ func (m *InputACLSetInterface) Reset()               { *m = InputACLSetInterface
 func (*InputACLSetInterface) GetMessageName() string { return "input_acl_set_interface" }
 func (*InputACLSetInterface) GetCrcString() string   { return "de7ad708" }
 func (*InputACLSetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *InputACLSetInterface) Size() (size int) {
@@ -1562,7 +1562,7 @@ func (m *InputACLSetInterfaceReply) Reset()               { *m = InputACLSetInte
 func (*InputACLSetInterfaceReply) GetMessageName() string { return "input_acl_set_interface_reply" }
 func (*InputACLSetInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*InputACLSetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *InputACLSetInterfaceReply) Size() (size int) {
@@ -1599,7 +1599,7 @@ func (m *OutputACLSetInterface) Reset()               { *m = OutputACLSetInterfa
 func (*OutputACLSetInterface) GetMessageName() string { return "output_acl_set_interface" }
 func (*OutputACLSetInterface) GetCrcString() string   { return "de7ad708" }
 func (*OutputACLSetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *OutputACLSetInterface) Size() (size int) {
@@ -1644,7 +1644,7 @@ func (m *OutputACLSetInterfaceReply) Reset()               { *m = OutputACLSetIn
 func (*OutputACLSetInterfaceReply) GetMessageName() string { return "output_acl_set_interface_reply" }
 func (*OutputACLSetInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*OutputACLSetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *OutputACLSetInterfaceReply) Size() (size int) {
@@ -1678,7 +1678,7 @@ func (m *PolicerClassifyDetails) Reset()               { *m = PolicerClassifyDet
 func (*PolicerClassifyDetails) GetMessageName() string { return "policer_classify_details" }
 func (*PolicerClassifyDetails) GetCrcString() string   { return "dfd08765" }
 func (*PolicerClassifyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerClassifyDetails) Size() (size int) {
@@ -1715,7 +1715,7 @@ func (m *PolicerClassifyDump) Reset()               { *m = PolicerClassifyDump{}
 func (*PolicerClassifyDump) GetMessageName() string { return "policer_classify_dump" }
 func (*PolicerClassifyDump) GetCrcString() string   { return "56cbb5fb" }
 func (*PolicerClassifyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerClassifyDump) Size() (size int) {
@@ -1755,7 +1755,7 @@ func (m *PolicerClassifySetInterface) Reset()               { *m = PolicerClassi
 func (*PolicerClassifySetInterface) GetMessageName() string { return "policer_classify_set_interface" }
 func (*PolicerClassifySetInterface) GetCrcString() string   { return "de7ad708" }
 func (*PolicerClassifySetInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerClassifySetInterface) Size() (size int) {
@@ -1802,7 +1802,7 @@ func (*PolicerClassifySetInterfaceReply) GetMessageName() string {
 }
 func (*PolicerClassifySetInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*PolicerClassifySetInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerClassifySetInterfaceReply) Size() (size int) {
@@ -1837,7 +1837,7 @@ func (m *PuntACLAddDel) Reset()               { *m = PuntACLAddDel{} }
 func (*PuntACLAddDel) GetMessageName() string { return "punt_acl_add_del" }
 func (*PuntACLAddDel) GetCrcString() string   { return "a93bf3a0" }
 func (*PuntACLAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntACLAddDel) Size() (size int) {
@@ -1876,7 +1876,7 @@ func (m *PuntACLAddDelReply) Reset()               { *m = PuntACLAddDelReply{} }
 func (*PuntACLAddDelReply) GetMessageName() string { return "punt_acl_add_del_reply" }
 func (*PuntACLAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*PuntACLAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntACLAddDelReply) Size() (size int) {
@@ -1907,7 +1907,7 @@ func (m *PuntACLGet) Reset()               { *m = PuntACLGet{} }
 func (*PuntACLGet) GetMessageName() string { return "punt_acl_get" }
 func (*PuntACLGet) GetCrcString() string   { return "51077d14" }
 func (*PuntACLGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntACLGet) Size() (size int) {
@@ -1938,7 +1938,7 @@ func (m *PuntACLGetReply) Reset()               { *m = PuntACLGetReply{} }
 func (*PuntACLGetReply) GetMessageName() string { return "punt_acl_get_reply" }
 func (*PuntACLGetReply) GetCrcString() string   { return "8409b9dd" }
 func (*PuntACLGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntACLGetReply) Size() (size int) {

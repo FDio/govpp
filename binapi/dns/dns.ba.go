@@ -36,7 +36,7 @@ func (m *DNSEnableDisable) Reset()               { *m = DNSEnableDisable{} }
 func (*DNSEnableDisable) GetMessageName() string { return "dns_enable_disable" }
 func (*DNSEnableDisable) GetCrcString() string   { return "8050327d" }
 func (*DNSEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DNSEnableDisable) Size() (size int) {
@@ -69,7 +69,7 @@ func (m *DNSEnableDisableReply) Reset()               { *m = DNSEnableDisableRep
 func (*DNSEnableDisableReply) GetMessageName() string { return "dns_enable_disable_reply" }
 func (*DNSEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*DNSEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DNSEnableDisableReply) Size() (size int) {
@@ -104,7 +104,7 @@ func (m *DNSNameServerAddDel) Reset()               { *m = DNSNameServerAddDel{}
 func (*DNSNameServerAddDel) GetMessageName() string { return "dns_name_server_add_del" }
 func (*DNSNameServerAddDel) GetCrcString() string   { return "3bb05d8c" }
 func (*DNSNameServerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DNSNameServerAddDel) Size() (size int) {
@@ -144,7 +144,7 @@ func (m *DNSNameServerAddDelReply) Reset()               { *m = DNSNameServerAdd
 func (*DNSNameServerAddDelReply) GetMessageName() string { return "dns_name_server_add_del_reply" }
 func (*DNSNameServerAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*DNSNameServerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DNSNameServerAddDelReply) Size() (size int) {
@@ -178,7 +178,7 @@ func (m *DNSResolveIP) Reset()               { *m = DNSResolveIP{} }
 func (*DNSResolveIP) GetMessageName() string { return "dns_resolve_ip" }
 func (*DNSResolveIP) GetCrcString() string   { return "ae96a1a3" }
 func (*DNSResolveIP) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DNSResolveIP) Size() (size int) {
@@ -216,7 +216,7 @@ func (m *DNSResolveIPReply) Reset()               { *m = DNSResolveIPReply{} }
 func (*DNSResolveIPReply) GetMessageName() string { return "dns_resolve_ip_reply" }
 func (*DNSResolveIPReply) GetCrcString() string   { return "49ed78d6" }
 func (*DNSResolveIPReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DNSResolveIPReply) Size() (size int) {
@@ -253,7 +253,7 @@ func (m *DNSResolveName) Reset()               { *m = DNSResolveName{} }
 func (*DNSResolveName) GetMessageName() string { return "dns_resolve_name" }
 func (*DNSResolveName) GetCrcString() string   { return "c6566676" }
 func (*DNSResolveName) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DNSResolveName) Size() (size int) {
@@ -291,7 +291,7 @@ func (m *DNSResolveNameReply) Reset()               { *m = DNSResolveNameReply{}
 func (*DNSResolveNameReply) GetMessageName() string { return "dns_resolve_name_reply" }
 func (*DNSResolveNameReply) GetCrcString() string   { return "c2d758c3" }
 func (*DNSResolveNameReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DNSResolveNameReply) Size() (size int) {

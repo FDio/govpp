@@ -43,7 +43,7 @@ func (m *SrMplsPolicyAdd) Reset()               { *m = SrMplsPolicyAdd{} }
 func (*SrMplsPolicyAdd) GetMessageName() string { return "sr_mpls_policy_add" }
 func (*SrMplsPolicyAdd) GetCrcString() string   { return "a1a70c70" }
 func (*SrMplsPolicyAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SrMplsPolicyAdd) Size() (size int) {
@@ -97,7 +97,7 @@ func (m *SrMplsPolicyAddReply) Reset()               { *m = SrMplsPolicyAddReply
 func (*SrMplsPolicyAddReply) GetMessageName() string { return "sr_mpls_policy_add_reply" }
 func (*SrMplsPolicyAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SrMplsPolicyAddReply) Size() (size int) {
@@ -134,7 +134,7 @@ func (*SrMplsPolicyAssignEndpointColor) GetMessageName() string {
 }
 func (*SrMplsPolicyAssignEndpointColor) GetCrcString() string { return "0e7eb978" }
 func (*SrMplsPolicyAssignEndpointColor) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SrMplsPolicyAssignEndpointColor) Size() (size int) {
@@ -178,7 +178,7 @@ func (*SrMplsPolicyAssignEndpointColorReply) GetMessageName() string {
 }
 func (*SrMplsPolicyAssignEndpointColorReply) GetCrcString() string { return "e8d4e804" }
 func (*SrMplsPolicyAssignEndpointColorReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SrMplsPolicyAssignEndpointColorReply) Size() (size int) {
@@ -211,7 +211,7 @@ func (m *SrMplsPolicyDel) Reset()               { *m = SrMplsPolicyDel{} }
 func (*SrMplsPolicyDel) GetMessageName() string { return "sr_mpls_policy_del" }
 func (*SrMplsPolicyDel) GetCrcString() string   { return "e29d34fa" }
 func (*SrMplsPolicyDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SrMplsPolicyDel) Size() (size int) {
@@ -244,7 +244,7 @@ func (m *SrMplsPolicyDelReply) Reset()               { *m = SrMplsPolicyDelReply
 func (*SrMplsPolicyDelReply) GetMessageName() string { return "sr_mpls_policy_del_reply" }
 func (*SrMplsPolicyDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SrMplsPolicyDelReply) Size() (size int) {
@@ -282,7 +282,7 @@ func (m *SrMplsPolicyMod) Reset()               { *m = SrMplsPolicyMod{} }
 func (*SrMplsPolicyMod) GetMessageName() string { return "sr_mpls_policy_mod" }
 func (*SrMplsPolicyMod) GetCrcString() string   { return "88482c17" }
 func (*SrMplsPolicyMod) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SrMplsPolicyMod) Size() (size int) {
@@ -339,7 +339,7 @@ func (m *SrMplsPolicyModReply) Reset()               { *m = SrMplsPolicyModReply
 func (*SrMplsPolicyModReply) GetMessageName() string { return "sr_mpls_policy_mod_reply" }
 func (*SrMplsPolicyModReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsPolicyModReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SrMplsPolicyModReply) Size() (size int) {
@@ -380,7 +380,7 @@ func (m *SrMplsSteeringAddDel) Reset()               { *m = SrMplsSteeringAddDel
 func (*SrMplsSteeringAddDel) GetMessageName() string { return "sr_mpls_steering_add_del" }
 func (*SrMplsSteeringAddDel) GetCrcString() string   { return "64acff63" }
 func (*SrMplsSteeringAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SrMplsSteeringAddDel) Size() (size int) {
@@ -446,7 +446,7 @@ func (m *SrMplsSteeringAddDelReply) Reset()               { *m = SrMplsSteeringA
 func (*SrMplsSteeringAddDelReply) GetMessageName() string { return "sr_mpls_steering_add_del_reply" }
 func (*SrMplsSteeringAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SrMplsSteeringAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SrMplsSteeringAddDelReply) Size() (size int) {

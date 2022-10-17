@@ -38,7 +38,7 @@ func (m *MdataEnableDisable) Reset()               { *m = MdataEnableDisable{} }
 func (*MdataEnableDisable) GetMessageName() string { return "mdata_enable_disable" }
 func (*MdataEnableDisable) GetCrcString() string   { return "2e7b47df" }
 func (*MdataEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MdataEnableDisable) Size() (size int) {
@@ -72,7 +72,7 @@ func (m *MdataEnableDisableReply) Reset()               { *m = MdataEnableDisabl
 func (*MdataEnableDisableReply) GetMessageName() string { return "mdata_enable_disable_reply" }
 func (*MdataEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MdataEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MdataEnableDisableReply) Size() (size int) {

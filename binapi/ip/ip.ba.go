@@ -197,7 +197,7 @@ func (m *AddDelIPPuntRedirectV2) Reset()               { *m = AddDelIPPuntRedire
 func (*AddDelIPPuntRedirectV2) GetMessageName() string { return "add_del_ip_punt_redirect_v2" }
 func (*AddDelIPPuntRedirectV2) GetCrcString() string   { return "9e804227" }
 func (*AddDelIPPuntRedirectV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AddDelIPPuntRedirectV2) Size() (size int) {
@@ -314,7 +314,7 @@ func (*AddDelIPPuntRedirectV2Reply) GetMessageName() string {
 }
 func (*AddDelIPPuntRedirectV2Reply) GetCrcString() string { return "e8d4e804" }
 func (*AddDelIPPuntRedirectV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AddDelIPPuntRedirectV2Reply) Size() (size int) {
@@ -347,7 +347,7 @@ func (m *IoamDisable) Reset()               { *m = IoamDisable{} }
 func (*IoamDisable) GetMessageName() string { return "ioam_disable" }
 func (*IoamDisable) GetCrcString() string   { return "6b16a45e" }
 func (*IoamDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IoamDisable) Size() (size int) {
@@ -380,7 +380,7 @@ func (m *IoamDisableReply) Reset()               { *m = IoamDisableReply{} }
 func (*IoamDisableReply) GetMessageName() string { return "ioam_disable_reply" }
 func (*IoamDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*IoamDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IoamDisableReply) Size() (size int) {
@@ -418,7 +418,7 @@ func (m *IoamEnable) Reset()               { *m = IoamEnable{} }
 func (*IoamEnable) GetMessageName() string { return "ioam_enable" }
 func (*IoamEnable) GetCrcString() string   { return "51ccd868" }
 func (*IoamEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IoamEnable) Size() (size int) {
@@ -466,7 +466,7 @@ func (m *IoamEnableReply) Reset()               { *m = IoamEnableReply{} }
 func (*IoamEnableReply) GetMessageName() string { return "ioam_enable_reply" }
 func (*IoamEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*IoamEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IoamEnableReply) Size() (size int) {
@@ -500,7 +500,7 @@ func (m *IPAddressDetails) Reset()               { *m = IPAddressDetails{} }
 func (*IPAddressDetails) GetMessageName() string { return "ip_address_details" }
 func (*IPAddressDetails) GetCrcString() string   { return "ee29b797" }
 func (*IPAddressDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPAddressDetails) Size() (size int) {
@@ -543,7 +543,7 @@ func (m *IPAddressDump) Reset()               { *m = IPAddressDump{} }
 func (*IPAddressDump) GetMessageName() string { return "ip_address_dump" }
 func (*IPAddressDump) GetCrcString() string   { return "2d033de4" }
 func (*IPAddressDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPAddressDump) Size() (size int) {
@@ -581,7 +581,7 @@ func (m *IPContainerProxyAddDel) Reset()               { *m = IPContainerProxyAd
 func (*IPContainerProxyAddDel) GetMessageName() string { return "ip_container_proxy_add_del" }
 func (*IPContainerProxyAddDel) GetCrcString() string   { return "7df1dff1" }
 func (*IPContainerProxyAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPContainerProxyAddDel) Size() (size int) {
@@ -628,7 +628,7 @@ func (*IPContainerProxyAddDelReply) GetMessageName() string {
 }
 func (*IPContainerProxyAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*IPContainerProxyAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPContainerProxyAddDelReply) Size() (size int) {
@@ -662,7 +662,7 @@ func (m *IPContainerProxyDetails) Reset()               { *m = IPContainerProxyD
 func (*IPContainerProxyDetails) GetMessageName() string { return "ip_container_proxy_details" }
 func (*IPContainerProxyDetails) GetCrcString() string   { return "a8085523" }
 func (*IPContainerProxyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPContainerProxyDetails) Size() (size int) {
@@ -702,7 +702,7 @@ func (m *IPContainerProxyDump) Reset()               { *m = IPContainerProxyDump
 func (*IPContainerProxyDump) GetMessageName() string { return "ip_container_proxy_dump" }
 func (*IPContainerProxyDump) GetCrcString() string   { return "51077d14" }
 func (*IPContainerProxyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPContainerProxyDump) Size() (size int) {
@@ -732,7 +732,7 @@ func (m *IPDetails) Reset()               { *m = IPDetails{} }
 func (*IPDetails) GetMessageName() string { return "ip_details" }
 func (*IPDetails) GetCrcString() string   { return "eb152d07" }
 func (*IPDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPDetails) Size() (size int) {
@@ -768,7 +768,7 @@ func (m *IPDump) Reset()               { *m = IPDump{} }
 func (*IPDump) GetMessageName() string { return "ip_dump" }
 func (*IPDump) GetCrcString() string   { return "98d231ca" }
 func (*IPDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPDump) Size() (size int) {
@@ -802,7 +802,7 @@ func (m *IPLocalReassEnableDisable) Reset()               { *m = IPLocalReassEna
 func (*IPLocalReassEnableDisable) GetMessageName() string { return "ip_local_reass_enable_disable" }
 func (*IPLocalReassEnableDisable) GetCrcString() string   { return "34e2ccc4" }
 func (*IPLocalReassEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPLocalReassEnableDisable) Size() (size int) {
@@ -840,7 +840,7 @@ func (*IPLocalReassEnableDisableReply) GetMessageName() string {
 }
 func (*IPLocalReassEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IPLocalReassEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPLocalReassEnableDisableReply) Size() (size int) {
@@ -871,7 +871,7 @@ func (m *IPLocalReassGet) Reset()               { *m = IPLocalReassGet{} }
 func (*IPLocalReassGet) GetMessageName() string { return "ip_local_reass_get" }
 func (*IPLocalReassGet) GetCrcString() string   { return "51077d14" }
 func (*IPLocalReassGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPLocalReassGet) Size() (size int) {
@@ -902,7 +902,7 @@ func (m *IPLocalReassGetReply) Reset()               { *m = IPLocalReassGetReply
 func (*IPLocalReassGetReply) GetMessageName() string { return "ip_local_reass_get_reply" }
 func (*IPLocalReassGetReply) GetCrcString() string   { return "3e93a702" }
 func (*IPLocalReassGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPLocalReassGetReply) Size() (size int) {
@@ -943,7 +943,7 @@ func (m *IPMrouteAddDel) Reset()               { *m = IPMrouteAddDel{} }
 func (*IPMrouteAddDel) GetMessageName() string { return "ip_mroute_add_del" }
 func (*IPMrouteAddDel) GetCrcString() string   { return "0dd7e790" }
 func (*IPMrouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPMrouteAddDel) Size() (size int) {
@@ -1080,7 +1080,7 @@ func (m *IPMrouteAddDelReply) Reset()               { *m = IPMrouteAddDelReply{}
 func (*IPMrouteAddDelReply) GetMessageName() string { return "ip_mroute_add_del_reply" }
 func (*IPMrouteAddDelReply) GetCrcString() string   { return "1992deab" }
 func (*IPMrouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPMrouteAddDelReply) Size() (size int) {
@@ -1116,7 +1116,7 @@ func (m *IPMrouteDetails) Reset()               { *m = IPMrouteDetails{} }
 func (*IPMrouteDetails) GetMessageName() string { return "ip_mroute_details" }
 func (*IPMrouteDetails) GetCrcString() string   { return "c5cb23fc" }
 func (*IPMrouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPMrouteDetails) Size() (size int) {
@@ -1246,7 +1246,7 @@ func (m *IPMrouteDump) Reset()               { *m = IPMrouteDump{} }
 func (*IPMrouteDump) GetMessageName() string { return "ip_mroute_dump" }
 func (*IPMrouteDump) GetCrcString() string   { return "b9d2e09e" }
 func (*IPMrouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPMrouteDump) Size() (size int) {
@@ -1285,7 +1285,7 @@ func (m *IPMtableDetails) Reset()               { *m = IPMtableDetails{} }
 func (*IPMtableDetails) GetMessageName() string { return "ip_mtable_details" }
 func (*IPMtableDetails) GetCrcString() string   { return "b9d2e09e" }
 func (*IPMtableDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPMtableDetails) Size() (size int) {
@@ -1322,7 +1322,7 @@ func (m *IPMtableDump) Reset()               { *m = IPMtableDump{} }
 func (*IPMtableDump) GetMessageName() string { return "ip_mtable_dump" }
 func (*IPMtableDump) GetCrcString() string   { return "51077d14" }
 func (*IPMtableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPMtableDump) Size() (size int) {
@@ -1351,7 +1351,7 @@ func (m *IPPathMtuDetails) Reset()               { *m = IPPathMtuDetails{} }
 func (*IPPathMtuDetails) GetMessageName() string { return "ip_path_mtu_details" }
 func (*IPPathMtuDetails) GetCrcString() string   { return "ac9539a7" }
 func (*IPPathMtuDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPathMtuDetails) Size() (size int) {
@@ -1399,7 +1399,7 @@ func (m *IPPathMtuGet) Reset()               { *m = IPPathMtuGet{} }
 func (*IPPathMtuGet) GetMessageName() string { return "ip_path_mtu_get" }
 func (*IPPathMtuGet) GetCrcString() string   { return "f75ba505" }
 func (*IPPathMtuGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPathMtuGet) Size() (size int) {
@@ -1433,7 +1433,7 @@ func (m *IPPathMtuGetReply) Reset()               { *m = IPPathMtuGetReply{} }
 func (*IPPathMtuGetReply) GetMessageName() string { return "ip_path_mtu_get_reply" }
 func (*IPPathMtuGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*IPPathMtuGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPathMtuGetReply) Size() (size int) {
@@ -1467,7 +1467,7 @@ func (m *IPPathMtuReplaceBegin) Reset()               { *m = IPPathMtuReplaceBeg
 func (*IPPathMtuReplaceBegin) GetMessageName() string { return "ip_path_mtu_replace_begin" }
 func (*IPPathMtuReplaceBegin) GetCrcString() string   { return "51077d14" }
 func (*IPPathMtuReplaceBegin) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPathMtuReplaceBegin) Size() (size int) {
@@ -1496,7 +1496,7 @@ func (m *IPPathMtuReplaceBeginReply) Reset()               { *m = IPPathMtuRepla
 func (*IPPathMtuReplaceBeginReply) GetMessageName() string { return "ip_path_mtu_replace_begin_reply" }
 func (*IPPathMtuReplaceBeginReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPPathMtuReplaceBeginReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPathMtuReplaceBeginReply) Size() (size int) {
@@ -1527,7 +1527,7 @@ func (m *IPPathMtuReplaceEnd) Reset()               { *m = IPPathMtuReplaceEnd{}
 func (*IPPathMtuReplaceEnd) GetMessageName() string { return "ip_path_mtu_replace_end" }
 func (*IPPathMtuReplaceEnd) GetCrcString() string   { return "51077d14" }
 func (*IPPathMtuReplaceEnd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPathMtuReplaceEnd) Size() (size int) {
@@ -1556,7 +1556,7 @@ func (m *IPPathMtuReplaceEndReply) Reset()               { *m = IPPathMtuReplace
 func (*IPPathMtuReplaceEndReply) GetMessageName() string { return "ip_path_mtu_replace_end_reply" }
 func (*IPPathMtuReplaceEndReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPPathMtuReplaceEndReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPathMtuReplaceEndReply) Size() (size int) {
@@ -1589,7 +1589,7 @@ func (m *IPPathMtuUpdate) Reset()               { *m = IPPathMtuUpdate{} }
 func (*IPPathMtuUpdate) GetMessageName() string { return "ip_path_mtu_update" }
 func (*IPPathMtuUpdate) GetCrcString() string   { return "10bbe5cb" }
 func (*IPPathMtuUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPathMtuUpdate) Size() (size int) {
@@ -1637,7 +1637,7 @@ func (m *IPPathMtuUpdateReply) Reset()               { *m = IPPathMtuUpdateReply
 func (*IPPathMtuUpdateReply) GetMessageName() string { return "ip_path_mtu_update_reply" }
 func (*IPPathMtuUpdateReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPPathMtuUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPathMtuUpdateReply) Size() (size int) {
@@ -1672,7 +1672,7 @@ func (m *IPPuntPolice) Reset()               { *m = IPPuntPolice{} }
 func (*IPPuntPolice) GetMessageName() string { return "ip_punt_police" }
 func (*IPPuntPolice) GetCrcString() string   { return "db867cea" }
 func (*IPPuntPolice) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPuntPolice) Size() (size int) {
@@ -1711,7 +1711,7 @@ func (m *IPPuntPoliceReply) Reset()               { *m = IPPuntPoliceReply{} }
 func (*IPPuntPoliceReply) GetMessageName() string { return "ip_punt_police_reply" }
 func (*IPPuntPoliceReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPPuntPoliceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPuntPoliceReply) Size() (size int) {
@@ -1746,7 +1746,7 @@ func (m *IPPuntRedirect) Reset()               { *m = IPPuntRedirect{} }
 func (*IPPuntRedirect) GetMessageName() string { return "ip_punt_redirect" }
 func (*IPPuntRedirect) GetCrcString() string   { return "6580f635" }
 func (*IPPuntRedirect) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPuntRedirect) Size() (size int) {
@@ -1791,7 +1791,7 @@ func (m *IPPuntRedirectDetails) Reset()               { *m = IPPuntRedirectDetai
 func (*IPPuntRedirectDetails) GetMessageName() string { return "ip_punt_redirect_details" }
 func (*IPPuntRedirectDetails) GetCrcString() string   { return "2cef63e7" }
 func (*IPPuntRedirectDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPuntRedirectDetails) Size() (size int) {
@@ -1834,7 +1834,7 @@ func (m *IPPuntRedirectDump) Reset()               { *m = IPPuntRedirectDump{} }
 func (*IPPuntRedirectDump) GetMessageName() string { return "ip_punt_redirect_dump" }
 func (*IPPuntRedirectDump) GetCrcString() string   { return "2d033de4" }
 func (*IPPuntRedirectDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPuntRedirectDump) Size() (size int) {
@@ -1871,7 +1871,7 @@ func (m *IPPuntRedirectReply) Reset()               { *m = IPPuntRedirectReply{}
 func (*IPPuntRedirectReply) GetMessageName() string { return "ip_punt_redirect_reply" }
 func (*IPPuntRedirectReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPPuntRedirectReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPuntRedirectReply) Size() (size int) {
@@ -1904,7 +1904,7 @@ func (m *IPPuntRedirectV2Details) Reset()               { *m = IPPuntRedirectV2D
 func (*IPPuntRedirectV2Details) GetMessageName() string { return "ip_punt_redirect_v2_details" }
 func (*IPPuntRedirectV2Details) GetCrcString() string   { return "7ba42e1d" }
 func (*IPPuntRedirectV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPPuntRedirectV2Details) Size() (size int) {
@@ -2017,7 +2017,7 @@ func (m *IPPuntRedirectV2Dump) Reset()               { *m = IPPuntRedirectV2Dump
 func (*IPPuntRedirectV2Dump) GetMessageName() string { return "ip_punt_redirect_v2_dump" }
 func (*IPPuntRedirectV2Dump) GetCrcString() string   { return "d817a484" }
 func (*IPPuntRedirectV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPPuntRedirectV2Dump) Size() (size int) {
@@ -2056,7 +2056,7 @@ func (m *IPReassemblyEnableDisable) Reset()               { *m = IPReassemblyEna
 func (*IPReassemblyEnableDisable) GetMessageName() string { return "ip_reassembly_enable_disable" }
 func (*IPReassemblyEnableDisable) GetCrcString() string   { return "eb77968d" }
 func (*IPReassemblyEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPReassemblyEnableDisable) Size() (size int) {
@@ -2100,7 +2100,7 @@ func (*IPReassemblyEnableDisableReply) GetMessageName() string {
 }
 func (*IPReassemblyEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IPReassemblyEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPReassemblyEnableDisableReply) Size() (size int) {
@@ -2134,7 +2134,7 @@ func (m *IPReassemblyGet) Reset()               { *m = IPReassemblyGet{} }
 func (*IPReassemblyGet) GetMessageName() string { return "ip_reassembly_get" }
 func (*IPReassemblyGet) GetCrcString() string   { return "ea13ff63" }
 func (*IPReassemblyGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPReassemblyGet) Size() (size int) {
@@ -2175,7 +2175,7 @@ func (m *IPReassemblyGetReply) Reset()               { *m = IPReassemblyGetReply
 func (*IPReassemblyGetReply) GetMessageName() string { return "ip_reassembly_get_reply" }
 func (*IPReassemblyGetReply) GetCrcString() string   { return "d5eb8d34" }
 func (*IPReassemblyGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPReassemblyGetReply) Size() (size int) {
@@ -2228,7 +2228,7 @@ func (m *IPReassemblySet) Reset()               { *m = IPReassemblySet{} }
 func (*IPReassemblySet) GetMessageName() string { return "ip_reassembly_set" }
 func (*IPReassemblySet) GetCrcString() string   { return "16467d25" }
 func (*IPReassemblySet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPReassemblySet) Size() (size int) {
@@ -2276,7 +2276,7 @@ func (m *IPReassemblySetReply) Reset()               { *m = IPReassemblySetReply
 func (*IPReassemblySetReply) GetMessageName() string { return "ip_reassembly_set_reply" }
 func (*IPReassemblySetReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPReassemblySetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPReassemblySetReply) Size() (size int) {
@@ -2311,7 +2311,7 @@ func (m *IPRouteAddDel) Reset()               { *m = IPRouteAddDel{} }
 func (*IPRouteAddDel) GetMessageName() string { return "ip_route_add_del" }
 func (*IPRouteAddDel) GetCrcString() string   { return "b8ecfe0d" }
 func (*IPRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteAddDel) Size() (size int) {
@@ -2439,7 +2439,7 @@ func (m *IPRouteAddDelReply) Reset()               { *m = IPRouteAddDelReply{} }
 func (*IPRouteAddDelReply) GetMessageName() string { return "ip_route_add_del_reply" }
 func (*IPRouteAddDelReply) GetCrcString() string   { return "1992deab" }
 func (*IPRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteAddDelReply) Size() (size int) {
@@ -2478,7 +2478,7 @@ func (m *IPRouteAddDelV2) Reset()               { *m = IPRouteAddDelV2{} }
 func (*IPRouteAddDelV2) GetMessageName() string { return "ip_route_add_del_v2" }
 func (*IPRouteAddDelV2) GetCrcString() string   { return "521ef330" }
 func (*IPRouteAddDelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteAddDelV2) Size() (size int) {
@@ -2610,7 +2610,7 @@ func (m *IPRouteAddDelV2Reply) Reset()               { *m = IPRouteAddDelV2Reply
 func (*IPRouteAddDelV2Reply) GetMessageName() string { return "ip_route_add_del_v2_reply" }
 func (*IPRouteAddDelV2Reply) GetCrcString() string   { return "1992deab" }
 func (*IPRouteAddDelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteAddDelV2Reply) Size() (size int) {
@@ -2646,7 +2646,7 @@ func (m *IPRouteDetails) Reset()               { *m = IPRouteDetails{} }
 func (*IPRouteDetails) GetMessageName() string { return "ip_route_details" }
 func (*IPRouteDetails) GetCrcString() string   { return "bda8f315" }
 func (*IPRouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteDetails) Size() (size int) {
@@ -2767,7 +2767,7 @@ func (m *IPRouteDump) Reset()               { *m = IPRouteDump{} }
 func (*IPRouteDump) GetMessageName() string { return "ip_route_dump" }
 func (*IPRouteDump) GetCrcString() string   { return "b9d2e09e" }
 func (*IPRouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteDump) Size() (size int) {
@@ -2808,7 +2808,7 @@ func (m *IPRouteLookup) Reset()               { *m = IPRouteLookup{} }
 func (*IPRouteLookup) GetMessageName() string { return "ip_route_lookup" }
 func (*IPRouteLookup) GetCrcString() string   { return "710d6471" }
 func (*IPRouteLookup) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteLookup) Size() (size int) {
@@ -2854,7 +2854,7 @@ func (m *IPRouteLookupReply) Reset()               { *m = IPRouteLookupReply{} }
 func (*IPRouteLookupReply) GetMessageName() string { return "ip_route_lookup_reply" }
 func (*IPRouteLookupReply) GetCrcString() string   { return "5d8febcb" }
 func (*IPRouteLookupReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteLookupReply) Size() (size int) {
@@ -2981,7 +2981,7 @@ func (m *IPRouteLookupV2) Reset()               { *m = IPRouteLookupV2{} }
 func (*IPRouteLookupV2) GetMessageName() string { return "ip_route_lookup_v2" }
 func (*IPRouteLookupV2) GetCrcString() string   { return "710d6471" }
 func (*IPRouteLookupV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteLookupV2) Size() (size int) {
@@ -3028,7 +3028,7 @@ func (m *IPRouteLookupV2Reply) Reset()               { *m = IPRouteLookupV2Reply
 func (*IPRouteLookupV2Reply) GetMessageName() string { return "ip_route_lookup_v2_reply" }
 func (*IPRouteLookupV2Reply) GetCrcString() string   { return "84cc9e03" }
 func (*IPRouteLookupV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteLookupV2Reply) Size() (size int) {
@@ -3156,7 +3156,7 @@ func (m *IPRouteV2Details) Reset()               { *m = IPRouteV2Details{} }
 func (*IPRouteV2Details) GetMessageName() string { return "ip_route_v2_details" }
 func (*IPRouteV2Details) GetCrcString() string   { return "b09aa6c0" }
 func (*IPRouteV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPRouteV2Details) Size() (size int) {
@@ -3282,7 +3282,7 @@ func (m *IPRouteV2Dump) Reset()               { *m = IPRouteV2Dump{} }
 func (*IPRouteV2Dump) GetMessageName() string { return "ip_route_v2_dump" }
 func (*IPRouteV2Dump) GetCrcString() string   { return "d16f72e6" }
 func (*IPRouteV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPRouteV2Dump) Size() (size int) {
@@ -3331,7 +3331,7 @@ func (*IPSourceAndPortRangeCheckAddDel) GetMessageName() string {
 }
 func (*IPSourceAndPortRangeCheckAddDel) GetCrcString() string { return "92a067e3" }
 func (*IPSourceAndPortRangeCheckAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPSourceAndPortRangeCheckAddDel) Size() (size int) {
@@ -3405,7 +3405,7 @@ func (*IPSourceAndPortRangeCheckAddDelReply) GetMessageName() string {
 }
 func (*IPSourceAndPortRangeCheckAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*IPSourceAndPortRangeCheckAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPSourceAndPortRangeCheckAddDelReply) Size() (size int) {
@@ -3447,7 +3447,7 @@ func (*IPSourceAndPortRangeCheckInterfaceAddDel) GetMessageName() string {
 }
 func (*IPSourceAndPortRangeCheckInterfaceAddDel) GetCrcString() string { return "e1ba8987" }
 func (*IPSourceAndPortRangeCheckInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPSourceAndPortRangeCheckInterfaceAddDel) Size() (size int) {
@@ -3499,7 +3499,7 @@ func (*IPSourceAndPortRangeCheckInterfaceAddDelReply) GetMessageName() string {
 }
 func (*IPSourceAndPortRangeCheckInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*IPSourceAndPortRangeCheckInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPSourceAndPortRangeCheckInterfaceAddDelReply) Size() (size int) {
@@ -3533,7 +3533,7 @@ func (m *IPTableAddDel) Reset()               { *m = IPTableAddDel{} }
 func (*IPTableAddDel) GetMessageName() string { return "ip_table_add_del" }
 func (*IPTableAddDel) GetCrcString() string   { return "0ffdaec0" }
 func (*IPTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableAddDel) Size() (size int) {
@@ -3575,7 +3575,7 @@ func (m *IPTableAddDelReply) Reset()               { *m = IPTableAddDelReply{} }
 func (*IPTableAddDelReply) GetMessageName() string { return "ip_table_add_del_reply" }
 func (*IPTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableAddDelReply) Size() (size int) {
@@ -3608,7 +3608,7 @@ func (m *IPTableAllocate) Reset()               { *m = IPTableAllocate{} }
 func (*IPTableAllocate) GetMessageName() string { return "ip_table_allocate" }
 func (*IPTableAllocate) GetCrcString() string   { return "b9d2e09e" }
 func (*IPTableAllocate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableAllocate) Size() (size int) {
@@ -3648,7 +3648,7 @@ func (m *IPTableAllocateReply) Reset()               { *m = IPTableAllocateReply
 func (*IPTableAllocateReply) GetMessageName() string { return "ip_table_allocate_reply" }
 func (*IPTableAllocateReply) GetCrcString() string   { return "1728303a" }
 func (*IPTableAllocateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableAllocateReply) Size() (size int) {
@@ -3690,7 +3690,7 @@ func (m *IPTableDetails) Reset()               { *m = IPTableDetails{} }
 func (*IPTableDetails) GetMessageName() string { return "ip_table_details" }
 func (*IPTableDetails) GetCrcString() string   { return "c79fca0f" }
 func (*IPTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableDetails) Size() (size int) {
@@ -3727,7 +3727,7 @@ func (m *IPTableDump) Reset()               { *m = IPTableDump{} }
 func (*IPTableDump) GetMessageName() string { return "ip_table_dump" }
 func (*IPTableDump) GetCrcString() string   { return "51077d14" }
 func (*IPTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableDump) Size() (size int) {
@@ -3756,7 +3756,7 @@ func (m *IPTableFlush) Reset()               { *m = IPTableFlush{} }
 func (*IPTableFlush) GetMessageName() string { return "ip_table_flush" }
 func (*IPTableFlush) GetCrcString() string   { return "b9d2e09e" }
 func (*IPTableFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableFlush) Size() (size int) {
@@ -3795,7 +3795,7 @@ func (m *IPTableFlushReply) Reset()               { *m = IPTableFlushReply{} }
 func (*IPTableFlushReply) GetMessageName() string { return "ip_table_flush_reply" }
 func (*IPTableFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPTableFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableFlushReply) Size() (size int) {
@@ -3828,7 +3828,7 @@ func (m *IPTableReplaceBegin) Reset()               { *m = IPTableReplaceBegin{}
 func (*IPTableReplaceBegin) GetMessageName() string { return "ip_table_replace_begin" }
 func (*IPTableReplaceBegin) GetCrcString() string   { return "b9d2e09e" }
 func (*IPTableReplaceBegin) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableReplaceBegin) Size() (size int) {
@@ -3867,7 +3867,7 @@ func (m *IPTableReplaceBeginReply) Reset()               { *m = IPTableReplaceBe
 func (*IPTableReplaceBeginReply) GetMessageName() string { return "ip_table_replace_begin_reply" }
 func (*IPTableReplaceBeginReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPTableReplaceBeginReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableReplaceBeginReply) Size() (size int) {
@@ -3900,7 +3900,7 @@ func (m *IPTableReplaceEnd) Reset()               { *m = IPTableReplaceEnd{} }
 func (*IPTableReplaceEnd) GetMessageName() string { return "ip_table_replace_end" }
 func (*IPTableReplaceEnd) GetCrcString() string   { return "b9d2e09e" }
 func (*IPTableReplaceEnd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPTableReplaceEnd) Size() (size int) {
@@ -3939,7 +3939,7 @@ func (m *IPTableReplaceEndReply) Reset()               { *m = IPTableReplaceEndR
 func (*IPTableReplaceEndReply) GetMessageName() string { return "ip_table_replace_end_reply" }
 func (*IPTableReplaceEndReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPTableReplaceEndReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPTableReplaceEndReply) Size() (size int) {
@@ -3973,7 +3973,7 @@ func (m *IPUnnumberedDetails) Reset()               { *m = IPUnnumberedDetails{}
 func (*IPUnnumberedDetails) GetMessageName() string { return "ip_unnumbered_details" }
 func (*IPUnnumberedDetails) GetCrcString() string   { return "cc59bd42" }
 func (*IPUnnumberedDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPUnnumberedDetails) Size() (size int) {
@@ -4009,7 +4009,7 @@ func (m *IPUnnumberedDump) Reset()               { *m = IPUnnumberedDump{} }
 func (*IPUnnumberedDump) GetMessageName() string { return "ip_unnumbered_dump" }
 func (*IPUnnumberedDump) GetCrcString() string   { return "f9e6675e" }
 func (*IPUnnumberedDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPUnnumberedDump) Size() (size int) {
@@ -4046,7 +4046,7 @@ func (m *MfibSignalDetails) Reset()               { *m = MfibSignalDetails{} }
 func (*MfibSignalDetails) GetMessageName() string { return "mfib_signal_details" }
 func (*MfibSignalDetails) GetCrcString() string   { return "6f4a4cfb" }
 func (*MfibSignalDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MfibSignalDetails) Size() (size int) {
@@ -4099,7 +4099,7 @@ func (m *MfibSignalDump) Reset()               { *m = MfibSignalDump{} }
 func (*MfibSignalDump) GetMessageName() string { return "mfib_signal_dump" }
 func (*MfibSignalDump) GetCrcString() string   { return "51077d14" }
 func (*MfibSignalDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MfibSignalDump) Size() (size int) {
@@ -4137,7 +4137,7 @@ func (m *SetIPFlowHash) Reset()               { *m = SetIPFlowHash{} }
 func (*SetIPFlowHash) GetMessageName() string { return "set_ip_flow_hash" }
 func (*SetIPFlowHash) GetCrcString() string   { return "084ee09e" }
 func (*SetIPFlowHash) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetIPFlowHash) Size() (size int) {
@@ -4195,7 +4195,7 @@ func (m *SetIPFlowHashReply) Reset()               { *m = SetIPFlowHashReply{} }
 func (*SetIPFlowHashReply) GetMessageName() string { return "set_ip_flow_hash_reply" }
 func (*SetIPFlowHashReply) GetCrcString() string   { return "e8d4e804" }
 func (*SetIPFlowHashReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetIPFlowHashReply) Size() (size int) {
@@ -4228,7 +4228,7 @@ func (m *SetIPFlowHashRouterID) Reset()               { *m = SetIPFlowHashRouter
 func (*SetIPFlowHashRouterID) GetMessageName() string { return "set_ip_flow_hash_router_id" }
 func (*SetIPFlowHashRouterID) GetCrcString() string   { return "03e4f48e" }
 func (*SetIPFlowHashRouterID) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetIPFlowHashRouterID) Size() (size int) {
@@ -4261,7 +4261,7 @@ func (m *SetIPFlowHashRouterIDReply) Reset()               { *m = SetIPFlowHashR
 func (*SetIPFlowHashRouterIDReply) GetMessageName() string { return "set_ip_flow_hash_router_id_reply" }
 func (*SetIPFlowHashRouterIDReply) GetCrcString() string   { return "e8d4e804" }
 func (*SetIPFlowHashRouterIDReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetIPFlowHashRouterIDReply) Size() (size int) {
@@ -4296,7 +4296,7 @@ func (m *SetIPFlowHashV2) Reset()               { *m = SetIPFlowHashV2{} }
 func (*SetIPFlowHashV2) GetMessageName() string { return "set_ip_flow_hash_v2" }
 func (*SetIPFlowHashV2) GetCrcString() string   { return "6d132100" }
 func (*SetIPFlowHashV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetIPFlowHashV2) Size() (size int) {
@@ -4335,7 +4335,7 @@ func (m *SetIPFlowHashV2Reply) Reset()               { *m = SetIPFlowHashV2Reply
 func (*SetIPFlowHashV2Reply) GetMessageName() string { return "set_ip_flow_hash_v2_reply" }
 func (*SetIPFlowHashV2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*SetIPFlowHashV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetIPFlowHashV2Reply) Size() (size int) {
@@ -4369,7 +4369,7 @@ func (m *SwInterfaceIP6EnableDisable) Reset()               { *m = SwInterfaceIP
 func (*SwInterfaceIP6EnableDisable) GetMessageName() string { return "sw_interface_ip6_enable_disable" }
 func (*SwInterfaceIP6EnableDisable) GetCrcString() string   { return "ae6cfcfb" }
 func (*SwInterfaceIP6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceIP6EnableDisable) Size() (size int) {
@@ -4407,7 +4407,7 @@ func (*SwInterfaceIP6EnableDisableReply) GetMessageName() string {
 }
 func (*SwInterfaceIP6EnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceIP6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceIP6EnableDisableReply) Size() (size int) {
@@ -4442,7 +4442,7 @@ func (*SwInterfaceIP6GetLinkLocalAddress) GetMessageName() string {
 }
 func (*SwInterfaceIP6GetLinkLocalAddress) GetCrcString() string { return "f9e6675e" }
 func (*SwInterfaceIP6GetLinkLocalAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceIP6GetLinkLocalAddress) Size() (size int) {
@@ -4480,7 +4480,7 @@ func (*SwInterfaceIP6GetLinkLocalAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceIP6GetLinkLocalAddressReply) GetCrcString() string { return "d16b7130" }
 func (*SwInterfaceIP6GetLinkLocalAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceIP6GetLinkLocalAddressReply) Size() (size int) {
@@ -4519,7 +4519,7 @@ func (*SwInterfaceIP6SetLinkLocalAddress) GetMessageName() string {
 }
 func (*SwInterfaceIP6SetLinkLocalAddress) GetCrcString() string { return "1c10f15f" }
 func (*SwInterfaceIP6SetLinkLocalAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceIP6SetLinkLocalAddress) Size() (size int) {
@@ -4559,7 +4559,7 @@ func (*SwInterfaceIP6SetLinkLocalAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceIP6SetLinkLocalAddressReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceIP6SetLinkLocalAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceIP6SetLinkLocalAddressReply) Size() (size int) {

@@ -96,7 +96,7 @@ func (m *CryptoSetAsyncDispatch) Reset()               { *m = CryptoSetAsyncDisp
 func (*CryptoSetAsyncDispatch) GetMessageName() string { return "crypto_set_async_dispatch" }
 func (*CryptoSetAsyncDispatch) GetCrcString() string   { return "5ca4adc0" }
 func (*CryptoSetAsyncDispatch) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CryptoSetAsyncDispatch) Size() (size int) {
@@ -129,7 +129,7 @@ func (m *CryptoSetAsyncDispatchReply) Reset()               { *m = CryptoSetAsyn
 func (*CryptoSetAsyncDispatchReply) GetMessageName() string { return "crypto_set_async_dispatch_reply" }
 func (*CryptoSetAsyncDispatchReply) GetCrcString() string   { return "e8d4e804" }
 func (*CryptoSetAsyncDispatchReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CryptoSetAsyncDispatchReply) Size() (size int) {
@@ -165,7 +165,7 @@ func (m *CryptoSetHandler) Reset()               { *m = CryptoSetHandler{} }
 func (*CryptoSetHandler) GetMessageName() string { return "crypto_set_handler" }
 func (*CryptoSetHandler) GetCrcString() string   { return "ce9ad00d" }
 func (*CryptoSetHandler) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CryptoSetHandler) Size() (size int) {
@@ -207,7 +207,7 @@ func (m *CryptoSetHandlerReply) Reset()               { *m = CryptoSetHandlerRep
 func (*CryptoSetHandlerReply) GetMessageName() string { return "crypto_set_handler_reply" }
 func (*CryptoSetHandlerReply) GetCrcString() string   { return "e8d4e804" }
 func (*CryptoSetHandlerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CryptoSetHandlerReply) Size() (size int) {

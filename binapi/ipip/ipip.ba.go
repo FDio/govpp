@@ -58,7 +58,7 @@ func (m *Ipip6rdAddTunnel) Reset()               { *m = Ipip6rdAddTunnel{} }
 func (*Ipip6rdAddTunnel) GetMessageName() string { return "ipip_6rd_add_tunnel" }
 func (*Ipip6rdAddTunnel) GetCrcString() string   { return "b9ec1863" }
 func (*Ipip6rdAddTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Ipip6rdAddTunnel) Size() (size int) {
@@ -116,7 +116,7 @@ func (m *Ipip6rdAddTunnelReply) Reset()               { *m = Ipip6rdAddTunnelRep
 func (*Ipip6rdAddTunnelReply) GetMessageName() string { return "ipip_6rd_add_tunnel_reply" }
 func (*Ipip6rdAddTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*Ipip6rdAddTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Ipip6rdAddTunnelReply) Size() (size int) {
@@ -152,7 +152,7 @@ func (m *Ipip6rdDelTunnel) Reset()               { *m = Ipip6rdDelTunnel{} }
 func (*Ipip6rdDelTunnel) GetMessageName() string { return "ipip_6rd_del_tunnel" }
 func (*Ipip6rdDelTunnel) GetCrcString() string   { return "f9e6675e" }
 func (*Ipip6rdDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Ipip6rdDelTunnel) Size() (size int) {
@@ -185,7 +185,7 @@ func (m *Ipip6rdDelTunnelReply) Reset()               { *m = Ipip6rdDelTunnelRep
 func (*Ipip6rdDelTunnelReply) GetMessageName() string { return "ipip_6rd_del_tunnel_reply" }
 func (*Ipip6rdDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
 func (*Ipip6rdDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Ipip6rdDelTunnelReply) Size() (size int) {
@@ -218,7 +218,7 @@ func (m *IpipAddTunnel) Reset()               { *m = IpipAddTunnel{} }
 func (*IpipAddTunnel) GetMessageName() string { return "ipip_add_tunnel" }
 func (*IpipAddTunnel) GetCrcString() string   { return "2ac399f5" }
 func (*IpipAddTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpipAddTunnel) Size() (size int) {
@@ -279,7 +279,7 @@ func (m *IpipAddTunnelReply) Reset()               { *m = IpipAddTunnelReply{} }
 func (*IpipAddTunnelReply) GetMessageName() string { return "ipip_add_tunnel_reply" }
 func (*IpipAddTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*IpipAddTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpipAddTunnelReply) Size() (size int) {
@@ -315,7 +315,7 @@ func (m *IpipDelTunnel) Reset()               { *m = IpipDelTunnel{} }
 func (*IpipDelTunnel) GetMessageName() string { return "ipip_del_tunnel" }
 func (*IpipDelTunnel) GetCrcString() string   { return "f9e6675e" }
 func (*IpipDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpipDelTunnel) Size() (size int) {
@@ -348,7 +348,7 @@ func (m *IpipDelTunnelReply) Reset()               { *m = IpipDelTunnelReply{} }
 func (*IpipDelTunnelReply) GetMessageName() string { return "ipip_del_tunnel_reply" }
 func (*IpipDelTunnelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IpipDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpipDelTunnelReply) Size() (size int) {
@@ -381,7 +381,7 @@ func (m *IpipTunnelDetails) Reset()               { *m = IpipTunnelDetails{} }
 func (*IpipTunnelDetails) GetMessageName() string { return "ipip_tunnel_details" }
 func (*IpipTunnelDetails) GetCrcString() string   { return "d31cb34e" }
 func (*IpipTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpipTunnelDetails) Size() (size int) {
@@ -441,7 +441,7 @@ func (m *IpipTunnelDump) Reset()               { *m = IpipTunnelDump{} }
 func (*IpipTunnelDump) GetMessageName() string { return "ipip_tunnel_dump" }
 func (*IpipTunnelDump) GetCrcString() string   { return "f9e6675e" }
 func (*IpipTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpipTunnelDump) Size() (size int) {

@@ -48,7 +48,7 @@ func (m *ProxyArpAddDel) Reset()               { *m = ProxyArpAddDel{} }
 func (*ProxyArpAddDel) GetMessageName() string { return "proxy_arp_add_del" }
 func (*ProxyArpAddDel) GetCrcString() string   { return "1823c3e7" }
 func (*ProxyArpAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ProxyArpAddDel) Size() (size int) {
@@ -90,7 +90,7 @@ func (m *ProxyArpAddDelReply) Reset()               { *m = ProxyArpAddDelReply{}
 func (*ProxyArpAddDelReply) GetMessageName() string { return "proxy_arp_add_del_reply" }
 func (*ProxyArpAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*ProxyArpAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ProxyArpAddDelReply) Size() (size int) {
@@ -123,7 +123,7 @@ func (m *ProxyArpDetails) Reset()               { *m = ProxyArpDetails{} }
 func (*ProxyArpDetails) GetMessageName() string { return "proxy_arp_details" }
 func (*ProxyArpDetails) GetCrcString() string   { return "5b948673" }
 func (*ProxyArpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ProxyArpDetails) Size() (size int) {
@@ -160,7 +160,7 @@ func (m *ProxyArpDump) Reset()               { *m = ProxyArpDump{} }
 func (*ProxyArpDump) GetMessageName() string { return "proxy_arp_dump" }
 func (*ProxyArpDump) GetCrcString() string   { return "51077d14" }
 func (*ProxyArpDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ProxyArpDump) Size() (size int) {
@@ -189,7 +189,7 @@ func (m *ProxyArpIntfcDetails) Reset()               { *m = ProxyArpIntfcDetails
 func (*ProxyArpIntfcDetails) GetMessageName() string { return "proxy_arp_intfc_details" }
 func (*ProxyArpIntfcDetails) GetCrcString() string   { return "f6458e5f" }
 func (*ProxyArpIntfcDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ProxyArpIntfcDetails) Size() (size int) {
@@ -220,7 +220,7 @@ func (m *ProxyArpIntfcDump) Reset()               { *m = ProxyArpIntfcDump{} }
 func (*ProxyArpIntfcDump) GetMessageName() string { return "proxy_arp_intfc_dump" }
 func (*ProxyArpIntfcDump) GetCrcString() string   { return "51077d14" }
 func (*ProxyArpIntfcDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ProxyArpIntfcDump) Size() (size int) {
@@ -250,7 +250,7 @@ func (m *ProxyArpIntfcEnableDisable) Reset()               { *m = ProxyArpIntfcE
 func (*ProxyArpIntfcEnableDisable) GetMessageName() string { return "proxy_arp_intfc_enable_disable" }
 func (*ProxyArpIntfcEnableDisable) GetCrcString() string   { return "ae6cfcfb" }
 func (*ProxyArpIntfcEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ProxyArpIntfcEnableDisable) Size() (size int) {
@@ -288,7 +288,7 @@ func (*ProxyArpIntfcEnableDisableReply) GetMessageName() string {
 }
 func (*ProxyArpIntfcEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*ProxyArpIntfcEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ProxyArpIntfcEnableDisableReply) Size() (size int) {

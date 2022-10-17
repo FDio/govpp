@@ -80,7 +80,7 @@ func (m *TraceCapturePackets) Reset()               { *m = TraceCapturePackets{}
 func (*TraceCapturePackets) GetMessageName() string { return "trace_capture_packets" }
 func (*TraceCapturePackets) GetCrcString() string   { return "9e791a9b" }
 func (*TraceCapturePackets) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceCapturePackets) Size() (size int) {
@@ -126,7 +126,7 @@ func (m *TraceCapturePacketsReply) Reset()               { *m = TraceCapturePack
 func (*TraceCapturePacketsReply) GetMessageName() string { return "trace_capture_packets_reply" }
 func (*TraceCapturePacketsReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceCapturePacketsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceCapturePacketsReply) Size() (size int) {
@@ -158,7 +158,7 @@ func (m *TraceClearCapture) Reset()               { *m = TraceClearCapture{} }
 func (*TraceClearCapture) GetMessageName() string { return "trace_clear_capture" }
 func (*TraceClearCapture) GetCrcString() string   { return "51077d14" }
 func (*TraceClearCapture) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceClearCapture) Size() (size int) {
@@ -188,7 +188,7 @@ func (m *TraceClearCaptureReply) Reset()               { *m = TraceClearCaptureR
 func (*TraceClearCaptureReply) GetMessageName() string { return "trace_clear_capture_reply" }
 func (*TraceClearCaptureReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceClearCaptureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceClearCaptureReply) Size() (size int) {
@@ -228,7 +228,7 @@ func (m *TraceDetails) Reset()               { *m = TraceDetails{} }
 func (*TraceDetails) GetMessageName() string { return "trace_details" }
 func (*TraceDetails) GetCrcString() string   { return "1553e9eb" }
 func (*TraceDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceDetails) Size() (size int) {
@@ -283,7 +283,7 @@ func (m *TraceDump) Reset()               { *m = TraceDump{} }
 func (*TraceDump) GetMessageName() string { return "trace_dump" }
 func (*TraceDump) GetCrcString() string   { return "c7d6681f" }
 func (*TraceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceDump) Size() (size int) {
@@ -332,7 +332,7 @@ func (m *TraceDumpReply) Reset()               { *m = TraceDumpReply{} }
 func (*TraceDumpReply) GetMessageName() string { return "trace_dump_reply" }
 func (*TraceDumpReply) GetCrcString() string   { return "e0e87f9d" }
 func (*TraceDumpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceDumpReply) Size() (size int) {
@@ -387,7 +387,7 @@ func (m *TraceSetFilters) Reset()               { *m = TraceSetFilters{} }
 func (*TraceSetFilters) GetMessageName() string { return "trace_set_filters" }
 func (*TraceSetFilters) GetCrcString() string   { return "f522b44a" }
 func (*TraceSetFilters) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceSetFilters) Size() (size int) {
@@ -430,7 +430,7 @@ func (m *TraceSetFiltersReply) Reset()               { *m = TraceSetFiltersReply
 func (*TraceSetFiltersReply) GetMessageName() string { return "trace_set_filters_reply" }
 func (*TraceSetFiltersReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceSetFiltersReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceSetFiltersReply) Size() (size int) {

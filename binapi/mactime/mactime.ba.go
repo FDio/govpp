@@ -60,7 +60,7 @@ func (m *MactimeAddDelRange) Reset()               { *m = MactimeAddDelRange{} }
 func (*MactimeAddDelRange) GetMessageName() string { return "mactime_add_del_range" }
 func (*MactimeAddDelRange) GetCrcString() string   { return "cb56e877" }
 func (*MactimeAddDelRange) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MactimeAddDelRange) Size() (size int) {
@@ -139,7 +139,7 @@ func (m *MactimeAddDelRangeReply) Reset()               { *m = MactimeAddDelRang
 func (*MactimeAddDelRangeReply) GetMessageName() string { return "mactime_add_del_range_reply" }
 func (*MactimeAddDelRangeReply) GetCrcString() string   { return "e8d4e804" }
 func (*MactimeAddDelRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MactimeAddDelRangeReply) Size() (size int) {
@@ -179,7 +179,7 @@ func (m *MactimeDetails) Reset()               { *m = MactimeDetails{} }
 func (*MactimeDetails) GetMessageName() string { return "mactime_details" }
 func (*MactimeDetails) GetCrcString() string   { return "da25b13a" }
 func (*MactimeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MactimeDetails) Size() (size int) {
@@ -252,7 +252,7 @@ func (m *MactimeDump) Reset()               { *m = MactimeDump{} }
 func (*MactimeDump) GetMessageName() string { return "mactime_dump" }
 func (*MactimeDump) GetCrcString() string   { return "8f454e23" }
 func (*MactimeDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MactimeDump) Size() (size int) {
@@ -286,7 +286,7 @@ func (m *MactimeDumpReply) Reset()               { *m = MactimeDumpReply{} }
 func (*MactimeDumpReply) GetMessageName() string { return "mactime_dump_reply" }
 func (*MactimeDumpReply) GetCrcString() string   { return "49bcc753" }
 func (*MactimeDumpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MactimeDumpReply) Size() (size int) {
@@ -323,7 +323,7 @@ func (m *MactimeEnableDisable) Reset()               { *m = MactimeEnableDisable
 func (*MactimeEnableDisable) GetMessageName() string { return "mactime_enable_disable" }
 func (*MactimeEnableDisable) GetCrcString() string   { return "3865946c" }
 func (*MactimeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MactimeEnableDisable) Size() (size int) {
@@ -359,7 +359,7 @@ func (m *MactimeEnableDisableReply) Reset()               { *m = MactimeEnableDi
 func (*MactimeEnableDisableReply) GetMessageName() string { return "mactime_enable_disable_reply" }
 func (*MactimeEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MactimeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MactimeEnableDisableReply) Size() (size int) {

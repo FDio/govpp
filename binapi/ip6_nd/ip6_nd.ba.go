@@ -56,7 +56,7 @@ func (m *IP6RaEvent) Reset()               { *m = IP6RaEvent{} }
 func (*IP6RaEvent) GetMessageName() string { return "ip6_ra_event" }
 func (*IP6RaEvent) GetCrcString() string   { return "0364c1c5" }
 func (*IP6RaEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *IP6RaEvent) Size() (size int) {
@@ -149,7 +149,7 @@ func (m *IP6ndProxyAddDel) Reset()               { *m = IP6ndProxyAddDel{} }
 func (*IP6ndProxyAddDel) GetMessageName() string { return "ip6nd_proxy_add_del" }
 func (*IP6ndProxyAddDel) GetCrcString() string   { return "c2e4a686" }
 func (*IP6ndProxyAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IP6ndProxyAddDel) Size() (size int) {
@@ -188,7 +188,7 @@ func (m *IP6ndProxyAddDelReply) Reset()               { *m = IP6ndProxyAddDelRep
 func (*IP6ndProxyAddDelReply) GetMessageName() string { return "ip6nd_proxy_add_del_reply" }
 func (*IP6ndProxyAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IP6ndProxyAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IP6ndProxyAddDelReply) Size() (size int) {
@@ -222,7 +222,7 @@ func (m *IP6ndProxyDetails) Reset()               { *m = IP6ndProxyDetails{} }
 func (*IP6ndProxyDetails) GetMessageName() string { return "ip6nd_proxy_details" }
 func (*IP6ndProxyDetails) GetCrcString() string   { return "30b9ff4a" }
 func (*IP6ndProxyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IP6ndProxyDetails) Size() (size int) {
@@ -256,7 +256,7 @@ func (m *IP6ndProxyDump) Reset()               { *m = IP6ndProxyDump{} }
 func (*IP6ndProxyDump) GetMessageName() string { return "ip6nd_proxy_dump" }
 func (*IP6ndProxyDump) GetCrcString() string   { return "51077d14" }
 func (*IP6ndProxyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IP6ndProxyDump) Size() (size int) {
@@ -286,7 +286,7 @@ func (m *IP6ndProxyEnableDisable) Reset()               { *m = IP6ndProxyEnableD
 func (*IP6ndProxyEnableDisable) GetMessageName() string { return "ip6nd_proxy_enable_disable" }
 func (*IP6ndProxyEnableDisable) GetCrcString() string   { return "7daa1e3a" }
 func (*IP6ndProxyEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IP6ndProxyEnableDisable) Size() (size int) {
@@ -324,7 +324,7 @@ func (*IP6ndProxyEnableDisableReply) GetMessageName() string {
 }
 func (*IP6ndProxyEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IP6ndProxyEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IP6ndProxyEnableDisableReply) Size() (size int) {
@@ -362,7 +362,7 @@ func (m *IP6ndSendRouterSolicitation) Reset()               { *m = IP6ndSendRout
 func (*IP6ndSendRouterSolicitation) GetMessageName() string { return "ip6nd_send_router_solicitation" }
 func (*IP6ndSendRouterSolicitation) GetCrcString() string   { return "e5de609c" }
 func (*IP6ndSendRouterSolicitation) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IP6ndSendRouterSolicitation) Size() (size int) {
@@ -412,7 +412,7 @@ func (*IP6ndSendRouterSolicitationReply) GetMessageName() string {
 }
 func (*IP6ndSendRouterSolicitationReply) GetCrcString() string { return "e8d4e804" }
 func (*IP6ndSendRouterSolicitationReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IP6ndSendRouterSolicitationReply) Size() (size int) {
@@ -458,7 +458,7 @@ func (m *SwInterfaceIP6ndRaConfig) Reset()               { *m = SwInterfaceIP6nd
 func (*SwInterfaceIP6ndRaConfig) GetMessageName() string { return "sw_interface_ip6nd_ra_config" }
 func (*SwInterfaceIP6ndRaConfig) GetCrcString() string   { return "3eb00b1c" }
 func (*SwInterfaceIP6ndRaConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceIP6ndRaConfig) Size() (size int) {
@@ -532,7 +532,7 @@ func (*SwInterfaceIP6ndRaConfigReply) GetMessageName() string {
 }
 func (*SwInterfaceIP6ndRaConfigReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceIP6ndRaConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceIP6ndRaConfigReply) Size() (size int) {
@@ -574,7 +574,7 @@ func (m *SwInterfaceIP6ndRaPrefix) Reset()               { *m = SwInterfaceIP6nd
 func (*SwInterfaceIP6ndRaPrefix) GetMessageName() string { return "sw_interface_ip6nd_ra_prefix" }
 func (*SwInterfaceIP6ndRaPrefix) GetCrcString() string   { return "82cc1b28" }
 func (*SwInterfaceIP6ndRaPrefix) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceIP6ndRaPrefix) Size() (size int) {
@@ -642,7 +642,7 @@ func (*SwInterfaceIP6ndRaPrefixReply) GetMessageName() string {
 }
 func (*SwInterfaceIP6ndRaPrefixReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceIP6ndRaPrefixReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceIP6ndRaPrefixReply) Size() (size int) {
@@ -676,7 +676,7 @@ func (m *WantIP6RaEvents) Reset()               { *m = WantIP6RaEvents{} }
 func (*WantIP6RaEvents) GetMessageName() string { return "want_ip6_ra_events" }
 func (*WantIP6RaEvents) GetCrcString() string   { return "3ec6d6c2" }
 func (*WantIP6RaEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantIP6RaEvents) Size() (size int) {
@@ -712,7 +712,7 @@ func (m *WantIP6RaEventsReply) Reset()               { *m = WantIP6RaEventsReply
 func (*WantIP6RaEventsReply) GetMessageName() string { return "want_ip6_ra_events_reply" }
 func (*WantIP6RaEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantIP6RaEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantIP6RaEventsReply) Size() (size int) {

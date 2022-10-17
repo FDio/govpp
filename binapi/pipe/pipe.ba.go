@@ -38,7 +38,7 @@ func (m *PipeCreate) Reset()               { *m = PipeCreate{} }
 func (*PipeCreate) GetMessageName() string { return "pipe_create" }
 func (*PipeCreate) GetCrcString() string   { return "bb263bd3" }
 func (*PipeCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PipeCreate) Size() (size int) {
@@ -76,7 +76,7 @@ func (m *PipeCreateReply) Reset()               { *m = PipeCreateReply{} }
 func (*PipeCreateReply) GetMessageName() string { return "pipe_create_reply" }
 func (*PipeCreateReply) GetCrcString() string   { return "b7ce310c" }
 func (*PipeCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PipeCreateReply) Size() (size int) {
@@ -121,7 +121,7 @@ func (m *PipeDelete) Reset()               { *m = PipeDelete{} }
 func (*PipeDelete) GetMessageName() string { return "pipe_delete" }
 func (*PipeDelete) GetCrcString() string   { return "f9e6675e" }
 func (*PipeDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PipeDelete) Size() (size int) {
@@ -154,7 +154,7 @@ func (m *PipeDeleteReply) Reset()               { *m = PipeDeleteReply{} }
 func (*PipeDeleteReply) GetMessageName() string { return "pipe_delete_reply" }
 func (*PipeDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*PipeDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PipeDeleteReply) Size() (size int) {
@@ -189,7 +189,7 @@ func (m *PipeDetails) Reset()               { *m = PipeDetails{} }
 func (*PipeDetails) GetMessageName() string { return "pipe_details" }
 func (*PipeDetails) GetCrcString() string   { return "c52b799d" }
 func (*PipeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PipeDetails) Size() (size int) {
@@ -232,7 +232,7 @@ func (m *PipeDump) Reset()               { *m = PipeDump{} }
 func (*PipeDump) GetMessageName() string { return "pipe_dump" }
 func (*PipeDump) GetCrcString() string   { return "51077d14" }
 func (*PipeDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PipeDump) Size() (size int) {

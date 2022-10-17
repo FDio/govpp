@@ -197,7 +197,7 @@ func (m *FlowprobeGetParams) Reset()               { *m = FlowprobeGetParams{} }
 func (*FlowprobeGetParams) GetMessageName() string { return "flowprobe_get_params" }
 func (*FlowprobeGetParams) GetCrcString() string   { return "51077d14" }
 func (*FlowprobeGetParams) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeGetParams) Size() (size int) {
@@ -230,7 +230,7 @@ func (m *FlowprobeGetParamsReply) Reset()               { *m = FlowprobeGetParam
 func (*FlowprobeGetParamsReply) GetMessageName() string { return "flowprobe_get_params_reply" }
 func (*FlowprobeGetParamsReply) GetCrcString() string   { return "f350d621" }
 func (*FlowprobeGetParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeGetParamsReply) Size() (size int) {
@@ -276,7 +276,7 @@ func (m *FlowprobeInterfaceAddDel) Reset()               { *m = FlowprobeInterfa
 func (*FlowprobeInterfaceAddDel) GetMessageName() string { return "flowprobe_interface_add_del" }
 func (*FlowprobeInterfaceAddDel) GetCrcString() string   { return "3420739c" }
 func (*FlowprobeInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeInterfaceAddDel) Size() (size int) {
@@ -321,7 +321,7 @@ func (*FlowprobeInterfaceAddDelReply) GetMessageName() string {
 }
 func (*FlowprobeInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*FlowprobeInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeInterfaceAddDelReply) Size() (size int) {
@@ -357,7 +357,7 @@ func (m *FlowprobeInterfaceDetails) Reset()               { *m = FlowprobeInterf
 func (*FlowprobeInterfaceDetails) GetMessageName() string { return "flowprobe_interface_details" }
 func (*FlowprobeInterfaceDetails) GetCrcString() string   { return "427d77e0" }
 func (*FlowprobeInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeInterfaceDetails) Size() (size int) {
@@ -397,7 +397,7 @@ func (m *FlowprobeInterfaceDump) Reset()               { *m = FlowprobeInterface
 func (*FlowprobeInterfaceDump) GetMessageName() string { return "flowprobe_interface_dump" }
 func (*FlowprobeInterfaceDump) GetCrcString() string   { return "f9e6675e" }
 func (*FlowprobeInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeInterfaceDump) Size() (size int) {
@@ -432,7 +432,7 @@ func (m *FlowprobeParams) Reset()               { *m = FlowprobeParams{} }
 func (*FlowprobeParams) GetMessageName() string { return "flowprobe_params" }
 func (*FlowprobeParams) GetCrcString() string   { return "baa46c09" }
 func (*FlowprobeParams) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeParams) Size() (size int) {
@@ -471,7 +471,7 @@ func (m *FlowprobeParamsReply) Reset()               { *m = FlowprobeParamsReply
 func (*FlowprobeParamsReply) GetMessageName() string { return "flowprobe_params_reply" }
 func (*FlowprobeParamsReply) GetCrcString() string   { return "e8d4e804" }
 func (*FlowprobeParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeParamsReply) Size() (size int) {
@@ -507,7 +507,7 @@ func (m *FlowprobeSetParams) Reset()               { *m = FlowprobeSetParams{} }
 func (*FlowprobeSetParams) GetMessageName() string { return "flowprobe_set_params" }
 func (*FlowprobeSetParams) GetCrcString() string   { return "baa46c09" }
 func (*FlowprobeSetParams) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeSetParams) Size() (size int) {
@@ -547,7 +547,7 @@ func (m *FlowprobeSetParamsReply) Reset()               { *m = FlowprobeSetParam
 func (*FlowprobeSetParamsReply) GetMessageName() string { return "flowprobe_set_params_reply" }
 func (*FlowprobeSetParamsReply) GetCrcString() string   { return "e8d4e804" }
 func (*FlowprobeSetParamsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeSetParamsReply) Size() (size int) {
@@ -582,7 +582,7 @@ func (m *FlowprobeTxInterfaceAddDel) Reset()               { *m = FlowprobeTxInt
 func (*FlowprobeTxInterfaceAddDel) GetMessageName() string { return "flowprobe_tx_interface_add_del" }
 func (*FlowprobeTxInterfaceAddDel) GetCrcString() string   { return "b782c976" }
 func (*FlowprobeTxInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowprobeTxInterfaceAddDel) Size() (size int) {
@@ -623,7 +623,7 @@ func (*FlowprobeTxInterfaceAddDelReply) GetMessageName() string {
 }
 func (*FlowprobeTxInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*FlowprobeTxInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowprobeTxInterfaceAddDelReply) Size() (size int) {

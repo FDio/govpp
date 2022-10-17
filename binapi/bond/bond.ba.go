@@ -119,7 +119,7 @@ func (m *BondAddMember) Reset()               { *m = BondAddMember{} }
 func (*BondAddMember) GetMessageName() string { return "bond_add_member" }
 func (*BondAddMember) GetCrcString() string   { return "e7d14948" }
 func (*BondAddMember) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondAddMember) Size() (size int) {
@@ -161,7 +161,7 @@ func (m *BondAddMemberReply) Reset()               { *m = BondAddMemberReply{} }
 func (*BondAddMemberReply) GetMessageName() string { return "bond_add_member_reply" }
 func (*BondAddMemberReply) GetCrcString() string   { return "e8d4e804" }
 func (*BondAddMemberReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondAddMemberReply) Size() (size int) {
@@ -200,7 +200,7 @@ func (m *BondCreate) Reset()               { *m = BondCreate{} }
 func (*BondCreate) GetMessageName() string { return "bond_create" }
 func (*BondCreate) GetCrcString() string   { return "f1dbd4ff" }
 func (*BondCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondCreate) Size() (size int) {
@@ -254,7 +254,7 @@ func (m *BondCreate2) Reset()               { *m = BondCreate2{} }
 func (*BondCreate2) GetMessageName() string { return "bond_create2" }
 func (*BondCreate2) GetCrcString() string   { return "912fda76" }
 func (*BondCreate2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondCreate2) Size() (size int) {
@@ -306,7 +306,7 @@ func (m *BondCreate2Reply) Reset()               { *m = BondCreate2Reply{} }
 func (*BondCreate2Reply) GetMessageName() string { return "bond_create2_reply" }
 func (*BondCreate2Reply) GetCrcString() string   { return "5383d31f" }
 func (*BondCreate2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondCreate2Reply) Size() (size int) {
@@ -343,7 +343,7 @@ func (m *BondCreateReply) Reset()               { *m = BondCreateReply{} }
 func (*BondCreateReply) GetMessageName() string { return "bond_create_reply" }
 func (*BondCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*BondCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondCreateReply) Size() (size int) {
@@ -379,7 +379,7 @@ func (m *BondDelete) Reset()               { *m = BondDelete{} }
 func (*BondDelete) GetMessageName() string { return "bond_delete" }
 func (*BondDelete) GetCrcString() string   { return "f9e6675e" }
 func (*BondDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondDelete) Size() (size int) {
@@ -412,7 +412,7 @@ func (m *BondDeleteReply) Reset()               { *m = BondDeleteReply{} }
 func (*BondDeleteReply) GetMessageName() string { return "bond_delete_reply" }
 func (*BondDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*BondDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondDeleteReply) Size() (size int) {
@@ -445,7 +445,7 @@ func (m *BondDetachMember) Reset()               { *m = BondDetachMember{} }
 func (*BondDetachMember) GetMessageName() string { return "bond_detach_member" }
 func (*BondDetachMember) GetCrcString() string   { return "f9e6675e" }
 func (*BondDetachMember) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondDetachMember) Size() (size int) {
@@ -478,7 +478,7 @@ func (m *BondDetachMemberReply) Reset()               { *m = BondDetachMemberRep
 func (*BondDetachMemberReply) GetMessageName() string { return "bond_detach_member_reply" }
 func (*BondDetachMemberReply) GetCrcString() string   { return "e8d4e804" }
 func (*BondDetachMemberReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondDetachMemberReply) Size() (size int) {
@@ -512,7 +512,7 @@ func (m *BondDetachSlave) Reset()               { *m = BondDetachSlave{} }
 func (*BondDetachSlave) GetMessageName() string { return "bond_detach_slave" }
 func (*BondDetachSlave) GetCrcString() string   { return "f9e6675e" }
 func (*BondDetachSlave) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondDetachSlave) Size() (size int) {
@@ -546,7 +546,7 @@ func (m *BondDetachSlaveReply) Reset()               { *m = BondDetachSlaveReply
 func (*BondDetachSlaveReply) GetMessageName() string { return "bond_detach_slave_reply" }
 func (*BondDetachSlaveReply) GetCrcString() string   { return "e8d4e804" }
 func (*BondDetachSlaveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondDetachSlaveReply) Size() (size int) {
@@ -583,7 +583,7 @@ func (m *BondEnslave) Reset()               { *m = BondEnslave{} }
 func (*BondEnslave) GetMessageName() string { return "bond_enslave" }
 func (*BondEnslave) GetCrcString() string   { return "e7d14948" }
 func (*BondEnslave) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BondEnslave) Size() (size int) {
@@ -625,7 +625,7 @@ func (m *BondEnslaveReply) Reset()               { *m = BondEnslaveReply{} }
 func (*BondEnslaveReply) GetMessageName() string { return "bond_enslave_reply" }
 func (*BondEnslaveReply) GetCrcString() string   { return "e8d4e804" }
 func (*BondEnslaveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BondEnslaveReply) Size() (size int) {
@@ -665,7 +665,7 @@ func (m *SwBondInterfaceDetails) Reset()               { *m = SwBondInterfaceDet
 func (*SwBondInterfaceDetails) GetMessageName() string { return "sw_bond_interface_details" }
 func (*SwBondInterfaceDetails) GetCrcString() string   { return "9428a69c" }
 func (*SwBondInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwBondInterfaceDetails) Size() (size int) {
@@ -719,7 +719,7 @@ func (m *SwBondInterfaceDump) Reset()               { *m = SwBondInterfaceDump{}
 func (*SwBondInterfaceDump) GetMessageName() string { return "sw_bond_interface_dump" }
 func (*SwBondInterfaceDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwBondInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwBondInterfaceDump) Size() (size int) {
@@ -759,7 +759,7 @@ func (m *SwInterfaceBondDetails) Reset()               { *m = SwInterfaceBondDet
 func (*SwInterfaceBondDetails) GetMessageName() string { return "sw_interface_bond_details" }
 func (*SwInterfaceBondDetails) GetCrcString() string   { return "bb7c929b" }
 func (*SwInterfaceBondDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceBondDetails) Size() (size int) {
@@ -812,7 +812,7 @@ func (m *SwInterfaceBondDump) Reset()               { *m = SwInterfaceBondDump{}
 func (*SwInterfaceBondDump) GetMessageName() string { return "sw_interface_bond_dump" }
 func (*SwInterfaceBondDump) GetCrcString() string   { return "51077d14" }
 func (*SwInterfaceBondDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceBondDump) Size() (size int) {
@@ -842,7 +842,7 @@ func (m *SwInterfaceSetBondWeight) Reset()               { *m = SwInterfaceSetBo
 func (*SwInterfaceSetBondWeight) GetMessageName() string { return "sw_interface_set_bond_weight" }
 func (*SwInterfaceSetBondWeight) GetCrcString() string   { return "deb510a0" }
 func (*SwInterfaceSetBondWeight) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetBondWeight) Size() (size int) {
@@ -880,7 +880,7 @@ func (*SwInterfaceSetBondWeightReply) GetMessageName() string {
 }
 func (*SwInterfaceSetBondWeightReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetBondWeightReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetBondWeightReply) Size() (size int) {
@@ -918,7 +918,7 @@ func (m *SwInterfaceSlaveDetails) Reset()               { *m = SwInterfaceSlaveD
 func (*SwInterfaceSlaveDetails) GetMessageName() string { return "sw_interface_slave_details" }
 func (*SwInterfaceSlaveDetails) GetCrcString() string   { return "3c4a0e23" }
 func (*SwInterfaceSlaveDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSlaveDetails) Size() (size int) {
@@ -967,7 +967,7 @@ func (m *SwInterfaceSlaveDump) Reset()               { *m = SwInterfaceSlaveDump
 func (*SwInterfaceSlaveDump) GetMessageName() string { return "sw_interface_slave_dump" }
 func (*SwInterfaceSlaveDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceSlaveDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSlaveDump) Size() (size int) {
@@ -1005,7 +1005,7 @@ func (m *SwMemberInterfaceDetails) Reset()               { *m = SwMemberInterfac
 func (*SwMemberInterfaceDetails) GetMessageName() string { return "sw_member_interface_details" }
 func (*SwMemberInterfaceDetails) GetCrcString() string   { return "3c4a0e23" }
 func (*SwMemberInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwMemberInterfaceDetails) Size() (size int) {
@@ -1053,7 +1053,7 @@ func (m *SwMemberInterfaceDump) Reset()               { *m = SwMemberInterfaceDu
 func (*SwMemberInterfaceDump) GetMessageName() string { return "sw_member_interface_dump" }
 func (*SwMemberInterfaceDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwMemberInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwMemberInterfaceDump) Size() (size int) {

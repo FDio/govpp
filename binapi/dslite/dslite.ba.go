@@ -40,7 +40,7 @@ func (m *DsliteAddDelPoolAddrRange) Reset()               { *m = DsliteAddDelPoo
 func (*DsliteAddDelPoolAddrRange) GetMessageName() string { return "dslite_add_del_pool_addr_range" }
 func (*DsliteAddDelPoolAddrRange) GetCrcString() string   { return "de2a5b02" }
 func (*DsliteAddDelPoolAddrRange) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteAddDelPoolAddrRange) Size() (size int) {
@@ -81,7 +81,7 @@ func (*DsliteAddDelPoolAddrRangeReply) GetMessageName() string {
 }
 func (*DsliteAddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804" }
 func (*DsliteAddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteAddDelPoolAddrRangeReply) Size() (size int) {
@@ -114,7 +114,7 @@ func (m *DsliteAddressDetails) Reset()               { *m = DsliteAddressDetails
 func (*DsliteAddressDetails) GetMessageName() string { return "dslite_address_details" }
 func (*DsliteAddressDetails) GetCrcString() string   { return "ec26d648" }
 func (*DsliteAddressDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteAddressDetails) Size() (size int) {
@@ -145,7 +145,7 @@ func (m *DsliteAddressDump) Reset()               { *m = DsliteAddressDump{} }
 func (*DsliteAddressDump) GetMessageName() string { return "dslite_address_dump" }
 func (*DsliteAddressDump) GetCrcString() string   { return "51077d14" }
 func (*DsliteAddressDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteAddressDump) Size() (size int) {
@@ -172,7 +172,7 @@ func (m *DsliteGetAftrAddr) Reset()               { *m = DsliteGetAftrAddr{} }
 func (*DsliteGetAftrAddr) GetMessageName() string { return "dslite_get_aftr_addr" }
 func (*DsliteGetAftrAddr) GetCrcString() string   { return "51077d14" }
 func (*DsliteGetAftrAddr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteGetAftrAddr) Size() (size int) {
@@ -203,7 +203,7 @@ func (m *DsliteGetAftrAddrReply) Reset()               { *m = DsliteGetAftrAddrR
 func (*DsliteGetAftrAddrReply) GetMessageName() string { return "dslite_get_aftr_addr_reply" }
 func (*DsliteGetAftrAddrReply) GetCrcString() string   { return "8e23608e" }
 func (*DsliteGetAftrAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteGetAftrAddrReply) Size() (size int) {
@@ -240,7 +240,7 @@ func (m *DsliteGetB4Addr) Reset()               { *m = DsliteGetB4Addr{} }
 func (*DsliteGetB4Addr) GetMessageName() string { return "dslite_get_b4_addr" }
 func (*DsliteGetB4Addr) GetCrcString() string   { return "51077d14" }
 func (*DsliteGetB4Addr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteGetB4Addr) Size() (size int) {
@@ -271,7 +271,7 @@ func (m *DsliteGetB4AddrReply) Reset()               { *m = DsliteGetB4AddrReply
 func (*DsliteGetB4AddrReply) GetMessageName() string { return "dslite_get_b4_addr_reply" }
 func (*DsliteGetB4AddrReply) GetCrcString() string   { return "8e23608e" }
 func (*DsliteGetB4AddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteGetB4AddrReply) Size() (size int) {
@@ -311,7 +311,7 @@ func (m *DsliteSetAftrAddr) Reset()               { *m = DsliteSetAftrAddr{} }
 func (*DsliteSetAftrAddr) GetMessageName() string { return "dslite_set_aftr_addr" }
 func (*DsliteSetAftrAddr) GetCrcString() string   { return "78b50fdf" }
 func (*DsliteSetAftrAddr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteSetAftrAddr) Size() (size int) {
@@ -347,7 +347,7 @@ func (m *DsliteSetAftrAddrReply) Reset()               { *m = DsliteSetAftrAddrR
 func (*DsliteSetAftrAddrReply) GetMessageName() string { return "dslite_set_aftr_addr_reply" }
 func (*DsliteSetAftrAddrReply) GetCrcString() string   { return "e8d4e804" }
 func (*DsliteSetAftrAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteSetAftrAddrReply) Size() (size int) {
@@ -381,7 +381,7 @@ func (m *DsliteSetB4Addr) Reset()               { *m = DsliteSetB4Addr{} }
 func (*DsliteSetB4Addr) GetMessageName() string { return "dslite_set_b4_addr" }
 func (*DsliteSetB4Addr) GetCrcString() string   { return "78b50fdf" }
 func (*DsliteSetB4Addr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DsliteSetB4Addr) Size() (size int) {
@@ -417,7 +417,7 @@ func (m *DsliteSetB4AddrReply) Reset()               { *m = DsliteSetB4AddrReply
 func (*DsliteSetB4AddrReply) GetMessageName() string { return "dslite_set_b4_addr_reply" }
 func (*DsliteSetB4AddrReply) GetCrcString() string   { return "e8d4e804" }
 func (*DsliteSetB4AddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DsliteSetB4AddrReply) Size() (size int) {

@@ -93,7 +93,7 @@ func (m *MssClampDetails) Reset()               { *m = MssClampDetails{} }
 func (*MssClampDetails) GetMessageName() string { return "mss_clamp_details" }
 func (*MssClampDetails) GetCrcString() string   { return "d3a4de61" }
 func (*MssClampDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MssClampDetails) Size() (size int) {
@@ -142,7 +142,7 @@ func (m *MssClampEnableDisable) Reset()               { *m = MssClampEnableDisab
 func (*MssClampEnableDisable) GetMessageName() string { return "mss_clamp_enable_disable" }
 func (*MssClampEnableDisable) GetCrcString() string   { return "d31b44e3" }
 func (*MssClampEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MssClampEnableDisable) Size() (size int) {
@@ -187,7 +187,7 @@ func (m *MssClampEnableDisableReply) Reset()               { *m = MssClampEnable
 func (*MssClampEnableDisableReply) GetMessageName() string { return "mss_clamp_enable_disable_reply" }
 func (*MssClampEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*MssClampEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MssClampEnableDisableReply) Size() (size int) {
@@ -221,7 +221,7 @@ func (m *MssClampGet) Reset()               { *m = MssClampGet{} }
 func (*MssClampGet) GetMessageName() string { return "mss_clamp_get" }
 func (*MssClampGet) GetCrcString() string   { return "47250981" }
 func (*MssClampGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MssClampGet) Size() (size int) {
@@ -258,7 +258,7 @@ func (m *MssClampGetReply) Reset()               { *m = MssClampGetReply{} }
 func (*MssClampGetReply) GetMessageName() string { return "mss_clamp_get_reply" }
 func (*MssClampGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*MssClampGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MssClampGetReply) Size() (size int) {

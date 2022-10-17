@@ -111,7 +111,7 @@ func (m *IgmpClearInterface) Reset()               { *m = IgmpClearInterface{} }
 func (*IgmpClearInterface) GetMessageName() string { return "igmp_clear_interface" }
 func (*IgmpClearInterface) GetCrcString() string   { return "f9e6675e" }
 func (*IgmpClearInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpClearInterface) Size() (size int) {
@@ -144,7 +144,7 @@ func (m *IgmpClearInterfaceReply) Reset()               { *m = IgmpClearInterfac
 func (*IgmpClearInterfaceReply) GetMessageName() string { return "igmp_clear_interface_reply" }
 func (*IgmpClearInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpClearInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpClearInterfaceReply) Size() (size int) {
@@ -179,7 +179,7 @@ func (m *IgmpDetails) Reset()               { *m = IgmpDetails{} }
 func (*IgmpDetails) GetMessageName() string { return "igmp_details" }
 func (*IgmpDetails) GetCrcString() string   { return "38f09929" }
 func (*IgmpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpDetails) Size() (size int) {
@@ -218,7 +218,7 @@ func (m *IgmpDump) Reset()               { *m = IgmpDump{} }
 func (*IgmpDump) GetMessageName() string { return "igmp_dump" }
 func (*IgmpDump) GetCrcString() string   { return "f9e6675e" }
 func (*IgmpDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpDump) Size() (size int) {
@@ -253,7 +253,7 @@ func (m *IgmpEnableDisable) Reset()               { *m = IgmpEnableDisable{} }
 func (*IgmpEnableDisable) GetMessageName() string { return "igmp_enable_disable" }
 func (*IgmpEnableDisable) GetCrcString() string   { return "b1edfb96" }
 func (*IgmpEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpEnableDisable) Size() (size int) {
@@ -292,7 +292,7 @@ func (m *IgmpEnableDisableReply) Reset()               { *m = IgmpEnableDisableR
 func (*IgmpEnableDisableReply) GetMessageName() string { return "igmp_enable_disable_reply" }
 func (*IgmpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpEnableDisableReply) Size() (size int) {
@@ -328,7 +328,7 @@ func (m *IgmpEvent) Reset()               { *m = IgmpEvent{} }
 func (*IgmpEvent) GetMessageName() string { return "igmp_event" }
 func (*IgmpEvent) GetCrcString() string   { return "85fe93ec" }
 func (*IgmpEvent) GetMessageType() api.MessageType {
-	return api.OtherMessage
+	return api.OtherMessageType
 }
 
 func (m *IgmpEvent) Size() (size int) {
@@ -370,7 +370,7 @@ func (m *IgmpGroupPrefixDetails) Reset()               { *m = IgmpGroupPrefixDet
 func (*IgmpGroupPrefixDetails) GetMessageName() string { return "igmp_group_prefix_details" }
 func (*IgmpGroupPrefixDetails) GetCrcString() string   { return "259ccd81" }
 func (*IgmpGroupPrefixDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpGroupPrefixDetails) Size() (size int) {
@@ -410,7 +410,7 @@ func (m *IgmpGroupPrefixDump) Reset()               { *m = IgmpGroupPrefixDump{}
 func (*IgmpGroupPrefixDump) GetMessageName() string { return "igmp_group_prefix_dump" }
 func (*IgmpGroupPrefixDump) GetCrcString() string   { return "51077d14" }
 func (*IgmpGroupPrefixDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpGroupPrefixDump) Size() (size int) {
@@ -439,7 +439,7 @@ func (m *IgmpGroupPrefixSet) Reset()               { *m = IgmpGroupPrefixSet{} }
 func (*IgmpGroupPrefixSet) GetMessageName() string { return "igmp_group_prefix_set" }
 func (*IgmpGroupPrefixSet) GetCrcString() string   { return "5b14a5ce" }
 func (*IgmpGroupPrefixSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpGroupPrefixSet) Size() (size int) {
@@ -481,7 +481,7 @@ func (m *IgmpGroupPrefixSetReply) Reset()               { *m = IgmpGroupPrefixSe
 func (*IgmpGroupPrefixSetReply) GetMessageName() string { return "igmp_group_prefix_set_reply" }
 func (*IgmpGroupPrefixSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpGroupPrefixSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpGroupPrefixSetReply) Size() (size int) {
@@ -514,7 +514,7 @@ func (m *IgmpListen) Reset()               { *m = IgmpListen{} }
 func (*IgmpListen) GetMessageName() string { return "igmp_listen" }
 func (*IgmpListen) GetCrcString() string   { return "19a49f1e" }
 func (*IgmpListen) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpListen) Size() (size int) {
@@ -575,7 +575,7 @@ func (m *IgmpListenReply) Reset()               { *m = IgmpListenReply{} }
 func (*IgmpListenReply) GetMessageName() string { return "igmp_listen_reply" }
 func (*IgmpListenReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpListenReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpListenReply) Size() (size int) {
@@ -610,7 +610,7 @@ func (m *IgmpProxyDeviceAddDel) Reset()               { *m = IgmpProxyDeviceAddD
 func (*IgmpProxyDeviceAddDel) GetMessageName() string { return "igmp_proxy_device_add_del" }
 func (*IgmpProxyDeviceAddDel) GetCrcString() string   { return "0b9be9ce" }
 func (*IgmpProxyDeviceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpProxyDeviceAddDel) Size() (size int) {
@@ -653,7 +653,7 @@ func (*IgmpProxyDeviceAddDelInterface) GetMessageName() string {
 }
 func (*IgmpProxyDeviceAddDelInterface) GetCrcString() string { return "1a9ec24a" }
 func (*IgmpProxyDeviceAddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IgmpProxyDeviceAddDelInterface) Size() (size int) {
@@ -694,7 +694,7 @@ func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageName() string {
 }
 func (*IgmpProxyDeviceAddDelInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*IgmpProxyDeviceAddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpProxyDeviceAddDelInterfaceReply) Size() (size int) {
@@ -727,7 +727,7 @@ func (m *IgmpProxyDeviceAddDelReply) Reset()               { *m = IgmpProxyDevic
 func (*IgmpProxyDeviceAddDelReply) GetMessageName() string { return "igmp_proxy_device_add_del_reply" }
 func (*IgmpProxyDeviceAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*IgmpProxyDeviceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IgmpProxyDeviceAddDelReply) Size() (size int) {
@@ -761,7 +761,7 @@ func (m *WantIgmpEvents) Reset()               { *m = WantIgmpEvents{} }
 func (*WantIgmpEvents) GetMessageName() string { return "want_igmp_events" }
 func (*WantIgmpEvents) GetCrcString() string   { return "cfaccc1f" }
 func (*WantIgmpEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantIgmpEvents) Size() (size int) {
@@ -797,7 +797,7 @@ func (m *WantIgmpEventsReply) Reset()               { *m = WantIgmpEventsReply{}
 func (*WantIgmpEventsReply) GetMessageName() string { return "want_igmp_events_reply" }
 func (*WantIgmpEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantIgmpEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantIgmpEventsReply) Size() (size int) {

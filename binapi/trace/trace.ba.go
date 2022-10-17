@@ -40,7 +40,7 @@ func (m *TraceProfileAdd) Reset()               { *m = TraceProfileAdd{} }
 func (*TraceProfileAdd) GetMessageName() string { return "trace_profile_add" }
 func (*TraceProfileAdd) GetCrcString() string   { return "de08aa6d" }
 func (*TraceProfileAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceProfileAdd) Size() (size int) {
@@ -85,7 +85,7 @@ func (m *TraceProfileAddReply) Reset()               { *m = TraceProfileAddReply
 func (*TraceProfileAddReply) GetMessageName() string { return "trace_profile_add_reply" }
 func (*TraceProfileAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceProfileAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceProfileAddReply) Size() (size int) {
@@ -116,7 +116,7 @@ func (m *TraceProfileDel) Reset()               { *m = TraceProfileDel{} }
 func (*TraceProfileDel) GetMessageName() string { return "trace_profile_del" }
 func (*TraceProfileDel) GetCrcString() string   { return "51077d14" }
 func (*TraceProfileDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceProfileDel) Size() (size int) {
@@ -145,7 +145,7 @@ func (m *TraceProfileDelReply) Reset()               { *m = TraceProfileDelReply
 func (*TraceProfileDelReply) GetMessageName() string { return "trace_profile_del_reply" }
 func (*TraceProfileDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*TraceProfileDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceProfileDelReply) Size() (size int) {
@@ -176,7 +176,7 @@ func (m *TraceProfileShowConfig) Reset()               { *m = TraceProfileShowCo
 func (*TraceProfileShowConfig) GetMessageName() string { return "trace_profile_show_config" }
 func (*TraceProfileShowConfig) GetCrcString() string   { return "51077d14" }
 func (*TraceProfileShowConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TraceProfileShowConfig) Size() (size int) {
@@ -210,7 +210,7 @@ func (m *TraceProfileShowConfigReply) Reset()               { *m = TraceProfileS
 func (*TraceProfileShowConfigReply) GetMessageName() string { return "trace_profile_show_config_reply" }
 func (*TraceProfileShowConfigReply) GetCrcString() string   { return "0f1d374c" }
 func (*TraceProfileShowConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TraceProfileShowConfigReply) Size() (size int) {

@@ -49,7 +49,7 @@ func (m *NshAddDelEntry) Reset()               { *m = NshAddDelEntry{} }
 func (*NshAddDelEntry) GetMessageName() string { return "nsh_add_del_entry" }
 func (*NshAddDelEntry) GetCrcString() string   { return "7dea480b" }
 func (*NshAddDelEntry) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NshAddDelEntry) Size() (size int) {
@@ -120,7 +120,7 @@ func (m *NshAddDelEntryReply) Reset()               { *m = NshAddDelEntryReply{}
 func (*NshAddDelEntryReply) GetMessageName() string { return "nsh_add_del_entry_reply" }
 func (*NshAddDelEntryReply) GetCrcString() string   { return "6296a9eb" }
 func (*NshAddDelEntryReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NshAddDelEntryReply) Size() (size int) {
@@ -162,7 +162,7 @@ func (m *NshAddDelMap) Reset()               { *m = NshAddDelMap{} }
 func (*NshAddDelMap) GetMessageName() string { return "nsh_add_del_map" }
 func (*NshAddDelMap) GetCrcString() string   { return "0a0f42b0" }
 func (*NshAddDelMap) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NshAddDelMap) Size() (size int) {
@@ -214,7 +214,7 @@ func (m *NshAddDelMapReply) Reset()               { *m = NshAddDelMapReply{} }
 func (*NshAddDelMapReply) GetMessageName() string { return "nsh_add_del_map_reply" }
 func (*NshAddDelMapReply) GetCrcString() string   { return "b2b127ef" }
 func (*NshAddDelMapReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NshAddDelMapReply) Size() (size int) {
@@ -262,7 +262,7 @@ func (m *NshEntryDetails) Reset()               { *m = NshEntryDetails{} }
 func (*NshEntryDetails) GetMessageName() string { return "nsh_entry_details" }
 func (*NshEntryDetails) GetCrcString() string   { return "046fb556" }
 func (*NshEntryDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NshEntryDetails) Size() (size int) {
@@ -332,7 +332,7 @@ func (m *NshEntryDump) Reset()               { *m = NshEntryDump{} }
 func (*NshEntryDump) GetMessageName() string { return "nsh_entry_dump" }
 func (*NshEntryDump) GetCrcString() string   { return "cdaf8ccb" }
 func (*NshEntryDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NshEntryDump) Size() (size int) {
@@ -371,7 +371,7 @@ func (m *NshMapDetails) Reset()               { *m = NshMapDetails{} }
 func (*NshMapDetails) GetMessageName() string { return "nsh_map_details" }
 func (*NshMapDetails) GetCrcString() string   { return "2fefcf49" }
 func (*NshMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *NshMapDetails) Size() (size int) {
@@ -422,7 +422,7 @@ func (m *NshMapDump) Reset()               { *m = NshMapDump{} }
 func (*NshMapDump) GetMessageName() string { return "nsh_map_dump" }
 func (*NshMapDump) GetCrcString() string   { return "8fc06b82" }
 func (*NshMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *NshMapDump) Size() (size int) {

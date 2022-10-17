@@ -47,7 +47,7 @@ func (m *TeibDetails) Reset()               { *m = TeibDetails{} }
 func (*TeibDetails) GetMessageName() string { return "teib_details" }
 func (*TeibDetails) GetCrcString() string   { return "981ee1a1" }
 func (*TeibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TeibDetails) Size() (size int) {
@@ -93,7 +93,7 @@ func (m *TeibDump) Reset()               { *m = TeibDump{} }
 func (*TeibDump) GetMessageName() string { return "teib_dump" }
 func (*TeibDump) GetCrcString() string   { return "51077d14" }
 func (*TeibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TeibDump) Size() (size int) {
@@ -123,7 +123,7 @@ func (m *TeibEntryAddDel) Reset()               { *m = TeibEntryAddDel{} }
 func (*TeibEntryAddDel) GetMessageName() string { return "teib_entry_add_del" }
 func (*TeibEntryAddDel) GetCrcString() string   { return "8016cfd2" }
 func (*TeibEntryAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TeibEntryAddDel) Size() (size int) {
@@ -174,7 +174,7 @@ func (m *TeibEntryAddDelReply) Reset()               { *m = TeibEntryAddDelReply
 func (*TeibEntryAddDelReply) GetMessageName() string { return "teib_entry_add_del_reply" }
 func (*TeibEntryAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*TeibEntryAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TeibEntryAddDelReply) Size() (size int) {

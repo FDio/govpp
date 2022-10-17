@@ -59,7 +59,7 @@ func (m *BierDispEntryAddDel) Reset()               { *m = BierDispEntryAddDel{}
 func (*BierDispEntryAddDel) GetMessageName() string { return "bier_disp_entry_add_del" }
 func (*BierDispEntryAddDel) GetCrcString() string   { return "9eb80cb4" }
 func (*BierDispEntryAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierDispEntryAddDel) Size() (size int) {
@@ -177,7 +177,7 @@ func (m *BierDispEntryAddDelReply) Reset()               { *m = BierDispEntryAdd
 func (*BierDispEntryAddDelReply) GetMessageName() string { return "bier_disp_entry_add_del_reply" }
 func (*BierDispEntryAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BierDispEntryAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierDispEntryAddDelReply) Size() (size int) {
@@ -215,7 +215,7 @@ func (m *BierDispEntryDetails) Reset()               { *m = BierDispEntryDetails
 func (*BierDispEntryDetails) GetMessageName() string { return "bier_disp_entry_details" }
 func (*BierDispEntryDetails) GetCrcString() string   { return "84c218f1" }
 func (*BierDispEntryDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierDispEntryDetails) Size() (size int) {
@@ -333,7 +333,7 @@ func (m *BierDispEntryDump) Reset()               { *m = BierDispEntryDump{} }
 func (*BierDispEntryDump) GetMessageName() string { return "bier_disp_entry_dump" }
 func (*BierDispEntryDump) GetCrcString() string   { return "b5fa54ad" }
 func (*BierDispEntryDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierDispEntryDump) Size() (size int) {
@@ -367,7 +367,7 @@ func (m *BierDispTableAddDel) Reset()               { *m = BierDispTableAddDel{}
 func (*BierDispTableAddDel) GetMessageName() string { return "bier_disp_table_add_del" }
 func (*BierDispTableAddDel) GetCrcString() string   { return "889657ac" }
 func (*BierDispTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierDispTableAddDel) Size() (size int) {
@@ -403,7 +403,7 @@ func (m *BierDispTableAddDelReply) Reset()               { *m = BierDispTableAdd
 func (*BierDispTableAddDelReply) GetMessageName() string { return "bier_disp_table_add_del_reply" }
 func (*BierDispTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BierDispTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierDispTableAddDelReply) Size() (size int) {
@@ -436,7 +436,7 @@ func (m *BierDispTableDetails) Reset()               { *m = BierDispTableDetails
 func (*BierDispTableDetails) GetMessageName() string { return "bier_disp_table_details" }
 func (*BierDispTableDetails) GetCrcString() string   { return "d27942c0" }
 func (*BierDispTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierDispTableDetails) Size() (size int) {
@@ -467,7 +467,7 @@ func (m *BierDispTableDump) Reset()               { *m = BierDispTableDump{} }
 func (*BierDispTableDump) GetMessageName() string { return "bier_disp_table_dump" }
 func (*BierDispTableDump) GetCrcString() string   { return "51077d14" }
 func (*BierDispTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierDispTableDump) Size() (size int) {
@@ -499,7 +499,7 @@ func (m *BierImpAdd) Reset()               { *m = BierImpAdd{} }
 func (*BierImpAdd) GetMessageName() string { return "bier_imp_add" }
 func (*BierImpAdd) GetCrcString() string   { return "3856dc3d" }
 func (*BierImpAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierImpAdd) Size() (size int) {
@@ -549,7 +549,7 @@ func (m *BierImpAddReply) Reset()               { *m = BierImpAddReply{} }
 func (*BierImpAddReply) GetMessageName() string { return "bier_imp_add_reply" }
 func (*BierImpAddReply) GetCrcString() string   { return "d49c5793" }
 func (*BierImpAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierImpAddReply) Size() (size int) {
@@ -585,7 +585,7 @@ func (m *BierImpDel) Reset()               { *m = BierImpDel{} }
 func (*BierImpDel) GetMessageName() string { return "bier_imp_del" }
 func (*BierImpDel) GetCrcString() string   { return "7d45edf6" }
 func (*BierImpDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierImpDel) Size() (size int) {
@@ -618,7 +618,7 @@ func (m *BierImpDelReply) Reset()               { *m = BierImpDelReply{} }
 func (*BierImpDelReply) GetMessageName() string { return "bier_imp_del_reply" }
 func (*BierImpDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BierImpDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierImpDelReply) Size() (size int) {
@@ -654,7 +654,7 @@ func (m *BierImpDetails) Reset()               { *m = BierImpDetails{} }
 func (*BierImpDetails) GetMessageName() string { return "bier_imp_details" }
 func (*BierImpDetails) GetCrcString() string   { return "b76192df" }
 func (*BierImpDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierImpDetails) Size() (size int) {
@@ -701,7 +701,7 @@ func (m *BierImpDump) Reset()               { *m = BierImpDump{} }
 func (*BierImpDump) GetMessageName() string { return "bier_imp_dump" }
 func (*BierImpDump) GetCrcString() string   { return "51077d14" }
 func (*BierImpDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierImpDump) Size() (size int) {
@@ -732,7 +732,7 @@ func (m *BierRouteAddDel) Reset()               { *m = BierRouteAddDel{} }
 func (*BierRouteAddDel) GetMessageName() string { return "bier_route_add_del" }
 func (*BierRouteAddDel) GetCrcString() string   { return "fd02f3ea" }
 func (*BierRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierRouteAddDel) Size() (size int) {
@@ -856,7 +856,7 @@ func (m *BierRouteAddDelReply) Reset()               { *m = BierRouteAddDelReply
 func (*BierRouteAddDelReply) GetMessageName() string { return "bier_route_add_del_reply" }
 func (*BierRouteAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BierRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierRouteAddDelReply) Size() (size int) {
@@ -889,7 +889,7 @@ func (m *BierRouteDetails) Reset()               { *m = BierRouteDetails{} }
 func (*BierRouteDetails) GetMessageName() string { return "bier_route_details" }
 func (*BierRouteDetails) GetCrcString() string   { return "4008caee" }
 func (*BierRouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierRouteDetails) Size() (size int) {
@@ -1007,7 +1007,7 @@ func (m *BierRouteDump) Reset()               { *m = BierRouteDump{} }
 func (*BierRouteDump) GetMessageName() string { return "bier_route_dump" }
 func (*BierRouteDump) GetCrcString() string   { return "38339846" }
 func (*BierRouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierRouteDump) Size() (size int) {
@@ -1048,7 +1048,7 @@ func (m *BierTableAddDel) Reset()               { *m = BierTableAddDel{} }
 func (*BierTableAddDel) GetMessageName() string { return "bier_table_add_del" }
 func (*BierTableAddDel) GetCrcString() string   { return "35e59209" }
 func (*BierTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierTableAddDel) Size() (size int) {
@@ -1093,7 +1093,7 @@ func (m *BierTableAddDelReply) Reset()               { *m = BierTableAddDelReply
 func (*BierTableAddDelReply) GetMessageName() string { return "bier_table_add_del_reply" }
 func (*BierTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BierTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierTableAddDelReply) Size() (size int) {
@@ -1127,7 +1127,7 @@ func (m *BierTableDetails) Reset()               { *m = BierTableDetails{} }
 func (*BierTableDetails) GetMessageName() string { return "bier_table_details" }
 func (*BierTableDetails) GetCrcString() string   { return "fc44a9dd" }
 func (*BierTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BierTableDetails) Size() (size int) {
@@ -1167,7 +1167,7 @@ func (m *BierTableDump) Reset()               { *m = BierTableDump{} }
 func (*BierTableDump) GetMessageName() string { return "bier_table_dump" }
 func (*BierTableDump) GetCrcString() string   { return "51077d14" }
 func (*BierTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BierTableDump) Size() (size int) {

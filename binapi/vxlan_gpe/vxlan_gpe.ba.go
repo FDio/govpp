@@ -42,7 +42,7 @@ func (*SwInterfaceSetVxlanGpeBypass) GetMessageName() string {
 }
 func (*SwInterfaceSetVxlanGpeBypass) GetCrcString() string { return "65247409" }
 func (*SwInterfaceSetVxlanGpeBypass) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetVxlanGpeBypass) Size() (size int) {
@@ -83,7 +83,7 @@ func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageName() string {
 }
 func (*SwInterfaceSetVxlanGpeBypassReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetVxlanGpeBypassReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetVxlanGpeBypassReply) Size() (size int) {
@@ -123,7 +123,7 @@ func (m *VxlanGpeAddDelTunnel) Reset()               { *m = VxlanGpeAddDelTunnel
 func (*VxlanGpeAddDelTunnel) GetMessageName() string { return "vxlan_gpe_add_del_tunnel" }
 func (*VxlanGpeAddDelTunnel) GetCrcString() string   { return "a645b2b0" }
 func (*VxlanGpeAddDelTunnel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeAddDelTunnel) Size() (size int) {
@@ -184,7 +184,7 @@ func (m *VxlanGpeAddDelTunnelReply) Reset()               { *m = VxlanGpeAddDelT
 func (*VxlanGpeAddDelTunnelReply) GetMessageName() string { return "vxlan_gpe_add_del_tunnel_reply" }
 func (*VxlanGpeAddDelTunnelReply) GetCrcString() string   { return "5383d31f" }
 func (*VxlanGpeAddDelTunnelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeAddDelTunnelReply) Size() (size int) {
@@ -229,7 +229,7 @@ func (m *VxlanGpeAddDelTunnelV2) Reset()               { *m = VxlanGpeAddDelTunn
 func (*VxlanGpeAddDelTunnelV2) GetMessageName() string { return "vxlan_gpe_add_del_tunnel_v2" }
 func (*VxlanGpeAddDelTunnelV2) GetCrcString() string   { return "d62fdb35" }
 func (*VxlanGpeAddDelTunnelV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeAddDelTunnelV2) Size() (size int) {
@@ -298,7 +298,7 @@ func (*VxlanGpeAddDelTunnelV2Reply) GetMessageName() string {
 }
 func (*VxlanGpeAddDelTunnelV2Reply) GetCrcString() string { return "5383d31f" }
 func (*VxlanGpeAddDelTunnelV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeAddDelTunnelV2Reply) Size() (size int) {
@@ -342,7 +342,7 @@ func (m *VxlanGpeTunnelDetails) Reset()               { *m = VxlanGpeTunnelDetai
 func (*VxlanGpeTunnelDetails) GetMessageName() string { return "vxlan_gpe_tunnel_details" }
 func (*VxlanGpeTunnelDetails) GetCrcString() string   { return "0968fc8b" }
 func (*VxlanGpeTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeTunnelDetails) Size() (size int) {
@@ -405,7 +405,7 @@ func (m *VxlanGpeTunnelDump) Reset()               { *m = VxlanGpeTunnelDump{} }
 func (*VxlanGpeTunnelDump) GetMessageName() string { return "vxlan_gpe_tunnel_dump" }
 func (*VxlanGpeTunnelDump) GetCrcString() string   { return "f9e6675e" }
 func (*VxlanGpeTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeTunnelDump) Size() (size int) {
@@ -448,7 +448,7 @@ func (m *VxlanGpeTunnelV2Details) Reset()               { *m = VxlanGpeTunnelV2D
 func (*VxlanGpeTunnelV2Details) GetMessageName() string { return "vxlan_gpe_tunnel_v2_details" }
 func (*VxlanGpeTunnelV2Details) GetCrcString() string   { return "06be4870" }
 func (*VxlanGpeTunnelV2Details) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VxlanGpeTunnelV2Details) Size() (size int) {
@@ -517,7 +517,7 @@ func (m *VxlanGpeTunnelV2Dump) Reset()               { *m = VxlanGpeTunnelV2Dump
 func (*VxlanGpeTunnelV2Dump) GetMessageName() string { return "vxlan_gpe_tunnel_v2_dump" }
 func (*VxlanGpeTunnelV2Dump) GetCrcString() string   { return "f9e6675e" }
 func (*VxlanGpeTunnelV2Dump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VxlanGpeTunnelV2Dump) Size() (size int) {

@@ -87,7 +87,7 @@ func (m *GreTunnelAddDel) Reset()               { *m = GreTunnelAddDel{} }
 func (*GreTunnelAddDel) GetMessageName() string { return "gre_tunnel_add_del" }
 func (*GreTunnelAddDel) GetCrcString() string   { return "a27d7f17" }
 func (*GreTunnelAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GreTunnelAddDel) Size() (size int) {
@@ -154,7 +154,7 @@ func (m *GreTunnelAddDelReply) Reset()               { *m = GreTunnelAddDelReply
 func (*GreTunnelAddDelReply) GetMessageName() string { return "gre_tunnel_add_del_reply" }
 func (*GreTunnelAddDelReply) GetCrcString() string   { return "5383d31f" }
 func (*GreTunnelAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GreTunnelAddDelReply) Size() (size int) {
@@ -190,7 +190,7 @@ func (m *GreTunnelDetails) Reset()               { *m = GreTunnelDetails{} }
 func (*GreTunnelDetails) GetMessageName() string { return "gre_tunnel_details" }
 func (*GreTunnelDetails) GetCrcString() string   { return "24435433" }
 func (*GreTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GreTunnelDetails) Size() (size int) {
@@ -253,7 +253,7 @@ func (m *GreTunnelDump) Reset()               { *m = GreTunnelDump{} }
 func (*GreTunnelDump) GetMessageName() string { return "gre_tunnel_dump" }
 func (*GreTunnelDump) GetCrcString() string   { return "f9e6675e" }
 func (*GreTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GreTunnelDump) Size() (size int) {

@@ -216,7 +216,7 @@ func (m *DHCP6ClientsEnableDisable) Reset()               { *m = DHCP6ClientsEna
 func (*DHCP6ClientsEnableDisable) GetMessageName() string { return "dhcp6_clients_enable_disable" }
 func (*DHCP6ClientsEnableDisable) GetCrcString() string   { return "b3e225d2" }
 func (*DHCP6ClientsEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCP6ClientsEnableDisable) Size() (size int) {
@@ -251,7 +251,7 @@ func (*DHCP6ClientsEnableDisableReply) GetMessageName() string {
 }
 func (*DHCP6ClientsEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*DHCP6ClientsEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCP6ClientsEnableDisableReply) Size() (size int) {
@@ -284,7 +284,7 @@ func (m *DHCP6DuidLlSet) Reset()               { *m = DHCP6DuidLlSet{} }
 func (*DHCP6DuidLlSet) GetMessageName() string { return "dhcp6_duid_ll_set" }
 func (*DHCP6DuidLlSet) GetCrcString() string   { return "0f6ca323" }
 func (*DHCP6DuidLlSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCP6DuidLlSet) Size() (size int) {
@@ -318,7 +318,7 @@ func (m *DHCP6DuidLlSetReply) Reset()               { *m = DHCP6DuidLlSetReply{}
 func (*DHCP6DuidLlSetReply) GetMessageName() string { return "dhcp6_duid_ll_set_reply" }
 func (*DHCP6DuidLlSetReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCP6DuidLlSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCP6DuidLlSetReply) Size() (size int) {
@@ -361,7 +361,7 @@ func (m *DHCP6PdReplyEvent) Reset()               { *m = DHCP6PdReplyEvent{} }
 func (*DHCP6PdReplyEvent) GetMessageName() string { return "dhcp6_pd_reply_event" }
 func (*DHCP6PdReplyEvent) GetCrcString() string   { return "5e878029" }
 func (*DHCP6PdReplyEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *DHCP6PdReplyEvent) Size() (size int) {
@@ -460,7 +460,7 @@ func (m *DHCP6PdSendClientMessage) Reset()               { *m = DHCP6PdSendClien
 func (*DHCP6PdSendClientMessage) GetMessageName() string { return "dhcp6_pd_send_client_message" }
 func (*DHCP6PdSendClientMessage) GetCrcString() string   { return "3739fd8d" }
 func (*DHCP6PdSendClientMessage) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCP6PdSendClientMessage) Size() (size int) {
@@ -553,7 +553,7 @@ func (*DHCP6PdSendClientMessageReply) GetMessageName() string {
 }
 func (*DHCP6PdSendClientMessageReply) GetCrcString() string { return "e8d4e804" }
 func (*DHCP6PdSendClientMessageReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCP6PdSendClientMessageReply) Size() (size int) {
@@ -596,7 +596,7 @@ func (m *DHCP6ReplyEvent) Reset()               { *m = DHCP6ReplyEvent{} }
 func (*DHCP6ReplyEvent) GetMessageName() string { return "dhcp6_reply_event" }
 func (*DHCP6ReplyEvent) GetCrcString() string   { return "85b7b17e" }
 func (*DHCP6ReplyEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *DHCP6ReplyEvent) Size() (size int) {
@@ -692,7 +692,7 @@ func (m *DHCP6SendClientMessage) Reset()               { *m = DHCP6SendClientMes
 func (*DHCP6SendClientMessage) GetMessageName() string { return "dhcp6_send_client_message" }
 func (*DHCP6SendClientMessage) GetCrcString() string   { return "f8222476" }
 func (*DHCP6SendClientMessage) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCP6SendClientMessage) Size() (size int) {
@@ -780,7 +780,7 @@ func (m *DHCP6SendClientMessageReply) Reset()               { *m = DHCP6SendClie
 func (*DHCP6SendClientMessageReply) GetMessageName() string { return "dhcp6_send_client_message_reply" }
 func (*DHCP6SendClientMessageReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCP6SendClientMessageReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCP6SendClientMessageReply) Size() (size int) {
@@ -814,7 +814,7 @@ func (m *DHCPClientConfig) Reset()               { *m = DHCPClientConfig{} }
 func (*DHCPClientConfig) GetMessageName() string { return "dhcp_client_config" }
 func (*DHCPClientConfig) GetCrcString() string   { return "1af013ea" }
 func (*DHCPClientConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPClientConfig) Size() (size int) {
@@ -869,7 +869,7 @@ func (m *DHCPClientConfigReply) Reset()               { *m = DHCPClientConfigRep
 func (*DHCPClientConfigReply) GetMessageName() string { return "dhcp_client_config_reply" }
 func (*DHCPClientConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPClientConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPClientConfigReply) Size() (size int) {
@@ -903,7 +903,7 @@ func (m *DHCPClientDetails) Reset()               { *m = DHCPClientDetails{} }
 func (*DHCPClientDetails) GetMessageName() string { return "dhcp_client_details" }
 func (*DHCPClientDetails) GetCrcString() string   { return "8897b2d8" }
 func (*DHCPClientDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPClientDetails) Size() (size int) {
@@ -1008,7 +1008,7 @@ func (m *DHCPClientDump) Reset()               { *m = DHCPClientDump{} }
 func (*DHCPClientDump) GetMessageName() string { return "dhcp_client_dump" }
 func (*DHCPClientDump) GetCrcString() string   { return "51077d14" }
 func (*DHCPClientDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPClientDump) Size() (size int) {
@@ -1038,7 +1038,7 @@ func (m *DHCPComplEvent) Reset()               { *m = DHCPComplEvent{} }
 func (*DHCPComplEvent) GetMessageName() string { return "dhcp_compl_event" }
 func (*DHCPComplEvent) GetCrcString() string   { return "e18124b7" }
 func (*DHCPComplEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *DHCPComplEvent) Size() (size int) {
@@ -1124,7 +1124,7 @@ func (m *DHCPPluginControlPing) Reset()               { *m = DHCPPluginControlPi
 func (*DHCPPluginControlPing) GetMessageName() string { return "dhcp_plugin_control_ping" }
 func (*DHCPPluginControlPing) GetCrcString() string   { return "51077d14" }
 func (*DHCPPluginControlPing) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPPluginControlPing) Size() (size int) {
@@ -1155,7 +1155,7 @@ func (m *DHCPPluginControlPingReply) Reset()               { *m = DHCPPluginCont
 func (*DHCPPluginControlPingReply) GetMessageName() string { return "dhcp_plugin_control_ping_reply" }
 func (*DHCPPluginControlPingReply) GetCrcString() string   { return "f6b0b8ca" }
 func (*DHCPPluginControlPingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPPluginControlPingReply) Size() (size int) {
@@ -1192,7 +1192,7 @@ func (m *DHCPPluginGetVersion) Reset()               { *m = DHCPPluginGetVersion
 func (*DHCPPluginGetVersion) GetMessageName() string { return "dhcp_plugin_get_version" }
 func (*DHCPPluginGetVersion) GetCrcString() string   { return "51077d14" }
 func (*DHCPPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPPluginGetVersion) Size() (size int) {
@@ -1222,7 +1222,7 @@ func (m *DHCPPluginGetVersionReply) Reset()               { *m = DHCPPluginGetVe
 func (*DHCPPluginGetVersionReply) GetMessageName() string { return "dhcp_plugin_get_version_reply" }
 func (*DHCPPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*DHCPPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPPluginGetVersionReply) Size() (size int) {
@@ -1262,7 +1262,7 @@ func (m *DHCPProxyConfig) Reset()               { *m = DHCPProxyConfig{} }
 func (*DHCPProxyConfig) GetMessageName() string { return "dhcp_proxy_config" }
 func (*DHCPProxyConfig) GetCrcString() string   { return "4058a689" }
 func (*DHCPProxyConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPProxyConfig) Size() (size int) {
@@ -1313,7 +1313,7 @@ func (m *DHCPProxyConfigReply) Reset()               { *m = DHCPProxyConfigReply
 func (*DHCPProxyConfigReply) GetMessageName() string { return "dhcp_proxy_config_reply" }
 func (*DHCPProxyConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPProxyConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPProxyConfigReply) Size() (size int) {
@@ -1354,7 +1354,7 @@ func (m *DHCPProxyDetails) Reset()               { *m = DHCPProxyDetails{} }
 func (*DHCPProxyDetails) GetMessageName() string { return "dhcp_proxy_details" }
 func (*DHCPProxyDetails) GetCrcString() string   { return "dcbaf540" }
 func (*DHCPProxyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPProxyDetails) Size() (size int) {
@@ -1436,7 +1436,7 @@ func (m *DHCPProxyDump) Reset()               { *m = DHCPProxyDump{} }
 func (*DHCPProxyDump) GetMessageName() string { return "dhcp_proxy_dump" }
 func (*DHCPProxyDump) GetCrcString() string   { return "5c5b063f" }
 func (*DHCPProxyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPProxyDump) Size() (size int) {
@@ -1475,7 +1475,7 @@ func (m *DHCPProxySetVss) Reset()               { *m = DHCPProxySetVss{} }
 func (*DHCPProxySetVss) GetMessageName() string { return "dhcp_proxy_set_vss" }
 func (*DHCPProxySetVss) GetCrcString() string   { return "50537301" }
 func (*DHCPProxySetVss) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DHCPProxySetVss) Size() (size int) {
@@ -1526,7 +1526,7 @@ func (m *DHCPProxySetVssReply) Reset()               { *m = DHCPProxySetVssReply
 func (*DHCPProxySetVssReply) GetMessageName() string { return "dhcp_proxy_set_vss_reply" }
 func (*DHCPProxySetVssReply) GetCrcString() string   { return "e8d4e804" }
 func (*DHCPProxySetVssReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DHCPProxySetVssReply) Size() (size int) {
@@ -1560,7 +1560,7 @@ func (m *WantDHCP6PdReplyEvents) Reset()               { *m = WantDHCP6PdReplyEv
 func (*WantDHCP6PdReplyEvents) GetMessageName() string { return "want_dhcp6_pd_reply_events" }
 func (*WantDHCP6PdReplyEvents) GetCrcString() string   { return "c5e2af94" }
 func (*WantDHCP6PdReplyEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantDHCP6PdReplyEvents) Size() (size int) {
@@ -1598,7 +1598,7 @@ func (*WantDHCP6PdReplyEventsReply) GetMessageName() string {
 }
 func (*WantDHCP6PdReplyEventsReply) GetCrcString() string { return "e8d4e804" }
 func (*WantDHCP6PdReplyEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantDHCP6PdReplyEventsReply) Size() (size int) {
@@ -1632,7 +1632,7 @@ func (m *WantDHCP6ReplyEvents) Reset()               { *m = WantDHCP6ReplyEvents
 func (*WantDHCP6ReplyEvents) GetMessageName() string { return "want_dhcp6_reply_events" }
 func (*WantDHCP6ReplyEvents) GetCrcString() string   { return "05b454b5" }
 func (*WantDHCP6ReplyEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantDHCP6ReplyEvents) Size() (size int) {
@@ -1668,7 +1668,7 @@ func (m *WantDHCP6ReplyEventsReply) Reset()               { *m = WantDHCP6ReplyE
 func (*WantDHCP6ReplyEventsReply) GetMessageName() string { return "want_dhcp6_reply_events_reply" }
 func (*WantDHCP6ReplyEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantDHCP6ReplyEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantDHCP6ReplyEventsReply) Size() (size int) {

@@ -40,7 +40,7 @@ func (m *LogDetails) Reset()               { *m = LogDetails{} }
 func (*LogDetails) GetMessageName() string { return "log_details" }
 func (*LogDetails) GetCrcString() string   { return "03d61cc0" }
 func (*LogDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *LogDetails) Size() (size int) {
@@ -82,7 +82,7 @@ func (m *LogDump) Reset()               { *m = LogDump{} }
 func (*LogDump) GetMessageName() string { return "log_dump" }
 func (*LogDump) GetCrcString() string   { return "6ab31753" }
 func (*LogDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *LogDump) Size() (size int) {
@@ -113,7 +113,7 @@ func (m *ShowVersion) Reset()               { *m = ShowVersion{} }
 func (*ShowVersion) GetMessageName() string { return "show_version" }
 func (*ShowVersion) GetCrcString() string   { return "51077d14" }
 func (*ShowVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ShowVersion) Size() (size int) {
@@ -146,7 +146,7 @@ func (m *ShowVersionReply) Reset()               { *m = ShowVersionReply{} }
 func (*ShowVersionReply) GetMessageName() string { return "show_version_reply" }
 func (*ShowVersionReply) GetCrcString() string   { return "c919bde1" }
 func (*ShowVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ShowVersionReply) Size() (size int) {
@@ -189,7 +189,7 @@ func (m *ShowVpeSystemTime) Reset()               { *m = ShowVpeSystemTime{} }
 func (*ShowVpeSystemTime) GetMessageName() string { return "show_vpe_system_time" }
 func (*ShowVpeSystemTime) GetCrcString() string   { return "51077d14" }
 func (*ShowVpeSystemTime) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ShowVpeSystemTime) Size() (size int) {
@@ -219,7 +219,7 @@ func (m *ShowVpeSystemTimeReply) Reset()               { *m = ShowVpeSystemTimeR
 func (*ShowVpeSystemTimeReply) GetMessageName() string { return "show_vpe_system_time_reply" }
 func (*ShowVpeSystemTimeReply) GetCrcString() string   { return "7ffd8193" }
 func (*ShowVpeSystemTimeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ShowVpeSystemTimeReply) Size() (size int) {

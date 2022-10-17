@@ -40,7 +40,7 @@ func (m *SvsDetails) Reset()               { *m = SvsDetails{} }
 func (*SvsDetails) GetMessageName() string { return "svs_details" }
 func (*SvsDetails) GetCrcString() string   { return "6282cd55" }
 func (*SvsDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SvsDetails) Size() (size int) {
@@ -77,7 +77,7 @@ func (m *SvsDump) Reset()               { *m = SvsDump{} }
 func (*SvsDump) GetMessageName() string { return "svs_dump" }
 func (*SvsDump) GetCrcString() string   { return "51077d14" }
 func (*SvsDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SvsDump) Size() (size int) {
@@ -109,7 +109,7 @@ func (m *SvsEnableDisable) Reset()               { *m = SvsEnableDisable{} }
 func (*SvsEnableDisable) GetMessageName() string { return "svs_enable_disable" }
 func (*SvsEnableDisable) GetCrcString() string   { return "634b89d2" }
 func (*SvsEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SvsEnableDisable) Size() (size int) {
@@ -151,7 +151,7 @@ func (m *SvsEnableDisableReply) Reset()               { *m = SvsEnableDisableRep
 func (*SvsEnableDisableReply) GetMessageName() string { return "svs_enable_disable_reply" }
 func (*SvsEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SvsEnableDisableReply) Size() (size int) {
@@ -182,7 +182,7 @@ func (m *SvsPluginGetVersion) Reset()               { *m = SvsPluginGetVersion{}
 func (*SvsPluginGetVersion) GetMessageName() string { return "svs_plugin_get_version" }
 func (*SvsPluginGetVersion) GetCrcString() string   { return "51077d14" }
 func (*SvsPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SvsPluginGetVersion) Size() (size int) {
@@ -212,7 +212,7 @@ func (m *SvsPluginGetVersionReply) Reset()               { *m = SvsPluginGetVers
 func (*SvsPluginGetVersionReply) GetMessageName() string { return "svs_plugin_get_version_reply" }
 func (*SvsPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*SvsPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SvsPluginGetVersionReply) Size() (size int) {
@@ -251,7 +251,7 @@ func (m *SvsRouteAddDel) Reset()               { *m = SvsRouteAddDel{} }
 func (*SvsRouteAddDel) GetMessageName() string { return "svs_route_add_del" }
 func (*SvsRouteAddDel) GetCrcString() string   { return "e49bc63c" }
 func (*SvsRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SvsRouteAddDel) Size() (size int) {
@@ -299,7 +299,7 @@ func (m *SvsRouteAddDelReply) Reset()               { *m = SvsRouteAddDelReply{}
 func (*SvsRouteAddDelReply) GetMessageName() string { return "svs_route_add_del_reply" }
 func (*SvsRouteAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SvsRouteAddDelReply) Size() (size int) {
@@ -334,7 +334,7 @@ func (m *SvsTableAddDel) Reset()               { *m = SvsTableAddDel{} }
 func (*SvsTableAddDel) GetMessageName() string { return "svs_table_add_del" }
 func (*SvsTableAddDel) GetCrcString() string   { return "7d21cb2a" }
 func (*SvsTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SvsTableAddDel) Size() (size int) {
@@ -373,7 +373,7 @@ func (m *SvsTableAddDelReply) Reset()               { *m = SvsTableAddDelReply{}
 func (*SvsTableAddDelReply) GetMessageName() string { return "svs_table_add_del_reply" }
 func (*SvsTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SvsTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SvsTableAddDelReply) Size() (size int) {

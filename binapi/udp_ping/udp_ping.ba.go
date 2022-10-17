@@ -46,7 +46,7 @@ func (m *UDPPingAddDel) Reset()               { *m = UDPPingAddDel{} }
 func (*UDPPingAddDel) GetMessageName() string { return "udp_ping_add_del" }
 func (*UDPPingAddDel) GetCrcString() string   { return "fa2628fc" }
 func (*UDPPingAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPPingAddDel) Size() (size int) {
@@ -113,7 +113,7 @@ func (m *UDPPingAddDelReply) Reset()               { *m = UDPPingAddDelReply{} }
 func (*UDPPingAddDelReply) GetMessageName() string { return "udp_ping_add_del_reply" }
 func (*UDPPingAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPPingAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPPingAddDelReply) Size() (size int) {
@@ -146,7 +146,7 @@ func (m *UDPPingExport) Reset()               { *m = UDPPingExport{} }
 func (*UDPPingExport) GetMessageName() string { return "udp_ping_export" }
 func (*UDPPingExport) GetCrcString() string   { return "b3e225d2" }
 func (*UDPPingExport) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPPingExport) Size() (size int) {
@@ -179,7 +179,7 @@ func (m *UDPPingExportReply) Reset()               { *m = UDPPingExportReply{} }
 func (*UDPPingExportReply) GetMessageName() string { return "udp_ping_export_reply" }
 func (*UDPPingExportReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPPingExportReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPPingExportReply) Size() (size int) {

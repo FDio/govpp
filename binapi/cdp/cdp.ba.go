@@ -36,7 +36,7 @@ func (m *CdpEnableDisable) Reset()               { *m = CdpEnableDisable{} }
 func (*CdpEnableDisable) GetMessageName() string { return "cdp_enable_disable" }
 func (*CdpEnableDisable) GetCrcString() string   { return "2e7b47df" }
 func (*CdpEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CdpEnableDisable) Size() (size int) {
@@ -69,7 +69,7 @@ func (m *CdpEnableDisableReply) Reset()               { *m = CdpEnableDisableRep
 func (*CdpEnableDisableReply) GetMessageName() string { return "cdp_enable_disable_reply" }
 func (*CdpEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*CdpEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CdpEnableDisableReply) Size() (size int) {

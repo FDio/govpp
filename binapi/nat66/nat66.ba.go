@@ -41,7 +41,7 @@ func (m *Nat66AddDelInterface) Reset()               { *m = Nat66AddDelInterface
 func (*Nat66AddDelInterface) GetMessageName() string { return "nat66_add_del_interface" }
 func (*Nat66AddDelInterface) GetCrcString() string   { return "f3699b83" }
 func (*Nat66AddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat66AddDelInterface) Size() (size int) {
@@ -80,7 +80,7 @@ func (m *Nat66AddDelInterfaceReply) Reset()               { *m = Nat66AddDelInte
 func (*Nat66AddDelInterfaceReply) GetMessageName() string { return "nat66_add_del_interface_reply" }
 func (*Nat66AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat66AddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat66AddDelInterfaceReply) Size() (size int) {
@@ -116,7 +116,7 @@ func (m *Nat66AddDelStaticMapping) Reset()               { *m = Nat66AddDelStati
 func (*Nat66AddDelStaticMapping) GetMessageName() string { return "nat66_add_del_static_mapping" }
 func (*Nat66AddDelStaticMapping) GetCrcString() string   { return "3ed88f71" }
 func (*Nat66AddDelStaticMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat66AddDelStaticMapping) Size() (size int) {
@@ -160,7 +160,7 @@ func (*Nat66AddDelStaticMappingReply) GetMessageName() string {
 }
 func (*Nat66AddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat66AddDelStaticMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat66AddDelStaticMappingReply) Size() (size int) {
@@ -194,7 +194,7 @@ func (m *Nat66InterfaceDetails) Reset()               { *m = Nat66InterfaceDetai
 func (*Nat66InterfaceDetails) GetMessageName() string { return "nat66_interface_details" }
 func (*Nat66InterfaceDetails) GetCrcString() string   { return "5d286289" }
 func (*Nat66InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat66InterfaceDetails) Size() (size int) {
@@ -228,7 +228,7 @@ func (m *Nat66InterfaceDump) Reset()               { *m = Nat66InterfaceDump{} }
 func (*Nat66InterfaceDump) GetMessageName() string { return "nat66_interface_dump" }
 func (*Nat66InterfaceDump) GetCrcString() string   { return "51077d14" }
 func (*Nat66InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat66InterfaceDump) Size() (size int) {
@@ -258,7 +258,7 @@ func (m *Nat66PluginEnableDisable) Reset()               { *m = Nat66PluginEnabl
 func (*Nat66PluginEnableDisable) GetMessageName() string { return "nat66_plugin_enable_disable" }
 func (*Nat66PluginEnableDisable) GetCrcString() string   { return "56f2f83b" }
 func (*Nat66PluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat66PluginEnableDisable) Size() (size int) {
@@ -296,7 +296,7 @@ func (*Nat66PluginEnableDisableReply) GetMessageName() string {
 }
 func (*Nat66PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat66PluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat66PluginEnableDisableReply) Size() (size int) {
@@ -333,7 +333,7 @@ func (m *Nat66StaticMappingDetails) Reset()               { *m = Nat66StaticMapp
 func (*Nat66StaticMappingDetails) GetMessageName() string { return "nat66_static_mapping_details" }
 func (*Nat66StaticMappingDetails) GetCrcString() string   { return "df39654b" }
 func (*Nat66StaticMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat66StaticMappingDetails) Size() (size int) {
@@ -376,7 +376,7 @@ func (m *Nat66StaticMappingDump) Reset()               { *m = Nat66StaticMapping
 func (*Nat66StaticMappingDump) GetMessageName() string { return "nat66_static_mapping_dump" }
 func (*Nat66StaticMappingDump) GetCrcString() string   { return "51077d14" }
 func (*Nat66StaticMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat66StaticMappingDump) Size() (size int) {

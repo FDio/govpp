@@ -38,7 +38,7 @@ func (m *FeatureGsoEnableDisable) Reset()               { *m = FeatureGsoEnableD
 func (*FeatureGsoEnableDisable) GetMessageName() string { return "feature_gso_enable_disable" }
 func (*FeatureGsoEnableDisable) GetCrcString() string   { return "5501adee" }
 func (*FeatureGsoEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FeatureGsoEnableDisable) Size() (size int) {
@@ -76,7 +76,7 @@ func (*FeatureGsoEnableDisableReply) GetMessageName() string {
 }
 func (*FeatureGsoEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*FeatureGsoEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FeatureGsoEnableDisableReply) Size() (size int) {

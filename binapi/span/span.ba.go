@@ -76,7 +76,7 @@ func (m *SwInterfaceSpanDetails) Reset()               { *m = SwInterfaceSpanDet
 func (*SwInterfaceSpanDetails) GetMessageName() string { return "sw_interface_span_details" }
 func (*SwInterfaceSpanDetails) GetCrcString() string   { return "8a20e79f" }
 func (*SwInterfaceSpanDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSpanDetails) Size() (size int) {
@@ -118,7 +118,7 @@ func (m *SwInterfaceSpanDump) Reset()               { *m = SwInterfaceSpanDump{}
 func (*SwInterfaceSpanDump) GetMessageName() string { return "sw_interface_span_dump" }
 func (*SwInterfaceSpanDump) GetCrcString() string   { return "d6cf0c3d" }
 func (*SwInterfaceSpanDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSpanDump) Size() (size int) {
@@ -156,7 +156,7 @@ func (*SwInterfaceSpanEnableDisable) GetMessageName() string {
 }
 func (*SwInterfaceSpanEnableDisable) GetCrcString() string { return "23ddd96b" }
 func (*SwInterfaceSpanEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSpanEnableDisable) Size() (size int) {
@@ -200,7 +200,7 @@ func (*SwInterfaceSpanEnableDisableReply) GetMessageName() string {
 }
 func (*SwInterfaceSpanEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSpanEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSpanEnableDisableReply) Size() (size int) {

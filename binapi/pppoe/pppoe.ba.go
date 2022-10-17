@@ -40,7 +40,7 @@ func (m *PppoeAddDelCp) Reset()               { *m = PppoeAddDelCp{} }
 func (*PppoeAddDelCp) GetMessageName() string { return "pppoe_add_del_cp" }
 func (*PppoeAddDelCp) GetCrcString() string   { return "eacd9aaa" }
 func (*PppoeAddDelCp) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PppoeAddDelCp) Size() (size int) {
@@ -76,7 +76,7 @@ func (m *PppoeAddDelCpReply) Reset()               { *m = PppoeAddDelCpReply{} }
 func (*PppoeAddDelCpReply) GetMessageName() string { return "pppoe_add_del_cp_reply" }
 func (*PppoeAddDelCpReply) GetCrcString() string   { return "e8d4e804" }
 func (*PppoeAddDelCpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PppoeAddDelCpReply) Size() (size int) {
@@ -113,7 +113,7 @@ func (m *PppoeAddDelSession) Reset()               { *m = PppoeAddDelSession{} }
 func (*PppoeAddDelSession) GetMessageName() string { return "pppoe_add_del_session" }
 func (*PppoeAddDelSession) GetCrcString() string   { return "f6fd759e" }
 func (*PppoeAddDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PppoeAddDelSession) Size() (size int) {
@@ -162,7 +162,7 @@ func (m *PppoeAddDelSessionReply) Reset()               { *m = PppoeAddDelSessio
 func (*PppoeAddDelSessionReply) GetMessageName() string { return "pppoe_add_del_session_reply" }
 func (*PppoeAddDelSessionReply) GetCrcString() string   { return "5383d31f" }
 func (*PppoeAddDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PppoeAddDelSessionReply) Size() (size int) {
@@ -204,7 +204,7 @@ func (m *PppoeSessionDetails) Reset()               { *m = PppoeSessionDetails{}
 func (*PppoeSessionDetails) GetMessageName() string { return "pppoe_session_details" }
 func (*PppoeSessionDetails) GetCrcString() string   { return "4b8e8a4a" }
 func (*PppoeSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PppoeSessionDetails) Size() (size int) {
@@ -258,7 +258,7 @@ func (m *PppoeSessionDump) Reset()               { *m = PppoeSessionDump{} }
 func (*PppoeSessionDump) GetMessageName() string { return "pppoe_session_dump" }
 func (*PppoeSessionDump) GetCrcString() string   { return "f9e6675e" }
 func (*PppoeSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PppoeSessionDump) Size() (size int) {

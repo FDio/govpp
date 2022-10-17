@@ -42,7 +42,7 @@ func (m *AdlAllowlistEnableDisable) Reset()               { *m = AdlAllowlistEna
 func (*AdlAllowlistEnableDisable) GetMessageName() string { return "adl_allowlist_enable_disable" }
 func (*AdlAllowlistEnableDisable) GetCrcString() string   { return "ea88828d" }
 func (*AdlAllowlistEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AdlAllowlistEnableDisable) Size() (size int) {
@@ -90,7 +90,7 @@ func (*AdlAllowlistEnableDisableReply) GetMessageName() string {
 }
 func (*AdlAllowlistEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*AdlAllowlistEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AdlAllowlistEnableDisableReply) Size() (size int) {
@@ -125,7 +125,7 @@ func (m *AdlInterfaceEnableDisable) Reset()               { *m = AdlInterfaceEna
 func (*AdlInterfaceEnableDisable) GetMessageName() string { return "adl_interface_enable_disable" }
 func (*AdlInterfaceEnableDisable) GetCrcString() string   { return "5501adee" }
 func (*AdlInterfaceEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AdlInterfaceEnableDisable) Size() (size int) {
@@ -164,7 +164,7 @@ func (*AdlInterfaceEnableDisableReply) GetMessageName() string {
 }
 func (*AdlInterfaceEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*AdlInterfaceEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AdlInterfaceEnableDisableReply) Size() (size int) {

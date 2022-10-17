@@ -74,7 +74,7 @@ func (m *BfdAuthDelKey) Reset()               { *m = BfdAuthDelKey{} }
 func (*BfdAuthDelKey) GetMessageName() string { return "bfd_auth_del_key" }
 func (*BfdAuthDelKey) GetCrcString() string   { return "65310b22" }
 func (*BfdAuthDelKey) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdAuthDelKey) Size() (size int) {
@@ -107,7 +107,7 @@ func (m *BfdAuthDelKeyReply) Reset()               { *m = BfdAuthDelKeyReply{} }
 func (*BfdAuthDelKeyReply) GetMessageName() string { return "bfd_auth_del_key_reply" }
 func (*BfdAuthDelKeyReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdAuthDelKeyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdAuthDelKeyReply) Size() (size int) {
@@ -142,7 +142,7 @@ func (m *BfdAuthKeysDetails) Reset()               { *m = BfdAuthKeysDetails{} }
 func (*BfdAuthKeysDetails) GetMessageName() string { return "bfd_auth_keys_details" }
 func (*BfdAuthKeysDetails) GetCrcString() string   { return "84130e9f" }
 func (*BfdAuthKeysDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdAuthKeysDetails) Size() (size int) {
@@ -179,7 +179,7 @@ func (m *BfdAuthKeysDump) Reset()               { *m = BfdAuthKeysDump{} }
 func (*BfdAuthKeysDump) GetMessageName() string { return "bfd_auth_keys_dump" }
 func (*BfdAuthKeysDump) GetCrcString() string   { return "51077d14" }
 func (*BfdAuthKeysDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdAuthKeysDump) Size() (size int) {
@@ -211,7 +211,7 @@ func (m *BfdAuthSetKey) Reset()               { *m = BfdAuthSetKey{} }
 func (*BfdAuthSetKey) GetMessageName() string { return "bfd_auth_set_key" }
 func (*BfdAuthSetKey) GetCrcString() string   { return "690b8877" }
 func (*BfdAuthSetKey) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdAuthSetKey) Size() (size int) {
@@ -254,7 +254,7 @@ func (m *BfdAuthSetKeyReply) Reset()               { *m = BfdAuthSetKeyReply{} }
 func (*BfdAuthSetKeyReply) GetMessageName() string { return "bfd_auth_set_key_reply" }
 func (*BfdAuthSetKeyReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdAuthSetKeyReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdAuthSetKeyReply) Size() (size int) {
@@ -295,7 +295,7 @@ func (m *BfdUDPAdd) Reset()               { *m = BfdUDPAdd{} }
 func (*BfdUDPAdd) GetMessageName() string { return "bfd_udp_add" }
 func (*BfdUDPAdd) GetCrcString() string   { return "939cd26a" }
 func (*BfdUDPAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPAdd) Size() (size int) {
@@ -358,7 +358,7 @@ func (m *BfdUDPAddReply) Reset()               { *m = BfdUDPAddReply{} }
 func (*BfdUDPAddReply) GetMessageName() string { return "bfd_udp_add_reply" }
 func (*BfdUDPAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPAddReply) Size() (size int) {
@@ -396,7 +396,7 @@ func (m *BfdUDPAuthActivate) Reset()               { *m = BfdUDPAuthActivate{} }
 func (*BfdUDPAuthActivate) GetMessageName() string { return "bfd_udp_auth_activate" }
 func (*BfdUDPAuthActivate) GetCrcString() string   { return "21fd1bdb" }
 func (*BfdUDPAuthActivate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPAuthActivate) Size() (size int) {
@@ -450,7 +450,7 @@ func (m *BfdUDPAuthActivateReply) Reset()               { *m = BfdUDPAuthActivat
 func (*BfdUDPAuthActivateReply) GetMessageName() string { return "bfd_udp_auth_activate_reply" }
 func (*BfdUDPAuthActivateReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPAuthActivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPAuthActivateReply) Size() (size int) {
@@ -486,7 +486,7 @@ func (m *BfdUDPAuthDeactivate) Reset()               { *m = BfdUDPAuthDeactivate
 func (*BfdUDPAuthDeactivate) GetMessageName() string { return "bfd_udp_auth_deactivate" }
 func (*BfdUDPAuthDeactivate) GetCrcString() string   { return "9a05e2e0" }
 func (*BfdUDPAuthDeactivate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPAuthDeactivate) Size() (size int) {
@@ -534,7 +534,7 @@ func (m *BfdUDPAuthDeactivateReply) Reset()               { *m = BfdUDPAuthDeact
 func (*BfdUDPAuthDeactivateReply) GetMessageName() string { return "bfd_udp_auth_deactivate_reply" }
 func (*BfdUDPAuthDeactivateReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPAuthDeactivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPAuthDeactivateReply) Size() (size int) {
@@ -569,7 +569,7 @@ func (m *BfdUDPDel) Reset()               { *m = BfdUDPDel{} }
 func (*BfdUDPDel) GetMessageName() string { return "bfd_udp_del" }
 func (*BfdUDPDel) GetCrcString() string   { return "dcb13a89" }
 func (*BfdUDPDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPDel) Size() (size int) {
@@ -612,7 +612,7 @@ func (m *BfdUDPDelEchoSource) Reset()               { *m = BfdUDPDelEchoSource{}
 func (*BfdUDPDelEchoSource) GetMessageName() string { return "bfd_udp_del_echo_source" }
 func (*BfdUDPDelEchoSource) GetCrcString() string   { return "51077d14" }
 func (*BfdUDPDelEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPDelEchoSource) Size() (size int) {
@@ -641,7 +641,7 @@ func (m *BfdUDPDelEchoSourceReply) Reset()               { *m = BfdUDPDelEchoSou
 func (*BfdUDPDelEchoSourceReply) GetMessageName() string { return "bfd_udp_del_echo_source_reply" }
 func (*BfdUDPDelEchoSourceReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPDelEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPDelEchoSourceReply) Size() (size int) {
@@ -674,7 +674,7 @@ func (m *BfdUDPDelReply) Reset()               { *m = BfdUDPDelReply{} }
 func (*BfdUDPDelReply) GetMessageName() string { return "bfd_udp_del_reply" }
 func (*BfdUDPDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPDelReply) Size() (size int) {
@@ -705,7 +705,7 @@ func (m *BfdUDPGetEchoSource) Reset()               { *m = BfdUDPGetEchoSource{}
 func (*BfdUDPGetEchoSource) GetMessageName() string { return "bfd_udp_get_echo_source" }
 func (*BfdUDPGetEchoSource) GetCrcString() string   { return "51077d14" }
 func (*BfdUDPGetEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPGetEchoSource) Size() (size int) {
@@ -740,7 +740,7 @@ func (m *BfdUDPGetEchoSourceReply) Reset()               { *m = BfdUDPGetEchoSou
 func (*BfdUDPGetEchoSourceReply) GetMessageName() string { return "bfd_udp_get_echo_source_reply" }
 func (*BfdUDPGetEchoSourceReply) GetCrcString() string   { return "e3d736a1" }
 func (*BfdUDPGetEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPGetEchoSourceReply) Size() (size int) {
@@ -796,7 +796,7 @@ func (m *BfdUDPMod) Reset()               { *m = BfdUDPMod{} }
 func (*BfdUDPMod) GetMessageName() string { return "bfd_udp_mod" }
 func (*BfdUDPMod) GetCrcString() string   { return "913df085" }
 func (*BfdUDPMod) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPMod) Size() (size int) {
@@ -850,7 +850,7 @@ func (m *BfdUDPModReply) Reset()               { *m = BfdUDPModReply{} }
 func (*BfdUDPModReply) GetMessageName() string { return "bfd_udp_mod_reply" }
 func (*BfdUDPModReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPModReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPModReply) Size() (size int) {
@@ -892,7 +892,7 @@ func (m *BfdUDPSessionDetails) Reset()               { *m = BfdUDPSessionDetails
 func (*BfdUDPSessionDetails) GetMessageName() string { return "bfd_udp_session_details" }
 func (*BfdUDPSessionDetails) GetCrcString() string   { return "09fb2f2d" }
 func (*BfdUDPSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPSessionDetails) Size() (size int) {
@@ -956,7 +956,7 @@ func (m *BfdUDPSessionDump) Reset()               { *m = BfdUDPSessionDump{} }
 func (*BfdUDPSessionDump) GetMessageName() string { return "bfd_udp_session_dump" }
 func (*BfdUDPSessionDump) GetCrcString() string   { return "51077d14" }
 func (*BfdUDPSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPSessionDump) Size() (size int) {
@@ -995,7 +995,7 @@ func (m *BfdUDPSessionEvent) Reset()               { *m = BfdUDPSessionEvent{} }
 func (*BfdUDPSessionEvent) GetMessageName() string { return "bfd_udp_session_event" }
 func (*BfdUDPSessionEvent) GetCrcString() string   { return "8eaaf062" }
 func (*BfdUDPSessionEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *BfdUDPSessionEvent) Size() (size int) {
@@ -1067,7 +1067,7 @@ func (m *BfdUDPSessionSetFlags) Reset()               { *m = BfdUDPSessionSetFla
 func (*BfdUDPSessionSetFlags) GetMessageName() string { return "bfd_udp_session_set_flags" }
 func (*BfdUDPSessionSetFlags) GetCrcString() string   { return "04b4bdfd" }
 func (*BfdUDPSessionSetFlags) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPSessionSetFlags) Size() (size int) {
@@ -1115,7 +1115,7 @@ func (m *BfdUDPSessionSetFlagsReply) Reset()               { *m = BfdUDPSessionS
 func (*BfdUDPSessionSetFlagsReply) GetMessageName() string { return "bfd_udp_session_set_flags_reply" }
 func (*BfdUDPSessionSetFlagsReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPSessionSetFlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPSessionSetFlagsReply) Size() (size int) {
@@ -1148,7 +1148,7 @@ func (m *BfdUDPSetEchoSource) Reset()               { *m = BfdUDPSetEchoSource{}
 func (*BfdUDPSetEchoSource) GetMessageName() string { return "bfd_udp_set_echo_source" }
 func (*BfdUDPSetEchoSource) GetCrcString() string   { return "f9e6675e" }
 func (*BfdUDPSetEchoSource) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPSetEchoSource) Size() (size int) {
@@ -1181,7 +1181,7 @@ func (m *BfdUDPSetEchoSourceReply) Reset()               { *m = BfdUDPSetEchoSou
 func (*BfdUDPSetEchoSourceReply) GetMessageName() string { return "bfd_udp_set_echo_source_reply" }
 func (*BfdUDPSetEchoSourceReply) GetCrcString() string   { return "e8d4e804" }
 func (*BfdUDPSetEchoSourceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPSetEchoSourceReply) Size() (size int) {
@@ -1222,7 +1222,7 @@ func (m *BfdUDPUpd) Reset()               { *m = BfdUDPUpd{} }
 func (*BfdUDPUpd) GetMessageName() string { return "bfd_udp_upd" }
 func (*BfdUDPUpd) GetCrcString() string   { return "939cd26a" }
 func (*BfdUDPUpd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BfdUDPUpd) Size() (size int) {
@@ -1286,7 +1286,7 @@ func (m *BfdUDPUpdReply) Reset()               { *m = BfdUDPUpdReply{} }
 func (*BfdUDPUpdReply) GetMessageName() string { return "bfd_udp_upd_reply" }
 func (*BfdUDPUpdReply) GetCrcString() string   { return "1992deab" }
 func (*BfdUDPUpdReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BfdUDPUpdReply) Size() (size int) {
@@ -1323,7 +1323,7 @@ func (m *WantBfdEvents) Reset()               { *m = WantBfdEvents{} }
 func (*WantBfdEvents) GetMessageName() string { return "want_bfd_events" }
 func (*WantBfdEvents) GetCrcString() string   { return "c5e2af94" }
 func (*WantBfdEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantBfdEvents) Size() (size int) {
@@ -1359,7 +1359,7 @@ func (m *WantBfdEventsReply) Reset()               { *m = WantBfdEventsReply{} }
 func (*WantBfdEventsReply) GetMessageName() string { return "want_bfd_events_reply" }
 func (*WantBfdEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantBfdEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantBfdEventsReply) Size() (size int) {

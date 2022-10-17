@@ -110,7 +110,7 @@ func (m *Nat44EiAddDelAddressRange) Reset()               { *m = Nat44EiAddDelAd
 func (*Nat44EiAddDelAddressRange) GetMessageName() string { return "nat44_ei_add_del_address_range" }
 func (*Nat44EiAddDelAddressRange) GetCrcString() string   { return "35f21abc" }
 func (*Nat44EiAddDelAddressRange) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddDelAddressRange) Size() (size int) {
@@ -155,7 +155,7 @@ func (*Nat44EiAddDelAddressRangeReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelAddressRangeReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelAddressRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddDelAddressRangeReply) Size() (size int) {
@@ -198,7 +198,7 @@ func (*Nat44EiAddDelIdentityMapping) GetMessageName() string {
 }
 func (*Nat44EiAddDelIdentityMapping) GetCrcString() string { return "cb8606b9" }
 func (*Nat44EiAddDelIdentityMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddDelIdentityMapping) Size() (size int) {
@@ -255,7 +255,7 @@ func (*Nat44EiAddDelIdentityMappingReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelIdentityMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelIdentityMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddDelIdentityMappingReply) Size() (size int) {
@@ -291,7 +291,7 @@ func (m *Nat44EiAddDelInterfaceAddr) Reset()               { *m = Nat44EiAddDelI
 func (*Nat44EiAddDelInterfaceAddr) GetMessageName() string { return "nat44_ei_add_del_interface_addr" }
 func (*Nat44EiAddDelInterfaceAddr) GetCrcString() string   { return "883abbcc" }
 func (*Nat44EiAddDelInterfaceAddr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddDelInterfaceAddr) Size() (size int) {
@@ -333,7 +333,7 @@ func (*Nat44EiAddDelInterfaceAddrReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelInterfaceAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddDelInterfaceAddrReply) Size() (size int) {
@@ -369,7 +369,7 @@ func (*Nat44EiAddDelOutputInterface) GetMessageName() string {
 }
 func (*Nat44EiAddDelOutputInterface) GetCrcString() string { return "47d6e753" }
 func (*Nat44EiAddDelOutputInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddDelOutputInterface) Size() (size int) {
@@ -407,7 +407,7 @@ func (*Nat44EiAddDelOutputInterfaceReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelOutputInterfaceReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelOutputInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddDelOutputInterfaceReply) Size() (size int) {
@@ -450,7 +450,7 @@ func (m *Nat44EiAddDelStaticMapping) Reset()               { *m = Nat44EiAddDelS
 func (*Nat44EiAddDelStaticMapping) GetMessageName() string { return "nat44_ei_add_del_static_mapping" }
 func (*Nat44EiAddDelStaticMapping) GetCrcString() string   { return "b404b7fe" }
 func (*Nat44EiAddDelStaticMapping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddDelStaticMapping) Size() (size int) {
@@ -513,7 +513,7 @@ func (*Nat44EiAddDelStaticMappingReply) GetMessageName() string {
 }
 func (*Nat44EiAddDelStaticMappingReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiAddDelStaticMappingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddDelStaticMappingReply) Size() (size int) {
@@ -548,7 +548,7 @@ func (m *Nat44EiAddressDetails) Reset()               { *m = Nat44EiAddressDetai
 func (*Nat44EiAddressDetails) GetMessageName() string { return "nat44_ei_address_details" }
 func (*Nat44EiAddressDetails) GetCrcString() string   { return "318f1202" }
 func (*Nat44EiAddressDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiAddressDetails) Size() (size int) {
@@ -583,7 +583,7 @@ func (m *Nat44EiAddressDump) Reset()               { *m = Nat44EiAddressDump{} }
 func (*Nat44EiAddressDump) GetMessageName() string { return "nat44_ei_address_dump" }
 func (*Nat44EiAddressDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiAddressDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiAddressDump) Size() (size int) {
@@ -619,7 +619,7 @@ func (m *Nat44EiDelSession) Reset()               { *m = Nat44EiDelSession{} }
 func (*Nat44EiDelSession) GetMessageName() string { return "nat44_ei_del_session" }
 func (*Nat44EiDelSession) GetCrcString() string   { return "74969ffe" }
 func (*Nat44EiDelSession) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiDelSession) Size() (size int) {
@@ -671,7 +671,7 @@ func (m *Nat44EiDelSessionReply) Reset()               { *m = Nat44EiDelSessionR
 func (*Nat44EiDelSessionReply) GetMessageName() string { return "nat44_ei_del_session_reply" }
 func (*Nat44EiDelSessionReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiDelSessionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiDelSessionReply) Size() (size int) {
@@ -706,7 +706,7 @@ func (m *Nat44EiDelUser) Reset()               { *m = Nat44EiDelUser{} }
 func (*Nat44EiDelUser) GetMessageName() string { return "nat44_ei_del_user" }
 func (*Nat44EiDelUser) GetCrcString() string   { return "99a9f998" }
 func (*Nat44EiDelUser) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiDelUser) Size() (size int) {
@@ -743,7 +743,7 @@ func (m *Nat44EiDelUserReply) Reset()               { *m = Nat44EiDelUserReply{}
 func (*Nat44EiDelUserReply) GetMessageName() string { return "nat44_ei_del_user_reply" }
 func (*Nat44EiDelUserReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiDelUserReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiDelUserReply) Size() (size int) {
@@ -779,7 +779,7 @@ func (*Nat44EiForwardingEnableDisable) GetMessageName() string {
 }
 func (*Nat44EiForwardingEnableDisable) GetCrcString() string { return "b3e225d2" }
 func (*Nat44EiForwardingEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiForwardingEnableDisable) Size() (size int) {
@@ -815,7 +815,7 @@ func (*Nat44EiForwardingEnableDisableReply) GetMessageName() string {
 }
 func (*Nat44EiForwardingEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiForwardingEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiForwardingEnableDisableReply) Size() (size int) {
@@ -849,7 +849,7 @@ func (*Nat44EiGetAddrAndPortAllocAlg) GetMessageName() string {
 }
 func (*Nat44EiGetAddrAndPortAllocAlg) GetCrcString() string { return "51077d14" }
 func (*Nat44EiGetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiGetAddrAndPortAllocAlg) Size() (size int) {
@@ -887,7 +887,7 @@ func (*Nat44EiGetAddrAndPortAllocAlgReply) GetMessageName() string {
 }
 func (*Nat44EiGetAddrAndPortAllocAlgReply) GetCrcString() string { return "3607a7d0" }
 func (*Nat44EiGetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiGetAddrAndPortAllocAlgReply) Size() (size int) {
@@ -937,7 +937,7 @@ func (m *Nat44EiGetMssClamping) Reset()               { *m = Nat44EiGetMssClampi
 func (*Nat44EiGetMssClamping) GetMessageName() string { return "nat44_ei_get_mss_clamping" }
 func (*Nat44EiGetMssClamping) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiGetMssClamping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiGetMssClamping) Size() (size int) {
@@ -969,7 +969,7 @@ func (m *Nat44EiGetMssClampingReply) Reset()               { *m = Nat44EiGetMssC
 func (*Nat44EiGetMssClampingReply) GetMessageName() string { return "nat44_ei_get_mss_clamping_reply" }
 func (*Nat44EiGetMssClampingReply) GetCrcString() string   { return "1c0b2a78" }
 func (*Nat44EiGetMssClampingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiGetMssClampingReply) Size() (size int) {
@@ -1007,7 +1007,7 @@ func (m *Nat44EiHaFlush) Reset()               { *m = Nat44EiHaFlush{} }
 func (*Nat44EiHaFlush) GetMessageName() string { return "nat44_ei_ha_flush" }
 func (*Nat44EiHaFlush) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiHaFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaFlush) Size() (size int) {
@@ -1037,7 +1037,7 @@ func (m *Nat44EiHaFlushReply) Reset()               { *m = Nat44EiHaFlushReply{}
 func (*Nat44EiHaFlushReply) GetMessageName() string { return "nat44_ei_ha_flush_reply" }
 func (*Nat44EiHaFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiHaFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaFlushReply) Size() (size int) {
@@ -1069,7 +1069,7 @@ func (m *Nat44EiHaGetFailover) Reset()               { *m = Nat44EiHaGetFailover
 func (*Nat44EiHaGetFailover) GetMessageName() string { return "nat44_ei_ha_get_failover" }
 func (*Nat44EiHaGetFailover) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiHaGetFailover) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaGetFailover) Size() (size int) {
@@ -1102,7 +1102,7 @@ func (m *Nat44EiHaGetFailoverReply) Reset()               { *m = Nat44EiHaGetFai
 func (*Nat44EiHaGetFailoverReply) GetMessageName() string { return "nat44_ei_ha_get_failover_reply" }
 func (*Nat44EiHaGetFailoverReply) GetCrcString() string   { return "a67d8752" }
 func (*Nat44EiHaGetFailoverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaGetFailoverReply) Size() (size int) {
@@ -1143,7 +1143,7 @@ func (m *Nat44EiHaGetListener) Reset()               { *m = Nat44EiHaGetListener
 func (*Nat44EiHaGetListener) GetMessageName() string { return "nat44_ei_ha_get_listener" }
 func (*Nat44EiHaGetListener) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiHaGetListener) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaGetListener) Size() (size int) {
@@ -1176,7 +1176,7 @@ func (m *Nat44EiHaGetListenerReply) Reset()               { *m = Nat44EiHaGetLis
 func (*Nat44EiHaGetListenerReply) GetMessageName() string { return "nat44_ei_ha_get_listener_reply" }
 func (*Nat44EiHaGetListenerReply) GetCrcString() string   { return "123ea41f" }
 func (*Nat44EiHaGetListenerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaGetListenerReply) Size() (size int) {
@@ -1220,7 +1220,7 @@ func (m *Nat44EiHaResync) Reset()               { *m = Nat44EiHaResync{} }
 func (*Nat44EiHaResync) GetMessageName() string { return "nat44_ei_ha_resync" }
 func (*Nat44EiHaResync) GetCrcString() string   { return "c8ab9e03" }
 func (*Nat44EiHaResync) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaResync) Size() (size int) {
@@ -1260,7 +1260,7 @@ func (*Nat44EiHaResyncCompletedEvent) GetMessageName() string {
 }
 func (*Nat44EiHaResyncCompletedEvent) GetCrcString() string { return "fdc598fb" }
 func (*Nat44EiHaResyncCompletedEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *Nat44EiHaResyncCompletedEvent) Size() (size int) {
@@ -1297,7 +1297,7 @@ func (m *Nat44EiHaResyncReply) Reset()               { *m = Nat44EiHaResyncReply
 func (*Nat44EiHaResyncReply) GetMessageName() string { return "nat44_ei_ha_resync_reply" }
 func (*Nat44EiHaResyncReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiHaResyncReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaResyncReply) Size() (size int) {
@@ -1333,7 +1333,7 @@ func (m *Nat44EiHaSetFailover) Reset()               { *m = Nat44EiHaSetFailover
 func (*Nat44EiHaSetFailover) GetMessageName() string { return "nat44_ei_ha_set_failover" }
 func (*Nat44EiHaSetFailover) GetCrcString() string   { return "718246af" }
 func (*Nat44EiHaSetFailover) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaSetFailover) Size() (size int) {
@@ -1373,7 +1373,7 @@ func (m *Nat44EiHaSetFailoverReply) Reset()               { *m = Nat44EiHaSetFai
 func (*Nat44EiHaSetFailoverReply) GetMessageName() string { return "nat44_ei_ha_set_failover_reply" }
 func (*Nat44EiHaSetFailoverReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiHaSetFailoverReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaSetFailoverReply) Size() (size int) {
@@ -1409,7 +1409,7 @@ func (m *Nat44EiHaSetListener) Reset()               { *m = Nat44EiHaSetListener
 func (*Nat44EiHaSetListener) GetMessageName() string { return "nat44_ei_ha_set_listener" }
 func (*Nat44EiHaSetListener) GetCrcString() string   { return "e4a8cb4e" }
 func (*Nat44EiHaSetListener) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiHaSetListener) Size() (size int) {
@@ -1449,7 +1449,7 @@ func (m *Nat44EiHaSetListenerReply) Reset()               { *m = Nat44EiHaSetLis
 func (*Nat44EiHaSetListenerReply) GetMessageName() string { return "nat44_ei_ha_set_listener_reply" }
 func (*Nat44EiHaSetListenerReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiHaSetListenerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiHaSetListenerReply) Size() (size int) {
@@ -1491,7 +1491,7 @@ func (*Nat44EiIdentityMappingDetails) GetMessageName() string {
 }
 func (*Nat44EiIdentityMappingDetails) GetCrcString() string { return "30d53e26" }
 func (*Nat44EiIdentityMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiIdentityMappingDetails) Size() (size int) {
@@ -1541,7 +1541,7 @@ func (m *Nat44EiIdentityMappingDump) Reset()               { *m = Nat44EiIdentit
 func (*Nat44EiIdentityMappingDump) GetMessageName() string { return "nat44_ei_identity_mapping_dump" }
 func (*Nat44EiIdentityMappingDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiIdentityMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiIdentityMappingDump) Size() (size int) {
@@ -1575,7 +1575,7 @@ func (*Nat44EiInterfaceAddDelFeature) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelFeature) GetCrcString() string { return "63a2db8b" }
 func (*Nat44EiInterfaceAddDelFeature) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceAddDelFeature) Size() (size int) {
@@ -1617,7 +1617,7 @@ func (*Nat44EiInterfaceAddDelFeatureReply) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelFeatureReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiInterfaceAddDelFeatureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiInterfaceAddDelFeatureReply) Size() (size int) {
@@ -1655,7 +1655,7 @@ func (*Nat44EiInterfaceAddDelOutputFeature) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelOutputFeature) GetCrcString() string { return "63a2db8b" }
 func (*Nat44EiInterfaceAddDelOutputFeature) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceAddDelOutputFeature) Size() (size int) {
@@ -1699,7 +1699,7 @@ func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetMessageName() string {
 }
 func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiInterfaceAddDelOutputFeatureReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiInterfaceAddDelOutputFeatureReply) Size() (size int) {
@@ -1733,7 +1733,7 @@ func (m *Nat44EiInterfaceAddrDetails) Reset()               { *m = Nat44EiInterf
 func (*Nat44EiInterfaceAddrDetails) GetMessageName() string { return "nat44_ei_interface_addr_details" }
 func (*Nat44EiInterfaceAddrDetails) GetCrcString() string   { return "0b45011c" }
 func (*Nat44EiInterfaceAddrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiInterfaceAddrDetails) Size() (size int) {
@@ -1765,7 +1765,7 @@ func (m *Nat44EiInterfaceAddrDump) Reset()               { *m = Nat44EiInterface
 func (*Nat44EiInterfaceAddrDump) GetMessageName() string { return "nat44_ei_interface_addr_dump" }
 func (*Nat44EiInterfaceAddrDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiInterfaceAddrDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceAddrDump) Size() (size int) {
@@ -1796,7 +1796,7 @@ func (m *Nat44EiInterfaceDetails) Reset()               { *m = Nat44EiInterfaceD
 func (*Nat44EiInterfaceDetails) GetMessageName() string { return "nat44_ei_interface_details" }
 func (*Nat44EiInterfaceDetails) GetCrcString() string   { return "f446e508" }
 func (*Nat44EiInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiInterfaceDetails) Size() (size int) {
@@ -1831,7 +1831,7 @@ func (m *Nat44EiInterfaceDump) Reset()               { *m = Nat44EiInterfaceDump
 func (*Nat44EiInterfaceDump) GetMessageName() string { return "nat44_ei_interface_dump" }
 func (*Nat44EiInterfaceDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceDump) Size() (size int) {
@@ -1864,7 +1864,7 @@ func (*Nat44EiInterfaceOutputFeatureDetails) GetMessageName() string {
 }
 func (*Nat44EiInterfaceOutputFeatureDetails) GetCrcString() string { return "f446e508" }
 func (*Nat44EiInterfaceOutputFeatureDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiInterfaceOutputFeatureDetails) Size() (size int) {
@@ -1901,7 +1901,7 @@ func (*Nat44EiInterfaceOutputFeatureDump) GetMessageName() string {
 }
 func (*Nat44EiInterfaceOutputFeatureDump) GetCrcString() string { return "51077d14" }
 func (*Nat44EiInterfaceOutputFeatureDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiInterfaceOutputFeatureDump) Size() (size int) {
@@ -1933,7 +1933,7 @@ func (m *Nat44EiIpfixEnableDisable) Reset()               { *m = Nat44EiIpfixEna
 func (*Nat44EiIpfixEnableDisable) GetMessageName() string { return "nat44_ei_ipfix_enable_disable" }
 func (*Nat44EiIpfixEnableDisable) GetCrcString() string   { return "9af4a2d2" }
 func (*Nat44EiIpfixEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiIpfixEnableDisable) Size() (size int) {
@@ -1975,7 +1975,7 @@ func (*Nat44EiIpfixEnableDisableReply) GetMessageName() string {
 }
 func (*Nat44EiIpfixEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiIpfixEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiIpfixEnableDisableReply) Size() (size int) {
@@ -2010,7 +2010,7 @@ func (*Nat44EiOutputInterfaceDetails) GetMessageName() string {
 }
 func (*Nat44EiOutputInterfaceDetails) GetCrcString() string { return "0b45011c" }
 func (*Nat44EiOutputInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiOutputInterfaceDetails) Size() (size int) {
@@ -2043,7 +2043,7 @@ func (m *Nat44EiOutputInterfaceGet) Reset()               { *m = Nat44EiOutputIn
 func (*Nat44EiOutputInterfaceGet) GetMessageName() string { return "nat44_ei_output_interface_get" }
 func (*Nat44EiOutputInterfaceGet) GetCrcString() string   { return "f75ba505" }
 func (*Nat44EiOutputInterfaceGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiOutputInterfaceGet) Size() (size int) {
@@ -2079,7 +2079,7 @@ func (*Nat44EiOutputInterfaceGetReply) GetMessageName() string {
 }
 func (*Nat44EiOutputInterfaceGetReply) GetCrcString() string { return "53b48f5d" }
 func (*Nat44EiOutputInterfaceGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiOutputInterfaceGetReply) Size() (size int) {
@@ -2124,7 +2124,7 @@ func (m *Nat44EiPluginEnableDisable) Reset()               { *m = Nat44EiPluginE
 func (*Nat44EiPluginEnableDisable) GetMessageName() string { return "nat44_ei_plugin_enable_disable" }
 func (*Nat44EiPluginEnableDisable) GetCrcString() string   { return "bf692144" }
 func (*Nat44EiPluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiPluginEnableDisable) Size() (size int) {
@@ -2184,7 +2184,7 @@ func (*Nat44EiPluginEnableDisableReply) GetMessageName() string {
 }
 func (*Nat44EiPluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiPluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiPluginEnableDisableReply) Size() (size int) {
@@ -2225,7 +2225,7 @@ func (*Nat44EiSetAddrAndPortAllocAlg) GetMessageName() string {
 }
 func (*Nat44EiSetAddrAndPortAllocAlg) GetCrcString() string { return "deeb746f" }
 func (*Nat44EiSetAddrAndPortAllocAlg) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetAddrAndPortAllocAlg) Size() (size int) {
@@ -2276,7 +2276,7 @@ func (*Nat44EiSetAddrAndPortAllocAlgReply) GetMessageName() string {
 }
 func (*Nat44EiSetAddrAndPortAllocAlgReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat44EiSetAddrAndPortAllocAlgReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetAddrAndPortAllocAlgReply) Size() (size int) {
@@ -2310,7 +2310,7 @@ func (m *Nat44EiSetFqOptions) Reset()               { *m = Nat44EiSetFqOptions{}
 func (*Nat44EiSetFqOptions) GetMessageName() string { return "nat44_ei_set_fq_options" }
 func (*Nat44EiSetFqOptions) GetCrcString() string   { return "2399bd71" }
 func (*Nat44EiSetFqOptions) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetFqOptions) Size() (size int) {
@@ -2344,7 +2344,7 @@ func (m *Nat44EiSetFqOptionsReply) Reset()               { *m = Nat44EiSetFqOpti
 func (*Nat44EiSetFqOptionsReply) GetMessageName() string { return "nat44_ei_set_fq_options_reply" }
 func (*Nat44EiSetFqOptionsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiSetFqOptionsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetFqOptionsReply) Size() (size int) {
@@ -2378,7 +2378,7 @@ func (m *Nat44EiSetLogLevel) Reset()               { *m = Nat44EiSetLogLevel{} }
 func (*Nat44EiSetLogLevel) GetMessageName() string { return "nat44_ei_set_log_level" }
 func (*Nat44EiSetLogLevel) GetCrcString() string   { return "70076bfe" }
 func (*Nat44EiSetLogLevel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetLogLevel) Size() (size int) {
@@ -2412,7 +2412,7 @@ func (m *Nat44EiSetLogLevelReply) Reset()               { *m = Nat44EiSetLogLeve
 func (*Nat44EiSetLogLevelReply) GetMessageName() string { return "nat44_ei_set_log_level_reply" }
 func (*Nat44EiSetLogLevelReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiSetLogLevelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetLogLevelReply) Size() (size int) {
@@ -2447,7 +2447,7 @@ func (m *Nat44EiSetMssClamping) Reset()               { *m = Nat44EiSetMssClampi
 func (*Nat44EiSetMssClamping) GetMessageName() string { return "nat44_ei_set_mss_clamping" }
 func (*Nat44EiSetMssClamping) GetCrcString() string   { return "25e90abb" }
 func (*Nat44EiSetMssClamping) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetMssClamping) Size() (size int) {
@@ -2484,7 +2484,7 @@ func (m *Nat44EiSetMssClampingReply) Reset()               { *m = Nat44EiSetMssC
 func (*Nat44EiSetMssClampingReply) GetMessageName() string { return "nat44_ei_set_mss_clamping_reply" }
 func (*Nat44EiSetMssClampingReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiSetMssClampingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetMssClampingReply) Size() (size int) {
@@ -2521,7 +2521,7 @@ func (m *Nat44EiSetTimeouts) Reset()               { *m = Nat44EiSetTimeouts{} }
 func (*Nat44EiSetTimeouts) GetMessageName() string { return "nat44_ei_set_timeouts" }
 func (*Nat44EiSetTimeouts) GetCrcString() string   { return "d4746b16" }
 func (*Nat44EiSetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetTimeouts) Size() (size int) {
@@ -2564,7 +2564,7 @@ func (m *Nat44EiSetTimeoutsReply) Reset()               { *m = Nat44EiSetTimeout
 func (*Nat44EiSetTimeoutsReply) GetMessageName() string { return "nat44_ei_set_timeouts_reply" }
 func (*Nat44EiSetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiSetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetTimeoutsReply) Size() (size int) {
@@ -2598,7 +2598,7 @@ func (m *Nat44EiSetWorkers) Reset()               { *m = Nat44EiSetWorkers{} }
 func (*Nat44EiSetWorkers) GetMessageName() string { return "nat44_ei_set_workers" }
 func (*Nat44EiSetWorkers) GetCrcString() string   { return "da926638" }
 func (*Nat44EiSetWorkers) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiSetWorkers) Size() (size int) {
@@ -2632,7 +2632,7 @@ func (m *Nat44EiSetWorkersReply) Reset()               { *m = Nat44EiSetWorkersR
 func (*Nat44EiSetWorkersReply) GetMessageName() string { return "nat44_ei_set_workers_reply" }
 func (*Nat44EiSetWorkersReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat44EiSetWorkersReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiSetWorkersReply) Size() (size int) {
@@ -2664,7 +2664,7 @@ func (m *Nat44EiShowFqOptions) Reset()               { *m = Nat44EiShowFqOptions
 func (*Nat44EiShowFqOptions) GetMessageName() string { return "nat44_ei_show_fq_options" }
 func (*Nat44EiShowFqOptions) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiShowFqOptions) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiShowFqOptions) Size() (size int) {
@@ -2695,7 +2695,7 @@ func (m *Nat44EiShowFqOptionsReply) Reset()               { *m = Nat44EiShowFqOp
 func (*Nat44EiShowFqOptionsReply) GetMessageName() string { return "nat44_ei_show_fq_options_reply" }
 func (*Nat44EiShowFqOptionsReply) GetCrcString() string   { return "7213b545" }
 func (*Nat44EiShowFqOptionsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiShowFqOptionsReply) Size() (size int) {
@@ -2730,7 +2730,7 @@ func (m *Nat44EiShowRunningConfig) Reset()               { *m = Nat44EiShowRunni
 func (*Nat44EiShowRunningConfig) GetMessageName() string { return "nat44_ei_show_running_config" }
 func (*Nat44EiShowRunningConfig) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiShowRunningConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiShowRunningConfig) Size() (size int) {
@@ -2774,7 +2774,7 @@ func (*Nat44EiShowRunningConfigReply) GetMessageName() string {
 }
 func (*Nat44EiShowRunningConfigReply) GetCrcString() string { return "41b66a81" }
 func (*Nat44EiShowRunningConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiShowRunningConfigReply) Size() (size int) {
@@ -2861,7 +2861,7 @@ func (m *Nat44EiStaticMappingDetails) Reset()               { *m = Nat44EiStatic
 func (*Nat44EiStaticMappingDetails) GetMessageName() string { return "nat44_ei_static_mapping_details" }
 func (*Nat44EiStaticMappingDetails) GetCrcString() string   { return "6b51ca6e" }
 func (*Nat44EiStaticMappingDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiStaticMappingDetails) Size() (size int) {
@@ -2917,7 +2917,7 @@ func (m *Nat44EiStaticMappingDump) Reset()               { *m = Nat44EiStaticMap
 func (*Nat44EiStaticMappingDump) GetMessageName() string { return "nat44_ei_static_mapping_dump" }
 func (*Nat44EiStaticMappingDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiStaticMappingDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiStaticMappingDump) Size() (size int) {
@@ -2950,7 +2950,7 @@ func (m *Nat44EiUserDetails) Reset()               { *m = Nat44EiUserDetails{} }
 func (*Nat44EiUserDetails) GetMessageName() string { return "nat44_ei_user_details" }
 func (*Nat44EiUserDetails) GetCrcString() string   { return "355896c2" }
 func (*Nat44EiUserDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiUserDetails) Size() (size int) {
@@ -2991,7 +2991,7 @@ func (m *Nat44EiUserDump) Reset()               { *m = Nat44EiUserDump{} }
 func (*Nat44EiUserDump) GetMessageName() string { return "nat44_ei_user_dump" }
 func (*Nat44EiUserDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiUserDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiUserDump) Size() (size int) {
@@ -3031,7 +3031,7 @@ func (m *Nat44EiUserSessionDetails) Reset()               { *m = Nat44EiUserSess
 func (*Nat44EiUserSessionDetails) GetMessageName() string { return "nat44_ei_user_session_details" }
 func (*Nat44EiUserSessionDetails) GetCrcString() string   { return "19b7c0ac" }
 func (*Nat44EiUserSessionDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiUserSessionDetails) Size() (size int) {
@@ -3096,7 +3096,7 @@ func (m *Nat44EiUserSessionDump) Reset()               { *m = Nat44EiUserSession
 func (*Nat44EiUserSessionDump) GetMessageName() string { return "nat44_ei_user_session_dump" }
 func (*Nat44EiUserSessionDump) GetCrcString() string   { return "e1899c98" }
 func (*Nat44EiUserSessionDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiUserSessionDump) Size() (size int) {
@@ -3135,7 +3135,7 @@ func (m *Nat44EiWorkerDetails) Reset()               { *m = Nat44EiWorkerDetails
 func (*Nat44EiWorkerDetails) GetMessageName() string { return "nat44_ei_worker_details" }
 func (*Nat44EiWorkerDetails) GetCrcString() string   { return "84bf06fc" }
 func (*Nat44EiWorkerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat44EiWorkerDetails) Size() (size int) {
@@ -3173,7 +3173,7 @@ func (m *Nat44EiWorkerDump) Reset()               { *m = Nat44EiWorkerDump{} }
 func (*Nat44EiWorkerDump) GetMessageName() string { return "nat44_ei_worker_dump" }
 func (*Nat44EiWorkerDump) GetCrcString() string   { return "51077d14" }
 func (*Nat44EiWorkerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat44EiWorkerDump) Size() (size int) {

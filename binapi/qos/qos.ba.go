@@ -106,7 +106,7 @@ func (m *QosEgressMapDelete) Reset()               { *m = QosEgressMapDelete{} }
 func (*QosEgressMapDelete) GetMessageName() string { return "qos_egress_map_delete" }
 func (*QosEgressMapDelete) GetCrcString() string   { return "3a91bde5" }
 func (*QosEgressMapDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosEgressMapDelete) Size() (size int) {
@@ -139,7 +139,7 @@ func (m *QosEgressMapDeleteReply) Reset()               { *m = QosEgressMapDelet
 func (*QosEgressMapDeleteReply) GetMessageName() string { return "qos_egress_map_delete_reply" }
 func (*QosEgressMapDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosEgressMapDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosEgressMapDeleteReply) Size() (size int) {
@@ -172,7 +172,7 @@ func (m *QosEgressMapDetails) Reset()               { *m = QosEgressMapDetails{}
 func (*QosEgressMapDetails) GetMessageName() string { return "qos_egress_map_details" }
 func (*QosEgressMapDetails) GetCrcString() string   { return "46c5653c" }
 func (*QosEgressMapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosEgressMapDetails) Size() (size int) {
@@ -213,7 +213,7 @@ func (m *QosEgressMapDump) Reset()               { *m = QosEgressMapDump{} }
 func (*QosEgressMapDump) GetMessageName() string { return "qos_egress_map_dump" }
 func (*QosEgressMapDump) GetCrcString() string   { return "51077d14" }
 func (*QosEgressMapDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosEgressMapDump) Size() (size int) {
@@ -242,7 +242,7 @@ func (m *QosEgressMapUpdate) Reset()               { *m = QosEgressMapUpdate{} }
 func (*QosEgressMapUpdate) GetMessageName() string { return "qos_egress_map_update" }
 func (*QosEgressMapUpdate) GetCrcString() string   { return "6d1c065f" }
 func (*QosEgressMapUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosEgressMapUpdate) Size() (size int) {
@@ -285,7 +285,7 @@ func (m *QosEgressMapUpdateReply) Reset()               { *m = QosEgressMapUpdat
 func (*QosEgressMapUpdateReply) GetMessageName() string { return "qos_egress_map_update_reply" }
 func (*QosEgressMapUpdateReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosEgressMapUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosEgressMapUpdateReply) Size() (size int) {
@@ -318,7 +318,7 @@ func (m *QosMarkDetails) Reset()               { *m = QosMarkDetails{} }
 func (*QosMarkDetails) GetMessageName() string { return "qos_mark_details" }
 func (*QosMarkDetails) GetCrcString() string   { return "89fe81a9" }
 func (*QosMarkDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosMarkDetails) Size() (size int) {
@@ -357,7 +357,7 @@ func (m *QosMarkDetailsReply) Reset()               { *m = QosMarkDetailsReply{}
 func (*QosMarkDetailsReply) GetMessageName() string { return "qos_mark_details_reply" }
 func (*QosMarkDetailsReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosMarkDetailsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosMarkDetailsReply) Size() (size int) {
@@ -390,7 +390,7 @@ func (m *QosMarkDump) Reset()               { *m = QosMarkDump{} }
 func (*QosMarkDump) GetMessageName() string { return "qos_mark_dump" }
 func (*QosMarkDump) GetCrcString() string   { return "f9e6675e" }
 func (*QosMarkDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosMarkDump) Size() (size int) {
@@ -424,7 +424,7 @@ func (m *QosMarkEnableDisable) Reset()               { *m = QosMarkEnableDisable
 func (*QosMarkEnableDisable) GetMessageName() string { return "qos_mark_enable_disable" }
 func (*QosMarkEnableDisable) GetCrcString() string   { return "1a010f74" }
 func (*QosMarkEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosMarkEnableDisable) Size() (size int) {
@@ -466,7 +466,7 @@ func (m *QosMarkEnableDisableReply) Reset()               { *m = QosMarkEnableDi
 func (*QosMarkEnableDisableReply) GetMessageName() string { return "qos_mark_enable_disable_reply" }
 func (*QosMarkEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosMarkEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosMarkEnableDisableReply) Size() (size int) {
@@ -499,7 +499,7 @@ func (m *QosRecordDetails) Reset()               { *m = QosRecordDetails{} }
 func (*QosRecordDetails) GetMessageName() string { return "qos_record_details" }
 func (*QosRecordDetails) GetCrcString() string   { return "a425d4d3" }
 func (*QosRecordDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosRecordDetails) Size() (size int) {
@@ -533,7 +533,7 @@ func (m *QosRecordDump) Reset()               { *m = QosRecordDump{} }
 func (*QosRecordDump) GetMessageName() string { return "qos_record_dump" }
 func (*QosRecordDump) GetCrcString() string   { return "51077d14" }
 func (*QosRecordDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosRecordDump) Size() (size int) {
@@ -563,7 +563,7 @@ func (m *QosRecordEnableDisable) Reset()               { *m = QosRecordEnableDis
 func (*QosRecordEnableDisable) GetMessageName() string { return "qos_record_enable_disable" }
 func (*QosRecordEnableDisable) GetCrcString() string   { return "2f1a4a38" }
 func (*QosRecordEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosRecordEnableDisable) Size() (size int) {
@@ -602,7 +602,7 @@ func (m *QosRecordEnableDisableReply) Reset()               { *m = QosRecordEnab
 func (*QosRecordEnableDisableReply) GetMessageName() string { return "qos_record_enable_disable_reply" }
 func (*QosRecordEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosRecordEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosRecordEnableDisableReply) Size() (size int) {
@@ -635,7 +635,7 @@ func (m *QosStoreDetails) Reset()               { *m = QosStoreDetails{} }
 func (*QosStoreDetails) GetMessageName() string { return "qos_store_details" }
 func (*QosStoreDetails) GetCrcString() string   { return "3ee0aad7" }
 func (*QosStoreDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosStoreDetails) Size() (size int) {
@@ -672,7 +672,7 @@ func (m *QosStoreDump) Reset()               { *m = QosStoreDump{} }
 func (*QosStoreDump) GetMessageName() string { return "qos_store_dump" }
 func (*QosStoreDump) GetCrcString() string   { return "51077d14" }
 func (*QosStoreDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosStoreDump) Size() (size int) {
@@ -702,7 +702,7 @@ func (m *QosStoreEnableDisable) Reset()               { *m = QosStoreEnableDisab
 func (*QosStoreEnableDisable) GetMessageName() string { return "qos_store_enable_disable" }
 func (*QosStoreEnableDisable) GetCrcString() string   { return "f3abcc8b" }
 func (*QosStoreEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *QosStoreEnableDisable) Size() (size int) {
@@ -744,7 +744,7 @@ func (m *QosStoreEnableDisableReply) Reset()               { *m = QosStoreEnable
 func (*QosStoreEnableDisableReply) GetMessageName() string { return "qos_store_enable_disable_reply" }
 func (*QosStoreEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*QosStoreEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *QosStoreEnableDisableReply) Size() (size int) {

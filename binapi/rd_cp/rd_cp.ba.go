@@ -39,7 +39,7 @@ func (m *IP6NdAddressAutoconfig) Reset()               { *m = IP6NdAddressAutoco
 func (*IP6NdAddressAutoconfig) GetMessageName() string { return "ip6_nd_address_autoconfig" }
 func (*IP6NdAddressAutoconfig) GetCrcString() string   { return "9e14a4a7" }
 func (*IP6NdAddressAutoconfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IP6NdAddressAutoconfig) Size() (size int) {
@@ -78,7 +78,7 @@ func (m *IP6NdAddressAutoconfigReply) Reset()               { *m = IP6NdAddressA
 func (*IP6NdAddressAutoconfigReply) GetMessageName() string { return "ip6_nd_address_autoconfig_reply" }
 func (*IP6NdAddressAutoconfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*IP6NdAddressAutoconfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IP6NdAddressAutoconfigReply) Size() (size int) {

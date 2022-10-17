@@ -39,7 +39,7 @@ func (m *IoamExportIP6EnableDisable) Reset()               { *m = IoamExportIP6E
 func (*IoamExportIP6EnableDisable) GetMessageName() string { return "ioam_export_ip6_enable_disable" }
 func (*IoamExportIP6EnableDisable) GetCrcString() string   { return "d4c76d3a" }
 func (*IoamExportIP6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IoamExportIP6EnableDisable) Size() (size int) {
@@ -80,7 +80,7 @@ func (*IoamExportIP6EnableDisableReply) GetMessageName() string {
 }
 func (*IoamExportIP6EnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IoamExportIP6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IoamExportIP6EnableDisableReply) Size() (size int) {

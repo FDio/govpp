@@ -75,7 +75,7 @@ func (m *UrpfUpdate) Reset()               { *m = UrpfUpdate{} }
 func (*UrpfUpdate) GetMessageName() string { return "urpf_update" }
 func (*UrpfUpdate) GetCrcString() string   { return "cc274cd1" }
 func (*UrpfUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UrpfUpdate) Size() (size int) {
@@ -117,7 +117,7 @@ func (m *UrpfUpdateReply) Reset()               { *m = UrpfUpdateReply{} }
 func (*UrpfUpdateReply) GetMessageName() string { return "urpf_update_reply" }
 func (*UrpfUpdateReply) GetCrcString() string   { return "e8d4e804" }
 func (*UrpfUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UrpfUpdateReply) Size() (size int) {

@@ -525,12 +525,12 @@ func genMessageMethods(g *GenFile, msg *Message) {
 func apiMsgType(t msgType) GoIdent {
 	switch t {
 	case msgTypeRequest:
-		return govppApiPkg.Ident("RequestMessage")
+		return govppApiPkg.Ident("RequestMessageType")
 	case msgTypeReply:
-		return govppApiPkg.Ident("ReplyMessage")
+		return govppApiPkg.Ident("ReplyMessageType")
 	case msgTypeEvent:
-		return govppApiPkg.Ident("EventMessage")
+		return govppApiPkg.Ident("EventMessageType")
 	default:
-		return govppApiPkg.Ident("OtherMessage")
+		return govppApiPkg.Ident("OtherMessageType")
 	}
 }

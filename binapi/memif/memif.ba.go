@@ -108,7 +108,7 @@ func (m *MemifCreate) Reset()               { *m = MemifCreate{} }
 func (*MemifCreate) GetMessageName() string { return "memif_create" }
 func (*MemifCreate) GetCrcString() string   { return "b1b25061" }
 func (*MemifCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MemifCreate) Size() (size int) {
@@ -172,7 +172,7 @@ func (m *MemifCreateReply) Reset()               { *m = MemifCreateReply{} }
 func (*MemifCreateReply) GetMessageName() string { return "memif_create_reply" }
 func (*MemifCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*MemifCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MemifCreateReply) Size() (size int) {
@@ -208,7 +208,7 @@ func (m *MemifDelete) Reset()               { *m = MemifDelete{} }
 func (*MemifDelete) GetMessageName() string { return "memif_delete" }
 func (*MemifDelete) GetCrcString() string   { return "f9e6675e" }
 func (*MemifDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MemifDelete) Size() (size int) {
@@ -241,7 +241,7 @@ func (m *MemifDeleteReply) Reset()               { *m = MemifDeleteReply{} }
 func (*MemifDeleteReply) GetMessageName() string { return "memif_delete_reply" }
 func (*MemifDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*MemifDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MemifDeleteReply) Size() (size int) {
@@ -284,7 +284,7 @@ func (m *MemifDetails) Reset()               { *m = MemifDetails{} }
 func (*MemifDetails) GetMessageName() string { return "memif_details" }
 func (*MemifDetails) GetCrcString() string   { return "da34feb9" }
 func (*MemifDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MemifDetails) Size() (size int) {
@@ -345,7 +345,7 @@ func (m *MemifDump) Reset()               { *m = MemifDump{} }
 func (*MemifDump) GetMessageName() string { return "memif_dump" }
 func (*MemifDump) GetCrcString() string   { return "51077d14" }
 func (*MemifDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MemifDump) Size() (size int) {
@@ -376,7 +376,7 @@ func (m *MemifSocketFilenameAddDel) Reset()               { *m = MemifSocketFile
 func (*MemifSocketFilenameAddDel) GetMessageName() string { return "memif_socket_filename_add_del" }
 func (*MemifSocketFilenameAddDel) GetCrcString() string   { return "a2ce1a10" }
 func (*MemifSocketFilenameAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MemifSocketFilenameAddDel) Size() (size int) {
@@ -417,7 +417,7 @@ func (*MemifSocketFilenameAddDelReply) GetMessageName() string {
 }
 func (*MemifSocketFilenameAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*MemifSocketFilenameAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MemifSocketFilenameAddDelReply) Size() (size int) {
@@ -451,7 +451,7 @@ func (m *MemifSocketFilenameDetails) Reset()               { *m = MemifSocketFil
 func (*MemifSocketFilenameDetails) GetMessageName() string { return "memif_socket_filename_details" }
 func (*MemifSocketFilenameDetails) GetCrcString() string   { return "7ff326f7" }
 func (*MemifSocketFilenameDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MemifSocketFilenameDetails) Size() (size int) {
@@ -485,7 +485,7 @@ func (m *MemifSocketFilenameDump) Reset()               { *m = MemifSocketFilena
 func (*MemifSocketFilenameDump) GetMessageName() string { return "memif_socket_filename_dump" }
 func (*MemifSocketFilenameDump) GetCrcString() string   { return "51077d14" }
 func (*MemifSocketFilenameDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MemifSocketFilenameDump) Size() (size int) {

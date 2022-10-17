@@ -46,7 +46,7 @@ func (m *FibSourceAdd) Reset()               { *m = FibSourceAdd{} }
 func (*FibSourceAdd) GetMessageName() string { return "fib_source_add" }
 func (*FibSourceAdd) GetCrcString() string   { return "b3ac2aec" }
 func (*FibSourceAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FibSourceAdd) Size() (size int) {
@@ -86,7 +86,7 @@ func (m *FibSourceAddReply) Reset()               { *m = FibSourceAddReply{} }
 func (*FibSourceAddReply) GetMessageName() string { return "fib_source_add_reply" }
 func (*FibSourceAddReply) GetCrcString() string   { return "604fd6f1" }
 func (*FibSourceAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FibSourceAddReply) Size() (size int) {
@@ -122,7 +122,7 @@ func (m *FibSourceDetails) Reset()               { *m = FibSourceDetails{} }
 func (*FibSourceDetails) GetMessageName() string { return "fib_source_details" }
 func (*FibSourceDetails) GetCrcString() string   { return "8668acdb" }
 func (*FibSourceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FibSourceDetails) Size() (size int) {
@@ -159,7 +159,7 @@ func (m *FibSourceDump) Reset()               { *m = FibSourceDump{} }
 func (*FibSourceDump) GetMessageName() string { return "fib_source_dump" }
 func (*FibSourceDump) GetCrcString() string   { return "51077d14" }
 func (*FibSourceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FibSourceDump) Size() (size int) {

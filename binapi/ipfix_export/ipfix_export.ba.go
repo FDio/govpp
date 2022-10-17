@@ -43,7 +43,7 @@ func (m *IpfixAllExporterDetails) Reset()               { *m = IpfixAllExporterD
 func (*IpfixAllExporterDetails) GetMessageName() string { return "ipfix_all_exporter_details" }
 func (*IpfixAllExporterDetails) GetCrcString() string   { return "0dedbfe4" }
 func (*IpfixAllExporterDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixAllExporterDetails) Size() (size int) {
@@ -100,7 +100,7 @@ func (m *IpfixAllExporterGet) Reset()               { *m = IpfixAllExporterGet{}
 func (*IpfixAllExporterGet) GetMessageName() string { return "ipfix_all_exporter_get" }
 func (*IpfixAllExporterGet) GetCrcString() string   { return "f75ba505" }
 func (*IpfixAllExporterGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixAllExporterGet) Size() (size int) {
@@ -134,7 +134,7 @@ func (m *IpfixAllExporterGetReply) Reset()               { *m = IpfixAllExporter
 func (*IpfixAllExporterGetReply) GetMessageName() string { return "ipfix_all_exporter_get_reply" }
 func (*IpfixAllExporterGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*IpfixAllExporterGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixAllExporterGetReply) Size() (size int) {
@@ -171,7 +171,7 @@ func (m *IpfixClassifyStreamDetails) Reset()               { *m = IpfixClassifyS
 func (*IpfixClassifyStreamDetails) GetMessageName() string { return "ipfix_classify_stream_details" }
 func (*IpfixClassifyStreamDetails) GetCrcString() string   { return "2903539d" }
 func (*IpfixClassifyStreamDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixClassifyStreamDetails) Size() (size int) {
@@ -205,7 +205,7 @@ func (m *IpfixClassifyStreamDump) Reset()               { *m = IpfixClassifyStre
 func (*IpfixClassifyStreamDump) GetMessageName() string { return "ipfix_classify_stream_dump" }
 func (*IpfixClassifyStreamDump) GetCrcString() string   { return "51077d14" }
 func (*IpfixClassifyStreamDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixClassifyStreamDump) Size() (size int) {
@@ -237,7 +237,7 @@ func (m *IpfixClassifyTableAddDel) Reset()               { *m = IpfixClassifyTab
 func (*IpfixClassifyTableAddDel) GetMessageName() string { return "ipfix_classify_table_add_del" }
 func (*IpfixClassifyTableAddDel) GetCrcString() string   { return "3e449bb9" }
 func (*IpfixClassifyTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixClassifyTableAddDel) Size() (size int) {
@@ -281,7 +281,7 @@ func (*IpfixClassifyTableAddDelReply) GetMessageName() string {
 }
 func (*IpfixClassifyTableAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*IpfixClassifyTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixClassifyTableAddDelReply) Size() (size int) {
@@ -316,7 +316,7 @@ func (m *IpfixClassifyTableDetails) Reset()               { *m = IpfixClassifyTa
 func (*IpfixClassifyTableDetails) GetMessageName() string { return "ipfix_classify_table_details" }
 func (*IpfixClassifyTableDetails) GetCrcString() string   { return "1af8c28c" }
 func (*IpfixClassifyTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixClassifyTableDetails) Size() (size int) {
@@ -353,7 +353,7 @@ func (m *IpfixClassifyTableDump) Reset()               { *m = IpfixClassifyTable
 func (*IpfixClassifyTableDump) GetMessageName() string { return "ipfix_classify_table_dump" }
 func (*IpfixClassifyTableDump) GetCrcString() string   { return "51077d14" }
 func (*IpfixClassifyTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixClassifyTableDump) Size() (size int) {
@@ -389,7 +389,7 @@ func (m *IpfixExporterCreateDelete) Reset()               { *m = IpfixExporterCr
 func (*IpfixExporterCreateDelete) GetMessageName() string { return "ipfix_exporter_create_delete" }
 func (*IpfixExporterCreateDelete) GetCrcString() string   { return "0753a768" }
 func (*IpfixExporterCreateDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixExporterCreateDelete) Size() (size int) {
@@ -452,7 +452,7 @@ func (*IpfixExporterCreateDeleteReply) GetMessageName() string {
 }
 func (*IpfixExporterCreateDeleteReply) GetCrcString() string { return "9ffac24b" }
 func (*IpfixExporterCreateDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixExporterCreateDeleteReply) Size() (size int) {
@@ -494,7 +494,7 @@ func (m *IpfixExporterDetails) Reset()               { *m = IpfixExporterDetails
 func (*IpfixExporterDetails) GetMessageName() string { return "ipfix_exporter_details" }
 func (*IpfixExporterDetails) GetCrcString() string   { return "0dedbfe4" }
 func (*IpfixExporterDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixExporterDetails) Size() (size int) {
@@ -549,7 +549,7 @@ func (m *IpfixExporterDump) Reset()               { *m = IpfixExporterDump{} }
 func (*IpfixExporterDump) GetMessageName() string { return "ipfix_exporter_dump" }
 func (*IpfixExporterDump) GetCrcString() string   { return "51077d14" }
 func (*IpfixExporterDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixExporterDump) Size() (size int) {
@@ -576,7 +576,7 @@ func (m *IpfixFlush) Reset()               { *m = IpfixFlush{} }
 func (*IpfixFlush) GetMessageName() string { return "ipfix_flush" }
 func (*IpfixFlush) GetCrcString() string   { return "51077d14" }
 func (*IpfixFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IpfixFlush) Size() (size int) {
@@ -605,7 +605,7 @@ func (m *IpfixFlushReply) Reset()               { *m = IpfixFlushReply{} }
 func (*IpfixFlushReply) GetMessageName() string { return "ipfix_flush_reply" }
 func (*IpfixFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*IpfixFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IpfixFlushReply) Size() (size int) {
@@ -639,7 +639,7 @@ func (m *SetIpfixClassifyStream) Reset()               { *m = SetIpfixClassifySt
 func (*SetIpfixClassifyStream) GetMessageName() string { return "set_ipfix_classify_stream" }
 func (*SetIpfixClassifyStream) GetCrcString() string   { return "c9cbe053" }
 func (*SetIpfixClassifyStream) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetIpfixClassifyStream) Size() (size int) {
@@ -675,7 +675,7 @@ func (m *SetIpfixClassifyStreamReply) Reset()               { *m = SetIpfixClass
 func (*SetIpfixClassifyStreamReply) GetMessageName() string { return "set_ipfix_classify_stream_reply" }
 func (*SetIpfixClassifyStreamReply) GetCrcString() string   { return "e8d4e804" }
 func (*SetIpfixClassifyStreamReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetIpfixClassifyStreamReply) Size() (size int) {
@@ -714,7 +714,7 @@ func (m *SetIpfixExporter) Reset()               { *m = SetIpfixExporter{} }
 func (*SetIpfixExporter) GetMessageName() string { return "set_ipfix_exporter" }
 func (*SetIpfixExporter) GetCrcString() string   { return "5530c8a0" }
 func (*SetIpfixExporter) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetIpfixExporter) Size() (size int) {
@@ -771,7 +771,7 @@ func (m *SetIpfixExporterReply) Reset()               { *m = SetIpfixExporterRep
 func (*SetIpfixExporterReply) GetMessageName() string { return "set_ipfix_exporter_reply" }
 func (*SetIpfixExporterReply) GetCrcString() string   { return "e8d4e804" }
 func (*SetIpfixExporterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetIpfixExporterReply) Size() (size int) {

@@ -36,7 +36,7 @@ type CliInband struct {
 func (m *CliInband) Reset()                        { *m = CliInband{} }
 func (*CliInband) GetMessageName() string          { return "cli_inband" }
 func (*CliInband) GetCrcString() string            { return "f8377302" }
-func (*CliInband) GetMessageType() api.MessageType { return api.RequestMessage }
+func (*CliInband) GetMessageType() api.MessageType { return api.RequestMessageType }
 
 // CliInbandReply represents VPP binary API message 'cli_inband_reply'.
 type CliInbandReply struct {
@@ -48,7 +48,7 @@ type CliInbandReply struct {
 func (m *CliInbandReply) Reset()                        { *m = CliInbandReply{} }
 func (*CliInbandReply) GetMessageName() string          { return "cli_inband_reply" }
 func (*CliInbandReply) GetCrcString() string            { return "05879051" }
-func (*CliInbandReply) GetMessageType() api.MessageType { return api.ReplyMessage }
+func (*CliInbandReply) GetMessageType() api.MessageType { return api.ReplyMessageType }
 
 func TestWrapperEncode(t *testing.T) {
 	msg := &CliInband{

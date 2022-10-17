@@ -40,7 +40,7 @@ func (m *FeatureEnableDisable) Reset()               { *m = FeatureEnableDisable
 func (*FeatureEnableDisable) GetMessageName() string { return "feature_enable_disable" }
 func (*FeatureEnableDisable) GetCrcString() string   { return "7531c862" }
 func (*FeatureEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FeatureEnableDisable) Size() (size int) {
@@ -82,7 +82,7 @@ func (m *FeatureEnableDisableReply) Reset()               { *m = FeatureEnableDi
 func (*FeatureEnableDisableReply) GetMessageName() string { return "feature_enable_disable_reply" }
 func (*FeatureEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*FeatureEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FeatureEnableDisableReply) Size() (size int) {

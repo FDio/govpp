@@ -91,7 +91,7 @@ func (m *GraphNodeDetails) Reset()               { *m = GraphNodeDetails{} }
 func (*GraphNodeDetails) GetMessageName() string { return "graph_node_details" }
 func (*GraphNodeDetails) GetCrcString() string   { return "ac762018" }
 func (*GraphNodeDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GraphNodeDetails) Size() (size int) {
@@ -149,7 +149,7 @@ func (m *GraphNodeGet) Reset()               { *m = GraphNodeGet{} }
 func (*GraphNodeGet) GetMessageName() string { return "graph_node_get" }
 func (*GraphNodeGet) GetCrcString() string   { return "39c8792e" }
 func (*GraphNodeGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GraphNodeGet) Size() (size int) {
@@ -195,7 +195,7 @@ func (m *GraphNodeGetReply) Reset()               { *m = GraphNodeGetReply{} }
 func (*GraphNodeGetReply) GetMessageName() string { return "graph_node_get_reply" }
 func (*GraphNodeGetReply) GetCrcString() string   { return "53b48f5d" }
 func (*GraphNodeGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GraphNodeGetReply) Size() (size int) {

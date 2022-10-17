@@ -116,7 +116,7 @@ func (m *WantWireguardPeerEvents) Reset()               { *m = WantWireguardPeer
 func (*WantWireguardPeerEvents) GetMessageName() string { return "want_wireguard_peer_events" }
 func (*WantWireguardPeerEvents) GetCrcString() string   { return "3bc666c8" }
 func (*WantWireguardPeerEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantWireguardPeerEvents) Size() (size int) {
@@ -161,7 +161,7 @@ func (*WantWireguardPeerEventsReply) GetMessageName() string {
 }
 func (*WantWireguardPeerEventsReply) GetCrcString() string { return "e8d4e804" }
 func (*WantWireguardPeerEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantWireguardPeerEventsReply) Size() (size int) {
@@ -195,7 +195,7 @@ func (m *WgSetAsyncMode) Reset()               { *m = WgSetAsyncMode{} }
 func (*WgSetAsyncMode) GetMessageName() string { return "wg_set_async_mode" }
 func (*WgSetAsyncMode) GetCrcString() string   { return "a6465f7c" }
 func (*WgSetAsyncMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WgSetAsyncMode) Size() (size int) {
@@ -229,7 +229,7 @@ func (m *WgSetAsyncModeReply) Reset()               { *m = WgSetAsyncModeReply{}
 func (*WgSetAsyncModeReply) GetMessageName() string { return "wg_set_async_mode_reply" }
 func (*WgSetAsyncModeReply) GetCrcString() string   { return "e8d4e804" }
 func (*WgSetAsyncModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WgSetAsyncModeReply) Size() (size int) {
@@ -264,7 +264,7 @@ func (m *WireguardInterfaceCreate) Reset()               { *m = WireguardInterfa
 func (*WireguardInterfaceCreate) GetMessageName() string { return "wireguard_interface_create" }
 func (*WireguardInterfaceCreate) GetCrcString() string   { return "a530137e" }
 func (*WireguardInterfaceCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardInterfaceCreate) Size() (size int) {
@@ -324,7 +324,7 @@ func (*WireguardInterfaceCreateReply) GetMessageName() string {
 }
 func (*WireguardInterfaceCreateReply) GetCrcString() string { return "5383d31f" }
 func (*WireguardInterfaceCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardInterfaceCreateReply) Size() (size int) {
@@ -361,7 +361,7 @@ func (m *WireguardInterfaceDelete) Reset()               { *m = WireguardInterfa
 func (*WireguardInterfaceDelete) GetMessageName() string { return "wireguard_interface_delete" }
 func (*WireguardInterfaceDelete) GetCrcString() string   { return "f9e6675e" }
 func (*WireguardInterfaceDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardInterfaceDelete) Size() (size int) {
@@ -397,7 +397,7 @@ func (*WireguardInterfaceDeleteReply) GetMessageName() string {
 }
 func (*WireguardInterfaceDeleteReply) GetCrcString() string { return "e8d4e804" }
 func (*WireguardInterfaceDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardInterfaceDeleteReply) Size() (size int) {
@@ -431,7 +431,7 @@ func (m *WireguardInterfaceDetails) Reset()               { *m = WireguardInterf
 func (*WireguardInterfaceDetails) GetMessageName() string { return "wireguard_interface_details" }
 func (*WireguardInterfaceDetails) GetCrcString() string   { return "0dd4865d" }
 func (*WireguardInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardInterfaceDetails) Size() (size int) {
@@ -486,7 +486,7 @@ func (m *WireguardInterfaceDump) Reset()               { *m = WireguardInterface
 func (*WireguardInterfaceDump) GetMessageName() string { return "wireguard_interface_dump" }
 func (*WireguardInterfaceDump) GetCrcString() string   { return "2c954158" }
 func (*WireguardInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardInterfaceDump) Size() (size int) {
@@ -523,7 +523,7 @@ func (m *WireguardPeerAdd) Reset()               { *m = WireguardPeerAdd{} }
 func (*WireguardPeerAdd) GetMessageName() string { return "wireguard_peer_add" }
 func (*WireguardPeerAdd) GetCrcString() string   { return "9b8aad61" }
 func (*WireguardPeerAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardPeerAdd) Size() (size int) {
@@ -611,7 +611,7 @@ func (m *WireguardPeerAddReply) Reset()               { *m = WireguardPeerAddRep
 func (*WireguardPeerAddReply) GetMessageName() string { return "wireguard_peer_add_reply" }
 func (*WireguardPeerAddReply) GetCrcString() string   { return "084a0cd3" }
 func (*WireguardPeerAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardPeerAddReply) Size() (size int) {
@@ -650,7 +650,7 @@ func (m *WireguardPeerEvent) Reset()               { *m = WireguardPeerEvent{} }
 func (*WireguardPeerEvent) GetMessageName() string { return "wireguard_peer_event" }
 func (*WireguardPeerEvent) GetCrcString() string   { return "4e1b5d67" }
 func (*WireguardPeerEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *WireguardPeerEvent) Size() (size int) {
@@ -690,7 +690,7 @@ func (m *WireguardPeerRemove) Reset()               { *m = WireguardPeerRemove{}
 func (*WireguardPeerRemove) GetMessageName() string { return "wireguard_peer_remove" }
 func (*WireguardPeerRemove) GetCrcString() string   { return "3b74607a" }
 func (*WireguardPeerRemove) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardPeerRemove) Size() (size int) {
@@ -724,7 +724,7 @@ func (m *WireguardPeerRemoveReply) Reset()               { *m = WireguardPeerRem
 func (*WireguardPeerRemoveReply) GetMessageName() string { return "wireguard_peer_remove_reply" }
 func (*WireguardPeerRemoveReply) GetCrcString() string   { return "e8d4e804" }
 func (*WireguardPeerRemoveReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardPeerRemoveReply) Size() (size int) {
@@ -758,7 +758,7 @@ func (m *WireguardPeersDetails) Reset()               { *m = WireguardPeersDetai
 func (*WireguardPeersDetails) GetMessageName() string { return "wireguard_peers_details" }
 func (*WireguardPeersDetails) GetCrcString() string   { return "6a9f6bc3" }
 func (*WireguardPeersDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WireguardPeersDetails) Size() (size int) {
@@ -845,7 +845,7 @@ func (m *WireguardPeersDump) Reset()               { *m = WireguardPeersDump{} }
 func (*WireguardPeersDump) GetMessageName() string { return "wireguard_peers_dump" }
 func (*WireguardPeersDump) GetCrcString() string   { return "3b74607a" }
 func (*WireguardPeersDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WireguardPeersDump) Size() (size int) {

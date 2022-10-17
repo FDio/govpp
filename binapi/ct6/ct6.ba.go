@@ -39,7 +39,7 @@ func (m *Ct6EnableDisable) Reset()               { *m = Ct6EnableDisable{} }
 func (*Ct6EnableDisable) GetMessageName() string { return "ct6_enable_disable" }
 func (*Ct6EnableDisable) GetCrcString() string   { return "5d02ac02" }
 func (*Ct6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Ct6EnableDisable) Size() (size int) {
@@ -78,7 +78,7 @@ func (m *Ct6EnableDisableReply) Reset()               { *m = Ct6EnableDisableRep
 func (*Ct6EnableDisableReply) GetMessageName() string { return "ct6_enable_disable_reply" }
 func (*Ct6EnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*Ct6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Ct6EnableDisableReply) Size() (size int) {

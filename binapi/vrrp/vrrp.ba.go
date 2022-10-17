@@ -173,7 +173,7 @@ func (m *VrrpVrAddDel) Reset()               { *m = VrrpVrAddDel{} }
 func (*VrrpVrAddDel) GetMessageName() string { return "vrrp_vr_add_del" }
 func (*VrrpVrAddDel) GetCrcString() string   { return "c5cf15aa" }
 func (*VrrpVrAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrAddDel) Size() (size int) {
@@ -246,7 +246,7 @@ func (m *VrrpVrAddDelReply) Reset()               { *m = VrrpVrAddDelReply{} }
 func (*VrrpVrAddDelReply) GetMessageName() string { return "vrrp_vr_add_del_reply" }
 func (*VrrpVrAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrAddDelReply) Size() (size int) {
@@ -279,7 +279,7 @@ func (m *VrrpVrDel) Reset()               { *m = VrrpVrDel{} }
 func (*VrrpVrDel) GetMessageName() string { return "vrrp_vr_del" }
 func (*VrrpVrDel) GetCrcString() string   { return "6029baa1" }
 func (*VrrpVrDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrDel) Size() (size int) {
@@ -312,7 +312,7 @@ func (m *VrrpVrDelReply) Reset()               { *m = VrrpVrDelReply{} }
 func (*VrrpVrDelReply) GetMessageName() string { return "vrrp_vr_del_reply" }
 func (*VrrpVrDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrDelReply) Size() (size int) {
@@ -348,7 +348,7 @@ func (m *VrrpVrDetails) Reset()               { *m = VrrpVrDetails{} }
 func (*VrrpVrDetails) GetMessageName() string { return "vrrp_vr_details" }
 func (*VrrpVrDetails) GetCrcString() string   { return "46edcebd" }
 func (*VrrpVrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrDetails) Size() (size int) {
@@ -439,7 +439,7 @@ func (m *VrrpVrDump) Reset()               { *m = VrrpVrDump{} }
 func (*VrrpVrDump) GetMessageName() string { return "vrrp_vr_dump" }
 func (*VrrpVrDump) GetCrcString() string   { return "f9e6675e" }
 func (*VrrpVrDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrDump) Size() (size int) {
@@ -475,7 +475,7 @@ func (m *VrrpVrEvent) Reset()               { *m = VrrpVrEvent{} }
 func (*VrrpVrEvent) GetMessageName() string { return "vrrp_vr_event" }
 func (*VrrpVrEvent) GetCrcString() string   { return "c1fea6a5" }
 func (*VrrpVrEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *VrrpVrEvent) Size() (size int) {
@@ -527,7 +527,7 @@ func (m *VrrpVrPeerDetails) Reset()               { *m = VrrpVrPeerDetails{} }
 func (*VrrpVrPeerDetails) GetMessageName() string { return "vrrp_vr_peer_details" }
 func (*VrrpVrPeerDetails) GetCrcString() string   { return "3d99c108" }
 func (*VrrpVrPeerDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrPeerDetails) Size() (size int) {
@@ -593,7 +593,7 @@ func (m *VrrpVrPeerDump) Reset()               { *m = VrrpVrPeerDump{} }
 func (*VrrpVrPeerDump) GetMessageName() string { return "vrrp_vr_peer_dump" }
 func (*VrrpVrPeerDump) GetCrcString() string   { return "6fa3f7c4" }
 func (*VrrpVrPeerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrPeerDump) Size() (size int) {
@@ -636,7 +636,7 @@ func (m *VrrpVrSetPeers) Reset()               { *m = VrrpVrSetPeers{} }
 func (*VrrpVrSetPeers) GetMessageName() string { return "vrrp_vr_set_peers" }
 func (*VrrpVrSetPeers) GetCrcString() string   { return "20bec71f" }
 func (*VrrpVrSetPeers) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrSetPeers) Size() (size int) {
@@ -700,7 +700,7 @@ func (m *VrrpVrSetPeersReply) Reset()               { *m = VrrpVrSetPeersReply{}
 func (*VrrpVrSetPeersReply) GetMessageName() string { return "vrrp_vr_set_peers_reply" }
 func (*VrrpVrSetPeersReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrSetPeersReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrSetPeersReply) Size() (size int) {
@@ -736,7 +736,7 @@ func (m *VrrpVrStartStop) Reset()               { *m = VrrpVrStartStop{} }
 func (*VrrpVrStartStop) GetMessageName() string { return "vrrp_vr_start_stop" }
 func (*VrrpVrStartStop) GetCrcString() string   { return "0662a3b7" }
 func (*VrrpVrStartStop) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrStartStop) Size() (size int) {
@@ -778,7 +778,7 @@ func (m *VrrpVrStartStopReply) Reset()               { *m = VrrpVrStartStopReply
 func (*VrrpVrStartStopReply) GetMessageName() string { return "vrrp_vr_start_stop_reply" }
 func (*VrrpVrStartStopReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrStartStopReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrStartStopReply) Size() (size int) {
@@ -816,7 +816,7 @@ func (m *VrrpVrTrackIfAddDel) Reset()               { *m = VrrpVrTrackIfAddDel{}
 func (*VrrpVrTrackIfAddDel) GetMessageName() string { return "vrrp_vr_track_if_add_del" }
 func (*VrrpVrTrackIfAddDel) GetCrcString() string   { return "d67df299" }
 func (*VrrpVrTrackIfAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrTrackIfAddDel) Size() (size int) {
@@ -883,7 +883,7 @@ func (m *VrrpVrTrackIfAddDelReply) Reset()               { *m = VrrpVrTrackIfAdd
 func (*VrrpVrTrackIfAddDelReply) GetMessageName() string { return "vrrp_vr_track_if_add_del_reply" }
 func (*VrrpVrTrackIfAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*VrrpVrTrackIfAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrTrackIfAddDelReply) Size() (size int) {
@@ -920,7 +920,7 @@ func (m *VrrpVrTrackIfDetails) Reset()               { *m = VrrpVrTrackIfDetails
 func (*VrrpVrTrackIfDetails) GetMessageName() string { return "vrrp_vr_track_if_details" }
 func (*VrrpVrTrackIfDetails) GetCrcString() string   { return "73c36f81" }
 func (*VrrpVrTrackIfDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrTrackIfDetails) Size() (size int) {
@@ -987,7 +987,7 @@ func (m *VrrpVrTrackIfDump) Reset()               { *m = VrrpVrTrackIfDump{} }
 func (*VrrpVrTrackIfDump) GetMessageName() string { return "vrrp_vr_track_if_dump" }
 func (*VrrpVrTrackIfDump) GetCrcString() string   { return "a34dfc6d" }
 func (*VrrpVrTrackIfDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrTrackIfDump) Size() (size int) {
@@ -1036,7 +1036,7 @@ func (m *VrrpVrUpdate) Reset()               { *m = VrrpVrUpdate{} }
 func (*VrrpVrUpdate) GetMessageName() string { return "vrrp_vr_update" }
 func (*VrrpVrUpdate) GetCrcString() string   { return "0b51e2f4" }
 func (*VrrpVrUpdate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VrrpVrUpdate) Size() (size int) {
@@ -1110,7 +1110,7 @@ func (m *VrrpVrUpdateReply) Reset()               { *m = VrrpVrUpdateReply{} }
 func (*VrrpVrUpdateReply) GetMessageName() string { return "vrrp_vr_update_reply" }
 func (*VrrpVrUpdateReply) GetCrcString() string   { return "5317d608" }
 func (*VrrpVrUpdateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VrrpVrUpdateReply) Size() (size int) {
@@ -1147,7 +1147,7 @@ func (m *WantVrrpVrEvents) Reset()               { *m = WantVrrpVrEvents{} }
 func (*WantVrrpVrEvents) GetMessageName() string { return "want_vrrp_vr_events" }
 func (*WantVrrpVrEvents) GetCrcString() string   { return "c5e2af94" }
 func (*WantVrrpVrEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantVrrpVrEvents) Size() (size int) {
@@ -1183,7 +1183,7 @@ func (m *WantVrrpVrEventsReply) Reset()               { *m = WantVrrpVrEventsRep
 func (*WantVrrpVrEventsReply) GetMessageName() string { return "want_vrrp_vr_events_reply" }
 func (*WantVrrpVrEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantVrrpVrEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantVrrpVrEventsReply) Size() (size int) {

@@ -89,7 +89,7 @@ func (m *UDPDecapAddDel) Reset()               { *m = UDPDecapAddDel{} }
 func (*UDPDecapAddDel) GetMessageName() string { return "udp_decap_add_del" }
 func (*UDPDecapAddDel) GetCrcString() string   { return "d14a4f47" }
 func (*UDPDecapAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPDecapAddDel) Size() (size int) {
@@ -131,7 +131,7 @@ func (m *UDPDecapAddDelReply) Reset()               { *m = UDPDecapAddDelReply{}
 func (*UDPDecapAddDelReply) GetMessageName() string { return "udp_decap_add_del_reply" }
 func (*UDPDecapAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPDecapAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPDecapAddDelReply) Size() (size int) {
@@ -164,7 +164,7 @@ func (m *UDPEncapAdd) Reset()               { *m = UDPEncapAdd{} }
 func (*UDPEncapAdd) GetMessageName() string { return "udp_encap_add" }
 func (*UDPEncapAdd) GetCrcString() string   { return "f74a60b1" }
 func (*UDPEncapAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPEncapAdd) Size() (size int) {
@@ -219,7 +219,7 @@ func (m *UDPEncapAddReply) Reset()               { *m = UDPEncapAddReply{} }
 func (*UDPEncapAddReply) GetMessageName() string { return "udp_encap_add_reply" }
 func (*UDPEncapAddReply) GetCrcString() string   { return "e2fc8294" }
 func (*UDPEncapAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPEncapAddReply) Size() (size int) {
@@ -255,7 +255,7 @@ func (m *UDPEncapDel) Reset()               { *m = UDPEncapDel{} }
 func (*UDPEncapDel) GetMessageName() string { return "udp_encap_del" }
 func (*UDPEncapDel) GetCrcString() string   { return "3a91bde5" }
 func (*UDPEncapDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPEncapDel) Size() (size int) {
@@ -288,7 +288,7 @@ func (m *UDPEncapDelReply) Reset()               { *m = UDPEncapDelReply{} }
 func (*UDPEncapDelReply) GetMessageName() string { return "udp_encap_del_reply" }
 func (*UDPEncapDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*UDPEncapDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPEncapDelReply) Size() (size int) {
@@ -321,7 +321,7 @@ func (m *UDPEncapDetails) Reset()               { *m = UDPEncapDetails{} }
 func (*UDPEncapDetails) GetMessageName() string { return "udp_encap_details" }
 func (*UDPEncapDetails) GetCrcString() string   { return "8cfb9c76" }
 func (*UDPEncapDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *UDPEncapDetails) Size() (size int) {
@@ -373,7 +373,7 @@ func (m *UDPEncapDump) Reset()               { *m = UDPEncapDump{} }
 func (*UDPEncapDump) GetMessageName() string { return "udp_encap_dump" }
 func (*UDPEncapDump) GetCrcString() string   { return "51077d14" }
 func (*UDPEncapDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *UDPEncapDump) Size() (size int) {

@@ -159,7 +159,7 @@ func (m *PuntReasonDetails) Reset()               { *m = PuntReasonDetails{} }
 func (*PuntReasonDetails) GetMessageName() string { return "punt_reason_details" }
 func (*PuntReasonDetails) GetCrcString() string   { return "2c9d4a40" }
 func (*PuntReasonDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntReasonDetails) Size() (size int) {
@@ -195,7 +195,7 @@ func (m *PuntReasonDump) Reset()               { *m = PuntReasonDump{} }
 func (*PuntReasonDump) GetMessageName() string { return "punt_reason_dump" }
 func (*PuntReasonDump) GetCrcString() string   { return "5c0dd4fe" }
 func (*PuntReasonDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntReasonDump) Size() (size int) {
@@ -231,7 +231,7 @@ func (m *PuntSocketDeregister) Reset()               { *m = PuntSocketDeregister
 func (*PuntSocketDeregister) GetMessageName() string { return "punt_socket_deregister" }
 func (*PuntSocketDeregister) GetCrcString() string   { return "75afa766" }
 func (*PuntSocketDeregister) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntSocketDeregister) Size() (size int) {
@@ -267,7 +267,7 @@ func (m *PuntSocketDeregisterReply) Reset()               { *m = PuntSocketDereg
 func (*PuntSocketDeregisterReply) GetMessageName() string { return "punt_socket_deregister_reply" }
 func (*PuntSocketDeregisterReply) GetCrcString() string   { return "e8d4e804" }
 func (*PuntSocketDeregisterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntSocketDeregisterReply) Size() (size int) {
@@ -301,7 +301,7 @@ func (m *PuntSocketDetails) Reset()               { *m = PuntSocketDetails{} }
 func (*PuntSocketDetails) GetMessageName() string { return "punt_socket_details" }
 func (*PuntSocketDetails) GetCrcString() string   { return "330466e4" }
 func (*PuntSocketDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntSocketDetails) Size() (size int) {
@@ -340,7 +340,7 @@ func (m *PuntSocketDump) Reset()               { *m = PuntSocketDump{} }
 func (*PuntSocketDump) GetMessageName() string { return "punt_socket_dump" }
 func (*PuntSocketDump) GetCrcString() string   { return "916fb004" }
 func (*PuntSocketDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntSocketDump) Size() (size int) {
@@ -375,7 +375,7 @@ func (m *PuntSocketRegister) Reset()               { *m = PuntSocketRegister{} }
 func (*PuntSocketRegister) GetMessageName() string { return "punt_socket_register" }
 func (*PuntSocketRegister) GetCrcString() string   { return "7875badb" }
 func (*PuntSocketRegister) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PuntSocketRegister) Size() (size int) {
@@ -418,7 +418,7 @@ func (m *PuntSocketRegisterReply) Reset()               { *m = PuntSocketRegiste
 func (*PuntSocketRegisterReply) GetMessageName() string { return "punt_socket_register_reply" }
 func (*PuntSocketRegisterReply) GetCrcString() string   { return "bd30ae90" }
 func (*PuntSocketRegisterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PuntSocketRegisterReply) Size() (size int) {
@@ -455,7 +455,7 @@ func (m *SetPunt) Reset()               { *m = SetPunt{} }
 func (*SetPunt) GetMessageName() string { return "set_punt" }
 func (*SetPunt) GetCrcString() string   { return "47d0e347" }
 func (*SetPunt) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SetPunt) Size() (size int) {
@@ -494,7 +494,7 @@ func (m *SetPuntReply) Reset()               { *m = SetPuntReply{} }
 func (*SetPuntReply) GetMessageName() string { return "set_punt_reply" }
 func (*SetPuntReply) GetCrcString() string   { return "e8d4e804" }
 func (*SetPuntReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SetPuntReply) Size() (size int) {

@@ -187,7 +187,7 @@ func (m *BdIPMacAddDel) Reset()               { *m = BdIPMacAddDel{} }
 func (*BdIPMacAddDel) GetMessageName() string { return "bd_ip_mac_add_del" }
 func (*BdIPMacAddDel) GetCrcString() string   { return "0257c869" }
 func (*BdIPMacAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BdIPMacAddDel) Size() (size int) {
@@ -232,7 +232,7 @@ func (m *BdIPMacAddDelReply) Reset()               { *m = BdIPMacAddDelReply{} }
 func (*BdIPMacAddDelReply) GetMessageName() string { return "bd_ip_mac_add_del_reply" }
 func (*BdIPMacAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BdIPMacAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BdIPMacAddDelReply) Size() (size int) {
@@ -265,7 +265,7 @@ func (m *BdIPMacDetails) Reset()               { *m = BdIPMacDetails{} }
 func (*BdIPMacDetails) GetMessageName() string { return "bd_ip_mac_details" }
 func (*BdIPMacDetails) GetCrcString() string   { return "545af86a" }
 func (*BdIPMacDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BdIPMacDetails) Size() (size int) {
@@ -307,7 +307,7 @@ func (m *BdIPMacDump) Reset()               { *m = BdIPMacDump{} }
 func (*BdIPMacDump) GetMessageName() string { return "bd_ip_mac_dump" }
 func (*BdIPMacDump) GetCrcString() string   { return "c25fdce6" }
 func (*BdIPMacDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BdIPMacDump) Size() (size int) {
@@ -340,7 +340,7 @@ func (m *BdIPMacFlush) Reset()               { *m = BdIPMacFlush{} }
 func (*BdIPMacFlush) GetMessageName() string { return "bd_ip_mac_flush" }
 func (*BdIPMacFlush) GetCrcString() string   { return "c25fdce6" }
 func (*BdIPMacFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BdIPMacFlush) Size() (size int) {
@@ -373,7 +373,7 @@ func (m *BdIPMacFlushReply) Reset()               { *m = BdIPMacFlushReply{} }
 func (*BdIPMacFlushReply) GetMessageName() string { return "bd_ip_mac_flush_reply" }
 func (*BdIPMacFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*BdIPMacFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BdIPMacFlushReply) Size() (size int) {
@@ -415,7 +415,7 @@ func (m *BridgeDomainAddDel) Reset()               { *m = BridgeDomainAddDel{} }
 func (*BridgeDomainAddDel) GetMessageName() string { return "bridge_domain_add_del" }
 func (*BridgeDomainAddDel) GetCrcString() string   { return "600b7170" }
 func (*BridgeDomainAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeDomainAddDel) Size() (size int) {
@@ -475,7 +475,7 @@ func (m *BridgeDomainAddDelReply) Reset()               { *m = BridgeDomainAddDe
 func (*BridgeDomainAddDelReply) GetMessageName() string { return "bridge_domain_add_del_reply" }
 func (*BridgeDomainAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*BridgeDomainAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeDomainAddDelReply) Size() (size int) {
@@ -520,7 +520,7 @@ func (m *BridgeDomainDetails) Reset()               { *m = BridgeDomainDetails{}
 func (*BridgeDomainDetails) GetMessageName() string { return "bridge_domain_details" }
 func (*BridgeDomainDetails) GetCrcString() string   { return "0fa506fd" }
 func (*BridgeDomainDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeDomainDetails) Size() (size int) {
@@ -612,7 +612,7 @@ func (m *BridgeDomainDump) Reset()               { *m = BridgeDomainDump{} }
 func (*BridgeDomainDump) GetMessageName() string { return "bridge_domain_dump" }
 func (*BridgeDomainDump) GetCrcString() string   { return "74396a43" }
 func (*BridgeDomainDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeDomainDump) Size() (size int) {
@@ -650,7 +650,7 @@ func (*BridgeDomainSetDefaultLearnLimit) GetMessageName() string {
 }
 func (*BridgeDomainSetDefaultLearnLimit) GetCrcString() string { return "f097ffce" }
 func (*BridgeDomainSetDefaultLearnLimit) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeDomainSetDefaultLearnLimit) Size() (size int) {
@@ -685,7 +685,7 @@ func (*BridgeDomainSetDefaultLearnLimitReply) GetMessageName() string {
 }
 func (*BridgeDomainSetDefaultLearnLimitReply) GetCrcString() string { return "e8d4e804" }
 func (*BridgeDomainSetDefaultLearnLimitReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeDomainSetDefaultLearnLimitReply) Size() (size int) {
@@ -719,7 +719,7 @@ func (m *BridgeDomainSetLearnLimit) Reset()               { *m = BridgeDomainSet
 func (*BridgeDomainSetLearnLimit) GetMessageName() string { return "bridge_domain_set_learn_limit" }
 func (*BridgeDomainSetLearnLimit) GetCrcString() string   { return "89c52b5f" }
 func (*BridgeDomainSetLearnLimit) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeDomainSetLearnLimit) Size() (size int) {
@@ -757,7 +757,7 @@ func (*BridgeDomainSetLearnLimitReply) GetMessageName() string {
 }
 func (*BridgeDomainSetLearnLimitReply) GetCrcString() string { return "e8d4e804" }
 func (*BridgeDomainSetLearnLimitReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeDomainSetLearnLimitReply) Size() (size int) {
@@ -791,7 +791,7 @@ func (m *BridgeDomainSetMacAge) Reset()               { *m = BridgeDomainSetMacA
 func (*BridgeDomainSetMacAge) GetMessageName() string { return "bridge_domain_set_mac_age" }
 func (*BridgeDomainSetMacAge) GetCrcString() string   { return "b537ad7b" }
 func (*BridgeDomainSetMacAge) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeDomainSetMacAge) Size() (size int) {
@@ -827,7 +827,7 @@ func (m *BridgeDomainSetMacAgeReply) Reset()               { *m = BridgeDomainSe
 func (*BridgeDomainSetMacAgeReply) GetMessageName() string { return "bridge_domain_set_mac_age_reply" }
 func (*BridgeDomainSetMacAgeReply) GetCrcString() string   { return "e8d4e804" }
 func (*BridgeDomainSetMacAgeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeDomainSetMacAgeReply) Size() (size int) {
@@ -862,7 +862,7 @@ func (m *BridgeFlags) Reset()               { *m = BridgeFlags{} }
 func (*BridgeFlags) GetMessageName() string { return "bridge_flags" }
 func (*BridgeFlags) GetCrcString() string   { return "1b0c5fbd" }
 func (*BridgeFlags) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BridgeFlags) Size() (size int) {
@@ -902,7 +902,7 @@ func (m *BridgeFlagsReply) Reset()               { *m = BridgeFlagsReply{} }
 func (*BridgeFlagsReply) GetMessageName() string { return "bridge_flags_reply" }
 func (*BridgeFlagsReply) GetCrcString() string   { return "29b2a2b3" }
 func (*BridgeFlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BridgeFlagsReply) Size() (size int) {
@@ -939,7 +939,7 @@ func (m *BviCreate) Reset()               { *m = BviCreate{} }
 func (*BviCreate) GetMessageName() string { return "bvi_create" }
 func (*BviCreate) GetCrcString() string   { return "f5398559" }
 func (*BviCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BviCreate) Size() (size int) {
@@ -976,7 +976,7 @@ func (m *BviCreateReply) Reset()               { *m = BviCreateReply{} }
 func (*BviCreateReply) GetMessageName() string { return "bvi_create_reply" }
 func (*BviCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*BviCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BviCreateReply) Size() (size int) {
@@ -1012,7 +1012,7 @@ func (m *BviDelete) Reset()               { *m = BviDelete{} }
 func (*BviDelete) GetMessageName() string { return "bvi_delete" }
 func (*BviDelete) GetCrcString() string   { return "f9e6675e" }
 func (*BviDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BviDelete) Size() (size int) {
@@ -1045,7 +1045,7 @@ func (m *BviDeleteReply) Reset()               { *m = BviDeleteReply{} }
 func (*BviDeleteReply) GetMessageName() string { return "bvi_delete_reply" }
 func (*BviDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*BviDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BviDeleteReply) Size() (size int) {
@@ -1081,7 +1081,7 @@ func (m *L2ArpTermEvent) Reset()               { *m = L2ArpTermEvent{} }
 func (*L2ArpTermEvent) GetMessageName() string { return "l2_arp_term_event" }
 func (*L2ArpTermEvent) GetCrcString() string   { return "6963e07a" }
 func (*L2ArpTermEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *L2ArpTermEvent) Size() (size int) {
@@ -1124,7 +1124,7 @@ func (m *L2FibClearTable) Reset()               { *m = L2FibClearTable{} }
 func (*L2FibClearTable) GetMessageName() string { return "l2_fib_clear_table" }
 func (*L2FibClearTable) GetCrcString() string   { return "51077d14" }
 func (*L2FibClearTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2FibClearTable) Size() (size int) {
@@ -1153,7 +1153,7 @@ func (m *L2FibClearTableReply) Reset()               { *m = L2FibClearTableReply
 func (*L2FibClearTableReply) GetMessageName() string { return "l2_fib_clear_table_reply" }
 func (*L2FibClearTableReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2FibClearTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2FibClearTableReply) Size() (size int) {
@@ -1191,7 +1191,7 @@ func (m *L2FibTableDetails) Reset()               { *m = L2FibTableDetails{} }
 func (*L2FibTableDetails) GetMessageName() string { return "l2_fib_table_details" }
 func (*L2FibTableDetails) GetCrcString() string   { return "a44ef6b8" }
 func (*L2FibTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2FibTableDetails) Size() (size int) {
@@ -1239,7 +1239,7 @@ func (m *L2FibTableDump) Reset()               { *m = L2FibTableDump{} }
 func (*L2FibTableDump) GetMessageName() string { return "l2_fib_table_dump" }
 func (*L2FibTableDump) GetCrcString() string   { return "c25fdce6" }
 func (*L2FibTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2FibTableDump) Size() (size int) {
@@ -1274,7 +1274,7 @@ func (m *L2Flags) Reset()               { *m = L2Flags{} }
 func (*L2Flags) GetMessageName() string { return "l2_flags" }
 func (*L2Flags) GetCrcString() string   { return "fc41cfe8" }
 func (*L2Flags) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2Flags) Size() (size int) {
@@ -1314,7 +1314,7 @@ func (m *L2FlagsReply) Reset()               { *m = L2FlagsReply{} }
 func (*L2FlagsReply) GetMessageName() string { return "l2_flags_reply" }
 func (*L2FlagsReply) GetCrcString() string   { return "29b2a2b3" }
 func (*L2FlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2FlagsReply) Size() (size int) {
@@ -1351,7 +1351,7 @@ func (m *L2InterfaceEfpFilter) Reset()               { *m = L2InterfaceEfpFilter
 func (*L2InterfaceEfpFilter) GetMessageName() string { return "l2_interface_efp_filter" }
 func (*L2InterfaceEfpFilter) GetCrcString() string   { return "5501adee" }
 func (*L2InterfaceEfpFilter) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2InterfaceEfpFilter) Size() (size int) {
@@ -1387,7 +1387,7 @@ func (m *L2InterfaceEfpFilterReply) Reset()               { *m = L2InterfaceEfpF
 func (*L2InterfaceEfpFilterReply) GetMessageName() string { return "l2_interface_efp_filter_reply" }
 func (*L2InterfaceEfpFilterReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2InterfaceEfpFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2InterfaceEfpFilterReply) Size() (size int) {
@@ -1426,7 +1426,7 @@ func (m *L2InterfacePbbTagRewrite) Reset()               { *m = L2InterfacePbbTa
 func (*L2InterfacePbbTagRewrite) GetMessageName() string { return "l2_interface_pbb_tag_rewrite" }
 func (*L2InterfacePbbTagRewrite) GetCrcString() string   { return "38e802a8" }
 func (*L2InterfacePbbTagRewrite) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2InterfacePbbTagRewrite) Size() (size int) {
@@ -1479,7 +1479,7 @@ func (*L2InterfacePbbTagRewriteReply) GetMessageName() string {
 }
 func (*L2InterfacePbbTagRewriteReply) GetCrcString() string { return "e8d4e804" }
 func (*L2InterfacePbbTagRewriteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2InterfacePbbTagRewriteReply) Size() (size int) {
@@ -1516,7 +1516,7 @@ func (m *L2InterfaceVlanTagRewrite) Reset()               { *m = L2InterfaceVlan
 func (*L2InterfaceVlanTagRewrite) GetMessageName() string { return "l2_interface_vlan_tag_rewrite" }
 func (*L2InterfaceVlanTagRewrite) GetCrcString() string   { return "62cc0bbc" }
 func (*L2InterfaceVlanTagRewrite) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2InterfaceVlanTagRewrite) Size() (size int) {
@@ -1563,7 +1563,7 @@ func (*L2InterfaceVlanTagRewriteReply) GetMessageName() string {
 }
 func (*L2InterfaceVlanTagRewriteReply) GetCrcString() string { return "e8d4e804" }
 func (*L2InterfaceVlanTagRewriteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2InterfaceVlanTagRewriteReply) Size() (size int) {
@@ -1598,7 +1598,7 @@ func (m *L2MacsEvent) Reset()               { *m = L2MacsEvent{} }
 func (*L2MacsEvent) GetMessageName() string { return "l2_macs_event" }
 func (*L2MacsEvent) GetCrcString() string   { return "44b8fd64" }
 func (*L2MacsEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *L2MacsEvent) Size() (size int) {
@@ -1664,7 +1664,7 @@ func (m *L2PatchAddDel) Reset()               { *m = L2PatchAddDel{} }
 func (*L2PatchAddDel) GetMessageName() string { return "l2_patch_add_del" }
 func (*L2PatchAddDel) GetCrcString() string   { return "a1f6a6f3" }
 func (*L2PatchAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2PatchAddDel) Size() (size int) {
@@ -1703,7 +1703,7 @@ func (m *L2PatchAddDelReply) Reset()               { *m = L2PatchAddDelReply{} }
 func (*L2PatchAddDelReply) GetMessageName() string { return "l2_patch_add_del_reply" }
 func (*L2PatchAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2PatchAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2PatchAddDelReply) Size() (size int) {
@@ -1737,7 +1737,7 @@ func (m *L2XconnectDetails) Reset()               { *m = L2XconnectDetails{} }
 func (*L2XconnectDetails) GetMessageName() string { return "l2_xconnect_details" }
 func (*L2XconnectDetails) GetCrcString() string   { return "472b6b67" }
 func (*L2XconnectDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2XconnectDetails) Size() (size int) {
@@ -1771,7 +1771,7 @@ func (m *L2XconnectDump) Reset()               { *m = L2XconnectDump{} }
 func (*L2XconnectDump) GetMessageName() string { return "l2_xconnect_dump" }
 func (*L2XconnectDump) GetCrcString() string   { return "51077d14" }
 func (*L2XconnectDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2XconnectDump) Size() (size int) {
@@ -1806,7 +1806,7 @@ func (m *L2fibAddDel) Reset()               { *m = L2fibAddDel{} }
 func (*L2fibAddDel) GetMessageName() string { return "l2fib_add_del" }
 func (*L2fibAddDel) GetCrcString() string   { return "eddda487" }
 func (*L2fibAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2fibAddDel) Size() (size int) {
@@ -1857,7 +1857,7 @@ func (m *L2fibAddDelReply) Reset()               { *m = L2fibAddDelReply{} }
 func (*L2fibAddDelReply) GetMessageName() string { return "l2fib_add_del_reply" }
 func (*L2fibAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2fibAddDelReply) Size() (size int) {
@@ -1888,7 +1888,7 @@ func (m *L2fibFlushAll) Reset()               { *m = L2fibFlushAll{} }
 func (*L2fibFlushAll) GetMessageName() string { return "l2fib_flush_all" }
 func (*L2fibFlushAll) GetCrcString() string   { return "51077d14" }
 func (*L2fibFlushAll) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2fibFlushAll) Size() (size int) {
@@ -1917,7 +1917,7 @@ func (m *L2fibFlushAllReply) Reset()               { *m = L2fibFlushAllReply{} }
 func (*L2fibFlushAllReply) GetMessageName() string { return "l2fib_flush_all_reply" }
 func (*L2fibFlushAllReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushAllReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2fibFlushAllReply) Size() (size int) {
@@ -1950,7 +1950,7 @@ func (m *L2fibFlushBd) Reset()               { *m = L2fibFlushBd{} }
 func (*L2fibFlushBd) GetMessageName() string { return "l2fib_flush_bd" }
 func (*L2fibFlushBd) GetCrcString() string   { return "c25fdce6" }
 func (*L2fibFlushBd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2fibFlushBd) Size() (size int) {
@@ -1983,7 +1983,7 @@ func (m *L2fibFlushBdReply) Reset()               { *m = L2fibFlushBdReply{} }
 func (*L2fibFlushBdReply) GetMessageName() string { return "l2fib_flush_bd_reply" }
 func (*L2fibFlushBdReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushBdReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2fibFlushBdReply) Size() (size int) {
@@ -2016,7 +2016,7 @@ func (m *L2fibFlushInt) Reset()               { *m = L2fibFlushInt{} }
 func (*L2fibFlushInt) GetMessageName() string { return "l2fib_flush_int" }
 func (*L2fibFlushInt) GetCrcString() string   { return "f9e6675e" }
 func (*L2fibFlushInt) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2fibFlushInt) Size() (size int) {
@@ -2049,7 +2049,7 @@ func (m *L2fibFlushIntReply) Reset()               { *m = L2fibFlushIntReply{} }
 func (*L2fibFlushIntReply) GetMessageName() string { return "l2fib_flush_int_reply" }
 func (*L2fibFlushIntReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibFlushIntReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2fibFlushIntReply) Size() (size int) {
@@ -2082,7 +2082,7 @@ func (m *L2fibSetScanDelay) Reset()               { *m = L2fibSetScanDelay{} }
 func (*L2fibSetScanDelay) GetMessageName() string { return "l2fib_set_scan_delay" }
 func (*L2fibSetScanDelay) GetCrcString() string   { return "a3b968a4" }
 func (*L2fibSetScanDelay) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *L2fibSetScanDelay) Size() (size int) {
@@ -2115,7 +2115,7 @@ func (m *L2fibSetScanDelayReply) Reset()               { *m = L2fibSetScanDelayR
 func (*L2fibSetScanDelayReply) GetMessageName() string { return "l2fib_set_scan_delay_reply" }
 func (*L2fibSetScanDelayReply) GetCrcString() string   { return "e8d4e804" }
 func (*L2fibSetScanDelayReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *L2fibSetScanDelayReply) Size() (size int) {
@@ -2152,7 +2152,7 @@ func (m *SwInterfaceSetL2Bridge) Reset()               { *m = SwInterfaceSetL2Br
 func (*SwInterfaceSetL2Bridge) GetMessageName() string { return "sw_interface_set_l2_bridge" }
 func (*SwInterfaceSetL2Bridge) GetCrcString() string   { return "d0678b13" }
 func (*SwInterfaceSetL2Bridge) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetL2Bridge) Size() (size int) {
@@ -2199,7 +2199,7 @@ func (*SwInterfaceSetL2BridgeReply) GetMessageName() string {
 }
 func (*SwInterfaceSetL2BridgeReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetL2BridgeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetL2BridgeReply) Size() (size int) {
@@ -2234,7 +2234,7 @@ func (m *SwInterfaceSetL2Xconnect) Reset()               { *m = SwInterfaceSetL2
 func (*SwInterfaceSetL2Xconnect) GetMessageName() string { return "sw_interface_set_l2_xconnect" }
 func (*SwInterfaceSetL2Xconnect) GetCrcString() string   { return "4fa28a85" }
 func (*SwInterfaceSetL2Xconnect) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetL2Xconnect) Size() (size int) {
@@ -2275,7 +2275,7 @@ func (*SwInterfaceSetL2XconnectReply) GetMessageName() string {
 }
 func (*SwInterfaceSetL2XconnectReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetL2XconnectReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetL2XconnectReply) Size() (size int) {
@@ -2309,7 +2309,7 @@ func (m *SwInterfaceSetVpath) Reset()               { *m = SwInterfaceSetVpath{}
 func (*SwInterfaceSetVpath) GetMessageName() string { return "sw_interface_set_vpath" }
 func (*SwInterfaceSetVpath) GetCrcString() string   { return "ae6cfcfb" }
 func (*SwInterfaceSetVpath) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetVpath) Size() (size int) {
@@ -2345,7 +2345,7 @@ func (m *SwInterfaceSetVpathReply) Reset()               { *m = SwInterfaceSetVp
 func (*SwInterfaceSetVpathReply) GetMessageName() string { return "sw_interface_set_vpath_reply" }
 func (*SwInterfaceSetVpathReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetVpathReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetVpathReply) Size() (size int) {
@@ -2379,7 +2379,7 @@ func (m *WantL2ArpTermEvents) Reset()               { *m = WantL2ArpTermEvents{}
 func (*WantL2ArpTermEvents) GetMessageName() string { return "want_l2_arp_term_events" }
 func (*WantL2ArpTermEvents) GetCrcString() string   { return "3ec6d6c2" }
 func (*WantL2ArpTermEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantL2ArpTermEvents) Size() (size int) {
@@ -2415,7 +2415,7 @@ func (m *WantL2ArpTermEventsReply) Reset()               { *m = WantL2ArpTermEve
 func (*WantL2ArpTermEventsReply) GetMessageName() string { return "want_l2_arp_term_events_reply" }
 func (*WantL2ArpTermEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2ArpTermEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantL2ArpTermEventsReply) Size() (size int) {
@@ -2453,7 +2453,7 @@ func (m *WantL2MacsEvents) Reset()               { *m = WantL2MacsEvents{} }
 func (*WantL2MacsEvents) GetMessageName() string { return "want_l2_macs_events" }
 func (*WantL2MacsEvents) GetCrcString() string   { return "9aabdfde" }
 func (*WantL2MacsEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantL2MacsEvents) Size() (size int) {
@@ -2500,7 +2500,7 @@ func (m *WantL2MacsEvents2) Reset()               { *m = WantL2MacsEvents2{} }
 func (*WantL2MacsEvents2) GetMessageName() string { return "want_l2_macs_events2" }
 func (*WantL2MacsEvents2) GetCrcString() string   { return "cc1377b0" }
 func (*WantL2MacsEvents2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantL2MacsEvents2) Size() (size int) {
@@ -2539,7 +2539,7 @@ func (m *WantL2MacsEvents2Reply) Reset()               { *m = WantL2MacsEvents2R
 func (*WantL2MacsEvents2Reply) GetMessageName() string { return "want_l2_macs_events2_reply" }
 func (*WantL2MacsEvents2Reply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2MacsEvents2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantL2MacsEvents2Reply) Size() (size int) {
@@ -2573,7 +2573,7 @@ func (m *WantL2MacsEventsReply) Reset()               { *m = WantL2MacsEventsRep
 func (*WantL2MacsEventsReply) GetMessageName() string { return "want_l2_macs_events_reply" }
 func (*WantL2MacsEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantL2MacsEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantL2MacsEventsReply) Size() (size int) {

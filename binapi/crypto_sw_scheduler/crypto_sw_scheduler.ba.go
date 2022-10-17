@@ -38,7 +38,7 @@ func (m *CryptoSwSchedulerSetWorker) Reset()               { *m = CryptoSwSchedu
 func (*CryptoSwSchedulerSetWorker) GetMessageName() string { return "crypto_sw_scheduler_set_worker" }
 func (*CryptoSwSchedulerSetWorker) GetCrcString() string   { return "b4274502" }
 func (*CryptoSwSchedulerSetWorker) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CryptoSwSchedulerSetWorker) Size() (size int) {
@@ -77,7 +77,7 @@ func (*CryptoSwSchedulerSetWorkerReply) GetMessageName() string {
 }
 func (*CryptoSwSchedulerSetWorkerReply) GetCrcString() string { return "e8d4e804" }
 func (*CryptoSwSchedulerSetWorkerReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CryptoSwSchedulerSetWorkerReply) Size() (size int) {

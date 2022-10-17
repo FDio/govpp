@@ -58,7 +58,7 @@ func (m *AbfItfAttachAddDel) Reset()               { *m = AbfItfAttachAddDel{} }
 func (*AbfItfAttachAddDel) GetMessageName() string { return "abf_itf_attach_add_del" }
 func (*AbfItfAttachAddDel) GetCrcString() string   { return "25c8621b" }
 func (*AbfItfAttachAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AbfItfAttachAddDel) Size() (size int) {
@@ -104,7 +104,7 @@ func (m *AbfItfAttachAddDelReply) Reset()               { *m = AbfItfAttachAddDe
 func (*AbfItfAttachAddDelReply) GetMessageName() string { return "abf_itf_attach_add_del_reply" }
 func (*AbfItfAttachAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*AbfItfAttachAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AbfItfAttachAddDelReply) Size() (size int) {
@@ -138,7 +138,7 @@ func (m *AbfItfAttachDetails) Reset()               { *m = AbfItfAttachDetails{}
 func (*AbfItfAttachDetails) GetMessageName() string { return "abf_itf_attach_details" }
 func (*AbfItfAttachDetails) GetCrcString() string   { return "7819523e" }
 func (*AbfItfAttachDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AbfItfAttachDetails) Size() (size int) {
@@ -179,7 +179,7 @@ func (m *AbfItfAttachDump) Reset()               { *m = AbfItfAttachDump{} }
 func (*AbfItfAttachDump) GetMessageName() string { return "abf_itf_attach_dump" }
 func (*AbfItfAttachDump) GetCrcString() string   { return "51077d14" }
 func (*AbfItfAttachDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AbfItfAttachDump) Size() (size int) {
@@ -207,7 +207,7 @@ func (m *AbfPluginGetVersion) Reset()               { *m = AbfPluginGetVersion{}
 func (*AbfPluginGetVersion) GetMessageName() string { return "abf_plugin_get_version" }
 func (*AbfPluginGetVersion) GetCrcString() string   { return "51077d14" }
 func (*AbfPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AbfPluginGetVersion) Size() (size int) {
@@ -238,7 +238,7 @@ func (m *AbfPluginGetVersionReply) Reset()               { *m = AbfPluginGetVers
 func (*AbfPluginGetVersionReply) GetMessageName() string { return "abf_plugin_get_version_reply" }
 func (*AbfPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*AbfPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AbfPluginGetVersionReply) Size() (size int) {
@@ -276,7 +276,7 @@ func (m *AbfPolicyAddDel) Reset()               { *m = AbfPolicyAddDel{} }
 func (*AbfPolicyAddDel) GetMessageName() string { return "abf_policy_add_del" }
 func (*AbfPolicyAddDel) GetCrcString() string   { return "c6131197" }
 func (*AbfPolicyAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AbfPolicyAddDel) Size() (size int) {
@@ -392,7 +392,7 @@ func (m *AbfPolicyAddDelReply) Reset()               { *m = AbfPolicyAddDelReply
 func (*AbfPolicyAddDelReply) GetMessageName() string { return "abf_policy_add_del_reply" }
 func (*AbfPolicyAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*AbfPolicyAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AbfPolicyAddDelReply) Size() (size int) {
@@ -426,7 +426,7 @@ func (m *AbfPolicyDetails) Reset()               { *m = AbfPolicyDetails{} }
 func (*AbfPolicyDetails) GetMessageName() string { return "abf_policy_details" }
 func (*AbfPolicyDetails) GetCrcString() string   { return "b7487fa4" }
 func (*AbfPolicyDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *AbfPolicyDetails) Size() (size int) {
@@ -537,7 +537,7 @@ func (m *AbfPolicyDump) Reset()               { *m = AbfPolicyDump{} }
 func (*AbfPolicyDump) GetMessageName() string { return "abf_policy_dump" }
 func (*AbfPolicyDump) GetCrcString() string   { return "51077d14" }
 func (*AbfPolicyDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *AbfPolicyDump) Size() (size int) {

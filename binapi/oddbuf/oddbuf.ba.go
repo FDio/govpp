@@ -39,7 +39,7 @@ func (m *OddbufEnableDisable) Reset()               { *m = OddbufEnableDisable{}
 func (*OddbufEnableDisable) GetMessageName() string { return "oddbuf_enable_disable" }
 func (*OddbufEnableDisable) GetCrcString() string   { return "3865946c" }
 func (*OddbufEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *OddbufEnableDisable) Size() (size int) {
@@ -76,7 +76,7 @@ func (m *OddbufEnableDisableReply) Reset()               { *m = OddbufEnableDisa
 func (*OddbufEnableDisableReply) GetMessageName() string { return "oddbuf_enable_disable_reply" }
 func (*OddbufEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*OddbufEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *OddbufEnableDisableReply) Size() (size int) {

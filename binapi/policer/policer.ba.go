@@ -50,7 +50,7 @@ func (m *PolicerAddDel) Reset()               { *m = PolicerAddDel{} }
 func (*PolicerAddDel) GetMessageName() string { return "policer_add_del" }
 func (*PolicerAddDel) GetCrcString() string   { return "2b31dd38" }
 func (*PolicerAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerAddDel) Size() (size int) {
@@ -129,7 +129,7 @@ func (m *PolicerAddDelReply) Reset()               { *m = PolicerAddDelReply{} }
 func (*PolicerAddDelReply) GetMessageName() string { return "policer_add_del_reply" }
 func (*PolicerAddDelReply) GetCrcString() string   { return "a177cef2" }
 func (*PolicerAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerAddDelReply) Size() (size int) {
@@ -167,7 +167,7 @@ func (m *PolicerBind) Reset()               { *m = PolicerBind{} }
 func (*PolicerBind) GetMessageName() string { return "policer_bind" }
 func (*PolicerBind) GetCrcString() string   { return "dcf516f9" }
 func (*PolicerBind) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerBind) Size() (size int) {
@@ -206,7 +206,7 @@ func (m *PolicerBindReply) Reset()               { *m = PolicerBindReply{} }
 func (*PolicerBindReply) GetMessageName() string { return "policer_bind_reply" }
 func (*PolicerBindReply) GetCrcString() string   { return "e8d4e804" }
 func (*PolicerBindReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerBindReply) Size() (size int) {
@@ -259,7 +259,7 @@ func (m *PolicerDetails) Reset()               { *m = PolicerDetails{} }
 func (*PolicerDetails) GetMessageName() string { return "policer_details" }
 func (*PolicerDetails) GetCrcString() string   { return "72d0e248" }
 func (*PolicerDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerDetails) Size() (size int) {
@@ -362,7 +362,7 @@ func (m *PolicerDump) Reset()               { *m = PolicerDump{} }
 func (*PolicerDump) GetMessageName() string { return "policer_dump" }
 func (*PolicerDump) GetCrcString() string   { return "35f1ae0f" }
 func (*PolicerDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerDump) Size() (size int) {
@@ -400,7 +400,7 @@ func (m *PolicerInput) Reset()               { *m = PolicerInput{} }
 func (*PolicerInput) GetMessageName() string { return "policer_input" }
 func (*PolicerInput) GetCrcString() string   { return "233f0ef5" }
 func (*PolicerInput) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerInput) Size() (size int) {
@@ -439,7 +439,7 @@ func (m *PolicerInputReply) Reset()               { *m = PolicerInputReply{} }
 func (*PolicerInputReply) GetMessageName() string { return "policer_input_reply" }
 func (*PolicerInputReply) GetCrcString() string   { return "e8d4e804" }
 func (*PolicerInputReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerInputReply) Size() (size int) {
@@ -474,7 +474,7 @@ func (m *PolicerOutput) Reset()               { *m = PolicerOutput{} }
 func (*PolicerOutput) GetMessageName() string { return "policer_output" }
 func (*PolicerOutput) GetCrcString() string   { return "233f0ef5" }
 func (*PolicerOutput) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PolicerOutput) Size() (size int) {
@@ -513,7 +513,7 @@ func (m *PolicerOutputReply) Reset()               { *m = PolicerOutputReply{} }
 func (*PolicerOutputReply) GetMessageName() string { return "policer_output_reply" }
 func (*PolicerOutputReply) GetCrcString() string   { return "e8d4e804" }
 func (*PolicerOutputReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PolicerOutputReply) Size() (size int) {

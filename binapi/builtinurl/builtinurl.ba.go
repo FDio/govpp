@@ -34,7 +34,7 @@ func (m *BuiltinurlEnable) Reset()               { *m = BuiltinurlEnable{} }
 func (*BuiltinurlEnable) GetMessageName() string { return "builtinurl_enable" }
 func (*BuiltinurlEnable) GetCrcString() string   { return "51077d14" }
 func (*BuiltinurlEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *BuiltinurlEnable) Size() (size int) {
@@ -63,7 +63,7 @@ func (m *BuiltinurlEnableReply) Reset()               { *m = BuiltinurlEnableRep
 func (*BuiltinurlEnableReply) GetMessageName() string { return "builtinurl_enable_reply" }
 func (*BuiltinurlEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*BuiltinurlEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *BuiltinurlEnableReply) Size() (size int) {

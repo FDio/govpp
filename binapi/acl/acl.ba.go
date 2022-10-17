@@ -43,7 +43,7 @@ func (m *ACLAddReplace) Reset()               { *m = ACLAddReplace{} }
 func (*ACLAddReplace) GetMessageName() string { return "acl_add_replace" }
 func (*ACLAddReplace) GetCrcString() string   { return "ee5c2f18" }
 func (*ACLAddReplace) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLAddReplace) Size() (size int) {
@@ -141,7 +141,7 @@ func (m *ACLAddReplaceReply) Reset()               { *m = ACLAddReplaceReply{} }
 func (*ACLAddReplaceReply) GetMessageName() string { return "acl_add_replace_reply" }
 func (*ACLAddReplaceReply) GetCrcString() string   { return "ac407b0c" }
 func (*ACLAddReplaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLAddReplaceReply) Size() (size int) {
@@ -177,7 +177,7 @@ func (m *ACLDel) Reset()               { *m = ACLDel{} }
 func (*ACLDel) GetMessageName() string { return "acl_del" }
 func (*ACLDel) GetCrcString() string   { return "ef34fea4" }
 func (*ACLDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLDel) Size() (size int) {
@@ -210,7 +210,7 @@ func (m *ACLDelReply) Reset()               { *m = ACLDelReply{} }
 func (*ACLDelReply) GetMessageName() string { return "acl_del_reply" }
 func (*ACLDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*ACLDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLDelReply) Size() (size int) {
@@ -246,7 +246,7 @@ func (m *ACLDetails) Reset()               { *m = ACLDetails{} }
 func (*ACLDetails) GetMessageName() string { return "acl_details" }
 func (*ACLDetails) GetCrcString() string   { return "95babae0" }
 func (*ACLDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLDetails) Size() (size int) {
@@ -343,7 +343,7 @@ func (m *ACLDump) Reset()               { *m = ACLDump{} }
 func (*ACLDump) GetMessageName() string { return "acl_dump" }
 func (*ACLDump) GetCrcString() string   { return "ef34fea4" }
 func (*ACLDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLDump) Size() (size int) {
@@ -379,7 +379,7 @@ func (m *ACLInterfaceAddDel) Reset()               { *m = ACLInterfaceAddDel{} }
 func (*ACLInterfaceAddDel) GetMessageName() string { return "acl_interface_add_del" }
 func (*ACLInterfaceAddDel) GetCrcString() string   { return "4b54bebd" }
 func (*ACLInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLInterfaceAddDel) Size() (size int) {
@@ -421,7 +421,7 @@ func (m *ACLInterfaceAddDelReply) Reset()               { *m = ACLInterfaceAddDe
 func (*ACLInterfaceAddDelReply) GetMessageName() string { return "acl_interface_add_del_reply" }
 func (*ACLInterfaceAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*ACLInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLInterfaceAddDelReply) Size() (size int) {
@@ -459,7 +459,7 @@ func (*ACLInterfaceEtypeWhitelistDetails) GetMessageName() string {
 }
 func (*ACLInterfaceEtypeWhitelistDetails) GetCrcString() string { return "cc2bfded" }
 func (*ACLInterfaceEtypeWhitelistDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLInterfaceEtypeWhitelistDetails) Size() (size int) {
@@ -512,7 +512,7 @@ func (*ACLInterfaceEtypeWhitelistDump) GetMessageName() string {
 }
 func (*ACLInterfaceEtypeWhitelistDump) GetCrcString() string { return "f9e6675e" }
 func (*ACLInterfaceEtypeWhitelistDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLInterfaceEtypeWhitelistDump) Size() (size int) {
@@ -548,7 +548,7 @@ func (m *ACLInterfaceListDetails) Reset()               { *m = ACLInterfaceListD
 func (*ACLInterfaceListDetails) GetMessageName() string { return "acl_interface_list_details" }
 func (*ACLInterfaceListDetails) GetCrcString() string   { return "e695d256" }
 func (*ACLInterfaceListDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLInterfaceListDetails) Size() (size int) {
@@ -599,7 +599,7 @@ func (m *ACLInterfaceListDump) Reset()               { *m = ACLInterfaceListDump
 func (*ACLInterfaceListDump) GetMessageName() string { return "acl_interface_list_dump" }
 func (*ACLInterfaceListDump) GetCrcString() string   { return "f9e6675e" }
 func (*ACLInterfaceListDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLInterfaceListDump) Size() (size int) {
@@ -635,7 +635,7 @@ func (m *ACLInterfaceSetACLList) Reset()               { *m = ACLInterfaceSetACL
 func (*ACLInterfaceSetACLList) GetMessageName() string { return "acl_interface_set_acl_list" }
 func (*ACLInterfaceSetACLList) GetCrcString() string   { return "473982bd" }
 func (*ACLInterfaceSetACLList) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLInterfaceSetACLList) Size() (size int) {
@@ -688,7 +688,7 @@ func (*ACLInterfaceSetACLListReply) GetMessageName() string {
 }
 func (*ACLInterfaceSetACLListReply) GetCrcString() string { return "e8d4e804" }
 func (*ACLInterfaceSetACLListReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLInterfaceSetACLListReply) Size() (size int) {
@@ -726,7 +726,7 @@ func (*ACLInterfaceSetEtypeWhitelist) GetMessageName() string {
 }
 func (*ACLInterfaceSetEtypeWhitelist) GetCrcString() string { return "3f5c2d2d" }
 func (*ACLInterfaceSetEtypeWhitelist) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLInterfaceSetEtypeWhitelist) Size() (size int) {
@@ -779,7 +779,7 @@ func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageName() string {
 }
 func (*ACLInterfaceSetEtypeWhitelistReply) GetCrcString() string { return "e8d4e804" }
 func (*ACLInterfaceSetEtypeWhitelistReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLInterfaceSetEtypeWhitelistReply) Size() (size int) {
@@ -810,7 +810,7 @@ func (m *ACLPluginControlPing) Reset()               { *m = ACLPluginControlPing
 func (*ACLPluginControlPing) GetMessageName() string { return "acl_plugin_control_ping" }
 func (*ACLPluginControlPing) GetCrcString() string   { return "51077d14" }
 func (*ACLPluginControlPing) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLPluginControlPing) Size() (size int) {
@@ -841,7 +841,7 @@ func (m *ACLPluginControlPingReply) Reset()               { *m = ACLPluginContro
 func (*ACLPluginControlPingReply) GetMessageName() string { return "acl_plugin_control_ping_reply" }
 func (*ACLPluginControlPingReply) GetCrcString() string   { return "f6b0b8ca" }
 func (*ACLPluginControlPingReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLPluginControlPingReply) Size() (size int) {
@@ -880,7 +880,7 @@ func (*ACLPluginGetConnTableMaxEntries) GetMessageName() string {
 }
 func (*ACLPluginGetConnTableMaxEntries) GetCrcString() string { return "51077d14" }
 func (*ACLPluginGetConnTableMaxEntries) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLPluginGetConnTableMaxEntries) Size() (size int) {
@@ -911,7 +911,7 @@ func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageName() string {
 }
 func (*ACLPluginGetConnTableMaxEntriesReply) GetCrcString() string { return "7a096d3d" }
 func (*ACLPluginGetConnTableMaxEntriesReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLPluginGetConnTableMaxEntriesReply) Size() (size int) {
@@ -942,7 +942,7 @@ func (m *ACLPluginGetVersion) Reset()               { *m = ACLPluginGetVersion{}
 func (*ACLPluginGetVersion) GetMessageName() string { return "acl_plugin_get_version" }
 func (*ACLPluginGetVersion) GetCrcString() string   { return "51077d14" }
 func (*ACLPluginGetVersion) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLPluginGetVersion) Size() (size int) {
@@ -972,7 +972,7 @@ func (m *ACLPluginGetVersionReply) Reset()               { *m = ACLPluginGetVers
 func (*ACLPluginGetVersionReply) GetMessageName() string { return "acl_plugin_get_version_reply" }
 func (*ACLPluginGetVersionReply) GetCrcString() string   { return "9b32cf86" }
 func (*ACLPluginGetVersionReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLPluginGetVersionReply) Size() (size int) {
@@ -1007,7 +1007,7 @@ func (m *ACLPluginUseHashLookupGet) Reset()               { *m = ACLPluginUseHas
 func (*ACLPluginUseHashLookupGet) GetMessageName() string { return "acl_plugin_use_hash_lookup_get" }
 func (*ACLPluginUseHashLookupGet) GetCrcString() string   { return "51077d14" }
 func (*ACLPluginUseHashLookupGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLPluginUseHashLookupGet) Size() (size int) {
@@ -1039,7 +1039,7 @@ func (*ACLPluginUseHashLookupGetReply) GetMessageName() string {
 }
 func (*ACLPluginUseHashLookupGetReply) GetCrcString() string { return "5392ad31" }
 func (*ACLPluginUseHashLookupGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLPluginUseHashLookupGetReply) Size() (size int) {
@@ -1073,7 +1073,7 @@ func (m *ACLPluginUseHashLookupSet) Reset()               { *m = ACLPluginUseHas
 func (*ACLPluginUseHashLookupSet) GetMessageName() string { return "acl_plugin_use_hash_lookup_set" }
 func (*ACLPluginUseHashLookupSet) GetCrcString() string   { return "b3e225d2" }
 func (*ACLPluginUseHashLookupSet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLPluginUseHashLookupSet) Size() (size int) {
@@ -1109,7 +1109,7 @@ func (*ACLPluginUseHashLookupSetReply) GetMessageName() string {
 }
 func (*ACLPluginUseHashLookupSetReply) GetCrcString() string { return "e8d4e804" }
 func (*ACLPluginUseHashLookupSetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLPluginUseHashLookupSetReply) Size() (size int) {
@@ -1142,7 +1142,7 @@ func (m *ACLStatsIntfCountersEnable) Reset()               { *m = ACLStatsIntfCo
 func (*ACLStatsIntfCountersEnable) GetMessageName() string { return "acl_stats_intf_counters_enable" }
 func (*ACLStatsIntfCountersEnable) GetCrcString() string   { return "b3e225d2" }
 func (*ACLStatsIntfCountersEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *ACLStatsIntfCountersEnable) Size() (size int) {
@@ -1177,7 +1177,7 @@ func (*ACLStatsIntfCountersEnableReply) GetMessageName() string {
 }
 func (*ACLStatsIntfCountersEnableReply) GetCrcString() string { return "e8d4e804" }
 func (*ACLStatsIntfCountersEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *ACLStatsIntfCountersEnableReply) Size() (size int) {
@@ -1212,7 +1212,7 @@ func (m *MacipACLAdd) Reset()               { *m = MacipACLAdd{} }
 func (*MacipACLAdd) GetMessageName() string { return "macip_acl_add" }
 func (*MacipACLAdd) GetCrcString() string   { return "ce6fbad0" }
 func (*MacipACLAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLAdd) Size() (size int) {
@@ -1285,7 +1285,7 @@ func (m *MacipACLAddReplace) Reset()               { *m = MacipACLAddReplace{} }
 func (*MacipACLAddReplace) GetMessageName() string { return "macip_acl_add_replace" }
 func (*MacipACLAddReplace) GetCrcString() string   { return "2a461dd4" }
 func (*MacipACLAddReplace) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLAddReplace) Size() (size int) {
@@ -1359,7 +1359,7 @@ func (m *MacipACLAddReplaceReply) Reset()               { *m = MacipACLAddReplac
 func (*MacipACLAddReplaceReply) GetMessageName() string { return "macip_acl_add_replace_reply" }
 func (*MacipACLAddReplaceReply) GetCrcString() string   { return "ac407b0c" }
 func (*MacipACLAddReplaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLAddReplaceReply) Size() (size int) {
@@ -1396,7 +1396,7 @@ func (m *MacipACLAddReply) Reset()               { *m = MacipACLAddReply{} }
 func (*MacipACLAddReply) GetMessageName() string { return "macip_acl_add_reply" }
 func (*MacipACLAddReply) GetCrcString() string   { return "ac407b0c" }
 func (*MacipACLAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLAddReply) Size() (size int) {
@@ -1432,7 +1432,7 @@ func (m *MacipACLDel) Reset()               { *m = MacipACLDel{} }
 func (*MacipACLDel) GetMessageName() string { return "macip_acl_del" }
 func (*MacipACLDel) GetCrcString() string   { return "ef34fea4" }
 func (*MacipACLDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLDel) Size() (size int) {
@@ -1465,7 +1465,7 @@ func (m *MacipACLDelReply) Reset()               { *m = MacipACLDelReply{} }
 func (*MacipACLDelReply) GetMessageName() string { return "macip_acl_del_reply" }
 func (*MacipACLDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*MacipACLDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLDelReply) Size() (size int) {
@@ -1501,7 +1501,7 @@ func (m *MacipACLDetails) Reset()               { *m = MacipACLDetails{} }
 func (*MacipACLDetails) GetMessageName() string { return "macip_acl_details" }
 func (*MacipACLDetails) GetCrcString() string   { return "27135b59" }
 func (*MacipACLDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLDetails) Size() (size int) {
@@ -1574,7 +1574,7 @@ func (m *MacipACLDump) Reset()               { *m = MacipACLDump{} }
 func (*MacipACLDump) GetMessageName() string { return "macip_acl_dump" }
 func (*MacipACLDump) GetCrcString() string   { return "ef34fea4" }
 func (*MacipACLDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLDump) Size() (size int) {
@@ -1609,7 +1609,7 @@ func (m *MacipACLInterfaceAddDel) Reset()               { *m = MacipACLInterface
 func (*MacipACLInterfaceAddDel) GetMessageName() string { return "macip_acl_interface_add_del" }
 func (*MacipACLInterfaceAddDel) GetCrcString() string   { return "4b8690b1" }
 func (*MacipACLInterfaceAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLInterfaceAddDel) Size() (size int) {
@@ -1650,7 +1650,7 @@ func (*MacipACLInterfaceAddDelReply) GetMessageName() string {
 }
 func (*MacipACLInterfaceAddDelReply) GetCrcString() string { return "e8d4e804" }
 func (*MacipACLInterfaceAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLInterfaceAddDelReply) Size() (size int) {
@@ -1681,7 +1681,7 @@ func (m *MacipACLInterfaceGet) Reset()               { *m = MacipACLInterfaceGet
 func (*MacipACLInterfaceGet) GetMessageName() string { return "macip_acl_interface_get" }
 func (*MacipACLInterfaceGet) GetCrcString() string   { return "51077d14" }
 func (*MacipACLInterfaceGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLInterfaceGet) Size() (size int) {
@@ -1711,7 +1711,7 @@ func (m *MacipACLInterfaceGetReply) Reset()               { *m = MacipACLInterfa
 func (*MacipACLInterfaceGetReply) GetMessageName() string { return "macip_acl_interface_get_reply" }
 func (*MacipACLInterfaceGetReply) GetCrcString() string   { return "accf9b05" }
 func (*MacipACLInterfaceGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLInterfaceGetReply) Size() (size int) {
@@ -1760,7 +1760,7 @@ func (*MacipACLInterfaceListDetails) GetMessageName() string {
 }
 func (*MacipACLInterfaceListDetails) GetCrcString() string { return "a0c5d56d" }
 func (*MacipACLInterfaceListDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MacipACLInterfaceListDetails) Size() (size int) {
@@ -1808,7 +1808,7 @@ func (m *MacipACLInterfaceListDump) Reset()               { *m = MacipACLInterfa
 func (*MacipACLInterfaceListDump) GetMessageName() string { return "macip_acl_interface_list_dump" }
 func (*MacipACLInterfaceListDump) GetCrcString() string   { return "f9e6675e" }
 func (*MacipACLInterfaceListDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MacipACLInterfaceListDump) Size() (size int) {

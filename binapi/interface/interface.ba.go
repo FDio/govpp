@@ -42,7 +42,7 @@ func (*CollectDetailedInterfaceStats) GetMessageName() string {
 }
 func (*CollectDetailedInterfaceStats) GetCrcString() string { return "5501adee" }
 func (*CollectDetailedInterfaceStats) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CollectDetailedInterfaceStats) Size() (size int) {
@@ -80,7 +80,7 @@ func (*CollectDetailedInterfaceStatsReply) GetMessageName() string {
 }
 func (*CollectDetailedInterfaceStatsReply) GetCrcString() string { return "e8d4e804" }
 func (*CollectDetailedInterfaceStatsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CollectDetailedInterfaceStatsReply) Size() (size int) {
@@ -113,7 +113,7 @@ func (m *CreateLoopback) Reset()               { *m = CreateLoopback{} }
 func (*CreateLoopback) GetMessageName() string { return "create_loopback" }
 func (*CreateLoopback) GetCrcString() string   { return "42bb5d22" }
 func (*CreateLoopback) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateLoopback) Size() (size int) {
@@ -148,7 +148,7 @@ func (m *CreateLoopbackInstance) Reset()               { *m = CreateLoopbackInst
 func (*CreateLoopbackInstance) GetMessageName() string { return "create_loopback_instance" }
 func (*CreateLoopbackInstance) GetCrcString() string   { return "d36a3ee2" }
 func (*CreateLoopbackInstance) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateLoopbackInstance) Size() (size int) {
@@ -188,7 +188,7 @@ func (m *CreateLoopbackInstanceReply) Reset()               { *m = CreateLoopbac
 func (*CreateLoopbackInstanceReply) GetMessageName() string { return "create_loopback_instance_reply" }
 func (*CreateLoopbackInstanceReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateLoopbackInstanceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateLoopbackInstanceReply) Size() (size int) {
@@ -225,7 +225,7 @@ func (m *CreateLoopbackReply) Reset()               { *m = CreateLoopbackReply{}
 func (*CreateLoopbackReply) GetMessageName() string { return "create_loopback_reply" }
 func (*CreateLoopbackReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateLoopbackReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateLoopbackReply) Size() (size int) {
@@ -265,7 +265,7 @@ func (m *CreateSubif) Reset()               { *m = CreateSubif{} }
 func (*CreateSubif) GetMessageName() string { return "create_subif" }
 func (*CreateSubif) GetCrcString() string   { return "790ca755" }
 func (*CreateSubif) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateSubif) Size() (size int) {
@@ -311,7 +311,7 @@ func (m *CreateSubifReply) Reset()               { *m = CreateSubifReply{} }
 func (*CreateSubifReply) GetMessageName() string { return "create_subif_reply" }
 func (*CreateSubifReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateSubifReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateSubifReply) Size() (size int) {
@@ -348,7 +348,7 @@ func (m *CreateVlanSubif) Reset()               { *m = CreateVlanSubif{} }
 func (*CreateVlanSubif) GetMessageName() string { return "create_vlan_subif" }
 func (*CreateVlanSubif) GetCrcString() string   { return "af34ac8b" }
 func (*CreateVlanSubif) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *CreateVlanSubif) Size() (size int) {
@@ -385,7 +385,7 @@ func (m *CreateVlanSubifReply) Reset()               { *m = CreateVlanSubifReply
 func (*CreateVlanSubifReply) GetMessageName() string { return "create_vlan_subif_reply" }
 func (*CreateVlanSubifReply) GetCrcString() string   { return "5383d31f" }
 func (*CreateVlanSubifReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *CreateVlanSubifReply) Size() (size int) {
@@ -421,7 +421,7 @@ func (m *DeleteLoopback) Reset()               { *m = DeleteLoopback{} }
 func (*DeleteLoopback) GetMessageName() string { return "delete_loopback" }
 func (*DeleteLoopback) GetCrcString() string   { return "f9e6675e" }
 func (*DeleteLoopback) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DeleteLoopback) Size() (size int) {
@@ -454,7 +454,7 @@ func (m *DeleteLoopbackReply) Reset()               { *m = DeleteLoopbackReply{}
 func (*DeleteLoopbackReply) GetMessageName() string { return "delete_loopback_reply" }
 func (*DeleteLoopbackReply) GetCrcString() string   { return "e8d4e804" }
 func (*DeleteLoopbackReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DeleteLoopbackReply) Size() (size int) {
@@ -487,7 +487,7 @@ func (m *DeleteSubif) Reset()               { *m = DeleteSubif{} }
 func (*DeleteSubif) GetMessageName() string { return "delete_subif" }
 func (*DeleteSubif) GetCrcString() string   { return "f9e6675e" }
 func (*DeleteSubif) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *DeleteSubif) Size() (size int) {
@@ -520,7 +520,7 @@ func (m *DeleteSubifReply) Reset()               { *m = DeleteSubifReply{} }
 func (*DeleteSubifReply) GetMessageName() string { return "delete_subif_reply" }
 func (*DeleteSubifReply) GetCrcString() string   { return "e8d4e804" }
 func (*DeleteSubifReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *DeleteSubifReply) Size() (size int) {
@@ -554,7 +554,7 @@ func (m *HwInterfaceSetMtu) Reset()               { *m = HwInterfaceSetMtu{} }
 func (*HwInterfaceSetMtu) GetMessageName() string { return "hw_interface_set_mtu" }
 func (*HwInterfaceSetMtu) GetCrcString() string   { return "e6746899" }
 func (*HwInterfaceSetMtu) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *HwInterfaceSetMtu) Size() (size int) {
@@ -590,7 +590,7 @@ func (m *HwInterfaceSetMtuReply) Reset()               { *m = HwInterfaceSetMtuR
 func (*HwInterfaceSetMtuReply) GetMessageName() string { return "hw_interface_set_mtu_reply" }
 func (*HwInterfaceSetMtuReply) GetCrcString() string   { return "e8d4e804" }
 func (*HwInterfaceSetMtuReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *HwInterfaceSetMtuReply) Size() (size int) {
@@ -624,7 +624,7 @@ func (m *InterfaceNameRenumber) Reset()               { *m = InterfaceNameRenumb
 func (*InterfaceNameRenumber) GetMessageName() string { return "interface_name_renumber" }
 func (*InterfaceNameRenumber) GetCrcString() string   { return "2b8858b8" }
 func (*InterfaceNameRenumber) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *InterfaceNameRenumber) Size() (size int) {
@@ -660,7 +660,7 @@ func (m *InterfaceNameRenumberReply) Reset()               { *m = InterfaceNameR
 func (*InterfaceNameRenumberReply) GetMessageName() string { return "interface_name_renumber_reply" }
 func (*InterfaceNameRenumberReply) GetCrcString() string   { return "e8d4e804" }
 func (*InterfaceNameRenumberReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *InterfaceNameRenumberReply) Size() (size int) {
@@ -696,7 +696,7 @@ func (m *SwInterfaceAddDelAddress) Reset()               { *m = SwInterfaceAddDe
 func (*SwInterfaceAddDelAddress) GetMessageName() string { return "sw_interface_add_del_address" }
 func (*SwInterfaceAddDelAddress) GetCrcString() string   { return "5463d73b" }
 func (*SwInterfaceAddDelAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceAddDelAddress) Size() (size int) {
@@ -746,7 +746,7 @@ func (*SwInterfaceAddDelAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceAddDelAddressReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceAddDelAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceAddDelAddressReply) Size() (size int) {
@@ -783,7 +783,7 @@ func (*SwInterfaceAddDelMacAddress) GetMessageName() string {
 }
 func (*SwInterfaceAddDelMacAddress) GetCrcString() string { return "638bb9f4" }
 func (*SwInterfaceAddDelMacAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceAddDelMacAddress) Size() (size int) {
@@ -824,7 +824,7 @@ func (*SwInterfaceAddDelMacAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceAddDelMacAddressReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceAddDelMacAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceAddDelMacAddressReply) Size() (size int) {
@@ -857,7 +857,7 @@ func (*SwInterfaceAddressReplaceBegin) GetMessageName() string {
 }
 func (*SwInterfaceAddressReplaceBegin) GetCrcString() string { return "51077d14" }
 func (*SwInterfaceAddressReplaceBegin) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceAddressReplaceBegin) Size() (size int) {
@@ -888,7 +888,7 @@ func (*SwInterfaceAddressReplaceBeginReply) GetMessageName() string {
 }
 func (*SwInterfaceAddressReplaceBeginReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceAddressReplaceBeginReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceAddressReplaceBeginReply) Size() (size int) {
@@ -921,7 +921,7 @@ func (*SwInterfaceAddressReplaceEnd) GetMessageName() string {
 }
 func (*SwInterfaceAddressReplaceEnd) GetCrcString() string { return "51077d14" }
 func (*SwInterfaceAddressReplaceEnd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceAddressReplaceEnd) Size() (size int) {
@@ -952,7 +952,7 @@ func (*SwInterfaceAddressReplaceEndReply) GetMessageName() string {
 }
 func (*SwInterfaceAddressReplaceEndReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceAddressReplaceEndReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceAddressReplaceEndReply) Size() (size int) {
@@ -985,7 +985,7 @@ func (m *SwInterfaceClearStats) Reset()               { *m = SwInterfaceClearSta
 func (*SwInterfaceClearStats) GetMessageName() string { return "sw_interface_clear_stats" }
 func (*SwInterfaceClearStats) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceClearStats) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceClearStats) Size() (size int) {
@@ -1018,7 +1018,7 @@ func (m *SwInterfaceClearStatsReply) Reset()               { *m = SwInterfaceCle
 func (*SwInterfaceClearStatsReply) GetMessageName() string { return "sw_interface_clear_stats_reply" }
 func (*SwInterfaceClearStatsReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceClearStatsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceClearStatsReply) Size() (size int) {
@@ -1076,7 +1076,7 @@ func (m *SwInterfaceDetails) Reset()               { *m = SwInterfaceDetails{} }
 func (*SwInterfaceDetails) GetMessageName() string { return "sw_interface_details" }
 func (*SwInterfaceDetails) GetCrcString() string   { return "6c221fc7" }
 func (*SwInterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceDetails) Size() (size int) {
@@ -1195,7 +1195,7 @@ func (m *SwInterfaceDump) Reset()               { *m = SwInterfaceDump{} }
 func (*SwInterfaceDump) GetMessageName() string { return "sw_interface_dump" }
 func (*SwInterfaceDump) GetCrcString() string   { return "aa610c27" }
 func (*SwInterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceDump) Size() (size int) {
@@ -1237,7 +1237,7 @@ func (m *SwInterfaceEvent) Reset()               { *m = SwInterfaceEvent{} }
 func (*SwInterfaceEvent) GetMessageName() string { return "sw_interface_event" }
 func (*SwInterfaceEvent) GetCrcString() string   { return "2d3d95a7" }
 func (*SwInterfaceEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *SwInterfaceEvent) Size() (size int) {
@@ -1279,7 +1279,7 @@ func (m *SwInterfaceGetMacAddress) Reset()               { *m = SwInterfaceGetMa
 func (*SwInterfaceGetMacAddress) GetMessageName() string { return "sw_interface_get_mac_address" }
 func (*SwInterfaceGetMacAddress) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceGetMacAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceGetMacAddress) Size() (size int) {
@@ -1315,7 +1315,7 @@ func (*SwInterfaceGetMacAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceGetMacAddressReply) GetCrcString() string { return "40ef2c08" }
 func (*SwInterfaceGetMacAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceGetMacAddressReply) Size() (size int) {
@@ -1352,7 +1352,7 @@ func (m *SwInterfaceGetTable) Reset()               { *m = SwInterfaceGetTable{}
 func (*SwInterfaceGetTable) GetMessageName() string { return "sw_interface_get_table" }
 func (*SwInterfaceGetTable) GetCrcString() string   { return "2d033de4" }
 func (*SwInterfaceGetTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceGetTable) Size() (size int) {
@@ -1389,7 +1389,7 @@ func (m *SwInterfaceGetTableReply) Reset()               { *m = SwInterfaceGetTa
 func (*SwInterfaceGetTableReply) GetMessageName() string { return "sw_interface_get_table_reply" }
 func (*SwInterfaceGetTableReply) GetCrcString() string   { return "a6eb0109" }
 func (*SwInterfaceGetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceGetTableReply) Size() (size int) {
@@ -1430,7 +1430,7 @@ func (*SwInterfaceRxPlacementDetails) GetMessageName() string {
 }
 func (*SwInterfaceRxPlacementDetails) GetCrcString() string { return "9e44a7ce" }
 func (*SwInterfaceRxPlacementDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceRxPlacementDetails) Size() (size int) {
@@ -1472,7 +1472,7 @@ func (m *SwInterfaceRxPlacementDump) Reset()               { *m = SwInterfaceRxP
 func (*SwInterfaceRxPlacementDump) GetMessageName() string { return "sw_interface_rx_placement_dump" }
 func (*SwInterfaceRxPlacementDump) GetCrcString() string   { return "f9e6675e" }
 func (*SwInterfaceRxPlacementDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceRxPlacementDump) Size() (size int) {
@@ -1506,7 +1506,7 @@ func (m *SwInterfaceSetFlags) Reset()               { *m = SwInterfaceSetFlags{}
 func (*SwInterfaceSetFlags) GetMessageName() string { return "sw_interface_set_flags" }
 func (*SwInterfaceSetFlags) GetCrcString() string   { return "f5aec1b8" }
 func (*SwInterfaceSetFlags) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetFlags) Size() (size int) {
@@ -1542,7 +1542,7 @@ func (m *SwInterfaceSetFlagsReply) Reset()               { *m = SwInterfaceSetFl
 func (*SwInterfaceSetFlagsReply) GetMessageName() string { return "sw_interface_set_flags_reply" }
 func (*SwInterfaceSetFlagsReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetFlagsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetFlagsReply) Size() (size int) {
@@ -1576,7 +1576,7 @@ func (m *SwInterfaceSetInterfaceName) Reset()               { *m = SwInterfaceSe
 func (*SwInterfaceSetInterfaceName) GetMessageName() string { return "sw_interface_set_interface_name" }
 func (*SwInterfaceSetInterfaceName) GetCrcString() string   { return "45a1d548" }
 func (*SwInterfaceSetInterfaceName) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetInterfaceName) Size() (size int) {
@@ -1614,7 +1614,7 @@ func (*SwInterfaceSetInterfaceNameReply) GetMessageName() string {
 }
 func (*SwInterfaceSetInterfaceNameReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetInterfaceNameReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetInterfaceNameReply) Size() (size int) {
@@ -1650,7 +1650,7 @@ func (*SwInterfaceSetIPDirectedBroadcast) GetMessageName() string {
 }
 func (*SwInterfaceSetIPDirectedBroadcast) GetCrcString() string { return "ae6cfcfb" }
 func (*SwInterfaceSetIPDirectedBroadcast) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetIPDirectedBroadcast) Size() (size int) {
@@ -1690,7 +1690,7 @@ func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageName() string {
 }
 func (*SwInterfaceSetIPDirectedBroadcastReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetIPDirectedBroadcastReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetIPDirectedBroadcastReply) Size() (size int) {
@@ -1724,7 +1724,7 @@ func (m *SwInterfaceSetMacAddress) Reset()               { *m = SwInterfaceSetMa
 func (*SwInterfaceSetMacAddress) GetMessageName() string { return "sw_interface_set_mac_address" }
 func (*SwInterfaceSetMacAddress) GetCrcString() string   { return "c536e7eb" }
 func (*SwInterfaceSetMacAddress) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetMacAddress) Size() (size int) {
@@ -1762,7 +1762,7 @@ func (*SwInterfaceSetMacAddressReply) GetMessageName() string {
 }
 func (*SwInterfaceSetMacAddressReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetMacAddressReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetMacAddressReply) Size() (size int) {
@@ -1796,7 +1796,7 @@ func (m *SwInterfaceSetMtu) Reset()               { *m = SwInterfaceSetMtu{} }
 func (*SwInterfaceSetMtu) GetMessageName() string { return "sw_interface_set_mtu" }
 func (*SwInterfaceSetMtu) GetCrcString() string   { return "5cbe85e5" }
 func (*SwInterfaceSetMtu) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetMtu) Size() (size int) {
@@ -1841,7 +1841,7 @@ func (m *SwInterfaceSetMtuReply) Reset()               { *m = SwInterfaceSetMtuR
 func (*SwInterfaceSetMtuReply) GetMessageName() string { return "sw_interface_set_mtu_reply" }
 func (*SwInterfaceSetMtuReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetMtuReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetMtuReply) Size() (size int) {
@@ -1875,7 +1875,7 @@ func (m *SwInterfaceSetPromisc) Reset()               { *m = SwInterfaceSetPromi
 func (*SwInterfaceSetPromisc) GetMessageName() string { return "sw_interface_set_promisc" }
 func (*SwInterfaceSetPromisc) GetCrcString() string   { return "d40860d4" }
 func (*SwInterfaceSetPromisc) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetPromisc) Size() (size int) {
@@ -1911,7 +1911,7 @@ func (m *SwInterfaceSetPromiscReply) Reset()               { *m = SwInterfaceSet
 func (*SwInterfaceSetPromiscReply) GetMessageName() string { return "sw_interface_set_promisc_reply" }
 func (*SwInterfaceSetPromiscReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetPromiscReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetPromiscReply) Size() (size int) {
@@ -1947,7 +1947,7 @@ func (m *SwInterfaceSetRxMode) Reset()               { *m = SwInterfaceSetRxMode
 func (*SwInterfaceSetRxMode) GetMessageName() string { return "sw_interface_set_rx_mode" }
 func (*SwInterfaceSetRxMode) GetCrcString() string   { return "b04d1cfe" }
 func (*SwInterfaceSetRxMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetRxMode) Size() (size int) {
@@ -1989,7 +1989,7 @@ func (m *SwInterfaceSetRxModeReply) Reset()               { *m = SwInterfaceSetR
 func (*SwInterfaceSetRxModeReply) GetMessageName() string { return "sw_interface_set_rx_mode_reply" }
 func (*SwInterfaceSetRxModeReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetRxModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetRxModeReply) Size() (size int) {
@@ -2025,7 +2025,7 @@ func (m *SwInterfaceSetRxPlacement) Reset()               { *m = SwInterfaceSetR
 func (*SwInterfaceSetRxPlacement) GetMessageName() string { return "sw_interface_set_rx_placement" }
 func (*SwInterfaceSetRxPlacement) GetCrcString() string   { return "db65f3c9" }
 func (*SwInterfaceSetRxPlacement) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetRxPlacement) Size() (size int) {
@@ -2069,7 +2069,7 @@ func (*SwInterfaceSetRxPlacementReply) GetMessageName() string {
 }
 func (*SwInterfaceSetRxPlacementReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetRxPlacementReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetRxPlacementReply) Size() (size int) {
@@ -2104,7 +2104,7 @@ func (m *SwInterfaceSetTable) Reset()               { *m = SwInterfaceSetTable{}
 func (*SwInterfaceSetTable) GetMessageName() string { return "sw_interface_set_table" }
 func (*SwInterfaceSetTable) GetCrcString() string   { return "df42a577" }
 func (*SwInterfaceSetTable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetTable) Size() (size int) {
@@ -2143,7 +2143,7 @@ func (m *SwInterfaceSetTableReply) Reset()               { *m = SwInterfaceSetTa
 func (*SwInterfaceSetTableReply) GetMessageName() string { return "sw_interface_set_table_reply" }
 func (*SwInterfaceSetTableReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetTableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetTableReply) Size() (size int) {
@@ -2179,7 +2179,7 @@ func (m *SwInterfaceSetTxPlacement) Reset()               { *m = SwInterfaceSetT
 func (*SwInterfaceSetTxPlacement) GetMessageName() string { return "sw_interface_set_tx_placement" }
 func (*SwInterfaceSetTxPlacement) GetCrcString() string   { return "4e0cd5ff" }
 func (*SwInterfaceSetTxPlacement) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetTxPlacement) Size() (size int) {
@@ -2232,7 +2232,7 @@ func (*SwInterfaceSetTxPlacementReply) GetMessageName() string {
 }
 func (*SwInterfaceSetTxPlacementReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetTxPlacementReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetTxPlacementReply) Size() (size int) {
@@ -2267,7 +2267,7 @@ func (m *SwInterfaceSetUnnumbered) Reset()               { *m = SwInterfaceSetUn
 func (*SwInterfaceSetUnnumbered) GetMessageName() string { return "sw_interface_set_unnumbered" }
 func (*SwInterfaceSetUnnumbered) GetCrcString() string   { return "154a6439" }
 func (*SwInterfaceSetUnnumbered) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetUnnumbered) Size() (size int) {
@@ -2308,7 +2308,7 @@ func (*SwInterfaceSetUnnumberedReply) GetMessageName() string {
 }
 func (*SwInterfaceSetUnnumberedReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetUnnumberedReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetUnnumberedReply) Size() (size int) {
@@ -2343,7 +2343,7 @@ func (m *SwInterfaceTagAddDel) Reset()               { *m = SwInterfaceTagAddDel
 func (*SwInterfaceTagAddDel) GetMessageName() string { return "sw_interface_tag_add_del" }
 func (*SwInterfaceTagAddDel) GetCrcString() string   { return "426f8bc1" }
 func (*SwInterfaceTagAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceTagAddDel) Size() (size int) {
@@ -2382,7 +2382,7 @@ func (m *SwInterfaceTagAddDelReply) Reset()               { *m = SwInterfaceTagA
 func (*SwInterfaceTagAddDelReply) GetMessageName() string { return "sw_interface_tag_add_del_reply" }
 func (*SwInterfaceTagAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceTagAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceTagAddDelReply) Size() (size int) {
@@ -2421,7 +2421,7 @@ func (*SwInterfaceTxPlacementDetails) GetMessageName() string {
 }
 func (*SwInterfaceTxPlacementDetails) GetCrcString() string { return "00381a2e" }
 func (*SwInterfaceTxPlacementDetails) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceTxPlacementDetails) Size() (size int) {
@@ -2476,7 +2476,7 @@ func (m *SwInterfaceTxPlacementGet) Reset()               { *m = SwInterfaceTxPl
 func (*SwInterfaceTxPlacementGet) GetMessageName() string { return "sw_interface_tx_placement_get" }
 func (*SwInterfaceTxPlacementGet) GetCrcString() string   { return "47250981" }
 func (*SwInterfaceTxPlacementGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceTxPlacementGet) Size() (size int) {
@@ -2515,7 +2515,7 @@ func (*SwInterfaceTxPlacementGetReply) GetMessageName() string {
 }
 func (*SwInterfaceTxPlacementGetReply) GetCrcString() string { return "53b48f5d" }
 func (*SwInterfaceTxPlacementGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceTxPlacementGetReply) Size() (size int) {
@@ -2552,7 +2552,7 @@ func (m *WantInterfaceEvents) Reset()               { *m = WantInterfaceEvents{}
 func (*WantInterfaceEvents) GetMessageName() string { return "want_interface_events" }
 func (*WantInterfaceEvents) GetCrcString() string   { return "476f5a08" }
 func (*WantInterfaceEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantInterfaceEvents) Size() (size int) {
@@ -2588,7 +2588,7 @@ func (m *WantInterfaceEventsReply) Reset()               { *m = WantInterfaceEve
 func (*WantInterfaceEventsReply) GetMessageName() string { return "want_interface_events_reply" }
 func (*WantInterfaceEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantInterfaceEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantInterfaceEventsReply) Size() (size int) {

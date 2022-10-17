@@ -105,7 +105,7 @@ func (m *SwInterfaceVirtioPciDetails) Reset()               { *m = SwInterfaceVi
 func (*SwInterfaceVirtioPciDetails) GetMessageName() string { return "sw_interface_virtio_pci_details" }
 func (*SwInterfaceVirtioPciDetails) GetCrcString() string   { return "6ca9c167" }
 func (*SwInterfaceVirtioPciDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceVirtioPciDetails) Size() (size int) {
@@ -160,7 +160,7 @@ func (m *SwInterfaceVirtioPciDump) Reset()               { *m = SwInterfaceVirti
 func (*SwInterfaceVirtioPciDump) GetMessageName() string { return "sw_interface_virtio_pci_dump" }
 func (*SwInterfaceVirtioPciDump) GetCrcString() string   { return "51077d14" }
 func (*SwInterfaceVirtioPciDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceVirtioPciDump) Size() (size int) {
@@ -195,7 +195,7 @@ func (m *VirtioPciCreate) Reset()               { *m = VirtioPciCreate{} }
 func (*VirtioPciCreate) GetMessageName() string { return "virtio_pci_create" }
 func (*VirtioPciCreate) GetCrcString() string   { return "1944f8db" }
 func (*VirtioPciCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VirtioPciCreate) Size() (size int) {
@@ -254,7 +254,7 @@ func (m *VirtioPciCreateReply) Reset()               { *m = VirtioPciCreateReply
 func (*VirtioPciCreateReply) GetMessageName() string { return "virtio_pci_create_reply" }
 func (*VirtioPciCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*VirtioPciCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VirtioPciCreateReply) Size() (size int) {
@@ -294,7 +294,7 @@ func (m *VirtioPciCreateV2) Reset()               { *m = VirtioPciCreateV2{} }
 func (*VirtioPciCreateV2) GetMessageName() string { return "virtio_pci_create_v2" }
 func (*VirtioPciCreateV2) GetCrcString() string   { return "5d096e1a" }
 func (*VirtioPciCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VirtioPciCreateV2) Size() (size int) {
@@ -349,7 +349,7 @@ func (m *VirtioPciCreateV2Reply) Reset()               { *m = VirtioPciCreateV2R
 func (*VirtioPciCreateV2Reply) GetMessageName() string { return "virtio_pci_create_v2_reply" }
 func (*VirtioPciCreateV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*VirtioPciCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VirtioPciCreateV2Reply) Size() (size int) {
@@ -385,7 +385,7 @@ func (m *VirtioPciDelete) Reset()               { *m = VirtioPciDelete{} }
 func (*VirtioPciDelete) GetMessageName() string { return "virtio_pci_delete" }
 func (*VirtioPciDelete) GetCrcString() string   { return "f9e6675e" }
 func (*VirtioPciDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *VirtioPciDelete) Size() (size int) {
@@ -418,7 +418,7 @@ func (m *VirtioPciDeleteReply) Reset()               { *m = VirtioPciDeleteReply
 func (*VirtioPciDeleteReply) GetMessageName() string { return "virtio_pci_delete_reply" }
 func (*VirtioPciDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*VirtioPciDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *VirtioPciDeleteReply) Size() (size int) {

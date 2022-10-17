@@ -41,7 +41,7 @@ func (m *FlowAdd) Reset()               { *m = FlowAdd{} }
 func (*FlowAdd) GetMessageName() string { return "flow_add" }
 func (*FlowAdd) GetCrcString() string   { return "f946ed84" }
 func (*FlowAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowAdd) Size() (size int) {
@@ -100,7 +100,7 @@ func (m *FlowAddReply) Reset()               { *m = FlowAddReply{} }
 func (*FlowAddReply) GetMessageName() string { return "flow_add_reply" }
 func (*FlowAddReply) GetCrcString() string   { return "8587dc85" }
 func (*FlowAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowAddReply) Size() (size int) {
@@ -137,7 +137,7 @@ func (m *FlowAddV2) Reset()               { *m = FlowAddV2{} }
 func (*FlowAddV2) GetMessageName() string { return "flow_add_v2" }
 func (*FlowAddV2) GetCrcString() string   { return "5b757558" }
 func (*FlowAddV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowAddV2) Size() (size int) {
@@ -208,7 +208,7 @@ func (m *FlowAddV2Reply) Reset()               { *m = FlowAddV2Reply{} }
 func (*FlowAddV2Reply) GetMessageName() string { return "flow_add_v2_reply" }
 func (*FlowAddV2Reply) GetCrcString() string   { return "8587dc85" }
 func (*FlowAddV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowAddV2Reply) Size() (size int) {
@@ -245,7 +245,7 @@ func (m *FlowDel) Reset()               { *m = FlowDel{} }
 func (*FlowDel) GetMessageName() string { return "flow_del" }
 func (*FlowDel) GetCrcString() string   { return "b6b9b02c" }
 func (*FlowDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowDel) Size() (size int) {
@@ -279,7 +279,7 @@ func (m *FlowDelReply) Reset()               { *m = FlowDelReply{} }
 func (*FlowDelReply) GetMessageName() string { return "flow_del_reply" }
 func (*FlowDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*FlowDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowDelReply) Size() (size int) {
@@ -314,7 +314,7 @@ func (m *FlowDisable) Reset()               { *m = FlowDisable{} }
 func (*FlowDisable) GetMessageName() string { return "flow_disable" }
 func (*FlowDisable) GetCrcString() string   { return "2024be69" }
 func (*FlowDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowDisable) Size() (size int) {
@@ -351,7 +351,7 @@ func (m *FlowDisableReply) Reset()               { *m = FlowDisableReply{} }
 func (*FlowDisableReply) GetMessageName() string { return "flow_disable_reply" }
 func (*FlowDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*FlowDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowDisableReply) Size() (size int) {
@@ -386,7 +386,7 @@ func (m *FlowEnable) Reset()               { *m = FlowEnable{} }
 func (*FlowEnable) GetMessageName() string { return "flow_enable" }
 func (*FlowEnable) GetCrcString() string   { return "2024be69" }
 func (*FlowEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *FlowEnable) Size() (size int) {
@@ -423,7 +423,7 @@ func (m *FlowEnableReply) Reset()               { *m = FlowEnableReply{} }
 func (*FlowEnableReply) GetMessageName() string { return "flow_enable_reply" }
 func (*FlowEnableReply) GetCrcString() string   { return "e8d4e804" }
 func (*FlowEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *FlowEnableReply) Size() (size int) {

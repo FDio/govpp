@@ -36,7 +36,7 @@ func (m *IoamCacheIP6EnableDisable) Reset()               { *m = IoamCacheIP6Ena
 func (*IoamCacheIP6EnableDisable) GetMessageName() string { return "ioam_cache_ip6_enable_disable" }
 func (*IoamCacheIP6EnableDisable) GetCrcString() string   { return "47705c03" }
 func (*IoamCacheIP6EnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IoamCacheIP6EnableDisable) Size() (size int) {
@@ -71,7 +71,7 @@ func (*IoamCacheIP6EnableDisableReply) GetMessageName() string {
 }
 func (*IoamCacheIP6EnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*IoamCacheIP6EnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IoamCacheIP6EnableDisableReply) Size() (size int) {

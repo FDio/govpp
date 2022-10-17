@@ -40,7 +40,7 @@ func (m *LldpConfig) Reset()               { *m = LldpConfig{} }
 func (*LldpConfig) GetMessageName() string { return "lldp_config" }
 func (*LldpConfig) GetCrcString() string   { return "c14445df" }
 func (*LldpConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *LldpConfig) Size() (size int) {
@@ -79,7 +79,7 @@ func (m *LldpConfigReply) Reset()               { *m = LldpConfigReply{} }
 func (*LldpConfigReply) GetMessageName() string { return "lldp_config_reply" }
 func (*LldpConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*LldpConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *LldpConfigReply) Size() (size int) {
@@ -117,7 +117,7 @@ func (m *SwInterfaceSetLldp) Reset()               { *m = SwInterfaceSetLldp{} }
 func (*SwInterfaceSetLldp) GetMessageName() string { return "sw_interface_set_lldp" }
 func (*SwInterfaceSetLldp) GetCrcString() string   { return "57afbcd4" }
 func (*SwInterfaceSetLldp) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetLldp) Size() (size int) {
@@ -166,7 +166,7 @@ func (m *SwInterfaceSetLldpReply) Reset()               { *m = SwInterfaceSetLld
 func (*SwInterfaceSetLldpReply) GetMessageName() string { return "sw_interface_set_lldp_reply" }
 func (*SwInterfaceSetLldpReply) GetCrcString() string   { return "e8d4e804" }
 func (*SwInterfaceSetLldpReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetLldpReply) Size() (size int) {

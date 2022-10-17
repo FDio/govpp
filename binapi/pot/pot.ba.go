@@ -37,7 +37,7 @@ func (m *PotProfileActivate) Reset()               { *m = PotProfileActivate{} }
 func (*PotProfileActivate) GetMessageName() string { return "pot_profile_activate" }
 func (*PotProfileActivate) GetCrcString() string   { return "0770af98" }
 func (*PotProfileActivate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PotProfileActivate) Size() (size int) {
@@ -73,7 +73,7 @@ func (m *PotProfileActivateReply) Reset()               { *m = PotProfileActivat
 func (*PotProfileActivateReply) GetMessageName() string { return "pot_profile_activate_reply" }
 func (*PotProfileActivateReply) GetCrcString() string   { return "e8d4e804" }
 func (*PotProfileActivateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PotProfileActivateReply) Size() (size int) {
@@ -114,7 +114,7 @@ func (m *PotProfileAdd) Reset()               { *m = PotProfileAdd{} }
 func (*PotProfileAdd) GetMessageName() string { return "pot_profile_add" }
 func (*PotProfileAdd) GetCrcString() string   { return "ad5da3a3" }
 func (*PotProfileAdd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PotProfileAdd) Size() (size int) {
@@ -171,7 +171,7 @@ func (m *PotProfileAddReply) Reset()               { *m = PotProfileAddReply{} }
 func (*PotProfileAddReply) GetMessageName() string { return "pot_profile_add_reply" }
 func (*PotProfileAddReply) GetCrcString() string   { return "e8d4e804" }
 func (*PotProfileAddReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PotProfileAddReply) Size() (size int) {
@@ -204,7 +204,7 @@ func (m *PotProfileDel) Reset()               { *m = PotProfileDel{} }
 func (*PotProfileDel) GetMessageName() string { return "pot_profile_del" }
 func (*PotProfileDel) GetCrcString() string   { return "cd63f53b" }
 func (*PotProfileDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PotProfileDel) Size() (size int) {
@@ -237,7 +237,7 @@ func (m *PotProfileDelReply) Reset()               { *m = PotProfileDelReply{} }
 func (*PotProfileDelReply) GetMessageName() string { return "pot_profile_del_reply" }
 func (*PotProfileDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*PotProfileDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PotProfileDelReply) Size() (size int) {
@@ -278,7 +278,7 @@ func (m *PotProfileShowConfigDetails) Reset()               { *m = PotProfileSho
 func (*PotProfileShowConfigDetails) GetMessageName() string { return "pot_profile_show_config_details" }
 func (*PotProfileShowConfigDetails) GetCrcString() string   { return "b7ce0618" }
 func (*PotProfileShowConfigDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *PotProfileShowConfigDetails) Size() (size int) {
@@ -335,7 +335,7 @@ func (m *PotProfileShowConfigDump) Reset()               { *m = PotProfileShowCo
 func (*PotProfileShowConfigDump) GetMessageName() string { return "pot_profile_show_config_dump" }
 func (*PotProfileShowConfigDump) GetCrcString() string   { return "005b7d59" }
 func (*PotProfileShowConfigDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *PotProfileShowConfigDump) Size() (size int) {

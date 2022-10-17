@@ -71,7 +71,7 @@ func (m *GpeAddDelFwdEntry) Reset()               { *m = GpeAddDelFwdEntry{} }
 func (*GpeAddDelFwdEntry) GetMessageName() string { return "gpe_add_del_fwd_entry" }
 func (*GpeAddDelFwdEntry) GetCrcString() string   { return "f0847644" }
 func (*GpeAddDelFwdEntry) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeAddDelFwdEntry) Size() (size int) {
@@ -154,7 +154,7 @@ func (m *GpeAddDelFwdEntryReply) Reset()               { *m = GpeAddDelFwdEntryR
 func (*GpeAddDelFwdEntryReply) GetMessageName() string { return "gpe_add_del_fwd_entry_reply" }
 func (*GpeAddDelFwdEntryReply) GetCrcString() string   { return "efe5f176" }
 func (*GpeAddDelFwdEntryReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeAddDelFwdEntryReply) Size() (size int) {
@@ -193,7 +193,7 @@ func (m *GpeAddDelIface) Reset()               { *m = GpeAddDelIface{} }
 func (*GpeAddDelIface) GetMessageName() string { return "gpe_add_del_iface" }
 func (*GpeAddDelIface) GetCrcString() string   { return "3ccff273" }
 func (*GpeAddDelIface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeAddDelIface) Size() (size int) {
@@ -235,7 +235,7 @@ func (m *GpeAddDelIfaceReply) Reset()               { *m = GpeAddDelIfaceReply{}
 func (*GpeAddDelIfaceReply) GetMessageName() string { return "gpe_add_del_iface_reply" }
 func (*GpeAddDelIfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*GpeAddDelIfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeAddDelIfaceReply) Size() (size int) {
@@ -271,7 +271,7 @@ func (m *GpeAddDelNativeFwdRpath) Reset()               { *m = GpeAddDelNativeFw
 func (*GpeAddDelNativeFwdRpath) GetMessageName() string { return "gpe_add_del_native_fwd_rpath" }
 func (*GpeAddDelNativeFwdRpath) GetCrcString() string   { return "43fc8b54" }
 func (*GpeAddDelNativeFwdRpath) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeAddDelNativeFwdRpath) Size() (size int) {
@@ -318,7 +318,7 @@ func (*GpeAddDelNativeFwdRpathReply) GetMessageName() string {
 }
 func (*GpeAddDelNativeFwdRpathReply) GetCrcString() string { return "e8d4e804" }
 func (*GpeAddDelNativeFwdRpathReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeAddDelNativeFwdRpathReply) Size() (size int) {
@@ -351,7 +351,7 @@ func (m *GpeEnableDisable) Reset()               { *m = GpeEnableDisable{} }
 func (*GpeEnableDisable) GetMessageName() string { return "gpe_enable_disable" }
 func (*GpeEnableDisable) GetCrcString() string   { return "c264d7bf" }
 func (*GpeEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeEnableDisable) Size() (size int) {
@@ -384,7 +384,7 @@ func (m *GpeEnableDisableReply) Reset()               { *m = GpeEnableDisableRep
 func (*GpeEnableDisableReply) GetMessageName() string { return "gpe_enable_disable_reply" }
 func (*GpeEnableDisableReply) GetCrcString() string   { return "e8d4e804" }
 func (*GpeEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeEnableDisableReply) Size() (size int) {
@@ -417,7 +417,7 @@ func (m *GpeFwdEntriesGet) Reset()               { *m = GpeFwdEntriesGet{} }
 func (*GpeFwdEntriesGet) GetMessageName() string { return "gpe_fwd_entries_get" }
 func (*GpeFwdEntriesGet) GetCrcString() string   { return "8d1f2fe9" }
 func (*GpeFwdEntriesGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeFwdEntriesGet) Size() (size int) {
@@ -452,7 +452,7 @@ func (m *GpeFwdEntriesGetReply) Reset()               { *m = GpeFwdEntriesGetRep
 func (*GpeFwdEntriesGetReply) GetMessageName() string { return "gpe_fwd_entries_get_reply" }
 func (*GpeFwdEntriesGetReply) GetCrcString() string   { return "c4844876" }
 func (*GpeFwdEntriesGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeFwdEntriesGetReply) Size() (size int) {
@@ -529,7 +529,7 @@ func (m *GpeFwdEntryPathDetails) Reset()               { *m = GpeFwdEntryPathDet
 func (*GpeFwdEntryPathDetails) GetMessageName() string { return "gpe_fwd_entry_path_details" }
 func (*GpeFwdEntryPathDetails) GetCrcString() string   { return "483df51a" }
 func (*GpeFwdEntryPathDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeFwdEntryPathDetails) Size() (size int) {
@@ -577,7 +577,7 @@ func (m *GpeFwdEntryPathDump) Reset()               { *m = GpeFwdEntryPathDump{}
 func (*GpeFwdEntryPathDump) GetMessageName() string { return "gpe_fwd_entry_path_dump" }
 func (*GpeFwdEntryPathDump) GetCrcString() string   { return "39bce980" }
 func (*GpeFwdEntryPathDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeFwdEntryPathDump) Size() (size int) {
@@ -608,7 +608,7 @@ func (m *GpeFwdEntryVnisGet) Reset()               { *m = GpeFwdEntryVnisGet{} }
 func (*GpeFwdEntryVnisGet) GetMessageName() string { return "gpe_fwd_entry_vnis_get" }
 func (*GpeFwdEntryVnisGet) GetCrcString() string   { return "51077d14" }
 func (*GpeFwdEntryVnisGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeFwdEntryVnisGet) Size() (size int) {
@@ -639,7 +639,7 @@ func (m *GpeFwdEntryVnisGetReply) Reset()               { *m = GpeFwdEntryVnisGe
 func (*GpeFwdEntryVnisGetReply) GetMessageName() string { return "gpe_fwd_entry_vnis_get_reply" }
 func (*GpeFwdEntryVnisGetReply) GetCrcString() string   { return "aa70da20" }
 func (*GpeFwdEntryVnisGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeFwdEntryVnisGetReply) Size() (size int) {
@@ -685,7 +685,7 @@ func (m *GpeGetEncapMode) Reset()               { *m = GpeGetEncapMode{} }
 func (*GpeGetEncapMode) GetMessageName() string { return "gpe_get_encap_mode" }
 func (*GpeGetEncapMode) GetCrcString() string   { return "51077d14" }
 func (*GpeGetEncapMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeGetEncapMode) Size() (size int) {
@@ -715,7 +715,7 @@ func (m *GpeGetEncapModeReply) Reset()               { *m = GpeGetEncapModeReply
 func (*GpeGetEncapModeReply) GetMessageName() string { return "gpe_get_encap_mode_reply" }
 func (*GpeGetEncapModeReply) GetCrcString() string   { return "36e3f7ca" }
 func (*GpeGetEncapModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeGetEncapModeReply) Size() (size int) {
@@ -751,7 +751,7 @@ func (m *GpeNativeFwdRpathsGet) Reset()               { *m = GpeNativeFwdRpathsG
 func (*GpeNativeFwdRpathsGet) GetMessageName() string { return "gpe_native_fwd_rpaths_get" }
 func (*GpeNativeFwdRpathsGet) GetCrcString() string   { return "f652ceb4" }
 func (*GpeNativeFwdRpathsGet) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeNativeFwdRpathsGet) Size() (size int) {
@@ -786,7 +786,7 @@ func (m *GpeNativeFwdRpathsGetReply) Reset()               { *m = GpeNativeFwdRp
 func (*GpeNativeFwdRpathsGetReply) GetMessageName() string { return "gpe_native_fwd_rpaths_get_reply" }
 func (*GpeNativeFwdRpathsGetReply) GetCrcString() string   { return "7a1ca5a2" }
 func (*GpeNativeFwdRpathsGetReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeNativeFwdRpathsGetReply) Size() (size int) {
@@ -850,7 +850,7 @@ func (m *GpeSetEncapMode) Reset()               { *m = GpeSetEncapMode{} }
 func (*GpeSetEncapMode) GetMessageName() string { return "gpe_set_encap_mode" }
 func (*GpeSetEncapMode) GetCrcString() string   { return "bd819eac" }
 func (*GpeSetEncapMode) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *GpeSetEncapMode) Size() (size int) {
@@ -883,7 +883,7 @@ func (m *GpeSetEncapModeReply) Reset()               { *m = GpeSetEncapModeReply
 func (*GpeSetEncapModeReply) GetMessageName() string { return "gpe_set_encap_mode_reply" }
 func (*GpeSetEncapModeReply) GetCrcString() string   { return "e8d4e804" }
 func (*GpeSetEncapModeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *GpeSetEncapModeReply) Size() (size int) {

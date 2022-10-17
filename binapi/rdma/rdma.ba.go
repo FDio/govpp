@@ -142,7 +142,7 @@ func (m *RdmaCreate) Reset()               { *m = RdmaCreate{} }
 func (*RdmaCreate) GetMessageName() string { return "rdma_create" }
 func (*RdmaCreate) GetCrcString() string   { return "076fe418" }
 func (*RdmaCreate) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *RdmaCreate) Size() (size int) {
@@ -191,7 +191,7 @@ func (m *RdmaCreateReply) Reset()               { *m = RdmaCreateReply{} }
 func (*RdmaCreateReply) GetMessageName() string { return "rdma_create_reply" }
 func (*RdmaCreateReply) GetCrcString() string   { return "5383d31f" }
 func (*RdmaCreateReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *RdmaCreateReply) Size() (size int) {
@@ -235,7 +235,7 @@ func (m *RdmaCreateV2) Reset()               { *m = RdmaCreateV2{} }
 func (*RdmaCreateV2) GetMessageName() string { return "rdma_create_v2" }
 func (*RdmaCreateV2) GetCrcString() string   { return "5826a4f3" }
 func (*RdmaCreateV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *RdmaCreateV2) Size() (size int) {
@@ -290,7 +290,7 @@ func (m *RdmaCreateV2Reply) Reset()               { *m = RdmaCreateV2Reply{} }
 func (*RdmaCreateV2Reply) GetMessageName() string { return "rdma_create_v2_reply" }
 func (*RdmaCreateV2Reply) GetCrcString() string   { return "5383d31f" }
 func (*RdmaCreateV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *RdmaCreateV2Reply) Size() (size int) {
@@ -335,7 +335,7 @@ func (m *RdmaCreateV3) Reset()               { *m = RdmaCreateV3{} }
 func (*RdmaCreateV3) GetMessageName() string { return "rdma_create_v3" }
 func (*RdmaCreateV3) GetCrcString() string   { return "c6287ea8" }
 func (*RdmaCreateV3) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *RdmaCreateV3) Size() (size int) {
@@ -396,7 +396,7 @@ func (m *RdmaCreateV3Reply) Reset()               { *m = RdmaCreateV3Reply{} }
 func (*RdmaCreateV3Reply) GetMessageName() string { return "rdma_create_v3_reply" }
 func (*RdmaCreateV3Reply) GetCrcString() string   { return "5383d31f" }
 func (*RdmaCreateV3Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *RdmaCreateV3Reply) Size() (size int) {
@@ -432,7 +432,7 @@ func (m *RdmaDelete) Reset()               { *m = RdmaDelete{} }
 func (*RdmaDelete) GetMessageName() string { return "rdma_delete" }
 func (*RdmaDelete) GetCrcString() string   { return "f9e6675e" }
 func (*RdmaDelete) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *RdmaDelete) Size() (size int) {
@@ -465,7 +465,7 @@ func (m *RdmaDeleteReply) Reset()               { *m = RdmaDeleteReply{} }
 func (*RdmaDeleteReply) GetMessageName() string { return "rdma_delete_reply" }
 func (*RdmaDeleteReply) GetCrcString() string   { return "e8d4e804" }
 func (*RdmaDeleteReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *RdmaDeleteReply) Size() (size int) {

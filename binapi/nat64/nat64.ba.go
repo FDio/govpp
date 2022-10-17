@@ -41,7 +41,7 @@ func (m *Nat64AddDelInterface) Reset()               { *m = Nat64AddDelInterface
 func (*Nat64AddDelInterface) GetMessageName() string { return "nat64_add_del_interface" }
 func (*Nat64AddDelInterface) GetCrcString() string   { return "f3699b83" }
 func (*Nat64AddDelInterface) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64AddDelInterface) Size() (size int) {
@@ -81,7 +81,7 @@ func (m *Nat64AddDelInterfaceAddr) Reset()               { *m = Nat64AddDelInter
 func (*Nat64AddDelInterfaceAddr) GetMessageName() string { return "nat64_add_del_interface_addr" }
 func (*Nat64AddDelInterfaceAddr) GetCrcString() string   { return "47d6e753" }
 func (*Nat64AddDelInterfaceAddr) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64AddDelInterfaceAddr) Size() (size int) {
@@ -119,7 +119,7 @@ func (*Nat64AddDelInterfaceAddrReply) GetMessageName() string {
 }
 func (*Nat64AddDelInterfaceAddrReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat64AddDelInterfaceAddrReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64AddDelInterfaceAddrReply) Size() (size int) {
@@ -152,7 +152,7 @@ func (m *Nat64AddDelInterfaceReply) Reset()               { *m = Nat64AddDelInte
 func (*Nat64AddDelInterfaceReply) GetMessageName() string { return "nat64_add_del_interface_reply" }
 func (*Nat64AddDelInterfaceReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelInterfaceReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64AddDelInterfaceReply) Size() (size int) {
@@ -188,7 +188,7 @@ func (m *Nat64AddDelPoolAddrRange) Reset()               { *m = Nat64AddDelPoolA
 func (*Nat64AddDelPoolAddrRange) GetMessageName() string { return "nat64_add_del_pool_addr_range" }
 func (*Nat64AddDelPoolAddrRange) GetCrcString() string   { return "a3b944e3" }
 func (*Nat64AddDelPoolAddrRange) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64AddDelPoolAddrRange) Size() (size int) {
@@ -232,7 +232,7 @@ func (*Nat64AddDelPoolAddrRangeReply) GetMessageName() string {
 }
 func (*Nat64AddDelPoolAddrRangeReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat64AddDelPoolAddrRangeReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64AddDelPoolAddrRangeReply) Size() (size int) {
@@ -267,7 +267,7 @@ func (m *Nat64AddDelPrefix) Reset()               { *m = Nat64AddDelPrefix{} }
 func (*Nat64AddDelPrefix) GetMessageName() string { return "nat64_add_del_prefix" }
 func (*Nat64AddDelPrefix) GetCrcString() string   { return "727b2f4c" }
 func (*Nat64AddDelPrefix) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64AddDelPrefix) Size() (size int) {
@@ -309,7 +309,7 @@ func (m *Nat64AddDelPrefixReply) Reset()               { *m = Nat64AddDelPrefixR
 func (*Nat64AddDelPrefixReply) GetMessageName() string { return "nat64_add_del_prefix_reply" }
 func (*Nat64AddDelPrefixReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelPrefixReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64AddDelPrefixReply) Size() (size int) {
@@ -348,7 +348,7 @@ func (m *Nat64AddDelStaticBib) Reset()               { *m = Nat64AddDelStaticBib
 func (*Nat64AddDelStaticBib) GetMessageName() string { return "nat64_add_del_static_bib" }
 func (*Nat64AddDelStaticBib) GetCrcString() string   { return "1c404de5" }
 func (*Nat64AddDelStaticBib) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64AddDelStaticBib) Size() (size int) {
@@ -399,7 +399,7 @@ func (m *Nat64AddDelStaticBibReply) Reset()               { *m = Nat64AddDelStat
 func (*Nat64AddDelStaticBibReply) GetMessageName() string { return "nat64_add_del_static_bib_reply" }
 func (*Nat64AddDelStaticBibReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64AddDelStaticBibReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64AddDelStaticBibReply) Size() (size int) {
@@ -439,7 +439,7 @@ func (m *Nat64BibDetails) Reset()               { *m = Nat64BibDetails{} }
 func (*Nat64BibDetails) GetMessageName() string { return "nat64_bib_details" }
 func (*Nat64BibDetails) GetCrcString() string   { return "43bc3ddf" }
 func (*Nat64BibDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64BibDetails) Size() (size int) {
@@ -493,7 +493,7 @@ func (m *Nat64BibDump) Reset()               { *m = Nat64BibDump{} }
 func (*Nat64BibDump) GetMessageName() string { return "nat64_bib_dump" }
 func (*Nat64BibDump) GetCrcString() string   { return "cfcb6b75" }
 func (*Nat64BibDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64BibDump) Size() (size int) {
@@ -524,7 +524,7 @@ func (m *Nat64GetTimeouts) Reset()               { *m = Nat64GetTimeouts{} }
 func (*Nat64GetTimeouts) GetMessageName() string { return "nat64_get_timeouts" }
 func (*Nat64GetTimeouts) GetCrcString() string   { return "51077d14" }
 func (*Nat64GetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64GetTimeouts) Size() (size int) {
@@ -557,7 +557,7 @@ func (m *Nat64GetTimeoutsReply) Reset()               { *m = Nat64GetTimeoutsRep
 func (*Nat64GetTimeoutsReply) GetMessageName() string { return "nat64_get_timeouts_reply" }
 func (*Nat64GetTimeoutsReply) GetCrcString() string   { return "3c4df4e1" }
 func (*Nat64GetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64GetTimeoutsReply) Size() (size int) {
@@ -603,7 +603,7 @@ func (m *Nat64InterfaceDetails) Reset()               { *m = Nat64InterfaceDetai
 func (*Nat64InterfaceDetails) GetMessageName() string { return "nat64_interface_details" }
 func (*Nat64InterfaceDetails) GetCrcString() string   { return "5d286289" }
 func (*Nat64InterfaceDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64InterfaceDetails) Size() (size int) {
@@ -637,7 +637,7 @@ func (m *Nat64InterfaceDump) Reset()               { *m = Nat64InterfaceDump{} }
 func (*Nat64InterfaceDump) GetMessageName() string { return "nat64_interface_dump" }
 func (*Nat64InterfaceDump) GetCrcString() string   { return "51077d14" }
 func (*Nat64InterfaceDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64InterfaceDump) Size() (size int) {
@@ -671,7 +671,7 @@ func (m *Nat64PluginEnableDisable) Reset()               { *m = Nat64PluginEnabl
 func (*Nat64PluginEnableDisable) GetMessageName() string { return "nat64_plugin_enable_disable" }
 func (*Nat64PluginEnableDisable) GetCrcString() string   { return "45948b90" }
 func (*Nat64PluginEnableDisable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64PluginEnableDisable) Size() (size int) {
@@ -719,7 +719,7 @@ func (*Nat64PluginEnableDisableReply) GetMessageName() string {
 }
 func (*Nat64PluginEnableDisableReply) GetCrcString() string { return "e8d4e804" }
 func (*Nat64PluginEnableDisableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64PluginEnableDisableReply) Size() (size int) {
@@ -753,7 +753,7 @@ func (m *Nat64PoolAddrDetails) Reset()               { *m = Nat64PoolAddrDetails
 func (*Nat64PoolAddrDetails) GetMessageName() string { return "nat64_pool_addr_details" }
 func (*Nat64PoolAddrDetails) GetCrcString() string   { return "9bb99cdb" }
 func (*Nat64PoolAddrDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64PoolAddrDetails) Size() (size int) {
@@ -787,7 +787,7 @@ func (m *Nat64PoolAddrDump) Reset()               { *m = Nat64PoolAddrDump{} }
 func (*Nat64PoolAddrDump) GetMessageName() string { return "nat64_pool_addr_dump" }
 func (*Nat64PoolAddrDump) GetCrcString() string   { return "51077d14" }
 func (*Nat64PoolAddrDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64PoolAddrDump) Size() (size int) {
@@ -817,7 +817,7 @@ func (m *Nat64PrefixDetails) Reset()               { *m = Nat64PrefixDetails{} }
 func (*Nat64PrefixDetails) GetMessageName() string { return "nat64_prefix_details" }
 func (*Nat64PrefixDetails) GetCrcString() string   { return "20568de3" }
 func (*Nat64PrefixDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64PrefixDetails) Size() (size int) {
@@ -854,7 +854,7 @@ func (m *Nat64PrefixDump) Reset()               { *m = Nat64PrefixDump{} }
 func (*Nat64PrefixDump) GetMessageName() string { return "nat64_prefix_dump" }
 func (*Nat64PrefixDump) GetCrcString() string   { return "51077d14" }
 func (*Nat64PrefixDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64PrefixDump) Size() (size int) {
@@ -886,7 +886,7 @@ func (m *Nat64SetTimeouts) Reset()               { *m = Nat64SetTimeouts{} }
 func (*Nat64SetTimeouts) GetMessageName() string { return "nat64_set_timeouts" }
 func (*Nat64SetTimeouts) GetCrcString() string   { return "d4746b16" }
 func (*Nat64SetTimeouts) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64SetTimeouts) Size() (size int) {
@@ -928,7 +928,7 @@ func (m *Nat64SetTimeoutsReply) Reset()               { *m = Nat64SetTimeoutsRep
 func (*Nat64SetTimeoutsReply) GetMessageName() string { return "nat64_set_timeouts_reply" }
 func (*Nat64SetTimeoutsReply) GetCrcString() string   { return "e8d4e804" }
 func (*Nat64SetTimeoutsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64SetTimeoutsReply) Size() (size int) {
@@ -969,7 +969,7 @@ func (m *Nat64StDetails) Reset()               { *m = Nat64StDetails{} }
 func (*Nat64StDetails) GetMessageName() string { return "nat64_st_details" }
 func (*Nat64StDetails) GetCrcString() string   { return "dd3361ed" }
 func (*Nat64StDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *Nat64StDetails) Size() (size int) {
@@ -1026,7 +1026,7 @@ func (m *Nat64StDump) Reset()               { *m = Nat64StDump{} }
 func (*Nat64StDump) GetMessageName() string { return "nat64_st_dump" }
 func (*Nat64StDump) GetCrcString() string   { return "cfcb6b75" }
 func (*Nat64StDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *Nat64StDump) Size() (size int) {

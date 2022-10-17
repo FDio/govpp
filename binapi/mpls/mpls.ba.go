@@ -72,7 +72,7 @@ func (m *MplsIPBindUnbind) Reset()               { *m = MplsIPBindUnbind{} }
 func (*MplsIPBindUnbind) GetMessageName() string { return "mpls_ip_bind_unbind" }
 func (*MplsIPBindUnbind) GetCrcString() string   { return "c7533b32" }
 func (*MplsIPBindUnbind) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsIPBindUnbind) Size() (size int) {
@@ -123,7 +123,7 @@ func (m *MplsIPBindUnbindReply) Reset()               { *m = MplsIPBindUnbindRep
 func (*MplsIPBindUnbindReply) GetMessageName() string { return "mpls_ip_bind_unbind_reply" }
 func (*MplsIPBindUnbindReply) GetCrcString() string   { return "e8d4e804" }
 func (*MplsIPBindUnbindReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsIPBindUnbindReply) Size() (size int) {
@@ -158,7 +158,7 @@ func (m *MplsRouteAddDel) Reset()               { *m = MplsRouteAddDel{} }
 func (*MplsRouteAddDel) GetMessageName() string { return "mpls_route_add_del" }
 func (*MplsRouteAddDel) GetCrcString() string   { return "8e1d1e07" }
 func (*MplsRouteAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsRouteAddDel) Size() (size int) {
@@ -286,7 +286,7 @@ func (m *MplsRouteAddDelReply) Reset()               { *m = MplsRouteAddDelReply
 func (*MplsRouteAddDelReply) GetMessageName() string { return "mpls_route_add_del_reply" }
 func (*MplsRouteAddDelReply) GetCrcString() string   { return "1992deab" }
 func (*MplsRouteAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsRouteAddDelReply) Size() (size int) {
@@ -322,7 +322,7 @@ func (m *MplsRouteDetails) Reset()               { *m = MplsRouteDetails{} }
 func (*MplsRouteDetails) GetMessageName() string { return "mpls_route_details" }
 func (*MplsRouteDetails) GetCrcString() string   { return "9b5043dc" }
 func (*MplsRouteDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsRouteDetails) Size() (size int) {
@@ -443,7 +443,7 @@ func (m *MplsRouteDump) Reset()               { *m = MplsRouteDump{} }
 func (*MplsRouteDump) GetMessageName() string { return "mpls_route_dump" }
 func (*MplsRouteDump) GetCrcString() string   { return "935fdefa" }
 func (*MplsRouteDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsRouteDump) Size() (size int) {
@@ -480,7 +480,7 @@ func (m *MplsTableAddDel) Reset()               { *m = MplsTableAddDel{} }
 func (*MplsTableAddDel) GetMessageName() string { return "mpls_table_add_del" }
 func (*MplsTableAddDel) GetCrcString() string   { return "57817512" }
 func (*MplsTableAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsTableAddDel) Size() (size int) {
@@ -519,7 +519,7 @@ func (m *MplsTableAddDelReply) Reset()               { *m = MplsTableAddDelReply
 func (*MplsTableAddDelReply) GetMessageName() string { return "mpls_table_add_del_reply" }
 func (*MplsTableAddDelReply) GetCrcString() string   { return "e8d4e804" }
 func (*MplsTableAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsTableAddDelReply) Size() (size int) {
@@ -552,7 +552,7 @@ func (m *MplsTableDetails) Reset()               { *m = MplsTableDetails{} }
 func (*MplsTableDetails) GetMessageName() string { return "mpls_table_details" }
 func (*MplsTableDetails) GetCrcString() string   { return "f03ecdc8" }
 func (*MplsTableDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsTableDetails) Size() (size int) {
@@ -586,7 +586,7 @@ func (m *MplsTableDump) Reset()               { *m = MplsTableDump{} }
 func (*MplsTableDump) GetMessageName() string { return "mpls_table_dump" }
 func (*MplsTableDump) GetCrcString() string   { return "51077d14" }
 func (*MplsTableDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsTableDump) Size() (size int) {
@@ -616,7 +616,7 @@ func (m *MplsTunnelAddDel) Reset()               { *m = MplsTunnelAddDel{} }
 func (*MplsTunnelAddDel) GetMessageName() string { return "mpls_tunnel_add_del" }
 func (*MplsTunnelAddDel) GetCrcString() string   { return "44350ac1" }
 func (*MplsTunnelAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsTunnelAddDel) Size() (size int) {
@@ -742,7 +742,7 @@ func (m *MplsTunnelAddDelReply) Reset()               { *m = MplsTunnelAddDelRep
 func (*MplsTunnelAddDelReply) GetMessageName() string { return "mpls_tunnel_add_del_reply" }
 func (*MplsTunnelAddDelReply) GetCrcString() string   { return "afb01472" }
 func (*MplsTunnelAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsTunnelAddDelReply) Size() (size int) {
@@ -781,7 +781,7 @@ func (m *MplsTunnelDetails) Reset()               { *m = MplsTunnelDetails{} }
 func (*MplsTunnelDetails) GetMessageName() string { return "mpls_tunnel_details" }
 func (*MplsTunnelDetails) GetCrcString() string   { return "57118ae3" }
 func (*MplsTunnelDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *MplsTunnelDetails) Size() (size int) {
@@ -902,7 +902,7 @@ func (m *MplsTunnelDump) Reset()               { *m = MplsTunnelDump{} }
 func (*MplsTunnelDump) GetMessageName() string { return "mpls_tunnel_dump" }
 func (*MplsTunnelDump) GetCrcString() string   { return "f9e6675e" }
 func (*MplsTunnelDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *MplsTunnelDump) Size() (size int) {
@@ -936,7 +936,7 @@ func (m *SwInterfaceSetMplsEnable) Reset()               { *m = SwInterfaceSetMp
 func (*SwInterfaceSetMplsEnable) GetMessageName() string { return "sw_interface_set_mpls_enable" }
 func (*SwInterfaceSetMplsEnable) GetCrcString() string   { return "ae6cfcfb" }
 func (*SwInterfaceSetMplsEnable) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SwInterfaceSetMplsEnable) Size() (size int) {
@@ -974,7 +974,7 @@ func (*SwInterfaceSetMplsEnableReply) GetMessageName() string {
 }
 func (*SwInterfaceSetMplsEnableReply) GetCrcString() string { return "e8d4e804" }
 func (*SwInterfaceSetMplsEnableReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SwInterfaceSetMplsEnableReply) Size() (size int) {

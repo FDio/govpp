@@ -83,7 +83,7 @@ func (m *SyslogGetFilter) Reset()               { *m = SyslogGetFilter{} }
 func (*SyslogGetFilter) GetMessageName() string { return "syslog_get_filter" }
 func (*SyslogGetFilter) GetCrcString() string   { return "51077d14" }
 func (*SyslogGetFilter) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SyslogGetFilter) Size() (size int) {
@@ -113,7 +113,7 @@ func (m *SyslogGetFilterReply) Reset()               { *m = SyslogGetFilterReply
 func (*SyslogGetFilterReply) GetMessageName() string { return "syslog_get_filter_reply" }
 func (*SyslogGetFilterReply) GetCrcString() string   { return "eb1833f8" }
 func (*SyslogGetFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SyslogGetFilterReply) Size() (size int) {
@@ -147,7 +147,7 @@ func (m *SyslogGetSender) Reset()               { *m = SyslogGetSender{} }
 func (*SyslogGetSender) GetMessageName() string { return "syslog_get_sender" }
 func (*SyslogGetSender) GetCrcString() string   { return "51077d14" }
 func (*SyslogGetSender) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SyslogGetSender) Size() (size int) {
@@ -181,7 +181,7 @@ func (m *SyslogGetSenderReply) Reset()               { *m = SyslogGetSenderReply
 func (*SyslogGetSenderReply) GetMessageName() string { return "syslog_get_sender_reply" }
 func (*SyslogGetSenderReply) GetCrcString() string   { return "424cfa4e" }
 func (*SyslogGetSenderReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SyslogGetSenderReply) Size() (size int) {
@@ -229,7 +229,7 @@ func (m *SyslogSetFilter) Reset()               { *m = SyslogSetFilter{} }
 func (*SyslogSetFilter) GetMessageName() string { return "syslog_set_filter" }
 func (*SyslogSetFilter) GetCrcString() string   { return "571348c3" }
 func (*SyslogSetFilter) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SyslogSetFilter) Size() (size int) {
@@ -262,7 +262,7 @@ func (m *SyslogSetFilterReply) Reset()               { *m = SyslogSetFilterReply
 func (*SyslogSetFilterReply) GetMessageName() string { return "syslog_set_filter_reply" }
 func (*SyslogSetFilterReply) GetCrcString() string   { return "e8d4e804" }
 func (*SyslogSetFilterReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SyslogSetFilterReply) Size() (size int) {
@@ -299,7 +299,7 @@ func (m *SyslogSetSender) Reset()               { *m = SyslogSetSender{} }
 func (*SyslogSetSender) GetMessageName() string { return "syslog_set_sender" }
 func (*SyslogSetSender) GetCrcString() string   { return "b8011d0b" }
 func (*SyslogSetSender) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *SyslogSetSender) Size() (size int) {
@@ -344,7 +344,7 @@ func (m *SyslogSetSenderReply) Reset()               { *m = SyslogSetSenderReply
 func (*SyslogSetSenderReply) GetMessageName() string { return "syslog_set_sender_reply" }
 func (*SyslogSetSenderReply) GetCrcString() string   { return "e8d4e804" }
 func (*SyslogSetSenderReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *SyslogSetSenderReply) Size() (size int) {

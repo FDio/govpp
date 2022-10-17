@@ -39,7 +39,7 @@ func (m *TLSOpensslSetEngine) Reset()               { *m = TLSOpensslSetEngine{}
 func (*TLSOpensslSetEngine) GetMessageName() string { return "tls_openssl_set_engine" }
 func (*TLSOpensslSetEngine) GetCrcString() string   { return "e34d95c1" }
 func (*TLSOpensslSetEngine) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *TLSOpensslSetEngine) Size() (size int) {
@@ -84,7 +84,7 @@ func (m *TLSOpensslSetEngineReply) Reset()               { *m = TLSOpensslSetEng
 func (*TLSOpensslSetEngineReply) GetMessageName() string { return "tls_openssl_set_engine_reply" }
 func (*TLSOpensslSetEngineReply) GetCrcString() string   { return "e8d4e804" }
 func (*TLSOpensslSetEngineReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *TLSOpensslSetEngineReply) Size() (size int) {

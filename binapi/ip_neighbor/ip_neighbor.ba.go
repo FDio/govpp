@@ -147,7 +147,7 @@ func (m *IPNeighborAddDel) Reset()               { *m = IPNeighborAddDel{} }
 func (*IPNeighborAddDel) GetMessageName() string { return "ip_neighbor_add_del" }
 func (*IPNeighborAddDel) GetCrcString() string   { return "0607c257" }
 func (*IPNeighborAddDel) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborAddDel) Size() (size int) {
@@ -196,7 +196,7 @@ func (m *IPNeighborAddDelReply) Reset()               { *m = IPNeighborAddDelRep
 func (*IPNeighborAddDelReply) GetMessageName() string { return "ip_neighbor_add_del_reply" }
 func (*IPNeighborAddDelReply) GetCrcString() string   { return "1992deab" }
 func (*IPNeighborAddDelReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborAddDelReply) Size() (size int) {
@@ -235,7 +235,7 @@ func (m *IPNeighborConfig) Reset()               { *m = IPNeighborConfig{} }
 func (*IPNeighborConfig) GetMessageName() string { return "ip_neighbor_config" }
 func (*IPNeighborConfig) GetCrcString() string   { return "f4a5cf44" }
 func (*IPNeighborConfig) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborConfig) Size() (size int) {
@@ -277,7 +277,7 @@ func (m *IPNeighborConfigReply) Reset()               { *m = IPNeighborConfigRep
 func (*IPNeighborConfigReply) GetMessageName() string { return "ip_neighbor_config_reply" }
 func (*IPNeighborConfigReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPNeighborConfigReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborConfigReply) Size() (size int) {
@@ -311,7 +311,7 @@ func (m *IPNeighborDetails) Reset()               { *m = IPNeighborDetails{} }
 func (*IPNeighborDetails) GetMessageName() string { return "ip_neighbor_details" }
 func (*IPNeighborDetails) GetCrcString() string   { return "e29d79f0" }
 func (*IPNeighborDetails) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborDetails) Size() (size int) {
@@ -360,7 +360,7 @@ func (m *IPNeighborDump) Reset()               { *m = IPNeighborDump{} }
 func (*IPNeighborDump) GetMessageName() string { return "ip_neighbor_dump" }
 func (*IPNeighborDump) GetCrcString() string   { return "d817a484" }
 func (*IPNeighborDump) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborDump) Size() (size int) {
@@ -398,7 +398,7 @@ func (m *IPNeighborEvent) Reset()               { *m = IPNeighborEvent{} }
 func (*IPNeighborEvent) GetMessageName() string { return "ip_neighbor_event" }
 func (*IPNeighborEvent) GetCrcString() string   { return "bdb092b2" }
 func (*IPNeighborEvent) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *IPNeighborEvent) Size() (size int) {
@@ -448,7 +448,7 @@ func (m *IPNeighborEventV2) Reset()               { *m = IPNeighborEventV2{} }
 func (*IPNeighborEventV2) GetMessageName() string { return "ip_neighbor_event_v2" }
 func (*IPNeighborEventV2) GetCrcString() string   { return "c1d53dc0" }
 func (*IPNeighborEventV2) GetMessageType() api.MessageType {
-	return api.EventMessage
+	return api.EventMessageType
 }
 
 func (m *IPNeighborEventV2) Size() (size int) {
@@ -500,7 +500,7 @@ func (m *IPNeighborFlush) Reset()               { *m = IPNeighborFlush{} }
 func (*IPNeighborFlush) GetMessageName() string { return "ip_neighbor_flush" }
 func (*IPNeighborFlush) GetCrcString() string   { return "16aa35d2" }
 func (*IPNeighborFlush) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborFlush) Size() (size int) {
@@ -536,7 +536,7 @@ func (m *IPNeighborFlushReply) Reset()               { *m = IPNeighborFlushReply
 func (*IPNeighborFlushReply) GetMessageName() string { return "ip_neighbor_flush_reply" }
 func (*IPNeighborFlushReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPNeighborFlushReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborFlushReply) Size() (size int) {
@@ -567,7 +567,7 @@ func (m *IPNeighborReplaceBegin) Reset()               { *m = IPNeighborReplaceB
 func (*IPNeighborReplaceBegin) GetMessageName() string { return "ip_neighbor_replace_begin" }
 func (*IPNeighborReplaceBegin) GetCrcString() string   { return "51077d14" }
 func (*IPNeighborReplaceBegin) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborReplaceBegin) Size() (size int) {
@@ -596,7 +596,7 @@ func (m *IPNeighborReplaceBeginReply) Reset()               { *m = IPNeighborRep
 func (*IPNeighborReplaceBeginReply) GetMessageName() string { return "ip_neighbor_replace_begin_reply" }
 func (*IPNeighborReplaceBeginReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPNeighborReplaceBeginReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborReplaceBeginReply) Size() (size int) {
@@ -627,7 +627,7 @@ func (m *IPNeighborReplaceEnd) Reset()               { *m = IPNeighborReplaceEnd
 func (*IPNeighborReplaceEnd) GetMessageName() string { return "ip_neighbor_replace_end" }
 func (*IPNeighborReplaceEnd) GetCrcString() string   { return "51077d14" }
 func (*IPNeighborReplaceEnd) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *IPNeighborReplaceEnd) Size() (size int) {
@@ -656,7 +656,7 @@ func (m *IPNeighborReplaceEndReply) Reset()               { *m = IPNeighborRepla
 func (*IPNeighborReplaceEndReply) GetMessageName() string { return "ip_neighbor_replace_end_reply" }
 func (*IPNeighborReplaceEndReply) GetCrcString() string   { return "e8d4e804" }
 func (*IPNeighborReplaceEndReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *IPNeighborReplaceEndReply) Size() (size int) {
@@ -693,7 +693,7 @@ func (m *WantIPNeighborEvents) Reset()               { *m = WantIPNeighborEvents
 func (*WantIPNeighborEvents) GetMessageName() string { return "want_ip_neighbor_events" }
 func (*WantIPNeighborEvents) GetCrcString() string   { return "73e70a86" }
 func (*WantIPNeighborEvents) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantIPNeighborEvents) Size() (size int) {
@@ -739,7 +739,7 @@ func (m *WantIPNeighborEventsReply) Reset()               { *m = WantIPNeighborE
 func (*WantIPNeighborEventsReply) GetMessageName() string { return "want_ip_neighbor_events_reply" }
 func (*WantIPNeighborEventsReply) GetCrcString() string   { return "e8d4e804" }
 func (*WantIPNeighborEventsReply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantIPNeighborEventsReply) Size() (size int) {
@@ -775,7 +775,7 @@ func (m *WantIPNeighborEventsV2) Reset()               { *m = WantIPNeighborEven
 func (*WantIPNeighborEventsV2) GetMessageName() string { return "want_ip_neighbor_events_v2" }
 func (*WantIPNeighborEventsV2) GetCrcString() string   { return "73e70a86" }
 func (*WantIPNeighborEventsV2) GetMessageType() api.MessageType {
-	return api.RequestMessage
+	return api.RequestMessageType
 }
 
 func (m *WantIPNeighborEventsV2) Size() (size int) {
@@ -822,7 +822,7 @@ func (*WantIPNeighborEventsV2Reply) GetMessageName() string {
 }
 func (*WantIPNeighborEventsV2Reply) GetCrcString() string { return "e8d4e804" }
 func (*WantIPNeighborEventsV2Reply) GetMessageType() api.MessageType {
-	return api.ReplyMessage
+	return api.ReplyMessageType
 }
 
 func (m *WantIPNeighborEventsV2Reply) Size() (size int) {
