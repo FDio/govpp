@@ -49,7 +49,7 @@ echo "-     VPP_REPO: $VPP_REPO"
 echo "-  VPP version: $vppver"
 echo "--------------------------------------------------------------------------"
 
-if docker run -it --privileged \
+if docker run -i --privileged \
     -e TEST=integration \
     -e DEBUG_GOVPP \
     -e CGO_ENABLED=0 \
