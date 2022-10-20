@@ -134,7 +134,11 @@ func genService(g *GenFile, svc *Service) {
 			g.P("}")
 			g.P()
 			g.P("type ", streamApi, " interface {")
-			g.P("	Recv() (*", msgDetails.GoIdent, ", error)")
+			if msgReply != msgControlPingReply {
+				g.P("	Recv() (*", msgDetails.GoIdent, ", *", msgReply.GoIdent, ", error)")
+			} else {
+				g.P("	Recv() (*", msgDetails.GoIdent, ", error)")
+			}
 			g.P("	", govppApiPkg.Ident("Stream"))
 			g.P("}")
 			g.P()
@@ -144,18 +148,57 @@ func genService(g *GenFile, svc *Service) {
 			g.P("}")
 			g.P()
 
-			g.P("func (c *", streamImpl, ") Recv() (*", msgDetails.GoIdent, ", error) {")
+			if msgReply != msgControlPingReply {
+				g.P("func (c *", streamImpl, ") Recv() (*", msgDetails.GoIdent, ", *", msgReply.GoIdent, ", error) {")
+			} else {
+				g.P("func (c *", streamImpl, ") Recv() (*", msgDetails.GoIdent, ", error) {")
+			}
 			g.P("	msg, err := c.Stream.RecvMsg()")
-			g.P("	if err != nil { return nil, err }")
+			if msgReply != msgControlPingReply {
+				g.P("	if err != nil { return nil, nil, err }")
+			} else {
+				g.P("	if err != nil { return nil, err }")
+			}
 			g.P("	switch m := msg.(type) {")
 			g.P("	case *", msgDetails.GoIdent, ":")
-			g.P("		return m, nil")
+			if msgReply != msgControlPingReply {
+				g.P("		return m, nil, nil")
+			} else {
+				g.P("		return m, nil")
+			}
 			g.P("	case *", msgReply.GoIdent, ":")
+			if msgReply != msgControlPingReply {
+				if retvalField := getRetvalField(msgReply); retvalField != nil {
+					s := fmt.Sprint("(m.", retvalField.GoName, ")")
+					if fieldType := getFieldType(g, retvalField); fieldType != "int32" {
+						s = fmt.Sprint("(int32(m.", retvalField.GoName, "))")
+					}
+					g.P("if err := ", govppApiPkg.Ident("RetvalToVPPApiError"), s, "; err != nil {")
+					if msgReply != msgControlPingReply {
+						g.P("	return nil, nil, err")
+					} else {
+						g.P("	return nil, err")
+					}
+					g.P("}")
+				}
+			}
 			g.P("		err = c.Stream.Close()")
-			g.P("		if err != nil { return nil, err }")
-			g.P("		return nil, ", ioPkg.Ident("EOF"))
+			if msgReply != msgControlPingReply {
+				g.P("	if err != nil { return nil, nil, err }")
+			} else {
+				g.P("	if err != nil { return nil, err }")
+			}
+			if msgReply != msgControlPingReply {
+				g.P("		return nil, m, ", ioPkg.Ident("EOF"))
+			} else {
+				g.P("		return nil, ", ioPkg.Ident("EOF"))
+			}
 			g.P("	default:")
-			g.P("		return nil, ", fmtPkg.Ident("Errorf"), "(\"unexpected message: %T %v\", m, m)")
+			if msgReply != msgControlPingReply {
+				g.P("		return nil, nil, ", fmtPkg.Ident("Errorf"), "(\"unexpected message: %T %v\", m, m)")
+			} else {
+				g.P("		return nil, ", fmtPkg.Ident("Errorf"), "(\"unexpected message: %T %v\", m, m)")
+			}
 			g.P("}")
 		} else if rpc.MsgReply != nil {
 			g.P("out := new(", rpc.MsgReply.GoIdent, ")")

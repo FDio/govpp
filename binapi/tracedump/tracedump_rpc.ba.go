@@ -57,7 +57,7 @@ func (c *serviceClient) TraceDump(ctx context.Context, in *TraceDump) (RPCServic
 }
 
 type RPCService_TraceDumpClient interface {
-	Recv() (*TraceDetails, error)
+	Recv() (*TraceDetails, *TraceDumpReply, error)
 	api.Stream
 }
 
@@ -65,22 +65,25 @@ type serviceClient_TraceDumpClient struct {
 	api.Stream
 }
 
-func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, error) {
+func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, *TraceDumpReply, error) {
 	msg, err := c.Stream.RecvMsg()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	switch m := msg.(type) {
 	case *TraceDetails:
-		return m, nil
+		return m, nil, nil
 	case *TraceDumpReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, nil, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		return nil, io.EOF
+		return nil, m, io.EOF
 	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
 

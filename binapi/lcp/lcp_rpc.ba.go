@@ -78,7 +78,7 @@ func (c *serviceClient) LcpItfPairGet(ctx context.Context, in *LcpItfPairGet) (R
 }
 
 type RPCService_LcpItfPairGetClient interface {
-	Recv() (*LcpItfPairDetails, error)
+	Recv() (*LcpItfPairDetails, *LcpItfPairGetReply, error)
 	api.Stream
 }
 
@@ -86,22 +86,25 @@ type serviceClient_LcpItfPairGetClient struct {
 	api.Stream
 }
 
-func (c *serviceClient_LcpItfPairGetClient) Recv() (*LcpItfPairDetails, error) {
+func (c *serviceClient_LcpItfPairGetClient) Recv() (*LcpItfPairDetails, *LcpItfPairGetReply, error) {
 	msg, err := c.Stream.RecvMsg()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	switch m := msg.(type) {
 	case *LcpItfPairDetails:
-		return m, nil
+		return m, nil, nil
 	case *LcpItfPairGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, nil, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		return nil, io.EOF
+		return nil, m, io.EOF
 	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
 
