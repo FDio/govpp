@@ -1,0 +1,27 @@
+---
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+  # Allows running this workflow manually
+  workflow_dispatch:
+
+jobs:
+  integration:
+    name: "VPP Integration ${{ matrix.version }}"
+    runs-on: ubuntu-latest
+    env:
+      VPP_REPO: ${{ matrix.version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [ '2210', '2206', '2202' ]
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - name: "Run Tests"
+        run: |
+          make integration-tests

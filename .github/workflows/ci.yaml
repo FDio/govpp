@@ -1,5 +1,5 @@
 ---
-name: ci
+name: CI
 on:
   push:
     branches:
@@ -10,19 +10,19 @@ on:
 
 jobs:
   yaml-lint:
-    name: lint yaml
+    name: Lint YAML
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Lint YAML
+      - name: Run Lint
         uses: karancode/yamllint-github-action@master
         with:
           yamllint_file_or_dir: '.github/ci/yamllint.yml'
           yamllint_strict: true
   
   go-mod:
-    name: check go.mod
+    name: Check go.mod
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
@@ -31,13 +31,13 @@ jobs:
           go-version: 1.18
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Check go mod
+      - name: Run go mod tidy
         run: |
           go mod tidy
           git diff --exit-code go.mod
     
   build-test:
-    name: build and test
+    name: Build and Test
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -53,9 +53,9 @@ jobs:
           gotestsum_version: 1.8.2
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Build
+      - name: Go build
         run: go build -v ./...
-      - name: Test
+      - name: Go test
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
       - name: Annotate tests
         if: always()
