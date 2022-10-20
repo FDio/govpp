@@ -2,63 +2,95 @@
 name: CI
 on:
   push:
+    tags:
+      - v*
     branches:
       - master
+      - ci
   pull_request:
   # Allows running this workflow manually
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   yaml-lint:
-    name: Lint YAML
+    name: lint yaml
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run Lint
+      - name: Lint YAML
         uses: karancode/yamllint-github-action@master
         with:
           yamllint_file_or_dir: '.github/ci/yamllint.yml'
           yamllint_strict: true
   
   go-mod:
-    name: Check go.mod
+    strategy:
+      matrix:
+        go: [1.18]
+    name: check go.mod
     runs-on: ubuntu-latest
     steps:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: ${{ matrix.go }}
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Run go mod tidy
+      - name: Check go mod
         run: |
           go mod tidy
           git diff --exit-code go.mod
     
   build-test:
-    name: Build and Test
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        go: [1.18]
         os: [ubuntu-latest]
+    name: build and test
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: ${{ matrix.go }}
       - name: Setup gotestsum
         uses: autero1/action-gotestsum@v1.0.0
         with:
           gotestsum_version: 1.8.2
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Go build
+      - name: Build
         run: go build -v ./...
-      - name: Go test
+      - name: Test
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
       - name: Annotate tests
         if: always()
         uses: guyarb/golang-test-annotations@v0.6.0
         with:
           test-results: test.json
+
+  golangci:
+    strategy:
+      matrix:
+        go: [1.18]
+    name: lint go
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3  # docs: https://github.com/golangci/golangci-lint-action
+        with:
+          version: v1.50
+          args: --go="${{ matrix.go }}"

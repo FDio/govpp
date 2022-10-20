@@ -122,7 +122,7 @@ func (c *serviceClient) MapDomainsGet(ctx context.Context, in *MapDomainsGet) (R
 }
 
 type RPCService_MapDomainsGetClient interface {
-	Recv() (*MapDomainDetails, error)
+	Recv() (*MapDomainDetails, *MapDomainsGetReply, error)
 	api.Stream
 }
 
@@ -130,22 +130,25 @@ type serviceClient_MapDomainsGetClient struct {
 	api.Stream
 }
 
-func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, error) {
+func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, *MapDomainsGetReply, error) {
 	msg, err := c.Stream.RecvMsg()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	switch m := msg.(type) {
 	case *MapDomainDetails:
-		return m, nil
+		return m, nil, nil
 	case *MapDomainsGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, nil, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
-		return nil, io.EOF
+		return nil, m, io.EOF
 	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
 
