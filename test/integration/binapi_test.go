@@ -37,14 +37,3 @@ func TestVersion(t *testing.T) {
 		t.Fatal("expected VPP version to not be empty")
 	}
 }
-
-func TestConfig(t *testing.T) {
-	test := vpptesting.SetupVPP(t)
-
-	reply, err := test.RunCli("show version cmdline")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Logf("Reply:\n%v", reply)
-
-}
