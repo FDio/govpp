@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="https://user-images.githubusercontent.com/32484950/198292988-cdd9d99a-8822-4e1f-83ee-251d542e18b6.png">
+	<img src="./docs/govpp-logo.png">
 </p>
 <h1 align="center">GoVPP</h1>
 <p align="center">
