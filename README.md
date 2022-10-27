@@ -1,3 +1,6 @@
+<p align="center">
+	<img src="https://user-images.githubusercontent.com/32484950/198292988-cdd9d99a-8822-4e1f-83ee-251d542e18b6.png">
+</p>
 <h1 align="center">GoVPP</h1>
 <p align="center">
 	<a href="https://github.com/FDio/govpp/actions/workflows/ci.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/ci.yaml/badge.svg" alt="CI"></a>
@@ -9,6 +12,8 @@
 The GoVPP repository contains a Go client library for interacting with the VPP API, </br>
 generator for Go bindings of the VPP binary API and various other tooling for the VPP.
 </p>
+
+---
 
 ## Migration to GitHub
 
