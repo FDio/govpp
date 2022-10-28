@@ -7,6 +7,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
+	github.com/mitchellh/go-ps v1.0.0
 	github.com/onsi/gomega v1.19.0
 	github.com/pkg/profile v1.2.1
 	github.com/sirupsen/logrus v1.6.0

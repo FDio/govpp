@@ -40,6 +40,8 @@ ifeq ($(V),1)
 GO_BUILD_ARGS += -v
 endif
 
+# Package cloud repo for VPP.
+VPP_REPO		  ?= release
 # VPP Docker image to use for api generation (gen-binapi-docker)
 VPP_IMG 	      ?= ligato/vpp-base:22.06-release
 # Local VPP directory used for binary api generation (gen-binapi-from-code)
@@ -80,7 +82,7 @@ test: ## Run unit tests
 .PHONY: test-integration
 test-integration: ## Run integration tests
 	@echo "# running integration tests"
-	go test -tags="integration ${GO_BUILD_TAGS}" ./test/integration
+	VPP_REPO=$(VPP_REPO) ./test/run_integration.sh
 
 .PHONY: lint ## Run code linter
 lint:

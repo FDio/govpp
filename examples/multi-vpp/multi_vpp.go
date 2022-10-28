@@ -58,10 +58,10 @@ func main() {
 
 	// since sockets default to the same value
 	if *binapiSockAddrVpp1 == *binapiSockAddrVpp2 {
-		log.Fatalln("ERROR: identical VPP binapi sockets defined, set at least one of them to a non-default path")
+		log.Println("ERROR: identical VPP binapi sockets defined, set at least one of them to a non-default path")
 	}
 	if *statsSockAddrVpp1 == *statsSockAddrVpp2 {
-		log.Fatalln("ERROR: identical VPP stats sockets defined, set at least one of them to a non-default path")
+		log.Println("ERROR: identical VPP stats sockets defined, set at least one of them to a non-default path")
 	}
 	var name1, name2 = "vpp1", "vpp2"
 	ch1, statsConn1, disconnect1 := connectVPP(name1, *binapiSockAddrVpp1, *statsSockAddrVpp1)
