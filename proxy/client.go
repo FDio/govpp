@@ -135,8 +135,13 @@ type BinapiClient struct {
 
 // RPCStream is a stream for forwarding requests to BinapiRPC's stream.
 type RPCStream struct {
+	ctx context.Context
 	rpc *rpc.Client
 	id  uint32
+}
+
+func (s *RPCStream) Context() context.Context {
+	return s.ctx
 }
 
 func (s *RPCStream) SendMsg(msg api.Message) error {
