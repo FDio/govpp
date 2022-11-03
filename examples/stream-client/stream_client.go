@@ -96,15 +96,16 @@ func main() {
 			logError(err, "closing the stream")
 		}
 	}()
-	getVppVersionStream(stream)
-	idx := createLoopbackStream(stream)
-	interfaceDumpStream(stream)
-	addIPAddressStream(stream, idx)
-	ipAddressDumpStream(stream, idx)
-	mactimeDump(stream)
+	getVppVersion(stream)
+	idx := createLoopback(stream)
+	interfaceDump(stream)
+	addIPAddress(stream, idx)
+	//ipAddressDump(stream, idx)
+	//mactimeDump(stream)
+	interfaceNotifications(conn, stream, idx)
 }
 
-func getVppVersionStream(stream api.Stream) {
+func getVppVersion(stream api.Stream) {
 	fmt.Println("Retrieving version..")
 
 	req := &vpe.ShowVersion{}
@@ -124,7 +125,7 @@ func getVppVersionStream(stream api.Stream) {
 	fmt.Println()
 }
 
-func createLoopbackStream(stream api.Stream) (ifIdx interface_types.InterfaceIndex) {
+func createLoopback(stream api.Stream) (ifIdx interface_types.InterfaceIndex) {
 	fmt.Println("Creating the loopback interface..")
 
 	req := &interfaces.CreateLoopback{}
@@ -146,7 +147,7 @@ func createLoopbackStream(stream api.Stream) (ifIdx interface_types.InterfaceInd
 	return recvMsg.SwIfIndex
 }
 
-func interfaceDumpStream(stream api.Stream) {
+func interfaceDump(stream api.Stream) {
 	fmt.Println("Dumping interfaces..")
 
 	if err := stream.SendMsg(&interfaces.SwInterfaceDump{
@@ -186,7 +187,7 @@ Loop:
 	fmt.Println()
 }
 
-func addIPAddressStream(stream api.Stream, index interface_types.InterfaceIndex) {
+func addIPAddress(stream api.Stream, index interface_types.InterfaceIndex) {
 	fmt.Printf("Adding IP address to the interface index %d..\n", index)
 
 	if err := stream.SendMsg(&interfaces.SwInterfaceAddDelAddress{
@@ -216,7 +217,7 @@ func addIPAddressStream(stream api.Stream, index interface_types.InterfaceIndex)
 	fmt.Println()
 }
 
-func ipAddressDumpStream(stream api.Stream, index interface_types.InterfaceIndex) {
+func ipAddressDump(stream api.Stream, index interface_types.InterfaceIndex) {
 	fmt.Printf("Dumping IP addresses for interface index %d..\n", index)
 
 	if err := stream.SendMsg(&ip.IPAddressDump{
@@ -290,6 +291,177 @@ Loop:
 
 	fmt.Println("OK")
 	fmt.Println()
+}
+
+// interfaceNotifications shows the usage of notification API. Note that for notifications,
+// you are supposed to create your own Go channel with your preferred buffer size. If the channel's
+// buffer is full, the notifications will not be delivered into it.
+func interfaceNotifications(conn api.Connection, stream api.Stream, index interface_types.InterfaceIndex) {
+	fmt.Printf("Subscribing to notificaiton events for interface index %d\n", index)
+
+	ctx := context.Background()
+
+	watcher, err := conn.WatchEvent(ctx, (*interfaces.SwInterfaceEvent)(nil))
+	if err != nil {
+		logError(err, "watch interface events")
+		return
+	} else {
+		fmt.Println("watching events OK")
+	}
+
+	//notifChan := make(chan api.Message, 100)
+
+	// subscribe for specific notification message
+	/*sub, err := ch.SubscribeNotification(notifChan, (*interfaces.SwInterfaceEvent)(nil))
+	if err != nil {
+		logError(err, "subscribing to interface events")
+		return
+	} else {
+		fmt.Println("subscribed to notifications OK")
+	}*/
+
+	// enable interface events in VPP
+	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
+		PID:           0,
+		EnableDisable: 1,
+	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
+	if err != nil {
+		logError(err, "enabling interface events")
+		return
+	} else {
+		fmt.Println("enabled interface events OK")
+	}*/
+	// enable interface events in VPP
+	var reply interfaces.WantInterfaceEventsReply
+	if err := conn.Invoke(ctx, &interfaces.WantInterfaceEvents{
+		//PID:           uint32(os.Getpid()),
+		EnableDisable: 1,
+	}, &reply); err != nil {
+		logError(err, "enabling interface events")
+		return
+	} else {
+		fmt.Println("enabled interface events OK")
+	}
+
+	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
+		//PID:           uint32(os.Getpid()),
+		EnableDisable: 1,
+	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
+	if err != nil {
+		logError(err, "enabling interface events")
+		return
+	} else {
+		fmt.Println("enabled interface events OK")
+	}*/
+
+	// receive notifications
+	go func() {
+		for notif := range watcher.Events() {
+			e := notif.(*interfaces.SwInterfaceEvent)
+			fmt.Printf("incoming event: %+v\n", e)
+		}
+		fmt.Println("all events processed OK")
+	}()
+
+	// generate some events in VPP
+	var setReply interfaces.SwInterfaceSetFlagsReply
+	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+	}, &setReply); err != nil {
+		logError(err, "setting interface flags")
+		return
+	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
+		logError(err, "setting interface flags retval")
+		return
+	}
+
+	setReply.Reset()
+	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     0,
+	}, &setReply); err != nil {
+		logError(err, "setting interface flags")
+		return
+	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
+		logError(err, "setting interface flags retval")
+		return
+	}
+
+	/*err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
+	if err != nil {
+		logError(err, "setting interface flags")
+		return
+	}
+	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     0,
+	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
+	if err != nil {
+		logError(err, "setting interface flags")
+		return
+	}*/
+
+	reply.Reset()
+	if err := conn.Invoke(ctx, &interfaces.WantInterfaceEvents{
+		//PID:           uint32(os.Getpid()),
+		EnableDisable: 0,
+	}, &reply); err != nil {
+		logError(err, "disabling interface events")
+		return
+	} else {
+		fmt.Println("disabling interface events OK")
+	}
+
+	// disable interface events in VPP
+	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
+		//PID:           uint32(os.Getpid()),
+		EnableDisable: 0,
+	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
+	if err != nil {
+		logError(err, "setting interface flags")
+		return
+	}*/
+
+	setReply.Reset()
+	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+	}, &setReply); err != nil {
+		logError(err, "setting interface flags")
+		return
+	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
+		logError(err, "setting interface flags retval")
+		return
+	}
+
+	/*err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
+		SwIfIndex: index,
+		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
+	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
+	if err != nil {
+		logError(err, "setting interface flags")
+		return
+	} else {
+		fmt.Println("disabled interface events OK")
+	}*/
+
+	// unsubscribe from delivery of the notifications
+	watcher.Close()
+	if err != nil {
+		logError(err, "closing interface events watcher")
+		return
+	} else {
+		fmt.Println("closing interface events watcher OK")
+	}
+
+	fmt.Println("OK")
+	fmt.Println()
+
+	time.Sleep(time.Second)
 }
 
 var errors []error
