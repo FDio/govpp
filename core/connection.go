@@ -102,8 +102,8 @@ type ConnectionEvent struct {
 type Connection struct {
 	vppClient adapter.VppAPI // VPP binary API client
 
-	maxAttempts int           // interval for reconnect attempts
-	recInterval time.Duration // maximum number of reconnect attempts
+	maxAttempts int           // maximum number of reconnect attempts
+	recInterval time.Duration // interval for reconnect attempts
 
 	vppConnected uint32 // non-zero if the adapter is connected to VPP
 

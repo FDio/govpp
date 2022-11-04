@@ -22,12 +22,10 @@ import (
 	"io"
 	"net"
 	"os"
-	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/fsnotify/fsnotify"
 	"github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/adapter"
@@ -50,6 +48,9 @@ var (
 	DefaultDisconnectTimeout = time.Millisecond * 100
 	// MaxWaitReady defines maximum duration of waiting for socket file
 	MaxWaitReady = time.Second * 10
+	// WaitReadyPollInterval defines polling interval for checking for the
+	// socket file existence
+	WaitReadyPollInterval = 50 * time.Millisecond
 )
 
 var (
@@ -147,33 +148,15 @@ func (c *Client) WaitReady() error {
 	}
 
 	// socket does not exist, watch for it
-	watcher, err := fsnotify.NewWatcher()
-	if err != nil {
-		return err
-	}
-	defer func() {
-		if err := watcher.Close(); err != nil {
-			log.Debugf("failed to close file watcher: %v", err)
-		}
-	}()
-
-	// start directory watcher
-	if err := watcher.Add(filepath.Dir(c.socketPath)); err != nil {
-		return err
-	}
-
+	ticker := time.NewTicker(WaitReadyPollInterval)
 	timeout := time.NewTimer(MaxWaitReady)
 	for {
 		select {
 		case <-timeout.C:
 			return fmt.Errorf("timeout waiting (%s) for socket file: %s", MaxWaitReady, c.socketPath)
 
-		case e := <-watcher.Errors:
-			return e
-
-		case ev := <-watcher.Events:
-			log.Debugf("watcher event: %+v", ev)
-			if ev.Name == c.socketPath && (ev.Op&fsnotify.Create) == fsnotify.Create {
+		case <-ticker.C:
+			if _, err := os.Stat(c.socketPath); err == nil {
 				// socket created, we are ready
 				return nil
 			}
