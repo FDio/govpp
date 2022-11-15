@@ -81,7 +81,7 @@ type multiRequestCtx struct {
 
 // subscriptionCtx is a context of subscription for delivery of specific notification messages.
 type subscriptionCtx struct {
-	ch         *Channel
+	conn       *Connection
 	notifChan  chan api.Message   // channel where notification messages will be delivered to
 	msgID      uint16             // message ID for the subscribed event message
 	event      api.Message        // event message that this subscription is for
@@ -189,7 +189,7 @@ func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.M
 	}
 
 	sub := &subscriptionCtx{
-		ch:         ch,
+		conn:       ch.conn,
 		notifChan:  notifChan,
 		msgID:      msgID,
 		event:      event,
@@ -243,15 +243,15 @@ func (sub *subscriptionCtx) Unsubscribe() error {
 	}).Debug("Removing notification subscription.")
 
 	// remove the subscription from the map
-	sub.ch.conn.subscriptionsLock.Lock()
-	defer sub.ch.conn.subscriptionsLock.Unlock()
+	sub.conn.subscriptionsLock.Lock()
+	defer sub.conn.subscriptionsLock.Unlock()
 
-	for i, item := range sub.ch.conn.subscriptions[sub.msgID] {
+	for i, item := range sub.conn.subscriptions[sub.msgID] {
 		if item == sub {
 			// close notification channel
-			close(sub.ch.conn.subscriptions[sub.msgID][i].notifChan)
+			close(sub.conn.subscriptions[sub.msgID][i].notifChan)
 			// remove i-th item in the slice
-			sub.ch.conn.subscriptions[sub.msgID] = append(sub.ch.conn.subscriptions[sub.msgID][:i], sub.ch.conn.subscriptions[sub.msgID][i+1:]...)
+			sub.conn.subscriptions[sub.msgID] = append(sub.conn.subscriptions[sub.msgID][:i], sub.conn.subscriptions[sub.msgID][i+1:]...)
 			return nil
 		}
 	}

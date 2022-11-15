@@ -31,6 +31,22 @@ type Connection interface {
 	// It creates stream and calls SendMsg with req and RecvMsg which returns
 	// reply.
 	Invoke(ctx context.Context, req Message, reply Message) error
+
+	// WatchEvent creates a new watcher for watching events of type specified by
+	// event parameter. Context can be used to close the watcher.
+	WatchEvent(ctx context.Context, event Message) (Watcher, error)
+}
+
+// Watcher provides access to watched event messages. It can be created by calling Connection.WatchEvent.
+//
+// NOTE: This API is EXPERIMENTAL.
+type Watcher interface {
+	// Events returns a channel where events are sent. The channel is closed when
+	// watcher context is canceled or when Close is called.
+	Events() <-chan Message
+
+	// Close closes the watcher along with the events channel.
+	Close()
 }
 
 // Stream provides low-level access for sending and receiving messages.
@@ -41,6 +57,9 @@ type Connection interface {
 //
 // NOTE: This API is EXPERIMENTAL.
 type Stream interface {
+	// Context returns the context for this stream.
+	Context() context.Context
+
 	// SendMsg sends a message to the client.
 	// It blocks until message is sent to the transport.
 	SendMsg(Message) error
@@ -53,10 +72,7 @@ type Stream interface {
 	Close() error
 }
 
-// StreamOption allows customizing a Stream. Available options are:
-// - WithRequestSize
-// - WithReplySize
-// - WithReplyTimeout
+// StreamOption allows customizing a Stream.
 type StreamOption func(Stream)
 
 // ChannelProvider provides the communication channel with govpp core.
