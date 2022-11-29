@@ -11,6 +11,40 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.7.0
+
+> _29 November 2022_
+
+### Changes
+
+- Switch to using a generic pool for channels in Connection (#39)
+- feat: Disable default reply timeout (#45)
+- gomemif: migrate from vpp repository (#65)
+- Run golangci-lint in CI (#69)
+- Add GoVPP logo to README (#79)
+- Introduce VPP integration tests (#75)
+- docs: Add troubleshooting guide (#70)
+- Add support of watching events to Connection (#80)
+
+
+### Fixes
+
+- Fix format of package comment (#44)
+- Fixes for staticcheck (#27)
+- Prevent data race on msgMapByPath map (#50)
+- Fix panic on the pool put/get operations (#54)
+- Fix endless loop in Reset (#57)
+- Fix generate RPC client for stream with reply (#72)
+- Fix endless Stream's reply waiting on vpp disconnect (#77)
+- Fix WaitReady if directory does not exist (#84)
+
+### Changes
+
+- Added GitHub CI
+- Remove deprecated vppapiclient
+- Remove unused Travis CI
+- Remove gerrit remains
+
 ## 0.6.0
 
 > _09 September 2022_
