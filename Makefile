@@ -115,7 +115,7 @@ generate-binapi: install-generator ## Generate binapi code
 .PHONY: gen-binapi-local
 gen-binapi-local: binapi-generator check-VPP_DIR ## Generate binapi code (using locally cloned VPP)
 	@make -C ${VPP_DIR} json-api-files
-	@find $(BINAPI_DIR)/*/*.ba.go -delete
+	@find $(BINAPI_DIR)/*/*.ba.go -delete || true
 	@find $(BINAPI_DIR)/* -type d -delete
 	@./bin/binapi-generator -input-dir=$(VPP_API_DIR) -output-dir=$(BINAPI_DIR) -gen=rpc
 	@./bin/binapi-generator -input-dir=$(VPP_API_DIR) -input-file=$(VPP_API_DIR)/core/vpe.api.json -output-dir=$(BINAPI_DIR) -gen=http
