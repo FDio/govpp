@@ -16,6 +16,10 @@
 package vppapi
 
 type (
+	Schema struct {
+		Files   []File
+		Version string
+	}
 	File struct {
 		Name string
 		Path string

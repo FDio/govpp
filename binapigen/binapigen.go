@@ -23,12 +23,6 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-// generatedCodeVersion indicates a version of the generated code.
-// It is incremented whenever an incompatibility between the generated code and
-// GoVPP api package is introduced; the generated code references
-// a constant, api.GoVppAPIPackageIsVersionN (where N is generatedCodeVersion).
-const generatedCodeVersion = 2
-
 // file options
 const (
 	optFileVersion = "version"
@@ -156,10 +150,11 @@ type Enum struct {
 func newEnum(gen *Generator, file *File, apitype vppapi.EnumType, isFlag bool) *Enum {
 	typ := &Enum{
 		EnumType: apitype,
-		GoIdent: GoIdent{
+		GoIdent:  file.GoImportPath.Ident(camelCaseName(apitype.Name)),
+		/*GoIdent: GoIdent{
 			GoName:       camelCaseName(apitype.Name),
 			GoImportPath: file.GoImportPath,
-		},
+		},*/
 		IsFlag: isFlag,
 	}
 	gen.enumsByName[typ.Name] = typ
@@ -179,10 +174,11 @@ type Alias struct {
 func newAlias(gen *Generator, file *File, apitype vppapi.AliasType) *Alias {
 	typ := &Alias{
 		AliasType: apitype,
-		GoIdent: GoIdent{
+		GoIdent:   file.GoImportPath.Ident(camelCaseName(apitype.Name)),
+		/*GoIdent: GoIdent{
 			GoName:       camelCaseName(apitype.Name),
 			GoImportPath: file.GoImportPath,
-		},
+		},*/
 	}
 	gen.aliasesByName[typ.Name] = typ
 	return typ
@@ -222,10 +218,11 @@ type Struct struct {
 func newStruct(gen *Generator, file *File, apitype vppapi.StructType) *Struct {
 	typ := &Struct{
 		StructType: apitype,
-		GoIdent: GoIdent{
+		GoIdent:    file.GoImportPath.Ident(camelCaseName(apitype.Name)),
+		/*GoIdent: GoIdent{
 			GoName:       camelCaseName(apitype.Name),
 			GoImportPath: file.GoImportPath,
-		},
+		},*/
 	}
 	gen.structsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {
@@ -255,10 +252,11 @@ type Union struct {
 func newUnion(gen *Generator, file *File, apitype vppapi.UnionType) *Union {
 	typ := &Union{
 		UnionType: apitype,
-		GoIdent: GoIdent{
+		GoIdent:   file.GoImportPath.Ident(withSuffix(camelCaseName(apitype.Name), "Union")),
+		/*GoIdent: GoIdent{
 			GoName:       withSuffix(camelCaseName(apitype.Name), "Union"),
 			GoImportPath: file.GoImportPath,
-		},
+		},*/
 	}
 	gen.unionsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {

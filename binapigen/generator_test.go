@@ -17,16 +17,51 @@ package binapigen
 import (
 	"bufio"
 	"fmt"
-	. "github.com/onsi/gomega"
 	"os"
 	"strings"
 	"testing"
+
+	. "github.com/onsi/gomega"
+
+	"go.fd.io/govpp/binapigen/vppapi"
 )
+
+func TestGenerator(t *testing.T) {
+	tests := []struct {
+		name          string
+		file          *vppapi.File
+		expectPackage string
+	}{
+		{name: "vpe", file: &vppapi.File{
+			Name: "vpe",
+			Path: "/usr/share/vpp/api/core/vpe.api.json",
+			CRC:  "0x12345678",
+		},
+			expectPackage: "vpe",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			RegisterTestingT(t)
+
+			apiFiles := []*vppapi.File{test.file}
+
+			gen, err := New(Options{
+				ImportPrefix: "test",
+			}, apiFiles, nil)
+			Expect(err).ToNot(HaveOccurred(), "unexpected generator error: %v", err)
+
+			Expect(gen.Files).To(HaveLen(1))
+			Expect(gen.Files[0].PackageName).To(BeEquivalentTo(test.expectPackage))
+			Expect(gen.Files[0].GoImportPath).To(BeEquivalentTo("test/" + test.expectPackage))
+		})
+	}
+}
 
 func TestGoModule(t *testing.T) {
 	const expected = "go.fd.io/govpp/binapi"
 
-	impPath, err := resolveImportPath("../binapi")
+	impPath, err := ResolveImportPath("../binapi")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

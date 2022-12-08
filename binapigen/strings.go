@@ -16,11 +16,12 @@ package binapigen
 
 import (
 	"go/token"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"strings"
 	"unicode"
 	"unicode/utf8"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // commonInitialisms is a set of common initialisms that need to stay in upper case.

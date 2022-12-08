@@ -34,17 +34,27 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// Options is set of input parameters for the Generator.
+type Options struct {
+	OutputDir    string // output directory for generated files
+	ImportPrefix string // prefix for import paths
+
+	NoVersionInfo    bool // disables generating version info
+	NoSourcePathInfo bool // disables the 'source: /path' comment
+}
+
 type Generator struct {
+	opts Options
+
 	Files       []*File
 	FilesByName map[string]*File
 	FilesByPath map[string]*File
 
-	opts       Options
 	apifiles   []*vppapi.File
 	vppVersion string
-
 	filesToGen []string
-	genfiles   []*GenFile
+
+	genfiles []*GenFile
 
 	enumsByName    map[string]*Enum
 	aliasesByName  map[string]*Alias
@@ -134,6 +144,12 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	return gen, nil
 }
 
+func (g *Generator) GetMessageByName(name string) *Message {
+	return g.messagesByName[name]
+}
+
+func (g *Generator) GetOpts() Options { return g.opts }
+
 func getFilename(file *vppapi.File) string {
 	if file.Path == "" {
 		return file.Name
@@ -164,24 +180,25 @@ type GenFile struct {
 	gen           *Generator
 	file          *File
 	filename      string
-	goImportPath  GoImportPath
 	buf           bytes.Buffer
 	manualImports map[GoImportPath]bool
 	packageNames  map[GoImportPath]GoPackageName
 }
 
 // NewGenFile creates new generated file with
-func (g *Generator) NewGenFile(filename string, importPath GoImportPath) *GenFile {
+func (g *Generator) NewGenFile(filename string, file *File) *GenFile {
 	f := &GenFile{
 		gen:           g,
+		file:          file,
 		filename:      filename,
-		goImportPath:  importPath,
 		manualImports: make(map[GoImportPath]bool),
 		packageNames:  make(map[GoImportPath]GoPackageName),
 	}
 	g.genfiles = append(g.genfiles, f)
 	return f
 }
+
+func (g *GenFile) GetFile() *File { return g.file }
 
 func (g *GenFile) Write(p []byte) (n int, err error) {
 	return g.buf.Write(p)
@@ -192,7 +209,7 @@ func (g *GenFile) Import(importPath GoImportPath) {
 }
 
 func (g *GenFile) GoIdent(ident GoIdent) string {
-	if ident.GoImportPath == g.goImportPath {
+	if ident.GoImportPath == g.file.GoImportPath {
 		return ident.GoName
 	}
 	if packageName, ok := g.packageNames[ident.GoImportPath]; ok {
@@ -216,10 +233,10 @@ func (g *GenFile) P(v ...interface{}) {
 }
 
 func (g *GenFile) Content() ([]byte, error) {
-	if !strings.HasSuffix(g.filename, ".go") {
-		return g.buf.Bytes(), nil
+	if strings.HasSuffix(g.filename, ".go") {
+		return g.injectImports(g.buf.Bytes())
 	}
-	return g.injectImports(g.buf.Bytes())
+	return g.buf.Bytes(), nil
 }
 
 func getImportClass(importPath string) int {

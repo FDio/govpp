@@ -16,62 +16,114 @@ package binapigen
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-type Options struct {
-	OutputDir        string // output directory for generated files
-	ImportPrefix     string // prefix for import paths
-	NoVersionInfo    bool   // disables generating version info
-	NoSourcePathInfo bool   // disables the 'source: /path' comment
+/*type Config struct {
+	Version string // version of config
+
+	Input string // API input (local VPP dir, ...)
+
+	VppReference      string   // commit id / tag / branch
+	Patches           []string // list of custom patches to include
+	RegenerateJsonAPI bool
+
+	GenerateFiles []string // list of API files to generate
+	Plugins       []string // enabled generator plugins
+}*/
+
+type VppInput struct {
+	ApiFiles   []*vppapi.File
+	VppVersion string
 }
 
-func Run(apiDir string, filesToGenerate []string, opts Options, f func(*Generator) error) {
-	if err := run(apiDir, filesToGenerate, opts, f); err != nil {
+func ResolveVppInput(input string) (*VppInput, error) {
+	vppInput := &VppInput{}
+
+	if input == "" {
+		input = vppapi.DefaultDir
+	}
+
+	u, err := url.Parse(input)
+	if err != nil {
+		logrus.Warnf("parsing url error: %v", err)
+	} else {
+		switch u.Scheme {
+		case "", "file":
+			i, err := os.Stat(input)
+			if err != nil {
+				return nil, fmt.Errorf("file error: %v", err)
+			} else {
+				if i.IsDir() {
+					apidir := vppapi.ResolveApiDir(u.Path)
+					logrus.Debugf("path %q resolved to api dir: %v", u.Path, apidir)
+					apiFiles, err := vppapi.ParseDir(apidir)
+					if err != nil {
+						logrus.Warnf("vppapi parsedir error: %v", err)
+					} else {
+						vppInput.ApiFiles = apiFiles
+						logrus.Infof("resolved %d apifiles", len(apiFiles))
+					}
+					vppInput.VppVersion = vppapi.ResolveVPPVersion(u.Path)
+					if vppInput.VppVersion == "" {
+						vppInput.VppVersion = "unknown"
+					}
+				} else {
+					return nil, fmt.Errorf("files not supported")
+				}
+			}
+		case "http", "https":
+			return nil, fmt.Errorf("http(s) not yet supported")
+		case "git", "ssh":
+			return nil, fmt.Errorf("ssh/git not yet supported")
+		default:
+			return nil, fmt.Errorf("unsupported scheme: %v", u.Scheme)
+		}
+	}
+
+	return vppInput, nil
+}
+
+func Run(vppInput *VppInput, filesToGenerate []string, opts Options, f func(*Generator) error) {
+	if err := run(vppInput, filesToGenerate, opts, f); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
 		os.Exit(1)
 	}
 }
 
-func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generator) error) error {
-	apiFiles, err := vppapi.ParseDir(apiDir)
-	if err != nil {
-		return err
-	}
+func run(vppInput *VppInput, filesToGenerate []string, opts Options, genFn func(*Generator) error) error {
+	var err error
 
 	if opts.ImportPrefix == "" {
-		opts.ImportPrefix, err = resolveImportPath(opts.OutputDir)
+		opts.ImportPrefix, err = ResolveImportPath(opts.OutputDir)
 		if err != nil {
 			return fmt.Errorf("cannot resolve import path for output dir %s: %w", opts.OutputDir, err)
 		}
 		logrus.Debugf("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
-	gen, err := New(opts, apiFiles, filesToGenerate)
+	gen, err := New(opts, vppInput.ApiFiles, filesToGenerate)
 	if err != nil {
 		return err
 	}
 
-	gen.vppVersion = vppapi.ResolveVPPVersion(apiDir)
-	if gen.vppVersion == "" {
-		gen.vppVersion = "unknown"
+	gen.vppVersion = vppInput.VppVersion
+
+	if genFn == nil {
+		genFn = GenerateDefault
+	}
+	if err := genFn(gen); err != nil {
+		return err
 	}
 
-	if fn == nil {
-		GenerateDefault(gen)
-	} else {
-		if err := fn(gen); err != nil {
-			return err
-		}
-	}
 	if err = gen.Generate(); err != nil {
 		return err
 	}
@@ -79,7 +131,24 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 	return nil
 }
 
-func GenerateDefault(gen *Generator) {
+func GeneratePlugins(genPlugins []string) func(*Generator) error {
+	return func(gen *Generator) error {
+		for _, file := range gen.Files {
+			if !file.Generate {
+				continue
+			}
+			GenerateAPI(gen, file)
+			for _, p := range genPlugins {
+				if err := RunPlugin(p, gen, file); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+}
+
+func GenerateDefault(gen *Generator) error {
 	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
@@ -87,23 +156,11 @@ func GenerateDefault(gen *Generator) {
 		GenerateAPI(gen, file)
 		GenerateRPC(gen, file)
 	}
+	return nil
 }
 
-var Logger = logrus.New()
-
-func init() {
-	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
-		Logger.SetLevel(logrus.DebugLevel)
-		logrus.SetLevel(logrus.DebugLevel)
-	}
-}
-
-func logf(f string, v ...interface{}) {
-	Logger.Debugf(f, v...)
-}
-
-// resolveImportPath tries to resolve import path for a directory.
-func resolveImportPath(dir string) (string, error) {
+// ResolveImportPath tries to resolve import path for a directory.
+func ResolveImportPath(dir string) (string, error) {
 	absPath, err := filepath.Abs(dir)
 	if err != nil {
 		return "", err

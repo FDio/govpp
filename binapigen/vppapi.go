@@ -21,6 +21,7 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// SortFileObjectsByName sorts all objects of file by their name.
 func SortFileObjectsByName(file *vppapi.File) {
 	sort.SliceStable(file.Imports, func(i, j int) bool {
 		return file.Imports[i] < file.Imports[j]
@@ -81,6 +82,7 @@ func importedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 	return list
 }
 
+// SortFilesByImports sorts list of files by their imports.
 func SortFilesByImports(apifiles []*vppapi.File) {
 	dependsOn := func(file *vppapi.File, dep string) bool {
 		for _, imp := range importedFiles(apifiles, file) {
@@ -103,6 +105,7 @@ func SortFilesByImports(apifiles []*vppapi.File) {
 	})
 }
 
+// ListImportedTypes returns list of names for imported types.
 func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 	var importedTypes []string
 	typeFiles := importedFiles(apifiles, file)
@@ -189,6 +192,7 @@ func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 	return importedTypes
 }
 
+// RemoveImportedTypes removes imported types from file.
 func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
 	importedTypes := ListImportedTypes(apifiles, apifile)
 	isImportedType := func(s string) bool {

@@ -1,4 +1,4 @@
-//  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2022 Cisco and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -12,11 +12,24 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package binapi
+package binapigen
 
-// To generate bindings for VPP API files in the default system directory, run:
-//
-//     go generate ./binapi
-//
-//go:generate binapi-generator --input=/usr/share/vpp/api --output-dir=. --gen=rpc
-//go:generate binapi-generator --output-dir=. --gen=http /usr/share/vpp/api/core/vpe.api.json
+import (
+	"os"
+	"strings"
+
+	"github.com/sirupsen/logrus"
+)
+
+var Logger = logrus.New()
+
+func init() {
+	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
+		Logger.SetLevel(logrus.DebugLevel)
+		logrus.SetLevel(logrus.DebugLevel)
+	}
+}
+
+func logf(f string, v ...interface{}) {
+	Logger.Debugf(f, v...)
+}
