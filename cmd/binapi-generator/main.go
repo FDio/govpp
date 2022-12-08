@@ -18,7 +18,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"unicode"
 
@@ -82,12 +81,7 @@ func main() {
 		OutputDir:        *theOutputDir,
 		NoVersionInfo:    *noVersionInfo,
 		NoSourcePathInfo: *noSourcePathInfo,
-	}
-
-	if opts.OutputDir == "binapi" {
-		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {
-			opts.OutputDir = "."
-		}
+		GenerateFiles:    filesToGenerate,
 	}
 
 	apiDir := *theApiDir
@@ -110,5 +104,5 @@ func main() {
 	}
 	logrus.Debugf("resolved VPP input: %+v", vppInput)
 
-	binapigen.Run(vppInput, filesToGenerate, opts, binapigen.GeneratePlugins(genPlugins))
+	binapigen.Run(vppInput, opts, binapigen.GeneratePlugins(genPlugins))
 }

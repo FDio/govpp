@@ -36,9 +36,9 @@ import (
 
 // Options is set of input parameters for the Generator.
 type Options struct {
-	OutputDir    string // output directory for generated files
-	ImportPrefix string // prefix for import paths
-
+	OutputDir        string // output directory for generated files
+	ImportPrefix     string // prefix for package import paths
+	GenerateFiles    []string
 	NoVersionInfo    bool // disables generating version info
 	NoSourcePathInfo bool // disables the 'source: /path' comment
 }
@@ -46,13 +46,12 @@ type Options struct {
 type Generator struct {
 	opts Options
 
+	apiFiles   []*vppapi.File
+	vppVersion string
+
 	Files       []*File
 	FilesByName map[string]*File
 	FilesByPath map[string]*File
-
-	apifiles   []*vppapi.File
-	vppVersion string
-	filesToGen []string
 
 	genfiles []*GenFile
 
@@ -63,13 +62,13 @@ type Generator struct {
 	messagesByName map[string]*Message
 }
 
-func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator, error) {
+func New(opts Options, input *VppInput) (*Generator, error) {
 	gen := &Generator{
+		opts:           opts,
+		apiFiles:       input.ApiFiles,
+		vppVersion:     input.VppVersion,
 		FilesByName:    make(map[string]*File),
 		FilesByPath:    make(map[string]*File),
-		opts:           opts,
-		apifiles:       apiFiles,
-		filesToGen:     filesToGen,
 		enumsByName:    map[string]*Enum{},
 		aliasesByName:  map[string]*Alias{},
 		structsByName:  map[string]*Struct{},
@@ -78,24 +77,24 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	}
 
 	// Normalize API files
-	SortFilesByImports(gen.apifiles)
-	for _, apiFile := range apiFiles {
-		RemoveImportedTypes(gen.apifiles, apiFile)
+	SortFilesByImports(gen.apiFiles)
+	for _, apiFile := range gen.apiFiles {
+		RemoveImportedTypes(gen.apiFiles, apiFile)
 		SortFileObjectsByName(apiFile)
 	}
 
 	// prepare package names and import paths
 	packageNames := make(map[string]GoPackageName)
 	importPaths := make(map[string]GoImportPath)
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range gen.apiFiles {
 		filename := getFilename(apifile)
 		packageNames[filename] = cleanPackageName(apifile.Name)
 		importPaths[filename] = GoImportPath(path.Join(gen.opts.ImportPrefix, baseName(apifile.Name)))
 	}
 
-	logrus.Debugf("adding %d VPP API files to generator", len(gen.apifiles))
+	logrus.Debugf("adding %d VPP API files to generator", len(gen.apiFiles))
 
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range gen.apiFiles {
 		if _, ok := gen.FilesByName[apifile.Name]; ok {
 			return nil, fmt.Errorf("duplicate file: %q", apifile.Name)
 		}
@@ -113,9 +112,9 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	}
 
 	// mark files for generation
-	if len(gen.filesToGen) > 0 {
-		logrus.Debugf("Checking %d files to generate: %v", len(gen.filesToGen), gen.filesToGen)
-		for _, genFile := range gen.filesToGen {
+	if len(gen.opts.GenerateFiles) > 0 {
+		logrus.Debugf("Checking %d files to generate: %v", len(gen.opts.GenerateFiles), gen.opts.GenerateFiles)
+		for _, genFile := range gen.opts.GenerateFiles {
 			markGen := func(file *File) {
 				file.Generate = true
 				// generate all imported files
@@ -169,10 +168,11 @@ func (g *Generator) Generate() error {
 		if err != nil {
 			return err
 		}
-		if err := writeSourceTo(genfile.filename, content); err != nil {
+		if err := WriteContentToFile(genfile.filename, content); err != nil {
 			return fmt.Errorf("writing source package %s failed: %v", genfile.filename, err)
 		}
 	}
+
 	return nil
 }
 
@@ -233,6 +233,7 @@ func (g *GenFile) P(v ...interface{}) {
 }
 
 func (g *GenFile) Content() ([]byte, error) {
+	// for *.go files we inject imports
 	if strings.HasSuffix(g.filename, ".go") {
 		return g.injectImports(g.buf.Bytes())
 	}
@@ -330,25 +331,26 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 		Tabwidth: 8,
 	}
 	if err = cfg.Fprint(&out, fset, file); err != nil {
-		return nil, fmt.Errorf("%v: can not reformat Go source: %v", g.filename, err)
+		return nil, fmt.Errorf("cannot reformat Go code in file %q: %w", g.filename, err)
 	}
 	return out.Bytes(), nil
 }
 
-func writeSourceTo(outputFile string, b []byte) error {
+func WriteContentToFile(outputFile string, content []byte) error {
 	// create output directory
 	packageDir := filepath.Dir(outputFile)
+
 	if err := os.MkdirAll(packageDir, 0775); err != nil {
 		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
 	}
 
 	// write generated code to output file
-	if err := os.WriteFile(outputFile, b, 0666); err != nil {
+	if err := os.WriteFile(outputFile, content, 0666); err != nil {
 		return fmt.Errorf("writing to output file %s failed: %v", outputFile, err)
 	}
 
-	lines := bytes.Count(b, []byte("\n"))
-	logf("wrote %d lines (%d bytes) to: %q", lines, len(b), outputFile)
+	lines := bytes.Count(content, []byte("\n"))
+	logf("written %d lines (%d bytes) to: %q", lines, len(content), outputFile)
 
 	return nil
 }

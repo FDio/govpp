@@ -92,15 +92,22 @@ func ResolveVppInput(input string) (*VppInput, error) {
 	return vppInput, nil
 }
 
-func Run(vppInput *VppInput, filesToGenerate []string, opts Options, f func(*Generator) error) {
-	if err := run(vppInput, filesToGenerate, opts, f); err != nil {
+func Run(vppInput *VppInput, opts Options, f func(*Generator) error) {
+	if err := run(vppInput, opts, f); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
 		os.Exit(1)
 	}
 }
 
-func run(vppInput *VppInput, filesToGenerate []string, opts Options, genFn func(*Generator) error) error {
+func run(vppInput *VppInput, opts Options, genFn func(*Generator) error) error {
 	var err error
+
+	//
+	if opts.OutputDir == "binapi" {
+		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {
+			opts.OutputDir = "."
+		}
+	}
 
 	if opts.ImportPrefix == "" {
 		opts.ImportPrefix, err = ResolveImportPath(opts.OutputDir)
@@ -110,12 +117,10 @@ func run(vppInput *VppInput, filesToGenerate []string, opts Options, genFn func(
 		logrus.Debugf("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
-	gen, err := New(opts, vppInput.ApiFiles, filesToGenerate)
+	gen, err := New(opts, vppInput)
 	if err != nil {
 		return err
 	}
-
-	gen.vppVersion = vppInput.VppVersion
 
 	if genFn == nil {
 		genFn = GenerateDefault
