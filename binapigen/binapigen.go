@@ -151,11 +151,7 @@ func newEnum(gen *Generator, file *File, apitype vppapi.EnumType, isFlag bool) *
 	typ := &Enum{
 		EnumType: apitype,
 		GoIdent:  file.GoImportPath.Ident(camelCaseName(apitype.Name)),
-		/*GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},*/
-		IsFlag: isFlag,
+		IsFlag:   isFlag,
 	}
 	gen.enumsByName[typ.Name] = typ
 	return typ
@@ -175,10 +171,6 @@ func newAlias(gen *Generator, file *File, apitype vppapi.AliasType) *Alias {
 	typ := &Alias{
 		AliasType: apitype,
 		GoIdent:   file.GoImportPath.Ident(camelCaseName(apitype.Name)),
-		/*GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},*/
 	}
 	gen.aliasesByName[typ.Name] = typ
 	return typ
@@ -219,10 +211,6 @@ func newStruct(gen *Generator, file *File, apitype vppapi.StructType) *Struct {
 	typ := &Struct{
 		StructType: apitype,
 		GoIdent:    file.GoImportPath.Ident(camelCaseName(apitype.Name)),
-		/*GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},*/
 	}
 	gen.structsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {
@@ -253,10 +241,6 @@ func newUnion(gen *Generator, file *File, apitype vppapi.UnionType) *Union {
 	typ := &Union{
 		UnionType: apitype,
 		GoIdent:   file.GoImportPath.Ident(withSuffix(camelCaseName(apitype.Name), "Union")),
-		/*GoIdent: GoIdent{
-			GoName:       withSuffix(camelCaseName(apitype.Name), "Union"),
-			GoImportPath: file.GoImportPath,
-		},*/
 	}
 	gen.unionsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {
