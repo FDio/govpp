@@ -32,7 +32,7 @@ var (
 	input     = pflag.String("input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
 	theApiDir = flag.String("input-dir", "", "DEPRECATED: Input directory containing API files.")
 
-	theOutputDir = flag.String("output-dir", "binapi", "Output directory where code will be generated.")
+	theOutputDir = pflag.StringP("output-dir", "o", "binapi", "Output directory where code will be generated.")
 	runPlugins   = flag.String("gen", "rpc", "List of generator plugins to run for files.")
 	importPrefix = flag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
 

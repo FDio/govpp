@@ -40,8 +40,7 @@ func RegisterPlugin(name string, genfn GenerateFileFn) {
 		Name:         name,
 		GenerateFile: genfn,
 	}
-	plugins = append(plugins, p)
-	pluginsByName[name] = p
+	addPlugin(p)
 }
 
 func RunPlugin(name string, gen *Generator, file *File) error {
@@ -55,6 +54,11 @@ func RunPlugin(name string, gen *Generator, file *File) error {
 	return nil
 }
 
+func addPlugin(p *Plugin) {
+	plugins = append(plugins, p)
+	pluginsByName[p.Name] = p
+}
+
 func getPlugin(name string) (*Plugin, error) {
 	var err error
 
@@ -66,6 +70,7 @@ func getPlugin(name string) (*Plugin, error) {
 		if err != nil {
 			return nil, err
 		}
+		addPlugin(p)
 	}
 
 	return p, nil

@@ -209,7 +209,7 @@ func (g *GenFile) Import(importPath GoImportPath) {
 }
 
 func (g *GenFile) GoIdent(ident GoIdent) string {
-	if ident.GoImportPath == g.file.GoImportPath {
+	if g.file != nil && ident.GoImportPath == g.file.GoImportPath {
 		return ident.GoName
 	}
 	if packageName, ok := g.packageNames[ident.GoImportPath]; ok {
