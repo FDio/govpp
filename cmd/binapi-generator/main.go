@@ -18,8 +18,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strings"
-	"unicode"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
@@ -33,7 +31,7 @@ var (
 	theApiDir = flag.String("input-dir", "", "DEPRECATED: Input directory containing API files.")
 
 	theOutputDir = pflag.StringP("output-dir", "o", "binapi", "Output directory where code will be generated.")
-	runPlugins   = flag.String("gen", "rpc", "List of generator plugins to run for files.")
+	runPlugins   = pflag.StringSlice("gen", []string{"rpc"}, "List of generator plugins to run for files.")
 	importPrefix = flag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
 
 	noVersionInfo    = flag.Bool("no-version-info", false, "Disable version info in generated files.")
@@ -86,9 +84,7 @@ func main() {
 
 	apiDir := *theApiDir
 	theInput := *input
-	genPlugins := strings.FieldsFunc(*runPlugins, func(c rune) bool {
-		return !unicode.IsLetter(c) && !unicode.IsNumber(c)
-	})
+	genPlugins := *runPlugins
 
 	if apiDir != "" {
 		if theInput != "" {
