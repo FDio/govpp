@@ -121,8 +121,13 @@ func (socket *Socket) StartPolling(errChan chan<- error) {
 			default:
 				num, err := syscall.EpollWait(socket.epfd, events[:], -1)
 				if err != nil {
-					errChan <- fmt.Errorf("EpollWait: ", err)
-					return
+					if err == syscall.EINTR {
+						continue
+					} else {
+						errChan <- fmt.Errorf("EpollWait: ", err)
+						return
+					}
+
 				}
 
 				for ev := 0; ev < num; ev++ {
@@ -234,8 +239,6 @@ func (socket *Socket) handleEvent(event *syscall.EpollEvent) error {
 	intf := socket.interfaceList.Back().Value.(*Interface)
 	if intf.args.InterruptFunc != nil {
 		if int(event.Fd) == int(intf.args.InterruptFd) {
-			b := make([]byte, 8)
-			syscall.Read(int(event.Fd), b)
 			intf.onInterrupt(intf)
 			return nil
 		}
@@ -464,7 +467,7 @@ func (cc *controlChannel) close(sendMsg bool, str string) (err error) {
 	return nil
 }
 
-//addControlChannel returns a new controlChannel and adds it to the socket
+// addControlChannel returns a new controlChannel and adds it to the socket
 func (socket *Socket) addControlChannel(fd int, i *Interface) (*controlChannel, error) {
 	cc := &controlChannel{
 		socket:      socket,
@@ -761,6 +764,19 @@ func (cc *controlChannel) parseConnect() (err error) {
 	cc.i.peerName = string(connect.Name[:])
 
 	err = cc.i.connect()
+	if err != nil {
+		return err
+	}
+	q, err := cc.i.GetRxQueue(0)
+	i := cc.i
+	if err != nil {
+		return err
+	}
+	if i.args.IsMaster {
+		i.args.InterruptFd = uint16(q.interruptFd)
+
+	}
+	err = i.socket.addInterrupt(q.interruptFd)
 	if err != nil {
 		return err
 	}

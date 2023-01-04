@@ -17,7 +17,15 @@
 
 package memif
 
-import "fmt"
+import (
+	"fmt"
+	"syscall"
+)
+
+type MemifPacketBuffer struct {
+	Buf    []byte
+	Buflen int
+}
 
 // ReadPacket reads one packet form the shared memory and
 // returns the number of bytes read
@@ -88,4 +96,91 @@ refill:
 	}
 
 	return pktOffset, nil
+}
+
+// ReadPacket reads one packet form the shared memory and
+// returns the number of packets
+func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
+	var mask int = q.ring.size - 1
+	var slot int
+	var lastSlot int
+	var length int
+	var offset int
+	var nSlots uint16
+	var desc descBuf = newDescBuf()
+
+	if q.i.args.IsMaster {
+		slot = int(q.lastHead)
+		lastSlot = q.readHead()
+	} else {
+		slot = int(q.lastTail)
+		lastSlot = q.readTail()
+	}
+
+	nSlots = uint16(lastSlot - slot)
+	if nSlots == 0 {
+		b := make([]byte, 8)
+		syscall.Read(int(q.interruptFd), b)
+		return 0, nil
+	}
+
+	rx := 0
+	for nSlots > 0 {
+		// copy descriptor from shm
+		q.getDescBuf(slot&mask, desc)
+		length = desc.getLength()
+		offset = desc.getOffset()
+		copy(pkt[rx].Buf[:], q.i.regions[desc.getRegion()].data[offset:offset+length])
+		pkt[rx].Buflen = length
+		rx++
+		nSlots--
+		slot++
+	}
+
+	if q.i.args.IsMaster {
+		q.lastHead += uint16(rx)
+	} else {
+		q.lastTail += uint16(rx)
+
+	}
+
+	b := make([]byte, 8)
+	syscall.Read(int(q.interruptFd), b)
+
+	return uint16(rx), nil
+}
+
+func (q *Queue) Refill(count int) {
+	var mask int = q.ring.size - 1
+
+	counter := 0
+	if q.i.args.IsMaster {
+		if q.readTail()+count <= int(q.lastHead) {
+			q.writeTail(q.readTail() + count)
+		} else {
+			q.writeTail(int(q.lastHead))
+		}
+	}
+
+	head := q.readHead()
+	slot := head
+	ns := (1 << q.ring.log2Size) - head + int(q.lastTail)
+
+	if count >= ns {
+		count = ns
+	}
+
+	for counter < count {
+		slot++
+		counter++
+	}
+	for nSlots := uint16(q.ring.size - head + int(q.lastTail)); nSlots > 0; nSlots-- {
+		q.setDescLength(head&mask, int(q.i.run.PacketBufferSize))
+		head++
+	}
+
+	if !q.i.args.IsMaster {
+		q.writeHead(head) //slot
+
+	}
 }

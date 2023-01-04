@@ -38,6 +38,7 @@ import (
 	"fmt"
 	"os"
 	"syscall"
+	"unsafe"
 )
 
 const (
@@ -115,6 +116,7 @@ type Interface struct {
 	txQueues    []Queue
 	rxQueues    []Queue
 	onInterrupt InterruptFunc
+	Pkt         []MemifPacketBuffer
 }
 
 // IsMaster returns true if the interfaces role is master, else returns false
@@ -367,6 +369,22 @@ func eventFd() (efd int, err error) {
 	return int(u_efd), nil
 }
 
+// The  function is  preparation for potential replacement of EpollWait syscall
+func EpollPWait(epfd int, events []syscall.EpollEvent, msec int) (n int, err error) {
+	var _p0 unsafe.Pointer
+	if len(events) > 0 {
+		_p0 = unsafe.Pointer(&events[0])
+	} else {
+		_p0 = unsafe.Pointer(nil)
+	}
+	r0, _, e1 := syscall.Syscall6(syscall.SYS_EPOLL_PWAIT, uintptr(epfd), uintptr(_p0), uintptr(len(events)), uintptr(msec), 0, 0)
+	n = int(r0)
+	if e1 != 0 {
+		err = e1
+	}
+	return
+}
+
 // addRegions creates and adds a new memory region to the interface (slave only)
 func (i *Interface) addRegion(hasPacketBuffers bool, hasRings bool) (err error) {
 	var r memoryRegion
@@ -447,7 +465,9 @@ func (i *Interface) initializeQueues() (err error) {
 		if err != nil {
 			return err
 		}
-		i.socket.addInterrupt(q.interruptFd)
+
+		i.args.InterruptFd = uint16(q.interruptFd)
+
 		q.putRing()
 		i.txQueues = append(i.txQueues, *q)
 
@@ -475,7 +495,9 @@ func (i *Interface) initializeQueues() (err error) {
 		if err != nil {
 			return err
 		}
-		i.args.InterruptFd = uint16(q.interruptFd)
+		if !i.args.IsMaster {
+			i.args.InterruptFd = uint16(q.interruptFd)
+		}
 		i.socket.addInterrupt(q.interruptFd)
 		q.putRing()
 		i.rxQueues = append(i.rxQueues, *q)
