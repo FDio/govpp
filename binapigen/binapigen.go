@@ -25,7 +25,7 @@ import (
 
 // file options
 const (
-	optFileVersion = "version"
+	OptFileVersion = "version"
 )
 
 type File struct {
@@ -55,7 +55,7 @@ func newFile(gen *Generator, apifile *vppapi.File, packageName GoPackageName, im
 		GoImportPath: importPath,
 	}
 	if apifile.Options != nil {
-		file.Version = apifile.Options[optFileVersion]
+		file.Version = apifile.Options[OptFileVersion]
 	}
 
 	file.FilenamePrefix = path.Join(gen.opts.OutputDir, file.Desc.Name)
