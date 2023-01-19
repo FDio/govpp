@@ -69,7 +69,7 @@ type (
 		Name    string
 		Fields  []Field
 		CRC     string
-		Options map[string]string
+		Options map[string]string `json:",omitempty"`
 	}
 
 	Field struct {
