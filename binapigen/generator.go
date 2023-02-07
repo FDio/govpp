@@ -36,13 +36,16 @@ import (
 
 // Options is set of input parameters for the Generator.
 type Options struct {
-	OutputDir        string // output directory for generated files
-	ImportPrefix     string // prefix for package import paths
-	GenerateFiles    []string
+	OutputDir     string   // output directory for generated files
+	ImportPrefix  string   // prefix for package import paths
+	GenerateFiles []string // list of files to generate
+
 	NoVersionInfo    bool // disables generating version info
 	NoSourcePathInfo bool // disables the 'source: /path' comment
 }
 
+// Generator processes VPP API files as input, provides API to handle content
+// of generated files.
 type Generator struct {
 	opts Options
 
@@ -76,7 +79,7 @@ func New(opts Options, input *VppInput) (*Generator, error) {
 		messagesByName: map[string]*Message{},
 	}
 
-	// Normalize API files
+	// normalize API files
 	SortFilesByImports(gen.apiFiles)
 	for _, apiFile := range gen.apiFiles {
 		RemoveImportedTypes(gen.apiFiles, apiFile)
@@ -168,6 +171,7 @@ func (g *Generator) Generate() error {
 		if err != nil {
 			return err
 		}
+		logrus.Debugf("- generating file: %v (%v bytes)", genfile.filename, len(content))
 		if err := WriteContentToFile(genfile.filename, content); err != nil {
 			return fmt.Errorf("writing source package %s failed: %v", genfile.filename, err)
 		}

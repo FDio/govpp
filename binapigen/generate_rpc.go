@@ -55,13 +55,13 @@ func GenerateRPC(gen *Generator, file *File) *GenFile {
 	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_rpc"+generatedFilenameSuffix)
 	g := gen.NewGenFile(filename, file)
 
-	// generate file header
+	// file header
 	genCodeGeneratedComment(g)
 	g.P()
 	g.P("package ", file.PackageName)
 	g.P()
 
-	// generate RPC service
+	// service RPCs
 	if len(file.Service.RPCs) > 0 {
 		genService(g, file.Service)
 	}

@@ -17,7 +17,6 @@ package binapigen
 import (
 	"fmt"
 	"path"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -65,15 +64,17 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	}
 	g.P()
 
+	// package definition
 	genPackageComment(g)
 	g.P("package ", file.PackageName)
 	g.P()
 
+	// package imports
 	for _, imp := range g.file.Imports {
 		genImport(g, imp)
 	}
 
-	// generate version assertion
+	// GoVPP API version assertion
 	g.P("// This is a compile-time assertion to ensure that this generated file")
 	g.P("// is compatible with the GoVPP api package it is being compiled against.")
 	g.P("// A compilation error at this line likely means your copy of the")
@@ -81,8 +82,10 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	g.P("const _ = ", govppApiPkg.Ident("GoVppAPIPackageIsVersion"), generatedCodeVersion)
 	g.P()
 
+	// API meta info
 	genApiInfo(g)
 
+	// API types
 	for _, enum := range g.file.Enums {
 		genEnum(g, enum)
 	}
@@ -95,6 +98,8 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	for _, union := range g.file.Unions {
 		genUnion(g, union)
 	}
+
+	// API messages
 	genMessages(g)
 
 	return g
@@ -262,15 +267,15 @@ func genAlias(g *GenFile, alias *Alias) {
 	// generate alias-specific methods
 	switch alias.Name {
 	case "ip4_address":
-		genIPConversion(g, alias.GoName, 4)
+		genIPXAddressHelpers(g, alias.GoName, 4)
 	case "ip6_address":
-		genIPConversion(g, alias.GoName, 16)
+		genIPXAddressHelpers(g, alias.GoName, 6)
 	case "address_with_prefix":
-		genAddressWithPrefixConversion(g, alias.GoName)
+		genAddressWithPrefixHelpers(g, alias.GoName)
 	case "mac_address":
-		genMacAddressConversion(g, alias.GoName)
+		genMacAddressHelpers(g, alias.GoName)
 	case "timestamp":
-		genTimestampConversion(g, alias.GoName)
+		genTimestampHelpers(g, alias.GoName)
 	}
 }
 
@@ -293,13 +298,13 @@ func genStruct(g *GenFile, typ *Struct) {
 	// generate type-specific methods
 	switch typ.Name {
 	case "address":
-		genAddressConversion(g, typ.GoName)
+		genAddressHelpers(g, typ.GoName)
 	case "prefix":
-		genPrefixConversion(g, typ.GoName)
+		genPrefixHelpers(g, typ.GoName)
 	case "ip4_prefix":
-		genIPPrefixConversion(g, typ.GoName, 4)
+		genIPXPrefixHelpers(g, typ.GoName, 4)
 	case "ip6_prefix":
-		genIPPrefixConversion(g, typ.GoName, 6)
+		genIPXPrefixHelpers(g, typ.GoName, 6)
 	}
 }
 
@@ -326,12 +331,12 @@ func genUnion(g *GenFile, union *Union) {
 
 	// generate methods for fields
 	for _, field := range union.Fields {
-		genUnionField(g, union, field)
+		genUnionFieldMethods(g, union, field)
 	}
 	g.P()
 }
 
-func genUnionField(g *GenFile, union *Union, field *Field) {
+func genUnionFieldMethods(g *GenFile, union *Union, field *Field) {
 	fieldType := fieldGoType(g, field)
 	constructorName := union.GoName + field.GoName
 
@@ -421,25 +426,6 @@ func fieldTagBinapi(field *Field) string {
 	return strings.Join(tag, ",")
 }
 
-type structTags map[string]string
-
-func (tags structTags) String() string {
-	if len(tags) == 0 {
-		return ""
-	}
-	var keys []string
-	for k := range tags {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	var ss []string
-	for _, key := range keys {
-		tag := tags[key]
-		ss = append(ss, fmt.Sprintf(`%s:%s`, key, strconv.Quote(tag)))
-	}
-	return "`" + strings.Join(ss, " ") + "`"
-}
-
 func genMessages(g *GenFile) {
 	if len(g.file.Messages) == 0 {
 		return
@@ -490,35 +476,36 @@ func genMessage(g *GenFile, msg *Message) {
 	}
 	g.P()
 
+	// Reset method
+	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
+
+	// GetXXX methods
 	genMessageMethods(g, msg)
 
-	// encoding methods
-	genMessageSize(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageMarshal(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+	// codec methods
+	genMessageMethodSize(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodMarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
 
 	g.P()
 }
 
 func genMessageMethods(g *GenFile, msg *Message) {
-	// Reset method
-	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
-
 	// GetMessageName method
-	g.P("func (*", msg.GoIdent.GoName, ") GetMessageName() string {	return ", strconv.Quote(msg.Name), " }")
+	g.P("func (*", msg.GoIdent.GoName, ") GetMessageName() string { return ", strconv.Quote(msg.Name), " }")
 
 	// GetCrcString method
 	g.P("func (*", msg.GoIdent.GoName, ") GetCrcString() string { return ", strconv.Quote(msg.CRC), " }")
 
 	// GetMessageType method
 	g.P("func (*", msg.GoIdent.GoName, ") GetMessageType() api.MessageType {")
-	g.P("	return ", apiMsgType(msg.msgType))
+	g.P("	return ", msgType2apiMessageType(msg.msgType))
 	g.P("}")
 
 	g.P()
 }
 
-func apiMsgType(t msgType) GoIdent {
+func msgType2apiMessageType(t msgType) GoIdent {
 	switch t {
 	case msgTypeRequest:
 		return govppApiPkg.Ident("RequestMessage")

@@ -15,9 +15,9 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
@@ -26,19 +26,22 @@ import (
 	"go.fd.io/govpp/version"
 )
 
+const (
+	DefaultOutputDir = "binapi"
+)
+
 var (
-	input     = pflag.String("input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
-	theApiDir = flag.String("input-dir", "", "DEPRECATED: Input directory containing API files.")
-
-	theOutputDir = pflag.StringP("output-dir", "o", "binapi", "Output directory where code will be generated.")
+	input        = pflag.String("input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
+	inputDir     = pflag.String("input-dir", "", "DEPRECATED: Input directory containing API files.")
+	theOutputDir = pflag.StringP("output-dir", "o", DefaultOutputDir, "Output directory where code will be generated.")
 	runPlugins   = pflag.StringSlice("gen", []string{"rpc"}, "List of generator plugins to run for files.")
-	importPrefix = flag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
+	importPrefix = pflag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
 
-	noVersionInfo    = flag.Bool("no-version-info", false, "Disable version info in generated files.")
-	noSourcePathInfo = flag.Bool("no-source-path-info", false, "Disable source path info in generated files.")
+	noVersionInfo    = pflag.Bool("no-version-info", false, "Disable version info in generated files.")
+	noSourcePathInfo = pflag.Bool("no-source-path-info", false, "Disable source path info in generated files.")
 
-	printVersion = flag.Bool("version", false, "Prints version and exits.")
-	enableDebug  = flag.Bool("debug", false, "Enable debugging mode.")
+	printVersion = pflag.Bool("version", false, "Prints version and exits.")
+	enableDebug  = pflag.Bool("debug", false, "Enable debugging mode.")
 )
 
 func init() {
@@ -59,7 +62,6 @@ func init() {
 }
 
 func main() {
-	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
 	pflag.Parse()
 
 	if *printVersion {
@@ -82,15 +84,22 @@ func main() {
 		GenerateFiles:    filesToGenerate,
 	}
 
-	apiDir := *theApiDir
+	// generate in same directory when current dir is binapi
+	if opts.OutputDir == DefaultOutputDir {
+		if wd, _ := os.Getwd(); filepath.Base(wd) == DefaultOutputDir {
+			opts.OutputDir = "."
+		}
+	}
+
+	theInputDir := *inputDir
 	theInput := *input
 	genPlugins := *runPlugins
 
-	if apiDir != "" {
+	if theInputDir != "" {
 		if theInput != "" {
-			logrus.Fatalf("both input and input-dir cannot be set!")
+			logrus.Fatalf("ignoring deprecated option 'input-dir', using 'input' instead")
 		} else {
-			theInput = apiDir
+			theInput = theInputDir
 		}
 	}
 

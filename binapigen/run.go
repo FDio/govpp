@@ -102,13 +102,6 @@ func Run(vppInput *VppInput, opts Options, f func(*Generator) error) {
 func run(vppInput *VppInput, opts Options, genFn func(*Generator) error) error {
 	var err error
 
-	//
-	if opts.OutputDir == "binapi" {
-		if wd, _ := os.Getwd(); filepath.Base(wd) == "binapi" {
-			opts.OutputDir = "."
-		}
-	}
-
 	if opts.ImportPrefix == "" {
 		opts.ImportPrefix, err = ResolveImportPath(opts.OutputDir)
 		if err != nil {
@@ -142,8 +135,10 @@ func GeneratePlugins(genPlugins []string) func(*Generator) error {
 			if !file.Generate {
 				continue
 			}
+			logrus.Debugf("GENERATE FILE: %v", file.Desc.Path)
 			GenerateAPI(gen, file)
 			for _, p := range genPlugins {
+				logrus.Debugf("  [GEN plugin: %v]", p)
 				if err := RunPlugin(p, gen, file); err != nil {
 					return err
 				}

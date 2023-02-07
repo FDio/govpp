@@ -14,6 +14,10 @@
 
 package binapigen
 
+import (
+	"fmt"
+)
+
 func init() {
 	//RegisterPlugin("convert", GenerateConvert)
 }
@@ -26,8 +30,22 @@ const (
 	stringsPkg = GoImportPath("strings")
 )
 
-func genIPConversion(g *GenFile, structName string, ipv int) {
-	// ParseIPXAddress method
+func genIPXAddressHelpers(g *GenFile, structName string, ipv int) {
+	validateIPvX(ipv)
+
+	// IPXAddressFromIP method (net.IP -> IPXAddress)
+	g.P("func New", structName, "(ip ", netPkg.Ident("IP"), ") ", structName, " {")
+	g.P("	var ipaddr ", structName)
+	if ipv == 4 {
+		g.P("	copy(ipaddr[:], ip.To4())")
+	} else {
+		g.P("	copy(ipaddr[:], ip.To16())")
+	}
+	g.P("	return ipaddr")
+	g.P("}")
+	g.P()
+
+	// ParseIPXAddress method (string -> IPXAddress)
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	if ipv == 4 {
 		g.P("	ip := ", netPkg.Ident("ParseIP"), "(s).To4()")
@@ -35,7 +53,7 @@ func genIPConversion(g *GenFile, structName string, ipv int) {
 		g.P("	ip := ", netPkg.Ident("ParseIP"), "(s).To16()")
 	}
 	g.P("	if ip == nil {")
-	g.P("		return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP address: %s\", s)")
+	g.P("		return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP"+fmt.Sprint(ipv)+" address: %s\", s)")
 	g.P("	}")
 	g.P("	var ipaddr ", structName)
 	if ipv == 4 {
@@ -47,7 +65,7 @@ func genIPConversion(g *GenFile, structName string, ipv int) {
 	g.P("}")
 	g.P()
 
-	// ToIP method
+	// ToIP method (IPXAddress -> net.IP)
 	g.P("func (x ", structName, ") ToIP() ", netPkg.Ident("IP"), " {")
 	if ipv == 4 {
 		g.P("	return ", netPkg.Ident("IP"), "(x[:]).To4()")
@@ -57,7 +75,7 @@ func genIPConversion(g *GenFile, structName string, ipv int) {
 	g.P("}")
 	g.P()
 
-	// String method
+	// String method (IPX -> string)
 	g.P("func (x ", structName, ") String() string {")
 	g.P("	return x.ToIP().String()")
 	g.P("}")
@@ -81,19 +99,9 @@ func genIPConversion(g *GenFile, structName string, ipv int) {
 	g.P()
 }
 
-func genAddressConversion(g *GenFile, structName string) {
-	// ParseAddress method
-	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
-	g.P("	ip := ", netPkg.Ident("ParseIP"), "(s)")
-	g.P("	if ip == nil {")
-	g.P("		return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid address: %s\", s)")
-	g.P("	}")
-	g.P("	return ", structName, "FromIP(ip), nil")
-	g.P("}")
-	g.P()
-
-	// AddressFromIP method
-	g.P("func ", structName, "FromIP(ip ", netPkg.Ident("IP"), ") ", structName, " {")
+func genAddressHelpers(g *GenFile, structName string) {
+	// AddressFromIP method (net.IP -> Address)
+	g.P("func New", structName, "(ip ", netPkg.Ident("IP"), ") ", structName, " {")
 	g.P("	var addr ", structName)
 	g.P("	if ip.To4() == nil {")
 	g.P("		addr.Af = ADDRESS_IP6")
@@ -110,7 +118,17 @@ func genAddressConversion(g *GenFile, structName string) {
 	g.P("}")
 	g.P()
 
-	// ToIP method
+	// ParseAddress method (string -> Address)
+	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
+	g.P("	ip := ", netPkg.Ident("ParseIP"), "(s)")
+	g.P("	if ip == nil {")
+	g.P("		return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP address: %s\", s)")
+	g.P("	}")
+	g.P("	return New", structName, "(ip), nil")
+	g.P("}")
+	g.P()
+
+	// ToIP method (Address -> net.IP)
 	g.P("func (x ", structName, ") ToIP() ", netPkg.Ident("IP"), " {")
 	g.P("	if x.Af == ADDRESS_IP6 {")
 	g.P("		ip6 := x.Un.GetIP6()")
@@ -146,14 +164,30 @@ func genAddressConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
-	// ParsePrefix method
+func genIPXPrefixHelpers(g *GenFile, structName string, ipv int) {
+	validateIPvX(ipv)
+
+	// NewIPXPrefix method (net.IPNet -> IPXPrefix)
+	g.P("func New", structName, "(network ", netPkg.Ident("IPNet"), ") ", structName, " {")
+	g.P("	var prefix ", structName)
+	g.P("	maskSize, _ := network.Mask.Size()")
+	g.P("	prefix.Len = byte(maskSize)")
+	if ipv == 4 {
+		g.P("	prefix.Address = NewIP4Address(network.IP)")
+	} else {
+		g.P("	prefix.Address = NewIP6Address(network.IP)")
+	}
+	g.P("	return prefix")
+	g.P("}")
+	g.P()
+
+	// ParsePrefix method (string -> IPXPrefix)
 	g.P("func Parse", structName, "(s string) (prefix ", structName, ", err error) {")
 	g.P("	hasPrefix := ", stringsPkg.Ident("Contains"), "(s, \"/\")")
 	g.P("	if hasPrefix {")
 	g.P("		ip, network, err := ", netPkg.Ident("ParseCIDR"), "(s)")
 	g.P("		if err != nil {")
-	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP %s: %s\", s, err)")
+	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP"+fmt.Sprint(ipv)+" %s: %s\", s, err)")
 	g.P("		}")
 	g.P("		maskSize, _ := network.Mask.Size()")
 	g.P("		prefix.Len = byte(maskSize)")
@@ -163,7 +197,7 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 		g.P("		prefix.Address, err = ParseIP6Address(ip.String())")
 	}
 	g.P("		if err != nil {")
-	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP %s: %s\", s, err)")
+	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP"+fmt.Sprint(ipv)+" %s: %s\", s, err)")
 	g.P("		}")
 	g.P("	} else {")
 	g.P("		ip :=  ", netPkg.Ident("ParseIP"), "(s)")
@@ -178,14 +212,14 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 		g.P("		prefix.Address, err = ParseIP6Address(ip.String())")
 	}
 	g.P("		if err != nil {")
-	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP %s: %s\", s, err)")
+	g.P("			return ", structName, "{}, ", fmtPkg.Ident("Errorf"), "(\"invalid IP"+fmt.Sprint(ipv)+" %s: %s\", s, err)")
 	g.P("		}")
 	g.P("	}")
 	g.P("	return prefix, nil")
 	g.P("}")
 	g.P()
 
-	// ToIPNet method
+	// ToIPNet method (IPXPrefix -> net.IPNet)
 	g.P("func (x ", structName, ") ToIPNet() *", netPkg.Ident("IPNet"), " {")
 	if ipv == 4 {
 		g.P("	mask := ", netPkg.Ident("CIDRMask"), "(int(x.Len), 32)")
@@ -222,8 +256,18 @@ func genIPPrefixConversion(g *GenFile, structName string, ipv int) {
 	g.P()
 }
 
-func genPrefixConversion(g *GenFile, structName string) {
-	// ParsePrefix method
+func genPrefixHelpers(g *GenFile, structName string) {
+	// NewPrefix method (net.IPNet -> Prefix)
+	g.P("func New", structName, "(network ", netPkg.Ident("IPNet"), ") ", structName, " {")
+	g.P("	var prefix ", structName)
+	g.P("	maskSize, _ := network.Mask.Size()")
+	g.P("	prefix.Len = byte(maskSize)")
+	g.P("	prefix.Address = NewAddress(network.IP)")
+	g.P("	return prefix")
+	g.P("}")
+	g.P()
+
+	// ParsePrefix method (string -> Prefix)
 	g.P("func Parse", structName, "(ip string) (prefix ", structName, ", err error) {")
 	g.P("	hasPrefix := ", stringsPkg.Ident("Contains"), "(ip, \"/\")")
 	g.P("	if hasPrefix {")
@@ -253,13 +297,13 @@ func genPrefixConversion(g *GenFile, structName string) {
 	g.P("}")
 	g.P()
 
-	// ToIPNet method
+	// ToIPNet method (Prefix -> net.IPNet)
 	g.P("func (x ", structName, ") ToIPNet() *", netPkg.Ident("IPNet"), " {")
 	g.P("	var mask ", netPkg.Ident("IPMask"))
 	g.P("	if x.Address.Af == ADDRESS_IP4 {")
-	g.P("	mask = ", netPkg.Ident("CIDRMask"), "(int(x.Len), 32)")
+	g.P("		mask = ", netPkg.Ident("CIDRMask"), "(int(x.Len), 32)")
 	g.P("	} else {")
-	g.P("	mask = ", netPkg.Ident("CIDRMask"), "(int(x.Len), 128)")
+	g.P("		mask = ", netPkg.Ident("CIDRMask"), "(int(x.Len), 128)")
 	g.P("	}")
 	g.P("	ipnet := &", netPkg.Ident("IPNet"), "{IP: x.Address.ToIP(), Mask: mask}")
 	g.P("	return ipnet")
@@ -291,14 +335,27 @@ func genPrefixConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func genAddressWithPrefixConversion(g *GenFile, structName string) {
-	// ParseAddressWithPrefix method
+func genAddressWithPrefixHelpers(g *GenFile, structName string) {
+	// NewAddressWithPrefix method (net.HardwareAddr -> MacAddress)
+	g.P("func New", structName, "(network ", netPkg.Ident("IPNet"), ") ", structName, " {")
+	g.P("	prefix := NewPrefix(network)")
+	g.P("	return ", structName, "(prefix)")
+	g.P("}")
+	g.P()
+
+	// ParseAddressWithPrefix method (string -> AddressWithPrefix)
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	g.P("	prefix, err := ParsePrefix(s)")
 	g.P("	if err != nil {")
 	g.P("		return ", structName, "{}, err")
 	g.P("	}")
 	g.P("	return ", structName, "(prefix), nil")
+	g.P("}")
+	g.P()
+
+	// ToIPNet method (Prefix -> net.IPNet)
+	g.P("func (x ", structName, ") ToIPNet() *", netPkg.Ident("IPNet"), " {")
+	g.P("	return Prefix(x).ToIPNet()")
 	g.P("}")
 	g.P()
 
@@ -326,8 +383,16 @@ func genAddressWithPrefixConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func genMacAddressConversion(g *GenFile, structName string) {
-	// ParseMAC method
+func genMacAddressHelpers(g *GenFile, structName string) {
+	// NewMAC method (net.HardwareAddr -> MacAddress)
+	g.P("func New", structName, "(mac ", netPkg.Ident("HardwareAddr"), ") ", structName, " {")
+	g.P("	var macaddr ", structName)
+	g.P("	copy(macaddr[:], mac[:])")
+	g.P("	return macaddr")
+	g.P("}")
+	g.P()
+
+	// ParseMAC method (string -> MacAddress)
 	g.P("func Parse", structName, "(s string) (", structName, ", error) {")
 	g.P("	var macaddr ", structName)
 	g.P("	mac, err := ", netPkg.Ident("ParseMAC"), "(s)")
@@ -339,7 +404,7 @@ func genMacAddressConversion(g *GenFile, structName string) {
 	g.P("}")
 	g.P()
 
-	// ToMAC method
+	// ToMAC method (MacAddress -> net.HardwareAddr)
 	g.P("func (x ", structName, ") ToMAC() ", netPkg.Ident("HardwareAddr"), " {")
 	g.P("	return ", netPkg.Ident("HardwareAddr"), "(x[:])")
 	g.P("}")
@@ -369,8 +434,8 @@ func genMacAddressConversion(g *GenFile, structName string) {
 	g.P()
 }
 
-func genTimestampConversion(g *GenFile, structName string) {
-	// NewTimestamp method
+func genTimestampHelpers(g *GenFile, structName string) {
+	// NewTimestamp method (time.Time -> Timestamp)
 	g.P("func New", structName, "(t ", timePkg.Ident("Time"), ") ", structName, " {")
 	g.P("	sec := int64(t.Unix())")
 	g.P("	nsec := int32(t.Nanosecond())")
@@ -379,7 +444,7 @@ func genTimestampConversion(g *GenFile, structName string) {
 	g.P("}")
 	g.P()
 
-	// ToTime method
+	// ToTime method (Timestamp -> time.Time)
 	g.P("func (x ", structName, ") ToTime() ", timePkg.Ident("Time"), " {")
 	g.P("	ns := int64(x * 1e9)")
 	g.P("	sec := ns / 1e9")
@@ -410,4 +475,12 @@ func genTimestampConversion(g *GenFile, structName string) {
 	g.P("	return nil")
 	g.P("}")
 	g.P()
+}
+
+func validateIPvX(ipv int) {
+	switch ipv {
+	case 4, 6:
+	default:
+		panic("ipv must be 4 or 6, got: " + fmt.Sprint(ipv))
+	}
 }

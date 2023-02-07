@@ -17,6 +17,7 @@ package binapigen
 import (
 	"fmt"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -549,6 +550,25 @@ func (rpc *RPC) resolveMessages(gen *Generator) error {
 		rpc.MsgStream = msg
 	}
 	return nil
+}
+
+type structTags map[string]string
+
+func (tags structTags) String() string {
+	if len(tags) == 0 {
+		return ""
+	}
+	var keys []string
+	for k := range tags {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	var ss []string
+	for _, key := range keys {
+		tag := tags[key]
+		ss = append(ss, fmt.Sprintf(`%s:%s`, key, strconv.Quote(tag)))
+	}
+	return "`" + strings.Join(ss, " ") + "`"
 }
 
 // GoIdent is a Go identifier, consisting of a name and import path.

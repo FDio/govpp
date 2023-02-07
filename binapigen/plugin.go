@@ -19,9 +19,13 @@ import (
 	"plugin"
 )
 
+// Plugin is an extension of the Generator. Plugins can be registered in
+// application with RegisterPlugin or loaded from an external file compiled
+// when calling RunPlugin.
 type Plugin struct {
 	Name         string
 	GenerateFile GenerateFileFn
+	External     bool
 }
 
 type GenerateFileFn = func(*Generator, *File) *GenFile
@@ -29,9 +33,11 @@ type GenerateFileFn = func(*Generator, *File) *GenFile
 var plugins []*Plugin
 var pluginsByName = map[string]*Plugin{}
 
+// RegisterPlugin registers a new plugin with name and generate
+// func. Name must not be empty or already taken.
 func RegisterPlugin(name string, genfn GenerateFileFn) {
 	if name == "" {
-		panic("plugin name empty")
+		panic("plugin name is empty")
 	}
 	if _, ok := pluginsByName[name]; ok {
 		panic("duplicate plugin name: " + name)
@@ -43,6 +49,10 @@ func RegisterPlugin(name string, genfn GenerateFileFn) {
 	addPlugin(p)
 }
 
+// RunPlugin executes plugin with given name, if name is not found it attempts
+// to load plugin from a filesystem, using name as path to the file. The file
+// must be Go binary compiled using "plugin" buildmode and must contain exported
+// func with the signature of GenerateFileFn.
 func RunPlugin(name string, gen *Generator, file *File) error {
 	p, err := getPlugin(name)
 	if err != nil {
@@ -62,7 +72,7 @@ func addPlugin(p *Plugin) {
 func getPlugin(name string) (*Plugin, error) {
 	var err error
 
-	// find name in registered plugins
+	// check in registered plugins
 	p, ok := pluginsByName[name]
 	if !ok {
 		// name might be the path to an external plugin
@@ -90,16 +100,6 @@ func loadExternalPlugin(name string) (*Plugin, error) {
 	return &Plugin{
 		Name:         name,
 		GenerateFile: symGenerateFile.(GenerateFileFn),
+		External:     true,
 	}, nil
 }
-
-/*
-func RunPlugin(name string, gen *Generator, file *File) error {
-	p, ok := pluginsByName[name]
-	if !ok {
-		return fmt.Errorf("plugin not found: %q", name)
-	}
-	p.GenerateFile(gen, file)
-	return nil
-}
-*/

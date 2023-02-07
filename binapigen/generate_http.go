@@ -42,13 +42,13 @@ func GenerateHTTP(gen *Generator, file *File) *GenFile {
 	filename := path.Join(file.FilenamePrefix, file.Desc.Name+"_http"+generatedFilenameSuffix)
 	g := gen.NewGenFile(filename, file)
 
-	// generate file header
+	// file header
 	genCodeGeneratedComment(g)
 	g.P()
 	g.P("package ", file.PackageName)
 	g.P()
 
-	// generate RPC service
+	// service HTTP handlers
 	if len(file.Service.RPCs) > 0 {
 		genHTTPHandler(g, file.Service)
 	}
@@ -57,11 +57,11 @@ func GenerateHTTP(gen *Generator, file *File) *GenFile {
 }
 
 func genHTTPHandler(g *GenFile, svc *Service) {
-	// generate handler constructor
+	// constructor
 	g.P("func HTTPHandler(rpc ", serviceApiName, ") ", httpPkg.Ident("Handler"), " {")
 	g.P("	mux := ", httpPkg.Ident("NewServeMux"), "()")
 
-	// generate http handlers for rpc
+	// http handlers for rpc
 	for _, rpc := range svc.RPCs {
 		if rpc.MsgReply == nil {
 			continue
