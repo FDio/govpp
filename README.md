@@ -4,7 +4,7 @@
 <h1 align="center">GoVPP</h1>
 <p align="center">
 	<a href="https://github.com/FDio/govpp/actions/workflows/ci.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/ci.yaml/badge.svg" alt="CI"></a>
-	<a href="https://github.com/FDio/govpp/releases/latest"><img src="https://img.shields.io/github/v/tag/fdio/govpp.svg?label=release&logo=github" alt="Latest"></a>
+	<a href="https://github.com/FDio/govpp/tags"><img src="https://img.shields.io/github/v/tag/fdio/govpp?label=latest&logo=github&sort=semver&color=blue" alt="Latest"></a>
 	<a href="https://pkg.go.dev/go.fd.io/govpp"><img src="https://pkg.go.dev/badge/go.fd.io/govpp" alt="PkgGoDev"></a>
 </p>
 

@@ -17,7 +17,7 @@ To Run ICMP responder in interrupt mode:
 
 ::
 
-   DBGvpp# create interface memif id 0 master no-zero-copy
+   DBGvpp# create interface memif id 0 master
    DBGvpp# set int ip addr memif0/0 192.168.1.2/24
    DBGvpp# set int state memif0/0 up
 
@@ -30,7 +30,7 @@ To Run ICMP responder in polling mode:
 
 ::
 
-   DBGvpp# create interface memif id 0 master no-zero-copy
+   DBGvpp# create interface memif id 0 master
    DBGvpp# set int ip addr memif0/0 192.168.1.2/24
    DBGvpp# set int state memif0/0 up
 

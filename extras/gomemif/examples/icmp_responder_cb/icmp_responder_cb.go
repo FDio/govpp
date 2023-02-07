@@ -56,8 +56,13 @@ func Responder(i *memif.Interface) error {
 	data.quitChan = make(chan struct{}, 1)
 	data.wg.Add(1)
 
-	// allocate packet buffer
-	pkt := make([]byte, 2048)
+	// allocate packet buffers
+	pkt := i.Pkt
+	var tx_bufs []memif.MemifPacketBuffer
+	for i := range pkt {
+		pkt[i].Buf = make([]byte, 2048)
+		pkt[i].Buflen = 2048
+	}
 	// get rx queue
 	rxq0, err := i.GetRxQueue(0)
 	if err != nil {
@@ -68,123 +73,122 @@ func Responder(i *memif.Interface) error {
 	if err != nil {
 		return err
 	}
-	for {
+	_ = txq0
 
-		// read packet from shared memory
-		pktLen, err := rxq0.ReadPacket(pkt)
-		_ = err
-		if pktLen > 0 {
-			fmt.Printf("pktLen: %d\n", pktLen)
-			gopkt := gopacket.NewPacket(pkt[:pktLen], layers.LayerTypeEthernet, gopacket.NoCopy)
-			etherLayer := gopkt.Layer(layers.LayerTypeEthernet)
-			if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeARP {
-				rEth := layers.Ethernet{
-					SrcMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-					DstMAC: net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+	nPackets, err := rxq0.Rx_burst(pkt)
+	if err != nil {
+		return err
+	}
 
-					EthernetType: layers.EthernetTypeARP,
-				}
-				rArp := layers.ARP{
-					AddrType:          layers.LinkTypeEthernet,
-					Protocol:          layers.EthernetTypeIPv4,
-					HwAddressSize:     6,
-					ProtAddressSize:   4,
-					Operation:         layers.ARPReply,
-					SourceHwAddress:   []byte(net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}),
-					SourceProtAddress: []byte("\xc0\xa8\x01\x01"),
-					DstHwAddress:      []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
-					DstProtAddress:    []byte("\xc0\xa8\x01\x02"),
-				}
-				buf := gopacket.NewSerializeBuffer()
-				opts := gopacket.SerializeOptions{
-					FixLengths:       true,
-					ComputeChecksums: true,
-				}
-				gopacket.SerializeLayers(buf, opts, &rEth, &rArp)
-				// write packet to shared memory
-				txq0.WritePacket(buf.Bytes())
+	fmt.Println(nPackets)
+	rxq0.Refill(int(nPackets))
+	_ = err
+
+	for i := 0; i < int(nPackets); i++ {
+		gopkt := gopacket.NewPacket(pkt[i].Buf[:pkt[i].Buflen], layers.LayerTypeEthernet, gopacket.NoCopy)
+		etherLayer := gopkt.Layer(layers.LayerTypeEthernet)
+
+		if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeARP {
+			rEth := layers.Ethernet{
+				SrcMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+				DstMAC: net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+
+				EthernetType: layers.EthernetTypeARP,
+			}
+			rArp := layers.ARP{
+				AddrType:          layers.LinkTypeEthernet,
+				Protocol:          layers.EthernetTypeIPv4,
+				HwAddressSize:     6,
+				ProtAddressSize:   4,
+				Operation:         layers.ARPReply,
+				SourceHwAddress:   []byte(net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}),
+				SourceProtAddress: []byte("\xc0\xa8\x01\x01"),
+				DstHwAddress:      []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
+				DstProtAddress:    []byte("\xc0\xa8\x01\x02"),
+			}
+			buf := gopacket.NewSerializeBuffer()
+			opts := gopacket.SerializeOptions{
+				FixLengths:       true,
+				ComputeChecksums: true,
+			}
+			gopacket.SerializeLayers(buf, opts, &rEth, &rArp)
+			// write packet to shared memory
+			txq0.WritePacket(buf.Bytes())
+		}
+		if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeIPv4 {
+			ipLayer := gopkt.Layer(layers.LayerTypeIPv4)
+			if ipLayer == nil {
+				fmt.Println("Missing IPv4 layer.")
+
+			}
+			ipv4, _ := ipLayer.(*layers.IPv4)
+			if ipv4.Protocol != layers.IPProtocolICMPv4 {
+				fmt.Println("Not ICMPv4 protocol.")
+			}
+			icmpLayer := gopkt.Layer(layers.LayerTypeICMPv4)
+			if icmpLayer == nil {
+				fmt.Println("Missing ICMPv4 layer.")
+			}
+			icmp, _ := icmpLayer.(*layers.ICMPv4)
+			if icmp.TypeCode.Type() != layers.ICMPv4TypeEchoRequest {
+				fmt.Println("Not ICMPv4 echo request.")
 			}
 
-			if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeIPv4 {
-				ipLayer := gopkt.Layer(layers.LayerTypeIPv4)
-				if ipLayer == nil {
-					fmt.Println("Missing IPv4 layer.")
+			// Build packet layers.
+			ethResp := layers.Ethernet{
+				DstMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+				SrcMAC: []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
 
-				}
-				ipv4, _ := ipLayer.(*layers.IPv4)
-				if ipv4.Protocol != layers.IPProtocolICMPv4 {
-					fmt.Println("Not ICMPv4 protocol.")
-				}
-				icmpLayer := gopkt.Layer(layers.LayerTypeICMPv4)
-				if icmpLayer == nil {
-					fmt.Println("Missing ICMPv4 layer.")
-				}
-				icmp, _ := icmpLayer.(*layers.ICMPv4)
-				if icmp.TypeCode.Type() != layers.ICMPv4TypeEchoRequest {
-					fmt.Println("Not ICMPv4 echo request.")
-				}
-				fmt.Println("Received an ICMPv4 echo request.")
-
-				// Build packet layers.
-				ethResp := layers.Ethernet{
-					DstMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-					//DstMAC: net.HardwareAddr{0x02, 0xfe, 0xa8, 0x77, 0xaf, 0x20},
-					SrcMAC: []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
-
-					EthernetType: layers.EthernetTypeIPv4,
-				}
-				ipv4Resp := layers.IPv4{
-					Version:    4,
-					IHL:        5,
-					TOS:        0,
-					Id:         0,
-					Flags:      0,
-					FragOffset: 0,
-					TTL:        255,
-					Protocol:   layers.IPProtocolICMPv4,
-					SrcIP:      []byte("\xc0\xa8\x01\x01"),
-					DstIP:      []byte("\xc0\xa8\x01\x02"),
-				}
-				icmpResp := layers.ICMPv4{
-					TypeCode: layers.CreateICMPv4TypeCode(layers.ICMPv4TypeEchoReply, 0),
-					Id:       icmp.Id,
-					Seq:      icmp.Seq,
-				}
-
-				// Set up buffer and options for serialization.
-				buf := gopacket.NewSerializeBuffer()
-				opts := gopacket.SerializeOptions{
-					FixLengths:       true,
-					ComputeChecksums: true,
-				}
-				gopacket.SerializeLayers(buf, opts, &ethResp, &ipv4Resp, &icmpResp,
-					gopacket.Payload(icmp.Payload))
-				// write packet to shared memory
-				txq0.WritePacket(buf.Bytes())
+				EthernetType: layers.EthernetTypeIPv4,
 			}
+			ipv4Resp := layers.IPv4{
+				Version:    4,
+				IHL:        5,
+				TOS:        0,
+				Id:         0,
+				Flags:      0,
+				FragOffset: 0,
+				TTL:        255,
+				Protocol:   layers.IPProtocolICMPv4,
+				SrcIP:      []byte("\xc0\xa8\x01\x01"),
+				DstIP:      []byte("\xc0\xa8\x01\x02"),
+			}
+			icmpResp := layers.ICMPv4{
+				TypeCode: layers.CreateICMPv4TypeCode(layers.ICMPv4TypeEchoReply, 0),
+				Id:       icmp.Id,
+				Seq:      icmp.Seq,
+			}
+
+			// Set up buffer and options for serialization.
+			buf := gopacket.NewSerializeBuffer()
+			opts := gopacket.SerializeOptions{
+				FixLengths:       true,
+				ComputeChecksums: true,
+			}
+			gopacket.SerializeLayers(buf, opts, &ethResp, &ipv4Resp, &icmpResp,
+				gopacket.Payload(icmp.Payload))
+			// write packet to shared memory
+			tx_bufs = append(tx_bufs, memif.MemifPacketBuffer{Buf: buf.Bytes(), Buflen: len(buf.Bytes())})
 
 		}
-		return nil
-
 	}
+	txq0.Tx_burst(tx_bufs)
+	return nil
 
 }
 func Connected(i *memif.Interface) error {
 	data, ok := i.GetPrivateData().(*interfaceData)
+	_ = data
 	if !ok {
 		return fmt.Errorf("Invalid private data")
 	}
-	_ = data
-
 	// allocate packet buffer
-	pkt := make([]byte, 2048)
+	i.Pkt = make([]memif.MemifPacketBuffer, 64)
+
 	// get rx queue
 	rxq0, err := i.GetRxQueue(0)
 	_ = err
-
-	// read packet from shared memory
-	pktLen, err := rxq0.ReadPacket(pkt)
-	_, _ = err, pktLen
+	rxq0.Refill(0)
 
 	return nil
 }
@@ -276,6 +280,7 @@ func main() {
 
 	go func(exitChan chan<- struct{}) {
 		reader := bufio.NewReader(os.Stdin)
+
 		for {
 			fmt.Print("gomemif# ")
 			text, _ := reader.ReadString('\n')
