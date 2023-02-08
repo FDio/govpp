@@ -14,14 +14,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		wget \
  	&& rm -rf /var/lib/apt/lists/*
 
-ARG GOTESTSUM_VERSION=1.8.2
+ARG GOTESTSUM_VERSION=1.9.0
 RUN curl -fsSL https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_linux_amd64.tar.gz -o gotestsum.tar.gz \
     && tar -xf gotestsum.tar.gz gotestsum \
     && mv gotestsum /usr/local/bin/gotestsum \
     && rm gotestsum.tar.gz
 
 # Install Go
-ENV GOLANG_VERSION 1.18.3
+ENV GOLANG_VERSION 1.20
 
 RUN set -eux; \
 	dpkgArch="$(dpkg --print-architecture)"; \
