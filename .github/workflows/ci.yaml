@@ -30,7 +30,7 @@ jobs:
   go-mod:
     strategy:
       matrix:
-        go: [ 1.20 ]
+        go: [ '1.20' ]
     name: check go.mod
     runs-on: ubuntu-latest
     steps:
@@ -52,7 +52,7 @@ jobs:
   binapi:
     strategy:
       matrix:
-        go: [ 1.20 ]
+        go: [ '1.20' ]
     env:
       VERSION: v0.7.0
     name: check binapi
@@ -73,7 +73,7 @@ jobs:
   build-test:
     strategy:
       matrix:
-        go: [ 1.20 ]
+        go: [ '1.20' ]
         os: [ ubuntu-latest ]
     name: build and test
     runs-on: ${{ matrix.os }}
@@ -101,7 +101,7 @@ jobs:
   golangci:
     strategy:
       matrix:
-        go: [ 1.20 ]
+        go: [ '1.20' ]
     name: lint go
     runs-on: ubuntu-latest
     permissions:
