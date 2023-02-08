@@ -117,5 +117,4 @@ jobs:
       - name: "Run golangci"
         uses: golangci/golangci-lint-action@v3  # docs: https://github.com/golangci/golangci-lint-action
         with:
-          version: v1.50
-          args: --go='${{ matrix.go }}'
+          version: latest
