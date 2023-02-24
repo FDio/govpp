@@ -226,9 +226,9 @@ if err != nil {
 
 The `NewStream` method also accepts following options:
 
-* `WithRequestSize` sets the size of the request channel buffer
-* `WithReplySize` sets the size of the reply channel buffer
-* `WithReplyTimeout` sets the reply timeout
+* `WithRequestSize(size int)` sets the size of the request channel buffer
+* `WithReplySize(size int)` sets the size of the reply channel buffer
+* `WithReplyTimeout(timeout time.Duration)` sets the reply timeout
 
 The single request procedure requires the user to convert the generic reply (the `Message` interface type) to the proper
 reply type.
