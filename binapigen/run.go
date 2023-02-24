@@ -27,24 +27,17 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-/*type Config struct {
-	Version string // version of config
-
-	Input string // API input (local VPP dir, ...)
-
-	VppReference      string   // commit id / tag / branch
-	Patches           []string // list of custom patches to include
-	RegenerateJsonAPI bool
-
-	GenerateFiles []string // list of API files to generate
-	Plugins       []string // enabled generator plugins
-}*/
-
+// VppInput defines VPP input parameters for the Generator.
 type VppInput struct {
 	ApiFiles   []*vppapi.File
 	VppVersion string
 }
 
+// ResolveVppInput resolves given input string into VppInput.
+//
+// Currently supported input formats are:
+// - directory with VPP API JSON files (e.g. /usr/share/vpp/api/)
+// - directory with VPP repository checkout (runs 'make json-api-files')
 func ResolveVppInput(input string) (*VppInput, error) {
 	vppInput := &VppInput{}
 
@@ -58,13 +51,14 @@ func ResolveVppInput(input string) (*VppInput, error) {
 	} else {
 		switch u.Scheme {
 		case "", "file":
-			i, err := os.Stat(input)
+			info, err := os.Stat(input)
 			if err != nil {
 				return nil, fmt.Errorf("file error: %v", err)
 			} else {
-				if i.IsDir() {
+				if info.IsDir() {
 					apidir := vppapi.ResolveApiDir(u.Path)
 					logrus.Debugf("path %q resolved to api dir: %v", u.Path, apidir)
+
 					apiFiles, err := vppapi.ParseDir(apidir)
 					if err != nil {
 						logrus.Warnf("vppapi parsedir error: %v", err)
@@ -72,6 +66,7 @@ func ResolveVppInput(input string) (*VppInput, error) {
 						vppInput.ApiFiles = apiFiles
 						logrus.Infof("resolved %d apifiles", len(apiFiles))
 					}
+
 					vppInput.VppVersion = vppapi.ResolveVPPVersion(u.Path)
 					if vppInput.VppVersion == "" {
 						vppInput.VppVersion = "unknown"

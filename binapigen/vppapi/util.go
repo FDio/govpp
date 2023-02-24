@@ -33,6 +33,10 @@ const (
 	localBuildRoot    = "build-root/install-vpp-native/vpp/share/vpp/api"
 )
 
+// ResolveApiDir checks if parameter dir is a path to directory of local VPP
+// repository and returns path to directory with VPP API JSON files under
+// build-root. It will execute `make json-api-files` in case the folder with
+// VPP API JSON files does not exist yet.
 func ResolveApiDir(dir string) string {
 	_, err := os.Stat(path.Join(dir, "build-root"))
 	if err == nil {
@@ -52,8 +56,7 @@ func ResolveApiDir(dir string) string {
 				return path.Join(dir, localBuildRoot)
 			}
 		}
-	} //else if errors.Is(err, os.ErrNotExist) {
-	//}
+	}
 
 	return dir
 }
