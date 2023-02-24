@@ -40,27 +40,40 @@ go install go.fd.io/govpp/cmd/binapi-generator@v0.8.0
 go install go.fd.io/govpp/cmd/binapi-generator@master
 ```
 
+Check the binapi generator is installed:
+
+```
+$ binapi-generator -version
+govpp v0.8.0-dev
+```
+
+# Source of VPP API input files
+
+At first, you need VPP JSON API bindings to build go bindings from. There are several ways to get it.
+
+1. Download from `packagecloud.io` ([learn more](https://fd.io/docs/vpp/master/gettingstarted/installing)).
+2. Clone the VPP repository `git clone https://github.com/FDio/vpp.git` and run `make json-api-files`. Built JSON files
+   can be found in `/vpp/build-root/install-vpp-native/vpp/share/vpp/api/`.
+3. If the VPP is already built, the default JSON API path is `/usr/share/vpp/api/`
+
 # Generate VPP API bindings
 
-At first, you need VPP JSON API bindings to build go bindings from.
-Build the VPP locally, or download
-from `packagecloud.io` ([learn more](https://fd.io/docs/vpp/master/gettingstarted/installing)).
-
-JSON API files are located in `/usr/share/vpp/api/`
+If the VPP JSON API definitions are in the default directory `/usr/share/vpp/api`, call:
 
 ```
-$ make generate-binapi 
-# installing binapi-generator v0.8.0-alpha-6-g2054a76-dirty
-# generating binapi
-binapi-generator -input-dir=/usr/share/vpp/api -output-dir=. -gen=rpc
-INFO[0000] resolved VPP version from installed package: 23.06-rc0~65-g2ddb2fdaa
-INFO[0000] Generating 236 files                         
-binapi-generator -input-file=/usr/share/vpp/api/core/vpe.api.json -output-dir=. -gen=http
-INFO[0000] resolved VPP version from installed package: 23.06-rc0~65-g2ddb2fdaa
-INFO[0000] Generating 3 files   
+binapi-generator
 ```
 
-Generated files can be found in `/binapi` package.
+Binding will be created in the current directory in `/binapi` package.
+
+To modify the VPP JSON API input directory, use `-input-dir` option. To modify the output directory, use
+the `-output-dir` option.
+
+```
+binapi-generator -input-dir=/path/to/vpp/api -output-dir=/path/to/generated/bindings
+```
+
+For the full list of binary API generator plugins and options, see sections below.
 
 ### Plugins
 
