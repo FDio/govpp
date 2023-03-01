@@ -24,10 +24,12 @@ import (
 // when calling RunPlugin.
 type Plugin struct {
 	Name         string
+	GenerateAll  GenerateAllFn
 	GenerateFile GenerateFileFn
 	External     bool
 }
 
+type GenerateAllFn = func(*Generator) []*GenFile
 type GenerateFileFn = func(*Generator, *File) *GenFile
 
 var plugins []*Plugin
@@ -59,7 +61,11 @@ func RunPlugin(name string, gen *Generator, file *File) error {
 		return fmt.Errorf("plugin %s not found: %w", name, err)
 	}
 
-	p.GenerateFile(gen, file)
+	if file != nil && p.GenerateFile != nil {
+		p.GenerateFile(gen, file)
+	} else if file == nil && p.GenerateAll != nil {
+		p.GenerateAll(gen)
+	}
 
 	return nil
 }
@@ -92,14 +98,22 @@ func loadExternalPlugin(name string) (*Plugin, error) {
 		return nil, err
 	}
 
-	symGenerateFile, err := plg.Lookup("GenerateFile")
-	if err != nil {
-		return nil, err
+	p := &Plugin{
+		Name:     name,
+		External: true,
 	}
 
-	return &Plugin{
-		Name:         name,
-		GenerateFile: symGenerateFile.(GenerateFileFn),
-		External:     true,
-	}, nil
+	symGenerateFile, err := plg.Lookup("GenerateFile")
+	if err != nil {
+		symGenerateAll, err := plg.Lookup("GenerateAll")
+		if err != nil {
+			return nil, err
+		} else {
+			p.GenerateAll = symGenerateAll.(GenerateAllFn)
+		}
+	} else {
+		p.GenerateFile = symGenerateFile.(GenerateFileFn)
+	}
+
+	return p, nil
 }

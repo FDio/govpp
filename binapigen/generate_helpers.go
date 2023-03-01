@@ -18,10 +18,6 @@ import (
 	"fmt"
 )
 
-func init() {
-	//RegisterPlugin("convert", GenerateConvert)
-}
-
 // library dependencies
 const (
 	fmtPkg     = GoImportPath("fmt")
@@ -29,6 +25,34 @@ const (
 	timePkg    = GoImportPath("time")
 	stringsPkg = GoImportPath("strings")
 )
+
+func genHelperMethods(g *GenFile, typName, goName string) {
+	switch typName {
+
+	// alias-specific methods
+	case "ip4_address":
+		genIPXAddressHelpers(g, goName, 4)
+	case "ip6_address":
+		genIPXAddressHelpers(g, goName, 6)
+	case "address_with_prefix":
+		genAddressWithPrefixHelpers(g, goName)
+	case "mac_address":
+		genMacAddressHelpers(g, goName)
+	case "timestamp":
+		genTimestampHelpers(g, goName)
+
+	// type-specific methods
+	case "address":
+		genAddressHelpers(g, goName)
+	case "prefix":
+		genPrefixHelpers(g, goName)
+	case "ip4_prefix":
+		genIPXPrefixHelpers(g, goName, 4)
+	case "ip6_prefix":
+		genIPXPrefixHelpers(g, goName, 6)
+		
+	}
+}
 
 func genIPXAddressHelpers(g *GenFile, structName string, ipv int) {
 	validateIPvX(ipv)

@@ -21,6 +21,12 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+func genMessageEncodingMethods(g *GenFile, msg *Message) {
+	genMessageMethodSize(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodMarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+}
+
 func genMessageMethodSize(g *GenFile, name string, fields []*Field) {
 	g.P("func (m *", name, ") Size() (size int) {")
 	g.P("if m == nil { return 0 }")

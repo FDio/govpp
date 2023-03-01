@@ -26,6 +26,7 @@ import (
 
 // file options
 const (
+	// OptFileVersion is an option key for a version of file.
 	OptFileVersion = "version"
 )
 
@@ -605,26 +606,4 @@ type GoPackageName string
 
 func cleanPackageName(name string) GoPackageName {
 	return GoPackageName(sanitizedName(name))
-}
-
-// baseName returns the last path element of the name, with the last dotted suffix removed.
-func baseName(name string) string {
-	// First, find the last element
-	if i := strings.LastIndex(name, "/"); i >= 0 {
-		name = name[i+1:]
-	}
-	// Now drop the suffix
-	if i := strings.LastIndex(name, "."); i >= 0 {
-		name = name[:i]
-	}
-	return name
-}
-
-// normalizeImport returns the last path element of the import, with all dotted suffixes removed.
-func normalizeImport(imp string) string {
-	imp = path.Base(imp)
-	if idx := strings.Index(imp, "."); idx >= 0 {
-		imp = imp[:idx]
-	}
-	return imp
 }

@@ -47,7 +47,7 @@ const (
 
 func GenerateAPI(gen *Generator, file *File) *GenFile {
 	logf("----------------------------")
-	logf(" Generate API - %s", file.Desc.Name)
+	logf(" Generate API FILE - %s", file.Desc.Name)
 	logf("----------------------------")
 
 	filename := path.Join(file.FilenamePrefix, file.Desc.Name+generatedFilenameSuffix)
@@ -264,19 +264,7 @@ func genAlias(g *GenFile, alias *Alias) {
 	g.P("type ", alias.GoName, " ", gotype)
 	g.P()
 
-	// generate alias-specific methods
-	switch alias.Name {
-	case "ip4_address":
-		genIPXAddressHelpers(g, alias.GoName, 4)
-	case "ip6_address":
-		genIPXAddressHelpers(g, alias.GoName, 6)
-	case "address_with_prefix":
-		genAddressWithPrefixHelpers(g, alias.GoName)
-	case "mac_address":
-		genMacAddressHelpers(g, alias.GoName)
-	case "timestamp":
-		genTimestampHelpers(g, alias.GoName)
-	}
+	genHelperMethods(g, alias.Name, alias.GoName)
 }
 
 func genStruct(g *GenFile, typ *Struct) {
@@ -295,17 +283,7 @@ func genStruct(g *GenFile, typ *Struct) {
 	}
 	g.P()
 
-	// generate type-specific methods
-	switch typ.Name {
-	case "address":
-		genAddressHelpers(g, typ.GoName)
-	case "prefix":
-		genPrefixHelpers(g, typ.GoName)
-	case "ip4_prefix":
-		genIPXPrefixHelpers(g, typ.GoName, 4)
-	case "ip6_prefix":
-		genIPXPrefixHelpers(g, typ.GoName, 6)
-	}
+	genHelperMethods(g, typ.Name, typ.GoName)
 }
 
 func genUnion(g *GenFile, union *Union) {
@@ -333,6 +311,7 @@ func genUnion(g *GenFile, union *Union) {
 	for _, field := range union.Fields {
 		genUnionFieldMethods(g, union, field)
 	}
+
 	g.P()
 }
 
@@ -431,13 +410,13 @@ func genMessages(g *GenFile) {
 		return
 	}
 
+	// generate definitions
 	for _, msg := range g.file.Messages {
 		genMessage(g, msg)
 	}
 
-	// generate registrations
+	// generate initial registration
 	initFnName := fmt.Sprintf("file_%s_binapi_init", g.file.PackageName)
-
 	g.P("func init() { ", initFnName, "() }")
 	g.P("func ", initFnName, "() {")
 	for _, msg := range g.file.Messages {
@@ -447,7 +426,7 @@ func genMessages(g *GenFile) {
 	g.P("}")
 	g.P()
 
-	// generate list of messages
+	// generate message list
 	g.P("// Messages returns list of all messages in this module.")
 	g.P("func AllMessages() []", govppApiPkg.Ident("Message"), " {")
 	g.P("return []", govppApiPkg.Ident("Message"), "{")
@@ -476,21 +455,19 @@ func genMessage(g *GenFile, msg *Message) {
 	}
 	g.P()
 
-	// Reset method
-	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
+	// base methods
+	genMessageBaseMethods(g, msg)
 
-	// GetXXX methods
-	genMessageMethods(g, msg)
-
-	// codec methods
-	genMessageMethodSize(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageMethodMarshal(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageMethodUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+	// encoding methods
+	genMessageEncodingMethods(g, msg)
 
 	g.P()
 }
 
-func genMessageMethods(g *GenFile, msg *Message) {
+func genMessageBaseMethods(g *GenFile, msg *Message) {
+	// Reset method
+	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
+
 	// GetMessageName method
 	g.P("func (*", msg.GoIdent.GoName, ") GetMessageName() string { return ", strconv.Quote(msg.Name), " }")
 

@@ -125,6 +125,7 @@ func New(opts Options, input *VppInput) (*Generator, error) {
 					impFile.Generate = true
 				}
 			}
+
 			if file, ok := gen.FilesByName[genFile]; ok {
 				markGen(file)
 				continue
@@ -242,6 +243,19 @@ func (g *GenFile) Content() ([]byte, error) {
 		return g.injectImports(g.buf.Bytes())
 	}
 	return g.buf.Bytes(), nil
+}
+
+// baseName returns the last path element of the name, with the last dotted suffix removed.
+func baseName(name string) string {
+	// First, find the last element
+	if i := strings.LastIndex(name, "/"); i >= 0 {
+		name = name[i+1:]
+	}
+	// Now drop the suffix
+	if i := strings.LastIndex(name, "."); i >= 0 {
+		name = name[:i]
+	}
+	return name
 }
 
 func getImportClass(importPath string) int {

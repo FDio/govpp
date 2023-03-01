@@ -16,7 +16,9 @@ package binapigen
 
 import (
 	"log"
+	"path"
 	"sort"
+	"strings"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
@@ -80,6 +82,15 @@ func ListImportedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 		}
 	}
 	return list
+}
+
+// normalizeImport returns the last path element of the import, with all dotted suffixes removed.
+func normalizeImport(imp string) string {
+	imp = path.Base(imp)
+	if idx := strings.Index(imp, "."); idx >= 0 {
+		imp = imp[:idx]
+	}
+	return imp
 }
 
 // SortFilesByImports sorts list of files by their imports.
