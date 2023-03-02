@@ -53,6 +53,8 @@ BINAPI_GENERATOR  = ./bin/binapi-generator
 
 .DEFAULT_GOAL = help
 
+export CGO_ENABLED=0
+
 check-%:
 	@: $(if $(value $*),,$(error $* is undefined))
 
