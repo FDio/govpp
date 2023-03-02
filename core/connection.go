@@ -107,8 +107,12 @@ type Connection struct {
 
 	vppConnected uint32 // non-zero if the adapter is connected to VPP
 
-	connChan        chan ConnectionEvent // connection status events are sent to this channel
-	healthCheckDone chan struct{}        // used to terminate health check loop
+	connChan             chan ConnectionEvent // connection status events are sent to this channel
+	healthCheckDone      chan struct{}        // used to terminate connect/health check loop
+	backgroundLoopActive uint32               // used to guard background loop from double close errors
+
+	async             bool          // connection to be operated in async mode
+	healthCheckExited chan struct{} // used to notify Disconnect() callers about healthcheck loop exit
 
 	codec  MessageCodec      // message codec
 	msgIDs map[string]uint16 // map of message IDs indexed by message name + CRC
@@ -135,7 +139,14 @@ type Connection struct {
 	apiTrace *trace // API tracer (disabled by default)
 }
 
-func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) *Connection {
+type backgroundLoopStatus int
+
+const (
+	terminate backgroundLoopStatus = iota
+	resume
+)
+
+func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, async bool) *Connection {
 	if attempts == 0 {
 		attempts = DefaultMaxReconnectAttempts
 	}
@@ -149,6 +160,8 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) 
 		recInterval:         interval,
 		connChan:            make(chan ConnectionEvent, NotificationChanBufSize),
 		healthCheckDone:     make(chan struct{}),
+		healthCheckExited:   make(chan struct{}),
+		async:               async,
 		codec:               codec.DefaultCodec,
 		msgIDs:              make(map[string]uint16),
 		msgMapByPath:        make(map[string]map[uint16]api.Message),
@@ -190,7 +203,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration) 
 // Only one connection attempt will be performed.
 func Connect(binapi adapter.VppAPI) (*Connection, error) {
 	// create new connection handle
-	c := newConnection(binapi, DefaultMaxReconnectAttempts, DefaultReconnectInterval)
+	c := newConnection(binapi, DefaultMaxReconnectAttempts, DefaultReconnectInterval, false)
 
 	// blocking attempt to connect to VPP
 	if err := c.connectVPP(); err != nil {
@@ -205,13 +218,16 @@ func Connect(binapi adapter.VppAPI) (*Connection, error) {
 // returns immediately. The caller is supposed to watch the returned ConnectionState channel for
 // Connected/Disconnected events. In case of disconnect, the library will asynchronously try to reconnect.
 func AsyncConnect(binapi adapter.VppAPI, attempts int, interval time.Duration) (*Connection, chan ConnectionEvent, error) {
+
 	// create new connection handle
-	c := newConnection(binapi, attempts, interval)
+	conn := newConnection(binapi, attempts, interval, true)
+
+	atomic.StoreUint32(&conn.backgroundLoopActive, 1)
 
 	// asynchronously attempt to connect to VPP
-	go c.connectLoop()
+	go conn.backgroudConnectionLoop()
 
-	return c, c.connChan, nil
+	return conn, conn.connChan, nil
 }
 
 // connectVPP performs blocking attempt to connect to VPP.
@@ -242,19 +258,24 @@ func (c *Connection) Disconnect() {
 	if c == nil {
 		return
 	}
+
+	if c.async {
+		if atomic.CompareAndSwapUint32(&c.backgroundLoopActive, 1, 0) {
+			close(c.healthCheckDone)
+		}
+
+		// Wait for the connect/healthcheck loop termination
+		<-c.healthCheckExited
+	}
+
 	if c.vppClient != nil {
-		c.disconnectVPP(true)
+		c.disconnectVPP()
 	}
 }
 
-// disconnectVPP disconnects from VPP in case it is connected. terminate tells
-// that disconnectVPP() was called from Close(), so healthCheckLoop() can be
-// terminated.
-func (c *Connection) disconnectVPP(terminate bool) {
+// disconnectVPP disconnects from VPP in case it is connected
+func (c *Connection) disconnectVPP() {
 	if atomic.CompareAndSwapUint32(&c.vppConnected, 1, 0) {
-		if terminate {
-			close(c.healthCheckDone)
-		}
 		log.Debug("Disconnecting from VPP..")
 
 		if err := c.vppClient.Disconnect(); err != nil {
@@ -303,9 +324,24 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 	go c.channelPool.Put(ch)
 }
 
+// runs connectionLoop and healthCheckLoop until they fail
+func (c *Connection) backgroudConnectionLoop() {
+	defer close(c.healthCheckExited)
+
+	for {
+		if c.connectLoop() == terminate {
+			return
+		}
+
+		if c.healthCheckLoop() == terminate {
+			return
+		}
+	}
+}
+
 // connectLoop attempts to connect to VPP until it succeeds.
 // Then it continues with healthCheckLoop.
-func (c *Connection) connectLoop() {
+func (c *Connection) connectLoop() backgroundLoopStatus {
 	var reconnectAttempts int
 
 	// loop until connected
@@ -316,29 +352,33 @@ func (c *Connection) connectLoop() {
 		if err := c.connectVPP(); err == nil {
 			// signal connected event
 			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Connected})
-			break
+			return resume
 		} else if reconnectAttempts < c.maxAttempts {
 			reconnectAttempts++
 			log.Warnf("connecting failed (attempt %d/%d): %v", reconnectAttempts, c.maxAttempts, err)
-			time.Sleep(c.recInterval)
 		} else {
 			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Failed, Error: err})
-			return
+			return terminate
+		}
+
+		select {
+		case <-c.healthCheckDone:
+			// Terminate the connect loop on connection disconnect
+			log.Debug("Disconnected on request, exiting connect loop.")
+			return terminate
+		case <-time.After(c.recInterval):
 		}
 	}
-
-	// we are now connected, continue with health check loop
-	c.healthCheckLoop()
 }
 
 // healthCheckLoop checks whether connection to VPP is alive. In case of disconnect,
 // it continues with connectLoop and tries to reconnect.
-func (c *Connection) healthCheckLoop() {
+func (c *Connection) healthCheckLoop() backgroundLoopStatus {
 	// create a separate API channel for health check probes
 	ch, err := c.newAPIChannel(1, 1)
 	if err != nil {
 		log.Error("Failed to create health check API channel, health check will be disabled:", err)
-		return
+		return terminate
 	}
 	defer ch.Close()
 
@@ -357,7 +397,7 @@ HealthCheck:
 		case <-c.healthCheckDone:
 			// Terminate the health check loop on connection disconnect
 			log.Debug("Disconnected on request, exiting health check loop.")
-			return
+			return terminate
 		case <-probeInterval.C:
 			// try draining probe replies from previous request before sending next one
 			select {
@@ -415,10 +455,9 @@ HealthCheck:
 	}
 
 	// cleanup
-	c.disconnectVPP(false)
+	c.disconnectVPP()
 
-	// we are now disconnected, start connect loop
-	c.connectLoop()
+	return resume
 }
 
 func getMsgNameWithCrc(x api.Message) string {

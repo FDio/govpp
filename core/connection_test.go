@@ -15,6 +15,8 @@
 package core_test
 
 import (
+	"fmt"
+	"math"
 	"testing"
 	"time"
 
@@ -88,7 +90,15 @@ func TestAsyncConnection(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
+	var (
+		connectCalled    int
+		disconnectCalled int
+	)
+
 	ctx.conn.Disconnect()
+
+	ctx.mockVpp.SetConnectCallback(func() { connectCalled++ })
+	ctx.mockVpp.SetDisconnectCallback(func() { disconnectCalled++ })
 	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	ctx.conn = conn
 
@@ -97,13 +107,32 @@ func TestAsyncConnection(t *testing.T) {
 
 	ev := <-statusChan
 	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
+
+	conn.Disconnect()
+	Expect(connectCalled).Should(BeEquivalentTo(1))
+	Expect(disconnectCalled).Should(BeEquivalentTo(1))
 }
 
 func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
+	var (
+		connectCalled    int
+		disconnectCalled int
+	)
+
 	ctx.conn.Disconnect()
+
+	ctx.mockVpp.SetConnectCallback(func() {
+		if connectCalled == 0 {
+			ctx.mockVpp.MockConnectError(fmt.Errorf("no VPP present"))
+		} else {
+			ctx.mockVpp.MockConnectError(nil)
+		}
+		connectCalled++
+	})
+	ctx.mockVpp.SetDisconnectCallback(func() { disconnectCalled++ })
 	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
 	ctx.conn = conn
 
@@ -112,6 +141,82 @@ func TestAsyncConnectionProcessesVppTimeout(t *testing.T) {
 
 	ev := <-statusChan
 	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
+
+	conn.Disconnect()
+	Expect(connectCalled).Should(BeEquivalentTo(2))
+	Expect(disconnectCalled).Should(BeEquivalentTo(1))
+}
+
+func TestAsyncConnectionEarlyDisconnect(t *testing.T) {
+	ctx := setupTest(t, false)
+	defer ctx.teardownTest()
+
+	var (
+		connectCalled    int
+		disconnectCalled int
+	)
+
+	timeout := 100 * time.Millisecond
+
+	ctx.conn.Disconnect()
+
+	ctx.mockVpp.MockConnectError(fmt.Errorf("no VPP present"))
+	ctx.mockVpp.SetConnectCallback(func() { connectCalled++ })
+	ctx.mockVpp.SetDisconnectCallback(func() { disconnectCalled++ })
+
+	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, math.MaxInt, timeout)
+	ctx.conn = conn
+
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(conn).ShouldNot(BeNil())
+
+	timer := time.NewTimer(8 * timeout)
+	time.Sleep(3 * timeout)
+	conn.Disconnect()
+
+	// Check if disconnect disconnects
+	ctx.mockVpp.MockConnectError(nil)
+	time.Sleep(2 * timeout)
+
+	var connected bool
+	select {
+	case <-statusChan:
+		connected = true
+	case <-timer.C:
+		break
+	}
+
+	Expect(connected).Should(BeFalse())
+	Expect(connectCalled).Should(BeNumerically(">", 1))
+	Expect(disconnectCalled).Should(BeEquivalentTo(0))
+}
+
+func TestAsyncConnectionDoubleDisconnect(t *testing.T) {
+	ctx := setupTest(t, false)
+	defer ctx.teardownTest()
+
+	var (
+		connectCalled    int
+		disconnectCalled int
+	)
+
+	ctx.conn.Disconnect()
+
+	ctx.mockVpp.SetConnectCallback(func() { connectCalled++ })
+	ctx.mockVpp.SetDisconnectCallback(func() { disconnectCalled++ })
+	conn, statusChan, err := core.AsyncConnect(ctx.mockVpp, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
+	ctx.conn = conn
+
+	Expect(err).ShouldNot(HaveOccurred())
+	Expect(conn).ShouldNot(BeNil())
+
+	ev := <-statusChan
+	Expect(ev.State).Should(BeEquivalentTo(core.Connected))
+
+	conn.Disconnect()
+	conn.Disconnect()
+	Expect(connectCalled).Should(BeEquivalentTo(1))
+	Expect(disconnectCalled).Should(BeEquivalentTo(1))
 }
 
 func TestCodec(t *testing.T) {
