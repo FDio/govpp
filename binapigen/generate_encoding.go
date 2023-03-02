@@ -21,7 +21,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func genMessageSize(g *GenFile, name string, fields []*Field) {
+func genMessageEncodingMethods(g *GenFile, msg *Message) {
+	genMessageMethodSize(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodMarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+}
+
+func genMessageMethodSize(g *GenFile, name string, fields []*Field) {
 	g.P("func (m *", name, ") Size() (size int) {")
 	g.P("if m == nil { return 0 }")
 
@@ -125,7 +131,7 @@ func genMessageSize(g *GenFile, name string, fields []*Field) {
 	g.P("}")
 }
 
-func genMessageMarshal(g *GenFile, name string, fields []*Field) {
+func genMessageMethodMarshal(g *GenFile, name string, fields []*Field) {
 	g.P("func (m *", name, ") Marshal(b []byte) ([]byte, error) {")
 	g.P("if b == nil {")
 	g.P("b = make([]byte, m.Size())")
@@ -270,7 +276,7 @@ func encodeBaseType(g *GenFile, typ, orig, name string, length int, sizefrom str
 	}
 }
 
-func genMessageUnmarshal(g *GenFile, name string, fields []*Field) {
+func genMessageMethodUnmarshal(g *GenFile, name string, fields []*Field) {
 	g.P("func (m *", name, ") Unmarshal(b []byte) error {")
 
 	if len(fields) > 0 {

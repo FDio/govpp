@@ -34,17 +34,29 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// Options is set of input parameters for the Generator.
+type Options struct {
+	OutputDir     string   // output directory for generated files
+	ImportPrefix  string   // prefix for package import paths
+	GenerateFiles []string // list of files to generate
+
+	NoVersionInfo    bool // disables generating version info
+	NoSourcePathInfo bool // disables the 'source: /path' comment
+}
+
+// Generator processes VPP API files as input, provides API to handle content
+// of generated files.
 type Generator struct {
+	opts Options
+
+	apiFiles   []*vppapi.File
+	vppVersion string
+
 	Files       []*File
 	FilesByName map[string]*File
 	FilesByPath map[string]*File
 
-	opts       Options
-	apifiles   []*vppapi.File
-	vppVersion string
-
-	filesToGen []string
-	genfiles   []*GenFile
+	genfiles []*GenFile
 
 	enumsByName    map[string]*Enum
 	aliasesByName  map[string]*Alias
@@ -53,13 +65,13 @@ type Generator struct {
 	messagesByName map[string]*Message
 }
 
-func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator, error) {
+func New(opts Options, input *VppInput) (*Generator, error) {
 	gen := &Generator{
+		opts:           opts,
+		apiFiles:       input.ApiFiles,
+		vppVersion:     input.VppVersion,
 		FilesByName:    make(map[string]*File),
 		FilesByPath:    make(map[string]*File),
-		opts:           opts,
-		apifiles:       apiFiles,
-		filesToGen:     filesToGen,
 		enumsByName:    map[string]*Enum{},
 		aliasesByName:  map[string]*Alias{},
 		structsByName:  map[string]*Struct{},
@@ -67,25 +79,25 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 		messagesByName: map[string]*Message{},
 	}
 
-	// Normalize API files
-	SortFilesByImports(gen.apifiles)
-	for _, apiFile := range apiFiles {
-		RemoveImportedTypes(gen.apifiles, apiFile)
+	// normalize API files
+	SortFilesByImports(gen.apiFiles)
+	for _, apiFile := range gen.apiFiles {
+		RemoveImportedTypes(gen.apiFiles, apiFile)
 		SortFileObjectsByName(apiFile)
 	}
 
 	// prepare package names and import paths
 	packageNames := make(map[string]GoPackageName)
 	importPaths := make(map[string]GoImportPath)
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range gen.apiFiles {
 		filename := getFilename(apifile)
 		packageNames[filename] = cleanPackageName(apifile.Name)
 		importPaths[filename] = GoImportPath(path.Join(gen.opts.ImportPrefix, baseName(apifile.Name)))
 	}
 
-	logrus.Debugf("adding %d VPP API files to generator", len(gen.apifiles))
+	logrus.Debugf("adding %d VPP API files to generator", len(gen.apiFiles))
 
-	for _, apifile := range gen.apifiles {
+	for _, apifile := range gen.apiFiles {
 		if _, ok := gen.FilesByName[apifile.Name]; ok {
 			return nil, fmt.Errorf("duplicate file: %q", apifile.Name)
 		}
@@ -103,9 +115,9 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	}
 
 	// mark files for generation
-	if len(gen.filesToGen) > 0 {
-		logrus.Debugf("Checking %d files to generate: %v", len(gen.filesToGen), gen.filesToGen)
-		for _, genFile := range gen.filesToGen {
+	if len(gen.opts.GenerateFiles) > 0 {
+		logrus.Debugf("Checking %d files to generate: %v", len(gen.opts.GenerateFiles), gen.opts.GenerateFiles)
+		for _, genFile := range gen.opts.GenerateFiles {
 			markGen := func(file *File) {
 				file.Generate = true
 				// generate all imported files
@@ -113,6 +125,7 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 					impFile.Generate = true
 				}
 			}
+
 			if file, ok := gen.FilesByName[genFile]; ok {
 				markGen(file)
 				continue
@@ -134,6 +147,12 @@ func New(opts Options, apiFiles []*vppapi.File, filesToGen []string) (*Generator
 	return gen, nil
 }
 
+func (g *Generator) GetMessageByName(name string) *Message {
+	return g.messagesByName[name]
+}
+
+func (g *Generator) GetOpts() Options { return g.opts }
+
 func getFilename(file *vppapi.File) string {
 	if file.Path == "" {
 		return file.Name
@@ -153,10 +172,12 @@ func (g *Generator) Generate() error {
 		if err != nil {
 			return err
 		}
-		if err := writeSourceTo(genfile.filename, content); err != nil {
+		logrus.Debugf("- generating file: %v (%v bytes)", genfile.filename, len(content))
+		if err := WriteContentToFile(genfile.filename, content); err != nil {
 			return fmt.Errorf("writing source package %s failed: %v", genfile.filename, err)
 		}
 	}
+
 	return nil
 }
 
@@ -164,24 +185,25 @@ type GenFile struct {
 	gen           *Generator
 	file          *File
 	filename      string
-	goImportPath  GoImportPath
 	buf           bytes.Buffer
 	manualImports map[GoImportPath]bool
 	packageNames  map[GoImportPath]GoPackageName
 }
 
 // NewGenFile creates new generated file with
-func (g *Generator) NewGenFile(filename string, importPath GoImportPath) *GenFile {
+func (g *Generator) NewGenFile(filename string, file *File) *GenFile {
 	f := &GenFile{
 		gen:           g,
+		file:          file,
 		filename:      filename,
-		goImportPath:  importPath,
 		manualImports: make(map[GoImportPath]bool),
 		packageNames:  make(map[GoImportPath]GoPackageName),
 	}
 	g.genfiles = append(g.genfiles, f)
 	return f
 }
+
+func (g *GenFile) GetFile() *File { return g.file }
 
 func (g *GenFile) Write(p []byte) (n int, err error) {
 	return g.buf.Write(p)
@@ -192,7 +214,7 @@ func (g *GenFile) Import(importPath GoImportPath) {
 }
 
 func (g *GenFile) GoIdent(ident GoIdent) string {
-	if ident.GoImportPath == g.goImportPath {
+	if g.file != nil && ident.GoImportPath == g.file.GoImportPath {
 		return ident.GoName
 	}
 	if packageName, ok := g.packageNames[ident.GoImportPath]; ok {
@@ -216,10 +238,24 @@ func (g *GenFile) P(v ...interface{}) {
 }
 
 func (g *GenFile) Content() ([]byte, error) {
-	if !strings.HasSuffix(g.filename, ".go") {
-		return g.buf.Bytes(), nil
+	// for *.go files we inject imports
+	if strings.HasSuffix(g.filename, ".go") {
+		return g.injectImports(g.buf.Bytes())
 	}
-	return g.injectImports(g.buf.Bytes())
+	return g.buf.Bytes(), nil
+}
+
+// baseName returns the last path element of the name, with the last dotted suffix removed.
+func baseName(name string) string {
+	// First, find the last element
+	if i := strings.LastIndex(name, "/"); i >= 0 {
+		name = name[i+1:]
+	}
+	// Now drop the suffix
+	if i := strings.LastIndex(name, "."); i >= 0 {
+		name = name[:i]
+	}
+	return name
 }
 
 func getImportClass(importPath string) int {
@@ -313,25 +349,26 @@ func (g *GenFile) injectImports(original []byte) ([]byte, error) {
 		Tabwidth: 8,
 	}
 	if err = cfg.Fprint(&out, fset, file); err != nil {
-		return nil, fmt.Errorf("%v: can not reformat Go source: %v", g.filename, err)
+		return nil, fmt.Errorf("cannot reformat Go code in file %q: %w", g.filename, err)
 	}
 	return out.Bytes(), nil
 }
 
-func writeSourceTo(outputFile string, b []byte) error {
+func WriteContentToFile(outputFile string, content []byte) error {
 	// create output directory
 	packageDir := filepath.Dir(outputFile)
+
 	if err := os.MkdirAll(packageDir, 0775); err != nil {
 		return fmt.Errorf("creating output dir %s failed: %v", packageDir, err)
 	}
 
 	// write generated code to output file
-	if err := os.WriteFile(outputFile, b, 0666); err != nil {
+	if err := os.WriteFile(outputFile, content, 0666); err != nil {
 		return fmt.Errorf("writing to output file %s failed: %v", outputFile, err)
 	}
 
-	lines := bytes.Count(b, []byte("\n"))
-	logf("wrote %d lines (%d bytes) to: %q", lines, len(b), outputFile)
+	lines := bytes.Count(content, []byte("\n"))
+	logf("written %d lines (%d bytes) to: %q", lines, len(content), outputFile)
 
 	return nil
 }

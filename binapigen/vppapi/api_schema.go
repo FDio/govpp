@@ -16,6 +16,10 @@
 package vppapi
 
 type (
+	Schema struct {
+		Files   []File
+		Version string
+	}
 	File struct {
 		Name string
 		Path string
@@ -65,7 +69,7 @@ type (
 		Name    string
 		Fields  []Field
 		CRC     string
-		Options map[string]string
+		Options map[string]string `json:",omitempty"`
 	}
 
 	Field struct {

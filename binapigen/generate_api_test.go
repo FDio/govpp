@@ -31,7 +31,8 @@ func GenerateFromFile(file string, opts Options) error {
 	if err != nil {
 		return err
 	}
-	gen, err := New(opts, []*vppapi.File{apifile}, nil)
+	input := &VppInput{ApiFiles: []*vppapi.File{apifile}}
+	gen, err := New(opts, input)
 	if err != nil {
 		return err
 	}
