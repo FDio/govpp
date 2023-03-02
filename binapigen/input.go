@@ -32,9 +32,9 @@ type VppInput struct {
 
 // ResolveVppInput resolves given input string into VppInput.
 //
-// Currently supported input formats are:
-// - directory with VPP API JSON files (e.g. /usr/share/vpp/api/)
-// - directory with VPP repository checkout (runs 'make json-api-files')
+// Supported input formats are:
+//   - directory with VPP API JSON files (e.g. `/usr/share/vpp/api/`)
+//   - directory with VPP repository (runs `make json-api-files`)
 func ResolveVppInput(input string) (*VppInput, error) {
 	vppInput := &VppInput{}
 
