@@ -52,9 +52,9 @@ govpp v0.8.0-dev
 At first, you need VPP JSON API bindings to build go bindings from. There are several ways to get it.
 
 1. Download from `packagecloud.io` ([learn more](https://fd.io/docs/vpp/master/gettingstarted/installing)).
-2. Clone the VPP repository `git clone https://github.com/FDio/vpp.git` and run `make json-api-files`. Built JSON files
-   can be found in `/vpp/build-root/install-vpp-native/vpp/share/vpp/api/`.
-3. If the VPP is already built, the default JSON API path is `/usr/share/vpp/api/`
+2. Clone the VPP repository `git clone https://github.com/FDio/vpp.git` and run `make json-api-files`. Installed JSON
+   files can be found in `/vpp/build-root/install-vpp-native/vpp/share/vpp/api/`.
+3. If the VPP is already installed, the default JSON API path is `/usr/share/vpp/api/`
 
 # Generate VPP API bindings
 
@@ -64,7 +64,12 @@ If the VPP JSON API definitions are in the default directory `/usr/share/vpp/api
 binapi-generator
 ```
 
-Binding will be created in the current directory in `/binapi` package.
+Binding will be created in the current directory in `./binapi` package (relative path). The final package name will be
+resolved to the local `go.mod` module name.
+
+If you have a Go project (called `myproject` in `$HOME/myproject/vppbinapi`) with GoVPP as a dependency with both, the
+binary API generator and the VPP connection client, generated bindings are required to be inside the project (for
+example in `$HOME/myproject/vppbinapi`)
 
 To modify the VPP JSON API input directory, use `-input-dir` option. To modify the output directory, use
 the `-output-dir` option.
@@ -72,6 +77,8 @@ the `-output-dir` option.
 ```
 binapi-generator -input-dir=/path/to/vpp/api -output-dir=/path/to/generated/bindings
 ```
+
+This option might require setting the correct`-import-prefix` as well.
 
 For the full list of binary API generator plugins and options, see sections below.
 
@@ -91,10 +98,33 @@ The list of binapi-generator optional arguments in form `binapi-generator [OPTIO
 - `binapi-generator -version` prints the generator version, for example, `govpp v0.8.0-dev`
 - `binapi-generator -gen=http` injects the `http` plugin to generate additional files.
   More plugins are separated with comma, i.e. `-gen-http,rpc`. Note that `rpc` plugin is used by default
-- `binapi-generator -import-prefix=/desired/prefix/path` generates a custom prefix for imports in generated files
+- `binapi-generator -import-prefix=/desired/prefix/path` sets the go package name to be used in the generated bindings (
+  the string used in imports)
 - `binapi-generator -input-dir=/vpp/api/input/dir` sets the custom input directory instead of the default
-- `binapi-generator -output-dir=/bin/api/output/dir` sets the custom output directory
+- `binapi-generator -output-dir=/bin/api/output/dir` sets the custom output directory. It may or may not match
+  the `-import-prefx`, based on go.mod.
 - `binapi-generator -debug` prints some additional logs
+
+## VPP Startup
+
+Define the minimal `startup.conf`:
+
+```
+unix {interactive}
+socksvr { socket-name /var/run/vpp/api.sock }
+```
+
+Start with `startup.conf` if the VPP was installed from sources:
+
+```
+<vpp_repo_dir>/build-root/install-vpp_debug-native/vpp/bin/vpp -c /tmp/startup.conf
+```
+
+If it was installed from the package:
+
+```
+vpp -c /tmp/startup.conf
+```
 
 ## VPP API calls
 
@@ -151,60 +181,6 @@ response (multirequest). It is possible to determine the message type out of its
 
 * *_Requests_* have no special suffix for the request, or `Dump` or `Get` for the multirequest.
 * *_Responses_* have a `Reply` suffix for the request or `Details` for multirequest.
-
-#### Channel
-
-The `Channel` is the main communication unit between the caller and the VPP. After the successful connection, the
-channel is simply created from the connection object.
-
-```go
-ch, err := conn.NewAPIChannel()
-if err != nil {
-// handle error
-}
-```
-
-The new channel starts watching caller requests immediately.
-
-The channel can do a compatibility check for all the messages from any generated VPP API file.
-
-```go
-if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
-// handle error
-}
-```
-
-A single request is done by calling the asynchronous request/reply on a channel. The request returns the request context
-allowing to receive the reply.
-
-```go
-req := &interfaces.CreateLoopback{} // fill with data
-reply := &interfaces.CreateLoopbackReply{}
-if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-// handler error
-}
-```
-
-The multirequest expects more than one response. Its context contains information about the last item in the request
-list.
-
-```go
-req := &interfaces.SwInterfaceDump{} // fill with data
-reqCtx := ch.SendMultiRequest(req)
-for {
-reply := &interfaces.SwInterfaceDetails{}
-stop, err := reqCtx.ReceiveReply(reply)
-if err != nil {
-// handle error
-}
-if stop {
-break
-}
-// handle the reply before the next iteration
-}
-```
-
-*_Note: the multirequest message suffixed with `Get` needs a different type of handling using the stream client._*
 
 #### Stream client
 
@@ -327,6 +303,62 @@ default:
 }
 }
 ```
+
+#### Channel
+
+⚠️ **Warning, this is getting deprecated!**
+
+The `Channel` is the main communication unit between the caller and the VPP. After the successful connection, the
+channel is simply created from the connection object.
+
+```go
+ch, err := conn.NewAPIChannel()
+if err != nil {
+// handle error
+}
+```
+
+The new channel starts watching caller requests immediately.
+
+The channel can do a compatibility check for all the messages from any generated VPP API file.
+
+```go
+if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
+// handle error
+}
+```
+
+A single request is done by calling the asynchronous request/reply on a channel. The request returns the request context
+allowing to receive the reply.
+
+```go
+req := &interfaces.CreateLoopback{} // fill with data
+reply := &interfaces.CreateLoopbackReply{}
+if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+// handler error
+}
+```
+
+The multirequest expects more than one response. Its context contains information about the last item in the request
+list.
+
+```go
+req := &interfaces.SwInterfaceDump{} // fill with data
+reqCtx := ch.SendMultiRequest(req)
+for {
+reply := &interfaces.SwInterfaceDetails{}
+stop, err := reqCtx.ReceiveReply(reply)
+if err != nil {
+// handle error
+}
+if stop {
+break
+}
+// handle the reply before the next iteration
+}
+```
+
+*_Note: the multirequest message suffixed with `Get` needs a different type of handling using the stream client._*
 
 ## HTTP Service
 
