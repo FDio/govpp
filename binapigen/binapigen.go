@@ -17,21 +17,17 @@ package binapigen
 import (
 	"fmt"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-// generatedCodeVersion indicates a version of the generated code.
-// It is incremented whenever an incompatibility between the generated code and
-// GoVPP api package is introduced; the generated code references
-// a constant, api.GoVppAPIPackageIsVersionN (where N is generatedCodeVersion).
-const generatedCodeVersion = 2
-
 // file options
 const (
-	optFileVersion = "version"
+	// OptFileVersion is an option key for a version of file.
+	OptFileVersion = "version"
 )
 
 type File struct {
@@ -61,7 +57,7 @@ func newFile(gen *Generator, apifile *vppapi.File, packageName GoPackageName, im
 		GoImportPath: importPath,
 	}
 	if apifile.Options != nil {
-		file.Version = apifile.Options[optFileVersion]
+		file.Version = apifile.Options[OptFileVersion]
 	}
 
 	file.FilenamePrefix = path.Join(gen.opts.OutputDir, file.Desc.Name)
@@ -156,11 +152,8 @@ type Enum struct {
 func newEnum(gen *Generator, file *File, apitype vppapi.EnumType, isFlag bool) *Enum {
 	typ := &Enum{
 		EnumType: apitype,
-		GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},
-		IsFlag: isFlag,
+		GoIdent:  file.GoImportPath.Ident(camelCaseName(apitype.Name)),
+		IsFlag:   isFlag,
 	}
 	gen.enumsByName[typ.Name] = typ
 	return typ
@@ -179,10 +172,7 @@ type Alias struct {
 func newAlias(gen *Generator, file *File, apitype vppapi.AliasType) *Alias {
 	typ := &Alias{
 		AliasType: apitype,
-		GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},
+		GoIdent:   file.GoImportPath.Ident(camelCaseName(apitype.Name)),
 	}
 	gen.aliasesByName[typ.Name] = typ
 	return typ
@@ -222,10 +212,7 @@ type Struct struct {
 func newStruct(gen *Generator, file *File, apitype vppapi.StructType) *Struct {
 	typ := &Struct{
 		StructType: apitype,
-		GoIdent: GoIdent{
-			GoName:       camelCaseName(apitype.Name),
-			GoImportPath: file.GoImportPath,
-		},
+		GoIdent:    file.GoImportPath.Ident(camelCaseName(apitype.Name)),
 	}
 	gen.structsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {
@@ -255,10 +242,7 @@ type Union struct {
 func newUnion(gen *Generator, file *File, apitype vppapi.UnionType) *Union {
 	typ := &Union{
 		UnionType: apitype,
-		GoIdent: GoIdent{
-			GoName:       withSuffix(camelCaseName(apitype.Name), "Union"),
-			GoImportPath: file.GoImportPath,
-		},
+		GoIdent:   file.GoImportPath.Ident(withSuffix(camelCaseName(apitype.Name), "Union")),
 	}
 	gen.unionsByName[typ.Name] = typ
 	for i, fieldType := range apitype.Fields {
@@ -569,6 +553,25 @@ func (rpc *RPC) resolveMessages(gen *Generator) error {
 	return nil
 }
 
+type structTags map[string]string
+
+func (tags structTags) String() string {
+	if len(tags) == 0 {
+		return ""
+	}
+	var keys []string
+	for k := range tags {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	var ss []string
+	for _, key := range keys {
+		tag := tags[key]
+		ss = append(ss, fmt.Sprintf(`%s:%s`, key, strconv.Quote(tag)))
+	}
+	return "`" + strings.Join(ss, " ") + "`"
+}
+
 // GoIdent is a Go identifier, consisting of a name and import path.
 // The name is a single identifier and may not be a dot-qualified selector.
 type GoIdent struct {
@@ -603,26 +606,4 @@ type GoPackageName string
 
 func cleanPackageName(name string) GoPackageName {
 	return GoPackageName(sanitizedName(name))
-}
-
-// baseName returns the last path element of the name, with the last dotted suffix removed.
-func baseName(name string) string {
-	// First, find the last element
-	if i := strings.LastIndex(name, "/"); i >= 0 {
-		name = name[i+1:]
-	}
-	// Now drop the suffix
-	if i := strings.LastIndex(name, "."); i >= 0 {
-		name = name[:i]
-	}
-	return name
-}
-
-// normalizeImport returns the last path element of the import, with all dotted suffixes removed.
-func normalizeImport(imp string) string {
-	imp = path.Base(imp)
-	if idx := strings.Index(imp, "."); idx >= 0 {
-		imp = imp[:idx]
-	}
-	return imp
 }

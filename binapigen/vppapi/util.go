@@ -15,6 +15,7 @@
 package vppapi
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -25,10 +26,40 @@ import (
 )
 
 const (
-	VPPVersionEnvVar  = "VPP_VERSION"
-	VPPDirEnvVar      = "VPP_DIR"
-	versionScriptPath = "./src/scripts/version"
+	VPPVersionEnvVar = "VPP_VERSION"
+	VPPDirEnvVar     = "VPP_DIR"
+
+	versionScriptPath = "src/scripts/version"
+	localBuildRoot    = "build-root/install-vpp-native/vpp/share/vpp/api"
 )
+
+// ResolveApiDir checks if parameter dir is a path to directory of local VPP
+// repository and returns path to directory with VPP API JSON files under
+// build-root. It will execute `make json-api-files` in case the folder with
+// VPP API JSON files does not exist yet.
+func ResolveApiDir(dir string) string {
+	_, err := os.Stat(path.Join(dir, "build-root"))
+	if err == nil {
+		// local VPP build
+		_, err := os.Stat(path.Join(dir, localBuildRoot))
+		if err == nil {
+			return path.Join(dir, localBuildRoot)
+		} else if errors.Is(err, os.ErrNotExist) {
+			cmd := exec.Command("make", "json-api-files")
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			cmd.Dir = dir
+			_, err := cmd.CombinedOutput()
+			if err != nil {
+				logrus.Warnf("make json-api-files failed: %v", err)
+			} else {
+				return path.Join(dir, localBuildRoot)
+			}
+		}
+	}
+
+	return dir
+}
 
 // ResolveVPPVersion resolves version of the VPP for target directory.
 //
@@ -40,6 +71,28 @@ func ResolveVPPVersion(apidir string) string {
 		return ver
 	}
 
+	// check if inside VPP repo
+	repoDir, err := findGitRepoRootDir(apidir)
+	if err != nil {
+		logrus.Debugf("checking VPP git repo failed: %v", err)
+	} else {
+		logrus.Debugf("resolved git repo root directory: %v", repoDir)
+
+		version, err := GetVPPVersionRepo(repoDir)
+		if err != nil {
+			logrus.Warnf("resolving VPP version from version script failed: %v", err)
+		} else {
+			logrus.Infof("resolved VPP version from version script: %v", version)
+			return version
+		}
+
+		// try to read VPP_VERSION file
+		data, err := os.ReadFile(path.Join(repoDir, "VPP_VERSION"))
+		if err == nil {
+			return strings.TrimSpace(string(data))
+		}
+	}
+
 	// assuming VPP package is installed
 	if _, err := exec.LookPath("vpp"); err == nil {
 		version, err := GetVPPVersionInstalled()
@@ -49,27 +102,6 @@ func ResolveVPPVersion(apidir string) string {
 			logrus.Infof("resolved VPP version from installed package: %v", version)
 			return version
 		}
-	}
-
-	// check if inside VPP repo
-	repoDir, err := findGitRepoRootDir(apidir)
-	if err != nil {
-		logrus.Warnf("checking VPP git repo failed: %v", err)
-	} else {
-		logrus.Debugf("resolved git repo root directory: %v", repoDir)
-		version, err := GetVPPVersionRepo(repoDir)
-		if err != nil {
-			logrus.Warnf("resolving VPP version from version script failed: %v", err)
-		} else {
-			logrus.Infof("resolved VPP version from version script: %v", version)
-			return version
-		}
-	}
-
-	// try to read VPP_VERSION file
-	data, err := os.ReadFile(path.Join(repoDir, "VPP_VERSION"))
-	if err == nil {
-		return strings.TrimSpace(string(data))
 	}
 
 	logrus.Warnf("VPP version could not be resolved, you can set it manually using %s env var", VPPVersionEnvVar)

@@ -50,6 +50,10 @@ type VppAdapter struct {
 	replies       []reply        // FIFO queue of messages
 	replyHandlers []ReplyHandler // callbacks that are able to calculate mock responses
 	mode          replyMode      // mode in which the mock operates
+
+	connectError       error  // error to be returned in Connect()
+	connectCallback    func() // callback to be called in Connect()
+	disconnectCallback func() // callback to be called in Disconnect()
 }
 
 // defaultReply is a default reply message that mock adapter returns for a request.
@@ -134,11 +138,17 @@ func NewVppAdapter() *VppAdapter {
 
 // Connect emulates connecting the process to VPP.
 func (a *VppAdapter) Connect() error {
-	return nil
+	if a.connectCallback != nil {
+		a.connectCallback()
+	}
+	return a.connectError
 }
 
 // Disconnect emulates disconnecting the process from VPP.
 func (a *VppAdapter) Disconnect() error {
+	if a.disconnectCallback != nil {
+		a.disconnectCallback()
+	}
 	return nil
 }
 
@@ -429,4 +439,19 @@ func setMultipart(context uint32, isMultipart bool) (newContext uint32) {
 		context |= 1 << 16
 	}
 	return context
+}
+
+// MockConnectError sets an error to be returned in Connect()
+func (a *VppAdapter) MockConnectError(err error) {
+	a.connectError = err
+}
+
+// SetConnectCallback sets a callback to be called in Connect()
+func (a *VppAdapter) SetConnectCallback(cb func()) {
+	a.connectCallback = cb
+}
+
+// SetDisconnectCallback sets a callback to be called in Disconnect()
+func (a *VppAdapter) SetDisconnectCallback(cb func()) {
+	a.disconnectCallback = cb
 }

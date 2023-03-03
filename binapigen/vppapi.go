@@ -16,11 +16,14 @@ package binapigen
 
 import (
 	"log"
+	"path"
 	"sort"
+	"strings"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// SortFileObjectsByName sorts all objects of file by their name.
 func SortFileObjectsByName(file *vppapi.File) {
 	sort.SliceStable(file.Imports, func(i, j int) bool {
 		return file.Imports[i] < file.Imports[j]
@@ -50,7 +53,7 @@ func SortFileObjectsByName(file *vppapi.File) {
 	}
 }
 
-func importedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
+func ListImportedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 	var list []*vppapi.File
 	byName := func(s string) *vppapi.File {
 		for _, f := range files {
@@ -65,9 +68,9 @@ func importedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 		imp = normalizeImport(imp)
 		impFile := byName(imp)
 		if impFile == nil {
-			log.Fatalf("file %q not found", imp)
+			log.Fatalf("imported file %q not found", imp)
 		}
-		for _, nest := range importedFiles(files, impFile) {
+		for _, nest := range ListImportedFiles(files, impFile) {
 			if _, ok := imported[nest.Name]; !ok {
 				list = append(list, nest)
 				imported[nest.Name] = struct{}{}
@@ -81,16 +84,26 @@ func importedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 	return list
 }
 
+// normalizeImport returns the last path element of the import, with all dotted suffixes removed.
+func normalizeImport(imp string) string {
+	imp = path.Base(imp)
+	if idx := strings.Index(imp, "."); idx >= 0 {
+		imp = imp[:idx]
+	}
+	return imp
+}
+
+// SortFilesByImports sorts list of files by their imports.
 func SortFilesByImports(apifiles []*vppapi.File) {
 	dependsOn := func(file *vppapi.File, dep string) bool {
-		for _, imp := range importedFiles(apifiles, file) {
+		for _, imp := range ListImportedFiles(apifiles, file) {
 			if imp.Name == dep {
 				return true
 			}
 		}
 		return false
 	}
-	sort.Slice(apifiles, func(i, j int) bool {
+	sort.SliceStable(apifiles, func(i, j int) bool {
 		a := apifiles[i]
 		b := apifiles[j]
 		if dependsOn(a, b.Name) {
@@ -103,9 +116,10 @@ func SortFilesByImports(apifiles []*vppapi.File) {
 	})
 }
 
+// ListImportedTypes returns list of names for imported types.
 func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 	var importedTypes []string
-	typeFiles := importedFiles(apifiles, file)
+	typeFiles := ListImportedFiles(apifiles, file)
 	for _, t := range file.StructTypes {
 		var imported bool
 		for _, imp := range typeFiles {
@@ -189,6 +203,7 @@ func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 	return importedTypes
 }
 
+// RemoveImportedTypes removes imported types from file.
 func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
 	importedTypes := ListImportedTypes(apifiles, apifile)
 	isImportedType := func(s string) bool {

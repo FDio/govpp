@@ -20,58 +20,40 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/sirupsen/logrus"
-
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-type Options struct {
-	OutputDir        string // output directory for generated files
-	ImportPrefix     string // prefix for import paths
-	NoVersionInfo    bool   // disables generating version info
-	NoSourcePathInfo bool   // disables the 'source: /path' comment
-}
-
-func Run(apiDir string, filesToGenerate []string, opts Options, f func(*Generator) error) {
-	if err := run(apiDir, filesToGenerate, opts, f); err != nil {
+func Run(vppInput *VppInput, opts Options, f func(*Generator) error) {
+	if err := run(vppInput, opts, f); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
 		os.Exit(1)
 	}
 }
 
-func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generator) error) error {
-	apiFiles, err := vppapi.ParseDir(apiDir)
-	if err != nil {
-		return err
-	}
+func run(vppInput *VppInput, opts Options, genFn func(*Generator) error) error {
+	var err error
 
 	if opts.ImportPrefix == "" {
-		opts.ImportPrefix, err = resolveImportPath(opts.OutputDir)
+		opts.ImportPrefix, err = ResolveImportPath(opts.OutputDir)
 		if err != nil {
 			return fmt.Errorf("cannot resolve import path for output dir %s: %w", opts.OutputDir, err)
 		}
 		logrus.Debugf("resolved import path prefix: %s", opts.ImportPrefix)
 	}
 
-	gen, err := New(opts, apiFiles, filesToGenerate)
+	gen, err := New(opts, vppInput)
 	if err != nil {
 		return err
 	}
 
-	gen.vppVersion = vppapi.ResolveVPPVersion(apiDir)
-	if gen.vppVersion == "" {
-		gen.vppVersion = "unknown"
+	if genFn == nil {
+		genFn = GenerateDefault
+	}
+	if err := genFn(gen); err != nil {
+		return err
 	}
 
-	if fn == nil {
-		GenerateDefault(gen)
-	} else {
-		if err := fn(gen); err != nil {
-			return err
-		}
-	}
 	if err = gen.Generate(); err != nil {
 		return err
 	}
@@ -79,7 +61,32 @@ func run(apiDir string, filesToGenerate []string, opts Options, fn func(*Generat
 	return nil
 }
 
-func GenerateDefault(gen *Generator) {
+func GeneratePlugins(genPlugins []string) func(*Generator) error {
+	return func(gen *Generator) error {
+		for _, file := range gen.Files {
+			if !file.Generate {
+				continue
+			}
+			logrus.Debugf("GENERATE FILE: %v", file.Desc.Path)
+			GenerateAPI(gen, file)
+			for _, p := range genPlugins {
+				logrus.Debugf("  [GEN plugin: %v]", p)
+				if err := RunPlugin(p, gen, file); err != nil {
+					return err
+				}
+			}
+		}
+		for _, p := range genPlugins {
+			logrus.Debugf("  [GEN ALL plugin: %v]", p)
+			if err := RunPlugin(p, gen, nil); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+}
+
+func GenerateDefault(gen *Generator) error {
 	for _, file := range gen.Files {
 		if !file.Generate {
 			continue
@@ -87,23 +94,11 @@ func GenerateDefault(gen *Generator) {
 		GenerateAPI(gen, file)
 		GenerateRPC(gen, file)
 	}
+	return nil
 }
 
-var Logger = logrus.New()
-
-func init() {
-	if debug := os.Getenv("DEBUG_GOVPP"); strings.Contains(debug, "binapigen") {
-		Logger.SetLevel(logrus.DebugLevel)
-		logrus.SetLevel(logrus.DebugLevel)
-	}
-}
-
-func logf(f string, v ...interface{}) {
-	Logger.Debugf(f, v...)
-}
-
-// resolveImportPath tries to resolve import path for a directory.
-func resolveImportPath(dir string) (string, error) {
+// ResolveImportPath tries to resolve import path for a directory.
+func ResolveImportPath(dir string) (string, error) {
 	absPath, err := filepath.Abs(dir)
 	if err != nil {
 		return "", err
