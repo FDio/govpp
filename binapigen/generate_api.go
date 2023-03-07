@@ -440,6 +440,7 @@ func genMessages(g *GenFile) {
 func genMessage(g *GenFile, msg *Message) {
 	logf("gen MESSAGE %s (%s) - %d fields", msg.GoName, msg.Name, len(msg.Fields))
 
+	genMessageComment(g, msg)
 	genTypeComment(g, msg.GoIdent.GoName, msg.Name, "message")
 	genTypeOptionComment(g, msg.Options)
 
@@ -468,6 +469,20 @@ func genMessageBaseMethods(g *GenFile, msg *Message) {
 	// Reset method
 	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
 
+	// GetXXX methods
+	genMessageMethods(g, msg)
+
+	g.P()
+}
+
+func genMessageComment(g *GenFile, msg *Message) {
+	if msg.Comment != "" {
+		comment := strings.Replace(msg.Comment, "\n", "\n// ", -1)
+		g.P("// ", comment)
+	}
+}
+
+func genMessageMethods(g *GenFile, msg *Message) {
 	// GetMessageName method
 	g.P("func (*", msg.GoIdent.GoName, ") GetMessageName() string { return ", strconv.Quote(msg.Name), " }")
 

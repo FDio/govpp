@@ -48,6 +48,7 @@ const (
 	// type keys
 	messageCrc     = "crc"
 	messageOptions = "options"
+	messageComment = "comment"
 	enumType       = "enumtype"
 	aliasLength    = "length"
 	aliasType      = "type"
@@ -372,12 +373,18 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 	if !ok {
 		return nil, fmt.Errorf("message name is %T, not a string", msgNode.At(0).Get())
 	}
-	msgCRC, ok := msgNode.At(msgNode.Len() - 1).At(messageCrc).Get().(string)
+
+	msgMeta := msgNode.At(msgNode.Len() - 1)
+
+	// parse message CRC
+	msgCRC, ok := msgMeta.At(messageCrc).Get().(string)
 	if !ok {
 		return nil, fmt.Errorf("message crc invalid or missing")
 	}
+
+	// parse message options
 	var msgOpts map[string]string
-	msgOptsNode := msgNode.At(msgNode.Len() - 1).Map(messageOptions)
+	msgOptsNode := msgMeta.Map(messageOptions)
 	if msgOptsNode.GetType() == jsongo.TypeMap {
 		msgOpts = make(map[string]string)
 		for _, opt := range msgOptsNode.GetKeys() {
@@ -396,10 +403,23 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 		}
 	}
 
+	// parse message comment
+	var msgComment string
+	msgCommentNode := msgMeta.At(messageComment)
+	if msgCommentNode.GetType() == jsongo.TypeValue {
+		comment, ok := msgCommentNode.Get().(string)
+		if !ok {
+			logf("message comment value invalid, expected string")
+		} else {
+			msgComment = comment
+		}
+	}
+
 	msg := Message{
 		Name:    msgName,
 		CRC:     msgCRC,
 		Options: msgOpts,
+		Comment: msgComment,
 	}
 
 	// loop through message fields, skip first (name) and last (crc)

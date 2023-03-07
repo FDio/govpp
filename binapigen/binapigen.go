@@ -287,7 +287,8 @@ const (
 type Message struct {
 	vppapi.Message
 
-	CRC string
+	CRC     string
+	Comment string
 
 	GoIdent
 
@@ -300,6 +301,7 @@ func newMessage(gen *Generator, file *File, apitype vppapi.Message) *Message {
 	msg := &Message{
 		Message: apitype,
 		CRC:     strings.TrimPrefix(apitype.CRC, "0x"),
+		Comment: StripMessageCommentFields(CleanMessageComment(apitype.Comment), fieldContext, fieldClientIndex),
 		GoIdent: newGoIdent(file, apitype.Name),
 	}
 	gen.messagesByName[apitype.Name] = msg

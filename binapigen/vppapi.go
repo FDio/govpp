@@ -250,3 +250,47 @@ func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
 	apifile.StructTypes = structs
 	apifile.UnionTypes = unions
 }
+
+// CleanMessageComment processes a comment string from VPP API message and
+// returns a modified version with the following changes:
+// - trim comment syntax ("/**", "*/")
+// - remove special syntax ("\brief") parts
+// - replace all occurrences of "@param" with a dash ("-").
+func CleanMessageComment(comment string) string {
+	// trim comment syntax
+	comment = strings.TrimPrefix(comment, "/**")
+	comment = strings.TrimSuffix(comment, " */")
+	comment = strings.TrimSuffix(comment, "*/")
+
+	// remove \\brief from the comment
+	comment = strings.Replace(comment, `\\brief`, "", -1)
+	comment = strings.Replace(comment, `\brief`, "", -1)
+
+	// replace @param with a dash (-)
+	comment = strings.Replace(comment, "@param", "-", -1)
+
+	return strings.TrimSpace(comment)
+}
+
+// StripMessageCommentFields processes a comment string from VPP API message and
+// returns a modified version where a set of fields are omitted.
+func StripMessageCommentFields(comment string, fields ...string) string {
+	lines := strings.Split(comment, "\n")
+	result := ""
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		add := true
+		for _, field := range fields {
+			if strings.Contains(line, " - "+field) {
+				add = false
+				break
+			}
+		}
+		if add {
+			result += line + "\n"
+		}
+	}
+	return strings.TrimSuffix(result, "\n")
+}

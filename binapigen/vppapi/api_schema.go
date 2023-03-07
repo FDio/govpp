@@ -20,6 +20,7 @@ type (
 		Files   []File
 		Version string
 	}
+
 	File struct {
 		Name string
 		Path string
@@ -70,6 +71,7 @@ type (
 		Fields  []Field
 		CRC     string
 		Options map[string]string `json:",omitempty"`
+		Comment string            `json:",omitempty"`
 	}
 
 	Field struct {
