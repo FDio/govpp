@@ -1,19 +1,30 @@
-<p align="center">
-	<img src="./docs/govpp-logo.png">
-</p>
-<h1 align="center">GoVPP</h1>
+<h1 align="center" style="border-bottom: none">
+    <img alt="Prometheus" src="./docs/govpp-logo.png"><br>GoVPP
+</h1>
+
 <p align="center">
 	<a href="https://github.com/FDio/govpp/actions/workflows/ci.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/ci.yaml/badge.svg" alt="CI"></a>
 	<a href="https://github.com/FDio/govpp/tags"><img src="https://img.shields.io/github/v/tag/fdio/govpp?label=latest&logo=github&sort=semver&color=blue" alt="Latest"></a>
 	<a href="https://pkg.go.dev/go.fd.io/govpp"><img src="https://pkg.go.dev/badge/go.fd.io/govpp" alt="PkgGoDev"></a>
 </p>
 
-<p align="center">
-The GoVPP repository contains a Go client library for interacting with the VPP API, </br>
-generator for Go bindings of the VPP binary API and various other tooling for the VPP.
-</p>
+The GoVPP repository contains Go client libraries, code bindings generator and other toolings for VPP.
+
+Here is brief summary of features provided by GoVPP:
+
+* Generator of Go bindings for VPP API
+* Go client library for VPP binary API & Stats API
+* Extendable code generator supporting custom plugins
+* Pure Go implementation of VPP binary API protocol
+* Efficient reader of VPP Stats data from shared memory
+* Simple client API that does not rely on VPP API semantics
+* Generated RPC client code that handles all boilerplate
+* ..and much more!
 
 ---
+
+<details><summary>ℹ️ Migration to GitHub</summary>
+<p>
 
 ## Migration to GitHub
 
@@ -27,15 +38,8 @@ The GoVPP project has been recently migrated to [:octocat: GitHub](https://githu
 - **Repository location** has changed from ~~[Gerrit](https://git.fd.io/govpp.git)~~ to [GitHub](https://github.com/FDio/govpp).
   - The [old Gerrit repository](https://gerrit.fd.io/r/gitweb?p=govpp.git;a=summary) has been archived.
 
-### How to contribute?
-
-- Contribute code by submitting a [Pull Request](https://github.com/FDio/govpp/pulls).
-- Report bugs by opening an [Issue](https://github.com/FDio/govpp/issues).
-- Ask questions & open discussions by starting a [Discussion](https://github.com/FDio/govpp/discussions).
-  
-## Documentation
-
-Go reference is available at https://pkg.go.dev/go.fd.io/govpp. More documentation can be found under [docs](docs) directory.
+</p>
+</details>
 
 ## Examples
 
@@ -113,6 +117,18 @@ log.Print("Version: ", reply.Version)
 ```
 
 For a complete example see [simple-client](examples/simple-client).
+
+### How to contribute?
+
+- Contribute code by submitting a [Pull Request](https://github.com/FDio/govpp/pulls).
+- Report bugs by opening an [Issue](https://github.com/FDio/govpp/issues).
+- Ask questions & open discussions by starting a [Discussion](https://github.com/FDio/govpp/discussions).
+
+## Documentation
+
+Refer to [User Guide](docs/USER_GUIDE.md) document for all the basics. If you run into issues or just need help debugging read our [Troubleshooting](docs/TROUBLESHOOTING.md) document.
+
+Go reference is available at https://pkg.go.dev/go.fd.io/govpp. More documentation can be found under [docs](docs) directory.
 
 ## Repository Structure
 
