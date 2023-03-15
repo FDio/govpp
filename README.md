@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none">
-    <img alt="Prometheus" src="./docs/govpp-logo.png"><br>GoVPP
+    <img alt="logo" src="./docs/govpp-logo.png"><br>GoVPP
 </h1>
 
 <p align="center">
