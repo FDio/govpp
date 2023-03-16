@@ -48,23 +48,24 @@ func main() {
 	}
 	defer conn.Disconnect()
 
-	singleChannel(conn)
-	multiChannel(conn)
-	stream(conn)
+	fmt.Printf("=> Enabling API trace...\n")
+	trace := core.NewTrace(conn, 50)
 
+	singleChannel(conn, trace)
+	multiChannel(conn, trace)
+	stream(conn, trace)
+
+	trace.Close()
 	fmt.Printf("Api-trace tool example finished\n\n")
 }
 
-func singleChannel(conn *core.Connection) {
+func singleChannel(conn *core.Connection, trace api.Trace) {
 	// create new channel and perform simple compatibility check
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
 	}
 	defer ch.Close()
-
-	fmt.Printf("=> Example 1\n\nEnabling API trace...\n")
-	conn.Trace().Enable(true)
 
 	if err := ch.CheckCompatiblity(append(vpe.AllMessages(), interfaces.AllMessages()...)...); err != nil {
 		log.Fatal(err)
@@ -79,18 +80,18 @@ func singleChannel(conn *core.Connection) {
 	deleteLoopback(ch, idx)
 	fmt.Println()
 
-	fmt.Printf("API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().Clear()
+	trace.Clear()
 }
 
-func multiChannel(conn *core.Connection) {
+func multiChannel(conn *core.Connection, trace api.Trace) {
 	ch1, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -123,30 +124,30 @@ func multiChannel(conn *core.Connection) {
 		log.Fatalln("ERROR: incorrect type of channel 2:", err)
 	}
 
-	fmt.Printf("API trace for channel 1 (api calls: %d):\n", len(conn.Trace().GetRecordsForChannel(chan1.GetID())))
+	fmt.Printf("API trace for channel 1 (api calls: %d):\n", len(trace.GetRecordsForChannel(chan1.GetID())))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecordsForChannel(chan1.GetID()) {
+	for _, item := range trace.GetRecordsForChannel(chan1.GetID()) {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
-	fmt.Printf("API trace for channel 2 (api calls: %d):\n", len(conn.Trace().GetRecordsForChannel(chan2.GetID())))
+	fmt.Printf("API trace for channel 2 (api calls: %d):\n", len(trace.GetRecordsForChannel(chan2.GetID())))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecordsForChannel(chan2.GetID()) {
+	for _, item := range trace.GetRecordsForChannel(chan2.GetID()) {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
-	fmt.Printf("cumulative API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("cumulative API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().Clear()
+	trace.Clear()
 }
 
-func stream(conn *core.Connection) {
+func stream(conn *core.Connection, trace api.Trace) {
 	// create new channel and perform simple compatibility check
 	s, err := conn.NewStream(context.Background())
 	if err != nil {
@@ -167,15 +168,15 @@ func stream(conn *core.Connection) {
 	invokeDeleteLoopback(conn, idx)
 	fmt.Println()
 
-	fmt.Printf("stream API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("stream API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().GetRecords()
+	trace.GetRecords()
 }
 
 func retrieveVersion(ch api.Channel) {

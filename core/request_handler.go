@@ -110,7 +110,12 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 	}
 
 	// send the request to VPP
-	t := time.Now()
+	c.trace.record(&api.Record{
+		Message:    req.msg,
+		Timestamp:  time.Now(),
+		IsReceived: false,
+		ChannelID:  ch.id,
+	})
 	err = c.vppClient.SendMsg(context, data)
 	if err != nil {
 		log.WithFields(logger.Fields{
@@ -126,7 +131,6 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}).Warnf("Unable to send message")
 		return err
 	}
-	c.trace(req.msg, ch.id, t, false)
 
 	if req.multi {
 		// send a control ping to determine end of the multipart response
@@ -143,16 +147,19 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				"data_len": len(pingData),
 			}).Debugf(" -> SEND MSG: %T", c.msgControlPing)
 		}
-
-		t = time.Now()
-		if err := c.vppClient.SendMsg(context, pingData); err != nil {
+		c.trace.record(&api.Record{
+			Message:    c.msgControlPing,
+			Timestamp:  time.Now(),
+			IsReceived: false,
+			ChannelID:  ch.id,
+		})
+		if err = c.vppClient.SendMsg(context, pingData); err != nil {
 			log.WithFields(logger.Fields{
 				"context": context,
 				"seq_num": req.seqNum,
 				"error":   err,
 			}).Warnf("unable to send control ping")
 		}
-		c.trace(c.msgControlPing, ch.id, t, false)
 	}
 
 	return nil
@@ -192,7 +199,12 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		log.WithField("msg", msg).Warnf("Unable to decode message: %v", err)
 		return
 	}
-	c.trace(msg, chanID, time.Now(), true)
+	c.trace.record(&api.Record{
+		Message:    msg,
+		Timestamp:  time.Now(),
+		IsReceived: true,
+		ChannelID:  chanID,
+	})
 
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		log.WithFields(logger.Fields{

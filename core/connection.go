@@ -136,7 +136,7 @@ type Connection struct {
 	msgControlPing      api.Message
 	msgControlPingReply api.Message
 
-	apiTrace *trace // API tracer (disabled by default)
+	trace *Trace // API tracer (disabled by default)
 }
 
 type backgroundLoopStatus int
@@ -169,10 +169,6 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 		subscriptions:       make(map[uint16][]*subscriptionCtx),
 		msgControlPing:      msgControlPing,
 		msgControlPingReply: msgControlPingReply,
-		apiTrace: &trace{
-			list: make([]*api.Record, 0),
-			mux:  &sync.Mutex{},
-		},
 	}
 
 	var nextChannelID uint32
@@ -564,25 +560,4 @@ func (c *Connection) sendConnEvent(event ConnectionEvent) {
 	default:
 		log.Warn("Connection state channel is full, discarding value.")
 	}
-}
-
-// Trace gives access to the API trace interface
-func (c *Connection) Trace() api.Trace {
-	return c.apiTrace
-}
-
-// trace records api message
-func (c *Connection) trace(msg api.Message, chId uint16, t time.Time, isReceived bool) {
-	if atomic.LoadInt32(&c.apiTrace.isEnabled) == 0 {
-		return
-	}
-	entry := &api.Record{
-		Message:    msg,
-		Timestamp:  t,
-		IsReceived: isReceived,
-		ChannelID:  chId,
-	}
-	c.apiTrace.mux.Lock()
-	c.apiTrace.list = append(c.apiTrace.list, entry)
-	c.apiTrace.mux.Unlock()
 }

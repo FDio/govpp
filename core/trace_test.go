@@ -1,11 +1,7 @@
 package core_test
 
 import (
-	"strings"
-	"testing"
-
 	. "github.com/onsi/gomega"
-
 	"go.fd.io/govpp/api"
 	interfaces "go.fd.io/govpp/binapi/interface"
 	"go.fd.io/govpp/binapi/ip"
@@ -13,14 +9,20 @@ import (
 	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/memif"
 	"go.fd.io/govpp/core"
+	"reflect"
+	"strings"
+	"testing"
 )
+
+const traceSize = 10
 
 func TestTraceEnabled(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	Expect(ctx.conn.Trace()).ToNot(BeNil())
-	ctx.conn.Trace().Enable(true)
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	defer trace.Close()
 
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
@@ -40,11 +42,10 @@ func TestTraceEnabled(t *testing.T) {
 		err := ctx.ch.SendRequest(request[i]).ReceiveReply(reply[i])
 		Expect(err).To(BeNil())
 	}
-
-	traced := ctx.conn.Trace().GetRecords()
-	Expect(traced).ToNot(BeNil())
-	Expect(traced).To(HaveLen(8))
-	for i, entry := range traced {
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(HaveLen(len(request) + len(reply)))
+	for i, entry := range records {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
@@ -65,7 +66,9 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	ctx.conn.Trace().Enable(true)
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	defer trace.Close()
 
 	request := []api.Message{
 		&interfaces.SwInterfaceDump{},
@@ -97,10 +100,10 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 		i++
 	}
 
-	traced := ctx.conn.Trace().GetRecords()
-	Expect(traced).ToNot(BeNil())
-	Expect(traced).To(HaveLen(6))
-	for _, entry := range traced {
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(HaveLen(6))
+	for _, entry := range records {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
@@ -125,7 +128,7 @@ func TestTraceDisabled(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	ctx.conn.Trace().Enable(false)
+	// do not enable trace
 
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
@@ -146,15 +149,21 @@ func TestTraceDisabled(t *testing.T) {
 		Expect(err).To(BeNil())
 	}
 
-	traced := ctx.conn.Trace().GetRecords()
-	Expect(traced).To(BeNil())
+	// It rightfully complains about copying the trace lock, but in this case,
+	// we are checking whether the connection trace field is nil. Forgive us.
+	//goland:noinspection GoVetCopyLock
+	connValue := reflect.ValueOf(*ctx.conn)
+	traceField := connValue.FieldByName("trace")
+	Expect(traceField.IsNil()).To(BeTrue())
 }
 
 func TestTracePerChannel(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	ctx.conn.Trace().Enable(true)
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	defer trace.Close()
 
 	ch1 := ctx.ch
 	ch2, err := ctx.conn.NewAPIChannel()
@@ -179,18 +188,18 @@ func TestTracePerChannel(t *testing.T) {
 
 	for i := 0; i < len(requestCh1); i++ {
 		ctx.mockVpp.MockReply(replyCh1[i])
-		err := ch1.SendRequest(requestCh1[i]).ReceiveReply(replyCh1[i])
+		err = ch1.SendRequest(requestCh1[i]).ReceiveReply(replyCh1[i])
 		Expect(err).To(BeNil())
 	}
 	for i := 0; i < len(requestCh2); i++ {
 		ctx.mockVpp.MockReply(replyCh2[i])
-		err := ch2.SendRequest(requestCh2[i]).ReceiveReply(replyCh2[i])
+		err = ch2.SendRequest(requestCh2[i]).ReceiveReply(replyCh2[i])
 		Expect(err).To(BeNil())
 	}
 
-	trace := ctx.conn.Trace().GetRecords()
-	Expect(trace).ToNot(BeNil())
-	Expect(trace).To(HaveLen(8))
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(HaveLen(8))
 
 	// per channel
 	channel1, ok := ch1.(*core.Channel)
@@ -198,10 +207,10 @@ func TestTracePerChannel(t *testing.T) {
 	channel2, ok := ch2.(*core.Channel)
 	Expect(ok).To(BeTrue())
 
-	tracedCh1 := ctx.conn.Trace().GetRecordsForChannel(channel1.GetID())
-	Expect(tracedCh1).ToNot(BeNil())
-	Expect(tracedCh1).To(HaveLen(6))
-	for i, entry := range tracedCh1 {
+	recordsCh1 := trace.GetRecordsForChannel(channel1.GetID())
+	Expect(recordsCh1).ToNot(BeNil())
+	Expect(recordsCh1).To(HaveLen(6))
+	for i, entry := range recordsCh1 {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
@@ -217,10 +226,10 @@ func TestTracePerChannel(t *testing.T) {
 		}
 	}
 
-	tracedCh2 := ctx.conn.Trace().GetRecordsForChannel(channel2.GetID())
-	Expect(tracedCh2).ToNot(BeNil())
-	Expect(tracedCh2).To(HaveLen(2))
-	for i, entry := range tracedCh2 {
+	recordsCh2 := trace.GetRecordsForChannel(channel2.GetID())
+	Expect(recordsCh2).ToNot(BeNil())
+	Expect(recordsCh2).To(HaveLen(2))
+	for i, entry := range recordsCh2 {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
@@ -241,7 +250,9 @@ func TestTraceClear(t *testing.T) {
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
-	ctx.conn.Trace().Enable(true)
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	defer trace.Close()
 
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
@@ -258,12 +269,51 @@ func TestTraceClear(t *testing.T) {
 		Expect(err).To(BeNil())
 	}
 
-	traced := ctx.conn.Trace().GetRecords()
-	Expect(traced).ToNot(BeNil())
-	Expect(traced).To(HaveLen(4))
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(HaveLen(4))
 
-	ctx.conn.Trace().Clear()
-	traced = ctx.conn.Trace().GetRecords()
-	Expect(traced).To(BeNil())
-	Expect(traced).To(BeEmpty())
+	trace.Clear()
+
+	for i := 0; i < len(request); i++ {
+		ctx.mockVpp.MockReply(reply[i])
+		err := ctx.ch.SendRequest(request[i]).ReceiveReply(reply[i])
+		Expect(err).To(BeNil())
+	}
+	records = trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(HaveLen(4))
+
+	trace.Clear()
+
+	records = trace.GetRecords()
+	Expect(records).To(BeEmpty())
+}
+
+func TestTraceUseIfClosed(t *testing.T) {
+	ctx := setupTest(t, false)
+	defer ctx.teardownTest()
+
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	trace.Close()
+
+	request := []api.Message{
+		&interfaces.CreateLoopback{},
+		&memif.MemifCreate{},
+	}
+	reply := []api.Message{
+		&interfaces.CreateLoopbackReply{},
+		&memif.MemifCreateReply{},
+	}
+
+	for i := 0; i < len(request); i++ {
+		ctx.mockVpp.MockReply(reply[i])
+		err := ctx.ch.SendRequest(request[i]).ReceiveReply(reply[i])
+		Expect(err).To(BeNil())
+	}
+
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(BeEmpty())
 }
