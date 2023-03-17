@@ -52,19 +52,17 @@ func NewTrace(c *Connection, size int) (t *Trace) {
 	}
 	go func() {
 		for {
-			select {
-			case record, ok := <-t.buffer:
-				if !ok {
-					return
-				}
-				if t.index < len(t.records) {
-					t.RLock()
-					t.records[t.index] = record
-					t.index++
-					t.RUnlock()
-				}
-				t.wg.Done()
+			record, ok := <-t.buffer
+			if !ok {
+				return
 			}
+			if t.index < len(t.records) {
+				t.RLock()
+				t.records[t.index] = record
+				t.index++
+				t.RUnlock()
+			}
+			t.wg.Done()
 		}
 	}()
 	return

@@ -9,7 +9,6 @@ import (
 	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/memif"
 	"go.fd.io/govpp/core"
-	"reflect"
 	"strings"
 	"testing"
 )
@@ -130,13 +129,6 @@ func TestTraceDisabled(t *testing.T) {
 
 	// do not enable trace
 
-	// It rightfully complains about copying the trace lock, but in this case,
-	// we are checking whether the connection trace field is nil. Forgive us.
-	//goland:noinspection GoVetCopyLock
-	connValue := reflect.ValueOf(*ctx.conn)
-	traceField := connValue.FieldByName("trace")
-	Expect(traceField.IsNil()).To(BeTrue())
-
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
 		&memif.MemifCreate{},
@@ -155,6 +147,14 @@ func TestTraceDisabled(t *testing.T) {
 		err := ctx.ch.SendRequest(request[i]).ReceiveReply(reply[i])
 		Expect(err).To(BeNil())
 	}
+
+	trace := core.NewTrace(ctx.conn, traceSize)
+	Expect(trace).ToNot(BeNil())
+	defer trace.Close()
+
+	records := trace.GetRecords()
+	Expect(records).ToNot(BeNil())
+	Expect(records).To(BeEmpty())
 }
 
 func TestTracePerChannel(t *testing.T) {
