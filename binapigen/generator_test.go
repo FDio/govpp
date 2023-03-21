@@ -46,7 +46,7 @@ func TestGenerator(t *testing.T) {
 
 			apiFiles := []*vppapi.File{test.file}
 
-			input := &VppInput{ApiFiles: apiFiles}
+			input := &vppapi.VppInput{ApiFiles: apiFiles}
 
 			gen, err := New(Options{
 				ImportPrefix: "test",

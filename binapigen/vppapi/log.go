@@ -1,4 +1,4 @@
-//  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2023 Cisco and/or its affiliates.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -12,8 +12,18 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-package main
+package vppapi
 
-func main() {
-	Execute()
+import (
+	"log"
+	"os"
+	"strings"
+)
+
+var debug = strings.Contains(os.Getenv("DEBUG_GOVPP"), "parser")
+
+func logf(f string, v ...interface{}) {
+	if debug {
+		log.Printf(f, v...)
+	}
 }

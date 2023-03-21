@@ -12,6 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+// Package vppapi parses VPP API files without any additional processing.
 package vppapi
 
 import (
@@ -51,13 +52,13 @@ func FindFiles(dir string, deep int) (files []string, err error) {
 }
 
 // Parse parses API files in directory DefaultDir.
-func Parse() ([]*File, error) {
+func Parse() ([]File, error) {
 	return ParseDir(DefaultDir)
 }
 
 // ParseDir finds and parses API files in given directory and returns parsed files.
 // Supports API files in JSON format (.api.json) only.
-func ParseDir(apiDir string) ([]*File, error) {
+func ParseDir(apiDir string) ([]File, error) {
 	list, err := FindFiles(apiDir, 1)
 	if err != nil {
 		return nil, err
@@ -65,13 +66,16 @@ func ParseDir(apiDir string) ([]*File, error) {
 
 	logf("found %d files in API dir %q", len(list), apiDir)
 
-	var files []*File
-	for _, file := range list {
-		module, err := ParseFile(file)
+	var files []File
+	for _, f := range list {
+		file, err := ParseFile(f)
 		if err != nil {
 			return nil, err
 		}
-		files = append(files, module)
+		if path, err := filepath.Rel(apiDir, file.Path); err == nil {
+			file.Path = path
+		}
+		files = append(files, *file)
 	}
 	return files, nil
 }

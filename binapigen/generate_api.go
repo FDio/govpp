@@ -152,31 +152,36 @@ func genImport(g *GenFile, imp string) {
 	g.Import(impFile.GoImportPath)
 }
 
-func genTypeComment(g *GenFile, goName string, vppName string, objKind string) {
+func genGenericDefinesComment(g *GenFile, goName string, vppName string, objKind string) {
 	g.P("// ", goName, " defines ", objKind, " '", vppName, "'.")
 }
 
-func genTypeOptionComment(g *GenFile, options map[string]string) {
-	// all messages for API versions < 1.0.0 are in_progress by default
-	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress ||
-		len(g.file.Version) > 1 && g.file.Version[0:2] == "0." {
+func genMessageStatusComment(g *GenFile, msg *Message) {
+	/*if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress || !g.file.IsStable(){
 		if msg == "" {
 			msg = inProgressMsg
 		}
 		g.P("// InProgress: ", msg)
+	}*/
+	if msg, ok := msg.Experimental(); ok {
+		g.P("// Experimental: ", msg)
 	}
-	if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
+	// deprecated message
+	if msg, ok := msg.Deprecated(); ok {
+		g.P("// Deprecated: ", msg)
+	}
+	/*if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
 		if msg == "" {
 			msg = deprecatedMsg
 		}
 		g.P("// Deprecated: ", msg)
-	}
+	}	*/
 }
 
 func genEnum(g *GenFile, enum *Enum) {
 	logf("gen ENUM %s (%s) - %d entries", enum.GoName, enum.Name, len(enum.Entries))
 
-	genTypeComment(g, enum.GoName, enum.Name, "enum")
+	genGenericDefinesComment(g, enum.GoName, enum.Name, "enum")
 
 	gotype := BaseTypesGo[enum.Type]
 
@@ -246,7 +251,7 @@ func genEnum(g *GenFile, enum *Enum) {
 func genAlias(g *GenFile, alias *Alias) {
 	logf("gen ALIAS %s (%s) - type: %s length: %d", alias.GoName, alias.Name, alias.Type, alias.Length)
 
-	genTypeComment(g, alias.GoName, alias.Name, "alias")
+	genGenericDefinesComment(g, alias.GoName, alias.Name, "alias")
 
 	var gotype string
 	switch {
@@ -270,7 +275,7 @@ func genAlias(g *GenFile, alias *Alias) {
 func genStruct(g *GenFile, typ *Struct) {
 	logf("gen STRUCT %s (%s) - %d fields", typ.GoName, typ.Name, len(typ.Fields))
 
-	genTypeComment(g, typ.GoName, typ.Name, "type")
+	genGenericDefinesComment(g, typ.GoName, typ.Name, "type")
 
 	if len(typ.Fields) == 0 {
 		g.P("type ", typ.GoName, " struct {}")
@@ -289,7 +294,7 @@ func genStruct(g *GenFile, typ *Struct) {
 func genUnion(g *GenFile, union *Union) {
 	logf("gen UNION %s (%s) - %d fields", union.GoName, union.Name, len(union.Fields))
 
-	genTypeComment(g, union.GoName, union.Name, "union")
+	genGenericDefinesComment(g, union.GoName, union.Name, "union")
 
 	g.P("type ", union.GoName, " struct {")
 
@@ -441,8 +446,8 @@ func genMessage(g *GenFile, msg *Message) {
 	logf("gen MESSAGE %s (%s) - %d fields", msg.GoName, msg.Name, len(msg.Fields))
 
 	genMessageComment(g, msg)
-	genTypeComment(g, msg.GoIdent.GoName, msg.Name, "message")
-	genTypeOptionComment(g, msg.Options)
+	genGenericDefinesComment(g, msg.GoIdent.GoName, msg.Name, "message")
+	genMessageStatusComment(g, msg)
 
 	// generate message definition
 	if len(msg.Fields) == 0 {

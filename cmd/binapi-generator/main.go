@@ -23,6 +23,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"go.fd.io/govpp/binapigen"
+	"go.fd.io/govpp/binapigen/vppapi"
 	"go.fd.io/govpp/version"
 )
 
@@ -103,7 +104,7 @@ func main() {
 		}
 	}
 
-	vppInput, err := binapigen.ResolveVppInput(theInput)
+	vppInput, err := vppapi.ResolveVppInput(theInput)
 	if err != nil {
 		logrus.Fatal(err)
 	}

@@ -50,9 +50,9 @@ type File struct {
 	Service  *Service
 }
 
-func newFile(gen *Generator, apifile *vppapi.File, packageName GoPackageName, importPath GoImportPath) (*File, error) {
+func newFile(gen *Generator, apifile vppapi.File, packageName GoPackageName, importPath GoImportPath) (*File, error) {
 	file := &File{
-		Desc:         *apifile,
+		Desc:         apifile,
 		PackageName:  packageName,
 		GoImportPath: importPath,
 	}
@@ -131,6 +131,11 @@ func (file *File) importedFiles(gen *Generator) []*File {
 		files = append(files, impFile)
 	}
 	return files
+}
+
+// IsStable return true if file version is >= 1.0.0
+func (f *File) IsStable() bool {
+	return len(f.Version) > 1 && f.Version[0:2] != "0."
 }
 
 const (
@@ -287,6 +292,8 @@ const (
 type Message struct {
 	vppapi.Message
 
+	File *File
+
 	CRC     string
 	Comment string
 
@@ -299,6 +306,7 @@ type Message struct {
 
 func newMessage(gen *Generator, file *File, apitype vppapi.Message) *Message {
 	msg := &Message{
+		File:    file,
 		Message: apitype,
 		CRC:     strings.TrimPrefix(apitype.CRC, "0x"),
 		Comment: StripMessageCommentFields(CleanMessageComment(apitype.Comment), fieldContext, fieldClientIndex),
@@ -373,6 +381,29 @@ func getRetvalField(m *Message) *Field {
 		}
 	}
 	return nil
+}
+
+func (m *Message) Experimental() (string, bool) {
+	options := m.Options
+	// all messages for API versions < 1.0.0 are in_progress by default
+	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress || !m.File.IsStable() {
+		if msg == "" {
+			msg = inProgressMsg
+		}
+		return msg, true
+	}
+	return "", false
+}
+
+func (m *Message) Deprecated() (string, bool) {
+	options := m.Options
+	if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
+		if msg == "" {
+			msg = deprecatedMsg
+		}
+		return msg, true
+	}
+	return "", false
 }
 
 // Field represents a field for message or struct/union types.

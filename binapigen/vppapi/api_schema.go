@@ -12,15 +12,16 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// Package vppapi parses VPP API files without any additional processing.
 package vppapi
 
 type (
+	// Schema is a collection of API files for a specific VPP version.
 	Schema struct {
 		Files   []File
 		Version string
 	}
 
+	// File is a single API file and all of its contents.
 	File struct {
 		Name string
 		Path string

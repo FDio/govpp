@@ -67,22 +67,22 @@ func ResolveApiDir(dir string) string {
 func ResolveVPPVersion(apidir string) string {
 	// check env variable override
 	if ver := os.Getenv(VPPVersionEnvVar); ver != "" {
-		logrus.Infof("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
+		logrus.Debugf("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
 		return ver
 	}
 
 	// check if inside VPP repo
 	repoDir, err := findGitRepoRootDir(apidir)
 	if err != nil {
-		logrus.Debugf("checking VPP git repo failed: %v", err)
+		logrus.Debugf("ERR: failed to check VPP git repo: %v", err)
 	} else {
 		logrus.Debugf("resolved git repo root directory: %v", repoDir)
 
 		version, err := GetVPPVersionRepo(repoDir)
 		if err != nil {
-			logrus.Warnf("resolving VPP version from version script failed: %v", err)
+			logrus.Debugf("ERR: failed to resolve  VPP version from version script: %v", err)
 		} else {
-			logrus.Infof("resolved VPP version from version script: %v", version)
+			logrus.Debugf("resolved VPP version from version script: %v", version)
 			return version
 		}
 
@@ -97,9 +97,9 @@ func ResolveVPPVersion(apidir string) string {
 	if _, err := exec.LookPath("vpp"); err == nil {
 		version, err := GetVPPVersionInstalled()
 		if err != nil {
-			logrus.Warnf("resolving VPP version from installed package failed: %v", err)
+			logrus.Debugf("ERR: failed to resolve VPP version from installed package: %v", err)
 		} else {
-			logrus.Infof("resolved VPP version from installed package: %v", version)
+			logrus.Debugf("resolved VPP version from installed package: %v", version)
 			return version
 		}
 	}

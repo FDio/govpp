@@ -49,7 +49,7 @@ type Options struct {
 type Generator struct {
 	opts Options
 
-	apiFiles   []*vppapi.File
+	apiFiles   []vppapi.File
 	vppVersion string
 
 	Files       []*File
@@ -65,7 +65,7 @@ type Generator struct {
 	messagesByName map[string]*Message
 }
 
-func New(opts Options, input *VppInput) (*Generator, error) {
+func New(opts Options, input *vppapi.VppInput) (*Generator, error) {
 	gen := &Generator{
 		opts:           opts,
 		apiFiles:       input.ApiFiles,
@@ -82,8 +82,8 @@ func New(opts Options, input *VppInput) (*Generator, error) {
 	// normalize API files
 	SortFilesByImports(gen.apiFiles)
 	for _, apiFile := range gen.apiFiles {
-		RemoveImportedTypes(gen.apiFiles, apiFile)
-		SortFileObjectsByName(apiFile)
+		RemoveImportedTypes(gen.apiFiles, &apiFile)
+		SortFileObjectsByName(&apiFile)
 	}
 
 	// prepare package names and import paths
@@ -153,7 +153,7 @@ func (g *Generator) GetMessageByName(name string) *Message {
 
 func (g *Generator) GetOpts() Options { return g.opts }
 
-func getFilename(file *vppapi.File) string {
+func getFilename(file vppapi.File) string {
 	if file.Path == "" {
 		return file.Name
 	}
