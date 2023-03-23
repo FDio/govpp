@@ -41,6 +41,7 @@ func newExportCmd() *cobra.Command {
 
 			return runExportCmd(opts, args)
 		},
+		Hidden: true,
 	}
 
 	cmd.PersistentFlags().StringVar(&opts.Input, "input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")

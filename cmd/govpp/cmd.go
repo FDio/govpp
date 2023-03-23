@@ -70,7 +70,7 @@ func newRootCmd() *cobra.Command {
 		newVppapiCmd(),
 		newServerCmd(),
 		newCliCommand(),
-		//newExportCmd(),
+		newExportCmd(),
 		newDiffCmd(),
 	)
 
