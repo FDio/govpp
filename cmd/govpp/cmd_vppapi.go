@@ -32,7 +32,7 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-type ApiOptions struct {
+type VppApiCmdOptions struct {
 	Input           string
 	Format          string
 	ShowContents    bool
@@ -44,16 +44,16 @@ type ApiOptions struct {
 
 func newVppapiCmd() *cobra.Command {
 	var (
-		opts = ApiOptions{
+		opts = VppApiCmdOptions{
 			Input: vppapi.DefaultDir,
 		}
 	)
 	cmd := &cobra.Command{
-		Use:     "api [FILE, ...]",
-		Aliases: []string{"a", "vppapi"},
-		Short:   "Print VPP API contents",
+		Use:     "vppapi [FILE, ...]",
+		Aliases: []string{"a", "api"},
+		Short:   "Print VPP API",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runApi(cmd.OutOrStdout(), opts, args)
+			return runVppApiCmd(cmd.OutOrStdout(), opts, args)
 		},
 	}
 
@@ -68,7 +68,9 @@ func newVppapiCmd() *cobra.Command {
 	return cmd
 }
 
-func runApi(out io.Writer, opts ApiOptions, args []string) error {
+func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
+	logrus.Tracef("resolving input: %q", opts.Input)
+
 	vppInput, err := vppapi.ResolveVppInput(opts.Input)
 	if err != nil {
 		return err

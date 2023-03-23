@@ -44,7 +44,7 @@ func TestGenerator(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			RegisterTestingT(t)
 
-			apiFiles := []*vppapi.File{test.file}
+			apiFiles := []vppapi.File{*test.file}
 
 			input := &vppapi.VppInput{ApiFiles: apiFiles}
 
