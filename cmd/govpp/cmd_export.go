@@ -18,8 +18,6 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 type ExportCmdOptions struct {
@@ -29,16 +27,16 @@ type ExportCmdOptions struct {
 
 func newExportCmd() *cobra.Command {
 	var (
-		opts = ExportCmdOptions{
-			Input: vppapi.DefaultDir,
-		}
+		opts = ExportCmdOptions{}
 	)
 	cmd := &cobra.Command{
 		Use:     "export [apifile...]",
 		Aliases: []string{"gen"},
-		Short:   "Generate code",
+		Short:   "Export VPP API schema",
 		RunE: func(cmd *cobra.Command, args []string) error {
-
+			if opts.Input == "" {
+				opts.Input = resolveVppApiInput()
+			}
 			return runExportCmd(opts, args)
 		},
 		Hidden: true,
@@ -50,7 +48,7 @@ func newExportCmd() *cobra.Command {
 	return cmd
 }
 
-func runExportCmd(cmdOpts ExportCmdOptions, args []string) error {
+func runExportCmd(opts ExportCmdOptions, args []string) error {
 	// TODO: implement this
 	return fmt.Errorf("not implemented")
 }

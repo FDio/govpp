@@ -72,6 +72,7 @@ func newRootCmd() *cobra.Command {
 		newCliCommand(),
 		newExportCmd(),
 		newDiffCmd(),
+		newLintCmd(),
 	)
 
 	// Help

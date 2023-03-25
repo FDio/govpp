@@ -39,7 +39,7 @@ const (
 )
 
 type ServerCmdOptions struct {
-	ApiDir     string
+	Input      string
 	ApiSocket  string
 	ServerAddr string
 }
@@ -47,7 +47,6 @@ type ServerCmdOptions struct {
 func newServerCmd() *cobra.Command {
 	var (
 		opts = ServerCmdOptions{
-			ApiDir:     vppapi.DefaultDir,
 			ApiSocket:  socketclient.DefaultSocketName,
 			ServerAddr: DefaultServerCmdAddress,
 		}
@@ -56,25 +55,33 @@ func newServerCmd() *cobra.Command {
 		Use:   "server",
 		Short: "Start HTTP server",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			apifiles, err := vppapi.ParseDir(opts.ApiDir)
-			if err != nil {
-				return fmt.Errorf("vppapi.ParseDir: %w", err)
-			}
-
 			// TODO: add option to set list of VPP APIs to serve
-
-			return runServer(apifiles, opts)
+			if opts.Input == "" {
+				opts.Input = resolveVppApiInput()
+			}
+			return runServer(opts)
 		},
 	}
 
+	cmd.PersistentFlags().StringVar(&opts.Input, "input", opts.Input, "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
 	cmd.PersistentFlags().StringVar(&opts.ApiSocket, "apisock", opts.ApiSocket, "Path to VPP API socket")
 	cmd.PersistentFlags().StringVar(&opts.ServerAddr, "addr", opts.ServerAddr, "Address for server to listen on")
-	cmd.PersistentFlags().StringVar(&opts.ApiDir, "api", opts.ApiDir, "Path to directory containing VPP API files")
 
 	return cmd
 }
 
-func runServer(apifiles []vppapi.File, opts ServerCmdOptions) error {
+func runServer(opts ServerCmdOptions) error {
+	// Input
+	vppInput, err := vppapi.ResolveVppInput(opts.Input)
+	if err != nil {
+		return err
+	}
+
+	logrus.Tracef("VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
+		vppInput.ApiDirectory, vppInput.VppVersion, len(vppInput.ApiFiles))
+
+	apifiles := vppInput.ApiFiles
+
 	addr := opts.ServerAddr
 	serveMux := http.NewServeMux()
 

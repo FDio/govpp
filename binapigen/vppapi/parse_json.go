@@ -24,7 +24,7 @@ import (
 
 const (
 	// root keys
-	fileAPIVersion = "vl_api_version"
+	fileVersionCrc = "vl_api_version"
 	fileOptions    = "options"
 	fileTypes      = "types"
 	fileMessages   = "messages"
@@ -56,25 +56,27 @@ func parseJSON(data []byte) (file *File, err error) {
 	// parse root
 	jsonRoot := new(jsongo.Node)
 	if err := json.Unmarshal(data, jsonRoot); err != nil {
-		return nil, fmt.Errorf("unmarshalling JSON failed: %v", err)
+		return nil, fmt.Errorf("unmarshalling JSON failed: %w", err)
 	}
 
-	logf("file contains:")
-	for _, key := range jsonRoot.GetKeys() {
-		if jsonRoot.At(key).Len() > 0 {
-			logf("  - %2d %s", jsonRoot.At(key).Len(), key)
+	// print contents
+	logf("file contents:")
+	for _, rootKey := range jsonRoot.GetKeys() {
+		length := jsonRoot.At(rootKey).Len()
+		if length > 0 {
+			logf(" - %2d %s", length, rootKey)
 		}
 	}
 
 	file = new(File)
 
-	// parse CRC
-	crc := jsonRoot.At(fileAPIVersion)
+	// parse file CRC
+	crc := jsonRoot.At(fileVersionCrc)
 	if crc.GetType() == jsongo.TypeValue {
 		file.CRC = crc.MustGetString()
 	}
 
-	// parse options
+	// parse file options
 	opt := jsonRoot.Map(fileOptions)
 	if opt.GetType() == jsongo.TypeMap {
 		file.Options = make(map[string]string)

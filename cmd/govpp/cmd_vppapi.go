@@ -18,11 +18,11 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"log"
+	"os"
 	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
-	"text/tabwriter"
 
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
@@ -38,21 +38,23 @@ type VppApiCmdOptions struct {
 	ShowContents    bool
 	ShowMessages    bool
 	ShowRPC         bool
+	ShowRaw         bool
 	IncludeImported bool
 	IncludeFields   bool
 }
 
 func newVppapiCmd() *cobra.Command {
 	var (
-		opts = VppApiCmdOptions{
-			Input: vppapi.DefaultDir,
-		}
+		opts = VppApiCmdOptions{}
 	)
 	cmd := &cobra.Command{
 		Use:     "vppapi [FILE, ...]",
 		Aliases: []string{"a", "api"},
 		Short:   "Print VPP API",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if opts.Input == "" {
+				opts.Input = resolveVppApiInput()
+			}
 			return runVppApiCmd(cmd.OutOrStdout(), opts, args)
 		},
 	}
@@ -62,6 +64,7 @@ func newVppapiCmd() *cobra.Command {
 	cmd.PersistentFlags().BoolVar(&opts.ShowContents, "show-contents", false, "Show contents of VPP API file(s)")
 	cmd.PersistentFlags().BoolVar(&opts.ShowRPC, "show-rpc", false, "Show service RPCs of VPP API file(s)")
 	cmd.PersistentFlags().BoolVar(&opts.ShowMessages, "show-messages", false, "Show messages for VPP API file(s)")
+	cmd.PersistentFlags().BoolVar(&opts.ShowRaw, "show-raw", false, "Show raw VPP API file(s)")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeImported, "include-imported", false, "Include imported types")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeFields, "include-fields", false, "Include message fields")
 
@@ -118,8 +121,9 @@ func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
 
 	// omit imported types
 	if !opts.IncludeImported {
-		for _, apifile := range apifiles {
+		for i, apifile := range apifiles {
 			binapigen.RemoveImportedTypes(allapifiles, &apifile)
+			apifiles[i] = apifile
 		}
 	}
 
@@ -132,8 +136,10 @@ func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
 			showVPPAPIRPCs(out, apifiles)
 		} else if opts.ShowContents {
 			showVPPAPIContents(out, apifiles)
+		} else if opts.ShowRaw {
+			showVPPAPIRaw(out, vppInput, args)
 		} else {
-			showVppApiList(out, apifiles)
+			showVPPAPIList(out, apifiles)
 		}
 	} else {
 		if err := formatAsTemplate(out, format, apifiles); err != nil {
@@ -144,9 +150,81 @@ func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
 	return nil
 }
 
-type ApiFile struct {
+type VppApiRawFile struct {
+	Name    string
+	Path    string
+	Content string
+}
+
+func showVPPAPIRaw(out io.Writer, input *vppapi.VppInput, args []string) {
+	list, err := vppapi.FindFiles(input.ApiDirectory)
+	if err != nil {
+		logrus.Errorf("failed to find files: %v", err)
+		return
+	}
+
+	var allapifiles []VppApiRawFile
+	for _, f := range list {
+		file, err := vppapi.ParseFile(f)
+		if err != nil {
+			logrus.Debugf("failed to parse file: %v", err)
+			continue
+		}
+		// use file path relative to apiDir
+		if p, err := filepath.Rel(input.ApiDirectory, file.Path); err == nil {
+			file.Path = p
+		}
+		// extract file name
+		base := filepath.Base(f)
+		name := base[:strings.Index(base, ".")]
+		b, err := os.ReadFile(f)
+		if err != nil {
+			logrus.Errorf("failed to read file %q: %v", f, err)
+			continue
+		}
+
+		allapifiles = append(allapifiles, VppApiRawFile{
+			Path:    file.Path,
+			Name:    name,
+			Content: string(b),
+		})
+	}
+
+	var apifiles []VppApiRawFile
+	if len(args) > 0 {
+		// select only specific files
+		for _, arg := range args {
+			var found bool
+			for _, apifile := range allapifiles {
+				if apifile.Name == arg {
+					apifiles = append(apifiles, apifile)
+					found = true
+					break
+				}
+			}
+			if !found {
+				logrus.Errorf("VPP API file %q not found", arg)
+				continue
+
+			}
+		}
+	} else {
+		// select all files
+		apifiles = allapifiles
+	}
+
+	for _, f := range apifiles {
+		fmt.Printf("# %s (%v)\n", f.Name, f.Path)
+		fmt.Printf("%s\n", f.Content)
+		fmt.Println()
+	}
+}
+
+type VppApiFile struct {
 	File        string
 	Version     string
+	CRC         string
+	Options     string
 	Path        string
 	NumImports  uint
 	NumMessages uint
@@ -154,46 +232,29 @@ type ApiFile struct {
 	NumRPCs     uint
 }
 
-func showVppApiList(out io.Writer, apifiles []vppapi.File) {
+func showVPPAPIList(out io.Writer, apifiles []vppapi.File) {
 	table := tablewriter.NewWriter(out)
 	table.SetHeader([]string{
-		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs",
+		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs", "Options",
 	})
 	//table.SetAutoMergeCells(true)
 	table.SetAutoWrapText(false)
 	table.SetRowLine(false)
 	table.SetBorder(false)
 	table.SetColumnAlignment([]int{
-		tablewriter.ALIGN_RIGHT, 0, 0, 0, 0, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT,
+		tablewriter.ALIGN_RIGHT, 0, 0, tablewriter.ALIGN_LEFT, 0, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_LEFT,
 	})
 
 	for i, apifile := range apifiles {
-
 		index := i + 1
+
 		//importedTypes := binapigen.ListImportedTypes(apifiles, apifile)
-		typesCount := len(apifile.EnumTypes) + len(apifile.EnumflagTypes) + len(apifile.AliasTypes) + len(apifile.StructTypes) + len(apifile.UnionTypes)
 		//importedFiles := listImportedFiles(apifiles, apifile)
-		apiVersion := "0.0.0"
-		var options []string
-		for k, v := range apifile.Options {
-			if k == binapigen.OptFileVersion {
-				apiVersion = v
-				continue
-			}
-			options = append(options, fmt.Sprintf("%s=%v", k, v))
-		}
-		var imports string
-		if len(apifile.Imports) > 0 {
-			var importList []string
-			if len(apifile.Imports) > 0 {
-				importList = append(importList, fmt.Sprintf("%d", len(apifile.Imports)))
-			}
-			imports = strings.Join(importList, ", ")
-		} else {
-			imports = "-"
-		}
-		apiPath := pathOfParentAndFile(apifile.Path)
-		apiPath = path.Dir(apiPath)
+		typesCount := getFileTypesCount(apifile)
+		apiVersion := getFileVersion(apifile)
+		apiCrc := getShortCrc(apifile.CRC)
+		options := strings.Join(getFileOptionsSlice(apifile), ", ")
+		apiDirPath := path.Dir(pathOfParentAndFile(apifile.Path))
 
 		var msgs string
 		if len(apifile.Messages) > 0 {
@@ -213,75 +274,20 @@ func showVppApiList(out io.Writer, apifiles []vppapi.File) {
 		} else {
 			services = fmt.Sprintf("%2s", "-")
 		}
-
-		var row []string
-		row = []string{
-			fmt.Sprint(index), apifile.Name, apiVersion, apifile.CRC, apiPath, imports, msgs, types, services,
+		var importCount string
+		if len(apifile.Imports) > 0 {
+			importCount = fmt.Sprintf("%2d", len(apifile.Imports))
+		} else {
+			importCount = fmt.Sprintf("%2s", "-")
 		}
+
+		row := []string{
+			fmt.Sprint(index), apifile.Name, apiVersion, apiCrc, apiDirPath, importCount, msgs, types, services, options,
+		}
+
 		table.Append(row)
 	}
 	table.Render()
-}
-
-func showVppApiListOld(out io.Writer, apifiles []*vppapi.File) {
-	var buf bytes.Buffer
-	w := tabwriter.NewWriter(&buf, 1, 0, 2, ' ', tabwriter.DiscardEmptyColumns)
-	fmt.Fprintf(w, "#\tAPI\tVERSION\tPATH\tIMPORTS\tMESSAGES\tTYPES\tRPCs\t\n")
-
-	for i, apifile := range apifiles {
-		index := i + 1
-		typesCount := len(apifile.EnumTypes) + len(apifile.EnumflagTypes) + len(apifile.AliasTypes) + len(apifile.StructTypes) + len(apifile.UnionTypes)
-		apiVersion := "0.0.0"
-		var options []string
-		for k, v := range apifile.Options {
-			if k == binapigen.OptFileVersion {
-				apiVersion = v
-				continue
-			}
-			options = append(options, fmt.Sprintf("%s=%v", k, v))
-		}
-		if apifile.CRC != "" {
-			apiVersion += fmt.Sprintf("-%s", strings.TrimPrefix(apifile.CRC, "0x"))
-		}
-		var imports string
-		if len(apifile.Imports) > 0 {
-			var importList []string
-			if len(apifile.Imports) > 0 {
-				importList = append(importList, fmt.Sprintf("%d", len(apifile.Imports)))
-			}
-			imports = strings.Join(importList, ", ")
-		} else {
-			imports = "-"
-		}
-		apiPath := pathOfParentAndFile(apifile.Path)
-		apiPath = path.Dir(apiPath)
-
-		var msgs string
-		if len(apifile.Messages) > 0 {
-			msgs = fmt.Sprintf("%3d", len(apifile.Messages))
-		} else {
-			msgs = fmt.Sprintf("%3s", "-")
-		}
-		var types string
-		if typesCount > 0 {
-			types = fmt.Sprintf("%2d", typesCount)
-		} else {
-			types = fmt.Sprintf("%2s", "-")
-		}
-		var services string
-		if apifile.Service != nil {
-			services = fmt.Sprintf("%2d", len(apifile.Service.RPCs))
-		} else {
-			services = fmt.Sprintf("%2s", "-")
-		}
-		fmt.Fprintf(w, "%v\t%s\t%s\t%s\t%s\t%v\t%s\t%v\t\n",
-			index, apifile.Name, apiVersion, apiPath, imports, msgs, types, services)
-	}
-
-	if err := w.Flush(); err != nil {
-		log.Fatal(err)
-	}
-	fmt.Fprint(out, buf.String())
 }
 
 func pathOfParentAndFile(path string) string {
@@ -303,20 +309,12 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 	var buf bytes.Buffer
 
 	for _, apifile := range apifiles {
-		apiVersion := "0.0.0"
-		var options []string
-		for k, v := range apifile.Options {
-			if k == binapigen.OptFileVersion {
-				apiVersion = v
-				continue
-			}
-			options = append(options, fmt.Sprintf("%s=%v", k, v))
-		}
-		if apifile.CRC != "" {
-			apiVersion += fmt.Sprintf("-%s", strings.TrimPrefix(apifile.CRC, "0x"))
-		}
+		apiVersion := getFileVersion(apifile)
+		options := getFileOptionsSlice(apifile)
+
+		// print file header
 		fmt.Fprintln(&buf, "--------------------------------------------------------------------------------")
-		fmt.Fprintf(&buf, "# %v (%s)\n", apifile.Name, apiVersion)
+		fmt.Fprintf(&buf, "# %v (%s) %v (%v) \n", apifile.Name, apifile.Path, apiVersion, apifile.CRC)
 		if len(options) > 0 {
 			fmt.Fprintf(&buf, "# Options: %v\n", mapStr(apifile.Options))
 		}
@@ -326,7 +324,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 		// Messages
 		if len(apifile.Messages) > 0 {
 			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "MESSAGE", "CRC", "FIELDS", "OPTIONS", "COMMENT"})
+			table.SetHeader([]string{"#", "Message", "CRC", "Fields", "Options", "Comment"})
 			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 			table.SetAutoWrapText(false)
 			table.SetRowLine(false)
@@ -336,10 +334,10 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 
 			for i, msg := range apifile.Messages {
 				index := i + 1
-				msgCrc := getMsgCrc(msg.CRC)
+				msgCrc := getShortCrc(msg.CRC)
 				msgFields := fmt.Sprintf("%v", len(msg.Fields))
-				msgOptions := getMsgOptionsShort(msg.Options)
-				msgComment := getMsgCommentSimple(msg.Comment)
+				msgOptions := shorMessageOptions(msg.Options)
+				msgComment := normalizeMessageComment(msg.Comment)
 				row := []string{strconv.Itoa(index), msg.Name, msgCrc, msgFields, msgOptions, msgComment}
 				table.Append(row)
 			}
@@ -351,7 +349,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 		// Structs
 		if len(apifile.StructTypes) > 0 {
 			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "TYPE", "FIELDS"})
+			table.SetHeader([]string{"#", "Type", "Fields"})
 			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 			table.SetAutoWrapText(false)
 			table.SetRowLine(false)
@@ -395,7 +393,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 		// Enums
 		if len(apifile.EnumTypes) > 0 || len(apifile.EnumflagTypes) > 0 {
 			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "ENUM", "TYPE", "KIND", "ENTRIES"})
+			table.SetHeader([]string{"#", "Enum", "Type", "Kind", "Entries"})
 			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 			table.SetAutoWrapText(false)
 			table.SetRowLine(false)
@@ -421,10 +419,9 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 		}
 
 		// Aliases
-
 		if len(apifile.AliasTypes) > 0 {
 			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "ALIAS", "TYPE", "LENGTH"})
+			table.SetHeader([]string{"#", "Alias", "Type", "Length"})
 			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
 			table.SetAutoWrapText(false)
 			table.SetRowLine(false)
@@ -448,13 +445,13 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 	fmt.Fprint(out, buf.String())
 }
 
-func getMsgCrc(crc string) string {
+func getShortCrc(crc string) string {
 	return strings.TrimPrefix(crc, "0x")
 }
 
 const maxLengthMsgOptionValue = 30
 
-func getMsgOptionsShort(options map[string]string) string {
+func shorMessageOptions(options map[string]string) string {
 	opts := make(map[string]string, len(options))
 	for k, v := range options {
 		if len(v) > maxLengthMsgOptionValue {
@@ -466,9 +463,9 @@ func getMsgOptionsShort(options map[string]string) string {
 	return fmt.Sprintf("%v", mapStrOrdered(opts))
 }
 
-func getMsgCommentSimple(comment string) string {
+func normalizeMessageComment(comment string) string {
 	if comment == "" {
-		return "-"
+		return ""
 	}
 
 	// get first line
@@ -494,17 +491,17 @@ func getMsgCommentSimple(comment string) string {
 	return msgComment
 }
 
-type ApiFileMessage struct {
+type VppApiFileMessage struct {
 	File *vppapi.File
 	vppapi.Message
 }
 
-func listVPPAPIMessages(apifiles []vppapi.File) []ApiFileMessage {
-	var msgs []ApiFileMessage
+func listVPPAPIMessages(apifiles []vppapi.File) []VppApiFileMessage {
+	var msgs []VppApiFileMessage
 	for _, apifile := range apifiles {
 		file := apifile
 		for _, msg := range apifile.Messages {
-			msgs = append(msgs, ApiFileMessage{
+			msgs = append(msgs, VppApiFileMessage{
 				File:    &file,
 				Message: msg,
 			})
@@ -513,10 +510,10 @@ func listVPPAPIMessages(apifiles []vppapi.File) []ApiFileMessage {
 	return msgs
 }
 
-func showVPPAPIMessages(out io.Writer, msgs []ApiFileMessage, withFields bool) {
+func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool) {
 	table := tablewriter.NewWriter(out)
 	table.SetHeader([]string{
-		"File", "Message", "Fields", "Options",
+		"#", "File", "Message", "Fields", "Options",
 	})
 	table.SetAutoWrapText(false)
 	table.SetRowLine(true)
@@ -526,7 +523,8 @@ func showVPPAPIMessages(out io.Writer, msgs []ApiFileMessage, withFields bool) {
 	table.SetHeaderLine(false)
 	table.SetBorder(false)
 
-	for _, msg := range msgs {
+	for i, msg := range msgs {
+		index := fmt.Sprint(i + 1)
 		fileName := ""
 		if msg.File != nil {
 			fileName = msg.File.Name
@@ -535,13 +533,10 @@ func showVPPAPIMessages(out io.Writer, msgs []ApiFileMessage, withFields bool) {
 		if withFields {
 			msgFields = strings.TrimSpace(yamlTmpl(msgFieldsStr(msg.Fields)))
 		}
-		msgOptions := getMsgOptionsShort(msg.Options)
+		msgOptions := shorMessageOptions(msg.Options)
 
 		row := []string{
-			fileName,
-			msg.Name,
-			msgFields,
-			msgOptions,
+			index, fileName, msg.Name, msgFields, msgOptions,
 		}
 		table.Append(row)
 	}
@@ -561,11 +556,9 @@ func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) {
 			continue
 		}
 		for _, rpc := range apifile.Service.RPCs {
-
 			rpcEvents := strings.Join(rpc.Events, ", ")
 
-			var row []string
-			row = []string{
+			row := []string{
 				apifile.Name, rpc.Request, rpc.Reply, fmt.Sprint(rpc.Stream), rpc.StreamMsg, rpcEvents,
 			}
 			table.Append(row)
@@ -609,4 +602,28 @@ func listImportedFiles(apifiles []vppapi.File, apifile *vppapi.File) []string {
 		list = append(list, f.Name)
 	}
 	return list
+}
+
+func getFileTypesCount(apifile vppapi.File) int {
+	return len(apifile.EnumTypes) + len(apifile.EnumflagTypes) + len(apifile.AliasTypes) + len(apifile.StructTypes) + len(apifile.UnionTypes)
+}
+
+func getFileVersion(apifile vppapi.File) string {
+	for k, v := range apifile.Options {
+		if k == binapigen.OptFileVersion {
+			return v
+		}
+	}
+	return "0.0.0"
+}
+
+func getFileOptionsSlice(apifile vppapi.File) []string {
+	var options []string
+	for k, v := range apifile.Options {
+		if k == binapigen.OptFileVersion {
+			continue
+		}
+		options = append(options, fmt.Sprintf("%s=%v", k, v))
+	}
+	return options
 }

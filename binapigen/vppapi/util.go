@@ -15,6 +15,7 @@
 package vppapi
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -38,23 +39,31 @@ const (
 // build-root. It will execute `make json-api-files` in case the folder with
 // VPP API JSON files does not exist yet.
 func ResolveApiDir(dir string) string {
+	logrus.Tracef("resolving api dir %q", dir)
+
 	_, err := os.Stat(path.Join(dir, "build-root"))
 	if err == nil {
+		logrus.Tracef("build-root exists, checking %q", localBuildRoot)
 		// local VPP build
 		_, err := os.Stat(path.Join(dir, localBuildRoot))
 		if err == nil {
+			logrus.Tracef("returning %q as api dir", localBuildRoot)
 			return path.Join(dir, localBuildRoot)
 		} else if errors.Is(err, os.ErrNotExist) {
+			logrus.Tracef("folder %q does not exist, running 'make json-api-files'", localBuildRoot)
 			cmd := exec.Command("make", "json-api-files")
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
 			cmd.Dir = dir
-			_, err := cmd.CombinedOutput()
+			err := cmd.Run()
 			if err != nil {
 				logrus.Warnf("make json-api-files failed: %v", err)
 			} else {
 				return path.Join(dir, localBuildRoot)
 			}
+		} else {
+			logrus.Tracef("error occurred when checking %q: %w'", localBuildRoot, err)
 		}
 	}
 

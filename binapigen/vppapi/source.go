@@ -29,12 +29,13 @@ const (
 	FormatTar = "tar"
 	FormatZip = "zip"
 
-	FormatJson = "json"
+	//FormatJson = "json"
 )
 
+// Input is a
 type Input struct {
-	Format  string
 	Path    string
+	Format  string
 	Options map[string]string
 }
 
@@ -64,9 +65,14 @@ type Input struct {
 //
 // Supported format options:
 //
-// * Directory
-// * Repository
-// * Archive
+//   - Directory
+//     -
+//   - Repository
+//   - branch: name of branch to checkout
+//   - tag: tag to checkout
+//   - ref: ref to checkout
+//   - Archive
+//     -
 func ParseInput(inputStr string) (*Input, error) {
 	logrus.Tracef("parsing input string: %q", inputStr)
 

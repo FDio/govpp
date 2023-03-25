@@ -126,7 +126,7 @@ func checkoutRepoLocally(repo string, commit string /*, command string, args ...
 		if err := os.MkdirAll(cacheDir, 0755); err != nil {
 			return "", fmt.Errorf("failed to create cache directory: %w", err)
 		}
-		logrus.Infof("CLONING")
+		logrus.Infof("Cloning repository %q", repo)
 		cmd := exec.Command("git", "clone", repo, cachePath)
 		if output, err := cmd.CombinedOutput(); err != nil {
 			return "", fmt.Errorf("failed to clone repository: %w\nOutput: %s", err, output)
@@ -134,7 +134,7 @@ func checkoutRepoLocally(repo string, commit string /*, command string, args ...
 	} else if err != nil {
 		return "", fmt.Errorf("failed to check if cache exists: %w", err)
 	} else {
-		logrus.Infof("FETCHING")
+		logrus.Infof("Fetching %q", commit)
 		cmd := exec.Command("git", "fetch", "origin", commit)
 		cmd.Dir = cachePath
 		if output, err := cmd.CombinedOutput(); err != nil {

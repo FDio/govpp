@@ -37,7 +37,6 @@ type GenerateOptions struct {
 func newGenerateCmd() *cobra.Command {
 	var (
 		opts = GenerateOptions{
-			Input:      vppapi.DefaultDir,
 			RunPlugins: []string{"rpc"},
 		}
 	)
@@ -46,7 +45,9 @@ func newGenerateCmd() *cobra.Command {
 		Aliases: []string{"gen"},
 		Short:   "Generate code",
 		RunE: func(cmd *cobra.Command, args []string) error {
-
+			if opts.Input == "" {
+				opts.Input = resolveVppApiInput()
+			}
 			return runGenerator(opts, args)
 		},
 	}
