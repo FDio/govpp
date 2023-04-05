@@ -37,6 +37,9 @@ type (
 
 		Messages []Message `json:",omitempty"`
 		Service  *Service  `json:",omitempty"`
+
+		Counters []Counter `json:",omitempty"`
+		Paths    []Path    `json:",omitempty"`
 	}
 
 	AliasType struct {
@@ -93,5 +96,14 @@ type (
 		Stream    bool     `json:",omitempty"`
 		StreamMsg string   `json:",omitempty"`
 		Events    []string `json:",omitempty"`
+	}
+
+	Counter struct {
+		Name     string
+		Elements []map[string]string
+	}
+
+	Path struct {
+		List []map[string]string
 	}
 )

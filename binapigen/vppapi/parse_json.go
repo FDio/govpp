@@ -45,13 +45,17 @@ const (
 	fileAliases    = "aliases"
 	fileServices   = "services"
 	fileImports    = "imports"
+	fileCounters   = "counters"
+	filePaths      = "paths"
 	// type keys
-	messageCrc     = "crc"
-	messageOptions = "options"
-	messageComment = "comment"
-	enumType       = "enumtype"
-	aliasLength    = "length"
-	aliasType      = "type"
+	messageCrc      = "crc"
+	messageOptions  = "options"
+	messageComment  = "comment"
+	enumType        = "enumtype"
+	aliasLength     = "length"
+	aliasType       = "type"
+	counterName     = "name"
+	counterElements = "elements"
 	// service
 	serviceReply     = "reply"
 	serviceStream    = "stream"
@@ -217,6 +221,32 @@ func parseJSON(data []byte) (module *File, err error) {
 				return nil, err
 			}
 			module.Service.RPCs[i] = *svc
+		}
+	}
+
+	// parse counters
+	countersNode := jsonRoot.Map(fileCounters)
+	if countersNode.GetType() == jsongo.TypeArray {
+		module.Counters = make([]Counter, countersNode.Len())
+		for i := 0; i < countersNode.Len(); i++ {
+			counter, err := parseCounter(countersNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			module.Counters[i] = *counter
+		}
+	}
+
+	// parse paths
+	pathsNode := jsonRoot.Map(filePaths)
+	if pathsNode.GetType() == jsongo.TypeArray {
+		module.Paths = make([]Path, pathsNode.Len())
+		for i := 0; i < pathsNode.Len(); i++ {
+			path, err := parsePath(pathsNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			module.Paths[i] = *path
 		}
 	}
 
@@ -541,4 +571,55 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 	}
 
 	return &rpc, nil
+}
+
+// parseCounter parses VPP binary API service object from JSON node
+func parseCounter(counterNode *jsongo.Node) (*Counter, error) {
+	// counter name
+	counter := &Counter{}
+	if counterNameNode := counterNode.At(counterName); counterNameNode.GetType() == jsongo.TypeValue {
+		var ok bool
+		if counter.Name, ok = counterNameNode.Get().(string); !ok {
+			return nil, fmt.Errorf("counter name is %T, not a string", counterNameNode.Get())
+		}
+	}
+
+	// counter elements
+	if elementsNode := counterNode.At(counterElements); elementsNode.GetType() == jsongo.TypeArray {
+		counter.Elements = make([]map[string]string, elementsNode.Len())
+		for i := 0; i < elementsNode.Len(); i++ {
+			if elementNode := elementsNode.At(i); elementNode.GetType() == jsongo.TypeMap {
+				elementOpts := make(map[string]string, elementNode.Len())
+				for _, key := range elementNode.GetKeys() {
+					if _, ok := key.(string); !ok {
+						logf("invalid counter element key, expected string")
+						continue
+					}
+					elementOpts[key.(string)] = elementNode.At(key).Get().(string)
+				}
+				counter.Elements[i] = elementOpts
+			}
+		}
+	}
+
+	return counter, nil
+}
+
+// parseCounter parses VPP binary API service object from JSON node
+func parsePath(pathNode *jsongo.Node) (*Path, error) {
+	path := &Path{List: make([]map[string]string, pathNode.Len())}
+	for i := 0; i < pathNode.Len(); i++ {
+		if pathValues := pathNode.At(i); pathValues.GetType() == jsongo.TypeMap {
+			values := make(map[string]string)
+			for _, key := range pathValues.GetKeys() {
+				if _, ok := key.(string); !ok {
+					logf("invalid path key, expected string")
+					continue
+				}
+				values[key.(string)] = pathValues.At(key).Get().(string)
+			}
+			path.List[i] = values
+		}
+	}
+	return path, nil
 }
