@@ -15,9 +15,6 @@
 package vppapi
 
 import (
-	"fmt"
-	"net/url"
-	"os"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -139,85 +136,4 @@ func detectFormat(path string) string {
 	}
 	// directory
 	return FormatDir
-}
-
-// Source defines VPP input parameters for the Generator.
-type Source struct {
-	ApiDirectory string
-	ApiFiles     []File
-	VppVersion   string
-}
-
-// ResolveSource resolves given input string into Source.
-//
-// Supported input formats are:
-//
-// * DIRECTORY - A local directory. The path can be either relative or absolute.
-//
-//		This is the default format. By default, buf uses the current directory as its input for all commands.
-//
-//	 Examples:
-//	  - /usr/share/vpp/api	- directory with VPP API JSON files)
-//	  - ./vpp 				- directory with VPP repository, runs `make json-api-files`)
-//
-// * GIT
-func ResolveSource(input string) (*Source, error) {
-	vppInput := &Source{}
-
-	if input == "" {
-		input = DefaultDir
-		vppInput.ApiDirectory = DefaultDir
-	}
-
-	u, err := url.Parse(input)
-	if err != nil {
-		logrus.Tracef("VPP input %q is invalid: %v", input, err)
-		return nil, fmt.Errorf("invalid input: %w", err)
-	}
-
-	//u.Fragment
-
-	switch u.Scheme {
-	case "":
-		fallthrough // assume file by default
-
-	case "file":
-		info, err := os.Stat(input)
-		if err != nil {
-			return nil, fmt.Errorf("file error: %v", err)
-		} else {
-			if info.IsDir() {
-				apidir := ResolveApiDir(u.Path)
-				vppInput.ApiDirectory = apidir
-
-				logrus.Debugf("path %q resolved to api dir: %v", u.Path, apidir)
-
-				apiFiles, err := ParseDir(apidir)
-				if err != nil {
-					logrus.Warnf("vppapi parsedir error: %v", err)
-				} else {
-					vppInput.ApiFiles = apiFiles
-					logrus.Infof("resolved %d apifiles", len(apiFiles))
-				}
-
-				vppInput.VppVersion = ResolveVPPVersion(u.Path)
-				if vppInput.VppVersion == "" {
-					vppInput.VppVersion = "unknown"
-				}
-			} else {
-				return nil, fmt.Errorf("files not supported")
-			}
-		}
-
-	case "http", "https":
-		return nil, fmt.Errorf("http(s) not yet supported")
-
-	case "git", "ssh":
-		return nil, fmt.Errorf("ssh/git not yet supported")
-
-	default:
-		return nil, fmt.Errorf("unsupported scheme: %v", u.Scheme)
-	}
-
-	return vppInput, nil
 }

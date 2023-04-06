@@ -46,7 +46,7 @@ func newGenerateCmd() *cobra.Command {
 		Short:   "Generate code",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.Input == "" {
-				opts.Input = resolveVppApiInput()
+				opts.Input = detectVppApiInput()
 			}
 			return runGenerator(opts, args)
 		},

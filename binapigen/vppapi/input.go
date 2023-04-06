@@ -29,15 +29,15 @@ import (
 // VppInput defines VPP input parameters for the Generator.
 type VppInput struct {
 	ApiDirectory string
-	ApiFiles     []File
-	VppVersion   string
+	Schema       Schema
 }
 
 // ResolveVppInput resolves given input string into VppInput.
 //
 // Supported input formats are:
-//   - directory with VPP API JSON files (e.g. `/usr/share/vpp/api/`)
-//   - directory with VPP repository (runs `make json-api-files`)
+//   - directory with API JSON files (e.g. `/usr/share/vpp/api/`)
+//   - local VPP repository (this will execute `make json-api-files`)
+//   - URL for VPP repository (or fork)
 func ResolveVppInput(input string) (*VppInput, error) {
 
 	vppInput := &VppInput{}
@@ -74,6 +74,10 @@ func ResolveVppInput(input string) (*VppInput, error) {
 
 	case "git", "ssh":
 		commit := u.Fragment
+		if commit == "" {
+			commit = "HEAD"
+		}
+
 		u.Fragment = ""
 		repo := u.String()
 
@@ -102,13 +106,13 @@ func resolveVppInputFromDir(path string) (*VppInput, error) {
 	if err != nil {
 		logrus.Warnf("vppapi parsedir error: %v", err)
 	} else {
-		vppInput.ApiFiles = apiFiles
+		vppInput.Schema.Files = apiFiles
 		logrus.Debugf("resolved %d apifiles", len(apiFiles))
 	}
 
-	vppInput.VppVersion = ResolveVPPVersion(path)
-	if vppInput.VppVersion == "" {
-		vppInput.VppVersion = "unknown"
+	vppInput.Schema.Version = ResolveVPPVersion(path)
+	if vppInput.Schema.Version == "" {
+		vppInput.Schema.Version = "unknown"
 	}
 
 	return vppInput, nil

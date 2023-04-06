@@ -287,6 +287,7 @@ const (
 // field options
 const (
 	optFieldDefault = "default"
+	optFieldLimit   = "limit"
 )
 
 type Message struct {

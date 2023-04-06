@@ -33,115 +33,93 @@ import (
 
 // TODO:
 // - add option to allow server to start without VPP running
+// - add option to set list of VPP APIs to serve
+// - wait for SIGTERM/SIGINT signal and shutdown the server gracefully
+// - add home page (/index.html) providing references and example links
 
 const (
-	DefaultServerCmdAddress = ":7777"
+	DefaultHttpServiceAddress = ":8000"
 )
 
-type ServerCmdOptions struct {
-	Input      string
-	ApiSocket  string
-	ServerAddr string
+type HttpCmdOptions struct {
+	Input     string
+	ApiSocket string
+	Address   string
 }
 
-func newServerCmd() *cobra.Command {
-	var (
-		opts = ServerCmdOptions{
-			ApiSocket:  socketclient.DefaultSocketName,
-			ServerAddr: DefaultServerCmdAddress,
-		}
-	)
+func newHttpCmd() *cobra.Command {
+	var opts = HttpCmdOptions{
+		ApiSocket: socketclient.DefaultSocketName,
+		Address:   DefaultHttpServiceAddress,
+	}
 	cmd := &cobra.Command{
-		Use:   "server",
-		Short: "Start HTTP server",
+		Use:   "http",
+		Short: "Serve VPP API as HTTP service",
+		Long:  "Serve VPP API as HTTP service",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// TODO: add option to set list of VPP APIs to serve
-			if opts.Input == "" {
-				opts.Input = resolveVppApiInput()
-			}
-			return runServer(opts)
+			return runHttpCmd(opts)
 		},
 	}
 
 	cmd.PersistentFlags().StringVar(&opts.Input, "input", opts.Input, "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
 	cmd.PersistentFlags().StringVar(&opts.ApiSocket, "apisock", opts.ApiSocket, "Path to VPP API socket")
-	cmd.PersistentFlags().StringVar(&opts.ServerAddr, "addr", opts.ServerAddr, "Address for server to listen on")
+	cmd.PersistentFlags().StringVar(&opts.Address, "addr", opts.Address, "HTTP service address")
 
 	return cmd
 }
 
-func runServer(opts ServerCmdOptions) error {
-	// Input
-	vppInput, err := vppapi.ResolveVppInput(opts.Input)
+func runHttpCmd(opts HttpCmdOptions) error {
+	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
-	logrus.Tracef("VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppInput.ApiDirectory, vppInput.VppVersion, len(vppInput.ApiFiles))
-
-	apifiles := vppInput.ApiFiles
-
-	addr := opts.ServerAddr
-	serveMux := http.NewServeMux()
-
-	setupServerAPIHandlers(apifiles, serveMux)
+	logrus.Debugf("connecting to VPP socket %s", opts.ApiSocket)
 
 	conn, err := govpp.Connect(opts.ApiSocket)
 	if err != nil {
 		return fmt.Errorf("govpp.Connect: %w", err)
 	}
 
+	serveMux := http.NewServeMux()
+
+	setupHttpAPIHandlers(vppInput.Schema.Files, serveMux)
+
 	c := vpe.HTTPHandler(vpe.NewServiceClient(conn))
 	//c := memclnt.HTTPHandler(memclnt.NewServiceClient(conn))
 
 	serveMux.Handle("/", c)
 
-	logrus.Infof("server listening on: %v", addr)
+	logrus.Infof("HTTP server listening on: %v", opts.Address)
 
-	if err := http.ListenAndServe(addr, serveMux); err != nil {
+	if err := http.ListenAndServe(opts.Address, serveMux); err != nil {
 		return err
 	}
-
-	// TODO: wait for SIGTERM/SIGINT signal and shutdown the server gracefully
 
 	return nil
 }
 
-func setupServerAPIHandlers(apifiles []vppapi.File, mux *http.ServeMux) {
+func setupHttpAPIHandlers(apifiles []vppapi.File, mux *http.ServeMux) {
 	for _, apifile := range apifiles {
 		file := apifile
-		name := apifile.Name
+		name := file.Name
 		mux.HandleFunc("/api/"+name, apiFileHandler(&file))
-		mux.HandleFunc("/raw/"+name, rawHandler(&file))
-		mux.HandleFunc("/rpc/"+name, rpcHandler(&file))
+		mux.HandleFunc("/raw/"+name, apiRawHandler(&file))
+		mux.HandleFunc("/vpp/"+name, reqHandler(&file))
 	}
-	mux.HandleFunc("/api", apiHandler(apifiles))
-	// TODO: add home page (/index.html) providing references and example links
+	mux.HandleFunc("/api", apiFilesHandler(apifiles))
 }
 
-func rpcHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
+func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		// extract message name
-		msgName := strings.TrimPrefix(req.URL.Path, "/rpc/"+apifile.Name+"/")
+		msgName := strings.TrimPrefix(req.URL.Path, "/vpp/"+apifile.Name+"/")
 		if msgName == "" {
-			http.Error(w, "no message name", http.StatusNotFound)
+			http.Error(w, "missing message name in URL", http.StatusBadRequest)
 			return
 		}
 
-		// parse input data
-		input, err := io.ReadAll(req.Body)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		msgReq := make(map[string]interface{})
-		err = json.Unmarshal(input, &msgReq)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
+		// find message
 		var msg *vppapi.Message
 		for _, m := range apifile.Messages {
 			if m.Name == msgName {
@@ -150,14 +128,43 @@ func rpcHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			}
 		}
 		if msg == nil {
-			http.Error(w, "unknown message name: "+msgName, http.StatusInternalServerError)
+			http.Error(w, "message not found : "+msgName, http.StatusNotFound)
 			return
 		}
 
+		if req.Method == http.MethodPost {
+			reqData := make(map[string]interface{})
+
+			// parse body data
+			body, err := io.ReadAll(req.Body)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusBadRequest)
+				return
+			}
+			err = json.Unmarshal(body, &reqData)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+
+			// TODO: unmarshal body data into message, send request to VPP, marshal it and send as response
+		} else if req.Method == http.MethodGet {
+			b, err := json.MarshalIndent(msg, "", "  ")
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+				return
+			}
+			_, err = w.Write(b)
+			if err != nil {
+				http.Error(w, err.Error(), http.StatusInternalServerError)
+			}
+		} else {
+			http.Error(w, "GET or POST are allowed only", http.StatusMethodNotAllowed)
+		}
 	}
 }
 
-func showRPC(apifiles []*vppapi.File) {
+/*func showRPC(apifiles []*vppapi.File) {
 	for _, apifile := range apifiles {
 		fmt.Printf("%s.api\n", apifile.Name)
 		if apifile.Service == nil {
@@ -172,9 +179,9 @@ func showRPC(apifiles []*vppapi.File) {
 			fmt.Printf(" rpc (%s) --> (%s)\n", req, reply)
 		}
 	}
-}
+}*/
 
-func apiHandler(apifiles []vppapi.File) func(http.ResponseWriter, *http.Request) {
+func apiFilesHandler(apifiles []vppapi.File) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		b, err := json.MarshalIndent(apifiles, "", "  ")
 		if err != nil {
@@ -202,7 +209,7 @@ func apiFileHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Reques
 	}
 }
 
-func rawHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
+func apiRawHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {
 		b, err := os.ReadFile(apifile.Path)
 		if err != nil {

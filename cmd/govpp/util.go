@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 func mapStr(data map[string]string) string {
@@ -27,7 +29,7 @@ func mapStr(data map[string]string) string {
 			str += ", "
 		}
 		if v == "" {
-			str += fmt.Sprintf("%s", k)
+			str += k
 		} else {
 			str += fmt.Sprintf("%s: %q", k, v)
 		}
@@ -40,7 +42,7 @@ func mapStrOrdered(data map[string]string) string {
 	for k, v := range data {
 		var str string
 		if v == "" {
-			str = fmt.Sprintf("%s", k)
+			str = k
 		} else {
 			str = fmt.Sprintf("%s: %q", k, v)
 		}
@@ -48,4 +50,10 @@ func mapStrOrdered(data map[string]string) string {
 	}
 	sort.Strings(strs)
 	return strings.Join(strs, ", ")
+}
+
+func must(err error) {
+	if err != nil {
+		logrus.Fatal(err)
+	}
 }

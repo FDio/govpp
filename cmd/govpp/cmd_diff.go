@@ -33,9 +33,9 @@ func newDiffCmd() *cobra.Command {
 		opts = DiffCmdOptions{}
 	)
 	cmd := &cobra.Command{
-		Use:     "diff <INPUT> --against <AGAINST>",
-		Aliases: []string{"dif", "cmp", "d"},
-		Short:   "Compare two schemas",
+		Use:     "diff INPUT --against=AGAINST",
+		Aliases: []string{"dif", "d", "cmp", "compare", "changes"},
+		Short:   "b two schemas",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Input = args[0]
@@ -56,7 +56,7 @@ func runDiffCmd(opts DiffCmdOptions) error {
 	}
 
 	logrus.Tracef("VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppInput.ApiDirectory, vppInput.VppVersion, len(vppInput.ApiFiles))
+		vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
 
 	// Against
 	vppAgainst, err := vppapi.ResolveVppInput(opts.Against)
@@ -65,16 +65,10 @@ func runDiffCmd(opts DiffCmdOptions) error {
 	}
 
 	logrus.Tracef("VPP against:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppAgainst.ApiDirectory, vppAgainst.VppVersion, len(vppAgainst.ApiFiles))
+		vppAgainst.ApiDirectory, vppAgainst.Schema.Version, len(vppAgainst.Schema.Files))
 
-	schema1 := vppapi.Schema{
-		Files:   vppInput.ApiFiles,
-		Version: vppInput.VppVersion,
-	}
-	schema2 := vppapi.Schema{
-		Files:   vppAgainst.ApiFiles,
-		Version: vppAgainst.VppVersion,
-	}
+	schema1 := vppInput.Schema
+	schema2 := vppAgainst.Schema
 
 	logrus.Debugf("comparing schemas..")
 

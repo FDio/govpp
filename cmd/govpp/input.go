@@ -17,9 +17,32 @@ package main
 import (
 	"os"
 	"path/filepath"
+
+	"github.com/sirupsen/logrus"
+
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-func resolveVppApiInput() string {
+func resolveInput(input string) (*vppapi.VppInput, error) {
+	if input == "" {
+		logrus.Tracef("input empty, trying to detect automatically")
+		input = detectVppApiInput()
+	}
+
+	logrus.Tracef("resolving VPP input: %q", input)
+
+	vppInput, err := vppapi.ResolveVppInput(input)
+	if err != nil {
+		return nil, err
+	}
+
+	logrus.Tracef("resolved VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
+		vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
+
+	return vppInput, nil
+}
+
+func detectVppApiInput() string {
 	// check if the current working dir is within the VPP repository
 	if _, err := os.Stat(filepath.Join(".", "src", "vpp")); err == nil {
 		// if true, return the path to the VPP API directory within the repository
@@ -27,9 +50,9 @@ func resolveVppApiInput() string {
 	}
 
 	// check if VPP is installed on the system
-	if _, err := os.Stat(filepath.Join("/", "usr", "share", "vpp")); err == nil {
+	if _, err := os.Stat(vppapi.DefaultDir); err == nil {
 		// if true, return the path to the VPP API directory
-		return filepath.Join("/", "usr", "share", "vpp", "api")
+		return vppapi.DefaultDir
 	}
 
 	// if none of the above conditions are met, return the current working directory

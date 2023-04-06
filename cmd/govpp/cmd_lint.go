@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/sirupsen/logrus"
@@ -26,8 +27,7 @@ import (
 )
 
 type LintCmdOptions struct {
-	Input  string
-	Output string
+	Input string
 }
 
 func newLintCmd() *cobra.Command {
@@ -35,116 +35,149 @@ func newLintCmd() *cobra.Command {
 		opts = LintCmdOptions{}
 	)
 	cmd := &cobra.Command{
-		Use:     "lint [apifile...]",
-		Aliases: []string{"gen"},
-		Short:   "Lint VPP API files",
+		Use:   "lint",
+		Short: "Lint VPP API files",
+		Long:  "Run linter checks for VPP API files",
+		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.Input == "" {
-				opts.Input = resolveVppApiInput()
-			}
 			return runLintCmd(opts, args)
 		},
-		Hidden: true,
 	}
 
 	cmd.PersistentFlags().StringVar(&opts.Input, "input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
-	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output location for linter")
 
 	return cmd
 }
 
+func runLintCmd(opts LintCmdOptions, args []string) error {
+	vppInput, err := resolveInput(opts.Input)
+	if err != nil {
+		return err
+	}
+
+	checks := defautLintChecks()
+
+	logrus.Tracef("running %d linter checks", len(checks))
+
+	schema := vppInput.Schema
+
+	err = checkSchema(&schema, checks)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+/*type Linter interface {
+	Enable(rules ...*LintRule)
+	Disable(rules ...*LintRule)
+	Run(schema *vppapi.Schema) error
+}
+
+var rules = []LintRule{
+	{
+		Code:        "F000",
+		Name:        "missing-crc",
+		Description: "Must have CRC defined",
+		Category:    "file",
+		Check: func(schema *vppapi.Schema) error {
+			return nil
+		},
+	},
+}*/
+
+func checkSchema(schema *vppapi.Schema, checks []LintChecker) error {
+	var issues LintErrors
+
+	for _, check := range checks {
+		if err := check.Check(schema); err != nil {
+			switch err.(type) {
+			case LintError:
+				issues = append(issues, err.(LintError))
+			case LintErrors:
+				issues = append(issues, err.(LintErrors)...)
+			default:
+				issues = append(issues, LintError{
+					Message: err.Error(),
+				})
+			}
+		}
+	}
+
+	if len(issues) > 0 {
+		logrus.Debugf("Found %d issues in the VPP API schema", len(issues))
+		return issues
+	}
+	logrus.Debugln("No issues found in the VPP API schema")
+	return nil
+}
+
+type LintChecker interface {
+	Check(schema *vppapi.Schema) error
+}
+
+type CheckFunc func(schema *vppapi.Schema) error
+
+func (c CheckFunc) Check(schema *vppapi.Schema) error {
+	return c(schema)
+}
+
+func defautLintChecks() []LintChecker {
+	return []LintChecker{
+		CheckFunc(CheckMissingCRC),
+		CheckFunc(CheckDeprecatedMessages),
+	}
+}
+
 type LintRule struct {
-	Name        string
 	Code        string
+	Name        string
 	Description string
-	Check       func(obj any) error
+	Category    string
+	Check       func(schema *vppapi.Schema) error
 }
 
 type LintError struct {
-	Obj     any
+	Rule    LintRule
+	File    string
+	Line    int
+	Object  any
 	Message string
 }
 
 func (l LintError) Error() string {
-	return l.Message
+	return fmt.Sprintf("%s:%d:%v ", l.File, l.Line, l.Message)
 }
 
-func runLintCmd(opts LintCmdOptions, args []string) error {
-	// Input
-	vppInput, err := vppapi.ResolveVppInput(opts.Input)
-	if err != nil {
-		return err
+type LintErrors []LintError
+
+func (le LintErrors) Error() string {
+	var sb strings.Builder
+	for _, e := range le {
+		sb.WriteString(e.Error())
+		sb.WriteString("\n")
 	}
-
-	logrus.Tracef("VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppInput.ApiDirectory, vppInput.VppVersion, len(vppInput.ApiFiles))
-
-	checks := defautChecks()
-	schema := &vppapi.Schema{
-		Files:   vppInput.ApiFiles,
-		Version: vppInput.VppVersion,
-	}
-
-	err = checkSchema(schema, checks)
-	if err != nil {
-		return err
-	}
-
-	/*var rules []LintRule
-
-	rules := defaultRules()
-
-	err := checkRules(vppInput, rules)
-	if err != nil {
-		return err
-	}*/
-
-	return nil
+	return sb.String()
 }
 
-/*func checkRules(input *vppapi.VppInput, rules []LintRule) error {
-
-	return nil
-}
-
-func defaultRules() []LintRule {
-	return []LintRule{
-		{
-			Name:        "",
-			Code:        "",
-			Description: "",
-			Check: func(obj any) error {
-
-			},
-		},
-	}
-}*/
-
-func defautChecks() []Check {
-	return []Check{
-		CheckMissingCRC{},
-		CheckDeprecatedMessages{},
-	}
-}
-
-type Check interface {
-	Check(schema *vppapi.Schema) (issuesFound bool, issueDescription string)
-}
-
-type CheckMissingCRC struct{}
-
-func (c CheckMissingCRC) Check(schema *vppapi.Schema) (issuesFound bool, issueDescription string) {
+func CheckMissingCRC(schema *vppapi.Schema) error {
+	var issues LintErrors
 	for _, file := range schema.Files {
 		if file.CRC == "" {
-			return true, fmt.Sprintf("CRC is missing for file: %s\n", file.Name)
+			issues = append(issues, LintError{
+				File:    file.Path,
+				Message: fmt.Sprintf("CRC is missing for file: %s", file.Name),
+			})
 		}
 	}
-	return false, ""
+	if len(issues) > 0 {
+		return issues
+	}
+	return nil
 }
 
-type CheckDeprecatedMessages struct{}
-
-func (c CheckDeprecatedMessages) Check(schema *vppapi.Schema) (issuesFound bool, issueDescription string) {
+func CheckDeprecatedMessages(schema *vppapi.Schema) error {
 	messageVersions := make(map[string]int)
 	for _, file := range schema.Files {
 		for _, message := range file.Messages {
@@ -155,51 +188,54 @@ func (c CheckDeprecatedMessages) Check(schema *vppapi.Schema) (issuesFound bool,
 		}
 	}
 
-	var issueBuilder strings.Builder
+	var issues LintErrors
 	for _, file := range schema.Files {
 		for _, message := range file.Messages {
 			baseName, version := extractBaseNameAndVersion(message.Name)
 			if version < messageVersions[baseName] {
 				if _, deprecated := message.Options["deprecated"]; !deprecated {
-					issuesFound = true
-					issueBuilder.WriteString(fmt.Sprintf("Message %s.%s is missing the deprecated option\n", file.Name, message.Name))
+					issues = append(issues, LintError{
+						File:    file.Path,
+						Message: fmt.Sprintf("Message %s.%s is missing the deprecated option", file.Name, message.Name),
+					})
 				}
 			}
 		}
 	}
-
-	return issuesFound, issueBuilder.String()
+	if len(issues) > 0 {
+		return issues
+	}
+	return nil
 }
 
 func extractBaseNameAndVersion(messageName string) (string, int) {
 	re := regexp.MustCompile(`^(.+)_v(\d+)$`)
 	matches := re.FindStringSubmatch(messageName)
-
 	if len(matches) == 3 {
-		return matches[1], 2
+		name := matches[1]
+		version, _ := strconv.Atoi(matches[2])
+		return name, version
 	} else {
 		return messageName, 1
 	}
 }
 
-func checkSchema(schema *vppapi.Schema, checks []Check) error {
-	var err error
-	issuesFound := false
+func extractMessageVersions(file vppapi.File) map[string][]string {
+	messageVersions := make(map[string][]string)
+	for _, message := range file.Messages {
+		baseName, _ := extractBaseNameAndVersion(message.Name)
+		messageVersions[baseName] = append(messageVersions[baseName], message.Name)
+	}
+	return messageVersions
+}
 
-	for _, check := range checks {
-		checkIssuesFound, issueDescription := check.Check(schema)
-		if checkIssuesFound {
-			issuesFound = true
-			fmt.Print(issueDescription)
-			err = fmt.Errorf("check error: %v", issueDescription)
+func extractFileMessageVersions(file vppapi.File) map[string]int {
+	messageVersions := make(map[string]int)
+	for _, message := range file.Messages {
+		baseName, version := extractBaseNameAndVersion(message.Name)
+		if version > messageVersions[baseName] {
+			messageVersions[baseName] = version
 		}
 	}
-
-	if issuesFound {
-		fmt.Println("Linting issues found in the VPP API schema")
-	} else {
-		fmt.Println("No issues found in the VPP API schema")
-	}
-
-	return err
+	return messageVersions
 }

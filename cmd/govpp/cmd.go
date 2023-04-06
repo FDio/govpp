@@ -20,7 +20,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"go.fd.io/govpp/version"
+	"go.fd.io/govpp/internal/version"
 )
 
 const logo = `
@@ -44,8 +44,8 @@ func newRootCmd() *cobra.Command {
 		glob GlobalOptions
 	)
 	cmd := &cobra.Command{
-		Use:               "govpp",
-		Short:             "GoVPP CLI",
+		Use:               "govpp COMMAND",
+		Short:             "GoVPP CLI app",
 		Long:              fmt.Sprintf(logo, version.Short(), version.BuildTime(), version.BuiltBy()),
 		Version:           version.String(),
 		SilenceUsage:      true,
@@ -68,7 +68,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(
 		newGenerateCmd(),
 		newVppapiCmd(),
-		newServerCmd(),
+		newHttpCmd(),
 		newCliCommand(),
 		newExportCmd(),
 		newDiffCmd(),

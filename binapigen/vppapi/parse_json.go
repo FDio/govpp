@@ -454,6 +454,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 		Type: fieldType,
 	}
 
+	// field length (array) or field meta
 	if field.Len() >= 3 {
 		switch field.At(2).GetType() {
 		case jsongo.TypeValue:
@@ -480,6 +481,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 			return nil, errors.New("invalid JSON for field specified")
 		}
 	}
+	// field size from
 	if field.Len() >= 4 {
 		fieldLengthFrom, ok := field.At(3).Get().(string)
 		if !ok {

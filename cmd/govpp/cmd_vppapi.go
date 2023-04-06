@@ -33,8 +33,9 @@ import (
 )
 
 type VppApiCmdOptions struct {
-	Input           string
-	Format          string
+	Input  string
+	Format string
+
 	ShowContents    bool
 	ShowMessages    bool
 	ShowRPC         bool
@@ -52,9 +53,6 @@ func newVppapiCmd() *cobra.Command {
 		Aliases: []string{"a", "api"},
 		Short:   "Print VPP API",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if opts.Input == "" {
-				opts.Input = resolveVppApiInput()
-			}
 			return runVppApiCmd(cmd.OutOrStdout(), opts, args)
 		},
 	}
@@ -72,20 +70,15 @@ func newVppapiCmd() *cobra.Command {
 }
 
 func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
-	logrus.Tracef("resolving input: %q", opts.Input)
-
-	vppInput, err := vppapi.ResolveVppInput(opts.Input)
+	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
-	logrus.Tracef("VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppInput.ApiDirectory, vppInput.VppVersion, len(vppInput.ApiFiles))
-
-	logrus.Debugf("parsing VPP API directory: %v", opts.Input)
+	logrus.Debugf("parsing VPP API directory: %v", vppInput.ApiDirectory)
 
 	// parse API directory
-	allapifiles, err := vppapi.ParseDir(opts.Input)
+	allapifiles, err := vppapi.ParseDir(vppInput.ApiDirectory)
 	if err != nil {
 		return fmt.Errorf("vppapi.ParseDir: %w", err)
 	}
@@ -248,8 +241,6 @@ func showVPPAPIList(out io.Writer, apifiles []vppapi.File) {
 	for i, apifile := range apifiles {
 		index := i + 1
 
-		//importedTypes := binapigen.ListImportedTypes(apifiles, apifile)
-		//importedFiles := listImportedFiles(apifiles, apifile)
 		typesCount := getFileTypesCount(apifile)
 		apiVersion := getFileVersion(apifile)
 		apiCrc := getShortCrc(apifile.CRC)
@@ -592,14 +583,6 @@ func msgFieldsStr(fields []vppapi.Field) []string {
 			s += fmt.Sprintf(" %v", meta)
 		}
 		list = append(list, s)
-	}
-	return list
-}
-
-func listImportedFiles(apifiles []vppapi.File, apifile *vppapi.File) []string {
-	var list []string
-	for _, f := range binapigen.ListImportedFiles(apifiles, apifile) {
-		list = append(list, f.Name)
 	}
 	return list
 }

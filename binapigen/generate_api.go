@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"strings"
 
-	"go.fd.io/govpp/version"
+	"go.fd.io/govpp/internal/version"
 )
 
 // generated names
@@ -57,7 +57,7 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	if !gen.opts.NoVersionInfo {
 		g.P("// versions:")
 		g.P("//  binapi-generator: ", version.Version())
-		g.P("//  VPP:              ", g.gen.vppVersion)
+		g.P("//  VPP:              ", g.gen.vppapiSchema.Version)
 		if !gen.opts.NoSourcePathInfo {
 			g.P("// source: ", g.file.Desc.Path)
 		}
@@ -157,25 +157,14 @@ func genGenericDefinesComment(g *GenFile, goName string, vppName string, objKind
 }
 
 func genMessageStatusComment(g *GenFile, msg *Message) {
-	/*if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress || !g.file.IsStable(){
-		if msg == "" {
-			msg = inProgressMsg
-		}
-		g.P("// InProgress: ", msg)
-	}*/
-	if msg, ok := msg.Experimental(); ok {
-		g.P("// Experimental: ", msg)
+	// experimental status (in progress)
+	if m, ok := msg.Experimental(); ok {
+		g.P("// Experimental: ", m)
 	}
-	// deprecated message
-	if msg, ok := msg.Deprecated(); ok {
-		g.P("// Deprecated: ", msg)
+	// deprecated status
+	if m, ok := msg.Deprecated(); ok {
+		g.P("// Deprecated: ", m)
 	}
-	/*if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
-		if msg == "" {
-			msg = deprecatedMsg
-		}
-		g.P("// Deprecated: ", msg)
-	}	*/
 }
 
 func genEnum(g *GenFile, enum *Enum) {
@@ -382,31 +371,36 @@ func fieldTagBinapi(field *Field) string {
 	typ := fromApiType(field.Type)
 	if field.Array {
 		if field.Length > 0 {
-			typ = fmt.Sprintf("%s[%d]", typ, field.Length)
+			typ += fmt.Sprintf("[%d]", field.Length)
 		} else if field.SizeFrom != "" {
-			typ = fmt.Sprintf("%s[%s]", typ, field.SizeFrom)
+			typ += fmt.Sprintf("[%s]", field.SizeFrom)
 		} else {
-			typ = fmt.Sprintf("%s[]", typ)
+			typ += "[]"
 		}
 	}
 	tag := []string{
 		typ,
 		fmt.Sprintf("name=%s", field.Name),
 	}
-	if limit, ok := field.Meta["limit"]; ok && limit.(int) > 0 {
+
+	// limit
+	if limit, ok := field.Meta[optFieldLimit]; ok && limit.(int) > 0 {
 		tag = append(tag, fmt.Sprintf("limit=%s", limit))
 	}
-	if def, ok := field.Meta["default"]; ok && def != nil {
+
+	// default value
+	if def, ok := field.Meta[optFieldDefault]; ok && def != nil {
 		switch fieldActualType(field) {
 		case I8, I16, I32, I64:
-			def = int(def.(float64))
+			def = int64(def.(float64))
 		case U8, U16, U32, U64:
-			def = uint(def.(float64))
+			def = uint64(def.(float64))
 		case F64:
 			def = def.(float64)
 		}
 		tag = append(tag, fmt.Sprintf("default=%v", def))
 	}
+
 	return strings.Join(tag, ",")
 }
 

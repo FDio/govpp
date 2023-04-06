@@ -63,7 +63,7 @@ func ResolveApiDir(dir string) string {
 				return path.Join(dir, localBuildRoot)
 			}
 		} else {
-			logrus.Tracef("error occurred when checking %q: %w'", localBuildRoot, err)
+			logrus.Tracef("error occurred when checking %q: %v'", localBuildRoot, err)
 		}
 	}
 

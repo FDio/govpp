@@ -25,12 +25,9 @@ type (
 
 	// File is a single API file and its contents.
 	File struct {
-		// Name is the name of this API file (without any extension).
-		Name string
-		// Path is the location of thi API file relative to API directory.
-		Path string
-		// CRC is a checksum for this API file.
-		CRC string
+		Name string // Name is the name of this API file (without any extension).
+		Path string // Path is the location of thi API file relative to API directory.
+		CRC  string // CRC is a checksum for this API file.
 
 		// Options is a map of string key-value pairs that provides additional options for this file.
 		Options map[string]string `json:",omitempty"`
@@ -45,8 +42,8 @@ type (
 
 		// Messages is a list of Message objects representing messages used in the API.
 		Messages []Message `json:",omitempty"`
-		// Service is an object representing the RPC service used in the API.
-		// In case there is not service defined for this File, the Service is nil.
+		// Service is an object representing the RPC services used in the API.
+		// In case there is not any services defined for this File, the Service is nil.
 		Service *Service `json:",omitempty"`
 	}
 

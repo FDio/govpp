@@ -24,7 +24,7 @@ import (
 
 	"go.fd.io/govpp/binapigen"
 	"go.fd.io/govpp/binapigen/vppapi"
-	"go.fd.io/govpp/version"
+	"go.fd.io/govpp/internal/version"
 )
 
 const (

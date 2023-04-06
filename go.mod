@@ -3,7 +3,7 @@ module go.fd.io/govpp
 go 1.18
 
 require (
-	github.com/bennyscetbun/jsongo v1.1.0
+	github.com/bennyscetbun/jsongo v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.5.2

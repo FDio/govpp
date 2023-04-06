@@ -28,7 +28,6 @@ import (
 	"go.fd.io/govpp"
 	"go.fd.io/govpp/adapter/socketclient"
 	"go.fd.io/govpp/binapi/vlib"
-	"go.fd.io/govpp/binapigen/vppapi"
 	"go.fd.io/govpp/core"
 )
 
@@ -51,7 +50,6 @@ const exampleCliCommand = `
 `
 
 type CliOptions struct {
-	ApiDir    string
 	ApiSocket string
 	Force     bool
 	Output    string
@@ -64,15 +62,14 @@ type CliOptions struct {
 func newCliCommand() *cobra.Command {
 	var (
 		opts = CliOptions{
-			ApiDir:    vppapi.DefaultDir,
 			ApiSocket: socketclient.DefaultSocketName,
 		}
 	)
 	cmd := &cobra.Command{
 		Use:                   "cli [COMMAND]",
 		Aliases:               []string{"c"},
-		Short:                 "Execute VPP CLI command",
-		Long:                  "Execute VPP CLI command(s) via binary API",
+		Short:                 "Send CLI via VPP API",
+		Long:                  "Send VPP CLI command(s) via VPP API",
 		Example:               exampleCliCommand,
 		DisableFlagsInUseLine: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -143,7 +140,6 @@ func newCliCommand() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().StringVar(&opts.ApiSocket, "apisock", opts.ApiSocket, "Path to VPP API socket")
-	cmd.PersistentFlags().StringVar(&opts.ApiDir, "api", opts.ApiDir, "Path to directory containing VPP API files")
 	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output location for the CLI reply")
 	cmd.PersistentFlags().BoolVarP(&opts.Force, "force", "f", false, "Force overwriting output file")
 
@@ -218,13 +214,13 @@ type VppCli interface {
 	Close() error
 }
 
-type binapiVppCli struct {
+type vppcliBinapi struct {
 	apiSocket string
 	conn      *core.Connection
 	client    vlib.RPCService
 }
 
-func newBinapiVppCli(apiSock string) (*binapiVppCli, error) {
+func newBinapiVppCli(apiSock string) (*vppcliBinapi, error) {
 	logrus.Tracef("connecting to VPP API socket %q", apiSock)
 
 	conn, err := govpp.Connect(apiSock)
@@ -242,7 +238,7 @@ func newBinapiVppCli(apiSock string) (*binapiVppCli, error) {
 		return nil, fmt.Errorf("incompatible VPP version: %w", err)
 	}
 
-	cli := &binapiVppCli{
+	cli := &vppcliBinapi{
 		apiSocket: apiSock,
 		conn:      conn,
 		client:    vlib.NewServiceClient(conn),
@@ -250,7 +246,7 @@ func newBinapiVppCli(apiSock string) (*binapiVppCli, error) {
 	return cli, nil
 }
 
-func (b *binapiVppCli) Execute(args ...string) (string, error) {
+func (b *vppcliBinapi) Execute(args ...string) (string, error) {
 	cmd := strings.Join(args, " ")
 
 	logrus.Tracef("sending CLI command: %q", cmd)
@@ -265,7 +261,7 @@ func (b *binapiVppCli) Execute(args ...string) (string, error) {
 	return reply.Reply, nil
 }
 
-func (b *binapiVppCli) Close() error {
+func (b *vppcliBinapi) Close() error {
 	if b.conn != nil {
 		logrus.Debugf("disconnecting VPP API connection")
 		b.conn.Disconnect()

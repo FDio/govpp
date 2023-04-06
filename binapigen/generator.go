@@ -49,8 +49,9 @@ type Options struct {
 type Generator struct {
 	opts Options
 
-	apiFiles   []vppapi.File
-	vppVersion string
+	vppapiSchema *vppapi.Schema
+	//apiFiles   []vppapi.File
+	//vppVersion string
 
 	Files       []*File
 	FilesByName map[string]*File
@@ -68,8 +69,7 @@ type Generator struct {
 func New(opts Options, input *vppapi.VppInput) (*Generator, error) {
 	gen := &Generator{
 		opts:           opts,
-		apiFiles:       input.ApiFiles,
-		vppVersion:     input.VppVersion,
+		vppapiSchema:   &input.Schema,
 		FilesByName:    make(map[string]*File),
 		FilesByPath:    make(map[string]*File),
 		enumsByName:    map[string]*Enum{},
@@ -80,24 +80,24 @@ func New(opts Options, input *vppapi.VppInput) (*Generator, error) {
 	}
 
 	// normalize API files
-	SortFilesByImports(gen.apiFiles)
-	for _, apiFile := range gen.apiFiles {
-		RemoveImportedTypes(gen.apiFiles, &apiFile)
+	SortFilesByImports(gen.vppapiSchema.Files)
+	for _, apiFile := range gen.vppapiSchema.Files {
+		RemoveImportedTypes(gen.vppapiSchema.Files, &apiFile)
 		SortFileObjectsByName(&apiFile)
 	}
 
 	// prepare package names and import paths
 	packageNames := make(map[string]GoPackageName)
 	importPaths := make(map[string]GoImportPath)
-	for _, apifile := range gen.apiFiles {
+	for _, apifile := range gen.vppapiSchema.Files {
 		filename := getFilename(apifile)
 		packageNames[filename] = cleanPackageName(apifile.Name)
 		importPaths[filename] = GoImportPath(path.Join(gen.opts.ImportPrefix, baseName(apifile.Name)))
 	}
 
-	logrus.Debugf("adding %d VPP API files to generator", len(gen.apiFiles))
+	logrus.Debugf("adding %d VPP API files to generator", len(gen.vppapiSchema.Files))
 
-	for _, apifile := range gen.apiFiles {
+	for _, apifile := range gen.vppapiSchema.Files {
 		if _, ok := gen.FilesByName[apifile.Name]; ok {
 			return nil, fmt.Errorf("duplicate file: %q", apifile.Name)
 		}

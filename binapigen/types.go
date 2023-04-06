@@ -110,7 +110,6 @@ func getFieldType(g *GenFile, field *Field) string {
 	gotype := fieldGoType(g, field)
 	if field.Array {
 		switch gotype {
-
 		case "uint8":
 			return "[]byte"
 		case "string":
