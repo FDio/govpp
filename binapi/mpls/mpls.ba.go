@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/mpls.api.json
+// source: core/mpls.api.json
 
 // Package mpls contains generated bindings for API file mpls.api.
 //

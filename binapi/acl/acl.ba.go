@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/acl.api.json
+// source: plugins/acl.api.json
 
 // Package acl contains generated bindings for API file acl.api.
 //

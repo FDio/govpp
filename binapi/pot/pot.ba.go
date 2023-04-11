@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/pot.api.json
+// source: plugins/pot.api.json
 
 // Package pot contains generated bindings for API file pot.api.
 //

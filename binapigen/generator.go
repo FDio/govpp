@@ -81,9 +81,11 @@ func New(opts Options, input *vppapi.VppInput) (*Generator, error) {
 
 	// normalize API files
 	SortFilesByImports(gen.vppapiSchema.Files)
-	for _, apiFile := range gen.vppapiSchema.Files {
-		RemoveImportedTypes(gen.vppapiSchema.Files, &apiFile)
-		SortFileObjectsByName(&apiFile)
+	for i, apiFile := range gen.vppapiSchema.Files {
+		f := apiFile
+		RemoveImportedTypes(gen.vppapiSchema.Files, &f)
+		SortFileObjectsByName(&f)
+		gen.vppapiSchema.Files[i] = f
 	}
 
 	// prepare package names and import paths

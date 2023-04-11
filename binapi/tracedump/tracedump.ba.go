@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/tracedump.api.json
+// source: plugins/tracedump.api.json
 
 // Package tracedump contains generated bindings for API file tracedump.api.
 //

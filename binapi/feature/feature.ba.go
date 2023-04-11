@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/feature.api.json
+// source: core/feature.api.json
 
 // Package feature contains generated bindings for API file feature.api.
 //

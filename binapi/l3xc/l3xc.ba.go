@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/l3xc.api.json
+// source: plugins/l3xc.api.json
 
 // Package l3xc contains generated bindings for API file l3xc.api.
 //

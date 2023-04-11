@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/mdata.api.json
+// source: plugins/mdata.api.json
 
 // Package mdata contains generated bindings for API file mdata.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/rdma.api.json
+// source: plugins/rdma.api.json
 
 // Package rdma contains generated bindings for API file rdma.api.
 //

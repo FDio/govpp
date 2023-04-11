@@ -158,8 +158,8 @@ func genGenericDefinesComment(g *GenFile, goName string, vppName string, objKind
 
 func genMessageStatusComment(g *GenFile, msg *Message) {
 	// experimental status (in progress)
-	if m, ok := msg.Experimental(); ok {
-		g.P("// Experimental: ", m)
+	if m, ok := msg.InProgress(); ok {
+		g.P("// InProgress: ", m)
 	}
 	// deprecated status
 	if m, ok := msg.Deprecated(); ok {

@@ -115,8 +115,9 @@ func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
 	// omit imported types
 	if !opts.IncludeImported {
 		for i, apifile := range apifiles {
-			binapigen.RemoveImportedTypes(allapifiles, &apifile)
-			apifiles[i] = apifile
+			f := apifile
+			binapigen.RemoveImportedTypes(allapifiles, &f)
+			apifiles[i] = f
 		}
 	}
 

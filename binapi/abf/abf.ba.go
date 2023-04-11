@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/abf.api.json
+// source: plugins/abf.api.json
 
 // Package abf contains generated bindings for API file abf.api.
 //

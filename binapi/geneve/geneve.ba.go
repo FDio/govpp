@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/geneve.api.json
+// source: plugins/geneve.api.json
 
 // Package geneve contains generated bindings for API file geneve.api.
 //

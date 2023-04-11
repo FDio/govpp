@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/vpe_types.api.json
+// source: core/vpe_types.api.json
 
 // Package vpe_types contains generated bindings for API file vpe_types.api.
 //

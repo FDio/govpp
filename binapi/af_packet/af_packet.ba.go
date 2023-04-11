@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/af_packet.api.json
+// source: core/af_packet.api.json
 
 // Package af_packet contains generated bindings for API file af_packet.api.
 //

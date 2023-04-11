@@ -384,7 +384,7 @@ func getRetvalField(m *Message) *Field {
 	return nil
 }
 
-func (m *Message) Experimental() (string, bool) {
+func (m *Message) InProgress() (string, bool) {
 	options := m.Options
 	// all messages for API versions < 1.0.0 are in_progress by default
 	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress || !m.File.IsStable() {

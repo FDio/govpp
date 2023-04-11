@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/pnat.api.json
+// source: plugins/pnat.api.json
 
 // Package pnat contains generated bindings for API file pnat.api.
 //

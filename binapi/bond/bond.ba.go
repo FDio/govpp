@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/bond.api.json
+// source: core/bond.api.json
 
 // Package bond contains generated bindings for API file bond.api.
 //
