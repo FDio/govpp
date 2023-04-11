@@ -92,11 +92,11 @@ func checkSchema(schema *vppapi.Schema, checks []LintChecker) error {
 
 	for _, check := range checks {
 		if err := check.Check(schema); err != nil {
-			switch err.(type) {
+			switch e := err.(type) {
 			case LintError:
-				issues = append(issues, err.(LintError))
+				issues = append(issues, e)
 			case LintErrors:
-				issues = append(issues, err.(LintErrors)...)
+				issues = append(issues, e...)
 			default:
 				issues = append(issues, LintError{
 					Message: err.Error(),
@@ -147,6 +147,9 @@ type LintError struct {
 }
 
 func (l LintError) Error() string {
+	if l.Line == 0 {
+		return fmt.Sprintf("%s:%v ", l.File, l.Message)
+	}
 	return fmt.Sprintf("%s:%d:%v ", l.File, l.Line, l.Message)
 }
 
@@ -178,25 +181,19 @@ func CheckMissingCRC(schema *vppapi.Schema) error {
 }
 
 func CheckDeprecatedMessages(schema *vppapi.Schema) error {
-	messageVersions := make(map[string]int)
-	for _, file := range schema.Files {
-		for _, message := range file.Messages {
-			baseName, version := extractBaseNameAndVersion(message.Name)
-			if version > messageVersions[baseName] {
-				messageVersions[baseName] = version
-			}
-		}
-	}
-
 	var issues LintErrors
 	for _, file := range schema.Files {
+		messageVersions := extractFileMessageVersions(file)
 		for _, message := range file.Messages {
 			baseName, version := extractBaseNameAndVersion(message.Name)
 			if version < messageVersions[baseName] {
-				if _, deprecated := message.Options["deprecated"]; !deprecated {
+				if _, ok := message.Options["in_progress"]; ok {
+					continue
+				}
+				if _, ok := message.Options["deprecated"]; !ok {
 					issues = append(issues, LintError{
 						File:    file.Path,
-						Message: fmt.Sprintf("Message %s.%s is missing the deprecated option", file.Name, message.Name),
+						Message: fmt.Sprintf("Message %s is missing the deprecated option for older version", message.Name),
 					})
 				}
 			}
@@ -209,24 +206,15 @@ func CheckDeprecatedMessages(schema *vppapi.Schema) error {
 }
 
 func extractBaseNameAndVersion(messageName string) (string, int) {
-	re := regexp.MustCompile(`^(.+)_v(\d+)$`)
+	re := regexp.MustCompile(`^(.+)_v(\d+)(_(?:reply|dump|details))?$`)
 	matches := re.FindStringSubmatch(messageName)
-	if len(matches) == 3 {
-		name := matches[1]
+	if len(matches) == 4 {
+		name := matches[1] + matches[3]
 		version, _ := strconv.Atoi(matches[2])
 		return name, version
 	} else {
 		return messageName, 1
 	}
-}
-
-func extractMessageVersions(file vppapi.File) map[string][]string {
-	messageVersions := make(map[string][]string)
-	for _, message := range file.Messages {
-		baseName, _ := extractBaseNameAndVersion(message.Name)
-		messageVersions[baseName] = append(messageVersions[baseName], message.Name)
-	}
-	return messageVersions
 }
 
 func extractFileMessageVersions(file vppapi.File) map[string]int {
@@ -239,3 +227,12 @@ func extractFileMessageVersions(file vppapi.File) map[string]int {
 	}
 	return messageVersions
 }
+
+/*func extractMessageVersions(file vppapi.File) map[string][]string {
+	messageVersions := make(map[string][]string)
+	for _, message := range file.Messages {
+		baseName, _ := extractBaseNameAndVersion(message.Name)
+		messageVersions[baseName] = append(messageVersions[baseName], message.Name)
+	}
+	return messageVersions
+}*/
