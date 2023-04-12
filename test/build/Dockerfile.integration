@@ -1,17 +1,17 @@
 FROM ubuntu:20.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		apt-transport-https \
-		ca-certificates \
-		curl \
-		git \
-		gnupg \
-		iproute2 \
-		iputils-ping \
-		make \
-		nano \
-		sudo \
-		wget \
+        apt-transport-https=2.0.* \
+        ca-certificates=20211016ubuntu0.20.* \
+        curl=7.68.* \
+        git=1:2.25.* \
+        gnupg=2.2.* \
+        iproute2=5.5.* \
+        iputils-ping=3:20190709-3 \
+        make=4.2.* \
+        nano=4.8-* \
+        sudo=1.8.* \
+        wget=1.20.* \
  	&& rm -rf /var/lib/apt/lists/*
 
 ARG GOTESTSUM_VERSION=1.9.0
@@ -46,8 +46,8 @@ RUN set -eux; \
 	apt-get update; \
 	curl -fsSL https://packagecloud.io/install/repositories/fdio/${VPP_REPO}/script.deb.sh | bash; \
 	apt-get update && apt-get install -V -y \
-		vpp \
-		vpp-plugin-core \
+        vpp \
+        vpp-plugin-core \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
