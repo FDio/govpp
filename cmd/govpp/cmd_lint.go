@@ -184,12 +184,21 @@ func CheckDeprecatedMessages(schema *vppapi.Schema) error {
 	var issues LintErrors
 	for _, file := range schema.Files {
 		messageVersions := extractFileMessageVersions(file)
+		versionMessages := extractMessageVersions(file)
+
 		for _, message := range file.Messages {
 			baseName, version := extractBaseNameAndVersion(message.Name)
+
+			// if this is not the latest version of a message
 			if version < messageVersions[baseName] {
-				if _, ok := message.Options["in_progress"]; ok {
-					continue
+
+				// check if newer message version is in progress
+				if vers, ok := versionMessages[baseName]; ok {
+					if newVer, ok := vers[version+1]; ok && isMessageInProgress(newVer) {
+						continue
+					}
 				}
+				// otherwise the message should be marked as deprecated
 				if _, ok := message.Options["deprecated"]; !ok {
 					issues = append(issues, LintError{
 						File:    file.Path,
@@ -203,6 +212,18 @@ func CheckDeprecatedMessages(schema *vppapi.Schema) error {
 		return issues
 	}
 	return nil
+}
+
+const statusInProgress = "in_progress"
+
+func isMessageInProgress(message vppapi.Message) bool {
+	if _, ok := message.Options[statusInProgress]; ok {
+		return true
+	}
+	if val, ok := message.Options["status"]; ok && strings.ToLower(val) == statusInProgress {
+		return true
+	}
+	return false
 }
 
 func extractBaseNameAndVersion(messageName string) (string, int) {
@@ -228,11 +249,14 @@ func extractFileMessageVersions(file vppapi.File) map[string]int {
 	return messageVersions
 }
 
-/*func extractMessageVersions(file vppapi.File) map[string][]string {
-	messageVersions := make(map[string][]string)
+func extractMessageVersions(file vppapi.File) map[string]map[int]vppapi.Message {
+	messageVersions := make(map[string]map[int]vppapi.Message)
 	for _, message := range file.Messages {
-		baseName, _ := extractBaseNameAndVersion(message.Name)
-		messageVersions[baseName] = append(messageVersions[baseName], message.Name)
+		baseName, version := extractBaseNameAndVersion(message.Name)
+		if messageVersions[baseName] == nil {
+			messageVersions[baseName] = make(map[int]vppapi.Message)
+		}
+		messageVersions[baseName][version] = message
 	}
 	return messageVersions
-}*/
+}
