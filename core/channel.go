@@ -285,6 +285,10 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 	}
 	timeoutTimer := time.NewTimer(timeout)
 	slowTimer := time.NewTimer(slowReplyDur)
+	defer func() {
+		timeoutTimer.Stop()
+		slowTimer.Stop()
+	}()
 	for {
 		select {
 		// blocks until a reply comes to ReplyChan or until timeout expires
