@@ -38,8 +38,8 @@ type (
 		Messages []Message `json:",omitempty"`
 		Service  *Service  `json:",omitempty"`
 
-		Counters []Counter `json:",omitempty"`
-		Paths    []Path    `json:",omitempty"`
+		Counters []Counter      `json:",omitempty"`
+		Paths    []CounterPaths `json:",omitempty"`
 	}
 
 	AliasType struct {
@@ -100,10 +100,19 @@ type (
 
 	Counter struct {
 		Name     string
-		Elements []map[string]string
+		Elements []Element `json:",omitempty"`
 	}
 
-	Path struct {
-		List []map[string]string
+	Element struct {
+		Name        string
+		Severity    string
+		Type        string
+		Units       string
+		Description string
+	}
+
+	CounterPaths struct {
+		Name  string
+		Paths []string `json:",omitempty"`
 	}
 )
