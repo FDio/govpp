@@ -254,9 +254,7 @@ func parseJSON(data []byte) (module *File, err error) {
 			if err != nil {
 				return nil, err
 			}
-			for _, paths := range *counterPaths {
-				module.Paths = append(module.Paths, paths)
-			}
+			module.Paths = append(module.Paths, *counterPaths...)
 		}
 	}
 
