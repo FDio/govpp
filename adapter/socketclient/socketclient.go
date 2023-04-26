@@ -88,6 +88,7 @@ type Client struct {
 	msgCallback  adapter.MsgCallback
 	clientIndex  uint32
 	msgTable     map[string]uint16
+	msgTableMu   sync.RWMutex
 	sockDelMsgId uint16
 	writeMu      sync.Mutex
 
@@ -333,6 +334,10 @@ func (c *Client) connect(sockAddr string) error {
 
 func (c *Client) disconnect() error {
 	log.Debugf("Closing socket")
+
+	// cleanup msg table
+	c.setMsgTable(make(map[string]uint16), 0)
+
 	if err := c.conn.Close(); err != nil {
 		log.Debugln("Closing socket failed:", err)
 		return err
@@ -383,23 +388,36 @@ func (c *Client) open() error {
 		reply.Response, reply.Index, reply.Count)
 
 	c.clientIndex = reply.Index
-	c.msgTable = make(map[string]uint16, reply.Count)
+	msgTable := make(map[string]uint16, reply.Count)
+	var sockDelMsgId uint16
 	for _, x := range reply.MessageTable {
 		msgName := strings.Split(x.Name, "\x00")[0]
 		name := strings.TrimSuffix(msgName, "\x13")
-		c.msgTable[name] = x.Index
+		msgTable[name] = x.Index
 		if strings.HasPrefix(name, "sockclnt_delete_") {
-			c.sockDelMsgId = x.Index
+			sockDelMsgId = x.Index
 		}
 		if debugMsgIds {
 			log.Debugf(" - %4d: %q", x.Index, name)
 		}
 	}
+	c.setMsgTable(msgTable, sockDelMsgId)
 
 	return nil
 }
 
+func (c *Client) setMsgTable(msgTable map[string]uint16, sockDelMsgId uint16) {
+	c.msgTableMu.Lock()
+	defer c.msgTableMu.Unlock()
+
+	c.msgTable = msgTable
+	c.sockDelMsgId = sockDelMsgId
+}
+
 func (c *Client) GetMsgID(msgName string, msgCrc string) (uint16, error) {
+	c.msgTableMu.RLock()
+	defer c.msgTableMu.RUnlock()
+
 	if msgID, ok := c.msgTable[msgName+"_"+msgCrc]; ok {
 		return msgID, nil
 	}
