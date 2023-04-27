@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/tls_openssl.api.json
+// source: plugins/tls_openssl.api.json
 
 // Package tls_openssl contains generated bindings for API file tls_openssl.api.
 //

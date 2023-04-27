@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/memclnt.api.json
+// source: core/memclnt.api.json
 
 // Package memclnt contains generated bindings for API file memclnt.api.
 //

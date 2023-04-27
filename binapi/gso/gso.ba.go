@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/gso.api.json
+// source: core/gso.api.json
 
 // Package gso contains generated bindings for API file gso.api.
 //

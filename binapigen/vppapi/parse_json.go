@@ -18,24 +18,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
-	"os"
-	"strings"
 
 	"github.com/bennyscetbun/jsongo"
 )
 
-var debug = strings.Contains(os.Getenv("DEBUG_GOVPP"), "parser")
-
-func logf(f string, v ...interface{}) {
-	if debug {
-		log.Printf(f, v...)
-	}
-}
-
 const (
 	// root keys
-	fileAPIVersion = "vl_api_version"
+	fileVersionCrc = "vl_api_version"
 	fileOptions    = "options"
 	fileTypes      = "types"
 	fileMessages   = "messages"
@@ -45,13 +34,17 @@ const (
 	fileAliases    = "aliases"
 	fileServices   = "services"
 	fileImports    = "imports"
-	// type keys
+
+	// message keys
 	messageCrc     = "crc"
 	messageOptions = "options"
 	messageComment = "comment"
-	enumType       = "enumtype"
-	aliasLength    = "length"
-	aliasType      = "type"
+
+	// type keys
+	enumType    = "enumtype"
+	aliasLength = "length"
+	aliasType   = "type"
+
 	// service
 	serviceReply     = "reply"
 	serviceStream    = "stream"
@@ -59,42 +52,44 @@ const (
 	serviceEvents    = "events"
 )
 
-func parseJSON(data []byte) (module *File, err error) {
+func parseJSON(data []byte) (file *File, err error) {
 	// parse root
 	jsonRoot := new(jsongo.Node)
 	if err := json.Unmarshal(data, jsonRoot); err != nil {
-		return nil, fmt.Errorf("unmarshalling JSON failed: %v", err)
+		return nil, fmt.Errorf("unmarshalling JSON failed: %w", err)
 	}
 
-	logf("file contains:")
-	for _, key := range jsonRoot.GetKeys() {
-		if jsonRoot.At(key).Len() > 0 {
-			logf("  - %2d %s", jsonRoot.At(key).Len(), key)
+	// print contents
+	logf("file contents:")
+	for _, rootKey := range jsonRoot.GetKeys() {
+		length := jsonRoot.At(rootKey).Len()
+		if length > 0 {
+			logf(" - %2d %s", length, rootKey)
 		}
 	}
 
-	module = new(File)
+	file = new(File)
 
-	// parse CRC
-	crc := jsonRoot.At(fileAPIVersion)
+	// parse file CRC
+	crc := jsonRoot.At(fileVersionCrc)
 	if crc.GetType() == jsongo.TypeValue {
-		module.CRC = crc.MustGetString()
+		file.CRC = crc.MustGetString()
 	}
 
-	// parse options
+	// parse file options
 	opt := jsonRoot.Map(fileOptions)
 	if opt.GetType() == jsongo.TypeMap {
-		module.Options = make(map[string]string)
+		file.Options = make(map[string]string)
 		for _, key := range opt.GetKeys() {
 			optionKey := key.(string)
 			optionVal := opt.At(key).MustGetString()
-			module.Options[optionKey] = optionVal
+			file.Options[optionKey] = optionVal
 		}
 	}
 
 	// parse imports
 	importsNode := jsonRoot.Map(fileImports)
-	module.Imports = make([]string, 0, importsNode.Len())
+	file.Imports = make([]string, 0, importsNode.Len())
 	uniq := make(map[string]struct{})
 	for i := 0; i < importsNode.Len(); i++ {
 		importNode := importsNode.At(i)
@@ -104,7 +99,7 @@ func parseJSON(data []byte) (module *File, err error) {
 			continue
 		}
 		uniq[imp] = struct{}{}
-		module.Imports = append(module.Imports, imp)
+		file.Imports = append(file.Imports, imp)
 	}
 
 	// avoid duplicate objects
@@ -120,7 +115,7 @@ func parseJSON(data []byte) (module *File, err error) {
 
 	// parse enum types
 	enumsNode := jsonRoot.Map(fileEnums)
-	module.EnumTypes = make([]EnumType, 0)
+	file.EnumTypes = make([]EnumType, 0)
 	for i := 0; i < enumsNode.Len(); i++ {
 		enum, err := parseEnum(enumsNode.At(i))
 		if err != nil {
@@ -129,12 +124,12 @@ func parseJSON(data []byte) (module *File, err error) {
 		if exists(enum.Name) {
 			continue
 		}
-		module.EnumTypes = append(module.EnumTypes, *enum)
+		file.EnumTypes = append(file.EnumTypes, *enum)
 	}
 
 	// parse enumflags types
 	enumflagsNode := jsonRoot.Map(fileEnumflags)
-	module.EnumflagTypes = make([]EnumType, 0)
+	file.EnumflagTypes = make([]EnumType, 0)
 	for i := 0; i < enumflagsNode.Len(); i++ {
 		enumflag, err := parseEnum(enumflagsNode.At(i))
 		if err != nil {
@@ -143,13 +138,13 @@ func parseJSON(data []byte) (module *File, err error) {
 		if exists(enumflag.Name) {
 			continue
 		}
-		module.EnumflagTypes = append(module.EnumflagTypes, *enumflag)
+		file.EnumflagTypes = append(file.EnumflagTypes, *enumflag)
 	}
 
 	// parse alias types
 	aliasesNode := jsonRoot.Map(fileAliases)
 	if aliasesNode.GetType() == jsongo.TypeMap {
-		module.AliasTypes = make([]AliasType, 0)
+		file.AliasTypes = make([]AliasType, 0)
 		for _, key := range aliasesNode.GetKeys() {
 			aliasName := key.(string)
 			alias, err := parseAlias(aliasName, aliasesNode.At(key))
@@ -159,13 +154,13 @@ func parseJSON(data []byte) (module *File, err error) {
 			if exists(alias.Name) {
 				continue
 			}
-			module.AliasTypes = append(module.AliasTypes, *alias)
+			file.AliasTypes = append(file.AliasTypes, *alias)
 		}
 	}
 
 	// parse struct types
 	typesNode := jsonRoot.Map(fileTypes)
-	module.StructTypes = make([]StructType, 0)
+	file.StructTypes = make([]StructType, 0)
 	for i := 0; i < typesNode.Len(); i++ {
 		structyp, err := parseStruct(typesNode.At(i))
 		if err != nil {
@@ -174,12 +169,12 @@ func parseJSON(data []byte) (module *File, err error) {
 		if exists(structyp.Name) {
 			continue
 		}
-		module.StructTypes = append(module.StructTypes, *structyp)
+		file.StructTypes = append(file.StructTypes, *structyp)
 	}
 
 	// parse union types
 	unionsNode := jsonRoot.Map(fileUnions)
-	module.UnionTypes = make([]UnionType, 0)
+	file.UnionTypes = make([]UnionType, 0)
 	for i := 0; i < unionsNode.Len(); i++ {
 		union, err := parseUnion(unionsNode.At(i))
 		if err != nil {
@@ -188,26 +183,26 @@ func parseJSON(data []byte) (module *File, err error) {
 		if exists(union.Name) {
 			continue
 		}
-		module.UnionTypes = append(module.UnionTypes, *union)
+		file.UnionTypes = append(file.UnionTypes, *union)
 	}
 
 	// parse messages
 	messagesNode := jsonRoot.Map(fileMessages)
 	if messagesNode.GetType() == jsongo.TypeArray {
-		module.Messages = make([]Message, messagesNode.Len())
+		file.Messages = make([]Message, messagesNode.Len())
 		for i := 0; i < messagesNode.Len(); i++ {
 			msg, err := parseMessage(messagesNode.At(i))
 			if err != nil {
 				return nil, err
 			}
-			module.Messages[i] = *msg
+			file.Messages[i] = *msg
 		}
 	}
 
 	// parse services
 	servicesNode := jsonRoot.Map(fileServices)
 	if servicesNode.GetType() == jsongo.TypeMap {
-		module.Service = &Service{
+		file.Service = &Service{
 			RPCs: make([]RPC, servicesNode.Len()),
 		}
 		for i, key := range servicesNode.GetKeys() {
@@ -216,11 +211,11 @@ func parseJSON(data []byte) (module *File, err error) {
 			if err != nil {
 				return nil, err
 			}
-			module.Service.RPCs[i] = *svc
+			file.Service.RPCs[i] = *svc
 		}
 	}
 
-	return module, nil
+	return file, nil
 }
 
 // parseEnum parses VPP binary API enum object from JSON node
@@ -459,6 +454,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 		Type: fieldType,
 	}
 
+	// field length (array) or field meta
 	if field.Len() >= 3 {
 		switch field.At(2).GetType() {
 		case jsongo.TypeValue:
@@ -485,6 +481,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 			return nil, errors.New("invalid JSON for field specified")
 		}
 	}
+	// field size from
 	if field.Len() >= 4 {
 		fieldLengthFrom, ok := field.At(3).Get().(string)
 		if !ok {

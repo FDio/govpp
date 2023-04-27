@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/flow.api.json
+// source: core/flow.api.json
 
 // Package flow contains generated bindings for API file flow.api.
 //

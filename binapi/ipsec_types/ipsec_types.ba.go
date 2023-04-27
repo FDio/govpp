@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/ipsec_types.api.json
+// source: core/ipsec_types.api.json
 
 // Package ipsec_types contains generated bindings for API file ipsec_types.api.
 //

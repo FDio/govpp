@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/vlib.api.json
+// source: core/vlib.api.json
 
 // Package vlib contains generated bindings for API file vlib.api.
 //

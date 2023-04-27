@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/cnat.api.json
+// source: plugins/cnat.api.json
 
 // Package cnat contains generated bindings for API file cnat.api.
 //

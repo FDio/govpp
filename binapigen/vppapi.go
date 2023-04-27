@@ -53,12 +53,13 @@ func SortFileObjectsByName(file *vppapi.File) {
 	}
 }
 
-func ListImportedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
-	var list []*vppapi.File
+func ListImportedFiles(files []vppapi.File, file *vppapi.File) []vppapi.File {
+	var list []vppapi.File
 	byName := func(s string) *vppapi.File {
 		for _, f := range files {
+			file := f
 			if f.Name == s {
-				return f
+				return &file
 			}
 		}
 		return nil
@@ -77,7 +78,7 @@ func ListImportedFiles(files []*vppapi.File, file *vppapi.File) []*vppapi.File {
 			}
 		}
 		if _, ok := imported[impFile.Name]; !ok {
-			list = append(list, impFile)
+			list = append(list, *impFile)
 			imported[impFile.Name] = struct{}{}
 		}
 	}
@@ -94,7 +95,7 @@ func normalizeImport(imp string) string {
 }
 
 // SortFilesByImports sorts list of files by their imports.
-func SortFilesByImports(apifiles []*vppapi.File) {
+func SortFilesByImports(apifiles []vppapi.File) {
 	dependsOn := func(file *vppapi.File, dep string) bool {
 		for _, imp := range ListImportedFiles(apifiles, file) {
 			if imp.Name == dep {
@@ -106,10 +107,10 @@ func SortFilesByImports(apifiles []*vppapi.File) {
 	sort.SliceStable(apifiles, func(i, j int) bool {
 		a := apifiles[i]
 		b := apifiles[j]
-		if dependsOn(a, b.Name) {
+		if dependsOn(&a, b.Name) {
 			return false
 		}
-		if dependsOn(b, a.Name) {
+		if dependsOn(&b, a.Name) {
 			return true
 		}
 		return len(b.Imports) > len(a.Imports)
@@ -117,7 +118,7 @@ func SortFilesByImports(apifiles []*vppapi.File) {
 }
 
 // ListImportedTypes returns list of names for imported types.
-func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
+func ListImportedTypes(apifiles []vppapi.File, file *vppapi.File) []string {
 	var importedTypes []string
 	typeFiles := ListImportedFiles(apifiles, file)
 	for _, t := range file.StructTypes {
@@ -204,7 +205,7 @@ func ListImportedTypes(apifiles []*vppapi.File, file *vppapi.File) []string {
 }
 
 // RemoveImportedTypes removes imported types from file.
-func RemoveImportedTypes(apifiles []*vppapi.File, apifile *vppapi.File) {
+func RemoveImportedTypes(apifiles []vppapi.File, apifile *vppapi.File) {
 	importedTypes := ListImportedTypes(apifiles, apifile)
 	isImportedType := func(s string) bool {
 		for _, t := range importedTypes {

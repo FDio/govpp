@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/policer.api.json
+// source: core/policer.api.json
 
 // Package policer contains generated bindings for API file policer.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/oddbuf.api.json
+// source: plugins/oddbuf.api.json
 
 // Package oddbuf contains generated bindings for API file oddbuf.api.
 //

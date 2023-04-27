@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/ct6.api.json
+// source: plugins/ct6.api.json
 
 // Package ct6 contains generated bindings for API file ct6.api.
 //

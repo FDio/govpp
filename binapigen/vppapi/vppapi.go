@@ -12,6 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+// Package vppapi parses VPP API files without any additional processing.
 package vppapi
 
 import (
@@ -29,16 +30,24 @@ const (
 	APIFileExtension = ".api.json"
 )
 
-// FindFiles finds API files located in dir or in a nested directory that is not nested deeper than deep.
-func FindFiles(dir string, deep int) (files []string, err error) {
+// FindFiles searches for API files in given directory or in a nested directory
+// that is at most one level deeper than dir. This effectively finds all API files
+// under core & plugins directories inside API directory.
+func FindFiles(dir string) (files []string, err error) {
+	return FindFilesRecursive(dir, 1)
+}
+
+// FindFilesRecursive searches for API files under dir or in a nested directory that is not
+// nested deeper than deep.
+func FindFilesRecursive(dir string, deep int) (files []string, err error) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {
-		return nil, fmt.Errorf("reading directory %s failed: %v", dir, err)
+		return nil, fmt.Errorf("read dir %s failed: %v", dir, err)
 	}
 	for _, e := range entries {
 		if e.IsDir() && deep > 0 {
 			nestedDir := filepath.Join(dir, e.Name())
-			if nested, err := FindFiles(nestedDir, deep-1); err != nil {
+			if nested, err := FindFilesRecursive(nestedDir, deep-1); err != nil {
 				return nil, err
 			} else {
 				files = append(files, nested...)
@@ -50,69 +59,80 @@ func FindFiles(dir string, deep int) (files []string, err error) {
 	return files, nil
 }
 
-// Parse parses API files in directory DefaultDir.
-func Parse() ([]*File, error) {
+// Parse parses API files in directory DefaultDir and returns collection of File
+// or an error if any error occurs during parsing.
+func Parse() ([]File, error) {
 	return ParseDir(DefaultDir)
 }
 
-// ParseDir finds and parses API files in given directory and returns parsed files.
-// Supports API files in JSON format (.api.json) only.
-func ParseDir(apiDir string) ([]*File, error) {
-	list, err := FindFiles(apiDir, 1)
+// ParseDir searches for API files in apiDir, parses the found API files and
+// returns collection of File.
+//
+// API files must have suffix `.api.json` and must be formatted as JSON.
+func ParseDir(apiDir string) ([]File, error) {
+	list, err := FindFiles(apiDir)
 	if err != nil {
 		return nil, err
 	}
 
 	logf("found %d files in API dir %q", len(list), apiDir)
 
-	var files []*File
-	for _, file := range list {
-		module, err := ParseFile(file)
+	var files []File
+	for _, f := range list {
+		file, err := ParseFile(f)
 		if err != nil {
 			return nil, err
 		}
-		files = append(files, module)
+		// use file path relative to apiDir
+		if path, err := filepath.Rel(apiDir, file.Path); err == nil {
+			file.Path = path
+		}
+		files = append(files, *file)
 	}
 	return files, nil
 }
 
-// ParseFile parses API file and returns File.
+// ParseFile parses API file and returns File or an error if any error occurs
+// during parsing.
 func ParseFile(apiFile string) (*File, error) {
+	// check API file extension
 	if !strings.HasSuffix(apiFile, APIFileExtension) {
-		return nil, fmt.Errorf("unsupported file format: %q", apiFile)
+		return nil, fmt.Errorf("unsupported file: %q, file must have suffix %q", apiFile, APIFileExtension)
 	}
 
-	data, err := os.ReadFile(apiFile)
+	content, err := os.ReadFile(apiFile)
 	if err != nil {
-		return nil, fmt.Errorf("reading file %s failed: %v", apiFile, err)
+		return nil, fmt.Errorf("read file %s error: %w", apiFile, err)
 	}
 
+	// extract file name
 	base := filepath.Base(apiFile)
 	name := base[:strings.Index(base, ".")]
 
-	logf("parsing file %q", base)
+	logf("parsing file %q (%d bytes)", base, len(content))
 
-	module, err := ParseRaw(data)
+	file, err := ParseRaw(content)
 	if err != nil {
-		return nil, fmt.Errorf("parsing file %s failed: %v", base, err)
+		return nil, fmt.Errorf("parsing API file %q content failed: %w", base, err)
 	}
-	module.Name = name
-	module.Path = apiFile
+	file.Name = name
+	file.Path = apiFile
 
-	return module, nil
+	return file, nil
 }
 
-// ParseRaw parses raw API file data and returns File.
-func ParseRaw(data []byte) (file *File, err error) {
+// ParseRaw parses raw API file content and returns File or an error if any error
+// occurs during parsing.
+func ParseRaw(content []byte) (file *File, err error) {
 	defer func() {
 		if e := recover(); e != nil {
-			err = fmt.Errorf("panic occurred: %v", e)
+			err = fmt.Errorf("panic occurred during parsing: %+v", e)
 		}
 	}()
 
-	file, err = parseJSON(data)
+	file, err = parseJSON(content)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parseJSON error: %w", err)
 	}
 
 	return file, nil

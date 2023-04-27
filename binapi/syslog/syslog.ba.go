@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/syslog.api.json
+// source: core/syslog.api.json
 
 // Package syslog contains generated bindings for API file syslog.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/ip_types.api.json
+// source: core/ip_types.api.json
 
 // Package ip_types contains generated bindings for API file ip_types.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/nat44_ei.api.json
+// source: plugins/nat44_ei.api.json
 
 // Package nat44_ei contains generated bindings for API file nat44_ei.api.
 //

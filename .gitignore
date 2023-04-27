@@ -5,6 +5,8 @@
 
 .idea/
 
+.cache/
+
 /bin/
 
 # cmd

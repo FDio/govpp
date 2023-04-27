@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/tapv2.api.json
+// source: core/tapv2.api.json
 
 // Package tapv2 contains generated bindings for API file tapv2.api.
 //

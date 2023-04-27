@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/lacp.api.json
+// source: plugins/lacp.api.json
 
 // Package lacp contains generated bindings for API file lacp.api.
 //
