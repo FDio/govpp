@@ -54,7 +54,7 @@ func Test_runCommandInRepo(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			//, tt.args.command, tt.args.args...
-			_, err := cloneRepoLocally(tt.args.repo, tt.args.commit)
+			_, err := cloneRepoLocally(tt.args.repo, tt.args.commit, 0)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("cloneRepoLocally() error = %v, wantErr %v", err, tt.wantErr)
 			}

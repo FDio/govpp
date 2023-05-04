@@ -203,7 +203,7 @@ func extractTar(archive string, gzipped bool, strip int) (string, error) {
 
 		nameList := strings.Split(header.Name, "/")
 		if len(nameList) < strip {
-			return "", fmt.Errorf("cannot strip first %d directories for file: %s", header.Name)
+			return "", fmt.Errorf("cannot strip first %d directories for file: %s", strip, header.Name)
 		}
 		fileName := filepath.Join(nameList[strip:]...)
 		filePath := filepath.Join(tempDir, fileName)
