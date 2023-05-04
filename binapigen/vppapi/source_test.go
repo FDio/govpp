@@ -34,7 +34,7 @@ func TestParseInput(t *testing.T) {
 			name: "local dir",
 			args: args{"/usr/share/vpp/api"},
 			want: &InputRef{
-				Format: "dir",
+				Format: FormatDir,
 				Path:   "/usr/share/vpp/api",
 			},
 		},
@@ -42,7 +42,7 @@ func TestParseInput(t *testing.T) {
 			name: "git repo",
 			args: args{".git#branch=master"},
 			want: &InputRef{
-				Format: "git",
+				Format: FormatGit,
 				Path:   ".git",
 				Options: map[string]string{
 					"branch": "master",
@@ -53,7 +53,7 @@ func TestParseInput(t *testing.T) {
 			name: "archive",
 			args: args{"input.tar.gz"},
 			want: &InputRef{
-				Format: "tar",
+				Format: FormatTar,
 				Path:   "input.tar.gz",
 			},
 		},
@@ -61,7 +61,7 @@ func TestParseInput(t *testing.T) {
 			name: "remote archive",
 			args: args{"https://example.com/input.tar.gz"},
 			want: &InputRef{
-				Format: "tar",
+				Format: FormatTar,
 				Path:   "https://example.com/input.tar.gz",
 			},
 		},
@@ -69,7 +69,7 @@ func TestParseInput(t *testing.T) {
 			name: "remote repo",
 			args: args{"https://github.com/FDio/vpp.git"},
 			want: &InputRef{
-				Format: "git",
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp.git",
 			},
 		},
@@ -77,18 +77,26 @@ func TestParseInput(t *testing.T) {
 			name: "no .git",
 			args: args{"https://github.com/FDio/vpp#format=git"},
 			want: &InputRef{
-				Format: "git",
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp",
+			},
+		},
+		{
+			name: "git@xxx",
+			args: args{"git@github.com:FDio/vpp#format=git"},
+			want: &InputRef{
+				Format: FormatGit,
+				Path:   "git@github.com:FDio/vpp",
 			},
 		},
 		{
 			name: "git tag",
 			args: args{"https://github.com/FDio/vpp.git#tag=v23.02"},
 			want: &InputRef{
-				Format: "git",
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp.git",
 				Options: map[string]string{
-					"tag": "v23.02",
+					OptionGitTag: "v23.02",
 				},
 			},
 		},

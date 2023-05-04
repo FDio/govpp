@@ -16,6 +16,7 @@ package vppapi
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -151,12 +152,24 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 			} else {
 				return nil, fmt.Errorf("unknown compression: %s", compression)
 			}
+		} else {
+			if strings.HasSuffix(input.Path, ".gz") || strings.HasSuffix(input.Path, ".tgz") {
+				gzipped = true
+			}
 		}
 
-		tempDir, err := extractTar(input.Path, gzipped, stripN)
+		reader, err := getInputPathReader(input.Path)
 		if err != nil {
-			return nil, fmt.Errorf("extracting failed: %w", err)
+			return nil, fmt.Errorf("input path: %w", err)
 		}
+
+		logrus.Tracef("extracting tarball %s (gzip: %v)", input.Path, gzipped)
+
+		tempDir, err := extractTar(reader, gzipped, stripN)
+		if err != nil {
+			return nil, fmt.Errorf("failed to extract tarball: %w", err)
+		}
+
 		dir := tempDir
 
 		subdir, hasSubdir := input.Options[OptionArchiveSubdir]
@@ -175,11 +188,25 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 		return resolveVppInputFromDir(dir)
 
 	case FormatZip:
-		return nil, fmt.Errorf("not implemented")
+		return nil, fmt.Errorf("zip format is not yet supported")
 
 	default:
-		return nil, fmt.Errorf("unknown format: %v", input.Format)
+		return nil, fmt.Errorf("unknown format: %q", input.Format)
 	}
+}
+
+func getInputPathReader(path string) (io.ReadCloser, error) {
+	var reader io.ReadCloser
+	if path == "-" {
+		reader = os.Stdin
+	} else {
+		file, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		reader = file
+	}
+	return reader, nil
 }
 
 func ParseInputRef(input string) (*InputRef, error) {
@@ -203,7 +230,7 @@ func ParseInputRef(input string) (*InputRef, error) {
 	}
 
 	ref := &InputRef{
-		Format:  InputFormat(format),
+		Format:  inputFormat,
 		Path:    path,
 		Options: options,
 	}

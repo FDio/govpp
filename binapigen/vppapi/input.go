@@ -19,7 +19,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -28,55 +27,55 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// VppInput defines VPP API input source.
-type VppInput struct {
-	ApiDirectory string
-	Schema       Schema
-}
-
 // ResolveVppInput parses an input string and returns VppInput or an error if a problem
 // occurs durig parsing. The input string consists of path, which can be followed
 // by '#' and one or more options separated by comma. The actual format can be
 // specified explicitely by an option 'format', if that is not the case then the
 // format will be detected from path automatically if possible.
 //
-//	path
-//	path#option1=val,option2=val
+// - `path`
+// - `path#option1=val,option2=val`
 //
 // Available formats:
 //
-// * Directory (`dir`)
+// * Directory: `dir`
 //   - absolute: `/usr/share/vpp/api`
 //   - relative: `path/to/apidir`
 //
-// * Git repository (`git`)
+// * Git repository: `git`
 //   - local repository: `.git`
 //   - remote repository: `https://github.com/FDio/vpp.git`
 //
-// * Tarball/ZIP Archive (`tar`/`zip`)
-//   - local archive: `api.tar.gz`
+// * Tarball/Zip Archive (`tar`/`zip`)
+//   - local archive:  `api.tar.gz`
 //   - remote archive: `https://example.com/api.tar.gz`
-//   - standard input (`-`)
+//   - standard input: `-`
 //
 // Format options:
 //
 // * Git repository
 //   - `branch`: name of branch
-//   - `tag`: specific git tag
-//   - `ref`: git reference
-//   - `depth`: git depth
+//   - `tag`:    specific git tag
+//   - `ref`:    git reference
+//   - `depth`:  git depth
 //   - `subdir`: subdirectory to use as base directory
 //
 // * Tarball/ZIP Archive
 //   - `compression`: compression to use (`gzip`)
-//   - `subdir`: subdirectory to use as base directory
-//   - 'strip': strip first N directories, applied before `subdir`
+//   - `subdir`:      subdirectory to use as base directory
+//   - 'strip':       strip first N directories, applied before `subdir`
 func ResolveVppInput(input string) (*VppInput, error) {
 	inputRef, err := ParseInputRef(input)
 	if err != nil {
 		return nil, err
 	}
 	return inputRef.Retrieve()
+}
+
+// VppInput defines VPP API input source.
+type VppInput struct {
+	ApiDirectory string
+	Schema       Schema
 }
 
 func resolveVppInputFromDir(path string) (*VppInput, error) {
@@ -166,24 +165,14 @@ func resolveCommitHash(repoPath, ref string) (string, error) {
 	return strings.TrimSpace(string(outputBytes)), nil
 }
 
-func extractTar(archive string, gzipped bool, strip int) (string, error) {
-	tempDir, err := ioutil.TempDir("", "vppapi-tar")
+func extractTar(reader io.Reader, gzipped bool, strip int) (string, error) {
+	tempDir, err := os.MkdirTemp("", "govpp-vppapi-archive-")
 	if err != nil {
 		return "", err
 	}
-	logrus.Tracef("extracting tarball %s (gzip: %v) into %s", archive, gzipped, tempDir)
 
-	var reader io.Reader
-
-	file, err := os.Open(archive)
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-
-	reader = file
 	if gzipped {
-		gzReader, err := gzip.NewReader(file)
+		gzReader, err := gzip.NewReader(reader)
 		if err != nil {
 			return "", err
 		}
@@ -191,6 +180,7 @@ func extractTar(archive string, gzipped bool, strip int) (string, error) {
 
 		reader = gzReader
 	}
+
 	tarReader := tar.NewReader(reader)
 	for {
 		header, err := tarReader.Next()
@@ -227,11 +217,12 @@ func extractTar(archive string, gzipped bool, strip int) (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("open file error: %w", err)
 		}
-		defer file.Close()
-
 		_, err = io.Copy(file, tarReader)
 		if err != nil {
-			return "", fmt.Errorf("copy file data error: %w", err)
+			return "", fmt.Errorf("copy data error: %w", err)
+		}
+		if err := file.Close(); err != nil {
+			return "", fmt.Errorf("close file error: %w", err)
 		}
 	}
 	return tempDir, nil
