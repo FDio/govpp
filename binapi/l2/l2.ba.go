@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/l2.api.json
+// source: core/l2.api.json
 
 // Package l2 contains generated bindings for API file l2.api.
 //

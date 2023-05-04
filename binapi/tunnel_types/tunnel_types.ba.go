@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/tunnel_types.api.json
+// source: core/tunnel_types.api.json
 
 // Package tunnel_types contains generated bindings for API file tunnel_types.api.
 //

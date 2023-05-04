@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/flow_types.api.json
+// source: core/flow_types.api.json
 
 // Package flow_types contains generated bindings for API file flow_types.api.
 //

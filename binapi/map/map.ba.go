@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/map.api.json
+// source: plugins/map.api.json
 
 // Package maps contains generated bindings for API file map.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/dns.api.json
+// source: plugins/dns.api.json
 
 // Package dns contains generated bindings for API file dns.api.
 //

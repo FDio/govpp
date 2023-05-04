@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/trace.api.json
+// source: plugins/trace.api.json
 
 // Package trace contains generated bindings for API file trace.api.
 //

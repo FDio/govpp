@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/wireguard.api.json
+// source: plugins/wireguard.api.json
 
 // Package wireguard contains generated bindings for API file wireguard.api.
 //

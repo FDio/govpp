@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/nsh.api.json
+// source: plugins/nsh.api.json
 
 // Package nsh contains generated bindings for API file nsh.api.
 //

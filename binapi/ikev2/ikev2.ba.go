@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/ikev2.api.json
+// source: plugins/ikev2.api.json
 
 // Package ikev2 contains generated bindings for API file ikev2.api.
 //

@@ -277,10 +277,6 @@ func RoleToString(isMaster bool) string {
 	return "Slave"
 }
 
-func memifPathIsAbstract(filename string) bool {
-	return (filename[0] == '@')
-}
-
 // RequestConnection is used by slave interface to connect to a socket and
 // create a control channel
 func (i *Interface) RequestConnection() error {
@@ -294,9 +290,6 @@ func (i *Interface) RequestConnection() error {
 	}
 	usa := &syscall.SockaddrUnix{Name: i.socket.filename}
 
-	if memifPathIsAbstract(i.socket.GetFilename()) {
-		usa.Name = "\000" + usa.Name[1:]
-	}
 	// Connect to listener socket
 	err = syscall.Connect(fd, usa)
 	if err != nil {

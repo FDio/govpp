@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/det44.api.json
+// source: plugins/det44.api.json
 
 // Package det44 contains generated bindings for API file det44.api.
 //

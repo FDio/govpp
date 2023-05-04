@@ -22,16 +22,18 @@ import (
 	"regexp"
 
 	"github.com/sirupsen/logrus"
+
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-func Run(vppInput *VppInput, opts Options, f func(*Generator) error) {
+func Run(vppInput *vppapi.VppInput, opts Options, f func(*Generator) error) {
 	if err := run(vppInput, opts, f); err != nil {
 		fmt.Fprintf(os.Stderr, "%s: %v\n", filepath.Base(os.Args[0]), err)
 		os.Exit(1)
 	}
 }
 
-func run(vppInput *VppInput, opts Options, genFn func(*Generator) error) error {
+func run(vppInput *vppapi.VppInput, opts Options, genFn func(*Generator) error) error {
 	var err error
 
 	if opts.ImportPrefix == "" {

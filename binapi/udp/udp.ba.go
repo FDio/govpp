@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/udp.api.json
+// source: core/udp.api.json
 
 // Package udp contains generated bindings for API file udp.api.
 //

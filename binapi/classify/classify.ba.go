@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/classify.api.json
+// source: core/classify.api.json
 
 // Package classify contains generated bindings for API file classify.api.
 //

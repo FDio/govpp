@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/http_static.api.json
+// source: plugins/http_static.api.json
 
 // Package http_static contains generated bindings for API file http_static.api.
 //

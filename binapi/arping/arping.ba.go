@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/arping.api.json
+// source: plugins/arping.api.json
 
 // Package arping contains generated bindings for API file arping.api.
 //

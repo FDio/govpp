@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/pppoe.api.json
+// source: plugins/pppoe.api.json
 
 // Package pppoe contains generated bindings for API file pppoe.api.
 //

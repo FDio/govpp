@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/avf.api.json
+// source: plugins/avf.api.json
 
 // Package avf contains generated bindings for API file avf.api.
 //

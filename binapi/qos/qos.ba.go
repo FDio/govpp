@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/qos.api.json
+// source: core/qos.api.json
 
 // Package qos contains generated bindings for API file qos.api.
 //

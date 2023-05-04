@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/mss_clamp.api.json
+// source: plugins/mss_clamp.api.json
 
 // Package mss_clamp contains generated bindings for API file mss_clamp.api.
 //

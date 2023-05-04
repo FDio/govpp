@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/nat_types.api.json
+// source: plugins/nat_types.api.json
 
 // Package nat_types contains generated bindings for API file nat_types.api.
 //
