@@ -151,7 +151,7 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 			differences = append(differences, Difference{
 				Type:        FileRemovedDifference,
 				File:        fileName,
-				Description: fmt.Sprintf("File removed"),
+				Description: "File removed",
 			})
 		}
 	}
@@ -161,7 +161,7 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 			differences = append(differences, Difference{
 				Type:        FileAddedDifference,
 				File:        fileName,
-				Description: fmt.Sprintf("File added"),
+				Description: "File added",
 			})
 		}
 	}

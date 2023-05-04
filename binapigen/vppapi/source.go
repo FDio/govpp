@@ -28,10 +28,10 @@ type InputFormat string
 
 const (
 	FormatNone InputFormat = ""
-	FormatDir              = "dir"
-	FormatGit              = "git"
-	FormatTar              = "tar"
-	FormatZip              = "zip"
+	FormatDir  InputFormat = "dir"
+	FormatGit  InputFormat = "git"
+	FormatTar  InputFormat = "tar"
+	FormatZip  InputFormat = "zip"
 )
 
 const (
@@ -182,33 +182,34 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 	}
 }
 
-func ParseInputRef(inputStr string) (*InputRef, error) {
-	logrus.Tracef("parsing input string: %q", inputStr)
+func ParseInputRef(input string) (*InputRef, error) {
+	logrus.Tracef("parsing input string: %q", input)
 
-	path, options := parsePathAndOptions(inputStr)
+	path, options := parsePathAndOptions(input)
 
+	var inputFormat InputFormat
 	format, ok := options[OptionFormat]
 	if ok {
+		inputFormat = InputFormat(format)
 		delete(options, OptionFormat)
 	} else {
-		format = detectFormatFromPath(path)
-		logrus.Tracef("detected format: %s", format)
+		inputFormat = detectFormatFromPath(path)
+		logrus.Tracef("detected format: %v", inputFormat)
 	}
 
 	// Use current working dir by default
-	if path == "" && format == FormatDir {
+	if inputFormat == FormatDir && path == "" {
 		path = "."
 	}
 
-	input := &InputRef{
+	ref := &InputRef{
 		Format:  InputFormat(format),
 		Path:    path,
 		Options: options,
 	}
+	logrus.Tracef("parsed InputRef: %+v", ref)
 
-	logrus.Tracef("parsed Input: %+v", input)
-
-	return input, nil
+	return ref, nil
 
 }
 
@@ -236,7 +237,7 @@ func parsePathAndOptions(input string) (path string, options map[string]string) 
 	return path, options
 }
 
-func detectFormatFromPath(path string) string {
+func detectFormatFromPath(path string) InputFormat {
 	// By suffix
 	if strings.HasSuffix(path, ".tar") || strings.HasSuffix(path, ".tar.gz") || strings.HasSuffix(path, ".tgz") {
 		return FormatTar

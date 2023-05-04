@@ -74,7 +74,7 @@ func runLintCmd(out io.Writer, opts LintCmdOptions, args []string) error {
 			if opts.Format == "" {
 				printLintErrorsAsTable(out, errs)
 			} else {
-				formatAsTemplate(out, opts.Format, errs)
+				return formatAsTemplate(out, opts.Format, errs)
 			}
 		}
 		if opts.ExitCode {
