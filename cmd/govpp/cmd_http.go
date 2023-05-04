@@ -54,8 +54,8 @@ func newHttpCmd() *cobra.Command {
 	}
 	cmd := &cobra.Command{
 		Use:   "http",
-		Short: "Serve VPP API as HTTP service",
-		Long:  "Serve VPP API as HTTP service",
+		Short: "VPP API as HTTP service",
+		Long:  "Serves VPP API via HTTP service",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runHttpCmd(opts)
 		},

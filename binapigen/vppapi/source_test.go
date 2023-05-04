@@ -26,14 +26,14 @@ func TestParseInput(t *testing.T) {
 	tests := []struct {
 		name      string
 		args      args
-		want      *Input
+		want      *InputRef
 		wantErr   bool
 		pre, post func()
 	}{
 		{
 			name: "local dir",
 			args: args{"/usr/share/vpp/api"},
-			want: &Input{
+			want: &InputRef{
 				Format: "dir",
 				Path:   "/usr/share/vpp/api",
 			},
@@ -41,7 +41,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "git repo",
 			args: args{".git#branch=master"},
-			want: &Input{
+			want: &InputRef{
 				Format: "git",
 				Path:   ".git",
 				Options: map[string]string{
@@ -52,7 +52,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "archive",
 			args: args{"input.tar.gz"},
-			want: &Input{
+			want: &InputRef{
 				Format: "tar",
 				Path:   "input.tar.gz",
 			},
@@ -60,7 +60,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "remote archive",
 			args: args{"https://example.com/input.tar.gz"},
-			want: &Input{
+			want: &InputRef{
 				Format: "tar",
 				Path:   "https://example.com/input.tar.gz",
 			},
@@ -68,7 +68,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "remote repo",
 			args: args{"https://github.com/FDio/vpp.git"},
-			want: &Input{
+			want: &InputRef{
 				Format: "git",
 				Path:   "https://github.com/FDio/vpp.git",
 			},
@@ -76,7 +76,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "no .git",
 			args: args{"https://github.com/FDio/vpp#format=git"},
-			want: &Input{
+			want: &InputRef{
 				Format: "git",
 				Path:   "https://github.com/FDio/vpp",
 			},
@@ -84,7 +84,7 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "git tag",
 			args: args{"https://github.com/FDio/vpp.git#tag=v23.02"},
-			want: &Input{
+			want: &InputRef{
 				Format: "git",
 				Path:   "https://github.com/FDio/vpp.git",
 				Options: map[string]string{
@@ -105,7 +105,7 @@ func TestParseInput(t *testing.T) {
 				tt.want.Options = map[string]string{}
 			}
 
-			got, err := ParseInput(tt.args.input)
+			got, err := ParseInputRef(tt.args.input)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ResolveVppInput() error = %v, wantErr %v", err, tt.wantErr)
 				return

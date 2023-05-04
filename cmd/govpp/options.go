@@ -35,7 +35,7 @@ func (glob *GlobalOptions) InstallFlags(flags *pflag.FlagSet) {
 	flags.StringVar(&glob.Color, "color", "", "Color mode; auto/always/never")
 }
 
-func InitOptions(opts GlobalOptions) {
+func InitOptions(opts *GlobalOptions) {
 	// color mode
 	if opts.Color == "" && os.Getenv("NO_COLOR") != "" {
 		// https://no-color.org/
@@ -55,7 +55,7 @@ func InitOptions(opts GlobalOptions) {
 	}
 
 	// debug mode
-	if os.Getenv("DEBUG_GOVPP") != "" {
+	if os.Getenv("DEBUG_GOVPP") != "" || os.Getenv("GOVPP_DEBUG") != "" {
 		opts.Debug = true
 	}
 

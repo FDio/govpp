@@ -6,6 +6,7 @@ require (
 	github.com/bennyscetbun/jsongo v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
+	github.com/ghodss/yaml v1.0.0
 	github.com/gookit/color v1.5.2
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
 	github.com/mitchellh/go-ps v1.0.0

@@ -74,9 +74,18 @@ func runDiffCmd(opts DiffCmdOptions) error {
 
 	diffs := CompareSchemas(&schema1, &schema2)
 
+	if len(diffs) == 0 {
+		fmt.Printf("")
+		return nil
+	}
+
 	fmt.Printf("Listing %d differences:\n", len(diffs))
 	for _, d := range diffs {
-		fmt.Printf(" - [%v] %v\n", d.Type, d.Description)
+		if d.File != "" {
+			fmt.Printf(" - [%v] %s: %v\n", d.Type, d.File, d.Description)
+		} else {
+			fmt.Printf(" - [%v] %v\n", d.Type, d.Description)
+		}
 	}
 
 	return nil
@@ -86,18 +95,19 @@ func runDiffCmd(opts DiffCmdOptions) error {
 type DifferenceType string
 
 const (
-	VersionDifference     DifferenceType = "Version"
-	FileCountDifference   DifferenceType = "FileCount"
-	FileAddedDifference   DifferenceType = "FileAdded"
-	FileRemovedDifference DifferenceType = "FileRemoved"
-	FileChangedDifference DifferenceType = "FileChanged"
-	FileMovedDifference   DifferenceType = "FileMoved"
-	FileVersionDifference DifferenceType = "FileVersion"
+	VersionDifference        DifferenceType = "Version"
+	TotalFilesDifference     DifferenceType = "FilesCount"
+	FileAddedDifference      DifferenceType = "FileAdded"
+	FileRemovedDifference    DifferenceType = "FileRemoved"
+	FileMovedDifference      DifferenceType = "FileMoved"
+	FileVersionDifference    DifferenceType = "FileVersion"
+	ContentChangedDifference DifferenceType = "FileChanged"
 )
 
 // Difference represents a difference in the API schemas.
 type Difference struct {
 	Type        DifferenceType
+	File        string
 	Description string
 }
 
@@ -105,54 +115,56 @@ type Difference struct {
 func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 	var differences []Difference
 
-	// Compare version
+	// compare version
 	if schema1.Version != schema2.Version {
 		differences = append(differences, Difference{
 			Type:        VersionDifference,
-			Description: fmt.Sprintf("VPP Versions are different: %s vs %s", schema1.Version, schema2.Version),
+			Description: fmt.Sprintf("Versions are different: %s vs %s", schema1.Version, schema2.Version),
 		})
 	}
-
-	// Compare file count
+	// compare file count
 	if len(schema1.Files) != len(schema2.Files) {
 		differences = append(differences, Difference{
-			Type:        FileCountDifference,
-			Description: fmt.Sprintf("File total count is different: %d vs %d", len(schema1.Files), len(schema2.Files)),
+			Type:        TotalFilesDifference,
+			Description: fmt.Sprintf("Total file count is different: %d vs %d", len(schema1.Files), len(schema2.Files)),
 		})
 	}
 
-	// Compare files
+	// prepare file maps
 	fileMap1 := make(map[string]vppapi.File)
 	for _, file := range schema1.Files {
 		fileMap1[file.Name] = file
 	}
-
 	fileMap2 := make(map[string]vppapi.File)
 	for _, file := range schema2.Files {
 		fileMap2[file.Name] = file
 	}
-
+	// removed files
 	for fileName, file1 := range fileMap1 {
 		if file2, ok := fileMap2[fileName]; ok {
 			fileDiffs := compareFiles(file1, file2)
-			differences = append(differences, fileDiffs...)
+			for _, fileDiff := range fileDiffs {
+				fileDiff.File = fileName
+				differences = append(differences, fileDiff)
+			}
 		} else {
 			differences = append(differences, Difference{
 				Type:        FileRemovedDifference,
-				Description: fmt.Sprintf("File removed: %s", fileName),
+				File:        fileName,
+				Description: fmt.Sprintf("File removed"),
 			})
 		}
 	}
-
+	// added files
 	for fileName := range fileMap2 {
 		if _, ok := fileMap1[fileName]; !ok {
 			differences = append(differences, Difference{
 				Type:        FileAddedDifference,
-				Description: fmt.Sprintf("File added: %s", fileName),
+				File:        fileName,
+				Description: fmt.Sprintf("File added"),
 			})
 		}
 	}
-
 	return differences
 }
 
@@ -160,64 +172,58 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 func compareFiles(file1, file2 vppapi.File) []Difference {
 	var differences []Difference
 
+	// Compare file properties
 	if file1.Path != file2.Path {
 		differences = append(differences, Difference{
 			Type:        FileMovedDifference,
-			Description: fmt.Sprintf("%s: File Path changed: %s vs %s", file1.Name, file1.Path, file2.Path),
+			Description: fmt.Sprintf("Path changed from %s to %s", file1.Path, file2.Path),
 		})
 	}
-
-	// Compare file properties
-	if file1.Options["version"] != file2.Options["version"] {
+	if file1.Options[vppapi.OptFileVersion] != file2.Options[vppapi.OptFileVersion] {
 		differences = append(differences, Difference{
 			Type:        FileVersionDifference,
-			Description: fmt.Sprintf("%s: File Version changed: %s vs %s", file1.Name, file1.Options["version"], file2.Options["version"]),
+			Description: fmt.Sprintf("Version changed from %s to %s", file1.Options[vppapi.OptFileVersion], file2.Options[vppapi.OptFileVersion]),
 		})
 	}
-
 	if file1.CRC != file2.CRC {
 		differences = append(differences, Difference{
 			Type:        FileVersionDifference,
-			Description: fmt.Sprintf("%s: File CRC changed: %s vs %s", file1.Name, file1.CRC, file2.CRC),
+			Description: fmt.Sprintf("File CRC changed from %s to %s", file1.CRC, file2.CRC),
 		})
 	}
 
+	// Compare number of messages and types
 	if len(file1.Messages) != len(file2.Messages) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Messages count changed: %d vs %d", file1.Name, len(file1.Messages), len(file2.Messages)),
-		})
+		differences = append(differences, fileChangedDifference("Messages", len(file1.Messages), len(file2.Messages)))
 	}
 	if len(file1.StructTypes) != len(file2.StructTypes) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Types count changed: %d vs %d", file1.Name, len(file1.StructTypes), len(file2.StructTypes)),
-		})
+		differences = append(differences, fileChangedDifference("Types", len(file1.StructTypes), len(file2.StructTypes)))
 	}
 	if len(file1.UnionTypes) != len(file2.UnionTypes) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Union types count changed: %d vs %d", file1.Name, len(file1.UnionTypes), len(file2.UnionTypes)),
-		})
+		differences = append(differences, fileChangedDifference("Unions", len(file1.UnionTypes), len(file2.UnionTypes)))
 	}
 	if len(file1.AliasTypes) != len(file2.AliasTypes) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Alias types count changed: %d vs %d", file1.Name, len(file1.AliasTypes), len(file2.AliasTypes)),
-		})
+		differences = append(differences, fileChangedDifference("Aliases", len(file1.AliasTypes), len(file2.AliasTypes)))
 	}
 	if len(file1.EnumTypes) != len(file2.EnumTypes) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Enum types count changed: %d vs %d", file1.Name, len(file1.EnumTypes), len(file2.EnumTypes)),
-		})
+		differences = append(differences, fileChangedDifference("Enums", len(file1.EnumTypes), len(file2.EnumTypes)))
 	}
 	if len(file1.EnumflagTypes) != len(file2.EnumflagTypes) {
-		differences = append(differences, Difference{
-			Type:        FileChangedDifference,
-			Description: fmt.Sprintf("%s: File Enumflag types count changed: %d vs %d", file1.Name, len(file1.EnumflagTypes), len(file2.EnumflagTypes)),
-		})
+		differences = append(differences, fileChangedDifference("Enumflags", len(file1.EnumflagTypes), len(file2.EnumflagTypes)))
 	}
 
 	return differences
+}
+
+func fileChangedDifference(typ string, c1, c2 int) Difference {
+	var change string
+	if c1 < c2 {
+		change = "increased"
+	} else {
+		change = "decreased"
+	}
+	return Difference{
+		Type:        ContentChangedDifference,
+		Description: fmt.Sprintf("Number of %s has %s from %d to %d", typ, change, c1, c2),
+	}
 }

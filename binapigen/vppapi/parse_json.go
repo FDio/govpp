@@ -52,6 +52,10 @@ const (
 	serviceEvents    = "events"
 )
 
+const (
+	OptFileVersion = "version"
+)
+
 func parseJSON(data []byte) (file *File, err error) {
 	// parse root
 	jsonRoot := new(jsongo.Node)

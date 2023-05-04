@@ -33,15 +33,15 @@ import (
 )
 
 type VppApiCmdOptions struct {
-	Input  string
-	Format string
-
-	ShowContents    bool
-	ShowMessages    bool
-	ShowRPC         bool
-	ShowRaw         bool
+	Input           string
+	Format          string
 	IncludeImported bool
 	IncludeFields   bool
+
+	ShowContents bool
+	ShowMessages bool
+	ShowRPC      bool
+	ShowRaw      bool
 }
 
 func newVppapiCmd() *cobra.Command {
@@ -49,27 +49,59 @@ func newVppapiCmd() *cobra.Command {
 		opts = VppApiCmdOptions{}
 	)
 	cmd := &cobra.Command{
-		Use:     "vppapi [FILE, ...]",
-		Aliases: []string{"a", "api"},
-		Short:   "Print VPP API",
+		Use:   "vppapi",
+		Short: "Browse VPP API",
+		Long:  "Browse VPP API files",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runVppApiCmd(cmd.OutOrStdout(), opts, args)
+			listOpts := VppApiListCmdOptions{VppApiCmdOptions: opts}
+			return runVppApiListCmd(cmd.OutOrStdout(), listOpts, args)
 		},
 	}
 
 	cmd.PersistentFlags().StringVar(&opts.Input, "input", opts.Input, "Path to directory containing VPP API files")
 	cmd.PersistentFlags().StringVar(&opts.Format, "format", "", "Output format (json, yaml, go-template..)")
-	cmd.PersistentFlags().BoolVar(&opts.ShowContents, "show-contents", false, "Show contents of VPP API file(s)")
-	cmd.PersistentFlags().BoolVar(&opts.ShowRPC, "show-rpc", false, "Show service RPCs of VPP API file(s)")
-	cmd.PersistentFlags().BoolVar(&opts.ShowMessages, "show-messages", false, "Show messages for VPP API file(s)")
-	cmd.PersistentFlags().BoolVar(&opts.ShowRaw, "show-raw", false, "Show raw VPP API file(s)")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeImported, "include-imported", false, "Include imported types")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeFields, "include-fields", false, "Include message fields")
+
+	cmd.AddCommand(
+		newVppapiListCmd(),
+	)
 
 	return cmd
 }
 
-func runVppApiCmd(out io.Writer, opts VppApiCmdOptions, args []string) error {
+type VppApiListCmdOptions struct {
+	VppApiCmdOptions
+
+	ShowContents bool
+	ShowMessages bool
+	ShowRPC      bool
+	ShowRaw      bool
+}
+
+func newVppapiListCmd() *cobra.Command {
+	var (
+		opts = VppApiListCmdOptions{}
+	)
+	cmd := &cobra.Command{
+		Use:     "ls [FILE, ...]",
+		Aliases: []string{"l", "list"},
+		Short:   "List VPP API files",
+		Long:    "List VPP API files and their contents",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runVppApiListCmd(cmd.OutOrStdout(), opts, args)
+		},
+	}
+
+	cmd.PersistentFlags().BoolVar(&opts.ShowContents, "show-contents", false, "Show contents of VPP API file(s)")
+	cmd.PersistentFlags().BoolVar(&opts.ShowRPC, "show-rpc", false, "Show service RPCs of VPP API file(s)")
+	cmd.PersistentFlags().BoolVar(&opts.ShowMessages, "show-messages", false, "Show messages for VPP API file(s)")
+	cmd.PersistentFlags().BoolVar(&opts.ShowRaw, "show-raw", false, "Show raw VPP API file(s)")
+
+	return cmd
+}
+
+func runVppApiListCmd(out io.Writer, opts VppApiListCmdOptions, args []string) error {
 	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
@@ -594,7 +626,7 @@ func getFileTypesCount(apifile vppapi.File) int {
 
 func getFileVersion(apifile vppapi.File) string {
 	for k, v := range apifile.Options {
-		if k == binapigen.OptFileVersion {
+		if k == vppapi.OptFileVersion {
 			return v
 		}
 	}
@@ -604,7 +636,7 @@ func getFileVersion(apifile vppapi.File) string {
 func getFileOptionsSlice(apifile vppapi.File) []string {
 	var options []string
 	for k, v := range apifile.Options {
-		if k == binapigen.OptFileVersion {
+		if k == vppapi.OptFileVersion {
 			continue
 		}
 		options = append(options, fmt.Sprintf("%s=%v", k, v))

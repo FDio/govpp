@@ -24,12 +24,6 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-// file options
-const (
-	// OptFileVersion is an option key for a version of file.
-	OptFileVersion = "version"
-)
-
 type File struct {
 	Desc vppapi.File
 
@@ -57,7 +51,7 @@ func newFile(gen *Generator, apifile vppapi.File, packageName GoPackageName, imp
 		GoImportPath: importPath,
 	}
 	if apifile.Options != nil {
-		file.Version = apifile.Options[OptFileVersion]
+		file.Version = apifile.Options[vppapi.OptFileVersion]
 	}
 
 	file.FilenamePrefix = path.Join(gen.opts.OutputDir, file.Desc.Name)
