@@ -22,6 +22,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sync"
 	"sync/atomic"
 	"syscall"
 	"time"
@@ -80,9 +81,14 @@ type StatsClient struct {
 
 	// defines the adapter connection state
 	connected uint32
+	// defines the adapter monitoring loop state
+	monitored uint32
 
 	// to quit socket monitor
 	done chan struct{}
+
+	// to protect statseg access from concurrent reconnect
+	accessLock sync.RWMutex
 
 	statSegment
 }
@@ -134,6 +140,8 @@ func (sc *StatsClient) Connect() (err error) {
 		return err
 	}
 	sc.done = make(chan struct{})
+	sc.accessLock.Lock()
+	defer sc.accessLock.Unlock()
 	if sc.statSegment, err = sc.connect(); err != nil {
 		return err
 	}
@@ -144,24 +152,23 @@ func (sc *StatsClient) Connect() (err error) {
 // Disconnect from the socket, unmap shared memory and terminate
 // socket monitor
 func (sc *StatsClient) Disconnect() error {
-	if sc.headerData == nil {
+	if atomic.CompareAndSwapUint32(&sc.monitored, 1, 0) {
+		close(sc.done)
+	}
+
+	if !sc.isConnected() {
 		return nil
 	}
-	if err := syscall.Munmap(sc.headerData); err != nil {
-		Log.Debugf("unmapping shared memory failed: %v", err)
-		return fmt.Errorf("unmapping shared memory failed: %v", err)
-	}
-	sc.headerData = nil
-	sc.done <- struct{}{}
 
-	Log.Debugf("successfully unmapped shared memory")
-	return nil
+	return sc.disconnect()
 }
 
 func (sc *StatsClient) ListStats(patterns ...string) (entries []adapter.StatIdentifier, err error) {
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
 	}
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -183,6 +190,8 @@ func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntr
 		return nil, adapter.ErrStatsDisconnected
 	}
 
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -204,6 +213,8 @@ func (sc *StatsClient) PrepareDir(patterns ...string) (*adapter.StatDir, error) 
 		return nil, adapter.ErrStatsDisconnected
 	}
 
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -231,6 +242,8 @@ func (sc *StatsClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, e
 		return nil, adapter.ErrStatsDisconnected
 	}
 
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -261,6 +274,9 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	if !sc.isConnected() {
 		return adapter.ErrStatsDisconnected
 	}
+
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
 	epoch, _ := sc.GetEpoch()
 	if dir.Epoch != epoch {
 		return adapter.ErrStatsDirStale
@@ -383,6 +399,8 @@ func (sc *StatsClient) connect() (ss statSegment, err error) {
 // reconnect disconnects from the socket, re-validates it and
 // connects again
 func (sc *StatsClient) reconnect() (err error) {
+	sc.accessLock.Lock()
+	defer sc.accessLock.Unlock()
 	if err = sc.disconnect(); err != nil {
 		return fmt.Errorf("error disconnecting socket: %v", err)
 	}
@@ -397,6 +415,7 @@ func (sc *StatsClient) reconnect() (err error) {
 
 // disconnect unmaps socket data from the memory and resets the header
 func (sc *StatsClient) disconnect() error {
+
 	if !atomic.CompareAndSwapUint32(&sc.connected, 1, 0) {
 		return fmt.Errorf("stats client is already disconnected")
 	}
@@ -419,6 +438,8 @@ func (sc *StatsClient) monitorSocket() {
 		Log.Errorf("error starting socket monitor: %v", err)
 		return
 	}
+
+	atomic.StoreUint32(&sc.monitored, 1)
 
 	go func() {
 		for {
