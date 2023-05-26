@@ -403,15 +403,6 @@ func extractMessagesRPC(file *vppapi.File) map[string]vppapi.RPC {
 			if m := rpc.Request; m != "" {
 				messagesRPC[m] = rpc
 			}
-			/*if m := rpc.Reply; m != "" {
-				messagesRPC[m] = rpc
-			}
-			if m := rpc.StreamMsg; m != "" {
-				messagesRPC[m] = rpc
-			}
-			for _, m := range rpc.Events {
-				messagesRPC[m] = rpc
-			}*/
 		}
 	}
 	return messagesRPC
@@ -428,9 +419,7 @@ func extractRPCMessages(rpc vppapi.RPC) []string {
 	if m := rpc.StreamMsg; m != "" {
 		messages = append(messages, m)
 	}
-	for _, m := range rpc.Events {
-		messages = append(messages, m)
-	}
+	messages = append(messages, rpc.Events...)
 	return messages
 }
 
