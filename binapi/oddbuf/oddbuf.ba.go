@@ -29,7 +29,6 @@ const (
 )
 
 // OddbufEnableDisable defines message 'oddbuf_enable_disable'.
-// InProgress: the message form may change in the future versions
 type OddbufEnableDisable struct {
 	EnableDisable bool                           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
@@ -67,7 +66,6 @@ func (m *OddbufEnableDisable) Unmarshal(b []byte) error {
 }
 
 // OddbufEnableDisableReply defines message 'oddbuf_enable_disable_reply'.
-// InProgress: the message form may change in the future versions
 type OddbufEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }

@@ -104,7 +104,6 @@ type WireguardPeer struct {
 }
 
 // WantWireguardPeerEvents defines message 'want_wireguard_peer_events'.
-// InProgress: the message form may change in the future versions
 type WantWireguardPeerEvents struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index,default=4294967295" json:"sw_if_index,omitempty"`
 	PeerIndex     uint32                         `binapi:"u32,name=peer_index,default=4294967295" json:"peer_index,omitempty"`
@@ -150,7 +149,6 @@ func (m *WantWireguardPeerEvents) Unmarshal(b []byte) error {
 }
 
 // WantWireguardPeerEventsReply defines message 'want_wireguard_peer_events_reply'.
-// InProgress: the message form may change in the future versions
 type WantWireguardPeerEventsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -186,7 +184,6 @@ func (m *WantWireguardPeerEventsReply) Unmarshal(b []byte) error {
 }
 
 // WgSetAsyncMode defines message 'wg_set_async_mode'.
-// InProgress: the message form may change in the future versions
 type WgSetAsyncMode struct {
 	AsyncEnable bool `binapi:"bool,name=async_enable,default=false" json:"async_enable,omitempty"`
 }
@@ -220,7 +217,6 @@ func (m *WgSetAsyncMode) Unmarshal(b []byte) error {
 }
 
 // WgSetAsyncModeReply defines message 'wg_set_async_mode_reply'.
-// InProgress: the message form may change in the future versions
 type WgSetAsyncModeReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -254,7 +250,6 @@ func (m *WgSetAsyncModeReply) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceCreate defines message 'wireguard_interface_create'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceCreate struct {
 	Interface   WireguardInterface `binapi:"wireguard_interface,name=interface" json:"interface,omitempty"`
 	GenerateKey bool               `binapi:"bool,name=generate_key" json:"generate_key,omitempty"`
@@ -312,7 +307,6 @@ func (m *WireguardInterfaceCreate) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceCreateReply defines message 'wireguard_interface_create_reply'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceCreateReply struct {
 	Retval    int32                          `binapi:"i32,name=retval" json:"retval,omitempty"`
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
@@ -352,7 +346,6 @@ func (m *WireguardInterfaceCreateReply) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceDelete defines message 'wireguard_interface_delete'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceDelete struct {
 	SwIfIndex interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 }
@@ -386,7 +379,6 @@ func (m *WireguardInterfaceDelete) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceDeleteReply defines message 'wireguard_interface_delete_reply'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceDeleteReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -422,7 +414,6 @@ func (m *WireguardInterfaceDeleteReply) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceDetails defines message 'wireguard_interface_details'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceDetails struct {
 	Interface WireguardInterface `binapi:"wireguard_interface,name=interface" json:"interface,omitempty"`
 }
@@ -476,7 +467,6 @@ func (m *WireguardInterfaceDetails) Unmarshal(b []byte) error {
 }
 
 // WireguardInterfaceDump defines message 'wireguard_interface_dump'.
-// InProgress: the message form may change in the future versions
 type WireguardInterfaceDump struct {
 	ShowPrivateKey bool                           `binapi:"bool,name=show_private_key" json:"show_private_key,omitempty"`
 	SwIfIndex      interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
@@ -514,7 +504,6 @@ func (m *WireguardInterfaceDump) Unmarshal(b []byte) error {
 }
 
 // WireguardPeerAdd defines message 'wireguard_peer_add'.
-// InProgress: the message form may change in the future versions
 type WireguardPeerAdd struct {
 	Peer WireguardPeer `binapi:"wireguard_peer,name=peer" json:"peer,omitempty"`
 }
@@ -601,7 +590,6 @@ func (m *WireguardPeerAdd) Unmarshal(b []byte) error {
 }
 
 // WireguardPeerAddReply defines message 'wireguard_peer_add_reply'.
-// InProgress: the message form may change in the future versions
 type WireguardPeerAddReply struct {
 	Retval    int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	PeerIndex uint32 `binapi:"u32,name=peer_index" json:"peer_index,omitempty"`
@@ -639,7 +627,6 @@ func (m *WireguardPeerAddReply) Unmarshal(b []byte) error {
 }
 
 // WireguardPeerEvent defines message 'wireguard_peer_event'.
-// InProgress: the message form may change in the future versions
 type WireguardPeerEvent struct {
 	PID       uint32             `binapi:"u32,name=pid" json:"pid,omitempty"`
 	PeerIndex uint32             `binapi:"u32,name=peer_index" json:"peer_index,omitempty"`
@@ -681,7 +668,6 @@ func (m *WireguardPeerEvent) Unmarshal(b []byte) error {
 }
 
 // WireguardPeerRemove defines message 'wireguard_peer_remove'.
-// InProgress: the message form may change in the future versions
 type WireguardPeerRemove struct {
 	PeerIndex uint32 `binapi:"u32,name=peer_index" json:"peer_index,omitempty"`
 }
@@ -715,7 +701,6 @@ func (m *WireguardPeerRemove) Unmarshal(b []byte) error {
 }
 
 // WireguardPeerRemoveReply defines message 'wireguard_peer_remove_reply'.
-// InProgress: the message form may change in the future versions
 type WireguardPeerRemoveReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -749,7 +734,6 @@ func (m *WireguardPeerRemoveReply) Unmarshal(b []byte) error {
 }
 
 // WireguardPeersDetails defines message 'wireguard_peers_details'.
-// InProgress: the message form may change in the future versions
 type WireguardPeersDetails struct {
 	Peer WireguardPeer `binapi:"wireguard_peer,name=peer" json:"peer,omitempty"`
 }
@@ -836,7 +820,6 @@ func (m *WireguardPeersDetails) Unmarshal(b []byte) error {
 }
 
 // WireguardPeersDump defines message 'wireguard_peers_dump'.
-// InProgress: the message form may change in the future versions
 type WireguardPeersDump struct {
 	PeerIndex uint32 `binapi:"u32,name=peer_index,default=4294967295" json:"peer_index,omitempty"`
 }
