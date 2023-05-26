@@ -63,7 +63,7 @@ func newLintCmd() *cobra.Command {
 
 func runLintCmd(out io.Writer, opts LintCmdOptions) error {
 	if opts.ListRules {
-		rules := defaultLintRules
+		rules := LintRules(defaultLintRules...)
 		if opts.Format == "" {
 			printLintRulesAsTable(out, rules)
 		} else {
@@ -97,11 +97,13 @@ func runLintCmd(out io.Writer, opts LintCmdOptions) error {
 			} else {
 				return formatAsTemplate(out, opts.Format, errs)
 			}
-		}
-		if opts.ExitCode {
-			return err
+			if opts.ExitCode {
+				return err
+			} else {
+				logrus.Errorln("Linter found:", err)
+			}
 		} else {
-			logrus.Errorln(err)
+			return fmt.Errorf("linter failure: %w", err)
 		}
 	} else {
 		if opts.Format == "" {
@@ -114,7 +116,7 @@ func runLintCmd(out io.Writer, opts LintCmdOptions) error {
 	return nil
 }
 
-func printLintRulesAsTable(out io.Writer, rules []LintRule) {
+func printLintRulesAsTable(out io.Writer, rules []*LintRule) {
 	table := tablewriter.NewWriter(out)
 	table.SetHeader([]string{
 		"#", "Id", "Purpose",

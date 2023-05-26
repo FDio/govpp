@@ -284,6 +284,22 @@ const (
 	optFieldLimit   = "limit"
 )
 
+// status option keys
+const (
+	msgOptStatus     = "status"
+	msgOptDeprecated = "deprecated"
+	msgOptInProgress = "in_progress"
+)
+
+type msgStatus int
+
+const (
+	msgStatusUnset msgStatus = iota
+	msgStatusInProgress
+	msgStatusDeprecated
+	msgStatusOther
+)
+
 type Message struct {
 	vppapi.Message
 
@@ -303,7 +319,7 @@ func newMessage(gen *Generator, file *File, apitype vppapi.Message) *Message {
 	msg := &Message{
 		File:    file,
 		Message: apitype,
-		CRC:     strings.TrimPrefix(apitype.CRC, "0x"),
+		CRC:     normalizeCRC(apitype.CRC),
 		Comment: StripMessageCommentFields(CleanMessageComment(apitype.Comment), fieldContext, fieldClientIndex),
 		GoIdent: newGoIdent(file, apitype.Name),
 	}
@@ -378,27 +394,25 @@ func getRetvalField(m *Message) *Field {
 	return nil
 }
 
-func (m *Message) InProgress() (string, bool) {
+func getMessageStatus(m *Message) (status msgStatus, info string) {
 	options := m.Options
-	// all messages for API versions < 1.0.0 are in_progress by default
-	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress || !m.File.IsStable() {
-		if msg == "" {
-			msg = inProgressMsg
+	if msg, ok := options[msgOptDeprecated]; ok || options[msgOptStatus] == msgOptDeprecated {
+		if msg != "" {
+			info = msg
 		}
-		return msg, true
-	}
-	return "", false
-}
-
-func (m *Message) Deprecated() (string, bool) {
-	options := m.Options
-	if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
-		if msg == "" {
-			msg = deprecatedMsg
+		status = msgStatusDeprecated
+	} else if msg, ok := options[msgOptInProgress]; ok || options[msgOptStatus] == msgOptInProgress {
+		if msg != "" {
+			info = msg
 		}
-		return msg, true
+		status = msgStatusInProgress
+	} else if msg, ok := options[msgOptStatus]; ok {
+		if msg != "" {
+			info = msg
+		}
+		status = msgStatusOther
 	}
-	return "", false
+	return status, info
 }
 
 // Field represents a field for message or struct/union types.

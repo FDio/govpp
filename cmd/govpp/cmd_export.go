@@ -17,6 +17,7 @@ package main
 import (
 	"archive/tar"
 	"compress/gzip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -80,11 +81,10 @@ func runExportCmd(opts ExportCmdOptions) error {
 	if strings.HasSuffix(opts.Output, ".tar.gz") {
 		err = exportFilesToTarGz(opts.Output, files, vppInput.ApiDirectory)
 	} else {
-		if err := os.Mkdir(opts.Output, 0750); err != nil {
-			return err
-		}
-
 		err = exportFilesToDir(opts.Output, files, vppInput.ApiDirectory)
+	}
+	if err != nil {
+		return fmt.Errorf("exporting failed: %w", err)
 	}
 
 	logrus.Debugf("exported %d files to %s", len(files), opts.Output)
@@ -93,6 +93,8 @@ func runExportCmd(opts ExportCmdOptions) error {
 }
 
 func exportFilesToTarGz(outputFile string, files []string, apiDir string) error {
+	logrus.Tracef("exporting files into tarball archive: %s", outputFile)
+
 	// create the output file for writing
 	fw, err := os.Create(outputFile)
 	if err != nil {
@@ -150,9 +152,14 @@ func exportFilesToTarGz(outputFile string, files []string, apiDir string) error 
 }
 
 func exportFilesToDir(outputDir string, files []string, apiDir string) error {
-	// export files to output
-	logrus.Tracef("exporting files into output directory: %s", outputDir)
+	logrus.Tracef("exporting files into directory: %s", outputDir)
 
+	// create the output directory for export
+	if err := os.Mkdir(outputDir, 0750); err != nil {
+		return err
+	}
+
+	// export files to directory
 	for _, f := range files {
 		data, err := os.ReadFile(f)
 		if err != nil {

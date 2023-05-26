@@ -295,3 +295,7 @@ func StripMessageCommentFields(comment string, fields ...string) string {
 	}
 	return strings.TrimSuffix(result, "\n")
 }
+
+func normalizeCRC(crc string) string {
+	return strings.TrimPrefix(crc, "0x")
+}
