@@ -23,6 +23,10 @@ import (
 	"github.com/spf13/pflag"
 )
 
+const (
+	defaultLogLevel = logrus.InfoLevel
+)
+
 type GlobalOptions struct {
 	Debug    bool
 	LogLevel string
@@ -36,11 +40,18 @@ func (glob *GlobalOptions) InstallFlags(flags *pflag.FlagSet) {
 }
 
 func InitOptions(opts *GlobalOptions) {
-	// color mode
+	// override
 	if opts.Color == "" && os.Getenv("NO_COLOR") != "" {
 		// https://no-color.org/
 		opts.Color = "never"
 	}
+	if os.Getenv("DEBUG_GOVPP") != "" || os.Getenv("GOVPP_DEBUG") != "" {
+		opts.Debug = true
+	}
+	if loglvl := os.Getenv("GOVPP_LOGLEVEL"); loglvl != "" {
+		opts.LogLevel = loglvl
+	}
+
 	switch strings.ToLower(opts.Color) {
 	case "auto", "":
 		/*if !cli.Out().IsTerminal() {
@@ -54,28 +65,20 @@ func InitOptions(opts *GlobalOptions) {
 		logrus.Fatalf("invalid color mode: %q", opts.Color)
 	}
 
-	// debug mode
-	if os.Getenv("DEBUG_GOVPP") != "" || os.Getenv("GOVPP_DEBUG") != "" {
-		opts.Debug = true
-	}
-
-	// log level
-	if loglvl := os.Getenv("GOVPP_LOGLEVEL"); loglvl != "" {
-		opts.LogLevel = loglvl
-	}
 	if opts.LogLevel != "" {
 		if lvl, err := logrus.ParseLevel(opts.LogLevel); err == nil {
 			logrus.SetLevel(lvl)
 			if lvl >= logrus.TraceLevel {
 				logrus.SetReportCaller(true)
 			}
-			logrus.Tracef("log level set to %v", lvl)
+			logrus.Tracef("log level set to: %v", lvl)
 		} else {
-			logrus.Fatalf("log level invalid: %v", err)
+			logrus.Fatalf("invalid log level: %v", err)
 		}
 	} else if opts.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
-		logrus.SetLevel(logrus.InfoLevel)
+
+		logrus.SetLevel(defaultLogLevel)
 	}
 }

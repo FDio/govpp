@@ -46,7 +46,7 @@ type VppApiCmdOptions struct {
 
 func newVppapiCmd() *cobra.Command {
 	var (
-		opts = VppApiCmdOptions{}
+		opts VppApiCmdOptions
 	)
 	cmd := &cobra.Command{
 		Use:   "vppapi",
@@ -81,7 +81,7 @@ type VppApiListCmdOptions struct {
 
 func newVppapiListCmd() *cobra.Command {
 	var (
-		opts = VppApiListCmdOptions{}
+		opts VppApiListCmdOptions
 	)
 	cmd := &cobra.Command{
 		Use:     "ls [FILE, ...]",
@@ -240,9 +240,9 @@ func showVPPAPIRaw(out io.Writer, input *vppapi.VppInput, args []string) {
 	}
 
 	for _, f := range apifiles {
-		fmt.Printf("# %s (%v)\n", f.Name, f.Path)
-		fmt.Printf("%s\n", f.Content)
-		fmt.Println()
+		fmt.Fprintf(out, "# %s (%v)\n", f.Name, f.Path)
+		fmt.Fprintf(out, "%s\n", f.Content)
+		fmt.Fprintln(out)
 	}
 }
 

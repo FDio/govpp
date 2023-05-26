@@ -23,11 +23,11 @@ import (
 )
 
 const logo = `
-<fg=white> _________     ___    _________________  </>
-<fg=white> __  ____/_______ |  / /__  __ \__  __ \ </>
-<fg=white> _  / __ _  __ \_ | / /__  /_/ /_  /_/ / </> <fg=blue;op=bold>%s</>
-<fg=white> / /_/ / / /_/ /_ |/ / _  ____/_  ____/  </> <lightBlue>%s</>
-<fg=white> \____/  \____/_____/  /_/     /_/       </> <blue>%s</>
+<fg=lightCyan> _________     ___    _________________  </>
+<fg=lightCyan> __  ____/_______ |  / /__  __ \__  __ \ </>
+<fg=lightCyan> _  / __ _  __ \_ | / /__  /_/ /_  /_/ / </> <fg=blue;op=bold>%s</>
+<fg=lightCyan> / /_/ / / /_/ /_ |/ / _  ____/_  ____/  </> <lightBlue>%s</>
+<fg=lightCyan> \____/  \____/_____/  /_/     /_/       </> <blue>%s</>
 `
 
 func Execute() {

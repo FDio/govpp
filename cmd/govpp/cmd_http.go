@@ -32,10 +32,10 @@ import (
 )
 
 // TODO:
-// - add option to allow server to start without VPP running
-// - add option to set list of VPP APIs to serve
-// - wait for SIGTERM/SIGINT signal and shutdown the server gracefully
-// - add home page (/index.html) providing references and example links
+//  - add option to allow server to start without VPP running
+//  - add option to set list of VPP APIs to serve
+//  - wait for SIGTERM/SIGINT signal and shutdown the server gracefully
+//  - add home page (/index.html) providing references and example links
 
 const (
 	DefaultHttpServiceAddress = ":8000"

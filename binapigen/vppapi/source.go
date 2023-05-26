@@ -49,6 +49,10 @@ const (
 	OptionArchiveStrip       = "strip"
 )
 
+const (
+	defaultGitRef = "master"
+)
+
 // InputRef is used to specify reference to VPP API input.
 type InputRef struct {
 	Path    string
@@ -61,7 +65,7 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 		return nil, fmt.Errorf("invalid path in input reference")
 	}
 
-	logrus.Tracef("retrieving input: %+v", input)
+	logrus.Tracef("retrieving input:\n%v", input)
 
 	switch input.Format {
 	case FormatNone:
@@ -97,7 +101,7 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 
 		commit := ref
 		if commit == "" {
-			commit = "HEAD"
+			commit = defaultGitRef
 		}
 
 		cloneDepth := 0
@@ -108,6 +112,8 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 			}
 			cloneDepth = d
 		}
+
+		logrus.Debugf("updating local repo %s to %s", input.Path, commit)
 
 		repoDir, err := cloneRepoLocally(input.Path, commit, cloneDepth)
 		if err != nil {
@@ -188,11 +194,15 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 		return resolveVppInputFromDir(dir)
 
 	case FormatZip:
-		return nil, fmt.Errorf("zip format is not yet supported")
+		return resolveVppInputFromZip(input.Path)
 
 	default:
 		return nil, fmt.Errorf("unknown format: %q", input.Format)
 	}
+}
+
+func resolveVppInputFromZip(path string) (*VppInput, error) {
+	return nil, fmt.Errorf("zip format is not yet supported")
 }
 
 func getInputPathReader(path string) (io.ReadCloser, error) {
@@ -241,13 +251,12 @@ func ParseInputRef(input string) (*InputRef, error) {
 }
 
 func parsePathAndOptions(input string) (path string, options map[string]string) {
-	// Split input string into path and options
+	// Split into path and options
 	parts := strings.Split(input, "#")
 	path = parts[0]
 	options = make(map[string]string)
-
 	if len(parts) > 1 {
-		// Split options into key-value pairs
+		// Split into key-value pairs
 		optionsList := strings.Split(parts[1], ",")
 		for _, option := range optionsList {
 			// Split each option into key and value
@@ -260,7 +269,6 @@ func parsePathAndOptions(input string) (path string, options map[string]string) 
 			options[key] = value
 		}
 	}
-
 	return path, options
 }
 

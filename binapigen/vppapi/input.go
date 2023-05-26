@@ -102,7 +102,9 @@ func resolveVppInputFromDir(path string) (*VppInput, error) {
 	return vppInput, nil
 }
 
-const cacheDir = "./.cache"
+const (
+	cacheDir = "./.cache"
+)
 
 func cloneRepoLocally(repo string, commit string, depth int) (string, error) {
 	repoPath := strings.ReplaceAll(repo, "/", "_")
