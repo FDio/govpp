@@ -1,24 +1,12 @@
-FROM ubuntu:20.04
+FROM buildpack-deps:20.04-scm
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        apt-transport-https=2.0.* \
-        ca-certificates=20211016ubuntu0.20.* \
-        curl=7.68.* \
-        git=1:2.25.* \
-        gnupg=2.2.* \
-        iproute2=5.5.* \
-        iputils-ping=3:20190709-3 \
-        make=4.2.* \
-        nano=4.8-* \
-        sudo=1.8.* \
-        wget=1.20.* \
- 	&& rm -rf /var/lib/apt/lists/*
-
-ARG GOTESTSUM_VERSION=1.9.0
-RUN curl -fsSL https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_linux_amd64.tar.gz -o gotestsum.tar.gz \
-    && tar -xf gotestsum.tar.gz gotestsum \
-    && mv gotestsum /usr/local/bin/gotestsum \
-    && rm gotestsum.tar.gz
+# Install gotestsum
+ARG GOTESTSUM_VERSION=1.10.0
+RUN set -eux; \
+    curl -fsSL https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_linux_amd64.tar.gz -o gotestsum.tar.gz; \
+    tar -xf gotestsum.tar.gz gotestsum; \
+    mv gotestsum /usr/local/bin/gotestsum; \
+    rm gotestsum.tar.gz;
 
 # Install Go
 ENV GOLANG_VERSION 1.20
@@ -37,7 +25,9 @@ RUN set -eux; \
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+RUN set -eux; \
+    mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
+    chmod -R 777 "$GOPATH";
 
 ARG VPP_REPO=release
 
