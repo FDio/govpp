@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/vxlan.api.json
+// source: core/vxlan.api.json
 
 // Package vxlan contains generated bindings for API file vxlan.api.
 //

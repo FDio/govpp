@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/bier.api.json
+// source: core/bier.api.json
 
 // Package bier contains generated bindings for API file bier.api.
 //

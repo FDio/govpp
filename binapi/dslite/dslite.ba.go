@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/dslite.api.json
+// source: plugins/dslite.api.json
 
 // Package dslite contains generated bindings for API file dslite.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/crypto.api.json
+// source: core/crypto.api.json
 
 // Package crypto contains generated bindings for API file crypto.api.
 //

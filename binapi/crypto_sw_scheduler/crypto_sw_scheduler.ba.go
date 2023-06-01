@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/crypto_sw_scheduler.api.json
+// source: plugins/crypto_sw_scheduler.api.json
 
 // Package crypto_sw_scheduler contains generated bindings for API file crypto_sw_scheduler.api.
 //

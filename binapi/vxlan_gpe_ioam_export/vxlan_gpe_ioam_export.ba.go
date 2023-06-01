@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/vxlan_gpe_ioam_export.api.json
+// source: plugins/vxlan_gpe_ioam_export.api.json
 
 // Package vxlan_gpe_ioam_export contains generated bindings for API file vxlan_gpe_ioam_export.api.
 //

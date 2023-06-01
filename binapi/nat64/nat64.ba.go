@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/nat64.api.json
+// source: plugins/nat64.api.json
 
 // Package nat64 contains generated bindings for API file nat64.api.
 //

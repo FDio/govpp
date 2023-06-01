@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/memif.api.json
+// source: plugins/memif.api.json
 
 // Package memif contains generated bindings for API file memif.api.
 //

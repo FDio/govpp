@@ -25,7 +25,7 @@ import (
 func TestGetInputFiles(t *testing.T) {
 	RegisterTestingT(t)
 
-	result, err := FindFiles("testdata", 1)
+	result, err := FindFiles("testdata")
 	Expect(err).ShouldNot(HaveOccurred())
 	Expect(result).To(HaveLen(6))
 	for _, file := range result {
@@ -36,7 +36,7 @@ func TestGetInputFiles(t *testing.T) {
 func TestGetInputFilesError(t *testing.T) {
 	RegisterTestingT(t)
 
-	result, err := FindFiles("nonexisting_directory", 1)
+	result, err := FindFiles("nonexisting_directory")
 	Expect(err).Should(HaveOccurred())
 	Expect(result).To(BeNil())
 }

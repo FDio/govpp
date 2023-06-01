@@ -12,22 +12,27 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// Package vppapi parses VPP API files without any additional processing.
 package vppapi
 
 type (
+	// Schema represents a collection of API files for a specific VPP version.
 	Schema struct {
-		Files   []File
+		// Files is a list of File objects that are part of this scheme.
+		Files []File
+		// Version is a VPP version of this schema.
 		Version string
 	}
 
+	// File is a single API file and its contents.
 	File struct {
-		Name string
-		Path string
-		CRC  string
+		Name string // Name is the name of this API file (without any extension).
+		Path string // Path is the location of thi API file relative to API directory.
+		CRC  string // CRC is a checksum for this API file.
 
+		// Options is a map of string key-value pairs that provides additional options for this file.
 		Options map[string]string `json:",omitempty"`
-		Imports []string          `json:",omitempty"`
+		// Imports is a list of strings representing the names of API files that are imported by this file.
+		Imports []string `json:",omitempty"`
 
 		AliasTypes    []AliasType  `json:",omitempty"`
 		EnumTypes     []EnumType   `json:",omitempty"`
@@ -35,8 +40,11 @@ type (
 		StructTypes   []StructType `json:",omitempty"`
 		UnionTypes    []UnionType  `json:",omitempty"`
 
+		// Messages is a list of Message objects representing messages used in the API.
 		Messages []Message `json:",omitempty"`
-		Service  *Service  `json:",omitempty"`
+		// Service is an object representing the RPC services used in the API.
+		// In case there is not any services defined for this File, the Service is nil.
+		Service *Service `json:",omitempty"`
 
 		Counters []Counter      `json:",omitempty"`
 		Paths    []CounterPaths `json:",omitempty"`

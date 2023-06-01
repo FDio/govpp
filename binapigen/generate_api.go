@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"strings"
 
-	"go.fd.io/govpp/version"
+	"go.fd.io/govpp/internal/version"
 )
 
 // generated names
@@ -57,7 +57,7 @@ func GenerateAPI(gen *Generator, file *File) *GenFile {
 	if !gen.opts.NoVersionInfo {
 		g.P("// versions:")
 		g.P("//  binapi-generator: ", version.Version())
-		g.P("//  VPP:              ", g.gen.vppVersion)
+		g.P("//  VPP:              ", g.gen.vppapiSchema.Version)
 		if !gen.opts.NoSourcePathInfo {
 			g.P("// source: ", g.file.Desc.Path)
 		}
@@ -152,31 +152,25 @@ func genImport(g *GenFile, imp string) {
 	g.Import(impFile.GoImportPath)
 }
 
-func genTypeComment(g *GenFile, goName string, vppName string, objKind string) {
+func genGenericDefinesComment(g *GenFile, goName string, vppName string, objKind string) {
 	g.P("// ", goName, " defines ", objKind, " '", vppName, "'.")
 }
 
-func genTypeOptionComment(g *GenFile, options map[string]string) {
-	// all messages for API versions < 1.0.0 are in_progress by default
-	if msg, ok := options[msgInProgress]; ok || options[msgStatus] == msgInProgress ||
-		len(g.file.Version) > 1 && g.file.Version[0:2] == "0." {
-		if msg == "" {
-			msg = inProgressMsg
-		}
-		g.P("// InProgress: ", msg)
+func genMessageStatusComment(g *GenFile, msg *Message) {
+	// experimental status (in progress)
+	if m, ok := msg.InProgress(); ok {
+		g.P("// InProgress: ", m)
 	}
-	if msg, ok := options[msgDeprecated]; ok || options[msgStatus] == msgDeprecated {
-		if msg == "" {
-			msg = deprecatedMsg
-		}
-		g.P("// Deprecated: ", msg)
+	// deprecated status
+	if m, ok := msg.Deprecated(); ok {
+		g.P("// Deprecated: ", m)
 	}
 }
 
 func genEnum(g *GenFile, enum *Enum) {
 	logf("gen ENUM %s (%s) - %d entries", enum.GoName, enum.Name, len(enum.Entries))
 
-	genTypeComment(g, enum.GoName, enum.Name, "enum")
+	genGenericDefinesComment(g, enum.GoName, enum.Name, "enum")
 
 	gotype := BaseTypesGo[enum.Type]
 
@@ -246,7 +240,7 @@ func genEnum(g *GenFile, enum *Enum) {
 func genAlias(g *GenFile, alias *Alias) {
 	logf("gen ALIAS %s (%s) - type: %s length: %d", alias.GoName, alias.Name, alias.Type, alias.Length)
 
-	genTypeComment(g, alias.GoName, alias.Name, "alias")
+	genGenericDefinesComment(g, alias.GoName, alias.Name, "alias")
 
 	var gotype string
 	switch {
@@ -270,7 +264,7 @@ func genAlias(g *GenFile, alias *Alias) {
 func genStruct(g *GenFile, typ *Struct) {
 	logf("gen STRUCT %s (%s) - %d fields", typ.GoName, typ.Name, len(typ.Fields))
 
-	genTypeComment(g, typ.GoName, typ.Name, "type")
+	genGenericDefinesComment(g, typ.GoName, typ.Name, "type")
 
 	if len(typ.Fields) == 0 {
 		g.P("type ", typ.GoName, " struct {}")
@@ -289,7 +283,7 @@ func genStruct(g *GenFile, typ *Struct) {
 func genUnion(g *GenFile, union *Union) {
 	logf("gen UNION %s (%s) - %d fields", union.GoName, union.Name, len(union.Fields))
 
-	genTypeComment(g, union.GoName, union.Name, "union")
+	genGenericDefinesComment(g, union.GoName, union.Name, "union")
 
 	g.P("type ", union.GoName, " struct {")
 
@@ -377,31 +371,36 @@ func fieldTagBinapi(field *Field) string {
 	typ := fromApiType(field.Type)
 	if field.Array {
 		if field.Length > 0 {
-			typ = fmt.Sprintf("%s[%d]", typ, field.Length)
+			typ += fmt.Sprintf("[%d]", field.Length)
 		} else if field.SizeFrom != "" {
-			typ = fmt.Sprintf("%s[%s]", typ, field.SizeFrom)
+			typ += fmt.Sprintf("[%s]", field.SizeFrom)
 		} else {
-			typ = fmt.Sprintf("%s[]", typ)
+			typ += "[]"
 		}
 	}
 	tag := []string{
 		typ,
 		fmt.Sprintf("name=%s", field.Name),
 	}
-	if limit, ok := field.Meta["limit"]; ok && limit.(int) > 0 {
+
+	// limit
+	if limit, ok := field.Meta[optFieldLimit]; ok && limit.(int) > 0 {
 		tag = append(tag, fmt.Sprintf("limit=%s", limit))
 	}
-	if def, ok := field.Meta["default"]; ok && def != nil {
+
+	// default value
+	if def, ok := field.Meta[optFieldDefault]; ok && def != nil {
 		switch fieldActualType(field) {
 		case I8, I16, I32, I64:
-			def = int(def.(float64))
+			def = int64(def.(float64))
 		case U8, U16, U32, U64:
-			def = uint(def.(float64))
+			def = uint64(def.(float64))
 		case F64:
 			def = def.(float64)
 		}
 		tag = append(tag, fmt.Sprintf("default=%v", def))
 	}
+
 	return strings.Join(tag, ",")
 }
 
@@ -441,8 +440,8 @@ func genMessage(g *GenFile, msg *Message) {
 	logf("gen MESSAGE %s (%s) - %d fields", msg.GoName, msg.Name, len(msg.Fields))
 
 	genMessageComment(g, msg)
-	genTypeComment(g, msg.GoIdent.GoName, msg.Name, "message")
-	genTypeOptionComment(g, msg.Options)
+	genGenericDefinesComment(g, msg.GoIdent.GoName, msg.Name, "message")
+	genMessageStatusComment(g, msg)
 
 	// generate message definition
 	if len(msg.Fields) == 0 {

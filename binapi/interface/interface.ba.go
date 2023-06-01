@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/interface.api.json
+// source: core/interface.api.json
 
 // Package interfaces contains generated bindings for API file interface.api.
 //

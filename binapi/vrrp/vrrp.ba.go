@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/vrrp.api.json
+// source: plugins/vrrp.api.json
 
 // Package vrrp contains generated bindings for API file vrrp.api.
 //

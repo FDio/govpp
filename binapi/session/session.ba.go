@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/session.api.json
+// source: core/session.api.json
 
 // Package session contains generated bindings for API file session.api.
 //

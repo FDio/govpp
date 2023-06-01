@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/graph.api.json
+// source: plugins/graph.api.json
 
 // Package graph contains generated bindings for API file graph.api.
 //

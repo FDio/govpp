@@ -10,7 +10,7 @@ BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 BUILD_HOST ?= $(shell hostname)
 BUILD_USER ?= $(shell id -un)
 
-GOVPP_PKG := go.fd.io/govpp
+GOVPP_PKG := go.fd.io/govpp/internal
 
 VPP_API_DIR ?= ${VPP_DIR}/build-root/install-vpp-native/vpp/share/vpp/api
 
@@ -88,8 +88,6 @@ test-integration: ## Run integration tests
 
 .PHONY: lint ## Run code linter
 lint:
-	@gofmt -s -l . | diff -u /dev/null -
-	@go vet ./...
 	@golangci-lint run
 	@echo "Done"
 

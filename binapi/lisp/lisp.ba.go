@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/lisp.api.json
+// source: plugins/lisp.api.json
 
 // Package lisp contains generated bindings for API file lisp.api.
 //

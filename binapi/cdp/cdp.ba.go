@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/cdp.api.json
+// source: plugins/cdp.api.json
 
 // Package cdp contains generated bindings for API file cdp.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/igmp.api.json
+// source: plugins/igmp.api.json
 
 // Package igmp contains generated bindings for API file igmp.api.
 //

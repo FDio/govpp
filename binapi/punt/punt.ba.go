@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/core/punt.api.json
+// source: core/punt.api.json
 
 // Package punt contains generated bindings for API file punt.api.
 //

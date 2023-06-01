@@ -44,9 +44,11 @@ func TestGenerator(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			RegisterTestingT(t)
 
-			apiFiles := []*vppapi.File{test.file}
+			apiFiles := []vppapi.File{*test.file}
 
-			input := &VppInput{ApiFiles: apiFiles}
+			input := &vppapi.VppInput{Schema: vppapi.Schema{
+				Files: apiFiles,
+			}}
 
 			gen, err := New(Options{
 				ImportPrefix: "test",

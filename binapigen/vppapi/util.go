@@ -15,6 +15,7 @@
 package vppapi
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -38,23 +39,31 @@ const (
 // build-root. It will execute `make json-api-files` in case the folder with
 // VPP API JSON files does not exist yet.
 func ResolveApiDir(dir string) string {
+	logrus.Tracef("resolving api dir %q", dir)
+
 	_, err := os.Stat(path.Join(dir, "build-root"))
 	if err == nil {
+		logrus.Tracef("build-root exists, checking %q", localBuildRoot)
 		// local VPP build
 		_, err := os.Stat(path.Join(dir, localBuildRoot))
 		if err == nil {
+			logrus.Tracef("returning %q as api dir", localBuildRoot)
 			return path.Join(dir, localBuildRoot)
 		} else if errors.Is(err, os.ErrNotExist) {
+			logrus.Tracef("folder %q does not exist, running 'make json-api-files'", localBuildRoot)
 			cmd := exec.Command("make", "json-api-files")
-			cmd.Stdout = os.Stdout
-			cmd.Stderr = os.Stderr
+			var stdout, stderr bytes.Buffer
+			cmd.Stdout = &stdout
+			cmd.Stderr = &stderr
 			cmd.Dir = dir
-			_, err := cmd.CombinedOutput()
+			err := cmd.Run()
 			if err != nil {
 				logrus.Warnf("make json-api-files failed: %v", err)
 			} else {
 				return path.Join(dir, localBuildRoot)
 			}
+		} else {
+			logrus.Tracef("error occurred when checking %q: %v'", localBuildRoot, err)
 		}
 	}
 
@@ -67,22 +76,22 @@ func ResolveApiDir(dir string) string {
 func ResolveVPPVersion(apidir string) string {
 	// check env variable override
 	if ver := os.Getenv(VPPVersionEnvVar); ver != "" {
-		logrus.Infof("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
+		logrus.Debugf("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
 		return ver
 	}
 
 	// check if inside VPP repo
 	repoDir, err := findGitRepoRootDir(apidir)
 	if err != nil {
-		logrus.Debugf("checking VPP git repo failed: %v", err)
+		logrus.Debugf("ERR: failed to check VPP git repo: %v", err)
 	} else {
 		logrus.Debugf("resolved git repo root directory: %v", repoDir)
 
 		version, err := GetVPPVersionRepo(repoDir)
 		if err != nil {
-			logrus.Warnf("resolving VPP version from version script failed: %v", err)
+			logrus.Debugf("ERR: failed to resolve  VPP version from version script: %v", err)
 		} else {
-			logrus.Infof("resolved VPP version from version script: %v", version)
+			logrus.Debugf("resolved VPP version from version script: %v", version)
 			return version
 		}
 
@@ -97,9 +106,9 @@ func ResolveVPPVersion(apidir string) string {
 	if _, err := exec.LookPath("vpp"); err == nil {
 		version, err := GetVPPVersionInstalled()
 		if err != nil {
-			logrus.Warnf("resolving VPP version from installed package failed: %v", err)
+			logrus.Debugf("ERR: failed to resolve VPP version from installed package: %v", err)
 		} else {
-			logrus.Infof("resolved VPP version from installed package: %v", version)
+			logrus.Debugf("resolved VPP version from installed package: %v", version)
 			return version
 		}
 	}

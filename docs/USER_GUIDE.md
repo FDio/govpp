@@ -1,11 +1,13 @@
 # GoVPP User Guide
 
+This section contains reference documentation for working with GoVPP client, binary API generator as well as some reference documentation for Protocol Buffers itself. 
+
 ### Table of Contents
 
-* [Binary API generator](#binary-api-generator)
+* [Binary API Generator](#binary-api-generator)
     * [Installation](#installation)
-    * [Plugins](#plugins)
-    * [Options](#options)
+    * [Using Generator](#using-generator)
+    * [Generator Plugins](#generator-plugins)
 * [VPP API calls](#vpp-api-calls)
     * [Connection](#connection)
         * [Synchronous](#synchronous-connect)
@@ -19,79 +21,78 @@
     * [Low-level API connection](#low-level-stats-api-connection)
     * [Low-level API usage](#low-level-stats-api-usage)
 
-## Binary API generator
+## Binary API Generator
 
-The binary API generator's purpose is to create Go bindings out of the VPP `.json` binary API definitions.
+The binary API generator's purpose is to generate Go code bindings for the VPP API. It uses VPP API definitions from `*.api.json` files as source and generates a Go package for each VPP API file, where each package contains Go types for objects from the VPP API file (messages, types, enums..).
 
 ### Installation
 
-Requires Go 1.18 or higher ([download](https://golang.org/dl))
+#### Prerequisites
 
-Install using the Go toolchain:
+- Go 1.18+ is required ([download](https://golang.org/dl))
 
-```
-// Latest version (most recent tag):
+Install binapi-generator into `$GOPATH/bin` (defaults to: `$HOME/go/bin`) using the Go toolchain:
+
+```sh
+// Latest release
 go install go.fd.io/govpp/cmd/binapi-generator@latest
 
 // Specific version
-go install go.fd.io/govpp/cmd/binapi-generator@v0.8.0
+go install go.fd.io/govpp/cmd/binapi-generator@v0.7.0
 
-// Development version (the master branch):
+// Development branch
 go install go.fd.io/govpp/cmd/binapi-generator@master
 ```
 
-Check the binapi generator is installed:
+> **Note**
+> Development branch might not have stable behavior.
 
-```
-$ binapi-generator -version
+Print the version for the installed binapi-generator:
+
+```sh
+binapi-generator -version
 govpp v0.8.0-dev
 ```
 
-# Source of VPP API input files
+### Using Generator
 
-At first, you need VPP JSON API bindings to build go bindings from. There are several ways to get it.
+#### Source of VPP API files
 
-1. Download from `packagecloud.io` ([learn more](https://fd.io/docs/vpp/master/gettingstarted/installing)).
-2. Clone the VPP repository `git clone https://github.com/FDio/vpp.git` and run `make json-api-files`. Installed JSON
-   files can be found in `/vpp/build-root/install-vpp-native/vpp/share/vpp/api/`.
-3. If the VPP is already installed, the default JSON API path is `/usr/share/vpp/api/`
+To generate Go code bindings, you need to provide source of VPP API files in JSON format (`*.api.json`). There are several ways to get it:
 
-# Generate VPP API bindings
+1. Download and install VPP from `packagecloud.io` ([learn more](https://fd.io/docs/vpp/master/gettingstarted/installing)).
+2. Clone the VPP repository (`git clone https://github.com/FDio/vpp.git`) and run `make json-api-files`. 
+   The VPP API files will be in: `./vpp/build-root/install-vpp-native/vpp/share/vpp/api/`.
+3. If the VPP is already installed in your system, the default location for the VPP API files is: `/usr/share/vpp/api/`
+
+#### Generating Go Bindings
 
 If the VPP JSON API definitions are in the default directory `/usr/share/vpp/api`, call:
 
-```
-binapi-generator
+```sh
+binapi-generator --input "/usr/share/vpp/api"
 ```
 
-Binding will be created in the current directory in `./binapi` package (relative path). The final package name will be
-resolved to the local `go.mod` module name.
+Generated Go code bindings will be under `./binapi` directory. 
+
+> **Note**
+> The Go package path of generated files will be resolved automatically from the module path in `go.mod` file.
+> To set the Go package path manually, use option `--import-prefix=PREFIX`.
 
 If you have a Go project (called `myproject` in `$HOME/myproject/vppbinapi`) with GoVPP as a dependency with both, the
 binary API generator and the VPP connection client, generated bindings are required to be inside the project (for
 example in `$HOME/myproject/vppbinapi`)
 
-To modify the VPP JSON API input directory, use `-input-dir` option. To modify the output directory, use
-the `-output-dir` option.
+To modify the VPP API input directory, use `-input-dir` option. To modify the output directory, use
+the `-output` option.
 
+```sh
+binapi-generator --input-dir="/path/to/vpp/api" --output-dir="/path/to/generated/bindings"
 ```
-binapi-generator -input-dir=/path/to/vpp/api -output-dir=/path/to/generated/bindings
-```
 
-This option might require setting the correct`-import-prefix` as well.
+This option might require setting the correct`--import-prefix` as well.
 
-For the full list of binary API generator plugins and options, see sections below.
-
-### Plugins
-
-The binary API generator supports custom plugins generating additional files.
-
-Optional built-in plugins:
-
-- `http` generates HTTP handlers (more information in the [HTTP service part](#http-service))
-- `rpc` generates RPC services (more information in the [RPC service part](#rpc-client))
-
-### Options
+#### Options
 
 The list of binapi-generator optional arguments in form `binapi-generator [OPTIONS] ARGS`
 
@@ -105,49 +106,58 @@ The list of binapi-generator optional arguments in form `binapi-generator [OPTIO
   the `-import-prefx`, based on go.mod.
 - `binapi-generator -debug` prints some additional logs
 
+### Generator Plugins
+
+The binary API generator supports extending its functionality with plugins that can generate additional files.
+
+Available built-in plugins:
+
+- `http` generates HTTP handlers (more information in the [HTTP service part](#http-service))
+- `rpc` generates RPC services (more information in the [RPC service part](#rpc-client))
+
 ## VPP Startup
 
 Define the minimal `startup.conf`:
 
-```
+```sh
 unix {interactive}
 socksvr { socket-name /var/run/vpp/api.sock }
 ```
 
 Start with `startup.conf` if the VPP was installed from sources:
 
-```
+```sh
 <vpp_repo_dir>/build-root/install-vpp_debug-native/vpp/bin/vpp -c /tmp/startup.conf
 ```
 
 If it was installed from the package:
 
-```
+```sh
 vpp -c /tmp/startup.conf
 ```
 
 ## VPP API calls
 
-GoVPP uses adapters to talk to VPP sockets.
+GoVPP client uses its own (pure Go) implementation to handle the low-level parts of the VPP API communication.
 
 ### Connection
 
-Two connection types to the binary API socket are exist - synchronous and asynchronous. GoVpp can connect to more VPPs
+Two connection types to the binary API socket are exist - synchronous and asynchronous. GoVPP can connect to more VPPs
 by creating multiple connections (see the [multi-vpp example](../examples/multi-vpp/README.md))
 
-#### Synchronous connect
+#### Synchronous Connect
 
 The synchronous connecting creates a new adapter instance. The call blocks until the connection is established.
 
 ```go
 conn, err := govpp.Connect(socketPath)
 if err != nil {
-// handle the error
+  // handle the error
 }
 defer conn.Disconnect()
 ```
 
-#### Asynchronous connect
+#### Asynchronous Connect
 
 The main difference between the synchronous and asynchronous connection is that the asynchronous connection does not
 block until the connection is ready. Instead, the caller receives a channel to watch connection events. Asynchronous
@@ -157,27 +167,28 @@ an interval (in seconds) between those attempts.
 ```go
 conn, connEv, err := govpp.AsyncConnect(socketPath, attemptNum, interval)
 if err != nil {
-// handle error
+  // handle error
 }
 defer conn.Disconnect()
 
 // wait for the connection event
 e := <-connEv
 if e.State != core.Connected {
-// handle error in e.Error
+  // handle error in e.Error
 }
 ```
 
 ### Sending API messages
 
 Each binary API message in the Go-generated API is a data structure. The caller can send API messages either using
-the `Channel` (legacy method), or the `Stream client` (preferred). In-depth discussion about differences
-between `Channel` and `Stream` can be found [here](https://github.com/FDio/govpp/discussions/43).
+a `Channel` (legacy method) or a `Stream`. 
+In-depth discussion about differences between `Channel` and `Stream` can be found https://github.com/FDio/govpp/discussions/43.
 
-Messages can be requests or responses. The request might expect just one response (request), or more than one
+Messages can be requests, replies or events. The request might expect just one response (request), or more than one
 response (multirequest). It is possible to determine the message type out of its name.
 
-*_Note: the naming might not be consistent across the VPP API_*
+> **Note**
+> The naming might not be consistent across the VPP API.
 
 * *_Requests_* have no special suffix for the request, or `Dump` or `Get` for the multirequest.
 * *_Responses_* have a `Reply` suffix for the request or `Details` for multirequest.
@@ -196,7 +207,7 @@ New `Stream` can be created by calling `Connection`'s method `NewStream`:
 ```go
 stream, err := conn.NewStream(context.Background(), options...)
 if err != nil {
-// handle error
+  // handle error
 }
 ```
 
@@ -212,23 +223,23 @@ reply type.
 ```go
 req := &interfaces.CreateLoopback{} // fill with data
 if err := stream.SendMsg(req); err != nil {
-// handle error
+  // handle error
 }
-reply, err := stream.RecvMsg()
+replyMsg, err := stream.RecvMsg()
 if err != nil {
-// handle error
+  // handle error
 }
-replyMsg := reply.(*interfaces.CreateLoopbackReply)
+reply := replyMsg.(*interfaces.CreateLoopbackReply)
 ```
 
 The simpler way is to use the `Invoke()` method, which does the same procedure as above.
 
 ```go
 req := &interfaces.CreateLoopback{} // fill with data
-reply, err := stream.RecvMsg()
-err := c.conn.Invoke(context.Background(), req, reply)
+var reply interfaces.CreateLoopbackReply
+err := c.conn.Invoke(context.Background(), req, &reply)
 if err != nil {
-// handle error
+  // handle error
 }
 ```
 
@@ -236,30 +247,28 @@ The multirequest message must be followed up by the control ping request. The lo
 control ping reply signalizing the end.
 
 ```go
-req := &interfaces.SwInterfaceDump{}
-if err := stream.SendMsg(req); err != nil {
-// handle error
-}
-cpReq := &memclnt.ControlPing{}
-if err := stream.SendMsg(cpReq); err != nil {
-// handle error
-}
+   if err := stream.SendMsg(&interfaces.SwInterfaceDump{}); err != nil {
+     // handle error
+   }
+   if err := stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+     // handle error
+   }
 
 Loop:
-for {
-msg, err := stream.RecvMsg()
-if err != nil {
-// handle error
-}
-switch msg.(type) {
-case *interfaces.SwInterfaceDetails:
-// handle the message
-case *memclnt.ControlPingReply:
-break Loop
-default:
-// unexpected message type
-}
-}
+   for {
+      reply, err := stream.RecvMsg()
+      if err != nil {
+         // handle error
+      }
+      switch reply.(type) {
+         case *interfaces.SwInterfaceDetails:
+            // handle the message
+         case *memclnt.ControlPingReply:
+            break Loop
+         default:
+            // unexpected message type
+      }
+   }
 ```
 
 There is another type of the multirequest, and this one needs to be handled differently. It can be easily identified
@@ -274,39 +283,38 @@ The initial batch always starts with zero.
 ```go
 cursor uint32 = 0
 for {
-if cursor == ^uint32(0) { // cursor pointing to this value marks the end of the multirequest
-return
-}
-req := &pnat.PnatBindingsGet{
-Cursor: cursor,
-}
-if err := stream.SendMsg(req); err != nil {
-// handle error
-}
-// new batch loop
-for {
-msg, err := stream.RecvMsg()
-if err != nil {
-// handle error
-}
-switch reply := msg.(type) {
-case *pnat.PnatBindingsDetails:
-// handle the data
-})
-case *pnat.PnatBindingsGetReply:
-cursor = reply.Cursor // the new cursor value
-// handle error
-break
-default:
-// unexpected reply type
-}
-}
+   if cursor == ^uint32(0) { // cursor pointing to this value marks the end of the multirequest
+      return
+   }
+   if err := stream.SendMsg(&pnat.PnatBindingsGet{
+      Cursor: cursor,
+   }); err != nil {
+      // handle error
+   }
+   // new batch loop
+   for {
+      msg, err := stream.RecvMsg()
+      if err != nil {
+         // handle error
+      }
+      switch reply := msg.(type) {
+         case *pnat.PnatBindingsDetails:
+            // handle the data
+         case *pnat.PnatBindingsGetReply:
+            cursor = reply.Cursor // the new cursor value
+            // handle error
+            break
+         default:
+            // unexpected reply type
+      }
+   }
 }
 ```
 
 #### Channel
 
-⚠️ **Warning, this is getting deprecated!**
+> **Warning**
+> The Channel are planned to be deprecated in the future.
 
 The `Channel` is the main communication unit between the caller and the VPP. After the successful connection, the
 channel is simply created from the connection object.
@@ -314,7 +322,7 @@ channel is simply created from the connection object.
 ```go
 ch, err := conn.NewAPIChannel()
 if err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -324,7 +332,7 @@ The channel can do a compatibility check for all the messages from any generated
 
 ```go
 if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -335,7 +343,7 @@ allowing to receive the reply.
 req := &interfaces.CreateLoopback{} // fill with data
 reply := &interfaces.CreateLoopbackReply{}
 if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
-// handler error
+   // handler error
 }
 ```
 
@@ -346,19 +354,20 @@ list.
 req := &interfaces.SwInterfaceDump{} // fill with data
 reqCtx := ch.SendMultiRequest(req)
 for {
-reply := &interfaces.SwInterfaceDetails{}
-stop, err := reqCtx.ReceiveReply(reply)
-if err != nil {
-// handle error
-}
-if stop {
-break
-}
-// handle the reply before the next iteration
+   reply := &interfaces.SwInterfaceDetails{}
+   stop, err := reqCtx.ReceiveReply(reply)
+   if err != nil {
+      // handle error
+   }
+   if stop {
+      break
+   }
+   // handle the reply before the next iteration
 }
 ```
 
-*_Note: the multirequest message suffixed with `Get` needs a different type of handling using the stream client._*
+> **Note**
+> The multirequest message suffixed with `Get` needs a different type of handling using the stream client.
 
 ## HTTP Service
 
@@ -371,13 +380,13 @@ Create the new HTTP handler and listener (requires the connection instance, and 
 vpeRpcClient := vpe.NewServiceClient(conn)
 vpeHttpClient := vpe.HTTPHandler(vpeRpcClient)
 if err := http.ListenAndServe(":8000", vpeHttpClient); err != nil {
-// handle error
+   // handle error
 }
 ```
 
-With the http server running, use `curl` command with the given pattern to make the VPP API call
+With the http server running, you can use `curl` command to call VPP API via HTTP request:
 
-```
+```sh
 $ curl http://localhost:8000/show_version
 {
   "program": "vpe",
@@ -389,7 +398,7 @@ $ curl http://localhost:8000/show_version
 
 ## RPC Client
 
-The RPC client is a client implementation generated by generator plugin `rpc` in separate file named `*.rpc.ba` for each
+The RPC client is a generated client implementation by generator plugin `rpc` in separate file named `*.rpc.ba` for each
 generated file (package) of the VPP binary API.
 
 Each generated VPP binary API file (package) contains RPC service interface `RPCService` and RPC client `serviceClient`
@@ -410,9 +419,9 @@ Simple request:
 ```go
 c := memif.NewServiceClient(conn)
 req := &memif.MemifCreate{} // fill with data
-reply, err := c.MemifCreate(context.Background(), &req)
+reply, err := c.MemifCreate(context.Background(), req)
 if err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -422,16 +431,16 @@ Multirequest (the end of the multirequest is determined by checking the `EOF` er
 c := interfaces.NewServiceClient(conn)
 stream, err := c.SwInterfaceDump(context.Background(), &interfaces.SwInterfaceDump{})
 if err != nil {
-// handle error
+   // handle error
 }
 for {
-iface, err := stream.Recv()
-if err == io.EOF {
-break
-}
-if err != nil {
-// handle error
-}
+   iface, err := stream.Recv()
+   if err == io.EOF {
+      break
+   }
+   if err != nil {
+      // handle error
+   }
 }
 ```
 
@@ -445,8 +454,8 @@ statsClient = statsclient.NewStatsClient(socket, options...)
 
 Supported options to customize the connection parameters.
 
-* `SetSocketRetryPeriod` specifies the custom retry period while waiting for the VPP socket
-* `SetSocketRetryTimeout` specifies the custom retry timeout while waiting for the VPP socket
+* `SetSocketRetryPeriod` - specifies a **time period between retries**
+* `SetSocketRetryTimeout` - specifies a **timeout duration for retry**
 
 The stats connection can be done synchronously or asynchronously (as for the binary API socket).
 
@@ -455,7 +464,7 @@ The synchronous connection:
 ```go
 statsConn, err = core.ConnectStats(statsClient)
 if err != nil {
-// handle error
+   // handle error
 }
 defer c.Disconnect()
 ```
@@ -465,11 +474,11 @@ The asynchronous connection:
 ```go
 statsConn, statsChan, err = core.AsyncConnectStats(statsClient, attemptNum, interval)
 if err != nil {
-// handle error
+   // handle error
 }
 e := <-statsChan
 if e.State != core.Connected {
-// handle error
+   // handle error
 }
 defer statsConn.Disconnect()
 ```
@@ -482,11 +491,11 @@ The `stats` connection implements the `StatsProvider` interface and gives access
 ```go
 systemStats := new(api.SystemStats)
 if err := statsConn.GetSystemStats(systemStats); err != nil {
-// handle error
+   // handle error
 }
 nodeStats := new(api.NodeStats)
 if err := statsConn.GetNodeStats(nodeStats); err != nil {
-// handle error
+   // handle error
 }
 ...
 ```
@@ -504,7 +513,7 @@ the `statsClient` (low-level API) and the `statsConn` (high-level API).
 ```go
 statsClient = statsclient.NewStatsClient(socket, options...)
 statsConn, err = core.ConnectStats(statsClient) // or core.AsyncConnectStats(statsClient, attemptNum, interval)
-// handle error
+   // handle error
 }
 defer statsConn.Disconnect()
 ```
@@ -528,7 +537,7 @@ index value.
 ```go
 list, err = client.ListStats(patterns...)
 if err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -538,7 +547,7 @@ identifier, type, data, and the symlink flag.
 ```go
 dump, err = client.DumpStats(patterns...)
 if err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -549,13 +558,13 @@ filter.
 // pattern filter
 dir, err := client.PrepareDir(patterns...)
 if err != nil {
-// handle error
+   // handle error
 }
 
 // index filter
 dir, err := client.PrepareDirOnIndex(patterns...)
 if err != nil {
-// handle error
+   // handle error
 }
 ```
 
@@ -563,13 +572,13 @@ Update the previously prepared directory. Suitable for polling VPP stats.
 
 ```go
 if err := client.UpdateDir(dir); err != nil {
-if err == adapter.ErrStatsDirStale { // if the directory is stale, re-load it
-if dir, err = client.PrepareDir(patterns...); err != nil {
-// handle error
-}
-continue
-}
-// handle error
+   if err == adapter.ErrStatsDirStale { // if the directory is stale, re-load it
+      if dir, err = client.PrepareDir(patterns...); err != nil {
+         // handle error
+      }
+      continue
+   }
+   // handle error
 }
 ```
 

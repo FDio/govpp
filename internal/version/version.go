@@ -47,8 +47,8 @@ var (
 	commit     = "unknown"
 	branch     = "HEAD"
 	buildStamp = ""
-	buildUser  = ""
-	buildHost  = ""
+	buildUser  = "unknown"
+	buildHost  = "unknown"
 
 	buildDate time.Time
 )
@@ -82,4 +82,34 @@ func Verbose() string {
 		buildUser, buildHost, buildDate.Format(time.UnixDate),
 		runtime.Version(), runtime.GOOS, runtime.GOARCH,
 	)
+}
+
+func Short() string {
+	return fmt.Sprintf(`%s %s`, name, version)
+}
+
+func BuildTime() string {
+	stamp := buildDate.Format(time.UnixDate)
+	if !buildDate.IsZero() {
+		stamp += fmt.Sprintf(" (%s)", timeAgo(buildDate))
+	}
+	return stamp
+}
+
+func BuiltBy() string {
+	return fmt.Sprintf("%s@%s (%s %s/%s)",
+		buildUser, buildHost, runtime.Version(), runtime.GOOS, runtime.GOARCH,
+	)
+}
+
+func timeAgo(t time.Time) string {
+	const timeDay = time.Hour * 24
+	if ago := time.Since(t); ago > timeDay {
+		return fmt.Sprintf("%v days ago", float64(ago.Round(timeDay)/timeDay))
+	} else if ago > time.Hour {
+		return fmt.Sprintf("%v hours ago", ago.Round(time.Hour).Hours())
+	} else if ago > time.Minute {
+		return fmt.Sprintf("%v minutes ago", ago.Round(time.Minute).Minutes())
+	}
+	return "just now"
 }

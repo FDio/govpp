@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/af_xdp.api.json
+// source: plugins/af_xdp.api.json
 
 // Package af_xdp contains generated bindings for API file af_xdp.api.
 //

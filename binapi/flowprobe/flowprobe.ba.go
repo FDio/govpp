@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/flowprobe.api.json
+// source: plugins/flowprobe.api.json
 
 // Package flowprobe contains generated bindings for API file flowprobe.api.
 //

@@ -2,7 +2,7 @@
 // versions:
 //  binapi-generator: v0.7.0
 //  VPP:              22.10-release
-// source: /usr/share/vpp/api/plugins/dhcp.api.json
+// source: plugins/dhcp.api.json
 
 // Package dhcp contains generated bindings for API file dhcp.api.
 //
