@@ -23,8 +23,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	logger "github.com/sirupsen/logrus"
-
 	"go.fd.io/govpp/adapter"
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/codec"
@@ -120,9 +118,10 @@ type Connection struct {
 	msgMapByPathLock sync.RWMutex                      // lock for the msgMapByPath map
 	msgMapByPath     map[string]map[uint16]api.Message // map of messages indexed by message ID which are indexed by path
 
-	channelsLock sync.RWMutex        // lock for the channels map and the channel ID
-	channels     map[uint16]*Channel // map of all API channels indexed by the channel ID
-	channelPool  *genericpool.Pool[*Channel]
+	channelsLock  sync.RWMutex        // lock for the channels map and the channel ID
+	channels      map[uint16]*Channel // map of all API channels indexed by the channel ID
+	channelPool   *genericpool.Pool[*Channel]
+	channelIdPool *idPool
 
 	subscriptionsLock sync.RWMutex                  // lock for the subscriptions map
 	subscriptions     map[uint16][]*subscriptionCtx // map od all notification subscriptions indexed by message ID
@@ -173,17 +172,14 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 			list: make([]*api.Record, 0),
 			mux:  &sync.Mutex{},
 		},
+		channelIdPool: newIDPool(0x7fff),
 	}
-
-	var nextChannelID uint32
 	c.channelPool = genericpool.New[*Channel](func() *Channel {
-		chID := atomic.AddUint32(&nextChannelID, 1)
-		if chID > 0x7fff {
-			return nil
+		if isDebugOn(debugOptChannels) {
+			log.Debugf("allocating new channel")
 		}
-		// create new channel
+		// create new channel without ID
 		return &Channel{
-			id:                  uint16(chID),
 			conn:                c,
 			msgCodec:            c.codec,
 			msgIdentifier:       c,
@@ -313,14 +309,21 @@ func (c *Connection) newAPIChannel(reqChanBufSize, replyChanBufSize int) (*Chann
 
 // releaseAPIChannel releases API channel that needs to be closed.
 func (c *Connection) releaseAPIChannel(ch *Channel) {
-	log.WithFields(logger.Fields{
-		"channel": ch.id,
-	}).Debug("API channel released")
+	l := log.WithField("id", ch.id)
+	if isDebugOn(debugOptChannels) {
+		l.Debug("releasing channel")
+	}
 
 	// delete the channel from channels map
 	c.channelsLock.Lock()
 	delete(c.channels, ch.id)
 	c.channelsLock.Unlock()
+	// return ID to the ID pool
+	c.channelIdPool.Put(ch.id)
+	if isDebugOn(debugOptChannels) {
+		l.Debug("channel ID returned to pool")
+	}
+	// return channel to the pool
 	go c.channelPool.Put(ch)
 }
 
@@ -522,22 +525,31 @@ func (c *Connection) GetMessagePath(msg api.Message) string {
 
 // retrieveMessageIDs retrieves IDs for all registered messages and stores them in map
 func (c *Connection) retrieveMessageIDs() (err error) {
-	t := time.Now()
-
 	msgsByPath := api.GetRegisteredMessages()
 
+	t := time.Now()
+	debugMsgIDs := isDebugOn(debugOptMsgId)
+	if debugMsgIDs {
+		log.Debugf("start retrieving message IDs for %d pkg paths", len(msgsByPath))
+	}
 	var n int
 	for pkgPath, msgs := range msgsByPath {
+		l := log.WithField("pkgPath", pkgPath)
+		if debugMsgIDs {
+			l.Debugf("retrieving IDs for %d messages", len(msgs))
+		}
+		tt := time.Now()
+		var nn int
 		for _, msg := range msgs {
 			msgID, err := c.GetMessageID(msg)
 			if err != nil {
 				if debugMsgIDs {
-					log.Debugf("retrieving message ID for %s.%s failed: %v",
-						pkgPath, msg.GetMessageName(), err)
+					l.Warnf("failed to retrieve message ID for %s: %v", msg.GetMessageName(), err)
 				}
 				continue
 			}
 			n++
+			nn++
 
 			if c.pingReqID == 0 && msg.GetMessageName() == c.msgControlPing.GetMessageName() {
 				c.pingReqID = msgID
@@ -548,11 +560,17 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 			}
 
 			if debugMsgIDs {
-				log.Debugf("message %q (%s) has ID: %d", msg.GetMessageName(), getMsgNameWithCrc(msg), msgID)
+				l.Debugf(" - #%d message %q (%s) has ID: %d", n, msg.GetMessageName(), getMsgNameWithCrc(msg), msgID)
 			}
 		}
+		if debugMsgIDs {
+			l.WithField("took", time.Since(tt)).
+				Debugf("retrieved IDs for %d/%d messages", nn, len(msgs))
+		}
+	}
+	if debugMsgIDs {
 		log.WithField("took", time.Since(t)).
-			Debugf("retrieved IDs for %d messages (registered %d) from path %s", n, len(msgs), pkgPath)
+			Debugf("done retrieving IDs for %d messages", n)
 	}
 
 	return nil

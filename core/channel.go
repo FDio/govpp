@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -110,23 +111,42 @@ type Channel struct {
 }
 
 func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel, error) {
-	// get a channel from the pool
+	// get an ID from the ID pool
+	chID, err := c.channelIdPool.Get()
+	if err != nil {
+		return nil, err
+	}
+	l := log.WithField("id", chID)
+	if isDebugOn(debugOptChannels) {
+		l.Debugf("start preparing channel")
+	}
+	// get a channel from the channel pool
 	channel := c.channelPool.Get()
 	if channel == nil {
-		return nil, errors.New("all channel IDs are in use")
+		c.channelIdPool.Put(chID)
+		return nil, errors.New("no more channels in pool available")
 	}
+	// set channel ID
+	channel.id = chID
+	// recreate request/reply channels if not the right capacity
 	if cap(channel.reqChan) != reqChanBufSize {
 		channel.reqChan = make(chan *vppRequest, reqChanBufSize)
 	}
 	if cap(channel.replyChan) != replyChanBufSize {
 		channel.replyChan = make(chan *vppReply, replyChanBufSize)
 	}
-
 	// store API channel within the client
 	c.channelsLock.Lock()
 	c.channels[channel.id] = channel
 	c.channelsLock.Unlock()
+	if isDebugOn(debugOptChannels) {
+		l.Debugf("done preparing channel")
+	}
 	return channel, nil
+}
+
+func (ch *Channel) Close() {
+	close(ch.reqChan)
 }
 
 func (ch *Channel) GetID() uint16 {
@@ -181,10 +201,12 @@ func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
 func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {
 	msgID, err := ch.msgIdentifier.GetMessageID(event)
 	if err != nil {
-		log.WithFields(logrus.Fields{
-			"msg_name": event.GetMessageName(),
-			"msg_crc":  event.GetCrcString(),
-		}).Errorf("unable to retrieve message ID: %v", err)
+		if debugOn {
+			log.WithFields(logrus.Fields{
+				"msg_name": event.GetMessageName(),
+				"msg_crc":  event.GetCrcString(),
+			}).Errorf("unable to retrieve message ID: %v", err)
+		}
 		return nil, fmt.Errorf("unable to retrieve event message ID: %v", err)
 	}
 
@@ -207,10 +229,6 @@ func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.M
 
 func (ch *Channel) SetReplyTimeout(timeout time.Duration) {
 	ch.replyTimeout = timeout
-}
-
-func (ch *Channel) Close() {
-	close(ch.reqChan)
 }
 
 func (req *requestCtx) ReceiveReply(msg api.Message) error {
@@ -415,4 +433,37 @@ func (ch *Channel) Reset() {
 			empty = true
 		}
 	}
+}
+
+type idPool struct {
+	ids  []uint16
+	lock sync.Mutex
+}
+
+func newIDPool(maxID uint16) *idPool {
+	ids := make([]uint16, maxID)
+	for i := uint16(0); i < maxID; i++ {
+		ids[i] = i + 1
+	}
+	return &idPool{ids: ids}
+}
+
+func (p *idPool) Get() (uint16, error) {
+	p.lock.Lock()
+	defer p.lock.Unlock()
+
+	if len(p.ids) == 0 {
+		return 0, errors.New("no more IDs available")
+	}
+
+	id := p.ids[0]
+	p.ids = p.ids[1:]
+
+	return id, nil
+}
+
+func (p *idPool) Put(id uint16) {
+	p.lock.Lock()
+	p.ids = append(p.ids, id)
+	p.lock.Unlock()
 }
