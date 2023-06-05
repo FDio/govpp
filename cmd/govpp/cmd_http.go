@@ -32,10 +32,10 @@ import (
 )
 
 // TODO:
-// - add option to allow server to start without VPP running
-// - add option to set list of VPP APIs to serve
-// - wait for SIGTERM/SIGINT signal and shutdown the server gracefully
-// - add home page (/index.html) providing references and example links
+//  - add option to allow server to start without VPP running
+//  - add option to set list of VPP APIs to serve
+//  - wait for SIGTERM/SIGINT signal and shutdown the server gracefully
+//  - add home page (/index.html) providing references and example links
 
 const (
 	DefaultHttpServiceAddress = ":8000"
@@ -54,8 +54,8 @@ func newHttpCmd() *cobra.Command {
 	}
 	cmd := &cobra.Command{
 		Use:   "http",
-		Short: "Serve VPP API as HTTP service",
-		Long:  "Serve VPP API as HTTP service",
+		Short: "VPP API as HTTP service",
+		Long:  "Serves VPP API via HTTP service",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runHttpCmd(opts)
 		},
@@ -85,6 +85,7 @@ func runHttpCmd(opts HttpCmdOptions) error {
 
 	setupHttpAPIHandlers(vppInput.Schema.Files, serveMux)
 
+	// TODO: register all api files automatically (requires some regisry for handlers or apifiles
 	c := vpe.HTTPHandler(vpe.NewServiceClient(conn))
 	//c := memclnt.HTTPHandler(memclnt.NewServiceClient(conn))
 
@@ -148,6 +149,7 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			}
 
 			// TODO: unmarshal body data into message, send request to VPP, marshal it and send as response
+			http.Error(w, "Sending requests is not implemented yet", http.StatusNotImplemented)
 		} else if req.Method == http.MethodGet {
 			b, err := json.MarshalIndent(msg, "", "  ")
 			if err != nil {

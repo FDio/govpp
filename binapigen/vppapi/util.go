@@ -22,6 +22,7 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -30,8 +31,8 @@ const (
 	VPPVersionEnvVar = "VPP_VERSION"
 	VPPDirEnvVar     = "VPP_DIR"
 
-	versionScriptPath = "src/scripts/version"
-	localBuildRoot    = "build-root/install-vpp-native/vpp/share/vpp/api"
+	versionScriptPath   = "src/scripts/version"
+	localVPPBuildApiDir = "build-root/install-vpp-native/vpp/share/vpp/api"
 )
 
 // ResolveApiDir checks if parameter dir is a path to directory of local VPP
@@ -39,35 +40,54 @@ const (
 // build-root. It will execute `make json-api-files` in case the folder with
 // VPP API JSON files does not exist yet.
 func ResolveApiDir(dir string) string {
-	logrus.Tracef("resolving api dir %q", dir)
+	log := logrus.WithField("dir", dir)
+	log.Tracef("trying to resolve VPP API directory")
 
+	apiDirPath := path.Join(dir, localVPPBuildApiDir)
+
+	// assume dir is a local VPP repository
 	_, err := os.Stat(path.Join(dir, "build-root"))
 	if err == nil {
-		logrus.Tracef("build-root exists, checking %q", localBuildRoot)
-		// local VPP build
-		_, err := os.Stat(path.Join(dir, localBuildRoot))
+		logrus.Tracef("build-root exists in %s, checking %q", dir, localVPPBuildApiDir)
+
+		// check if the API directory exists
+		_, err := os.Stat(apiDirPath)
 		if err == nil {
-			logrus.Tracef("returning %q as api dir", localBuildRoot)
-			return path.Join(dir, localBuildRoot)
+			logrus.Tracef("returning %q as api dir", localVPPBuildApiDir)
+			return apiDirPath
 		} else if errors.Is(err, os.ErrNotExist) {
-			logrus.Tracef("folder %q does not exist, running 'make json-api-files'", localBuildRoot)
-			cmd := exec.Command("make", "json-api-files")
-			var stdout, stderr bytes.Buffer
-			cmd.Stdout = &stdout
-			cmd.Stderr = &stderr
-			cmd.Dir = dir
-			err := cmd.Run()
-			if err != nil {
+			logrus.Tracef("api dir %q does not exist, running 'make json-api-files'", localVPPBuildApiDir)
+			if err := makeJsonApiFiles(dir); err != nil {
 				logrus.Warnf("make json-api-files failed: %v", err)
 			} else {
-				return path.Join(dir, localBuildRoot)
+				return apiDirPath
 			}
 		} else {
-			logrus.Tracef("error occurred when checking %q: %v'", localBuildRoot, err)
+			logrus.Tracef("error occurred when checking %q: %v'", localVPPBuildApiDir, err)
 		}
 	}
-
 	return dir
+}
+
+func makeJsonApiFiles(dir string) error {
+	var stdout, stderr bytes.Buffer
+	cmd := exec.Command("make", "json-api-files")
+	cmd.Dir = dir
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	t := time.Now()
+	if err := cmd.Run(); err != nil {
+		logrus.Debugf("command `%v` failed: %v", cmd, err)
+		if stdout.Len() > 0 {
+			logrus.Debugf("# STDOUT:\n%v", stdout.String())
+		}
+		if stderr.Len() > 0 {
+			logrus.Debugf("# STDERR:\n%v", stderr.String())
+		}
+		return fmt.Errorf("command `%v` failed: %v", cmd, err)
+	}
+	logrus.Debugf("command `%v` done (took %.3fs)\n", cmd, time.Since(t).Seconds())
+	return nil
 }
 
 // ResolveVPPVersion resolves version of the VPP for target directory.

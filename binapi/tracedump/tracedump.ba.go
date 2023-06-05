@@ -67,7 +67,6 @@ func (x TraceFilterFlag) String() string {
 }
 
 // TraceCapturePackets defines message 'trace_capture_packets'.
-// InProgress: the message form may change in the future versions
 type TraceCapturePackets struct {
 	NodeIndex       uint32 `binapi:"u32,name=node_index" json:"node_index,omitempty"`
 	MaxPackets      uint32 `binapi:"u32,name=max_packets" json:"max_packets,omitempty"`
@@ -117,7 +116,6 @@ func (m *TraceCapturePackets) Unmarshal(b []byte) error {
 }
 
 // TraceCapturePacketsReply defines message 'trace_capture_packets_reply'.
-// InProgress: the message form may change in the future versions
 type TraceCapturePacketsReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -151,7 +149,6 @@ func (m *TraceCapturePacketsReply) Unmarshal(b []byte) error {
 }
 
 // TraceClearCapture defines message 'trace_clear_capture'.
-// InProgress: the message form may change in the future versions
 type TraceClearCapture struct{}
 
 func (m *TraceClearCapture) Reset()               { *m = TraceClearCapture{} }
@@ -179,7 +176,6 @@ func (m *TraceClearCapture) Unmarshal(b []byte) error {
 }
 
 // TraceClearCaptureReply defines message 'trace_clear_capture_reply'.
-// InProgress: the message form may change in the future versions
 type TraceClearCaptureReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -213,7 +209,6 @@ func (m *TraceClearCaptureReply) Unmarshal(b []byte) error {
 }
 
 // TraceDetails defines message 'trace_details'.
-// InProgress: the message form may change in the future versions
 type TraceDetails struct {
 	ThreadID       uint32 `binapi:"u32,name=thread_id" json:"thread_id,omitempty"`
 	Position       uint32 `binapi:"u32,name=position" json:"position,omitempty"`
@@ -271,7 +266,6 @@ func (m *TraceDetails) Unmarshal(b []byte) error {
 }
 
 // TraceDump defines message 'trace_dump'.
-// InProgress: the message form may change in the future versions
 type TraceDump struct {
 	ClearCache uint8  `binapi:"u8,name=clear_cache" json:"clear_cache,omitempty"`
 	ThreadID   uint32 `binapi:"u32,name=thread_id" json:"thread_id,omitempty"`
@@ -317,7 +311,6 @@ func (m *TraceDump) Unmarshal(b []byte) error {
 }
 
 // TraceDumpReply defines message 'trace_dump_reply'.
-// InProgress: the message form may change in the future versions
 type TraceDumpReply struct {
 	Retval         int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	LastThreadID   uint32 `binapi:"u32,name=last_thread_id" json:"last_thread_id,omitempty"`
@@ -375,7 +368,6 @@ func (m *TraceDumpReply) Unmarshal(b []byte) error {
 }
 
 // TraceSetFilters defines message 'trace_set_filters'.
-// InProgress: the message form may change in the future versions
 type TraceSetFilters struct {
 	Flag                 TraceFilterFlag `binapi:"trace_filter_flag,name=flag" json:"flag,omitempty"`
 	Count                uint32          `binapi:"u32,name=count" json:"count,omitempty"`
@@ -421,7 +413,6 @@ func (m *TraceSetFilters) Unmarshal(b []byte) error {
 }
 
 // TraceSetFiltersReply defines message 'trace_set_filters_reply'.
-// InProgress: the message form may change in the future versions
 type TraceSetFiltersReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }

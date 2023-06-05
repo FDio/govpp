@@ -52,7 +52,7 @@ func newGenerateCmd() *cobra.Command {
 		},
 	}
 
-	cmd.PersistentFlags().StringVar(&opts.Input, "input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
+	cmd.PersistentFlags().StringVar(&opts.Input, "input", "", "Input for VPP API (e.g. VPP API dir, VPP repository, ..)")
 	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output location for generated files")
 	cmd.PersistentFlags().StringVar(&opts.ImportPrefix, "import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
 	cmd.PersistentFlags().BoolVar(&opts.NoVersionInfo, "no-version-info", false, "Exclude version info.")

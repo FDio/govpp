@@ -29,7 +29,6 @@ const (
 )
 
 // AdlAllowlistEnableDisable defines message 'adl_allowlist_enable_disable'.
-// InProgress: the message form may change in the future versions
 type AdlAllowlistEnableDisable struct {
 	SwIfIndex  interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 	FibID      uint32                         `binapi:"u32,name=fib_id" json:"fib_id,omitempty"`
@@ -79,7 +78,6 @@ func (m *AdlAllowlistEnableDisable) Unmarshal(b []byte) error {
 }
 
 // AdlAllowlistEnableDisableReply defines message 'adl_allowlist_enable_disable_reply'.
-// InProgress: the message form may change in the future versions
 type AdlAllowlistEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -115,7 +113,6 @@ func (m *AdlAllowlistEnableDisableReply) Unmarshal(b []byte) error {
 }
 
 // AdlInterfaceEnableDisable defines message 'adl_interface_enable_disable'.
-// InProgress: the message form may change in the future versions
 type AdlInterfaceEnableDisable struct {
 	SwIfIndex     interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 	EnableDisable bool                           `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
@@ -153,7 +150,6 @@ func (m *AdlInterfaceEnableDisable) Unmarshal(b []byte) error {
 }
 
 // AdlInterfaceEnableDisableReply defines message 'adl_interface_enable_disable_reply'.
-// InProgress: the message form may change in the future versions
 type AdlInterfaceEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }

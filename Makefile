@@ -2,7 +2,7 @@ SHELL := /usr/bin/env bash -o pipefail
 
 PROJECT := govpp
 
-VERSION      ?= $(shell git describe --always --tags --dirty)
+VERSION      ?= $(shell git describe --always --tags --dirty --match='v*')
 COMMIT       ?= $(shell git rev-parse HEAD)
 BUILD_STAMP  ?= $(shell git log -1 --format='%ct')
 BUILD_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)

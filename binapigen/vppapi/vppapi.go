@@ -130,9 +130,9 @@ func ParseRaw(content []byte) (file *File, err error) {
 		}
 	}()
 
-	file, err = parseJSON(content)
+	file, err = parseApiJsonFile(content)
 	if err != nil {
-		return nil, fmt.Errorf("parseJSON error: %w", err)
+		return nil, fmt.Errorf("parseApiJsonFile error: %w", err)
 	}
 
 	return file, nil

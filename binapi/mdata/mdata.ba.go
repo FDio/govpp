@@ -29,7 +29,6 @@ const (
 )
 
 // MdataEnableDisable defines message 'mdata_enable_disable'.
-// InProgress: the message form may change in the future versions
 type MdataEnableDisable struct {
 	EnableDisable bool `binapi:"bool,name=enable_disable" json:"enable_disable,omitempty"`
 }
@@ -63,7 +62,6 @@ func (m *MdataEnableDisable) Unmarshal(b []byte) error {
 }
 
 // MdataEnableDisableReply defines message 'mdata_enable_disable_reply'.
-// InProgress: the message form may change in the future versions
 type MdataEnableDisableReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
