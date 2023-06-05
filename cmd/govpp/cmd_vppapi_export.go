@@ -34,14 +34,15 @@ import (
 //  - add option for exporting flat structure
 //  - embed VPP version into export somehow
 
-type ExportCmdOptions struct {
-	Input  string
+type VppApiExportCmdOptions struct {
+	*VppApiCmdOptions
+
 	Output string
 }
 
-func newExportCmd() *cobra.Command {
+func newVppApiExportCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
-		opts = ExportCmdOptions{}
+		opts = VppApiExportCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
 		Use:   "export [INPUT] -o OUTPUT",
@@ -62,7 +63,7 @@ func newExportCmd() *cobra.Command {
 	return cmd
 }
 
-func runExportCmd(opts ExportCmdOptions) error {
+func runExportCmd(opts VppApiExportCmdOptions) error {
 	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err

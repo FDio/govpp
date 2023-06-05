@@ -72,9 +72,6 @@ func newRootCmd() *cobra.Command {
 		newVppapiCmd(),
 		newHttpCmd(),
 		newCliCommand(),
-		newExportCmd(),
-		newDiffCmd(),
-		newLintCmd(),
 	)
 
 	cmd.InitDefaultVersionFlag()

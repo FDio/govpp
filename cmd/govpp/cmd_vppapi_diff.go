@@ -26,33 +26,35 @@ import (
 )
 
 // TODO:
-//  - option to filter specific difference types
 //  - table format for differences
 //  - option to exit with non-zero status on breaking changes
 
-type DiffCmdOptions struct {
-	Input   string
-	Against string
+type VppApiDiffCmdOptions struct {
+	*VppApiCmdOptions
+
+	Against     string
+	Differences []string
 }
 
-func newDiffCmd() *cobra.Command {
+func newVppApiDiffCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
-		opts = DiffCmdOptions{}
+		opts = VppApiDiffCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:     "diff INPUT --against AGAINST",
-		Aliases: []string{"d", "cmp", "compare"},
+		Use:     "diff INPUT --against=AGAINST",
+		Aliases: []string{"cmp", "compare"},
 		Short:   "Compare VPP API schemas",
-		Long:    "Compares VPP API schemas INPUT and AGAINST and print all differences between them.",
+		Long:    "Compares two VPP API schemas and lists the differences.",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			return runDiffCmd(cmd.OutOrStdout(), opts)
+			return runVppApiDiffCmd(cmd.OutOrStdout(), opts)
 		},
 	}
 
+	cmd.PersistentFlags().StringSliceVar(&opts.Differences, "differences", nil, "List only specific differences")
 	cmd.PersistentFlags().StringVar(&opts.Against, "against", "", "The VPP API schema to compare against.")
 	must(cobra.MarkFlagRequired(cmd.PersistentFlags(), "against"))
 
@@ -65,7 +67,11 @@ var (
 	clrDiffFile = color.Style{color.Yellow}
 )
 
-func runDiffCmd(out io.Writer, opts DiffCmdOptions) error {
+func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
+	if opts.Format != "" {
+		color.Disable()
+	}
+
 	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
@@ -85,16 +91,55 @@ func runDiffCmd(out io.Writer, opts DiffCmdOptions) error {
 	logrus.Tracef("comparing schemas:\n\tSCHEMA 1: %+v\n\tSCHEMA 2: %+v\n", schema1, schema2)
 
 	diffs := CompareSchemas(&schema1, &schema2)
-	if len(diffs) == 0 {
-		fmt.Fprintln(out, "No differences found.")
-		return nil
-	} else {
-		fmt.Fprintf(out, "Listing %d differences:\n", len(diffs))
-		for _, d := range diffs {
-			color.Fprintf(out, " - %s\n", d)
-		}
 
+	if len(opts.Differences) > 0 {
+		diffs, err = filterDiffs(diffs, opts.Differences)
+		if err != nil {
+			return err
+		}
+	}
+
+	if opts.Format == "" {
+		printDifferencesSimple(out, diffs)
+	} else {
+		return formatAsTemplate(out, opts.Format, diffs)
 	}
 
 	return nil
+}
+
+func printDifferencesSimple(out io.Writer, diffs []Difference) {
+	if len(diffs) == 0 {
+		fmt.Fprintln(out, "No differences found.")
+		return
+	}
+
+	fmt.Fprintf(out, "Listing %d differences:\n", len(diffs))
+	for _, d := range diffs {
+		color.Fprintf(out, " - %s\n", d)
+	}
+}
+
+func filterDiffs(diffs []Difference, differences []string) ([]Difference, error) {
+	wantDiffs := map[DifferenceType]bool{}
+	for _, d := range differences {
+		var ok bool
+		for _, diff := range differenceTypes {
+			if string(diff) == d {
+				ok = true
+				break
+			}
+		}
+		if !ok {
+			return nil, fmt.Errorf("unknown difference type: %s", d)
+		}
+		wantDiffs[DifferenceType(d)] = true
+	}
+	var list []Difference
+	for _, d := range diffs {
+		if want := wantDiffs[d.Type]; want {
+			list = append(list, d)
+		}
+	}
+	return list, nil
 }

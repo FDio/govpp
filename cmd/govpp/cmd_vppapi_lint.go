@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -26,20 +27,19 @@ import (
 // TODO:
 //  - support file filter (include, exclude..)
 //  - consider adding categories for linter rules
-//  - add option to list all linter rules
 
-type LintCmdOptions struct {
-	Input     string
-	Format    string
+type VppApiLintCmdOptions struct {
+	*VppApiCmdOptions
+
 	Rules     []string
 	Except    []string
 	ExitCode  bool
 	ListRules bool
 }
 
-func newLintCmd() *cobra.Command {
+func newVppApiLintCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
-		opts = LintCmdOptions{}
+		opts = VppApiLintCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
 		Use:   "lint",
@@ -47,21 +47,24 @@ func newLintCmd() *cobra.Command {
 		Long:  "Run linter checks for VPP API files",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runLintCmd(cmd.OutOrStdout(), opts)
+			return runVppApiLintCmd(cmd.OutOrStdout(), opts)
 		},
 	}
 
 	cmd.PersistentFlags().StringSliceVar(&opts.Rules, "rules", nil, "Limit to specific linter rules")
 	cmd.PersistentFlags().StringSliceVar(&opts.Except, "except", nil, "Skip specific linter rules.")
-	cmd.PersistentFlags().StringVar(&opts.Input, "input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
-	cmd.PersistentFlags().StringVar(&opts.Format, "format", "", "The format of the output")
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "The format of the output")
 	cmd.PersistentFlags().BoolVar(&opts.ExitCode, "exit-code", false, "Exit with non-zero exit code if any issue is found")
 	cmd.PersistentFlags().BoolVar(&opts.ListRules, "list-rules", false, "List all known linter rules")
 
 	return cmd
 }
 
-func runLintCmd(out io.Writer, opts LintCmdOptions) error {
+func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
+	if opts.Format != "" {
+		color.Disable()
+	}
+
 	if opts.ListRules {
 		rules := LintRules(defaultLintRules...)
 		if opts.Format == "" {

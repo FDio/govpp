@@ -46,6 +46,23 @@ const (
 	MsgOptionRemovedDifference DifferenceType = "MsgOptionRemoved"
 )
 
+var differenceTypes = []DifferenceType{
+	VersionDifference,
+	TotalFilesDifference,
+	FileAddedDifference,
+	FileRemovedDifference,
+	FileMovedDifference,
+	FileVersionDifference,
+	FileCrcDifference,
+	FileContentsChangedDifference,
+	MessageAddedDifference,
+	MessageRemovedDifference,
+	MessageCrcDifference,
+	MsgOptionChangedDifference,
+	MsgOptionAddedDifference,
+	MsgOptionRemovedDifference,
+}
+
 // Difference represents a difference between two API schemas.
 type Difference struct {
 	Type           DifferenceType

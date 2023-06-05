@@ -23,6 +23,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/gookit/color"
 	"gopkg.in/yaml.v3"
 )
 
@@ -39,7 +40,8 @@ func formatAsTemplate(w io.Writer, format string, data interface{}) error {
 	var b bytes.Buffer
 	switch strings.ToLower(format) {
 	case "json":
-		b.WriteString(jsonTmpl(data))
+		s := color.ClearCode(jsonTmpl(data))
+		b.WriteString(s)
 	case "yaml", "yml":
 		b.WriteString(yamlTmpl(data))
 	default:

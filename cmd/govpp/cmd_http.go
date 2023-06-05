@@ -85,6 +85,7 @@ func runHttpCmd(opts HttpCmdOptions) error {
 
 	setupHttpAPIHandlers(vppInput.Schema.Files, serveMux)
 
+	// TODO: register all api files automatically (requires some regisry for handlers or apifiles
 	c := vpe.HTTPHandler(vpe.NewServiceClient(conn))
 	//c := memclnt.HTTPHandler(memclnt.NewServiceClient(conn))
 
@@ -148,6 +149,7 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			}
 
 			// TODO: unmarshal body data into message, send request to VPP, marshal it and send as response
+			http.Error(w, "Sending requests is not implemented yet", http.StatusNotImplemented)
 		} else if req.Method == http.MethodGet {
 			b, err := json.MarshalIndent(msg, "", "  ")
 			if err != nil {
