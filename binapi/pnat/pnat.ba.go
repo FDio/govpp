@@ -128,7 +128,6 @@ type PnatRewriteTuple struct {
 }
 
 // PnatBindingAdd defines message 'pnat_binding_add'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAdd struct {
 	Match   PnatMatchTuple   `binapi:"pnat_match_tuple,name=match" json:"match,omitempty"`
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
@@ -202,7 +201,6 @@ func (m *PnatBindingAdd) Unmarshal(b []byte) error {
 }
 
 // PnatBindingAddReply defines message 'pnat_binding_add_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAddReply struct {
 	Retval       int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
@@ -240,7 +238,6 @@ func (m *PnatBindingAddReply) Unmarshal(b []byte) error {
 }
 
 // PnatBindingAddV2 defines message 'pnat_binding_add_v2'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAddV2 struct {
 	Match   PnatMatchTuple   `binapi:"pnat_match_tuple,name=match" json:"match,omitempty"`
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
@@ -314,7 +311,6 @@ func (m *PnatBindingAddV2) Unmarshal(b []byte) error {
 }
 
 // PnatBindingAddV2Reply defines message 'pnat_binding_add_v2_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAddV2Reply struct {
 	Retval       int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
@@ -352,7 +348,6 @@ func (m *PnatBindingAddV2Reply) Unmarshal(b []byte) error {
 }
 
 // PnatBindingAttach defines message 'pnat_binding_attach'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAttach struct {
 	SwIfIndex    interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 	Attachment   PnatAttachmentPoint            `binapi:"pnat_attachment_point,name=attachment" json:"attachment,omitempty"`
@@ -394,7 +389,6 @@ func (m *PnatBindingAttach) Unmarshal(b []byte) error {
 }
 
 // PnatBindingAttachReply defines message 'pnat_binding_attach_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingAttachReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -428,7 +422,6 @@ func (m *PnatBindingAttachReply) Unmarshal(b []byte) error {
 }
 
 // PnatBindingDel defines message 'pnat_binding_del'.
-// InProgress: the message form may change in the future versions
 type PnatBindingDel struct {
 	BindingIndex uint32 `binapi:"u32,name=binding_index" json:"binding_index,omitempty"`
 }
@@ -462,7 +455,6 @@ func (m *PnatBindingDel) Unmarshal(b []byte) error {
 }
 
 // PnatBindingDelReply defines message 'pnat_binding_del_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingDelReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -496,7 +488,6 @@ func (m *PnatBindingDelReply) Unmarshal(b []byte) error {
 }
 
 // PnatBindingDetach defines message 'pnat_binding_detach'.
-// InProgress: the message form may change in the future versions
 type PnatBindingDetach struct {
 	SwIfIndex    interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 	Attachment   PnatAttachmentPoint            `binapi:"pnat_attachment_point,name=attachment" json:"attachment,omitempty"`
@@ -538,7 +529,6 @@ func (m *PnatBindingDetach) Unmarshal(b []byte) error {
 }
 
 // PnatBindingDetachReply defines message 'pnat_binding_detach_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingDetachReply struct {
 	Retval int32 `binapi:"i32,name=retval" json:"retval,omitempty"`
 }
@@ -572,7 +562,6 @@ func (m *PnatBindingDetachReply) Unmarshal(b []byte) error {
 }
 
 // PnatBindingsDetails defines message 'pnat_bindings_details'.
-// InProgress: the message form may change in the future versions
 type PnatBindingsDetails struct {
 	Match   PnatMatchTuple   `binapi:"pnat_match_tuple,name=match" json:"match,omitempty"`
 	Rewrite PnatRewriteTuple `binapi:"pnat_rewrite_tuple,name=rewrite" json:"rewrite,omitempty"`
@@ -646,7 +635,6 @@ func (m *PnatBindingsDetails) Unmarshal(b []byte) error {
 }
 
 // PnatBindingsGet defines message 'pnat_bindings_get'.
-// InProgress: the message form may change in the future versions
 type PnatBindingsGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
@@ -680,7 +668,6 @@ func (m *PnatBindingsGet) Unmarshal(b []byte) error {
 }
 
 // PnatBindingsGetReply defines message 'pnat_bindings_get_reply'.
-// InProgress: the message form may change in the future versions
 type PnatBindingsGetReply struct {
 	Retval int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
@@ -718,7 +705,6 @@ func (m *PnatBindingsGetReply) Unmarshal(b []byte) error {
 }
 
 // PnatInterfacesDetails defines message 'pnat_interfaces_details'.
-// InProgress: the message form may change in the future versions
 type PnatInterfacesDetails struct {
 	SwIfIndex  interface_types.InterfaceIndex `binapi:"interface_index,name=sw_if_index" json:"sw_if_index,omitempty"`
 	Enabled    []bool                         `binapi:"bool[2],name=enabled" json:"enabled,omitempty"`
@@ -775,7 +761,6 @@ func (m *PnatInterfacesDetails) Unmarshal(b []byte) error {
 }
 
 // PnatInterfacesGet defines message 'pnat_interfaces_get'.
-// InProgress: the message form may change in the future versions
 type PnatInterfacesGet struct {
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`
 }
@@ -809,7 +794,6 @@ func (m *PnatInterfacesGet) Unmarshal(b []byte) error {
 }
 
 // PnatInterfacesGetReply defines message 'pnat_interfaces_get_reply'.
-// InProgress: the message form may change in the future versions
 type PnatInterfacesGetReply struct {
 	Retval int32  `binapi:"i32,name=retval" json:"retval,omitempty"`
 	Cursor uint32 `binapi:"u32,name=cursor" json:"cursor,omitempty"`

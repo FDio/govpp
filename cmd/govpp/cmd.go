@@ -15,8 +15,7 @@
 package main
 
 import (
-	"fmt"
-
+	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -24,11 +23,11 @@ import (
 )
 
 const logo = `
- _________     ___    _________________
- __  ____/_______ |  / /__  __ \__  __ \
- _  / __ _  __ \_ | / /__  /_/ /_  /_/ /  %s
- / /_/ / / /_/ /_ |/ / _  ____/_  ____/   %s
- \____/  \____/_____/  /_/     /_/        %s
+<fg=lightCyan> _________     ___    _________________  </>
+<fg=lightCyan> __  ____/_______ |  / /__  __ \__  __ \ </>
+<fg=lightCyan> _  / __ _  __ \_ | / /__  /_/ /_  /_/ / </> <fg=blue;op=bold>%s</>
+<fg=lightCyan> / /_/ / / /_/ /_ |/ / _  ____/_  ____/  </> <lightBlue>%s</>
+<fg=lightCyan> \____/  \____/_____/  /_/     /_/       </> <blue>%s</>
 `
 
 func Execute() {
@@ -44,16 +43,19 @@ func newRootCmd() *cobra.Command {
 		glob GlobalOptions
 	)
 	cmd := &cobra.Command{
-		Use:               "govpp COMMAND",
+		Use:               "govpp [options] command",
 		Short:             "GoVPP CLI app",
-		Long:              fmt.Sprintf(logo, version.Short(), version.BuildTime(), version.BuiltBy()),
+		Long:              color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()),
 		Version:           version.String(),
 		SilenceUsage:      true,
 		SilenceErrors:     true,
 		TraverseChildren:  true,
 		CompletionOptions: cobra.CompletionOptions{HiddenDefaultCmd: true},
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			InitOptions(glob)
+			InitOptions(&glob)
+			logrus.Tracef("global options: %+v", glob)
+
+			logrus.Tracef("args: %+v", args)
 
 			return nil
 		},
@@ -70,23 +72,18 @@ func newRootCmd() *cobra.Command {
 		newVppapiCmd(),
 		newHttpCmd(),
 		newCliCommand(),
-		newExportCmd(),
-		newDiffCmd(),
-		newLintCmd(),
 	)
 
-	// Help
+	cmd.InitDefaultVersionFlag()
 	cmd.InitDefaultHelpFlag()
 	cmd.Flags().Lookup("help").Hidden = true
+
 	cmd.InitDefaultHelpCmd()
 	for _, c := range cmd.Commands() {
 		if c.Name() == "help" {
 			c.Hidden = true
 		}
 	}
-
-	// Version
-	cmd.InitDefaultVersionFlag()
 
 	return cmd
 }

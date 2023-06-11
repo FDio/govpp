@@ -32,17 +32,14 @@ const (
 	fieldUnionData = "XXX_UnionData" // name for the union data field
 )
 
-// option keys
+// generated status info
 const (
-	msgStatus     = "status"
-	msgDeprecated = "deprecated"
-	msgInProgress = "in_progress"
-)
+	statusInProgressPrefix = "InProgress"
+	statusDeprecatedPrefix = "Deprecated"
+	statusOtherPrefix      = "Status"
 
-// generated option messages
-const (
-	deprecatedMsg = "the message will be removed in the future versions"
-	inProgressMsg = "the message form may change in the future versions"
+	statusDeprecatedInfoText = "the message will be removed in the future versions"
+	statusInProgressInfoText = "the message form may change in the future versions"
 )
 
 func GenerateAPI(gen *Generator, file *File) *GenFile {
@@ -156,14 +153,23 @@ func genGenericDefinesComment(g *GenFile, goName string, vppName string, objKind
 	g.P("// ", goName, " defines ", objKind, " '", vppName, "'.")
 }
 
-func genMessageStatusComment(g *GenFile, msg *Message) {
-	// experimental status (in progress)
-	if m, ok := msg.InProgress(); ok {
-		g.P("// InProgress: ", m)
-	}
-	// deprecated status
-	if m, ok := msg.Deprecated(); ok {
-		g.P("// Deprecated: ", m)
+func genMessageStatusInfoComment(g *GenFile, msg *Message) {
+	switch status, text := getMessageStatus(msg); status {
+	case msgStatusInProgress:
+		// "in progress" status - might be changed anytime
+		if text == "" {
+			text = statusInProgressInfoText
+		}
+		g.P("// ", statusInProgressPrefix, ": ", text)
+	case msgStatusDeprecated:
+		// "deprecated" status - will be removed later
+		if text == "" {
+			text = statusDeprecatedInfoText
+		}
+		g.P("// ", statusDeprecatedPrefix, ": ", text)
+	case msgStatusOther:
+		// custom status - arbitrary info
+		g.P("// ", statusOtherPrefix, ": ", text)
 	}
 }
 
@@ -441,7 +447,7 @@ func genMessage(g *GenFile, msg *Message) {
 
 	genMessageComment(g, msg)
 	genGenericDefinesComment(g, msg.GoIdent.GoName, msg.Name, "message")
-	genMessageStatusComment(g, msg)
+	genMessageStatusInfoComment(g, msg)
 
 	// generate message definition
 	if len(msg.Fields) == 0 {

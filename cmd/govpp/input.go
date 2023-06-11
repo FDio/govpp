@@ -43,18 +43,36 @@ func resolveInput(input string) (*vppapi.VppInput, error) {
 }
 
 func detectVppApiInput() string {
-	// check if the current working dir is within the VPP repository
-	if _, err := os.Stat(filepath.Join(".", "src", "vpp")); err == nil {
-		// if true, return the path to the VPP API directory within the repository
-		return filepath.Join(".", "build-root", "install-vpp-native", "vpp", "share", "vpp", "api")
+	var (
+		relPathSrcVpp      = filepath.Join(".", "src", "vpp")
+		relPathBuildVppApi = filepath.Join(".", "build-root", "install-vpp-native", "vpp", "share", "vpp", "api")
+	)
+	// check if VPP API files are built
+	if dirExists(relPathBuildVppApi) {
+		return relPathBuildVppApi
 	}
-
+	// check if within the VPP repository
+	if dirExists(relPathSrcVpp) {
+		return relPathBuildVppApi
+	}
+	// check if within VPP API directory
+	if dirExists("core", "plugins") {
+		return "."
+	}
 	// check if VPP is installed on the system
-	if _, err := os.Stat(vppapi.DefaultDir); err == nil {
-		// if true, return the path to the VPP API directory
+	if dirExists(vppapi.DefaultDir) {
 		return vppapi.DefaultDir
 	}
-
 	// if none of the above conditions are met, return the current working directory
 	return "."
+}
+
+func dirExists(dir ...string) bool {
+	for _, d := range dir {
+		if _, err := os.Stat(d); err != nil {
+			return false
+		}
+
+	}
+	return true
 }
