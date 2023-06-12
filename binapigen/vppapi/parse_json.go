@@ -43,9 +43,9 @@ const (
 	messageComment = "comment"
 
 	// type keys
-	enumType       = "enumtype"
-	aliasLength    = "length"
-	aliasType      = "type"
+	enumType    = "enumtype"
+	aliasLength = "length"
+	aliasType   = "type"
 
 	// counters
 	counter         = "counter"
@@ -233,7 +233,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 	}
 
 	// parse counters
-	countersNode := jsonRoot.Map(fileCounters)
+	countersNode := rootNode.Map(fileCounters)
 	if countersNode.GetType() == jsongo.TypeArray {
 		file.Counters = make([]Counter, countersNode.Len())
 		for i := 0; i < countersNode.Len(); i++ {
@@ -246,7 +246,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 	}
 
 	// parse paths
-	pathsNode := jsonRoot.Map(filePaths)
+	pathsNode := rootNode.Map(filePaths)
 	if pathsNode.GetType() == jsongo.TypeArray {
 		file.Paths = make([]CounterPaths, 0)
 		for i := 0; i < pathsNode.Len(); i++ {
