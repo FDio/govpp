@@ -45,6 +45,9 @@ type (
 		// Service is an object representing the RPC services used in the API.
 		// In case there is not any services defined for this File, the Service is nil.
 		Service *Service `json:",omitempty"`
+
+		Counters []Counter      `json:",omitempty"`
+		Paths    []CounterPaths `json:",omitempty"`
 	}
 
 	AliasType struct {
@@ -101,5 +104,23 @@ type (
 		Stream    bool     `json:",omitempty"`
 		StreamMsg string   `json:",omitempty"`
 		Events    []string `json:",omitempty"`
+	}
+
+	Counter struct {
+		Name     string
+		Elements []Element `json:",omitempty"`
+	}
+
+	Element struct {
+		Name        string
+		Severity    string
+		Type        string
+		Units       string
+		Description string
+	}
+
+	CounterPaths struct {
+		Name  string
+		Paths []string `json:",omitempty"`
 	}
 )
