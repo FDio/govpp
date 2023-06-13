@@ -47,7 +47,7 @@ type HttpCmdOptions struct {
 	Address   string
 }
 
-func newHttpCmd() *cobra.Command {
+func newHttpCmd(Cli) *cobra.Command {
 	var opts = HttpCmdOptions{
 		ApiSocket: socketclient.DefaultSocketName,
 		Address:   DefaultHttpServiceAddress,

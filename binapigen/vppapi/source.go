@@ -65,7 +65,7 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 		return nil, fmt.Errorf("invalid path in input reference")
 	}
 
-	logrus.Tracef("retrieving input:\n%v", input)
+	logrus.Tracef("retrieving input: %+v", input)
 
 	switch input.Format {
 	case FormatNone:
@@ -90,7 +90,7 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 			return nil, fmt.Errorf("cannot set both branch and tag")
 		} else if branch != "" || tag != "" {
 			if ref != "" {
-				return nil, fmt.Errorf("cannot set ref if branch or tag is set")
+				return nil, fmt.Errorf("cannot set rev if branch or tag is set")
 			}
 			if branch != "" {
 				ref = branch
@@ -115,7 +115,7 @@ func (input *InputRef) Retrieve() (*VppInput, error) {
 
 		logrus.Debugf("updating local repo %s to %s", input.Path, commit)
 
-		repoDir, err := cloneRepoLocally(input.Path, commit, cloneDepth)
+		repoDir, err := cloneRepoLocally(input.Path, commit, branch, cloneDepth)
 		if err != nil {
 			return nil, err
 		}

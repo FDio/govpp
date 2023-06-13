@@ -4,11 +4,13 @@ go 1.18
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.1
+	github.com/docker/cli v24.0.2+incompatible
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.5.2
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
 	github.com/mitchellh/go-ps v1.0.0
+	github.com/moby/term v0.5.0
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/onsi/gomega v1.19.0
 	github.com/pkg/profile v1.5.0
@@ -20,6 +22,7 @@ require (
 )
 
 require (
+	github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 // indirect
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
