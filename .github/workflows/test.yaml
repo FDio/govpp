@@ -1,8 +1,10 @@
 ---
 name: Test
 on:
-  # Runs on branch pushes & PRs
+  # Runs on branch push to master & PRs
   push:
+    branches:
+      - master
   pull_request:
     paths-ignore:
       - 'docs/**'
