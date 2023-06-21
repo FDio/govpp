@@ -1,17 +1,16 @@
 ---
 name: Test
 on:
+  # Runs on branch pushes & PRs
   push:
-    branches:
-      - master
   pull_request:
     paths-ignore:
       - 'docs/**'
       - '**.md'
-  # Runs at 05:05. Daily.
+  # Runs daily at 05:05
   schedule:
     - cron: '5 5 * * *'
-  # Allows running this workflow manually
+  # Allows running manually
   workflow_dispatch:
 
 jobs:
@@ -23,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [ '2302', '2210', '2206', '2202' ]
+        version: [ '2306', '2302', '2210', '2206' ]
 
     steps:
       - name: "Checkout"
@@ -31,7 +30,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+          go-version: 1.20
       - name: "Run Tests"
         run: |
           make test-integration
