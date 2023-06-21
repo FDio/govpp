@@ -91,27 +91,6 @@ func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions) error {
 		return err
 	}
 
-	// remove imported types
-	/*if !opts.IncludeImported {
-		binapigen.SortFilesByImports(allapifiles)
-		for i, apifile := range allapifiles {
-			f := apifile
-			binapigen.RemoveImportedTypes(allapifiles, &f)
-			allapifiles[i] = f
-		}
-	}
-
-	// filter files
-	apifiles := filterFilesByPaths(allapifiles, opts.Paths)
-	if len(apifiles) == 0 {
-		return fmt.Errorf("filter matched no files")
-	}
-	logrus.Debugf("filtered %d/%d files", len(apifiles), len(allapifiles))
-
-	if opts.SortByName {
-		binapigen.SortFilesByName(apifiles)
-	}*/
-
 	// format output
 	if format := opts.Format; len(format) == 0 {
 		if opts.ShowMessages {

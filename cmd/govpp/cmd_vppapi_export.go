@@ -158,7 +158,6 @@ func exportFilesToTarGz(outputFile string, files []string, baseDir string) error
 		}
 
 		// update the name to correctly reflect the desired destination when untaring
-		//header.Name = filepath.Join(filepath.Base(baseDir), strings.TrimPrefix(file, apiDir))
 		header.Name = strings.TrimPrefix(file, baseDir)
 
 		logrus.Tracef("- exporting file: %q to: %s", file, header.Name)
