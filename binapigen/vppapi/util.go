@@ -21,6 +21,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -53,7 +54,10 @@ func ResolveApiDir(dir string) string {
 		// check if the API directory exists
 		_, err := os.Stat(apiDirPath)
 		if err == nil {
-			logrus.Tracef("returning %q as api dir", localVPPBuildApiDir)
+			logrus.Tracef("api dir %q exists, running 'make json-api-files'", localVPPBuildApiDir)
+			if err := makeJsonApiFiles(dir); err != nil {
+				logrus.Warnf("make json-api-files failed: %v", err)
+			}
 			return apiDirPath
 		} else if errors.Is(err, os.ErrNotExist) {
 			logrus.Tracef("api dir %q does not exist, running 'make json-api-files'", localVPPBuildApiDir)
@@ -94,12 +98,6 @@ func makeJsonApiFiles(dir string) error {
 //
 // Version resolved here can be overriden by setting VPP_VERSION env var.
 func ResolveVPPVersion(apidir string) string {
-	// check env variable override
-	if ver := os.Getenv(VPPVersionEnvVar); ver != "" {
-		logrus.Debugf("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
-		return ver
-	}
-
 	// check if inside VPP repo
 	repoDir, err := findGitRepoRootDir(apidir)
 	if err != nil {
@@ -118,12 +116,28 @@ func ResolveVPPVersion(apidir string) string {
 		// try to read VPP_VERSION file
 		data, err := os.ReadFile(path.Join(repoDir, "VPP_VERSION"))
 		if err == nil {
-			return strings.TrimSpace(string(data))
+			ver := strings.TrimSpace(string(data))
+			logrus.Debugf("VPP version was resolved to %q from VPP_VERSION file", ver)
+			return ver
 		}
 	}
 
+	// try to read VPP_VERSION file
+	data, err := os.ReadFile(path.Join(apidir, "VPP_VERSION"))
+	if err == nil {
+		ver := strings.TrimSpace(string(data))
+		logrus.Debugf("VPP version was resolved to %q from VPP_VERSION file", ver)
+		return ver
+	}
+
+	// check env variable override
+	if ver := os.Getenv(VPPVersionEnvVar); ver != "" {
+		logrus.Debugf("VPP version was manually set to %q via %s env var", ver, VPPVersionEnvVar)
+		return ver
+	}
+
 	// assuming VPP package is installed
-	if _, err := exec.LookPath("vpp"); err == nil {
+	if filepath.Clean(apidir) == DefaultDir {
 		version, err := GetVPPVersionInstalled()
 		if err != nil {
 			logrus.Debugf("ERR: failed to resolve VPP version from installed package: %v", err)

@@ -21,7 +21,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -29,12 +28,13 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"go.fd.io/govpp/binapigen"
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 type VppApiLsCmdOptions struct {
 	*VppApiCmdOptions
+
+	Paths []string
 
 	IncludeImported bool
 	IncludeFields   bool
@@ -47,17 +47,21 @@ type VppApiLsCmdOptions struct {
 	SortByName bool
 }
 
-func newVppApiLsCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
+func newVppApiLsCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
 		opts = VppApiLsCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:     "ls [FILE, ...]",
+		Use:     "ls [INPUT] [--path PATH]... [--show-contents | --show-messages | --show-raw | --show-rpc]",
 		Aliases: []string{"l", "list"},
-		Short:   "List VPP API files",
-		Long:    "List VPP API files and their contents",
+		Short:   "Show VPP API contents",
+		Long:    "Show VPP API files and their contents",
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return runVppApiLsCmd(cmd.OutOrStdout(), opts, args)
+			if len(args) > 0 {
+				opts.Input = args[0]
+			}
+			return runVppApiLsCmd(cmd.OutOrStdout(), opts)
 		},
 	}
 
@@ -72,64 +76,19 @@ func newVppApiLsCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	return cmd
 }
 
-func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions, args []string) error {
+func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions) error {
 	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
-	logrus.Debugf("parsing VPP API directory: %v", vppInput.ApiDirectory)
+	allapifiles := vppInput.Schema.Files
 
-	// parse API directory
-	allapifiles, err := vppapi.ParseDir(vppInput.ApiDirectory)
+	logrus.Debugf("processing %d files", len(allapifiles))
+
+	apifiles, err := prepareVppApiFiles(allapifiles, opts.Paths, opts.IncludeImported, opts.SortByName)
 	if err != nil {
-		return fmt.Errorf("vppapi.ParseDir: %w", err)
-	}
-
-	logrus.Debugf("parsed %d files, normalizing data", len(allapifiles))
-
-	// normalize data
-	binapigen.SortFilesByImports(allapifiles)
-
-	// filter files
-	var apifiles []vppapi.File
-	if len(args) > 0 {
-		// select only specific files
-		for _, arg := range args {
-			var found bool
-			for _, apifile := range allapifiles {
-				if apifile.Name == arg {
-					apifiles = append(apifiles, apifile)
-					found = true
-					break
-				}
-			}
-			if !found {
-				return fmt.Errorf("VPP API file %q not found", arg)
-			}
-		}
-	} else {
-		// select all files
-		apifiles = allapifiles
-	}
-
-	logrus.Debugf("selected %d/%d files", len(apifiles), len(allapifiles))
-
-	// omit imported types
-	if !opts.IncludeImported {
-		for i, apifile := range apifiles {
-			f := apifile
-			binapigen.RemoveImportedTypes(allapifiles, &f)
-			apifiles[i] = f
-		}
-	}
-
-	if opts.SortByName {
-		sort.SliceStable(apifiles, func(i, j int) bool {
-			a := apifiles[i]
-			b := apifiles[j]
-			return a.Name < b.Name
-		})
+		return err
 	}
 
 	// format output
@@ -142,7 +101,8 @@ func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions, args []string) error
 		} else if opts.ShowContents {
 			showVPPAPIContents(out, apifiles)
 		} else if opts.ShowRaw {
-			showVPPAPIRaw(out, vppInput, args)
+			rawFiles := getVppApiRawFiles(vppInput.ApiDirectory, apifiles)
+			showVPPAPIRaw(out, rawFiles)
 		} else {
 			showVPPAPIList(out, apifiles)
 		}
@@ -161,64 +121,30 @@ type VppApiRawFile struct {
 	Content string
 }
 
-func showVPPAPIRaw(out io.Writer, input *vppapi.VppInput, args []string) {
-	list, err := vppapi.FindFiles(input.ApiDirectory)
-	if err != nil {
-		logrus.Errorf("failed to find files: %v", err)
-		return
-	}
-
-	var allapifiles []VppApiRawFile
-	for _, f := range list {
-		file, err := vppapi.ParseFile(f)
+func getVppApiRawFiles(apiDir string, files []vppapi.File) []VppApiRawFile {
+	var rawFiles []VppApiRawFile
+	for _, file := range files {
+		filePath := filepath.Join(apiDir, file.Path)
+		b, err := os.ReadFile(filePath)
 		if err != nil {
-			logrus.Debugf("failed to parse file: %v", err)
+			logrus.Errorf("failed to read file %q: %v", filePath, err)
 			continue
 		}
-		// use file path relative to apiDir
-		if p, err := filepath.Rel(input.ApiDirectory, file.Path); err == nil {
-			file.Path = p
-		}
-		// extract file name
-		base := filepath.Base(f)
-		name := base[:strings.Index(base, ".")]
-		b, err := os.ReadFile(f)
-		if err != nil {
-			logrus.Errorf("failed to read file %q: %v", f, err)
-			continue
-		}
-
-		allapifiles = append(allapifiles, VppApiRawFile{
+		rawFiles = append(rawFiles, VppApiRawFile{
 			Path:    file.Path,
-			Name:    name,
+			Name:    file.Name,
 			Content: string(b),
 		})
 	}
+	return rawFiles
+}
 
-	var apifiles []VppApiRawFile
-	if len(args) > 0 {
-		// select only specific files
-		for _, arg := range args {
-			var found bool
-			for _, apifile := range allapifiles {
-				if apifile.Name == arg {
-					apifiles = append(apifiles, apifile)
-					found = true
-					break
-				}
-			}
-			if !found {
-				logrus.Errorf("VPP API file %q not found", arg)
-				continue
-
-			}
-		}
-	} else {
-		// select all files
-		apifiles = allapifiles
+func showVPPAPIRaw(out io.Writer, rawFiles []VppApiRawFile) {
+	if len(rawFiles) == 0 {
+		logrus.Errorf("no files to show")
+		return
 	}
-
-	for _, f := range apifiles {
+	for _, f := range rawFiles {
 		fmt.Fprintf(out, "# %s (%v)\n", f.Name, f.Path)
 		fmt.Fprintf(out, "%s\n", f.Content)
 		fmt.Fprintln(out)

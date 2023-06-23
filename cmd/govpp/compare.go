@@ -40,6 +40,7 @@ const (
 	MessageAddedDifference   DifferenceType = "MessageAdded"
 	MessageRemovedDifference DifferenceType = "MessageRemoved"
 	MessageCrcDifference     DifferenceType = "MessageCRC"
+	MessageCommentDifference DifferenceType = "MessageComment"
 
 	MsgOptionChangedDifference DifferenceType = "MsgOptionChanged"
 	MsgOptionAddedDifference   DifferenceType = "MsgOptionAdded"
@@ -219,8 +220,12 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		if msg2, ok := msgMap2[msgName]; ok {
 			msgDiffs := compareMessages(msg1, msg2)
 			for _, msgDiff := range msgDiffs {
-				msgDiff.Value1 = msg1
-				msgDiff.Value2 = msg2
+				if msgDiff.Value1 == nil {
+					msgDiff.Value1 = msg1
+				}
+				if msgDiff.Value2 == nil {
+					msgDiff.Value2 = msg2
+				}
 				differences = append(differences, msgDiff)
 			}
 		} else {
@@ -233,13 +238,13 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		}
 	}
 	// added messages
-	for msgName := range msgMap2 {
-		if msg2, ok := msgMap1[msgName]; !ok {
+	for msgName, msg := range msgMap2 {
+		if _, ok := msgMap1[msgName]; !ok {
 			differences = append(differences, Difference{
 				Type:        MessageAddedDifference,
 				Description: color.Sprintf("Message added: %s", clrCyan.Sprint(msgName)),
 				Value1:      nil,
-				Value2:      msg2,
+				Value2:      msg,
 			})
 		}
 	}
@@ -259,7 +264,27 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 		differences = append(differences, Difference{
 			Type: MessageCrcDifference,
 			Description: color.Sprintf("Message %s changed CRC from %s to %s",
-				clrCyan.Sprint(msg1.Name), msg1.CRC, msg2.CRC),
+				clrCyan.Sprint(msg1.Name), clrWhite.Sprint(msg1.CRC), clrWhite.Sprint(msg2.CRC)),
+			Value1: msg1.CRC,
+			Value2: msg2.CRC,
+		})
+	}
+
+	// Compare message comments
+	if msg1.Comment != msg2.Comment {
+		desc := color.Sprintf("Message %s comment ", clrCyan.Sprint(msg1.Name))
+		if msg1.Comment == "" {
+			desc += "added"
+		} else if msg2.Comment == "" {
+			desc += "removed"
+		} else {
+			desc += "changed"
+		}
+		differences = append(differences, Difference{
+			Type:        MessageCommentDifference,
+			Description: desc,
+			Value1:      msg1.Comment,
+			Value2:      msg2.Comment,
 		})
 	}
 

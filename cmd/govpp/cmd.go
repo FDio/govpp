@@ -31,20 +31,24 @@ const logo = `
 `
 
 func Execute() {
-	root := newRootCmd()
+	cli, err := NewCli()
+	if err != nil {
+		logrus.Fatalf("CLI init error: %v", err)
+	}
+	root := newRootCmd(cli)
 
 	if err := root.Execute(); err != nil {
 		logrus.Fatalf("ERROR: %v", err)
 	}
 }
 
-func newRootCmd() *cobra.Command {
+func newRootCmd(cli Cli) *cobra.Command {
 	var (
 		glob GlobalOptions
 	)
 	cmd := &cobra.Command{
-		Use:               "govpp [options] command",
-		Short:             "GoVPP CLI app",
+		Use:               "govpp [OPTIONS] COMMAND",
+		Short:             "GoVPP CLI",
 		Long:              color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()),
 		Version:           version.String(),
 		SilenceUsage:      true,
@@ -52,7 +56,7 @@ func newRootCmd() *cobra.Command {
 		TraverseChildren:  true,
 		CompletionOptions: cobra.CompletionOptions{HiddenDefaultCmd: true},
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			InitOptions(&glob)
+			InitOptions(cli, &glob)
 			logrus.Tracef("global options: %+v", glob)
 
 			logrus.Tracef("args: %+v", args)
@@ -68,10 +72,10 @@ func newRootCmd() *cobra.Command {
 	glob.InstallFlags(cmd.PersistentFlags())
 
 	cmd.AddCommand(
-		newGenerateCmd(),
-		newVppapiCmd(),
-		newHttpCmd(),
-		newCliCommand(),
+		newGenerateCmd(cli),
+		newVppapiCmd(cli),
+		newHttpCmd(cli),
+		newCliCommand(cli),
 	)
 
 	cmd.InitDefaultVersionFlag()
