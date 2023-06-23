@@ -57,10 +57,10 @@ func NewTrace(c *Connection, size int) (t *Trace) {
 				return
 			}
 			if t.index < len(t.records) {
-				t.RLock()
+				t.Lock()
 				t.records[t.index] = record
 				t.index++
-				t.RUnlock()
+				t.Unlock()
 			}
 			t.wg.Done()
 		}
@@ -69,13 +69,13 @@ func NewTrace(c *Connection, size int) (t *Trace) {
 }
 
 func (t *Trace) GetRecords() (list []*api.Record) {
+	list = make([]*api.Record, t.index)
 	// it is supposed to wait until all API messages sent to the
 	// buffer are processed before returning the list
 	t.wg.Wait()
-	t.Lock()
-	list = make([]*api.Record, t.index)
+	t.RLock()
 	copy(list, t.records[:t.index])
-	t.Unlock()
+	t.RUnlock()
 	sort.Slice(list, func(i, j int) bool {
 		return list[i].Timestamp.Before(list[j].Timestamp)
 	})
