@@ -32,8 +32,8 @@ import (
 )
 
 // TODO:
-// - add option to allow connecting via CLI socket
-// - try several ways to connect to VPP if not specified
+//  - add option to allow connecting via CLI socket
+//  - try several ways to connect to VPP if not specified
 
 const exampleCliCommand = `
   # Execute 'show version' command

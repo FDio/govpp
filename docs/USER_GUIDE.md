@@ -1,8 +1,10 @@
 # GoVPP User Guide
 
-This section contains reference documentation for working with GoVPP client, binary API generator as well as some reference documentation for Protocol Buffers itself. 
+This section contains reference documentation for working with GoVPP, generating VPP binary API bindings, calling VPP API, retrieving VPP Stats data and other GoVPP features.
 
-### Table of Contents
+---
+
+**Table of Contents**
 
 * [Binary API Generator](#binary-api-generator)
     * [Installation](#installation)
@@ -34,13 +36,13 @@ The binary API generator's purpose is to generate Go code bindings for the VPP A
 Install binapi-generator into `$GOPATH/bin` (defaults to: `$HOME/go/bin`) using the Go toolchain:
 
 ```sh
-// Latest release
+# Latest release
 go install go.fd.io/govpp/cmd/binapi-generator@latest
 
-// Specific version
+# Specific version
 go install go.fd.io/govpp/cmd/binapi-generator@v0.7.0
 
-// Development branch
+# Development branch
 go install go.fd.io/govpp/cmd/binapi-generator@master
 ```
 
@@ -50,7 +52,7 @@ go install go.fd.io/govpp/cmd/binapi-generator@master
 Print the version for the installed binapi-generator:
 
 ```sh
-binapi-generator -version
+$ binapi-generator -version
 govpp v0.8.0-dev
 ```
 
@@ -221,7 +223,9 @@ The single request procedure requires the user to convert the generic reply (the
 reply type.
 
 ```go
-req := &interfaces.CreateLoopback{} // fill with data
+req := &interfaces.CreateLoopback{
+   // fill with data
+}
 if err := stream.SendMsg(req); err != nil {
   // handle error
 }
@@ -235,7 +239,9 @@ reply := replyMsg.(*interfaces.CreateLoopbackReply)
 The simpler way is to use the `Invoke()` method, which does the same procedure as above.
 
 ```go
-req := &interfaces.CreateLoopback{} // fill with data
+req := &interfaces.CreateLoopback{
+   // fill with data
+}
 var reply interfaces.CreateLoopbackReply
 err := c.conn.Invoke(context.Background(), req, &reply)
 if err != nil {
@@ -581,4 +587,3 @@ if err := client.UpdateDir(dir); err != nil {
    // handle error
 }
 ```
-

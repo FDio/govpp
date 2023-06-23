@@ -3,9 +3,10 @@
 </h1>
 
 <p align="center">
-	<a href="https://github.com/FDio/govpp/actions/workflows/ci.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/ci.yaml/badge.svg" alt="CI"></a>
 	<a href="https://github.com/FDio/govpp/tags"><img src="https://img.shields.io/github/v/tag/fdio/govpp?label=latest&logo=github&sort=semver&color=blue" alt="Latest"></a>
 	<a href="https://pkg.go.dev/go.fd.io/govpp"><img src="https://pkg.go.dev/badge/go.fd.io/govpp" alt="PkgGoDev"></a>
+	<a href="https://github.com/FDio/govpp/actions/workflows/ci.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/ci.yaml/badge.svg" alt="CI"></a>
+	<a href="https://github.com/FDio/govpp/actions/workflows/test.yaml"><img src="https://github.com/FDio/govpp/actions/workflows/test.yaml/badge.svg" alt="Test"></a>
 </p>
 
 The GoVPP repository contains Go client libraries, code bindings generator and other toolings for VPP.

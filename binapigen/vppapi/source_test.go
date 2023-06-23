@@ -26,23 +26,23 @@ func TestParseInput(t *testing.T) {
 	tests := []struct {
 		name      string
 		args      args
-		want      *Input
+		want      *InputRef
 		wantErr   bool
 		pre, post func()
 	}{
 		{
 			name: "local dir",
 			args: args{"/usr/share/vpp/api"},
-			want: &Input{
-				Format: "dir",
+			want: &InputRef{
+				Format: FormatDir,
 				Path:   "/usr/share/vpp/api",
 			},
 		},
 		{
 			name: "git repo",
 			args: args{".git#branch=master"},
-			want: &Input{
-				Format: "git",
+			want: &InputRef{
+				Format: FormatGit,
 				Path:   ".git",
 				Options: map[string]string{
 					"branch": "master",
@@ -52,43 +52,51 @@ func TestParseInput(t *testing.T) {
 		{
 			name: "archive",
 			args: args{"input.tar.gz"},
-			want: &Input{
-				Format: "tar",
+			want: &InputRef{
+				Format: FormatTar,
 				Path:   "input.tar.gz",
 			},
 		},
 		{
 			name: "remote archive",
 			args: args{"https://example.com/input.tar.gz"},
-			want: &Input{
-				Format: "tar",
+			want: &InputRef{
+				Format: FormatTar,
 				Path:   "https://example.com/input.tar.gz",
 			},
 		},
 		{
 			name: "remote repo",
 			args: args{"https://github.com/FDio/vpp.git"},
-			want: &Input{
-				Format: "git",
+			want: &InputRef{
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp.git",
 			},
 		},
 		{
 			name: "no .git",
 			args: args{"https://github.com/FDio/vpp#format=git"},
-			want: &Input{
-				Format: "git",
+			want: &InputRef{
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp",
+			},
+		},
+		{
+			name: "git@xxx",
+			args: args{"git@github.com:FDio/vpp#format=git"},
+			want: &InputRef{
+				Format: FormatGit,
+				Path:   "git@github.com:FDio/vpp",
 			},
 		},
 		{
 			name: "git tag",
 			args: args{"https://github.com/FDio/vpp.git#tag=v23.02"},
-			want: &Input{
-				Format: "git",
+			want: &InputRef{
+				Format: FormatGit,
 				Path:   "https://github.com/FDio/vpp.git",
 				Options: map[string]string{
-					"tag": "v23.02",
+					OptionGitTag: "v23.02",
 				},
 			},
 		},
@@ -105,7 +113,7 @@ func TestParseInput(t *testing.T) {
 				tt.want.Options = map[string]string{}
 			}
 
-			got, err := ParseInput(tt.args.input)
+			got, err := ParseInputRef(tt.args.input)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("ResolveVppInput() error = %v, wantErr %v", err, tt.wantErr)
 				return

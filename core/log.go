@@ -7,9 +7,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+const (
+	DebugEnvVar = "DEBUG_GOVPP"
+
+	debugOptMsgId    = "msgid"
+	debugOptChannels = "channels"
+)
+
 var (
-	debug       = os.Getenv("DEBUG_GOVPP") != ""
-	debugMsgIDs = strings.Contains(os.Getenv("DEBUG_GOVPP"), "msgid")
+	debugOn  = os.Getenv(DebugEnvVar) != ""
+	debugMap = initDebugMap(os.Getenv(DebugEnvVar))
 
 	log = logrus.New()
 )
@@ -19,10 +26,41 @@ func init() {
 	log.Formatter = &logrus.TextFormatter{
 		EnvironmentOverrideColors: true,
 	}
-	if debug {
+	if debugOn {
 		log.Level = logrus.DebugLevel
-		log.Debugf("govpp: debug level enabled")
+		log.Debugf("govpp: debug enabled %+v", debugMap)
 	}
+}
+
+func isDebugOn(u string) bool {
+	_, ok := debugMap[u]
+	return ok
+}
+
+func initDebugMap(s string) map[string]string {
+	debugMap := make(map[string]string)
+	for _, p := range splitString(s) {
+		var key, val string
+		kv := strings.SplitN(p, "=", 2)
+		key = kv[0]
+		if len(kv) > 1 {
+			val = kv[1]
+		} else {
+			val = "true"
+		}
+		debugMap[key] = val
+	}
+	return debugMap
+}
+
+func splitString(s string) []string {
+	return strings.FieldsFunc(s, func(c rune) bool {
+		switch c {
+		case ';', ',', ' ':
+			return true
+		}
+		return false
+	})
 }
 
 // SetLogger sets global logger to l.

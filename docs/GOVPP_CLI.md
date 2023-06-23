@@ -74,12 +74,6 @@ Flags:
 Use "govpp [command] --help" for more information about a command.
 ```
 
-### Options
-
-```sh
-
-```
-
 ### Print VPP API contents
 
 The `vppapi` command allows you to print the VPP API files and their specific contents
@@ -124,8 +118,8 @@ govpp vppapi --show-message
 # Print VPP API services
 govpp vppapi --show-rpc
 
-# Print raw VPP API files
-govpp vppapi --show-rpc
+# Print raw VPP API file
+govpp vppapi --show-raw
 ```
 
 You can also use the `--include-fields` and `--include-imported` flags to include 
@@ -157,7 +151,7 @@ The `diff` command allows you to compare two VPP API schemas and lists the diffe
 Here's an example usage of the `diff` command:
 
 ```sh
-govpp diff ./vppapi2210 --against=./vppapi2302
+govpp diff ./vppapi2210 --against ./vppapi2302
 ```
 
 This command compares the VPP API schema from `vppapi2210` directory against the VPP API schema in `vppapi2302` and lists the differences between them. The output shows related information details for each difference.
@@ -167,3 +161,11 @@ You can use the `--help` flag to get more information about the available flags 
 > **Note**
 > The `--against` flag is required and should point to an input source for the schema to compare against.
 
+## Troubleshooting
+
+If you run into any problems when executing some commands, you can use the `--debug` option to increase log verbosity to help when debugging the issue.
+For the highest verbosity use `--log-level=trace`.
+
+
+> **Warning**
+> Be sure to open an issue on GitHub for any bug that you may encounter.

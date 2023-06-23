@@ -15,9 +15,10 @@
 package vppapi
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"fmt"
 	"io"
-	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -26,72 +27,55 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// VppInput defines VPP input parameters for the Generator.
+// ResolveVppInput parses an input string and returns VppInput or an error if a problem
+// occurs durig parsing. The input string consists of path, which can be followed
+// by '#' and one or more options separated by comma. The actual format can be
+// specified explicitely by an option 'format', if that is not the case then the
+// format will be detected from path automatically if possible.
+//
+// - `path`
+// - `path#option1=val,option2=val`
+//
+// Available formats:
+//
+// * Directory: `dir`
+//   - absolute: `/usr/share/vpp/api`
+//   - relative: `path/to/apidir`
+//
+// * Git repository: `git`
+//   - local repository: `.git`
+//   - remote repository: `https://github.com/FDio/vpp.git`
+//
+// * Tarball/Zip Archive (`tar`/`zip`)
+//   - local archive:  `api.tar.gz`
+//   - remote archive: `https://example.com/api.tar.gz`
+//   - standard input: `-`
+//
+// Format options:
+//
+// * Git repository
+//   - `branch`: name of branch
+//   - `tag`:    specific git tag
+//   - `ref`:    git reference
+//   - `depth`:  git depth
+//   - `subdir`: subdirectory to use as base directory
+//
+// * Tarball/ZIP Archive
+//   - `compression`: compression to use (`gzip`)
+//   - `subdir`:      subdirectory to use as base directory
+//   - 'strip':       strip first N directories, applied before `subdir`
+func ResolveVppInput(input string) (*VppInput, error) {
+	inputRef, err := ParseInputRef(input)
+	if err != nil {
+		return nil, err
+	}
+	return inputRef.Retrieve()
+}
+
+// VppInput defines VPP API input source.
 type VppInput struct {
 	ApiDirectory string
 	Schema       Schema
-}
-
-// ResolveVppInput resolves given input string into VppInput.
-//
-// Supported input formats are:
-//   - directory with API JSON files (e.g. `/usr/share/vpp/api/`)
-//   - local VPP repository (this will execute `make json-api-files`)
-//   - URL for VPP repository (or fork)
-func ResolveVppInput(input string) (*VppInput, error) {
-
-	vppInput := &VppInput{}
-
-	if input == "" {
-		input = DefaultDir
-		vppInput.ApiDirectory = DefaultDir
-	}
-
-	u, err := url.Parse(input)
-	if err != nil {
-		logrus.Tracef("VPP input %q is invalid: %v", input, err)
-		return nil, fmt.Errorf("invalid input: %w", err)
-	}
-
-	switch u.Scheme {
-	case "":
-		fallthrough // assume file by default
-
-	case "file":
-		info, err := os.Stat(input)
-		if err != nil {
-			return nil, fmt.Errorf("file error: %v", err)
-		} else {
-			if info.IsDir() {
-				return resolveVppInputFromDir(u.Path)
-			} else {
-				return nil, fmt.Errorf("files not supported")
-			}
-		}
-
-	case "http", "https":
-		fallthrough
-
-	case "git", "ssh":
-		commit := u.Fragment
-		if commit == "" {
-			commit = "HEAD"
-		}
-
-		u.Fragment = ""
-		repo := u.String()
-
-		dir, err := checkoutRepoLocally(repo, commit)
-		if err != nil {
-			return nil, err
-		}
-
-		return resolveVppInputFromDir(dir)
-
-	default:
-		return nil, fmt.Errorf("unsupported scheme: %v", u.Scheme)
-	}
-
 }
 
 func resolveVppInputFromDir(path string) (*VppInput, error) {
@@ -118,9 +102,11 @@ func resolveVppInputFromDir(path string) (*VppInput, error) {
 	return vppInput, nil
 }
 
-const cacheDir = "./.cache"
+const (
+	cacheDir = "./.cache"
+)
 
-func checkoutRepoLocally(repo string, commit string /*, command string, args ...string*/) (string, error) {
+func cloneRepoLocally(repo string, commit string, depth int) (string, error) {
 	repoPath := strings.ReplaceAll(repo, "/", "_")
 	repoPath = strings.ReplaceAll(repoPath, ":", "_")
 	cachePath := filepath.Join(cacheDir, repoPath)
@@ -130,8 +116,14 @@ func checkoutRepoLocally(repo string, commit string /*, command string, args ...
 		if err := os.MkdirAll(cacheDir, 0755); err != nil {
 			return "", fmt.Errorf("failed to create cache directory: %w", err)
 		}
-		logrus.Debugf("Cloning repository %q", repo)
-		cmd := exec.Command("git", "clone", repo, cachePath)
+		logrus.Tracef("Cloning repository %q", repo)
+
+		var args []string
+		if depth > 0 {
+			args = append(args, fmt.Sprintf("--depth=%d", depth))
+		}
+		args = append(args, repo, cachePath)
+		cmd := exec.Command("git", append([]string{"clone"}, args...)...)
 		if output, err := cmd.CombinedOutput(); err != nil {
 			return "", fmt.Errorf("failed to clone repository: %w\nOutput: %s", err, output)
 		}
@@ -166,20 +158,74 @@ func resolveCommitHash(repoPath, ref string) (string, error) {
 	cmd := exec.Command("git", "rev-parse", "--verify", ref)
 	cmd.Dir = repoPath
 
-	output, err := cmd.StdoutPipe()
+	outputBytes, err := cmd.Output()
+	logrus.Tracef("command %q output: %s", cmd, outputBytes)
 	if err != nil {
-		return "", fmt.Errorf("failed to create output pipe: %w", err)
-	}
-	if err := cmd.Start(); err != nil {
-		return "", fmt.Errorf("failed to start command: %w", err)
-	}
-	outputBytes, err := io.ReadAll(output)
-	if err != nil {
-		return "", fmt.Errorf("failed to read output: %w", err)
-	}
-	if err := cmd.Wait(); err != nil {
 		return "", fmt.Errorf("failed to run command: %w", err)
 	}
 
 	return strings.TrimSpace(string(outputBytes)), nil
+}
+
+func extractTar(reader io.Reader, gzipped bool, strip int) (string, error) {
+	tempDir, err := os.MkdirTemp("", "govpp-vppapi-archive-")
+	if err != nil {
+		return "", err
+	}
+
+	if gzipped {
+		gzReader, err := gzip.NewReader(reader)
+		if err != nil {
+			return "", err
+		}
+		defer gzReader.Close()
+
+		reader = gzReader
+	}
+
+	tarReader := tar.NewReader(reader)
+	for {
+		header, err := tarReader.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return "", err
+		}
+
+		nameList := strings.Split(header.Name, "/")
+		if len(nameList) < strip {
+			return "", fmt.Errorf("cannot strip first %d directories for file: %s", strip, header.Name)
+		}
+		fileName := filepath.Join(nameList[strip:]...)
+		filePath := filepath.Join(tempDir, fileName)
+		fileInfo := header.FileInfo()
+
+		logrus.Tracef(" - extracting tar file: %s into: %s", header.Name, filePath)
+
+		if fileInfo.IsDir() {
+			err = os.MkdirAll(filePath, fileInfo.Mode())
+			if err != nil {
+				return "", err
+			}
+			continue
+		} else {
+			err = os.MkdirAll(filepath.Dir(filePath), 0750)
+			if err != nil {
+				return "", err
+			}
+		}
+		file, err := os.OpenFile(filePath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, fileInfo.Mode())
+		if err != nil {
+			return "", fmt.Errorf("open file error: %w", err)
+		}
+		_, err = io.Copy(file, tarReader)
+		if err != nil {
+			return "", fmt.Errorf("copy data error: %w", err)
+		}
+		if err := file.Close(); err != nil {
+			return "", fmt.Errorf("close file error: %w", err)
+		}
+	}
+	return tempDir, nil
 }

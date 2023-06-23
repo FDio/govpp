@@ -44,13 +44,14 @@ func main() {
 	var sync bool
 	var cnt int
 	var sock, prof string
-	var testV2 bool
+	var testV2, debugOn bool
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
 	flag.StringVar(&sock, "api-socket", socketclient.DefaultSocketName, "Path to VPP API socket")
 	flag.String("stats-socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
 	flag.StringVar(&prof, "prof", "", "enable profiling mode [mem, cpu]")
 	flag.BoolVar(&testV2, "v2", false, "Use test function v2")
+	flag.BoolVar(&debugOn, "debug", false, "Enable debug mode")
 	flag.Parse()
 
 	if cnt == 0 {
@@ -92,8 +93,10 @@ func main() {
 
 	ch.SetReplyTimeout(time.Second * 2)
 
-	// log only errors
-	core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
+	if !debugOn {
+		// log only errors
+		core.SetLogger(&logrus.Logger{Level: logrus.ErrorLevel})
+	}
 
 	// run the test & measure the time
 	start := time.Now()
@@ -202,6 +205,8 @@ func asyncTest2(conn api.Connection, cnt int) {
 		} else {
 			log.Fatalf("unexpected reply: %v", msg.GetMessageName())
 		}
-		ctx.Close()
+		if err := ctx.Close(); err != nil {
+			log.Fatalf("Stream.Close error: %v", err)
+		}
 	}
 }
