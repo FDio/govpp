@@ -30,7 +30,6 @@ import (
 )
 
 // TODO:
-// 	- exporting to archive (.tar.gz)
 //  - add option for exporting flat structure
 //  - embed VPP version into export somehow
 
@@ -38,25 +37,31 @@ type VppApiExportCmdOptions struct {
 	*VppApiCmdOptions
 
 	Output string
+	Targz  bool
 }
 
-func newVppApiExportCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
+func newVppApiExportCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
 		opts = VppApiExportCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:   "export [INPUT] -o OUTPUT",
-		Short: "Export VPP API files",
+		Use:   "export [INPUT] --output OUTPUT [--targz]",
+		Short: "Export VPP API",
 		Long:  "Export VPP API files from an input location to an output location.",
 		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
+			// auto-detect .tar.gz
+			if !cmd.Flags().Changed("targz") && strings.HasSuffix(opts.Output, ".tar.gz") {
+				opts.Targz = true
+			}
 			return runExportCmd(opts)
 		},
 	}
 
+	cmd.PersistentFlags().BoolVar(&opts.Targz, "targz", false, "Export to gzipped tarball")
 	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output directory for the exported files")
 	must(cobra.MarkFlagRequired(cmd.PersistentFlags(), "output"))
 
@@ -70,22 +75,43 @@ func runExportCmd(opts VppApiExportCmdOptions) error {
 	}
 
 	// collect files from input
-	logrus.Tracef("searching for files in API dir: %s", vppInput.ApiDirectory)
+	logrus.Tracef("collecting files for export in API dir: %s", vppInput.ApiDirectory)
 
 	files, err := vppapi.FindFiles(vppInput.ApiDirectory)
 	if err != nil {
 		return err
 	}
 
-	logrus.Debugf("found %d files in API dir %s", len(files), vppInput.ApiDirectory)
+	logrus.Debugf("exporting %d files", len(files))
 
-	if strings.HasSuffix(opts.Output, ".tar.gz") {
-		err = exportFilesToTarGz(opts.Output, files, vppInput.ApiDirectory)
+	if opts.Targz {
+		temp, err := os.MkdirTemp("", "govpp-vppapi-export-*")
+		if err != nil {
+			return fmt.Errorf("creating temp dir failed: %w", err)
+		}
+		tmpDir := filepath.Join(temp, "vppapi")
+		err = exportFilesToDir(tmpDir, files, vppInput)
+		if err != nil {
+			return fmt.Errorf("exporting to directory failed: %w", err)
+		}
+		var files2 = []string{filepath.Join(tmpDir, "VPP_VERSION")}
+		for _, f := range files {
+			filerel, err := filepath.Rel(vppInput.ApiDirectory, f)
+			if err != nil {
+				filerel = strings.TrimPrefix(f, vppInput.ApiDirectory)
+			}
+			filename := filepath.Join(tmpDir, filerel)
+			files2 = append(files2, filename)
+		}
+		err = exportFilesToTarGz(opts.Output, files2, tmpDir)
+		if err != nil {
+			return fmt.Errorf("exporting to gzipped tarball failed: %w", err)
+		}
 	} else {
-		err = exportFilesToDir(opts.Output, files, vppInput.ApiDirectory)
-	}
-	if err != nil {
-		return fmt.Errorf("exporting failed: %w", err)
+		err = exportFilesToDir(opts.Output, files, vppInput)
+		if err != nil {
+			return fmt.Errorf("exporting failed: %w", err)
+		}
 	}
 
 	logrus.Debugf("exported %d files to %s", len(files), opts.Output)
@@ -93,8 +119,8 @@ func runExportCmd(opts VppApiExportCmdOptions) error {
 	return nil
 }
 
-func exportFilesToTarGz(outputFile string, files []string, apiDir string) error {
-	logrus.Tracef("exporting files into tarball archive: %s", outputFile)
+func exportFilesToTarGz(outputFile string, files []string, baseDir string) error {
+	logrus.Tracef("exporting %d files into tarball archive: %s", len(files), outputFile)
 
 	// create the output file for writing
 	fw, err := os.Create(outputFile)
@@ -132,7 +158,9 @@ func exportFilesToTarGz(outputFile string, files []string, apiDir string) error 
 		}
 
 		// update the name to correctly reflect the desired destination when untaring
-		header.Name = filepath.Join(filepath.Base(apiDir), strings.TrimPrefix(file, apiDir))
+		header.Name = strings.TrimPrefix(file, baseDir)
+
+		logrus.Tracef("- exporting file: %q to: %s", file, header.Name)
 
 		// write the header
 		if err := tw.WriteHeader(header); err != nil {
@@ -152,8 +180,10 @@ func exportFilesToTarGz(outputFile string, files []string, apiDir string) error 
 	return nil
 }
 
-func exportFilesToDir(outputDir string, files []string, apiDir string) error {
+func exportFilesToDir(outputDir string, files []string, vppInput *vppapi.VppInput) error {
 	logrus.Tracef("exporting files into directory: %s", outputDir)
+
+	apiDir := vppInput.ApiDirectory
 
 	// create the output directory for export
 	if err := os.Mkdir(outputDir, 0750); err != nil {
@@ -184,5 +214,13 @@ func exportFilesToDir(outputDir string, files []string, apiDir string) error {
 
 		logrus.Tracef("file %s exported (%d bytes) to %s", filerel, len(data), dir)
 	}
+
+	// write version
+	filename := filepath.Join(outputDir, "VPP_VERSION")
+	data := []byte(vppInput.Schema.Version)
+	if err := os.WriteFile(filename, data, 0660); err != nil {
+		return err
+	}
+
 	return nil
 }

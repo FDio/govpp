@@ -32,20 +32,21 @@ import (
 type VppApiDiffCmdOptions struct {
 	*VppApiCmdOptions
 
-	Against     string
-	Differences []string
+	Against      string
+	Differences  []string
+	CommentDiffs bool
 }
 
-func newVppApiDiffCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
+func newVppApiDiffCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
 		opts = VppApiDiffCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:     "diff INPUT --against=AGAINST",
+		Use:     "diff [INPUT] --against AGAINST [--differences DIFF]...",
 		Aliases: []string{"cmp", "compare"},
 		Short:   "Compare VPP API schemas",
 		Long:    "Compares two VPP API schemas and lists the differences.",
-		Args:    cobra.ExactArgs(1),
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
@@ -54,6 +55,7 @@ func newVppApiDiffCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		},
 	}
 
+	cmd.PersistentFlags().BoolVar(&opts.CommentDiffs, "comments", false, "Include message comment differences")
 	cmd.PersistentFlags().StringSliceVar(&opts.Differences, "differences", nil, "List only specific differences")
 	cmd.PersistentFlags().StringVar(&opts.Against, "against", "", "The VPP API schema to compare against.")
 	must(cobra.MarkFlagRequired(cmd.PersistentFlags(), "against"))
@@ -68,10 +70,6 @@ var (
 )
 
 func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
-	if opts.Format != "" {
-		color.Disable()
-	}
-
 	vppInput, err := resolveInput(opts.Input)
 	if err != nil {
 		return err
@@ -91,6 +89,16 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 	logrus.Tracef("comparing schemas:\n\tSCHEMA 1: %+v\n\tSCHEMA 2: %+v\n", schema1, schema2)
 
 	diffs := CompareSchemas(&schema1, &schema2)
+
+	if !opts.CommentDiffs {
+		var filtered []Difference
+		for _, diff := range diffs {
+			if diff.Type != MessageCommentDifference {
+				filtered = append(filtered, diff)
+			}
+		}
+		diffs = filtered
+	}
 
 	if len(opts.Differences) > 0 {
 		diffs, err = filterDiffs(diffs, opts.Differences)

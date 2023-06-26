@@ -16,7 +16,9 @@ package main
 
 import (
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 
@@ -72,7 +74,33 @@ func dirExists(dir ...string) bool {
 		if _, err := os.Stat(d); err != nil {
 			return false
 		}
-
 	}
 	return true
+}
+
+func filterFilesByPaths(allapifiles []vppapi.File, paths []string) []vppapi.File {
+	var apifiles []vppapi.File
+	if len(paths) == 0 {
+		return allapifiles
+	}
+	added := make(map[string]bool)
+	// filter files
+	for _, arg := range paths {
+		var found bool
+		for _, apifile := range allapifiles {
+			if added[apifile.Path] {
+				continue
+			}
+			dir, file := path.Split(apifile.Path)
+			if apifile.Name == strings.TrimSuffix(arg, ".api") || apifile.Path == arg || file == arg || path.Clean(dir) == arg {
+				apifiles = append(apifiles, apifile)
+				found = true
+				added[apifile.Path] = true
+			}
+		}
+		if !found {
+			logrus.Warnf("path %q did not match any file", arg)
+		}
+	}
+	return apifiles
 }

@@ -15,55 +15,95 @@
 package main
 
 import (
+	"fmt"
+
+	"github.com/gookit/color"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"go.fd.io/govpp/binapigen"
+	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 const exampleVppapi = `
- # Specify VPP API input source
- govpp vppapi --input=. COMMAND
- govpp vppapi --input=http://github.com/FDio/vpp.git COMMAND
- govpp vppapi --input=vppapi.tar.gz COMMAND
+  <gray># Specify input source of VPP API</>
+  govpp vppapi COMMAND [INPUT]
+  govpp vppapi COMMAND ./vpp
+  govpp vppapi COMMAND /usr/share/vpp/api
+  govpp vppapi COMMAND vppapi.tar.gz 
+  govpp vppapi COMMAND http://github.com/FDio/vpp.git
 
- # Browse VPP API files
- govpp vppapi --input=INPUT ls
- govpp vppapi --input=INPUT ls --show-messages
+  <gray># List VPP API contents</>
+  govpp vppapi ls [INPUT]
+  govpp vppapi ls --show-contents
 
- # Export VPP API files
- govpp vppapi --input=INPUT export --output=vppapi 
+  <gray># Export VPP API files</>
+  govpp vppapi export [INPUT] --output vppapi
+  govpp vppapi export [INPUT] --output vppapi.tar.gz
 
- # Lint VPP API
- govpp vppapi --input=INPUT lint
+  <gray># Lint VPP API definitions</>
+  govpp vppapi lint [INPUT]
 
- # Compare VPPPI schemas
- govpp vppapi -input=INPUT diff --against=http://github.com/FDio/vpp.git
+  <gray># Compare VPP API schemas</>
+  govpp vppapi diff [INPUT] --against http://github.com/FDio/vpp.git
 `
 
 type VppApiCmdOptions struct {
 	Input  string
+	Paths  []string
 	Format string
 }
 
-func newVppapiCmd() *cobra.Command {
+func newVppapiCmd(cli Cli) *cobra.Command {
 	var (
 		opts VppApiCmdOptions
 	)
 	cmd := &cobra.Command{
 		Use:              "vppapi",
 		Short:            "Manage VPP API",
-		Long:             "Manage VPP API development",
-		Example:          exampleVppapi,
+		Long:             "Manage VPP API development.",
+		Example:          color.Sprint(exampleVppapi),
 		TraverseChildren: true,
 	}
 
-	cmd.PersistentFlags().StringVar(&opts.Input, "input", opts.Input, "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
-	cmd.PersistentFlags().StringVar(&opts.Format, "format", "", "Output format (json, yaml, go-template..)")
+	cmd.PersistentFlags().StringSliceVar(&opts.Paths, "path", nil, "Limit to specific files or directories.\nFor example: \"vpe\" or \"core/\".")
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
 
 	cmd.AddCommand(
-		newVppApiLsCmd(&opts),
-		newVppApiExportCmd(&opts),
-		newVppApiDiffCmd(&opts),
-		newVppApiLintCmd(&opts),
+		newVppApiLsCmd(cli, &opts),
+		newVppApiExportCmd(cli, &opts),
+		newVppApiDiffCmd(cli, &opts),
+		newVppApiLintCmd(cli, &opts),
 	)
 
 	return cmd
+}
+
+func prepareVppApiFiles(allapifiles []vppapi.File, paths []string, includeImported, sortByName bool) ([]vppapi.File, error) {
+	// remove imported types
+	if !includeImported {
+		binapigen.SortFilesByImports(allapifiles)
+		for i, apifile := range allapifiles {
+			f := apifile
+			binapigen.RemoveImportedTypes(allapifiles, &f)
+			allapifiles[i] = f
+		}
+	}
+
+	apifiles := allapifiles
+
+	// filter files
+	if len(paths) > 0 {
+		apifiles = filterFilesByPaths(allapifiles, paths)
+		if len(apifiles) == 0 {
+			return nil, fmt.Errorf("no files matching: %q", paths)
+		}
+		logrus.Tracef("filter (%d paths) matched %d/%d files", len(paths), len(apifiles), len(allapifiles))
+	}
+
+	if sortByName {
+		binapigen.SortFilesByName(apifiles)
+	}
+
+	return apifiles, nil
 }

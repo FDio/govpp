@@ -59,7 +59,7 @@ type CliOptions struct {
 	Stdout io.Writer
 }
 
-func newCliCommand() *cobra.Command {
+func newCliCommand(Cli) *cobra.Command {
 	var (
 		opts = CliOptions{
 			ApiSocket: socketclient.DefaultSocketName,
