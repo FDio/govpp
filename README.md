@@ -15,14 +15,14 @@ The GoVPP repository contains Go client libraries, code bindings generator and o
 
 ## Features
 
-* 🆕 CLI app for interacting with VPP and managing VPP API development (see [GoVPP CLI](https://github.com/FDio/govpp/discussions/100))
+* 🆕 CLI app for interacting with VPP instance and development of VPP API (see [GoVPP CLI](https://github.com/FDio/govpp/blob/master/docs/GOVPP_CLI.md))
 * 🆕 Extendable code generator supporting custom plugins (see [Enhanced Generator](https://github.com/FDio/govpp/discussions/94))
 * 🆕 Generated RPC client code that handles all boilerplate (see [RPC Services](https://github.com/FDio/govpp/discussions/58))
-* Simple client API that does not rely on VPP API semantics (see [Stream API](https://github.com/FDio/govpp/discussions/43))
-* Generator of Go bindings for VPP API 
-* Go client library for VPP binary API & Stats API
-* Pure Go implementation of VPP binary API protocol
-* Efficient reader of VPP Stats data from shared memory
+* Simple VPP client API that is not dependent on any VPP API semantics (see [Stream API](https://github.com/FDio/govpp/discussions/43))
+* Generator of Go bindings for VPP API schema (see [Binapi Generator](https://github.com/FDio/govpp/blob/master/docs/USER_GUIDE.md#binary-api-generator))
+* Go client library for VPP binary API & Stats API (see [VPP API calls](https://github.com/FDio/govpp/blob/master/docs/USER_GUIDE.md#vpp-api-calls))
+* Pure Go implementation of VPP binary API protocol (see [socketclient](https://github.com/FDio/govpp/blob/master/adapter/socketclient/socketclient.go))
+* Efficient reader of VPP Stats data from shared memory (see [stats client example](https://github.com/FDio/govpp/tree/master/examples/stats-client))
 
 ## Quick Start
 
