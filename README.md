@@ -11,22 +11,25 @@
 
 The GoVPP repository contains Go client libraries, code bindings generator and other toolings for VPP.
 
-Here is a brief summary of features provided by GoVPP:
+---
 
-* Generator of Go bindings for VPP API
+## Features
+
+* 🆕 CLI app for interacting with VPP and managing VPP API development (see [GoVPP CLI](https://github.com/FDio/govpp/discussions/100))
+* 🆕 Extendable code generator supporting custom plugins (see [Enhanced Generator](https://github.com/FDio/govpp/discussions/94))
+* 🆕 Generated RPC client code that handles all boilerplate (see [RPC Services](https://github.com/FDio/govpp/discussions/58))
+* Simple client API that does not rely on VPP API semantics (see [Stream API](https://github.com/FDio/govpp/discussions/43))
+* Generator of Go bindings for VPP API 
 * Go client library for VPP binary API & Stats API
-* Extendable code generator supporting custom plugins
 * Pure Go implementation of VPP binary API protocol
 * Efficient reader of VPP Stats data from shared memory
-* Simple client API that does not rely on VPP API semantics
-* Generated RPC client code that handles all boilerplate
-* ..and much more!
-
----
 
 ## Quick Start
 
-Here is a code sample of an effortless way for calling the VPP API by using a generated RPC client.
+Here is a code sample of an effortless way for calling the VPP API services by using a generated RPC client.
+
+> **Note**
+> For extensive info about using generated RPC client , see [RPC Services](https://github.com/FDio/govpp/discussions/58)
 
 ```go
 // Connect to VPP API socket
@@ -47,23 +50,28 @@ if err != nil {
 log.Print("Version: ", reply.Version)
 ```
 
-See complete example in [examples/rpc-service](examples/rpc-service).
+See complete code for the example above: [examples/rpc-service](examples/rpc-service).
 
 ### Examples
 
-For all code examples demonstrating GoVPP features, please refer to the [examples](examples) directory.
+For complete code examples demonstrating vrious GoVPP features, please refer to the [examples](examples) directory.
 
 ## Documentation
 
-Refer to [User Guide](docs/USER_GUIDE.md) document for all the basics. If you run into issues or just need help debugging read our [Troubleshooting](docs/TROUBLESHOOTING.md) document.
+Refer to [User Guide](docs/USER_GUIDE.md) document for info about how to use GoVPP. 
+If you run into any issues or need some help with debugging GoVPP, read our [Troubleshooting](docs/TROUBLESHOOTING.md) document.
 
-Go reference is available at https://pkg.go.dev/go.fd.io/govpp. More documentation can be found under [docs](docs) directory.
+Go reference docs are available at [pkg.go.dev](https://pkg.go.dev/go.fd.io/govpp). 
+
+For other documentation refer to [docs](docs) directory.
 
 ## How to contribute?
 
-- Contribute code by submitting a [Pull Request](https://github.com/FDio/govpp/pulls).
-- Report bugs by opening an [Issue](https://github.com/FDio/govpp/issues).
-- Ask questions & open discussions by starting a [Discussion](https://github.com/FDio/govpp/discussions).
+Anyone insterested in GoVPP development is welcome to join our bi-weekly [📣 GoVPP Community Meeting](https://github.com/FDio/govpp/discussions/46), where we accept inputs from projects using GoVPP and have technical discussions about actual development.
+
+- **Contribute code**: submit a [Pull Request](https://github.com/FDio/govpp/pulls)
+- **Report bugs**: open an [Issue](https://github.com/FDio/govpp/issues)
+- **Ask questions**: start a [Discussion](https://github.com/FDio/govpp/discussions)
 
 ## Repository Structure
 
