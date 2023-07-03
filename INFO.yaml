@@ -5,7 +5,7 @@ project_category: ''
 lifecycle_state: 'Incubation'
 project_lead: &govpp_ptl
   name: 'Ondrej Fabry'
-  email: 'ofabry@cisco.com'
+  email: 'ondrej@fabry.dev'
   id: 'ondrej-fabry'
 primary_contact: *govpp_ptl
 issue_tracking:
