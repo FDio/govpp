@@ -16,12 +16,15 @@ package integration
 
 import (
 	"context"
+	"io"
 	"testing"
 
+	interfaces "go.fd.io/govpp/binapi/interface"
 	"go.fd.io/govpp/binapi/vpe"
 	"go.fd.io/govpp/test/vpptesting"
 )
 
+// TestVersion tests that getting VPP version works.
 func TestVersion(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
 
@@ -35,5 +38,54 @@ func TestVersion(t *testing.T) {
 	t.Logf("VPP version: %v", versionInfo.Version)
 	if versionInfo.Version == "" {
 		t.Fatal("expected VPP version to not be empty")
+	}
+}
+
+// TestInterfacesLoopback tests that creating a loopback interface works and returns
+// non-zero ID and that the interface will be listed in interface dump.
+func TestInterfacesLoopback(t *testing.T) {
+	test := vpptesting.SetupVPP(t)
+	ctx := context.Background()
+
+	ifacesRPC := interfaces.NewServiceClient(test.Conn)
+
+	// create loopback interface
+	reply, err := ifacesRPC.CreateLoopback(ctx, &interfaces.CreateLoopback{})
+	if err != nil {
+		t.Fatal("interfaces.CreateLoopback error:", err)
+	}
+	loopId := reply.SwIfIndex
+	t.Logf("loopback interface created (id: %v)", reply.SwIfIndex)
+
+	// list interfaces
+	stream, err := ifacesRPC.SwInterfaceDump(ctx, &interfaces.SwInterfaceDump{})
+	if err != nil {
+		t.Fatal("interfaces.SwInterfaceDump error:", err)
+	}
+
+	t.Log("Dumping interfaces")
+	foundLoop := false
+	numIfaces := 0
+	for {
+		iface, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Fatal("interfaces.SwInterfaceDump/Recv error:", err)
+		}
+		numIfaces++
+		t.Logf("- interface[%d]: %q\n", iface.SwIfIndex, iface.InterfaceName)
+		if iface.SwIfIndex == loopId {
+			foundLoop = true
+		}
+	}
+
+	// verify expected
+	if !foundLoop {
+		t.Fatalf("loopback interface (id: %v) not found", loopId)
+	}
+	if numIfaces != 2 {
+		t.Errorf("expected 2 interfaces in dump, got %d", numIfaces)
 	}
 }
