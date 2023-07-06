@@ -54,7 +54,7 @@ jobs:
       matrix:
         go: [ '1.20' ]
     env:
-      VERSION: v0.7.0
+      VERSION: v0.8.0
     name: check binapi
     runs-on: ubuntu-latest
     steps:
