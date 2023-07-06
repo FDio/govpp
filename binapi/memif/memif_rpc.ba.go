@@ -14,9 +14,11 @@ import (
 // RPCService defines RPC service memif.
 type RPCService interface {
 	MemifCreate(ctx context.Context, in *MemifCreate) (*MemifCreateReply, error)
+	MemifCreateV2(ctx context.Context, in *MemifCreateV2) (*MemifCreateV2Reply, error)
 	MemifDelete(ctx context.Context, in *MemifDelete) (*MemifDeleteReply, error)
 	MemifDump(ctx context.Context, in *MemifDump) (RPCService_MemifDumpClient, error)
 	MemifSocketFilenameAddDel(ctx context.Context, in *MemifSocketFilenameAddDel) (*MemifSocketFilenameAddDelReply, error)
+	MemifSocketFilenameAddDelV2(ctx context.Context, in *MemifSocketFilenameAddDelV2) (*MemifSocketFilenameAddDelV2Reply, error)
 	MemifSocketFilenameDump(ctx context.Context, in *MemifSocketFilenameDump) (RPCService_MemifSocketFilenameDumpClient, error)
 }
 
@@ -30,6 +32,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) MemifCreate(ctx context.Context, in *MemifCreate) (*MemifCreateReply, error) {
 	out := new(MemifCreateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) MemifCreateV2(ctx context.Context, in *MemifCreateV2) (*MemifCreateV2Reply, error) {
+	out := new(MemifCreateV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -91,6 +102,15 @@ func (c *serviceClient_MemifDumpClient) Recv() (*MemifDetails, error) {
 
 func (c *serviceClient) MemifSocketFilenameAddDel(ctx context.Context, in *MemifSocketFilenameAddDel) (*MemifSocketFilenameAddDelReply, error) {
 	out := new(MemifSocketFilenameAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) MemifSocketFilenameAddDelV2(ctx context.Context, in *MemifSocketFilenameAddDelV2) (*MemifSocketFilenameAddDelV2Reply, error) {
+	out := new(MemifSocketFilenameAddDelV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

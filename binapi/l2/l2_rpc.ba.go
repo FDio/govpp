@@ -17,6 +17,7 @@ type RPCService interface {
 	BdIPMacDump(ctx context.Context, in *BdIPMacDump) (RPCService_BdIPMacDumpClient, error)
 	BdIPMacFlush(ctx context.Context, in *BdIPMacFlush) (*BdIPMacFlushReply, error)
 	BridgeDomainAddDel(ctx context.Context, in *BridgeDomainAddDel) (*BridgeDomainAddDelReply, error)
+	BridgeDomainAddDelV2(ctx context.Context, in *BridgeDomainAddDelV2) (*BridgeDomainAddDelV2Reply, error)
 	BridgeDomainDump(ctx context.Context, in *BridgeDomainDump) (RPCService_BridgeDomainDumpClient, error)
 	BridgeDomainSetDefaultLearnLimit(ctx context.Context, in *BridgeDomainSetDefaultLearnLimit) (*BridgeDomainSetDefaultLearnLimitReply, error)
 	BridgeDomainSetLearnLimit(ctx context.Context, in *BridgeDomainSetLearnLimit) (*BridgeDomainSetLearnLimitReply, error)
@@ -116,6 +117,15 @@ func (c *serviceClient) BdIPMacFlush(ctx context.Context, in *BdIPMacFlush) (*Bd
 
 func (c *serviceClient) BridgeDomainAddDel(ctx context.Context, in *BridgeDomainAddDel) (*BridgeDomainAddDelReply, error) {
 	out := new(BridgeDomainAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) BridgeDomainAddDelV2(ctx context.Context, in *BridgeDomainAddDelV2) (*BridgeDomainAddDelV2Reply, error) {
+	out := new(BridgeDomainAddDelV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

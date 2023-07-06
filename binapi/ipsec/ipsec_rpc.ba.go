@@ -26,6 +26,7 @@ type RPCService interface {
 	IpsecSadEntryAddDelV2(ctx context.Context, in *IpsecSadEntryAddDelV2) (*IpsecSadEntryAddDelV2Reply, error)
 	IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadEntryAddDelV3) (*IpsecSadEntryAddDelV3Reply, error)
 	IpsecSadEntryDel(ctx context.Context, in *IpsecSadEntryDel) (*IpsecSadEntryDelReply, error)
+	IpsecSadEntryUpdate(ctx context.Context, in *IpsecSadEntryUpdate) (*IpsecSadEntryUpdateReply, error)
 	IpsecSelectBackend(ctx context.Context, in *IpsecSelectBackend) (*IpsecSelectBackendReply, error)
 	IpsecSetAsyncMode(ctx context.Context, in *IpsecSetAsyncMode) (*IpsecSetAsyncModeReply, error)
 	IpsecSpdAddDel(ctx context.Context, in *IpsecSpdAddDel) (*IpsecSpdAddDelReply, error)
@@ -327,6 +328,15 @@ func (c *serviceClient) IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadE
 
 func (c *serviceClient) IpsecSadEntryDel(ctx context.Context, in *IpsecSadEntryDel) (*IpsecSadEntryDelReply, error) {
 	out := new(IpsecSadEntryDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecSadEntryUpdate(ctx context.Context, in *IpsecSadEntryUpdate) (*IpsecSadEntryUpdateReply, error) {
+	out := new(IpsecSadEntryUpdateReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
