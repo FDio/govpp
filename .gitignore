@@ -12,6 +12,7 @@
 # cmd
 cmd/binapi-generator/binapi-generator
 cmd/vpp-proxy/vpp-proxy
+cmd/govpp/govpp
 
 # examples
 examples/api-trace/api-trace

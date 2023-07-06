@@ -14,6 +14,22 @@
 
 package main
 
+import (
+	"github.com/sirupsen/logrus"
+)
+
 func main() {
 	Execute()
+}
+
+func Execute() {
+	cli, err := NewCli()
+	if err != nil {
+		logrus.Fatalf("CLI init error: %v", err)
+	}
+	root := newRootCmd(cli)
+
+	if err := root.Execute(); err != nil {
+		logrus.Fatalf("ERROR: %v", err)
+	}
 }
