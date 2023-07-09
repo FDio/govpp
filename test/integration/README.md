@@ -31,7 +31,8 @@ make test-integration VPP_REPO=master
 The make target above simply runs a helper script which accepts additional arguments that are passed down directly to `go test ...`.
 
 ```shell
-./test/integration/run_integration.sh <ARGS>
+# Usage:
+#  ./test/integration/run_integration.sh <ARGS>
 
 # Run with verbose mode
 ./test/integration/run_integration.sh -test.v
