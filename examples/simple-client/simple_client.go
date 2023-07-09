@@ -64,10 +64,10 @@ func main() {
 	}
 	defer ch.Close()
 	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
-		log.Fatal(err)
+		log.Fatalf("compatibility check failed: %v", err)
 	}
 	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
-		log.Fatal(err)
+		log.Printf("compatibility check failed: %v", err)
 	}
 
 	// process errors encountered during the example

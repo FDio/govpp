@@ -235,7 +235,7 @@ func newBinapiVppCli(apiSock string) (*vppcliBinapi, error) {
 	defer ch.Close()
 
 	if err := ch.CheckCompatiblity(vlib.AllMessages()...); err != nil {
-		return nil, fmt.Errorf("incompatible VPP version: %w", err)
+		return nil, fmt.Errorf("compatibility check failed: %w", err)
 	}
 
 	cli := &vppcliBinapi{
