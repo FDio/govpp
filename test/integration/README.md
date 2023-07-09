@@ -14,13 +14,13 @@ The integration tests cases are grouped by files:
 
 The recommended way to run the integration tests is to use a self-contained testing environment, which is managed from a helper bash script [`run_integration.sh`](../run_integration.sh). The script will build a special Docker image that includes testing suite and other requirements (e.g. VPP, gotestsum..) and then will run the integration tests inside a container.
 
-```sh
+```shell
 make test-integration
 ```
 
 This will run the tests against latest VPP release by default. To run against specific VPP version, add `VPP_REPO=<REPO>` where `<REPO>` is name of VPP repostiroy on packagecloud.
 
-```
+```shell
 # Run against specific VPP version
 make test-integration VPP_REPO=2306
 
