@@ -17,6 +17,7 @@ type RPCService interface {
 	LbAddDelIntfNat4(ctx context.Context, in *LbAddDelIntfNat4) (*LbAddDelIntfNat4Reply, error)
 	LbAddDelIntfNat6(ctx context.Context, in *LbAddDelIntfNat6) (*LbAddDelIntfNat6Reply, error)
 	LbAddDelVip(ctx context.Context, in *LbAddDelVip) (*LbAddDelVipReply, error)
+	LbAddDelVipV2(ctx context.Context, in *LbAddDelVipV2) (*LbAddDelVipV2Reply, error)
 	LbAsDump(ctx context.Context, in *LbAsDump) (RPCService_LbAsDumpClient, error)
 	LbConf(ctx context.Context, in *LbConf) (*LbConfReply, error)
 	LbFlushVip(ctx context.Context, in *LbFlushVip) (*LbFlushVipReply, error)
@@ -60,6 +61,15 @@ func (c *serviceClient) LbAddDelIntfNat6(ctx context.Context, in *LbAddDelIntfNa
 
 func (c *serviceClient) LbAddDelVip(ctx context.Context, in *LbAddDelVip) (*LbAddDelVipReply, error) {
 	out := new(LbAddDelVipReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LbAddDelVipV2(ctx context.Context, in *LbAddDelVipV2) (*LbAddDelVipV2Reply, error) {
+	out := new(LbAddDelVipV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

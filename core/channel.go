@@ -195,6 +195,13 @@ func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
 	if len(comperr.IncompatibleMessages) == 0 {
 		return nil
 	}
+	if debugOn {
+		s := ""
+		for _, msg := range comperr.IncompatibleMessages {
+			s += fmt.Sprintf(" - %s\n", msg)
+		}
+		log.Debugf("ERROR: check compatibility: %v:\nIncompatible messages:\n%v", comperr, s)
+	}
 	return &comperr
 }
 
