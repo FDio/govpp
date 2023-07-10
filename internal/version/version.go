@@ -17,6 +17,7 @@ package version
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"strconv"
 	"time"
@@ -56,9 +57,27 @@ var (
 func init() {
 	buildstampInt64, _ := strconv.ParseInt(buildStamp, 10, 64)
 	if buildstampInt64 == 0 {
-		buildstampInt64 = time.Now().Unix()
+		modTime, _ := binaryModTime()
+		buildstampInt64 = modTime.Unix()
 	}
 	buildDate = time.Unix(buildstampInt64, 0)
+}
+
+func binaryModTime() (time.Time, error) {
+	// Get the path of the currently running binary
+	binaryPath, err := os.Executable()
+	if err != nil {
+		return time.Time{}, fmt.Errorf("unable to get current binary path: %w", err)
+	}
+
+	// Get the file info for the binary
+	fileInfo, err := os.Stat(binaryPath)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("unable to get file info for binary: %w", err)
+	}
+
+	// Return the modification time
+	return fileInfo.ModTime(), nil
 }
 
 func Version() string {
