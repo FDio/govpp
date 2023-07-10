@@ -423,12 +423,9 @@ func (c *serviceClient_SwInterfaceTxPlacementGetClient) Recv() (*SwInterfaceTxPl
 	case *SwInterfaceTxPlacementDetails:
 		return m, nil, nil
 	case *SwInterfaceTxPlacementGetReply:
-		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
-			return nil, nil, err
-		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, nil, err
+			return nil, m, err
 		}
 		return nil, m, io.EOF
 	default:

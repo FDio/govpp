@@ -104,12 +104,9 @@ func (c *serviceClient_PnatBindingsGetClient) Recv() (*PnatBindingsDetails, *Pna
 	case *PnatBindingsDetails:
 		return m, nil, nil
 	case *PnatBindingsGetReply:
-		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
-			return nil, nil, err
-		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, nil, err
+			return nil, m, err
 		}
 		return nil, m, io.EOF
 	default:
@@ -147,12 +144,9 @@ func (c *serviceClient_PnatInterfacesGetClient) Recv() (*PnatInterfacesDetails, 
 	case *PnatInterfacesDetails:
 		return m, nil, nil
 	case *PnatInterfacesGetReply:
-		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
-			return nil, nil, err
-		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, nil, err
+			return nil, m, err
 		}
 		return nil, m, io.EOF
 	default:

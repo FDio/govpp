@@ -167,24 +167,9 @@ func genService(g *GenFile, svc *Service) {
 				g.P("		return m, nil")
 			}
 			g.P("	case *", msgReply.GoIdent, ":")
-			if msgReply != msgControlPingReply {
-				if retvalField := getRetvalField(msgReply); retvalField != nil {
-					s := fmt.Sprint("(m.", retvalField.GoName, ")")
-					if fieldType := getFieldType(g, retvalField); fieldType != "int32" {
-						s = fmt.Sprint("(int32(m.", retvalField.GoName, "))")
-					}
-					g.P("if err := ", govppApiPkg.Ident("RetvalToVPPApiError"), s, "; err != nil {")
-					if msgReply != msgControlPingReply {
-						g.P("	return nil, nil, err")
-					} else {
-						g.P("	return nil, err")
-					}
-					g.P("}")
-				}
-			}
 			g.P("		err = c.Stream.Close()")
 			if msgReply != msgControlPingReply {
-				g.P("	if err != nil { return nil, nil, err }")
+				g.P("	if err != nil { return nil, m, err }")
 			} else {
 				g.P("	if err != nil { return nil, err }")
 			}
