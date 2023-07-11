@@ -26,25 +26,25 @@ import (
 )
 
 const exampleVppapi = `
-  <gray># Specify input source of VPP API</>
+  <note># Specify input source of VPP API</>
   govpp vppapi COMMAND [INPUT]
   govpp vppapi COMMAND ./vpp
   govpp vppapi COMMAND /usr/share/vpp/api
   govpp vppapi COMMAND vppapi.tar.gz 
   govpp vppapi COMMAND http://github.com/FDio/vpp.git
 
-  <gray># List VPP API contents</>
+  <note># List VPP API contents</>
   govpp vppapi ls [INPUT]
   govpp vppapi ls --show-contents
 
-  <gray># Export VPP API files</>
+  <note># Export VPP API files</>
   govpp vppapi export [INPUT] --output vppapi
   govpp vppapi export [INPUT] --output vppapi.tar.gz
 
-  <gray># Lint VPP API definitions</>
+  <note># Lint VPP API definitions</>
   govpp vppapi lint [INPUT]
 
-  <gray># Compare VPP API schemas</>
+  <note># Compare VPP API schemas</>
   govpp vppapi diff [INPUT] --against http://github.com/FDio/vpp.git
 `
 

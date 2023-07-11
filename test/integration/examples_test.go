@@ -36,7 +36,7 @@ func TestExamples(t *testing.T) {
 		})
 		return nil
 	}); err != nil {
-		t.Fatal(err)
+		t.Fatalf("walking examples dir error: %v", err)
 	}
 }
 
@@ -44,9 +44,10 @@ func testExample(t *testing.T, example string) {
 	vpptesting.SetupVPP(t)
 
 	cmd := exec.Command("go", "run", "./examples/"+example)
+	t.Logf("executing command '%v'", cmd)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		t.Fatalf("%s command failed: %+v\n%s", cmd, err, out)
+		t.Fatalf("example %s failed: command '%s' error: %+v\n%s", example, cmd, err, out)
 	}
-	t.Logf("out: %s", out)
+	t.Logf("example %s output: %s", example, out)
 }
