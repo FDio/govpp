@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service urpf.
 type RPCService interface {
 	UrpfUpdate(ctx context.Context, in *UrpfUpdate) (*UrpfUpdateReply, error)
+	UrpfUpdateV2(ctx context.Context, in *UrpfUpdateV2) (*UrpfUpdateV2Reply, error)
 }
 
 type serviceClient struct {
@@ -23,6 +24,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) UrpfUpdate(ctx context.Context, in *UrpfUpdate) (*UrpfUpdateReply, error) {
 	out := new(UrpfUpdateReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) UrpfUpdateV2(ctx context.Context, in *UrpfUpdateV2) (*UrpfUpdateV2Reply, error) {
+	out := new(UrpfUpdateV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

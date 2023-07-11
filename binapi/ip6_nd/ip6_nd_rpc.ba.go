@@ -18,6 +18,7 @@ type RPCService interface {
 	IP6ndProxyEnableDisable(ctx context.Context, in *IP6ndProxyEnableDisable) (*IP6ndProxyEnableDisableReply, error)
 	IP6ndSendRouterSolicitation(ctx context.Context, in *IP6ndSendRouterSolicitation) (*IP6ndSendRouterSolicitationReply, error)
 	SwInterfaceIP6ndRaConfig(ctx context.Context, in *SwInterfaceIP6ndRaConfig) (*SwInterfaceIP6ndRaConfigReply, error)
+	SwInterfaceIP6ndRaDump(ctx context.Context, in *SwInterfaceIP6ndRaDump) (RPCService_SwInterfaceIP6ndRaDumpClient, error)
 	SwInterfaceIP6ndRaPrefix(ctx context.Context, in *SwInterfaceIP6ndRaPrefix) (*SwInterfaceIP6ndRaPrefixReply, error)
 	WantIP6RaEvents(ctx context.Context, in *WantIP6RaEvents) (*WantIP6RaEventsReply, error)
 }
@@ -107,6 +108,49 @@ func (c *serviceClient) SwInterfaceIP6ndRaConfig(ctx context.Context, in *SwInte
 		return nil, err
 	}
 	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SwInterfaceIP6ndRaDump(ctx context.Context, in *SwInterfaceIP6ndRaDump) (RPCService_SwInterfaceIP6ndRaDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_SwInterfaceIP6ndRaDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_SwInterfaceIP6ndRaDumpClient interface {
+	Recv() (*SwInterfaceIP6ndRaDetails, error)
+	api.Stream
+}
+
+type serviceClient_SwInterfaceIP6ndRaDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_SwInterfaceIP6ndRaDumpClient) Recv() (*SwInterfaceIP6ndRaDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *SwInterfaceIP6ndRaDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) SwInterfaceIP6ndRaPrefix(ctx context.Context, in *SwInterfaceIP6ndRaPrefix) (*SwInterfaceIP6ndRaPrefixReply, error) {
