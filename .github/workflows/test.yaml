@@ -25,10 +25,10 @@ jobs:
       fail-fast: false
       matrix:
         version:
+          - 'master'
           - '2306'
           - '2302'
           - '2210'
-          - '2206'
 
     steps:
       - name: "Checkout"
