@@ -24,6 +24,8 @@ import (
 )
 
 func TestExamples(t *testing.T) {
+	skipTestIfGoNotInstalled(t)
+
 	if err := filepath.WalkDir("./examples", func(path string, d fs.DirEntry, err error) error {
 		if !d.IsDir() || filepath.Base(d.Name()) == "examples" {
 			return nil
