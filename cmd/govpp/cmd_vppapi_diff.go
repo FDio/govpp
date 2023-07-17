@@ -29,6 +29,11 @@ import (
 //  - table format for differences
 //  - option to exit with non-zero status on breaking changes
 
+const exampleVppApiDiffCommand = `
+  <note># Compare VPP API schemas</>
+  govpp vppapi diff . --against https://github.com/FDio/vpp
+`
+
 type VppApiDiffCmdOptions struct {
 	*VppApiCmdOptions
 
@@ -46,6 +51,7 @@ func newVppApiDiffCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		Aliases: []string{"cmp", "compare"},
 		Short:   "Compare VPP API schemas",
 		Long:    "Compares two VPP API schemas and lists the differences.",
+		Example: color.Sprint(exampleVppApiDiffCommand),
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {

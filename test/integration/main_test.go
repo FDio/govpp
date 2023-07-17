@@ -17,12 +17,28 @@
 package integration
 
 import (
+	"fmt"
 	"os"
+	"os/exec"
 	"testing"
 )
 
+var (
+	// IntegrationTestsActive is set to true if integration tests should run.
+	IntegrationTestsActive = os.Getenv("TEST") == "integration"
+)
+
 func TestMain(m *testing.M) {
-	if os.Getenv("TEST") == "integration" {
+	if IntegrationTestsActive {
 		os.Exit(m.Run())
+	}
+	fmt.Fprintf(os.Stderr, "integration tests are NOT enabled (set TEST='integration' to enable)\n")
+	os.Exit(0)
+}
+
+func skipTestIfGoNotInstalled(t *testing.T) {
+	_, err := exec.LookPath("go")
+	if err != nil {
+		t.Skipf("`go` command is not available, skipping test")
 	}
 }

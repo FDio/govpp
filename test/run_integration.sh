@@ -51,9 +51,10 @@ echo "--------------------------------------------------------------------------
 
 if docker run -i --privileged \
     -e TEST=integration \
-    -e DEBUG_GOVPP \
     -e CGO_ENABLED=0 \
+    -e DEBUG_GOVPP \
     -e GOTESTSUM_FORMAT \
+    -e CLICOLOR_FORCE \
     -v "$(cd "${SCRIPT_DIR}/.." && pwd)":/src \
     -w /src \
     "${imgtag}" gotestsum --raw-command -- go tool test2json -t -p integration ./test/integration.test -test.v ${args[@]:-}

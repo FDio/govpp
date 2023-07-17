@@ -21,7 +21,6 @@ type RPCService interface {
 	Nat44AddDelStaticMappingV2(ctx context.Context, in *Nat44AddDelStaticMappingV2) (*Nat44AddDelStaticMappingV2Reply, error)
 	Nat44AddressDump(ctx context.Context, in *Nat44AddressDump) (RPCService_Nat44AddressDumpClient, error)
 	Nat44DelSession(ctx context.Context, in *Nat44DelSession) (*Nat44DelSessionReply, error)
-	Nat44DelUser(ctx context.Context, in *Nat44DelUser) (*Nat44DelUserReply, error)
 	Nat44EdAddDelOutputInterface(ctx context.Context, in *Nat44EdAddDelOutputInterface) (*Nat44EdAddDelOutputInterfaceReply, error)
 	Nat44EdAddDelVrfRoute(ctx context.Context, in *Nat44EdAddDelVrfRoute) (*Nat44EdAddDelVrfRouteReply, error)
 	Nat44EdAddDelVrfTable(ctx context.Context, in *Nat44EdAddDelVrfTable) (*Nat44EdAddDelVrfTableReply, error)
@@ -30,6 +29,7 @@ type RPCService interface {
 	Nat44EdSetFqOptions(ctx context.Context, in *Nat44EdSetFqOptions) (*Nat44EdSetFqOptionsReply, error)
 	Nat44EdShowFqOptions(ctx context.Context, in *Nat44EdShowFqOptions) (*Nat44EdShowFqOptionsReply, error)
 	Nat44EdVrfTablesDump(ctx context.Context, in *Nat44EdVrfTablesDump) (RPCService_Nat44EdVrfTablesDumpClient, error)
+	Nat44EdVrfTablesV2Dump(ctx context.Context, in *Nat44EdVrfTablesV2Dump) (RPCService_Nat44EdVrfTablesV2DumpClient, error)
 	Nat44ForwardingEnableDisable(ctx context.Context, in *Nat44ForwardingEnableDisable) (*Nat44ForwardingEnableDisableReply, error)
 	Nat44IdentityMappingDump(ctx context.Context, in *Nat44IdentityMappingDump) (RPCService_Nat44IdentityMappingDumpClient, error)
 	Nat44InterfaceAddDelFeature(ctx context.Context, in *Nat44InterfaceAddDelFeature) (*Nat44InterfaceAddDelFeatureReply, error)
@@ -43,16 +43,9 @@ type RPCService interface {
 	Nat44UserDump(ctx context.Context, in *Nat44UserDump) (RPCService_Nat44UserDumpClient, error)
 	Nat44UserSessionDump(ctx context.Context, in *Nat44UserSessionDump) (RPCService_Nat44UserSessionDumpClient, error)
 	Nat44UserSessionV2Dump(ctx context.Context, in *Nat44UserSessionV2Dump) (RPCService_Nat44UserSessionV2DumpClient, error)
-	NatGetAddrAndPortAllocAlg(ctx context.Context, in *NatGetAddrAndPortAllocAlg) (*NatGetAddrAndPortAllocAlgReply, error)
+	Nat44UserSessionV3Dump(ctx context.Context, in *Nat44UserSessionV3Dump) (RPCService_Nat44UserSessionV3DumpClient, error)
 	NatGetMssClamping(ctx context.Context, in *NatGetMssClamping) (*NatGetMssClampingReply, error)
-	NatHaFlush(ctx context.Context, in *NatHaFlush) (*NatHaFlushReply, error)
-	NatHaGetFailover(ctx context.Context, in *NatHaGetFailover) (*NatHaGetFailoverReply, error)
-	NatHaGetListener(ctx context.Context, in *NatHaGetListener) (*NatHaGetListenerReply, error)
-	NatHaResync(ctx context.Context, in *NatHaResync) (*NatHaResyncReply, error)
-	NatHaSetFailover(ctx context.Context, in *NatHaSetFailover) (*NatHaSetFailoverReply, error)
-	NatHaSetListener(ctx context.Context, in *NatHaSetListener) (*NatHaSetListenerReply, error)
 	NatIpfixEnableDisable(ctx context.Context, in *NatIpfixEnableDisable) (*NatIpfixEnableDisableReply, error)
-	NatSetAddrAndPortAllocAlg(ctx context.Context, in *NatSetAddrAndPortAllocAlg) (*NatSetAddrAndPortAllocAlgReply, error)
 	NatSetMssClamping(ctx context.Context, in *NatSetMssClamping) (*NatSetMssClampingReply, error)
 	NatSetTimeouts(ctx context.Context, in *NatSetTimeouts) (*NatSetTimeoutsReply, error)
 	NatSetWorkers(ctx context.Context, in *NatSetWorkers) (*NatSetWorkersReply, error)
@@ -166,15 +159,6 @@ func (c *serviceClient_Nat44AddressDumpClient) Recv() (*Nat44AddressDetails, err
 
 func (c *serviceClient) Nat44DelSession(ctx context.Context, in *Nat44DelSession) (*Nat44DelSessionReply, error) {
 	out := new(Nat44DelSessionReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) Nat44DelUser(ctx context.Context, in *Nat44DelUser) (*Nat44DelUserReply, error) {
-	out := new(Nat44DelUserReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -307,6 +291,49 @@ func (c *serviceClient_Nat44EdVrfTablesDumpClient) Recv() (*Nat44EdVrfTablesDeta
 	}
 	switch m := msg.(type) {
 	case *Nat44EdVrfTablesDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) Nat44EdVrfTablesV2Dump(ctx context.Context, in *Nat44EdVrfTablesV2Dump) (RPCService_Nat44EdVrfTablesV2DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_Nat44EdVrfTablesV2DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_Nat44EdVrfTablesV2DumpClient interface {
+	Recv() (*Nat44EdVrfTablesV2Details, error)
+	api.Stream
+}
+
+type serviceClient_Nat44EdVrfTablesV2DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_Nat44EdVrfTablesV2DumpClient) Recv() (*Nat44EdVrfTablesV2Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *Nat44EdVrfTablesV2Details:
 		return m, nil
 	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()
@@ -708,13 +735,47 @@ func (c *serviceClient_Nat44UserSessionV2DumpClient) Recv() (*Nat44UserSessionV2
 	}
 }
 
-func (c *serviceClient) NatGetAddrAndPortAllocAlg(ctx context.Context, in *NatGetAddrAndPortAllocAlg) (*NatGetAddrAndPortAllocAlgReply, error) {
-	out := new(NatGetAddrAndPortAllocAlgReply)
-	err := c.conn.Invoke(ctx, in, out)
+func (c *serviceClient) Nat44UserSessionV3Dump(ctx context.Context, in *Nat44UserSessionV3Dump) (RPCService_Nat44UserSessionV3DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return out, api.RetvalToVPPApiError(out.Retval)
+	x := &serviceClient_Nat44UserSessionV3DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_Nat44UserSessionV3DumpClient interface {
+	Recv() (*Nat44UserSessionV3Details, error)
+	api.Stream
+}
+
+type serviceClient_Nat44UserSessionV3DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_Nat44UserSessionV3DumpClient) Recv() (*Nat44UserSessionV3Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *Nat44UserSessionV3Details:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) NatGetMssClamping(ctx context.Context, in *NatGetMssClamping) (*NatGetMssClampingReply, error) {
@@ -726,71 +787,8 @@ func (c *serviceClient) NatGetMssClamping(ctx context.Context, in *NatGetMssClam
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
-func (c *serviceClient) NatHaFlush(ctx context.Context, in *NatHaFlush) (*NatHaFlushReply, error) {
-	out := new(NatHaFlushReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatHaGetFailover(ctx context.Context, in *NatHaGetFailover) (*NatHaGetFailoverReply, error) {
-	out := new(NatHaGetFailoverReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatHaGetListener(ctx context.Context, in *NatHaGetListener) (*NatHaGetListenerReply, error) {
-	out := new(NatHaGetListenerReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatHaResync(ctx context.Context, in *NatHaResync) (*NatHaResyncReply, error) {
-	out := new(NatHaResyncReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatHaSetFailover(ctx context.Context, in *NatHaSetFailover) (*NatHaSetFailoverReply, error) {
-	out := new(NatHaSetFailoverReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatHaSetListener(ctx context.Context, in *NatHaSetListener) (*NatHaSetListenerReply, error) {
-	out := new(NatHaSetListenerReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
 func (c *serviceClient) NatIpfixEnableDisable(ctx context.Context, in *NatIpfixEnableDisable) (*NatIpfixEnableDisableReply, error) {
 	out := new(NatIpfixEnableDisableReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) NatSetAddrAndPortAllocAlg(ctx context.Context, in *NatSetAddrAndPortAllocAlg) (*NatSetAddrAndPortAllocAlgReply, error) {
-	out := new(NatSetAddrAndPortAllocAlgReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

@@ -182,10 +182,10 @@ func getAPIChannel(c api.ChannelProvider) (api.Channel, error) {
 		return nil, err
 	}
 	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("compatibility check failed: %w", err)
 	}
 	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
-		return nil, err
+		logInfo("compatibility check failed: %v", err)
 	}
 	return ch, nil
 }
