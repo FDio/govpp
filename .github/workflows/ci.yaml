@@ -23,10 +23,9 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v3
       - name: "Run YAML linter"
-        uses: karancode/yamllint-github-action@master
+        uses: ibiqlik/action-yamllint@v3
         with:
-          yamllint_file_or_dir: '.github/ci/yamllint.yml'
-          yamllint_strict: true
+          config_file: '.github/ci/yamllint.yml'
   
   go-mod:
     strategy:
