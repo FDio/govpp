@@ -1,4 +1,4 @@
-ARG VPP_VERSION=v21.06
+ARG VPP_VERSION=v23.06
 ARG UBUNTU_VERSION=20.04
 
 FROM ubuntu:${UBUNTU_VERSION} as vppbuild
@@ -24,7 +24,7 @@ RUN VPP_INSTALL_SKIP_SYSCTL=false apt install -f -y --no-install-recommends /vpp
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /pkg
 
-FROM golang:1.18-alpine3.15 as binapi-generator
+FROM golang:1.20-alpine3.18 as binapi-generator
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
 ENV GOBIN=/bin

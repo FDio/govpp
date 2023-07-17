@@ -8,8 +8,7 @@ on:
       - master
       - ci
   pull_request:
-  # Allows running this workflow manually
-  workflow_dispatch:
+  workflow_dispatch: # Allow running manually
 
 permissions:
   contents: read

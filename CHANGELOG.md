@@ -11,6 +11,45 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.8.0
+
+> _17 July 2023_
+
+### Changes
+
+- Add VPP 23.06 to CI  (#136)
+- Improvements for GoVPP CLI (#135)
+- Skip running CI tests for docs updates (#137)
+- binapigen: initial support for counters and paths (#121)
+- Refactor resolving VPP API input  (#130)
+- Update Dockerfile.integration (#134)
+- Add README for examples (#128)
+- Invalidate msgTable map during reconnect (#127)
+- Add more GoVPP CLI features (#117)
+- Update README.md (#115)
+- Generate message comments (#109)
+- Add User Guide (#110)
+- Enhancements for binapigen (#93)
+- Update Go and test if binapi is up-to-date (#105)
+- Create RELEASE document (#89)
+
+### Fixes
+
+- Fix returning message reply on retval errors (#147)
+- Fix memory leak for timers (#138)
+- Fix channel pool (#131)
+- Fix race in statsclient during reconnect (#126)
+- Fix memory leak with reply timers (#124)
+- Fix for Dockerfile smell DL3008 (#123)
+- Fix disconnect for AsyncConnect case (#106)
+- Fix binapi generation if old binapi files are not present (#73)
+
+### GoMemif
+
+- Fix memif abstract socket support (#119)
+- Handle EINTR error (#99)
+
+
 ## 0.7.0
 
 > _29 November 2022_
