@@ -327,9 +327,9 @@ func newMessage(gen *Generator, file *File, apitype vppapi.Message) *Message {
 	var n int
 	for _, fieldType := range apitype.Fields {
 		if n == 0 {
-			// skip header fields
 			switch strings.ToLower(fieldType.Name) {
 			case fieldMsgID, fieldClientIndex, fieldContext:
+				// skip header fields
 				continue
 			}
 		}

@@ -169,6 +169,21 @@ const (
 	INVALID_VALUE_3                    VPPApiError = -150
 	NON_ETHERNET                       VPPApiError = -151
 	BD_ALREADY_HAS_BVI                 VPPApiError = -152
+	INVALID_PROTOCOL                   VPPApiError = -153
+	INVALID_ALGORITHM                  VPPApiError = -154
+	RSRC_IN_USE                        VPPApiError = -155
+	KEY_LENGTH                         VPPApiError = -156
+	FIB_PATH_UNSUPPORTED_NH_PROTO      VPPApiError = -157
+	API_ENDIAN_FAILED                  VPPApiError = -159
+	NO_CHANGE                          VPPApiError = -160
+	MISSING_CERT_KEY                   VPPApiError = -161
+	LIMIT_EXCEEDED                     VPPApiError = -162
+	IKE_NO_PORT                        VPPApiError = -163
+	UDP_PORT_TAKEN                     VPPApiError = -164
+	EAGAIN                             VPPApiError = -165
+	INVALID_VALUE_4                    VPPApiError = -166
+	BUSY                               VPPApiError = -167
+	BUG                                VPPApiError = -168
 )
 
 var vppApiErrors = map[VPPApiError]string{
@@ -298,4 +313,19 @@ var vppApiErrors = map[VPPApiError]string{
 	INVALID_VALUE_3:                    "Invalid value #3",
 	NON_ETHERNET:                       "Interface is not an Ethernet interface",
 	BD_ALREADY_HAS_BVI:                 "Bridge domain already has a BVI interface",
+	INVALID_PROTOCOL:                   "Invalid Protocol",
+	INVALID_ALGORITHM:                  "Invalid Algorithm",
+	RSRC_IN_USE:                        "Resource In Use",
+	KEY_LENGTH:                         "invalid Key Length",
+	FIB_PATH_UNSUPPORTED_NH_PROTO:      "Unsupported FIB Path protocol",
+	API_ENDIAN_FAILED:                  "Endian mismatch detected",
+	NO_CHANGE:                          "No change in table",
+	MISSING_CERT_KEY:                   "Missing certifcate or key",
+	LIMIT_EXCEEDED:                     "limit exceeded",
+	IKE_NO_PORT:                        "port not managed by IKE",
+	UDP_PORT_TAKEN:                     "UDP port already taken",
+	EAGAIN:                             "Retry stream call with cursor",
+	INVALID_VALUE_4:                    "Invalid value #4",
+	BUSY:                               "Busy",
+	BUG:                                "Bug",
 }
