@@ -62,6 +62,9 @@ func (c *serviceClient_IpfixAllExporterGetClient) Recv() (*IpfixAllExporterDetai
 	case *IpfixAllExporterDetails:
 		return m, nil, nil
 	case *IpfixAllExporterGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, m, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, m, err

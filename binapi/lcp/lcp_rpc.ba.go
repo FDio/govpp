@@ -95,6 +95,9 @@ func (c *serviceClient_LcpItfPairGetClient) Recv() (*LcpItfPairDetails, *LcpItfP
 	case *LcpItfPairDetails:
 		return m, nil, nil
 	case *LcpItfPairGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, m, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, m, err

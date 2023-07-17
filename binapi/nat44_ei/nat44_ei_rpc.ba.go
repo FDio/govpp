@@ -478,6 +478,9 @@ func (c *serviceClient_Nat44EiOutputInterfaceGetClient) Recv() (*Nat44EiOutputIn
 	case *Nat44EiOutputInterfaceDetails:
 		return m, nil, nil
 	case *Nat44EiOutputInterfaceGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, m, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, m, err

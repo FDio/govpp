@@ -53,6 +53,9 @@ func (c *serviceClient_GraphNodeGetClient) Recv() (*GraphNodeDetails, *GraphNode
 	case *GraphNodeDetails:
 		return m, nil, nil
 	case *GraphNodeGetReply:
+		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			return nil, m, err
+		}
 		err = c.Stream.Close()
 		if err != nil {
 			return nil, m, err
