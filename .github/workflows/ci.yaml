@@ -65,7 +65,7 @@ jobs:
         uses: actions/checkout@v3
       - name: "Generate binapi"
         run: make gen-binapi-docker
-      - name: "Check go.mod"
+      - name: "Check binapi"
         run: |
           git diff --exit-code binapi
 
@@ -87,11 +87,11 @@ jobs:
           gotestsum_version: 1.9.0
       - name: "Checkout"
         uses: actions/checkout@v3
-      - name: "Build"
+      - name: "Go Build"
         run: go build -v ./...
-      - name: "Test"
+      - name: "Go Test"
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
-      - name: "Annotate tests"
+      - name: "Test results"
         if: always()
         uses: guyarb/golang-test-annotations@v0.6.0
         with:
