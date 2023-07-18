@@ -13,7 +13,7 @@ This file lists changes for the GoVPP releases.
 
 ## 0.8.0
 
-> _17 July 2023_
+> _18 July 2023_
 
 ### Changes
 
