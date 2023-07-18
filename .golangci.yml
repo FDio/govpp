@@ -1,14 +1,14 @@
 # Configuration of golangci-lint
-# 
+#
 # see docs: https://golangci-lint.run/usage/configuration/
 
+---
 run:
   timeout: 5m
   skip-dirs:
     - adapter/mock
   skip-files:
     - ".*\\.ba.\\.go$"
-
 
 linters:
   disable-all: true
