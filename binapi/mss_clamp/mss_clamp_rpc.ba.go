@@ -64,6 +64,7 @@ func (c *serviceClient_MssClampGetClient) Recv() (*MssClampDetails, *MssClampGet
 		return m, nil, nil
 	case *MssClampGetReply:
 		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			c.Stream.Close()
 			return nil, m, err
 		}
 		err = c.Stream.Close()

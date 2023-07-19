@@ -140,6 +140,7 @@ func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, *MapDomai
 		return m, nil, nil
 	case *MapDomainsGetReply:
 		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			c.Stream.Close()
 			return nil, m, err
 		}
 		err = c.Stream.Close()
