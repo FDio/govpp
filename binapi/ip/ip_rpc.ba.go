@@ -378,6 +378,7 @@ func (c *serviceClient_IPPathMtuGetClient) Recv() (*IPPathMtuDetails, *IPPathMtu
 		return m, nil, nil
 	case *IPPathMtuGetReply:
 		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			c.Stream.Close()
 			return nil, m, err
 		}
 		err = c.Stream.Close()

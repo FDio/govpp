@@ -170,6 +170,7 @@ func genService(g *GenFile, svc *Service) {
 			if msgReply != msgControlPingReply {
 				if retvalField := getRetvalField(msgReply); retvalField != nil {
 					g.P("if err := ", retvalFieldToErr(g, "m", retvalField), "; err != nil {")
+					g.P("	c.Stream.Close()")
 					if msgReply != msgControlPingReply {
 						g.P("	return nil, m, err")
 					} else {

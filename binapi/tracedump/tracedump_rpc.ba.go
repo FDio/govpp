@@ -87,6 +87,7 @@ func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, *TraceDumpReply, 
 		return m, nil, nil
 	case *TraceDumpReply:
 		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			c.Stream.Close()
 			return nil, m, err
 		}
 		err = c.Stream.Close()
