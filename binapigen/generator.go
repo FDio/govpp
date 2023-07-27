@@ -50,8 +50,6 @@ type Generator struct {
 	opts Options
 
 	vppapiSchema *vppapi.Schema
-	//apiFiles   []vppapi.File
-	//vppVersion string
 
 	Files       []*File
 	FilesByName map[string]*File

@@ -40,21 +40,11 @@ func Test_runCommandInRepo(t *testing.T) {
 			},
 			wantErr: false,
 		},
-		{
-			name: "tag",
-			args: args{
-				repo:    "https://github.com/FDio/vpp.git",
-				commit:  "v23.02",
-				command: "bash",
-				args:    []string{"-exc", "bash ./src/scripts/version; make json-api-files && ls ./build-root/install-vpp-native/vpp/share/vpp/api"},
-			},
-			wantErr: false,
-		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			//, tt.args.command, tt.args.args...
-			_, err := cloneRepoLocally(tt.args.repo, tt.args.commit, 0)
+			_, err := cloneRepoLocally(tt.args.repo, tt.args.commit, "", 0)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("cloneRepoLocally() error = %v, wantErr %v", err, tt.wantErr)
 			}

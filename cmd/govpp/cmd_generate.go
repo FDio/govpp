@@ -34,7 +34,7 @@ type GenerateOptions struct {
 	RunPlugins    []string
 }
 
-func newGenerateCmd() *cobra.Command {
+func newGenerateCmd(cli Cli) *cobra.Command {
 	var (
 		opts = GenerateOptions{
 			RunPlugins: []string{"rpc"},
@@ -44,6 +44,7 @@ func newGenerateCmd() *cobra.Command {
 		Use:     "generate [apifile...]",
 		Aliases: []string{"gen"},
 		Short:   "Generate code",
+		Long:    "Generates Go bindings for VPP API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.Input == "" {
 				opts.Input = detectVppApiInput()

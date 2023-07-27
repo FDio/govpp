@@ -18,14 +18,12 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 // TODO:
-//  - support file filter (include, exclude..)
 //  - consider adding categories for linter rules
 
 type VppApiLintCmdOptions struct {
@@ -37,23 +35,25 @@ type VppApiLintCmdOptions struct {
 	ListRules bool
 }
 
-func newVppApiLintCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
+func newVppApiLintCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 	var (
 		opts = VppApiLintCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:   "lint",
-		Short: "Lint VPP API files",
+		Use:   "lint [INPUT] [--rules RULE]...",
+		Short: "Lint VPP API",
 		Long:  "Run linter checks for VPP API files",
-		Args:  cobra.NoArgs,
+		Args:  cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) > 0 {
+				opts.Input = args[0]
+			}
 			return runVppApiLintCmd(cmd.OutOrStdout(), opts)
 		},
 	}
 
 	cmd.PersistentFlags().StringSliceVar(&opts.Rules, "rules", nil, "Limit to specific linter rules")
 	cmd.PersistentFlags().StringSliceVar(&opts.Except, "except", nil, "Skip specific linter rules.")
-	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "The format of the output")
 	cmd.PersistentFlags().BoolVar(&opts.ExitCode, "exit-code", false, "Exit with non-zero exit code if any issue is found")
 	cmd.PersistentFlags().BoolVar(&opts.ListRules, "list-rules", false, "List all known linter rules")
 
@@ -61,10 +61,6 @@ func newVppApiLintCmd(vppapiOpts *VppApiCmdOptions) *cobra.Command {
 }
 
 func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
-	if opts.Format != "" {
-		color.Disable()
-	}
-
 	if opts.ListRules {
 		rules := LintRules(defaultLintRules...)
 		if opts.Format == "" {
@@ -80,6 +76,15 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 		return err
 	}
 
+	schema := vppInput.Schema
+
+	// filter files
+	apifiles := filterFilesByPaths(schema.Files, opts.Paths)
+	if len(apifiles) == 0 {
+		return fmt.Errorf("filter matched no files")
+	}
+	logrus.Debugf("filtered %d/%d files", len(apifiles), len(schema.Files))
+
 	linter := NewLinter()
 
 	if len(opts.Rules) > 0 {
@@ -90,8 +95,6 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 		logrus.Debugf("disabling lint rules: %v", opts.Except)
 		linter.Disable(opts.Except...)
 	}
-
-	schema := vppInput.Schema
 
 	if err := linter.Lint(&schema); err != nil {
 		if errs, ok := err.(LintIssues); ok {

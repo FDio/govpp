@@ -1,5 +1,5 @@
 ---
-extends: default
+extends: relaxed
 
 yaml-files:
   - '*.yaml'

@@ -169,13 +169,10 @@ func genService(g *GenFile, svc *Service) {
 			g.P("	case *", msgReply.GoIdent, ":")
 			if msgReply != msgControlPingReply {
 				if retvalField := getRetvalField(msgReply); retvalField != nil {
-					s := fmt.Sprint("(m.", retvalField.GoName, ")")
-					if fieldType := getFieldType(g, retvalField); fieldType != "int32" {
-						s = fmt.Sprint("(int32(m.", retvalField.GoName, "))")
-					}
-					g.P("if err := ", govppApiPkg.Ident("RetvalToVPPApiError"), s, "; err != nil {")
+					g.P("if err := ", retvalFieldToErr(g, "m", retvalField), "; err != nil {")
+					g.P("	c.Stream.Close()")
 					if msgReply != msgControlPingReply {
-						g.P("	return nil, nil, err")
+						g.P("	return nil, m, err")
 					} else {
 						g.P("	return nil, err")
 					}
@@ -184,7 +181,7 @@ func genService(g *GenFile, svc *Service) {
 			}
 			g.P("		err = c.Stream.Close()")
 			if msgReply != msgControlPingReply {
-				g.P("	if err != nil { return nil, nil, err }")
+				g.P("	if err != nil { return nil, m, err }")
 			} else {
 				g.P("	if err != nil { return nil, err }")
 			}
@@ -205,15 +202,11 @@ func genService(g *GenFile, svc *Service) {
 			g.P("err := c.conn.Invoke(ctx, in, out)")
 			g.P("if err != nil { return nil, err }")
 			if retvalField := getRetvalField(rpc.MsgReply); retvalField != nil {
-				if fieldType := getFieldType(g, retvalField); fieldType == "int32" {
-					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(out.", retvalField.GoName, ")")
-				} else {
-					g.P("return out, ", govppApiPkg.Ident("RetvalToVPPApiError"), "(int32(out.", retvalField.GoName, "))")
-				}
+				g.P("return out, ", retvalFieldToErr(g, "out", retvalField))
 			} else {
 				g.P("return out, nil")
 			}
-		} else {
+		} else { // MsgReply == nil
 			g.P("stream, err := c.conn.NewStream(ctx)")
 			g.P("if err != nil { return err }")
 			g.P("err = stream.SendMsg(in)")
@@ -243,6 +236,14 @@ func genService(g *GenFile, svc *Service) {
 	  fmt.Fprintln(w, "}")*/
 
 	g.P()
+}
+
+func retvalFieldToErr(g *GenFile, varName string, retvalField *Field) string {
+	if getFieldType(g, retvalField) == "int32" {
+		return g.GoIdent(govppApiPkg.Ident("RetvalToVPPApiError")) + "(" + varName + "." + retvalField.GoName + ")"
+	} else {
+		return g.GoIdent(govppApiPkg.Ident("RetvalToVPPApiError")) + "(int32(" + varName + "." + retvalField.GoName + "))"
+	}
 }
 
 func rpcMethodSignature(g *GenFile, rpc *RPC) string {

@@ -184,6 +184,7 @@ func (c *Client) WaitReady() error {
 	}
 
 	timeout := time.NewTimer(MaxWaitReady)
+	defer timeout.Stop()
 	for {
 		select {
 		case <-timeout.C:
@@ -234,6 +235,7 @@ func waitForDir(dir string) error {
 	}
 
 	timeout := time.NewTimer(MaxWaitReady)
+	defer timeout.Stop()
 	for {
 		select {
 		case <-timeout.C:

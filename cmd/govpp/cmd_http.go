@@ -47,7 +47,7 @@ type HttpCmdOptions struct {
 	Address   string
 }
 
-func newHttpCmd() *cobra.Command {
+func newHttpCmd(Cli) *cobra.Command {
 	var opts = HttpCmdOptions{
 		ApiSocket: socketclient.DefaultSocketName,
 		Address:   DefaultHttpServiceAddress,
@@ -165,23 +165,6 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 		}
 	}
 }
-
-/*func showRPC(apifiles []*vppapi.File) {
-	for _, apifile := range apifiles {
-		fmt.Printf("%s.api\n", apifile.Name)
-		if apifile.Service == nil {
-			continue
-		}
-		for _, rpc := range apifile.Service.RPCs {
-			req := rpc.Request
-			reply := rpc.Reply
-			if rpc.Stream {
-				reply = "stream " + reply
-			}
-			fmt.Printf(" rpc (%s) --> (%s)\n", req, reply)
-		}
-	}
-}*/
 
 func apiFilesHandler(apifiles []vppapi.File) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, req *http.Request) {

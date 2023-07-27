@@ -55,6 +55,7 @@ type RPCService interface {
 	SetIPFlowHash(ctx context.Context, in *SetIPFlowHash) (*SetIPFlowHashReply, error)
 	SetIPFlowHashRouterID(ctx context.Context, in *SetIPFlowHashRouterID) (*SetIPFlowHashRouterIDReply, error)
 	SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2) (*SetIPFlowHashV2Reply, error)
+	SetIPFlowHashV3(ctx context.Context, in *SetIPFlowHashV3) (*SetIPFlowHashV3Reply, error)
 	SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error)
 	SwInterfaceIP6GetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6GetLinkLocalAddress) (*SwInterfaceIP6GetLinkLocalAddressReply, error)
 	SwInterfaceIP6SetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6SetLinkLocalAddress) (*SwInterfaceIP6SetLinkLocalAddressReply, error)
@@ -377,11 +378,12 @@ func (c *serviceClient_IPPathMtuGetClient) Recv() (*IPPathMtuDetails, *IPPathMtu
 		return m, nil, nil
 	case *IPPathMtuGetReply:
 		if err := api.RetvalToVPPApiError(m.Retval); err != nil {
-			return nil, nil, err
+			c.Stream.Close()
+			return nil, m, err
 		}
 		err = c.Stream.Close()
 		if err != nil {
-			return nil, nil, err
+			return nil, m, err
 		}
 		return nil, m, io.EOF
 	default:
@@ -881,6 +883,15 @@ func (c *serviceClient) SetIPFlowHashRouterID(ctx context.Context, in *SetIPFlow
 
 func (c *serviceClient) SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2) (*SetIPFlowHashV2Reply, error) {
 	out := new(SetIPFlowHashV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SetIPFlowHashV3(ctx context.Context, in *SetIPFlowHashV3) (*SetIPFlowHashV3Reply, error) {
+	out := new(SetIPFlowHashV3Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

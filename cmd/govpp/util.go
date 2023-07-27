@@ -16,11 +16,26 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/sirupsen/logrus"
 )
+
+const (
+	codeSuffix = "[0m"
+	codeExpr   = `(\\u001b|\033)\[[\d;?]+m`
+)
+
+var codeRegex = regexp.MustCompile(codeExpr)
+
+func clearColorCode(str string) string {
+	if !strings.Contains(str, codeSuffix) {
+		return str
+	}
+	return codeRegex.ReplaceAllString(str, "")
+}
 
 func mapStr(data map[string]string) string {
 	var str string

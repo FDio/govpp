@@ -23,61 +23,59 @@ import (
 )
 
 const logo = `
-<fg=lightCyan> _________     ___    _________________  </>
-<fg=lightCyan> __  ____/_______ |  / /__  __ \__  __ \ </>
-<fg=lightCyan> _  / __ _  __ \_ | / /__  /_/ /_  /_/ / </> <fg=blue;op=bold>%s</>
-<fg=lightCyan> / /_/ / / /_/ /_ |/ / _  ____/_  ____/  </> <lightBlue>%s</>
-<fg=lightCyan> \____/  \____/_____/  /_/     /_/       </> <blue>%s</>
+<fg=lightCyan;bg=black;op=bold>   ______         _    _  _____   _____   </>  <fg=lightWhite;op=bold>%s</>
+<fg=lightCyan;bg=black;op=bold>  |  ____  _____   \  /  |_____] |_____]  </>  <fg=lightBlue>%s</>
+<fg=lightCyan;bg=black;op=bold>  |_____| [_____]   \/   |       |        </>  <fg=blue>%s</>
+<fg=lightCyan;bg=black;op=bold>                                          </> 
 `
 
-func Execute() {
-	root := newRootCmd()
-
-	if err := root.Execute(); err != nil {
-		logrus.Fatalf("ERROR: %v", err)
-	}
-}
-
-func newRootCmd() *cobra.Command {
+func newRootCmd(cli Cli) *cobra.Command {
 	var (
 		glob GlobalOptions
 	)
+
 	cmd := &cobra.Command{
-		Use:               "govpp [options] command",
-		Short:             "GoVPP CLI app",
-		Long:              color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()),
-		Version:           version.String(),
-		SilenceUsage:      true,
-		SilenceErrors:     true,
-		TraverseChildren:  true,
-		CompletionOptions: cobra.CompletionOptions{HiddenDefaultCmd: true},
+		Use:     "govpp [OPTIONS] COMMAND",
+		Short:   "GoVPP CLI tool",
+		Long:    color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()),
+		Version: version.String(),
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			InitOptions(&glob)
+			InitOptions(cli, &glob)
 			logrus.Tracef("global options: %+v", glob)
-
 			logrus.Tracef("args: %+v", args)
-
 			return nil
+		},
+		SilenceUsage:     true,
+		SilenceErrors:    true,
+		TraverseChildren: true,
+		CompletionOptions: cobra.CompletionOptions{
+			HiddenDefaultCmd: true,
 		},
 	}
 
+	// Setup options
 	cmd.Flags().SortFlags = false
 	cmd.PersistentFlags().SortFlags = false
 
 	// Global options
 	glob.InstallFlags(cmd.PersistentFlags())
 
-	cmd.AddCommand(
-		newGenerateCmd(),
-		newVppapiCmd(),
-		newHttpCmd(),
-		newCliCommand(),
-	)
-
+	// Version option
 	cmd.InitDefaultVersionFlag()
+	cmd.Flags().Lookup("version").Shorthand = ""
+	// Help option
 	cmd.InitDefaultHelpFlag()
 	cmd.Flags().Lookup("help").Hidden = true
 
+	// Commands
+	cmd.AddCommand(
+		newGenerateCmd(cli),
+		newVppapiCmd(cli),
+		newHttpCmd(cli),
+		newCliCommand(cli),
+	)
+
+	// Help command
 	cmd.InitDefaultHelpCmd()
 	for _, c := range cmd.Commands() {
 		if c.Name() == "help" {

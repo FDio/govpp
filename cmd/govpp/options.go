@@ -39,7 +39,7 @@ func (glob *GlobalOptions) InstallFlags(flags *pflag.FlagSet) {
 	flags.StringVar(&glob.Color, "color", "", "Color mode; auto/always/never")
 }
 
-func InitOptions(opts *GlobalOptions) {
+func InitOptions(cli Cli, opts *GlobalOptions) {
 	// override
 	if opts.Color == "" && os.Getenv("NO_COLOR") != "" {
 		// https://no-color.org/
@@ -54,9 +54,9 @@ func InitOptions(opts *GlobalOptions) {
 
 	switch strings.ToLower(opts.Color) {
 	case "auto", "":
-		/*if !cli.Out().IsTerminal() {
+		if !cli.Out().IsTerminal() {
 			color.Disable()
-		}*/
+		}
 	case "on", "enabled", "always", "1", "true":
 		color.Enable = true
 	case "off", "disabled", "never", "0", "false":
@@ -78,7 +78,6 @@ func InitOptions(opts *GlobalOptions) {
 	} else if opts.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
 	} else {
-
 		logrus.SetLevel(defaultLogLevel)
 	}
 }

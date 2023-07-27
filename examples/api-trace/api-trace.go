@@ -20,6 +20,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
+
 	"go.fd.io/govpp"
 	"go.fd.io/govpp/adapter/socketclient"
 	"go.fd.io/govpp/api"
@@ -67,8 +69,14 @@ func singleChannel(conn *core.Connection, trace api.Trace) {
 	}
 	defer ch.Close()
 
-	if err := ch.CheckCompatiblity(append(vpe.AllMessages(), interfaces.AllMessages()...)...); err != nil {
-		log.Fatal(err)
+	fmt.Printf("=> Example 1\n\nEnabling API trace...\n")
+	conn.Trace().Enable(true)
+
+	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
+		log.Fatalf("compatibility check failed: %v", err)
+	}
+	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
+		log.Printf("compatibility check failed: %v", err)
 	}
 
 	// do some API calls

@@ -1,16 +1,20 @@
-# Troubleshooting guide
+# Troubleshooting Guide
 
-## Table of contents
+This document provides guidance for troubleshooting issues or any debugging for GoVPP.
 
-* [Enable debug logs](#enable-debug-logs)
-  + [core](#core)
-  + [msgid](#msgid)
-  + [socketclient](#socketclient)
-  + [msgtable](#msgtable)
-  + [statsclient](#statsclient)
-  + [proxy](#proxy)
-  + [Binapi generator debug logs](#binapi-generator-debug-logs)
-* [Connection problems](#connection-problems)
+---
+
+**Table of contents**
+
+* [Debug Logging](#debug-logging)
+  + [Enable Debug](#enable-debug)
+  + [Debug Components](#debug-components)
+    - [Debug Message IDs](#debug-message-ids)
+    - [Debug Socket Client](#debug-socket-client)
+    - [Debug Binapi Generator](#debug-binapi-generator)
+    - [Debug Stats Client](#debug-stats-client)
+    - [Debug Proxy](#debug-proxy)
+* [Connection Problems](#connection-problems)
   + [Socket file does not exist](#socket-file-does-not-exist)
   + [Connection refused](#connection-refused)
   + [Permission denied](#permission-denied)
@@ -18,88 +22,85 @@
 * [Problems with sending/receiving messages](#problems-with-sendingreceiving-messages)
   + [Unknown message error](#unknown-message-error)
   + [VPP not replying to some messages](#vpp-not-replying-to-some-messages)
-* [Message versioning, deprecated and in-progesss messages](#message-versioning-deprecated-and-in-progesss-messages)
-  + [Message versioning](#message-versioning)
+* [Message versioning](#message-versioning)
   + [Deprecated messages](#deprecated-messages)
   + [In-progress messages](#in-progress-messages)
 
 ---
 
-## Enable debug logs
+## Debug Logging
 
-This section describes how to increase log verbosity to enable debug logs of various GoVPP components.
+This section describes ways to enable debug logs for GoVPP and its components.
+Most of the debug logs is controlled via the environment variable `DEBUG_GOVPP`.
 
-### core
+### Enable Debug
 
-Set the environment variable `DEBUG_GOVPP` to any non-empty value.
+To enable debug logs for GoVPP core, set the environment variable `DEBUG_GOVPP` to a **non-empty value**.
 
-Example:
+```sh
+DEBUG_GOVPP=y ./app
 ```
-DEBUG_GOVPP=y ./bin/rpc-service
-```
 
-To verify that it works, check for the following line in the console output:
+The following line will be printed to _stderr_ output during program initialization:
+
 ```
 DEBU[0000] govpp: debug level enabled
 ```
 
-### msgid
+### Debug Components
 
-Assign value `msgid` to the variable `DEBUG_GOVPP`.
+The environment variable `DEBUG_GOVPP` can be used also to enable debug logs for other GoVPP components separately. 
 
-NOTE: To make msgid debugging work, you must also enable core debugging (in this case, it is enabled automatically, because `msgid` is a non-emtpy value).
+> **Note**
+> Multiple components can be enabled silmutaneously, by separating values with comma, e.g. `DEBUG_GOVPP=socketclient,msgtable`
 
-Example:
-```
-DEBUG_GOVPP=msgid ./bin/rpc-service
-```
+#### Debug Message IDs
 
-It should output lines similar to this:
+To enable debugging of message IDs, set `DEBUG_GOVPP=msgid`.
+
+*log output sample:*
 ```
 DEBU[0000] message "show_version" (show_version_51077d14) has ID: 1380
 ```
 
-### socketclient
+#### Debug Socket Client
 
-Assign value `socketclient` to the variable `DEBUG_GOVPP`.
+To debug `socketclient` package, set `DEBUG_GOVPP=socketclient`.
 
-Example:
-```
-DEBUG_GOVPP=socketclient ./bin/rpc-service
-```
-
-To verify that it works, check for the following line in the console output:
+*log output sample:*
 ```
 DEBU[0000] govpp: debug level enabled for socketclient
 ```
 
-### msgtable
+Additionally, to debug the message table retrieved upon connecting to socket, set `DEBUG_GOVPP=socketclient,msgtable`.
 
-Assign value `msgtable` to the variable `DEBUG_GOVPP`.
-
-NOTE: To make msgtable debugging work, you must also enable socketclient debugging.
-
-NOTE: To assign multiple values to a variable, you can separate the values with a colon.
-
-Example:
-```
-DEBUG_GOVPP=socketclient:msgtable ./bin/rpc-service
-```
-
-It should output lines similar to this:
+*log output sample:*
 ```
 DEBU[0000]  - 1380: "show_version_51077d14"              logger=govpp/socketclient
 ```
 
-### statsclient
+#### Debug Binapi Generator
 
-Set the environment variable `DEBUG_GOVPP_STATS` to any non-empty value.
+To enable the basic debug logs in the binapi generator, pass the flag `-debug` to the program.
 
-NOTE: statsclient debugging only works if package `go.fd.io/govpp/adapter/statsclient` is imported.
+Additionaly, to enable debug logs for the _parser_, assign value `DEBUG_GOVPP=parser` and
+to enable debug logs for the _generator_, set `DEBUG_GOVPP=binapigen`.
 
-Example:
+Examples:
+```bash
+# Enable debug logs
+./bin/binapi-generator -debug
+
+# Maximum verbosity
+DEBUG_GOVPP=parser,binapigen ./binapi-generator
 ```
-DEBUG_GOVPP_STATS=y ./bin/vpp-proxy server
+
+#### Debug Stats Client
+
+To enable debug logs for `statsclient` package, set `DEBUG_GOVPP_STATS` to a non-empty value.
+
+```sh
+DEBUG_GOVPP_STATS=y ./stats-client
 ```
 
 To verify that it works, check for the following line in the console output:
@@ -107,49 +108,28 @@ To verify that it works, check for the following line in the console output:
 DEBU[0000] govpp/statsclient: enabled debug mode
 ```
 
-### proxy
+#### Debug Proxy
 
-Set the environment variable `DEBUG_GOVPP_PROXY` to any non-empty value.
+To enable debug logs for `proxy` package, set `DEBUG_GOVPP_PROXY` to a non-empty value.
 
-NOTE: proxy debugging only works if package `go.fd.io/govpp/proxy` is imported.
-
-Example:
-```
-DEBUG_GOVPP_PROXY=y ./bin/vpp-proxy server
+```sh
+DEBUG_GOVPP_PROXY=y ./vpp-proxy server
 ```
 
 To verify that it works, check for the following line in the console output:
+
 ```
 DEBU[0000] govpp/proxy: debug mode enabled
 ```
 
-### Binapi generator debug logs
-
-You can enable logs separately for vppapi parser and for binapi generator. The binapi generator has two verbosity levels.
-
-To enable parser logs, assign value `parser` to the variable `DEBUG_GOVPP`.
-
-To enable the first verbosity level for generator, pass the flag `-debug` when invoking the generator binary.
-
-To enable the second verbosity level for generator, assign value `binapigen` to the variable `DEBUG_GOVPP`.
-
-Examples:
-```bash
-# first verbosity level for generator
-./bin/binapi-generator -debug
-# maximum logs for all components
-DEBUG_GOVPP=parser:binapigen ./bin/binapi-generator
-```
-
-
-
-## Connection problems
+## Connection Problems
 
 This section describes various problems when GoVPP tries to connect to VPP.
 
 ### Socket file does not exist
 
 **Symptoms**: You see the following error:
+
 ```
 ERROR: connecting to VPP failed: VPP API socket file /run/vpp/api.sock does not exist
 ```
@@ -189,6 +169,7 @@ ERROR: connecting to VPP failed: VPP API socket file /run/vpp/api.sock does not 
 ### Connection refused
 
 **Symptoms**: You see the following error:
+
 ```
 ERROR: connecting to VPP failed: dial unix /run/vpp/api.sock: connect: connection refused
 ```
@@ -200,6 +181,7 @@ ERROR: connecting to VPP failed: dial unix /run/vpp/api.sock: connect: connectio
 ### Permission denied
 
 **Symptoms**: You see the following error:
+
 ```
 ERROR: connecting to VPP failed: dial unix /run/vpp/api.sock: connect: permission denied
 ```
@@ -217,7 +199,6 @@ ERROR: connecting to VPP failed: dial unix /run/vpp/api.sock: connect: permissio
   (replace the `<ID>` with actual group ID; you can see the ID with `id -g`).
 
   - If you are running VPP inside Docker container, run the container as current user's group (but keep the user as root), for example `docker run -it -v /run/vpp:/run/vpp -u 0:$(id -g) ligato/vpp-base:22.10`. In this case, do NOT use the `unix { gid ... }` in `startup.conf`.
-
 - Run GoVPP with `sudo`.
 
 - Manually change permissions or ownership of the socket file.
@@ -231,9 +212,8 @@ ERROR: connecting to VPP failed: dial unix /run/vpp/api.sock: connect: permissio
 - Increase the interval between reconnects (the third argument, `interval`, of the `govpp.AsyncConnect` function).
 - Increase the timeout for waiting for the socket existence (variable `MaxWaitReady` in the file `adapter/socketclient/socketclient.go`).
 
-**NOTE**: The solutions apply only if you use the function `govpp.AsyncConnect`. If you instead use the function `govpp.Connect`, then GoVPP tries to connect immediately and only once, and if the socket does not exist, it immediately throws error. In this case, you have to ensure that the socket is ready before starting GoVPP.
-
-
+> **Note**
+> The solutions apply only if you use the function `govpp.AsyncConnect`. If you instead use the function `govpp.Connect`, then GoVPP tries to connect immediately and only once, and if the socket does not exist, it immediately throws error. In this case, you have to ensure that the socket is ready before starting GoVPP.
 
 ## Problems with sending/receiving messages
 
@@ -257,11 +237,7 @@ To solve it, you can try the following:
 - Check if the VPP is frozen or crashed.
 - Try sending the message with different values.
 
-
-
-## Message versioning, deprecated and in-progesss messages
-
-### Message versioning
+## Message versioning
 
 When a GoVPP's message is updated, the message itself is not changed. Instead, a new version of the message is added that has a `v2` (or `v3`, `v4`, ...) suffix to its name. The old version of the message is then marked as deprecated.
 
@@ -270,6 +246,7 @@ When a GoVPP's message is updated, the message itself is not changed. Instead, a
 If a message is marked as deprecated, it should no longer be used. The message works fine for now, but it may be removed in the future. When a message is deprecated, there is likely available a new version of the message or an another message with a similar behaviour which should be used instead. Also, if some message is not deprecated, but there already exists a new version of the message, the new version should be used, as the older version may soon become deprecated.
 
 For example, here is an excerpt from the file `binapi/vhost_user/vhost_user.ba.go` (as of 31-Oct-2022):
+
 ```go
 // CreateVhostUserIf defines message 'create_vhost_user_if'.
 // Deprecated: the message will be removed in the future versions
@@ -299,6 +276,7 @@ type CreateVhostUserIfV2Reply struct {
 	// ...
 }
 ```
+
 The messages `CreateVhostUserIf` and `CreateVhostUserIfReply` are deprecated and should not be used. Instead, there are new versions of the messages: `CreateVhostUserIfV2` and `CreateVhostUserIfV2Reply`, which should be used.
 
 ### In-progress messages
@@ -306,6 +284,7 @@ The messages `CreateVhostUserIf` and `CreateVhostUserIfReply` are deprecated and
 When a new message is added, usually it is initially experimental and is marked as in-progress. In this case, an older message should be preferrably used. Later, when the message will be considered stable, the in-progress label will be removed, the message will become recommended to use and the old message may become deprecated.
 
 For example, here is an excerpt from the file `binapi/ip/ip.ba.go` (as of 31-Oct-2022):
+
 ```go
 // IPRouteAddDel defines message 'ip_route_add_del'.
 type IPRouteAddDel struct {
@@ -335,4 +314,5 @@ type IPRouteAddDelV2Reply struct {
 	// ...
 }
 ```
+
 In this case, the messages `IPRouteAddDel` and `IPRouteAddDelReply` should be used; the messages `IPRouteAddDelV2` and `IPRouteAddDelV2Reply` are in-progress.

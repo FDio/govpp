@@ -22,6 +22,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -36,16 +37,16 @@ import (
 //  - try several ways to connect to VPP if not specified
 
 const exampleCliCommand = `
-  # Execute 'show version' command
+  <note># Execute 'show version' command</>
   govpp cli show version
 
-  # Enter REPL mode to send commands interactively
+  <note># Enter REPL mode to send commands interactively</>
   govpp cli
 
-  # Read CLI command(s) from stdin
+  <note># Read CLI command(s) from stdin</>
   echo "show errors" | govpp cli
 
-  # Execute commands and write output to file
+  <note># Execute commands and write output to file</>
   govpp cli -o cli.log show version
 `
 
@@ -59,7 +60,7 @@ type CliOptions struct {
 	Stdout io.Writer
 }
 
-func newCliCommand() *cobra.Command {
+func newCliCommand(Cli) *cobra.Command {
 	var (
 		opts = CliOptions{
 			ApiSocket: socketclient.DefaultSocketName,
@@ -70,7 +71,7 @@ func newCliCommand() *cobra.Command {
 		Aliases:               []string{"c"},
 		Short:                 "Send CLI via VPP API",
 		Long:                  "Send VPP CLI command(s) via VPP API",
-		Example:               exampleCliCommand,
+		Example:               color.Sprint(exampleCliCommand),
 		DisableFlagsInUseLine: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Stdin = cmd.InOrStdin()
@@ -235,7 +236,7 @@ func newBinapiVppCli(apiSock string) (*vppcliBinapi, error) {
 	defer ch.Close()
 
 	if err := ch.CheckCompatiblity(vlib.AllMessages()...); err != nil {
-		return nil, fmt.Errorf("incompatible VPP version: %w", err)
+		return nil, fmt.Errorf("compatibility check failed: %w", err)
 	}
 
 	cli := &vppcliBinapi{

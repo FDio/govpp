@@ -17,6 +17,7 @@ package version
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"strconv"
 	"time"
@@ -24,7 +25,7 @@ import (
 
 const (
 	Major      = 0
-	Minor      = 8
+	Minor      = 9
 	Patch      = 0
 	PreRelease = "dev"
 )
@@ -43,7 +44,7 @@ func String() string {
 // even with bare go build/install.
 var (
 	name       = "govpp"
-	version    = "v0.8.0-dev"
+	version    = "v0.9.0-dev"
 	commit     = "unknown"
 	branch     = "HEAD"
 	buildStamp = ""
@@ -56,9 +57,27 @@ var (
 func init() {
 	buildstampInt64, _ := strconv.ParseInt(buildStamp, 10, 64)
 	if buildstampInt64 == 0 {
-		buildstampInt64 = time.Now().Unix()
+		modTime, _ := binaryModTime()
+		buildstampInt64 = modTime.Unix()
 	}
 	buildDate = time.Unix(buildstampInt64, 0)
+}
+
+func binaryModTime() (time.Time, error) {
+	// Get the path of the currently running binary
+	binaryPath, err := os.Executable()
+	if err != nil {
+		return time.Time{}, fmt.Errorf("unable to get current binary path: %w", err)
+	}
+
+	// Get the file info for the binary
+	fileInfo, err := os.Stat(binaryPath)
+	if err != nil {
+		return time.Time{}, fmt.Errorf("unable to get file info for binary: %w", err)
+	}
+
+	// Return the modification time
+	return fileInfo.ModTime(), nil
 }
 
 func Version() string {

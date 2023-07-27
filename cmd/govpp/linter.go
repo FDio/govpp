@@ -42,7 +42,7 @@ type LintRule struct {
 	Id      string
 	Purpose string
 	//Categories []string
-	check func(schema *vppapi.Schema) error
+	check func(schema *vppapi.Schema) LintIssues
 }
 
 func LintRules(ids ...string) []*LintRule {
@@ -68,97 +68,117 @@ var lintRules = map[string]LintRule{
 	FILE_BASIC: {
 		Id:      FILE_BASIC,
 		Purpose: "File must have basic info defined",
-		check: checkFiles(func(file *vppapi.File) error {
-			var errs LintIssues
-			if file.CRC == "" {
-				errs = errs.Append(fmt.Errorf("file %s must have CRC defined", file.Name))
-			}
-			if file.Options != nil && file.Options[vppapi.OptFileVersion] == "" {
-				errs = errs.Append(fmt.Errorf("file %s must have version defined", file.Name))
-			}
-			return errs.ToErr()
-		}),
+		check:   checkFiles(checkFileBasic),
 	},
 	MESSAGE_DEPRECATE_OLDER_VERSIONS: {
 		Id:      MESSAGE_DEPRECATE_OLDER_VERSIONS,
 		Purpose: "Message should be marked as deprecated if newer version exists",
-		check: checkFiles(func(file *vppapi.File) error {
-			var errs LintIssues
-			messageVersions := extractFileMessageVersions(file)
-			versionMessages := extractMessageVersions(file)
-			for _, message := range file.Messages {
-				baseName, version := extractBaseNameAndVersion(message.Name)
-				// if this is not the latest version of a message
-				if version < messageVersions[baseName] {
-					var newer vppapi.Message
-					if vers, ok := versionMessages[baseName]; ok {
-						if newVer, ok := vers[version+1]; ok {
-							newer = newVer
-						}
-					}
-					// older messages should be marked as deprecated (if newer message version is not in progress)
-					if !isMessageDeprecated(message) && !isMessageInProgress(newer) {
-						errs = errs.Append(LintIssue{
-							File: file.Path,
-							// TODO: Line: ?,
-							Object: map[string]any{
-								"Message": message,
-								"Base":    baseName,
-								"Version": version,
-								"Latest":  messageVersions[baseName],
-							},
-							Violation: color.Sprintf("message %s has newer version available (%v) but is not marked as deprecated",
-								color.Cyan.Sprint(message.Name), color.Cyan.Sprint(newer.Name)),
-						})
-					}
-				}
-			}
-			return errs.ToErr()
-		}),
+		check:   checkFiles(checkFileMessageDeprecateOldVersions),
 	},
 	MESSAGE_SAME_STATUS: {
 		Id:      MESSAGE_SAME_STATUS,
 		Purpose: "Message request and reply must have the same status",
-		check: checkFiles(func(file *vppapi.File) error {
-			var errs LintIssues
-			for _, message := range file.Messages {
-				status := getMessageStatus(message)
-				related := getRelatedMessages(file, message.Name)
-				for _, rel := range related {
-					if relMsg, ok := getFileMessage(file, rel); ok {
-						if relStatus := getMessageStatus(relMsg); relStatus != status {
-							errs = errs.Append(LintIssue{
-								File: file.Path,
-								Object: map[string]any{
-									"Message":       message,
-									"Related":       relMsg,
-									"Status":        status,
-									"RelatedStatus": relStatus,
-								},
-								Violation: color.Sprintf("message %s does not have consistent status (%v) with related message: %v (%v)",
-									color.Cyan.Sprint(message.Name), clrWhite.Sprint(status), color.Cyan.Sprint(rel), clrWhite.Sprint(relStatus)),
-							})
-						}
-					}
-				}
-			}
-			return errs.ToErr()
-		}),
+		check:   checkFiles(checkFileMessageSameStatus),
 	},
 }
 
-func checkFiles(checkFn func(file *vppapi.File) error) func(*vppapi.Schema) error {
-	return func(schema *vppapi.Schema) error {
-		errs := LintIssues{}
+func checkFileBasic(file *vppapi.File) LintIssues {
+	var issues LintIssues
+	if file.CRC == "" {
+		issues = issues.Append(fmt.Errorf("file %s must have CRC defined", file.Name))
+	}
+	if file.Options != nil && file.Options[vppapi.OptFileVersion] == "" {
+		issues = issues.Append(fmt.Errorf("file %s must have version defined", file.Name))
+	}
+	return issues
+}
+
+func checkFileMessageDeprecateOldVersions(file *vppapi.File) LintIssues {
+	var issues LintIssues
+
+	messageVersions := extractFileMessageVersions(file)
+	versionMessages := extractMessageVersions(file)
+
+	for _, message := range file.Messages {
+		baseName, version := extractBaseNameAndVersion(message.Name)
+
+		// if this is not the latest version of a message
+		if version < messageVersions[baseName] {
+			var newer vppapi.Message
+			if vers, ok := versionMessages[baseName]; ok {
+				if newVer, ok := vers[version+1]; ok {
+					newer = newVer
+				}
+			}
+
+			// older messages should be marked as deprecated (if newer message version is not in progress)
+			if !isMessageDeprecated(message) && !isMessageInProgress(newer) {
+				issues = issues.Append(LintIssue{
+					File: file.Path,
+					// TODO: Line: ?,
+					Object: map[string]any{
+						"Message": message,
+						"Base":    baseName,
+						"Version": version,
+						"Latest":  messageVersions[baseName],
+					},
+					Violation: color.Sprintf("message %s has newer version available (%v) but is not marked as deprecated",
+						color.Cyan.Sprint(message.Name), color.Cyan.Sprint(newer.Name)),
+				})
+			}
+		}
+	}
+
+	return issues
+}
+
+func checkFileMessageSameStatus(file *vppapi.File) LintIssues {
+	var issues LintIssues
+
+	for _, message := range file.Messages {
+		status := getMessageStatus(message)
+		relatedMsgs := getRelatedMessages(file, message.Name)
+
+		for _, relatedMsg := range relatedMsgs {
+			relMsg, ok := getFileMessage(file, relatedMsg)
+			if !ok {
+				logrus.Warnf("could not find related message %s in file %s", relatedMsg, file.Path)
+				continue
+			}
+			if relStatus := getMessageStatus(relMsg); relStatus != status {
+				issues = issues.Append(LintIssue{
+					File: file.Path,
+					Object: map[string]any{
+						"Message":       message,
+						"Related":       relMsg,
+						"Status":        status,
+						"RelatedStatus": relStatus,
+					},
+					Violation: color.Sprintf("message %s does not have consistent status (%v) with related message: %v (%v)",
+						color.Cyan.Sprint(message.Name), clrWhite.Sprint(status), color.Cyan.Sprint(relatedMsg), clrWhite.Sprint(relStatus)),
+				})
+			}
+		}
+	}
+
+	return issues
+}
+
+func checkFiles(checkFn func(file *vppapi.File) LintIssues) func(*vppapi.Schema) LintIssues {
+	return func(schema *vppapi.Schema) LintIssues {
+		var issues LintIssues
+
 		logrus.Tracef("running checkFiles for %d files", len(schema.Files))
+
 		for _, file := range schema.Files {
 			e := checkFn(&file)
 			if e != nil {
 				logrus.Tracef("checked file: %v (%v)", file.Name, e)
 			}
-			errs = errs.Append(e)
+			issues = append(issues, e...)
 		}
-		return errs
+
+		return issues
 	}
 }
 
@@ -199,43 +219,34 @@ func (l *Linter) Disable(rules ...string) {
 }
 
 func (l *Linter) Lint(schema *vppapi.Schema) error {
-	logrus.Debugf("linter will run %d rules for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
+	logrus.Debugf("linter will run %d rule checks for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
 
-	var errs LintIssues
+	var allIssues LintIssues
 
 	for _, rule := range l.rules {
 		log := logrus.WithField("rule", rule.Id)
-		log.Debugf("running linter check for rule (purpose: %v)", rule.Purpose)
+		log.Debugf("running linter rulecheck (purpose: %v)", rule.Purpose)
 
-		err := rule.check(schema)
-		if err != nil {
-			log.Tracef("linter check failed: %v", err)
+		issues := rule.check(schema)
+		if len(issues) > 0 {
+			log.Tracef("linter rule check failed, found %d issues", len(issues))
 
-			switch e := err.(type) {
-			case LintIssue:
-				if e.RuleId == "" {
-					e.RuleId = rule.Id
+			for _, issue := range issues {
+				if issue.RuleId == "" {
+					issue.RuleId = rule.Id
 				}
-				errs = errs.Append(e)
-			case LintIssues:
-				for _, le := range e {
-					if le.RuleId == "" {
-						le.RuleId = rule.Id
-					}
-					errs = errs.Append(le)
-				}
-			default:
-				errs = append(errs, createLintIssue(rule.Id, err))
+				allIssues = allIssues.Append(issue)
 			}
 		} else {
-			log.Tracef("linter check passed")
+			log.Tracef("linter rule check passed")
 		}
 	}
-	if len(errs) > 0 {
-		logrus.Debugf("found %d issues in %d files", len(errs), len(schema.Files))
-		return errs
+
+	if len(allIssues) > 0 {
+		logrus.Debugf("found %d issues in %d files", len(allIssues), len(schema.Files))
+		return allIssues
 	} else {
-		logrus.Debugf("no issues in %d files", len(schema.Files))
+		logrus.Debugf("no issues found in %d files", len(schema.Files))
 	}
 
 	return nil
@@ -281,13 +292,6 @@ func (l LintIssue) Error() string {
 
 type LintIssues []LintIssue
 
-func (le LintIssues) ToErr() error {
-	if len(le) == 0 {
-		return nil
-	}
-	return le
-}
-
 func (le LintIssues) Error() string {
 	if len(le) == 0 {
 		return "no issues"
@@ -304,8 +308,8 @@ func (le LintIssues) Append(errs ...error) LintIssues {
 		switch e := err.(type) {
 		case LintIssue:
 			r = append(r, e)
-		case LintIssues:
-			r = append(r, e...)
+		//case LintIssues:
+		//	r = append(r, e...)
 		default:
 			r = append(r, createLintIssue("", err))
 		}
@@ -413,7 +417,7 @@ func extractRPCMessages(rpc vppapi.RPC) []string {
 	if m := rpc.Request; m != "" {
 		messages = append(messages, m)
 	}
-	if m := rpc.Reply; m != "" {
+	if m := rpc.Reply; m != "" && m != "null" {
 		messages = append(messages, m)
 	}
 	if m := rpc.StreamMsg; m != "" {

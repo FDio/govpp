@@ -106,7 +106,7 @@ const (
 	cacheDir = "./.cache"
 )
 
-func cloneRepoLocally(repo string, commit string, depth int) (string, error) {
+func cloneRepoLocally(repo string, commit string, branch string, depth int) (string, error) {
 	repoPath := strings.ReplaceAll(repo, "/", "_")
 	repoPath = strings.ReplaceAll(repoPath, ":", "_")
 	cachePath := filepath.Join(cacheDir, repoPath)
@@ -116,36 +116,40 @@ func cloneRepoLocally(repo string, commit string, depth int) (string, error) {
 		if err := os.MkdirAll(cacheDir, 0755); err != nil {
 			return "", fmt.Errorf("failed to create cache directory: %w", err)
 		}
-		logrus.Tracef("Cloning repository %q", repo)
 
-		var args []string
+		args := []string{"--single-branch"}
 		if depth > 0 {
 			args = append(args, fmt.Sprintf("--depth=%d", depth))
 		}
 		args = append(args, repo, cachePath)
+		logrus.Debugf("cloning repo: %v", args)
 		cmd := exec.Command("git", append([]string{"clone"}, args...)...)
 		if output, err := cmd.CombinedOutput(); err != nil {
 			return "", fmt.Errorf("failed to clone repository: %w\nOutput: %s", err, output)
 		}
 	} else if err != nil {
 		return "", fmt.Errorf("failed to check if cache exists: %w", err)
-	} else {
-		logrus.Debugf("Fetching %q", commit)
-		cmd := exec.Command("git", "fetch", "origin", commit)
-		cmd.Dir = cachePath
-		if output, err := cmd.CombinedOutput(); err != nil {
-			return "", fmt.Errorf("failed to fetch repository: %w\nOutput: %s", err, output)
-		}
+	}
+	logrus.Debugf("local repo dir: %q, fetching %q", cachePath, commit)
+
+	cmd := exec.Command("git", "fetch", "-f", "origin", commit)
+	cmd.Dir = cachePath
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("failed to fetch repository: %w\nOutput: %s", err, output)
 	}
 
 	// Resolve the commit hash for the given branch/tag
-	commitHash, err := resolveCommitHash(cachePath, commit)
+	ref := commit
+	if branch != "" {
+		ref = "origin/" + branch
+	}
+	commitHash, err := resolveCommitHash(cachePath, ref)
 	if err != nil {
 		return "", fmt.Errorf("failed to resolve commit hash: %w", err)
 	}
 
 	// Check out the repository at the resolved commit
-	cmd := exec.Command("git", "checkout", commitHash)
+	cmd = exec.Command("git", "checkout", commitHash)
 	cmd.Dir = cachePath
 	if output, err := cmd.CombinedOutput(); err != nil {
 		return "", fmt.Errorf("failed to check out repository: %w\nOutput: %s", err, output)

@@ -94,6 +94,15 @@ func normalizeImport(imp string) string {
 	return imp
 }
 
+// SortFilesByName sorts list of files by their name.
+func SortFilesByName(apifiles []vppapi.File) {
+	sort.SliceStable(apifiles, func(i, j int) bool {
+		a := apifiles[i]
+		b := apifiles[j]
+		return a.Name < b.Name
+	})
+}
+
 // SortFilesByImports sorts list of files by their imports.
 func SortFilesByImports(apifiles []vppapi.File) {
 	dependsOn := func(file *vppapi.File, dep string) bool {

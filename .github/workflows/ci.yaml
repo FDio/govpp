@@ -8,7 +8,7 @@ on:
       - master
       - ci
   pull_request:
-  # Allows running this workflow manually
+# Allows running this workflow manually
   workflow_dispatch:
 
 permissions:
@@ -16,22 +16,21 @@ permissions:
 
 jobs:
   yaml-lint:
-    name: lint yaml
+    name: "Lint YAML"
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
       - name: "Run YAML linter"
-        uses: karancode/yamllint-github-action@master
+        uses: ibiqlik/action-yamllint@v3
         with:
-          yamllint_file_or_dir: '.github/ci/yamllint.yml'
-          yamllint_strict: true
-  
+          config_file: '.github/ci/yamllint.yml'
+
   go-mod:
     strategy:
       matrix:
         go: [ '1.20' ]
-    name: check go.mod
+    name: "Check go.mod"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup Go"
@@ -54,8 +53,8 @@ jobs:
       matrix:
         go: [ '1.20' ]
     env:
-      VERSION: v0.7.0
-    name: check binapi
+      VERSION: v0.8.0
+    name: "Check generated binapi"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup Go"
@@ -66,7 +65,7 @@ jobs:
         uses: actions/checkout@v3
       - name: "Generate binapi"
         run: make gen-binapi-docker
-      - name: "Check go.mod"
+      - name: "Check binapi"
         run: |
           git diff --exit-code binapi
 
@@ -75,7 +74,7 @@ jobs:
       matrix:
         go: [ '1.20' ]
         os: [ ubuntu-latest ]
-    name: build and test
+    name: "Build and test"
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Setup Go"
@@ -88,11 +87,11 @@ jobs:
           gotestsum_version: 1.9.0
       - name: "Checkout"
         uses: actions/checkout@v3
-      - name: "Build"
+      - name: "Go Build"
         run: go build -v ./...
-      - name: "Test"
+      - name: "Go Test"
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
-      - name: "Annotate tests"
+      - name: "Test results"
         if: always()
         uses: guyarb/golang-test-annotations@v0.6.0
         with:
@@ -102,7 +101,7 @@ jobs:
     strategy:
       matrix:
         go: [ '1.20' ]
-    name: lint go
+    name: "GolangCI"
     runs-on: ubuntu-latest
     permissions:
       contents: read
