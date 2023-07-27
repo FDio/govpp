@@ -17,6 +17,7 @@ package integration
 import (
 	"context"
 	"fmt"
+	"go.fd.io/govpp/core"
 	"testing"
 
 	"go.fd.io/govpp/api"
@@ -27,11 +28,11 @@ import (
 func TestTrace(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
 
-	test.Conn.Trace().Enable(true)
+	trace := core.NewTrace(test.Conn, 50)
 
 	runTraceRequests(t, test)
 
-	records := test.Conn.Trace().GetRecords()
+	records := trace.GetRecords()
 
 	if len(records) != 2 {
 		t.Fatalf("expected 2 records, got %d", len(records))

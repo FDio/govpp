@@ -31,7 +31,6 @@ import (
 	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/vpe"
 	"go.fd.io/govpp/core"
-	"log"
 )
 
 var (
@@ -62,7 +61,7 @@ func main() {
 }
 
 func singleChannel(conn *core.Connection, trace api.Trace) {
-	// create new channel and perform simple compatibility check
+	// create the new channel and perform simple compatibility check
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -70,12 +69,10 @@ func singleChannel(conn *core.Connection, trace api.Trace) {
 	defer ch.Close()
 
 	fmt.Printf("=> Example 1\n\nEnabling API trace...\n")
-	conn.Trace().Enable(true)
-
-	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
+	if err = ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
 		log.Fatalf("compatibility check failed: %v", err)
 	}
-	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
+	if err = ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
 		log.Printf("compatibility check failed: %v", err)
 	}
 
@@ -111,7 +108,7 @@ func multiChannel(conn *core.Connection, trace api.Trace) {
 	}
 	defer ch2.Close()
 
-	//do API calls again
+	// do API call again
 	fmt.Printf("=> Example 2\n\nCalling VPP API (multi-channel)...\n")
 	retrieveVersion(ch1)
 	idx1 := createLoopback(ch1)
@@ -156,7 +153,7 @@ func multiChannel(conn *core.Connection, trace api.Trace) {
 }
 
 func stream(conn *core.Connection, trace api.Trace) {
-	// create new channel and perform simple compatibility check
+	// create the new channel and perform simple compatibility check
 	s, err := conn.NewStream(context.Background())
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -272,7 +269,7 @@ func addIPAddress(addr string, ch api.Channel, index interface_types.InterfaceIn
 	}
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
-	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+	if err = ch.SendRequest(req).ReceiveReply(reply); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -293,7 +290,7 @@ func invokeAddIPAddress(addr string, c api.Connection, index interface_types.Int
 	}
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
-	if err := c.Invoke(context.Background(), req, reply); err != nil {
+	if err = c.Invoke(context.Background(), req, reply); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -324,11 +321,11 @@ func invokeInterfaceDump(c api.Connection) {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
-	if err := s.SendMsg(&interfaces.SwInterfaceDump{}); err != nil {
+	if err = s.SendMsg(&interfaces.SwInterfaceDump{}); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
-	if err := s.SendMsg(&memclnt.ControlPing{}); err != nil {
+	if err = s.SendMsg(&memclnt.ControlPing{}); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -353,6 +350,6 @@ func printTrace(item *api.Record) {
 	if item.IsReceived {
 		reply = "(reply)"
 	}
-	fmt.Printf("%dh:%dm:%ds:%dns %s %s\n", h, m, s,
-		item.Timestamp.Nanosecond(), item.Message.GetMessageName(), reply)
+	fmt.Printf("%dh:%dm:%ds:%dns %s sucess: %t %s\n", h, m, s,
+		item.Timestamp.Nanosecond(), item.Message.GetMessageName(), item.Succeeded, reply)
 }

@@ -36,11 +36,12 @@ type Trace interface {
 	Close()
 }
 
-// Record contains essential information about traced message, its timestamp and whether
+// Record contains essential information about the traced message, its timestamp and whether
 // the message was received or sent
 type Record struct {
 	Message    Message
 	Timestamp  time.Time
 	IsReceived bool
 	ChannelID  uint16
+	Succeeded  bool
 }

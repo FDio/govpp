@@ -103,9 +103,19 @@ func (t *Trace) Close() {
 	t.closeFunc()
 }
 
-func (t *Trace) record(r *api.Record) {
+type registeredRecord struct {
+	r *api.Record
+}
+
+func (t *Trace) newRegisteredRecord(rc *api.Record) *registeredRecord {
 	if t != nil {
 		t.wg.Add(1)
-		t.buffer <- r
+	}
+	return &registeredRecord{r: rc}
+}
+
+func (t *Trace) send(record *registeredRecord) {
+	if t != nil {
+		t.buffer <- record.r
 	}
 }

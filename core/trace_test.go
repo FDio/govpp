@@ -16,8 +16,6 @@ import (
 const traceSize = 10
 
 func TestTraceEnabled(t *testing.T) {
-	t.Skipf("these randomly fail, see integration tests")
-
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
@@ -28,13 +26,13 @@ func TestTraceEnabled(t *testing.T) {
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
 		&memif.MemifCreate{},
-		&l2.BridgeDomainAddDel{},
+		&l2.BridgeDomainAddDelV2{},
 		&ip.IPTableAddDel{},
 	}
 	reply := []api.Message{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
-		&l2.BridgeDomainAddDelReply{},
+		&l2.BridgeDomainAddDelV2Reply{},
 		&ip.IPTableAddDelReply{},
 	}
 
@@ -49,6 +47,7 @@ func TestTraceEnabled(t *testing.T) {
 	for i, entry := range records {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
+		Expect(entry.Succeeded).To(BeTrue())
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
 			strings.HasSuffix(entry.Message.GetMessageName(), "_details") {
 			Expect(entry.IsReceived).To(BeTrue())
@@ -64,8 +63,6 @@ func TestTraceEnabled(t *testing.T) {
 }
 
 func TestMultiRequestTraceEnabled(t *testing.T) {
-	t.Skipf("these randomly fail, see integration tests")
-
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
@@ -106,30 +103,31 @@ func TestMultiRequestTraceEnabled(t *testing.T) {
 	records := trace.GetRecords()
 	Expect(records).ToNot(BeNil())
 	Expect(records).To(HaveLen(6))
-	for _, entry := range records {
+	for eIdx, entry := range records {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
+		Expect(entry.Succeeded).To(BeTrue())
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
 			strings.HasSuffix(entry.Message.GetMessageName(), "_details") {
 			Expect(entry.IsReceived).To(BeTrue())
 		} else {
 			Expect(entry.IsReceived).To(BeFalse())
 		}
-		// FIXME: the way mock adapter works now prevents having the exact same order for each execution
-		/*if i == 0 {
-		  	Expect(request[0].GetMessageName()).To(Equal(entry.Message.GetMessageName()))
-		  } else if i == len(traced)-1 {
-		  	msg := memclnt.ControlPing{}
-		  	Expect(msg.GetMessageName()).To(Equal(entry.Message.GetMessageName()))
-		  } else {
-		  	Expect(reply[i-1].GetMessageName()).To(Equal(entry.Message.GetMessageName()))
-		  }*/
+		if eIdx == 0 {
+			Expect(request[0].GetMessageName()).To(Equal(entry.Message.GetMessageName()))
+		} else if eIdx == len(records)-2 {
+			msg := memclnt.ControlPing{}
+			Expect(msg.GetMessageName()).To(Equal(entry.Message.GetMessageName()))
+		} else if eIdx == len(records)-1 {
+			msg := memclnt.ControlPingReply{}
+			Expect(msg.GetMessageName()).To(Equal(entry.Message.GetMessageName()))
+		} else {
+			Expect(reply[i-1].GetMessageName()).To(Equal(entry.Message.GetMessageName()))
+		}
 	}
 }
 
 func TestTraceDisabled(t *testing.T) {
-	t.Skipf("these randomly fail, see integration tests")
-
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
@@ -138,13 +136,13 @@ func TestTraceDisabled(t *testing.T) {
 	request := []api.Message{
 		&interfaces.CreateLoopback{},
 		&memif.MemifCreate{},
-		&l2.BridgeDomainAddDel{},
+		&l2.BridgeDomainAddDelV2{},
 		&ip.IPTableAddDel{},
 	}
 	reply := []api.Message{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
-		&l2.BridgeDomainAddDelReply{},
+		&l2.BridgeDomainAddDelV2Reply{},
 		&ip.IPTableAddDelReply{},
 	}
 
@@ -164,8 +162,6 @@ func TestTraceDisabled(t *testing.T) {
 }
 
 func TestTracePerChannel(t *testing.T) {
-	t.Skipf("these randomly fail, see integration tests")
-
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
@@ -180,12 +176,12 @@ func TestTracePerChannel(t *testing.T) {
 	requestCh1 := []api.Message{
 		&interfaces.CreateLoopback{},
 		&memif.MemifCreate{},
-		&l2.BridgeDomainAddDel{},
+		&l2.BridgeDomainAddDelV2{},
 	}
 	replyCh1 := []api.Message{
 		&interfaces.CreateLoopbackReply{},
 		&memif.MemifCreateReply{},
-		&l2.BridgeDomainAddDelReply{},
+		&l2.BridgeDomainAddDelV2Reply{},
 	}
 	requestCh2 := []api.Message{
 		&ip.IPTableAddDel{},
@@ -221,6 +217,7 @@ func TestTracePerChannel(t *testing.T) {
 	for i, entry := range recordsCh1 {
 		Expect(entry.Timestamp).ToNot(BeNil())
 		Expect(entry.Message.GetMessageName()).ToNot(Equal(""))
+		Expect(entry.Succeeded).To(BeTrue())
 		if strings.HasSuffix(entry.Message.GetMessageName(), "_reply") ||
 			strings.HasSuffix(entry.Message.GetMessageName(), "_details") {
 			Expect(entry.IsReceived).To(BeTrue())
@@ -255,8 +252,6 @@ func TestTracePerChannel(t *testing.T) {
 }
 
 func TestTraceClear(t *testing.T) {
-	t.Skipf("these randomly fail, see integration tests")
-
 	ctx := setupTest(t, false)
 	defer ctx.teardownTest()
 
