@@ -276,7 +276,7 @@ Loop:
 			fmt.Printf(" - MactimeDetails: %+v\n", m)
 
 		case *mactime.MactimeDumpReply:
-			if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+			if err := api.RetvalToVPPApiError(m.Retval); err != nil && err != api.NO_CHANGE {
 				logError(err, "mactime dump reply retval")
 				return
 			}
