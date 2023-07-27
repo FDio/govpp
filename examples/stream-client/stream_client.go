@@ -21,7 +21,9 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"os"
+	"sync"
 	"time"
 
 	"go.fd.io/govpp"
@@ -45,7 +47,6 @@ func main() {
 	flag.Parse()
 
 	fmt.Println("Starting stream client example")
-	fmt.Println()
 
 	// connect to VPP asynchronously
 	conn, connEv, err := govpp.AsyncConnect(*sockAddr, core.DefaultMaxReconnectAttempts, core.DefaultReconnectInterval)
@@ -96,68 +97,71 @@ func main() {
 			logError(err, "closing the stream")
 		}
 	}()
+
 	getVppVersion(stream)
 	idx := createLoopback(stream)
 	interfaceDump(stream)
 	addIPAddress(stream, idx)
-	//ipAddressDump(stream, idx)
-	//mactimeDump(stream)
-	interfaceNotifications(conn, stream, idx)
+	ipAddressDump(stream, idx)
+	mactimeDump(stream)
+	interfaceNotifications(conn, idx)
 }
 
 func getVppVersion(stream api.Stream) {
-	fmt.Println("Retrieving version..")
+	fmt.Println("Retrieving version")
 
-	req := &vpe.ShowVersion{}
-	if err := stream.SendMsg(req); err != nil {
-		logError(err, "ShowVersion sending message")
+	if err := stream.SendMsg(&vpe.ShowVersion{}); err != nil {
+		logError(err, "get version request")
 		return
 	}
-	recv, err := stream.RecvMsg()
+	recvMsg, err := stream.RecvMsg()
 	if err != nil {
-		logError(err, "ShowVersion receive message")
+		logError(err, "get version reply")
 		return
 	}
-	recvMsg := recv.(*vpe.ShowVersionReply)
+	reply := recvMsg.(*vpe.ShowVersionReply)
+	if api.RetvalToVPPApiError(reply.Retval) != nil {
+		logError(err, "get version reply retval")
+		return
+	}
 
-	fmt.Printf("Retrieved VPP version: %q\n", recvMsg.Version)
-	fmt.Println("OK")
-	fmt.Println()
+	fmt.Printf("VPP version: %v\n", reply.Version)
 }
 
 func createLoopback(stream api.Stream) (ifIdx interface_types.InterfaceIndex) {
-	fmt.Println("Creating the loopback interface..")
+	fmt.Println("Creating loopback interface..")
 
-	req := &interfaces.CreateLoopback{}
-	if err := stream.SendMsg(req); err != nil {
-		logError(err, "CreateLoopback sending message")
+	if err := stream.SendMsg(&interfaces.CreateLoopback{}); err != nil {
+		logError(err, "create loopback request")
 		return
 	}
 	recv, err := stream.RecvMsg()
 	if err != nil {
-		logError(err, "CreateLoopback receive message")
+		logError(err, "create loopback reply")
 		return
 	}
-	recvMsg := recv.(*interfaces.CreateLoopbackReply)
+	reply := recv.(*interfaces.CreateLoopbackReply)
+	if api.RetvalToVPPApiError(reply.Retval) != nil {
+		logError(err, "create loopback reply retval")
+		return
+	}
 
-	fmt.Printf("Loopback interface index: %v\n", recvMsg.SwIfIndex)
-	fmt.Println("OK")
-	fmt.Println()
+	fmt.Printf("Loopback interface created: %v\n", reply.SwIfIndex)
 
-	return recvMsg.SwIfIndex
+	return reply.SwIfIndex
 }
 
 func interfaceDump(stream api.Stream) {
-	fmt.Println("Dumping interfaces..")
+	fmt.Println("Listing interfaces")
 
 	if err := stream.SendMsg(&interfaces.SwInterfaceDump{
 		SwIfIndex: ^interface_types.InterfaceIndex(0),
 	}); err != nil {
-		logError(err, "SwInterfaceDump sending message")
+		logError(err, "list interfaces request")
 		return
 	}
 	if err := stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		logError(err, "ControlPing sending message")
+		logError(err, "ControlPing request")
 		return
 	}
 
@@ -165,16 +169,16 @@ Loop:
 	for {
 		msg, err := stream.RecvMsg()
 		if err != nil {
-			logError(err, "SwInterfaceDump receiving message ")
+			logError(err, "receiving interface list")
 			return
 		}
 
-		switch msg.(type) {
+		switch m := msg.(type) {
 		case *interfaces.SwInterfaceDetails:
-			fmt.Printf(" - SwInterfaceDetails: %+v\n", msg)
+			fmt.Printf("- interface: %s (index: %v)\n", m.InterfaceName, m.SwIfIndex)
 
 		case *memclnt.ControlPingReply:
-			fmt.Printf(" - ControlPingReply: %+v\n", msg)
+			fmt.Printf(" - ControlPingReply: %+v\n", m)
 			break Loop
 
 		default:
@@ -182,52 +186,47 @@ Loop:
 			return
 		}
 	}
-
-	fmt.Println("OK")
-	fmt.Println()
 }
 
 func addIPAddress(stream api.Stream, index interface_types.InterfaceIndex) {
-	fmt.Printf("Adding IP address to the interface index %d..\n", index)
+	addr := ip_types.NewAddress(net.IPv4(10, 10, 0, byte(index)))
+
+	fmt.Printf("Adding IP address %v to interface (index %d)\n", addr, index)
 
 	if err := stream.SendMsg(&interfaces.SwInterfaceAddDelAddress{
 		SwIfIndex: index,
 		IsAdd:     true,
-		Prefix: ip_types.AddressWithPrefix{
-			Address: ip_types.Address{
-				Af: ip_types.ADDRESS_IP4,
-				Un: ip_types.AddressUnionIP4(ip_types.IP4Address{10, 10, 0, uint8(index)}),
-			},
-			Len: 32,
-		},
+		Prefix:    ip_types.AddressWithPrefix{Address: addr, Len: 32},
 	}); err != nil {
-		logError(err, "SwInterfaceAddDelAddress sending message")
+		logError(err, "add IP address request")
 		return
 	}
 
 	recv, err := stream.RecvMsg()
 	if err != nil {
-		logError(err, "SwInterfaceAddDelAddressReply receiving message")
+		logError(err, "add IP address reply")
 		return
 	}
-	recvMsg := recv.(*interfaces.SwInterfaceAddDelAddressReply)
+	reply := recv.(*interfaces.SwInterfaceAddDelAddressReply)
+	if api.RetvalToVPPApiError(reply.Retval) != nil {
+		logError(err, "add IP address reply retval")
+		return
+	}
 
-	fmt.Printf("Added IP address to interface: %v (return value: %d)\n", index, recvMsg.Retval)
-	fmt.Println("OK")
-	fmt.Println()
+	fmt.Printf("IP address %v added\n", addr)
 }
 
 func ipAddressDump(stream api.Stream, index interface_types.InterfaceIndex) {
-	fmt.Printf("Dumping IP addresses for interface index %d..\n", index)
+	fmt.Printf("Listing IP addresses for interface (index %d)\n", index)
 
 	if err := stream.SendMsg(&ip.IPAddressDump{
 		SwIfIndex: index,
 	}); err != nil {
-		logError(err, "IPAddressDump sending message")
+		logError(err, "dump IP address request")
 		return
 	}
 	if err := stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		logError(err, "ControlPing sending sending message")
+		logError(err, "sending ControlPing")
 		return
 	}
 
@@ -235,7 +234,7 @@ Loop:
 	for {
 		msg, err := stream.RecvMsg()
 		if err != nil {
-			logError(err, "IPAddressDump receiving message ")
+			logError(err, "receiving IP addresses")
 			return
 		}
 
@@ -252,18 +251,15 @@ Loop:
 			return
 		}
 	}
-
-	fmt.Println("OK")
-	fmt.Println()
 }
 
 // Mactime dump uses MactimeDumpReply message as an end of the stream
 // notification instead of the control ping.
 func mactimeDump(stream api.Stream) {
-	fmt.Println("Sending mactime dump..")
+	fmt.Println("Sending mactime dump")
 
 	if err := stream.SendMsg(&mactime.MactimeDump{}); err != nil {
-		logError(err, "sending mactime dump")
+		logError(err, "mactime dump request")
 		return
 	}
 
@@ -271,16 +267,20 @@ Loop:
 	for {
 		msg, err := stream.RecvMsg()
 		if err != nil {
-			logError(err, "MactimeDump receiving message")
+			logError(err, "receiving mactime dump")
 			return
 		}
 
-		switch msg.(type) {
+		switch m := msg.(type) {
 		case *mactime.MactimeDetails:
-			fmt.Printf(" - MactimeDetails: %+v\n", msg)
+			fmt.Printf(" - MactimeDetails: %+v\n", m)
 
 		case *mactime.MactimeDumpReply:
-			fmt.Printf(" - MactimeDumpReply: %+v\n", msg)
+			if err := api.RetvalToVPPApiError(m.Retval); err != nil {
+				logError(err, "mactime dump reply retval")
+				return
+			}
+			fmt.Printf(" - MactimeDumpReply: %+v\n", m)
 			break Loop
 
 		default:
@@ -288,180 +288,87 @@ Loop:
 			return
 		}
 	}
-
-	fmt.Println("OK")
-	fmt.Println()
 }
 
 // interfaceNotifications shows the usage of notification API. Note that for notifications,
 // you are supposed to create your own Go channel with your preferred buffer size. If the channel's
 // buffer is full, the notifications will not be delivered into it.
-func interfaceNotifications(conn api.Connection, stream api.Stream, index interface_types.InterfaceIndex) {
-	fmt.Printf("Subscribing to notificaiton events for interface index %d\n", index)
+func interfaceNotifications(conn api.Connection, index interface_types.InterfaceIndex) {
 
-	ctx := context.Background()
-
-	watcher, err := conn.WatchEvent(ctx, (*interfaces.SwInterfaceEvent)(nil))
+	// start watcher for specific event message
+	watcher, err := conn.WatchEvent(context.Background(), (*interfaces.SwInterfaceEvent)(nil))
 	if err != nil {
-		logError(err, "watch interface events")
+		logError(err, "watching interface events")
 		return
-	} else {
-		fmt.Println("watching events OK")
 	}
 
-	//notifChan := make(chan api.Message, 100)
-
-	// subscribe for specific notification message
-	/*sub, err := ch.SubscribeNotification(notifChan, (*interfaces.SwInterfaceEvent)(nil))
-	if err != nil {
-		logError(err, "subscribing to interface events")
-		return
-	} else {
-		fmt.Println("subscribed to notifications OK")
-	}*/
-
-	// enable interface events in VPP
-	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
-		PID:           0,
-		EnableDisable: 1,
-	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
-	if err != nil {
-		logError(err, "enabling interface events")
-		return
-	} else {
-		fmt.Println("enabled interface events OK")
-	}*/
 	// enable interface events in VPP
 	var reply interfaces.WantInterfaceEventsReply
-	if err := conn.Invoke(ctx, &interfaces.WantInterfaceEvents{
-		//PID:           uint32(os.Getpid()),
+	err = conn.Invoke(context.Background(), &interfaces.WantInterfaceEvents{
+		PID:           uint32(os.Getpid()),
 		EnableDisable: 1,
-	}, &reply); err != nil {
+	}, &reply)
+	if err != nil || api.RetvalToVPPApiError(reply.Retval) != nil {
 		logError(err, "enabling interface events")
 		return
-	} else {
-		fmt.Println("enabled interface events OK")
 	}
 
-	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
-		//PID:           uint32(os.Getpid()),
-		EnableDisable: 1,
-	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
-	if err != nil {
-		logError(err, "enabling interface events")
-		return
-	} else {
-		fmt.Println("enabled interface events OK")
-	}*/
+	fmt.Printf("watching interface events for index %d\n", index)
+
+	var wg sync.WaitGroup
 
 	// receive notifications
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		for notif := range watcher.Events() {
 			e := notif.(*interfaces.SwInterfaceEvent)
-			fmt.Printf("incoming event: %+v\n", e)
+			fmt.Printf("incoming interface event: %+v\n", e)
 		}
-		fmt.Println("all events processed OK")
+		fmt.Println("watcher done")
 	}()
 
 	// generate some events in VPP
-	var setReply interfaces.SwInterfaceSetFlagsReply
-	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
-	}, &setReply); err != nil {
-		logError(err, "setting interface flags")
-		return
-	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
-		logError(err, "setting interface flags retval")
-		return
-	}
-
-	setReply.Reset()
-	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     0,
-	}, &setReply); err != nil {
-		logError(err, "setting interface flags")
-		return
-	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
-		logError(err, "setting interface flags retval")
-		return
-	}
-
-	/*err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
-	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
-	if err != nil {
-		logError(err, "setting interface flags")
-		return
-	}
-	err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     0,
-	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
-	if err != nil {
-		logError(err, "setting interface flags")
-		return
-	}*/
-
-	reply.Reset()
-	if err := conn.Invoke(ctx, &interfaces.WantInterfaceEvents{
-		//PID:           uint32(os.Getpid()),
-		EnableDisable: 0,
-	}, &reply); err != nil {
-		logError(err, "disabling interface events")
-		return
-	} else {
-		fmt.Println("disabling interface events OK")
-	}
+	setInterfaceStatus(conn, index, true)
+	setInterfaceStatus(conn, index, false)
 
 	// disable interface events in VPP
-	/*err = ch.SendRequest(&interfaces.WantInterfaceEvents{
-		//PID:           uint32(os.Getpid()),
+	reply.Reset()
+	if err := conn.Invoke(context.Background(), &interfaces.WantInterfaceEvents{
+		PID:           uint32(os.Getpid()),
 		EnableDisable: 0,
-	}).ReceiveReply(&interfaces.WantInterfaceEventsReply{})
-	if err != nil {
-		logError(err, "setting interface flags")
-		return
-	}*/
-
-	setReply.Reset()
-	if err := conn.Invoke(ctx, &interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
-	}, &setReply); err != nil {
-		logError(err, "setting interface flags")
-		return
-	} else if err = api.RetvalToVPPApiError(setReply.Retval); err != nil {
-		logError(err, "setting interface flags retval")
+	}, &reply); err != nil || api.RetvalToVPPApiError(reply.Retval) != nil {
+		logError(err, "disabling interface events")
 		return
 	}
-
-	/*err = ch.SendRequest(&interfaces.SwInterfaceSetFlags{
-		SwIfIndex: index,
-		Flags:     interface_types.IF_STATUS_API_FLAG_ADMIN_UP,
-	}).ReceiveReply(&interfaces.SwInterfaceSetFlagsReply{})
-	if err != nil {
-		logError(err, "setting interface flags")
-		return
-	} else {
-		fmt.Println("disabled interface events OK")
-	}*/
 
 	// unsubscribe from delivery of the notifications
 	watcher.Close()
-	if err != nil {
-		logError(err, "closing interface events watcher")
-		return
+
+	// generate ignored events in VPP
+	setInterfaceStatus(conn, index, true)
+
+	wg.Wait()
+}
+
+func setInterfaceStatus(conn api.Connection, ifIdx interface_types.InterfaceIndex, up bool) {
+	var flags interface_types.IfStatusFlags
+	if up {
+		flags = interface_types.IF_STATUS_API_FLAG_ADMIN_UP
 	} else {
-		fmt.Println("closing interface events watcher OK")
+		flags = 0
 	}
-
-	fmt.Println("OK")
-	fmt.Println()
-
-	time.Sleep(time.Second)
+	var reply interfaces.SwInterfaceSetFlagsReply
+	if err := conn.Invoke(context.Background(), &interfaces.SwInterfaceSetFlags{
+		SwIfIndex: ifIdx,
+		Flags:     flags,
+	}, &reply); err != nil {
+		logError(err, "setting interface flags")
+		return
+	} else if err = api.RetvalToVPPApiError(reply.Retval); err != nil {
+		logError(err, "setting interface flags retval")
+		return
+	}
 }
 
 var errors []error
