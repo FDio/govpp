@@ -32,7 +32,7 @@ func TestExamples(t *testing.T) {
 		}
 		example := filepath.Base(d.Name())
 		t.Run(example, func(tt *testing.T) {
-			testExample(tt, example)
+			runExample(tt, example)
 		})
 		return nil
 	}); err != nil {
@@ -40,7 +40,7 @@ func TestExamples(t *testing.T) {
 	}
 }
 
-func testExample(t *testing.T, example string) {
+func runExample(t *testing.T, example string) {
 	vpptesting.SetupVPP(t)
 
 	cmd := exec.Command("go", "run", "./examples/"+example)
