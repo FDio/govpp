@@ -32,7 +32,8 @@ repositories:
 committers:
   - <<: *govpp_ptl
   - name: 'Ondrej Fabry'
-    email: 'ondrej@fabry.dev'
+    company: 'cisco'
+    email: 'ofabry@cisco.com'
     id: 'ondrej-fabry'
   - name: 'Jan Medved'
     company: 'cisco'
