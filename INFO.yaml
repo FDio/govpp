@@ -1,12 +1,13 @@
 ---
-project: 'govpp'
-project_creation_date: '2017-4-27'
-project_category: ''
+project: 'GoVPP'
+project_creation_date: '2017-04-27'
+project_category: 'Integration & Tooling'
 lifecycle_state: 'Incubation'
 project_lead: &govpp_ptl
   name: 'Ondrej Fabry'
   email: 'ondrej@fabry.dev'
   id: 'ondrej-fabry'
+  timezone: 'Europe/Bratislava'
 primary_contact: *govpp_ptl
 issue_tracking:
   type: 'github'
@@ -19,13 +20,19 @@ realtime_discussion:
   type: 'slack'
   server: 'fdio-project.slack.com'
   channel: 'govpp'
+meetings:
+  - type: 'zoom'
+    agenda: 'https://wiki.fd.io/view/GoVPP/Meeting#Agenda'
+    url: 'https://zoom.us/j/5301185804'
+    repeats: 'bi-weekly'
+    day: 'thu'
+    time: '13:30 UTC'
 repositories:
   - 'govpp'
 committers:
   - <<: *govpp_ptl
   - name: 'Ondrej Fabry'
-    company: 'cisco'
-    email: 'ofabry@cisco.com'
+    email: 'ondrej@fabry.dev'
     id: 'ondrej-fabry'
   - name: 'Jan Medved'
     company: 'cisco'
