@@ -37,16 +37,16 @@ import (
 //  - try several ways to connect to VPP if not specified
 
 const exampleCliCommand = `
-  <note># Execute 'show version' command</>
+  <cyan># Execute 'show version' command</>
   govpp cli show version
 
-  <note># Enter REPL mode to send commands interactively</>
+  <cyan># Enter REPL mode to send commands interactively</>
   govpp cli
 
-  <note># Read CLI command(s) from stdin</>
+  <cyan># Read CLI command(s) from stdin</>
   echo "show errors" | govpp cli
 
-  <note># Execute commands and write output to file</>
+  <cyan># Execute commands and write output to file</>
   govpp cli -o cli.log show version
 `
 
@@ -60,7 +60,7 @@ type CliOptions struct {
 	Stdout io.Writer
 }
 
-func newCliCommand(Cli) *cobra.Command {
+func newCliCommand(cli Cli) *cobra.Command {
 	var (
 		opts = CliOptions{
 			ApiSocket: socketclient.DefaultSocketName,
@@ -74,8 +74,8 @@ func newCliCommand(Cli) *cobra.Command {
 		Example:               color.Sprint(exampleCliCommand),
 		DisableFlagsInUseLine: true,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts.Stdin = cmd.InOrStdin()
-			opts.Stderr = cmd.ErrOrStderr()
+			opts.Stdin = cli.In()
+			opts.Stderr = cli.Err()
 
 			// Setup output
 			if opts.Output != "" {
@@ -149,8 +149,10 @@ func newCliCommand(Cli) *cobra.Command {
 
 const vppcliPrompt = "vpp# "
 
-func runCliCmd(opts CliOptions, cmds []string) error {
-	cli, err := connectBinapiVppCLI(opts.ApiSocket)
+func runCliCmd(opts CliOptions, cmds []string) (err error) {
+	var cli VppCli
+
+	cli, err = connectBinapiVppCLI(opts.ApiSocket)
 	if err != nil {
 		return fmt.Errorf("connecting to CLI failed: %w", err)
 	}

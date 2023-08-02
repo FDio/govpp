@@ -44,7 +44,7 @@ func newGenerateCmd(cli Cli) *cobra.Command {
 		Use:     "generate [apifile...]",
 		Aliases: []string{"gen"},
 		Short:   "Generate code",
-		Long:    "Generates Go bindings for VPP API",
+		Long:    "Generates bindings for VPP API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if opts.Input == "" {
 				opts.Input = detectVppApiInput()

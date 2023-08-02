@@ -16,7 +16,6 @@ package main
 
 import (
 	"github.com/gookit/color"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"go.fd.io/govpp/internal/version"
@@ -35,19 +34,18 @@ func newRootCmd(cli Cli) *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:     "govpp [OPTIONS] COMMAND",
-		Short:   "GoVPP CLI tool",
-		Long:    color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()),
+		Use:   "govpp [OPTIONS] COMMAND",
+		Short: "GoVPP CLI tool",
+		Long: color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()) + "\n" +
+			"GoVPP is an universal CLI tool for any VPP-related development.",
 		Version: version.String(),
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			InitOptions(cli, &glob)
-			logrus.Tracef("global options: %+v", glob)
-			logrus.Tracef("args: %+v", args)
 			return nil
 		},
-		SilenceUsage:     true,
-		SilenceErrors:    true,
-		TraverseChildren: true,
+		SilenceUsage:  true,
+		SilenceErrors: true,
+		//TraverseChildren: true,
 		CompletionOptions: cobra.CompletionOptions{
 			HiddenDefaultCmd: true,
 		},
@@ -67,13 +65,19 @@ func newRootCmd(cli Cli) *cobra.Command {
 	cmd.InitDefaultHelpFlag()
 	cmd.Flags().Lookup("help").Hidden = true
 
+	cobra.EnableCommandSorting = false
+
 	// Commands
 	cmd.AddCommand(
-		newGenerateCmd(cli),
-		newVppapiCmd(cli),
-		newHttpCmd(cli),
 		newCliCommand(cli),
+		newGenerateCmd(cli),
+		newHttpCmd(cli),
+		newVppapiCmd(cli),
 	)
+
+	forAllCommands(cmd, func(c *cobra.Command) {
+		c.Flags().SortFlags = false
+	})
 
 	// Help command
 	cmd.InitDefaultHelpCmd()
@@ -82,6 +86,48 @@ func newRootCmd(cli Cli) *cobra.Command {
 			c.Hidden = true
 		}
 	}
+	// Completion command
+	cmd.InitDefaultCompletionCmd()
+
+	cmd.SetUsageTemplate(color.Sprint(usageTemplate))
 
 	return cmd
 }
+
+func forAllCommands(cmd *cobra.Command, f func(c *cobra.Command)) {
+	for _, c := range cmd.Commands() {
+		forAllCommands(c, f)
+	}
+	f(cmd)
+}
+
+const usageTemplate = `<lightWhite>USAGE:</>{{if .Runnable}}
+  {{.UseLine}}{{end}}{{if .HasAvailableSubCommands}}
+  {{.CommandPath}} [command]{{end}}{{if gt (len .Aliases) 0}}
+
+<lightWhite>ALIASES:</>
+  {{.NameAndAliases}}{{end}}{{if .HasExample}}
+
+<lightWhite>EXAMPLES:</>
+{{- trimRightSpace .Example}}{{end}}{{if .HasAvailableSubCommands}}{{$cmds := .Commands}}{{if eq (len .Groups) 0}}
+
+<lightWhite>COMMANDS:</>{{range $cmds}}{{if .IsAvailableCommand}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{else}}{{range $group := .Groups}}
+
+{{.Title}}{{range $cmds}}{{if (and (eq .GroupID $group.ID) .IsAvailableCommand)}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{if not .AllChildCommandsHaveGroup}}
+
+<lightWhite>ADDITIONAL COMMANDS:</>{{range $cmds}}{{if (and (eq .GroupID "") .IsAvailableCommand)}}
+  {{rpad .Name .NamePadding }} {{.Short}}{{end}}{{end}}{{end}}{{end}}{{end}}{{if .HasAvailableLocalFlags}}
+
+<lightWhite>OPTIONS:</>
+{{.LocalFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasAvailableInheritedFlags}}
+
+<lightWhite>GLOBAL OPTIONS:</>
+{{.InheritedFlags.FlagUsages | trimTrailingWhitespaces}}{{end}}{{if .HasHelpSubCommands}}
+
+<lightWhite>TOPICS:</>{{range .Commands}}{{if .IsAdditionalHelpTopicCommand}}
+  {{rpad .CommandPath .CommandPathPadding}} {{.Short}}{{end}}{{end}}{{end}}{{if .HasAvailableSubCommands}}
+
+Use "{{.CommandPath}} [command] --help" for more information about a command.{{end}}
+`

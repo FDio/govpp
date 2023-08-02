@@ -28,11 +28,10 @@ import (
 type InputFormat string
 
 const (
-	FormatNone InputFormat = ""
-	FormatDir  InputFormat = "dir"
-	FormatGit  InputFormat = "git"
-	FormatTar  InputFormat = "tar"
-	FormatZip  InputFormat = "zip"
+	FormatDir InputFormat = "dir"
+	FormatGit InputFormat = "git"
+	FormatTar InputFormat = "tar"
+	FormatZip InputFormat = "zip"
 )
 
 const (
@@ -60,165 +59,6 @@ type InputRef struct {
 	Options map[string]string
 }
 
-func (input *InputRef) Retrieve() (*VppInput, error) {
-	if input.Path == "" {
-		return nil, fmt.Errorf("invalid path in input reference")
-	}
-
-	logrus.Tracef("retrieving input: %+v", input)
-
-	switch input.Format {
-	case FormatNone:
-		return nil, fmt.Errorf("undefined format")
-
-	case FormatDir:
-		info, err := os.Stat(input.Path)
-		if err != nil {
-			return nil, fmt.Errorf("path error: %v", err)
-		}
-		if !info.IsDir() {
-			return nil, fmt.Errorf("path must be a directory")
-		}
-
-		return resolveVppInputFromDir(input.Path)
-
-	case FormatGit:
-		branch := input.Options[OptionGitBranch]
-		tag := input.Options[OptionGitTag]
-		ref := input.Options[OptionGitRef]
-		if branch != "" && tag != "" {
-			return nil, fmt.Errorf("cannot set both branch and tag")
-		} else if branch != "" || tag != "" {
-			if ref != "" {
-				return nil, fmt.Errorf("cannot set rev if branch or tag is set")
-			}
-			if branch != "" {
-				ref = branch
-			} else if tag != "" {
-				ref = tag
-			}
-		}
-
-		commit := ref
-		if commit == "" {
-			commit = defaultGitRef
-		}
-
-		cloneDepth := 0
-		if depth := input.Options[OptionGitDepth]; depth != "" {
-			d, err := strconv.Atoi(depth)
-			if err != nil {
-				return nil, fmt.Errorf("invalid depth: %w", err)
-			}
-			cloneDepth = d
-		}
-
-		logrus.Debugf("updating local repo %s to %s", input.Path, commit)
-
-		repoDir, err := cloneRepoLocally(input.Path, commit, branch, cloneDepth)
-		if err != nil {
-			return nil, err
-		}
-		dir := repoDir
-
-		subdir, hasSubdir := input.Options[OptionGitSubdir]
-		if hasSubdir {
-			dir = filepath.Join(repoDir, subdir)
-			if info, err := os.Stat(dir); err != nil {
-				if os.IsNotExist(err) {
-					return nil, fmt.Errorf("subdirectory %q does not exists", subdir)
-				}
-				return nil, fmt.Errorf("subdirectory %q err: %w", subdir, err)
-			} else if !info.IsDir() {
-				return nil, fmt.Errorf("subdirectory must be a directory")
-			}
-		}
-
-		return resolveVppInputFromDir(dir)
-
-	case FormatTar:
-		stripN := 0
-		strip, hasStrip := input.Options[OptionArchiveStrip]
-		if hasStrip {
-			parsedStrip, err := strconv.Atoi(strip)
-			if err != nil {
-				return nil, fmt.Errorf("invalid strip value: %s", strip)
-			}
-			if parsedStrip < 0 {
-				return nil, fmt.Errorf("strip must be a non-negative integer")
-			}
-			stripN = parsedStrip
-		}
-
-		gzipped := false
-		compression, hasCompression := input.Options[OptionArchiveCompression]
-		if hasCompression {
-			if compression == "gzip" {
-				gzipped = true
-			} else {
-				return nil, fmt.Errorf("unknown compression: %s", compression)
-			}
-		} else {
-			if strings.HasSuffix(input.Path, ".gz") || strings.HasSuffix(input.Path, ".tgz") {
-				gzipped = true
-			}
-		}
-
-		reader, err := getInputPathReader(input.Path)
-		if err != nil {
-			return nil, fmt.Errorf("input path: %w", err)
-		}
-
-		logrus.Tracef("extracting tarball %s (gzip: %v)", input.Path, gzipped)
-
-		tempDir, err := extractTar(reader, gzipped, stripN)
-		if err != nil {
-			return nil, fmt.Errorf("failed to extract tarball: %w", err)
-		}
-
-		dir := tempDir
-
-		subdir, hasSubdir := input.Options[OptionArchiveSubdir]
-		if hasSubdir {
-			dir = filepath.Join(tempDir, subdir)
-			if info, err := os.Stat(dir); err != nil {
-				if os.IsNotExist(err) {
-					return nil, fmt.Errorf("subdirectory %q does not exists", subdir)
-				}
-				return nil, fmt.Errorf("subdirectory %q err: %w", subdir, err)
-			} else if !info.IsDir() {
-				return nil, fmt.Errorf("subdirectory must be a directory")
-			}
-		}
-
-		return resolveVppInputFromDir(dir)
-
-	case FormatZip:
-		return resolveVppInputFromZip(input.Path)
-
-	default:
-		return nil, fmt.Errorf("unknown format: %q", input.Format)
-	}
-}
-
-func resolveVppInputFromZip(path string) (*VppInput, error) {
-	return nil, fmt.Errorf("zip format is not yet supported")
-}
-
-func getInputPathReader(path string) (io.ReadCloser, error) {
-	var reader io.ReadCloser
-	if path == "-" {
-		reader = os.Stdin
-	} else {
-		file, err := os.Open(path)
-		if err != nil {
-			return nil, err
-		}
-		reader = file
-	}
-	return reader, nil
-}
-
 func ParseInputRef(input string) (*InputRef, error) {
 	logrus.Tracef("parsing input string: %q", input)
 
@@ -231,7 +71,7 @@ func ParseInputRef(input string) (*InputRef, error) {
 		delete(options, OptionFormat)
 	} else {
 		inputFormat = detectFormatFromPath(path)
-		logrus.Tracef("detected format: %v", inputFormat)
+		logrus.Tracef("detected format: %q", inputFormat)
 	}
 
 	// Use current working dir by default
@@ -244,7 +84,7 @@ func ParseInputRef(input string) (*InputRef, error) {
 		Path:    path,
 		Options: options,
 	}
-	logrus.Tracef("parsed InputRef: %+v", ref)
+	logrus.Tracef("parsed input ref: %+v", ref)
 
 	return ref, nil
 
@@ -291,4 +131,159 @@ func detectFormatFromPath(path string) InputFormat {
 
 	// By default
 	return FormatDir
+}
+
+func (ref *InputRef) Retrieve() (*VppInput, error) {
+	if ref.Path == "" {
+		return nil, fmt.Errorf("missing path")
+	}
+	if ref.Format == "" {
+		return nil, fmt.Errorf("undefined format")
+	}
+
+	logrus.Tracef("retrieving from ref: %+v", ref)
+
+	switch ref.Format {
+	case FormatDir:
+		info, err := os.Stat(ref.Path)
+		if err != nil {
+			return nil, fmt.Errorf("path error: %v", err)
+		}
+		if !info.IsDir() {
+			return nil, fmt.Errorf("path must be a directory")
+		}
+
+		return resolveVppInputFromDir(ref.Path)
+
+	case FormatGit:
+		branch := ref.Options[OptionGitBranch]
+		tag := ref.Options[OptionGitTag]
+		rev := ref.Options[OptionGitRef]
+		if branch != "" && tag != "" {
+			return nil, fmt.Errorf("cannot set both branch and tag")
+		} else if branch != "" || tag != "" {
+			if rev != "" {
+				return nil, fmt.Errorf("cannot set rev if branch or tag is set")
+			}
+			if branch != "" {
+				rev = branch
+			} else if tag != "" {
+				rev = tag
+			}
+		}
+
+		commit := rev
+		if commit == "" {
+			commit = defaultGitRef
+		}
+
+		cloneDepth := 0
+		if depth := ref.Options[OptionGitDepth]; depth != "" {
+			d, err := strconv.Atoi(depth)
+			if err != nil {
+				return nil, fmt.Errorf("invalid depth: %w", err)
+			}
+			cloneDepth = d
+		}
+
+		logrus.Debugf("updating local repo %s to %s", ref.Path, commit)
+
+		repoDir, err := cloneRepoLocally(ref.Path, commit, branch, cloneDepth)
+		if err != nil {
+			return nil, err
+		}
+		dir := repoDir
+
+		subdir, hasSubdir := ref.Options[OptionGitSubdir]
+		if hasSubdir {
+			dir = filepath.Join(repoDir, subdir)
+			if info, err := os.Stat(dir); err != nil {
+				if os.IsNotExist(err) {
+					return nil, fmt.Errorf("subdirectory %q does not exists", subdir)
+				}
+				return nil, fmt.Errorf("subdirectory %q err: %w", subdir, err)
+			} else if !info.IsDir() {
+				return nil, fmt.Errorf("subdirectory must be a directory")
+			}
+		}
+
+		return resolveVppInputFromDir(dir)
+
+	case FormatTar:
+		stripN := 0
+		strip, hasStrip := ref.Options[OptionArchiveStrip]
+		if hasStrip {
+			parsedStrip, err := strconv.Atoi(strip)
+			if err != nil {
+				return nil, fmt.Errorf("invalid strip value: %s", strip)
+			}
+			if parsedStrip < 0 {
+				return nil, fmt.Errorf("strip must be a non-negative integer")
+			}
+			stripN = parsedStrip
+		}
+
+		gzipped := false
+		compression, hasCompression := ref.Options[OptionArchiveCompression]
+		if hasCompression {
+			if compression == "gzip" {
+				gzipped = true
+			} else {
+				return nil, fmt.Errorf("unknown compression: %s", compression)
+			}
+		} else {
+			if strings.HasSuffix(ref.Path, ".gz") || strings.HasSuffix(ref.Path, ".tgz") {
+				gzipped = true
+			}
+		}
+
+		reader, err := getInputPathReader(ref.Path)
+		if err != nil {
+			return nil, fmt.Errorf("input path: %w", err)
+		}
+
+		logrus.Tracef("extracting tarball %s (gzip: %v)", ref.Path, gzipped)
+
+		tempDir, err := extractTar(reader, gzipped, stripN)
+		if err != nil {
+			return nil, fmt.Errorf("failed to extract tarball: %w", err)
+		}
+
+		dir := tempDir
+
+		subdir, hasSubdir := ref.Options[OptionArchiveSubdir]
+		if hasSubdir {
+			dir = filepath.Join(tempDir, subdir)
+			if info, err := os.Stat(dir); err != nil {
+				if os.IsNotExist(err) {
+					return nil, fmt.Errorf("subdirectory %q does not exists", subdir)
+				}
+				return nil, fmt.Errorf("subdirectory %q err: %w", subdir, err)
+			} else if !info.IsDir() {
+				return nil, fmt.Errorf("subdirectory must be a directory")
+			}
+		}
+
+		return resolveVppInputFromDir(dir)
+
+	case FormatZip:
+		return nil, fmt.Errorf("zip format is not yet supported")
+
+	default:
+		return nil, fmt.Errorf("unknown format: %q", ref.Format)
+	}
+}
+
+func getInputPathReader(path string) (io.ReadCloser, error) {
+	var reader io.ReadCloser
+	if path == "-" {
+		reader = os.Stdin
+	} else {
+		file, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		reader = file
+	}
+	return reader, nil
 }

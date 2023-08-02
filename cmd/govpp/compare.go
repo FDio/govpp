@@ -15,6 +15,7 @@
 package main
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/gookit/color"
@@ -27,21 +28,21 @@ import (
 type DifferenceType string
 
 const (
-	VersionDifference    DifferenceType = "Version"
-	TotalFilesDifference DifferenceType = "FilesCount"
+	VersionDifference DifferenceType = "Version"
 
-	FileAddedDifference           DifferenceType = "FileAdded"
-	FileRemovedDifference         DifferenceType = "FileRemoved"
+	TotalFilesDifference  DifferenceType = "FilesCount"
+	FileAddedDifference   DifferenceType = "FileAdded"
+	FileRemovedDifference DifferenceType = "FileRemoved"
+
 	FileMovedDifference           DifferenceType = "FileMoved"
 	FileVersionDifference         DifferenceType = "FileVersion"
 	FileCrcDifference             DifferenceType = "FileCRC"
 	FileContentsChangedDifference DifferenceType = "FileContentsChanged"
+	MessageAddedDifference        DifferenceType = "MessageAdded"
+	MessageRemovedDifference      DifferenceType = "MessageRemoved"
 
-	MessageAddedDifference   DifferenceType = "MessageAdded"
-	MessageRemovedDifference DifferenceType = "MessageRemoved"
-	MessageCrcDifference     DifferenceType = "MessageCRC"
-	MessageCommentDifference DifferenceType = "MessageComment"
-
+	MessageCrcDifference       DifferenceType = "MessageCRC"
+	MessageCommentDifference   DifferenceType = "MessageComment"
 	MsgOptionChangedDifference DifferenceType = "MsgOptionChanged"
 	MsgOptionAddedDifference   DifferenceType = "MsgOptionAdded"
 	MsgOptionRemovedDifference DifferenceType = "MsgOptionRemoved"
@@ -64,12 +65,18 @@ var differenceTypes = []DifferenceType{
 	MsgOptionRemovedDifference,
 }
 
-// Difference represents a difference between two API schemas.
+var (
+	clrWhite    = color.Style{color.White}
+	clrCyan     = color.Style{color.Cyan}
+	clrDiffFile = color.Style{color.Yellow}
+)
+
+// Difference represents a specific difference found between two API schemas.
 type Difference struct {
-	Type           DifferenceType
-	File           string
-	Description    string
-	Value1, Value2 any
+	Type           DifferenceType // Type is a type of difference
+	File           string         // File is a name of file this difference was found in
+	Description    string         // Description contains difference description
+	Value1, Value2 any            // Value1 & Value2 contain the value this difference refers to from both schemas (or nil for add/remove)
 }
 
 func (d Difference) String() string {
@@ -83,8 +90,30 @@ func (d Difference) String() string {
 }
 
 // CompareSchemas compares two API schemas and returns a list of differences.
+//
+// Comparison process:
+//
+// 1. Schema-level properties
+//   - schema version
+//   - number of files
+//   - added/removed files
+//
+// 2. File-level properties
+//   - file version/CRC
+//   - file path
+//   - file options
+//   - number of messages/types
+//   - added/removed messages/types
+//
+// 3. Object-level properties
+//   - message CRC
+//   - message comment
+//   - added/removed/changed message fields
+//   - added/removed/changed message options
 func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 	var differences []Difference
+
+	logrus.Tracef("comparing schemas:\n\tSCHEMA 1: %v (%v files)\n\tSCHEMA 2: %v (%d files)\n", schema1.Version, len(schema1.Files), schema2.Version, len(schema2.Files))
 
 	// compare VPP version
 	if schema1.Version != schema2.Version {
@@ -101,51 +130,84 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 		differences = append(differences, Difference{
 			Type: TotalFilesDifference,
 			Description: color.Sprintf("Total file count %s from %v to %v",
-				clrWhite.Sprint(numberChangeString(len(schema1.Files), len(schema2.Files))), clrWhite.Sprint(len(schema1.Files)), clrWhite.Sprint(len(schema2.Files))),
+				clrWhite.Sprint(numberChangeString(len(schema1.Files), len(schema2.Files))),
+				clrWhite.Sprint(len(schema1.Files)), clrWhite.Sprint(len(schema2.Files))),
 			Value1: len(schema1.Files),
 			Value2: len(schema2.Files),
 		})
 	}
 
-	// compare schema files
+	fileDiffs := compareSchemaFiles(schema1.Files, schema2.Files)
+	logrus.Debugf("found %d differences between all schema files", len(fileDiffs))
+
+	differences = append(differences, fileDiffs...)
+
+	return differences
+}
+
+func compareSchemaFiles(files1 []vppapi.File, files2 []vppapi.File) []Difference {
+	var differences []Difference
+
+	// prepare files for comparison
+	var fileList1 []string
 	fileMap1 := make(map[string]vppapi.File)
-	for _, file := range schema1.Files {
+	for _, file := range files1 {
+		fileList1 = append(fileList1, file.Name)
 		fileMap1[file.Name] = file
 	}
+	var fileList2 []string
 	fileMap2 := make(map[string]vppapi.File)
-	for _, file := range schema2.Files {
+	for _, file := range files2 {
+		fileList2 = append(fileList2, file.Name)
 		fileMap2[file.Name] = file
 	}
+	sort.Strings(fileList1)
+	sort.Strings(fileList2)
+
+	var fileCompare []string
+
 	// removed files
-	for fileName, file1 := range fileMap1 {
-		if file2, ok := fileMap2[fileName]; ok {
-			fileDiffs := compareFiles(file1, file2)
-			for _, fileDiff := range fileDiffs {
-				fileDiff.File = fileName
-				differences = append(differences, fileDiff)
-			}
+	for _, fileName := range fileList1 {
+		file1 := fileMap1[fileName]
+		if _, ok := fileMap2[fileName]; ok {
+			fileCompare = append(fileCompare, fileName)
 		} else {
 			differences = append(differences, Difference{
 				Type:        FileRemovedDifference,
-				File:        fileName,
-				Description: "File removed",
+				Description: color.Sprintf("File removed: %s", clrWhite.Sprint(fileName)),
 				Value1:      file1,
 				Value2:      nil,
 			})
 		}
 	}
 	// added files
-	for fileName, file2 := range fileMap2 {
+	for _, fileName := range fileList2 {
+		file2 := fileMap2[fileName]
 		if _, ok := fileMap1[fileName]; !ok {
 			differences = append(differences, Difference{
 				Type:        FileAddedDifference,
-				File:        fileName,
-				Description: "File added",
+				Description: color.Sprintf("File added: %s", clrWhite.Sprint(fileName)),
 				Value1:      nil,
 				Value2:      file2,
 			})
 		}
 	}
+	sort.Strings(fileCompare)
+
+	// changed files
+	for _, fileName := range fileCompare {
+		file1 := fileMap1[fileName]
+		file2 := fileMap2[fileName]
+		fileDiffs := compareFiles(file1, file2)
+		if len(fileDiffs) > 0 {
+			logrus.Tracef("found %2d differences between files: %s", len(fileDiffs), fileName)
+		}
+		for _, fileDiff := range fileDiffs {
+			fileDiff.File = fileName
+			differences = append(differences, fileDiff)
+		}
+	}
+
 	return differences
 }
 
@@ -185,6 +247,7 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 			Value2: file2.CRC,
 		})
 	}
+	// TODO: compare other file options
 
 	// Compare number of messages and types
 	if len(file1.Messages) != len(file2.Messages) {
@@ -249,6 +312,8 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		}
 	}
 
+	// TODO: compare added/removed types
+
 	return differences
 }
 
@@ -296,6 +361,8 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 					Type: MsgOptionChangedDifference,
 					Description: color.Sprintf("Message %s changed option %s from %q to %q",
 						clrCyan.Sprint(msg1.Name), clrWhite.Sprint(option), clrWhite.Sprint(val1), clrWhite.Sprint(val2)),
+					Value1: keyValString(option, val1),
+					Value2: keyValString(option, val2),
 				})
 			}
 		} else {
@@ -304,19 +371,19 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 				Description: color.Sprintf("Message %s removed option: %s",
 					clrCyan.Sprint(msg1.Name), clrWhite.Sprint(option)),
 				Value1: keyValString(option, val1),
-				Value2: nil,
+				Value2: "",
 			})
 		}
 	}
 	// added options
-	for option, val := range msg2.Options {
+	for option, val2 := range msg2.Options {
 		if _, ok := msg1.Options[option]; !ok {
 			differences = append(differences, Difference{
 				Type: MsgOptionAddedDifference,
 				Description: color.Sprintf("Message %s added option: %s",
-					clrCyan.Sprint(msg2.Name), clrWhite.Sprint(keyValString(option, val))),
-				Value1: nil,
-				Value2: keyValString(option, val),
+					clrCyan.Sprint(msg2.Name), clrWhite.Sprint(keyValString(option, val2))),
+				Value1: "",
+				Value2: keyValString(option, val2),
 			})
 		}
 	}

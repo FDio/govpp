@@ -24,6 +24,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -31,10 +32,29 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+const exampleVppApiLsCmd = `
+  <cyan># List all VPP API files</>
+  govpp vppapi ls [INPUT]
+
+  <cyan># List only files matching path(s)</>
+  govpp vppapi ls [INPUT] --path "core/"
+  govpp vppapi ls [INPUT] --path "vpe,memclnt"
+
+  <cyan># List all files contents</>
+  govpp vppapi ls [INPUT] --show-contents
+
+  <cyan># List message definitions</>
+  govpp vppapi ls [INPUT] --show-messages
+  govpp vppapi ls [INPUT] --show-messages --include-fields
+
+  <cyan># Print raw VPP API files</>
+  govpp vppapi ls [INPUT] --show-raw
+`
+
 type VppApiLsCmdOptions struct {
 	*VppApiCmdOptions
 
-	Paths []string
+	Format string
 
 	IncludeImported bool
 	IncludeFields   bool
@@ -52,19 +72,21 @@ func newVppApiLsCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		opts = VppApiLsCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:     "ls [INPUT] [--path PATH]... [--show-contents | --show-messages | --show-raw | --show-rpc]",
-		Aliases: []string{"l", "list"},
-		Short:   "Show VPP API contents",
-		Long:    "Show VPP API files and their contents",
+		Use:     "list [INPUT] [--path PATH]... [--show-contents | --show-messages | --show-raw | --show-rpc]",
+		Aliases: []string{"l", "ls"},
+		Short:   "List VPP API contents",
+		Long:    "List VPP API files and their contents",
+		Example: color.Sprint(exampleVppApiLsCmd),
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			return runVppApiLsCmd(cmd.OutOrStdout(), opts)
+			return runVppApiLsCmd(cli.Out(), opts)
 		},
 	}
 
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeImported, "include-imported", false, "Include imported types")
 	cmd.PersistentFlags().BoolVar(&opts.IncludeFields, "include-fields", false, "Include message fields")
 	cmd.PersistentFlags().BoolVar(&opts.ShowContents, "show-contents", false, "Show contents of VPP API file(s)")
@@ -77,22 +99,18 @@ func newVppApiLsCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 }
 
 func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions) error {
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
-	allapifiles := vppInput.Schema.Files
-
-	logrus.Debugf("processing %d files", len(allapifiles))
-
-	apifiles, err := prepareVppApiFiles(allapifiles, opts.Paths, opts.IncludeImported, opts.SortByName)
+	apifiles, err := prepareVppApiFiles(vppInput.Schema.Files, opts.Paths, opts.IncludeImported, opts.SortByName)
 	if err != nil {
 		return err
 	}
 
 	// format output
-	if format := opts.Format; len(format) == 0 {
+	if opts.Format == "" {
 		if opts.ShowMessages {
 			apimsgs := listVPPAPIMessages(apifiles)
 			showVPPAPIMessages(out, apimsgs, opts.IncludeFields)
@@ -104,10 +122,11 @@ func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions) error {
 			rawFiles := getVppApiRawFiles(vppInput.ApiDirectory, apifiles)
 			showVPPAPIRaw(out, rawFiles)
 		} else {
-			showVPPAPIList(out, apifiles)
+			files := vppApiFilesToList(apifiles)
+			showVPPAPIFilesTable(out, files)
 		}
 	} else {
-		if err := formatAsTemplate(out, format, apifiles); err != nil {
+		if err := formatAsTemplate(out, opts.Format, apifiles); err != nil {
 			return err
 		}
 	}
@@ -152,15 +171,92 @@ func showVPPAPIRaw(out io.Writer, rawFiles []VppApiRawFile) {
 }
 
 type VppApiFile struct {
-	File        string
+	Name        string
 	Version     string
 	CRC         string
-	Options     string
+	Options     []string
 	Path        string
-	NumImports  uint
-	NumMessages uint
-	NumTypes    uint
-	NumRPCs     uint
+	NumImports  int
+	NumMessages int
+	NumTypes    int
+	NumRPCs     int
+}
+
+func showVPPAPIFilesTable(out io.Writer, apifiles []VppApiFile) {
+	table := tablewriter.NewWriter(out)
+	table.SetHeader([]string{
+		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs", "Options",
+	})
+	table.SetAutoWrapText(false)
+	table.SetRowLine(false)
+	table.SetBorder(false)
+	table.SetColumnAlignment([]int{
+		tablewriter.ALIGN_RIGHT, 0, 0, tablewriter.ALIGN_LEFT, 0, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_LEFT,
+	})
+
+	for i, apifile := range apifiles {
+		index := i + 1
+
+		typesCount := apifile.NumTypes
+		apiVersion := apifile.Version
+		apiCrc := apifile.CRC
+		options := strings.Join(apifile.Options, ", ")
+		apiDirPath := path.Dir(apifile.Path)
+
+		var msgs string
+		if apifile.NumMessages > 0 {
+			msgs = fmt.Sprintf("%3d", apifile.NumMessages)
+		} else {
+			msgs = fmt.Sprintf("%3s", "-")
+		}
+		var types string
+		if typesCount > 0 {
+			types = fmt.Sprintf("%2d", typesCount)
+		} else {
+			types = fmt.Sprintf("%2s", "-")
+		}
+		var services string
+		if apifile.NumRPCs > 0 {
+			services = fmt.Sprintf("%2d", apifile.NumRPCs)
+		} else {
+			services = fmt.Sprintf("%2s", "-")
+		}
+		var importCount string
+		if apifile.NumImports > 0 {
+			importCount = fmt.Sprintf("%2d", apifile.NumImports)
+		} else {
+			importCount = fmt.Sprintf("%2s", "-")
+		}
+
+		row := []string{
+			fmt.Sprint(index), apifile.Name, apiVersion, apiCrc, apiDirPath, importCount, msgs, types, services, options,
+		}
+
+		table.Append(row)
+	}
+	table.Render()
+}
+
+func vppApiFilesToList(apifiles []vppapi.File) []VppApiFile {
+	var list []VppApiFile
+	for _, apifile := range apifiles {
+		numRPCs := 0
+		if apifile.Service != nil {
+			numRPCs = len(apifile.Service.RPCs)
+		}
+		list = append(list, VppApiFile{
+			Name:        apifile.Name,
+			Version:     getFileVersion(apifile),
+			CRC:         getShortCrc(apifile.CRC),
+			Options:     getFileOptionsSlice(apifile),
+			Path:        pathOfParentAndFile(apifile.Path),
+			NumImports:  len(apifile.Imports),
+			NumMessages: len(apifile.Messages),
+			NumTypes:    getFileTypesCount(apifile),
+			NumRPCs:     numRPCs,
+		})
+	}
+	return list
 }
 
 func showVPPAPIList(out io.Writer, apifiles []vppapi.File) {
@@ -168,7 +264,6 @@ func showVPPAPIList(out io.Writer, apifiles []vppapi.File) {
 	table.SetHeader([]string{
 		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs", "Options",
 	})
-	//table.SetAutoMergeCells(true)
 	table.SetAutoWrapText(false)
 	table.SetRowLine(false)
 	table.SetBorder(false)

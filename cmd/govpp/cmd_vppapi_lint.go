@@ -18,17 +18,27 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// TODO:
-//  - consider adding categories for linter rules
+const exampleVppApiLintCmd = `
+  <cyan># Lint VPP master using default rules</>
+  govpp vppapi lint https://github.com/FDio/vpp
+
+  <cyan># Lint using only specific rules</>
+  govpp vppapi lint https://github.com/FDio/vpp --rules=MESSAGE_DEPRECATE_OLDER_VERSIONS
+
+  <cyan># List all linter rules</>
+  govpp vppapi lint --list-rules
+`
 
 type VppApiLintCmdOptions struct {
 	*VppApiCmdOptions
 
+	Format    string
 	Rules     []string
 	Except    []string
 	ExitCode  bool
@@ -40,18 +50,20 @@ func newVppApiLintCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		opts = VppApiLintCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:   "lint [INPUT] [--rules RULE]...",
-		Short: "Lint VPP API",
-		Long:  "Run linter checks for VPP API files",
-		Args:  cobra.MaximumNArgs(1),
+		Use:     "lint [INPUT] [--rules RULE]... [--except RULE]... [--exit-code] | [--list-rules]",
+		Short:   "Lint VPP API definitions",
+		Long:    "Lint VPP API definitions by running linter with rule checks to detect any violations.",
+		Example: color.Sprint(exampleVppApiLintCmd),
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			return runVppApiLintCmd(cmd.OutOrStdout(), opts)
+			return runVppApiLintCmd(cli.Out(), opts)
 		},
 	}
 
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
 	cmd.PersistentFlags().StringSliceVar(&opts.Rules, "rules", nil, "Limit to specific linter rules")
 	cmd.PersistentFlags().StringSliceVar(&opts.Except, "except", nil, "Skip specific linter rules.")
 	cmd.PersistentFlags().BoolVar(&opts.ExitCode, "exit-code", false, "Exit with non-zero exit code if any issue is found")
@@ -71,19 +83,18 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 		return nil
 	}
 
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
 	schema := vppInput.Schema
 
-	// filter files
-	apifiles := filterFilesByPaths(schema.Files, opts.Paths)
-	if len(apifiles) == 0 {
-		return fmt.Errorf("filter matched no files")
+	apifiles, err := prepareVppApiFiles(schema.Files, opts.Paths, false, true)
+	if err != nil {
+		return err
 	}
-	logrus.Debugf("filtered %d/%d files", len(apifiles), len(schema.Files))
+	schema.Files = apifiles
 
 	linter := NewLinter()
 

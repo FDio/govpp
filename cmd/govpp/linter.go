@@ -26,16 +26,21 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// TODO:
+//  - consider adding categories for linter rules
+
 const (
 	FILE_BASIC                       = "FILE_BASIC"
 	MESSAGE_DEPRECATE_OLDER_VERSIONS = "MESSAGE_DEPRECATE_OLDER_VERSIONS"
 	MESSAGE_SAME_STATUS              = "MESSAGE_SAME_STATUS"
+	UNUSED_MESSAGE                   = "UNUSED_MESSAGE"
 )
 
 var defaultLintRules = []string{
 	FILE_BASIC,
 	MESSAGE_DEPRECATE_OLDER_VERSIONS,
 	MESSAGE_SAME_STATUS,
+	UNUSED_MESSAGE,
 }
 
 type LintRule struct {
@@ -77,8 +82,13 @@ var lintRules = map[string]LintRule{
 	},
 	MESSAGE_SAME_STATUS: {
 		Id:      MESSAGE_SAME_STATUS,
-		Purpose: "Message request and reply must have the same status",
+		Purpose: "Messages that are related must have the same status",
 		check:   checkFiles(checkFileMessageSameStatus),
+	},
+	UNUSED_MESSAGE: {
+		Id:      UNUSED_MESSAGE,
+		Purpose: "Messages should be used in services",
+		check:   checkFiles(checkFileMessageUsed),
 	},
 }
 
@@ -158,6 +168,26 @@ func checkFileMessageSameStatus(file *vppapi.File) LintIssues {
 						color.Cyan.Sprint(message.Name), clrWhite.Sprint(status), color.Cyan.Sprint(relatedMsg), clrWhite.Sprint(relStatus)),
 				})
 			}
+		}
+	}
+
+	return issues
+}
+
+func checkFileMessageUsed(file *vppapi.File) LintIssues {
+	var issues LintIssues
+
+	rpcMsgs := extractFileMessagesToRPC(file)
+
+	for _, message := range file.Messages {
+		if _, ok := rpcMsgs[message.Name]; !ok {
+			issues = issues.Append(LintIssue{
+				File: file.Path,
+				Object: map[string]any{
+					"Message": message,
+				},
+				Violation: color.Sprintf("message %s is not used by services", color.Cyan.Sprint(message.Name)),
+			})
 		}
 	}
 
@@ -321,6 +351,8 @@ const (
 	optionStatus           = "status"
 	optionStatusInProgress = "in_progress"
 	optionStatusDeprecated = "deprecated"
+
+	noStatus = "n/a"
 )
 
 func getMessageStatus(message vppapi.Message) string {
@@ -333,7 +365,7 @@ func getMessageStatus(message vppapi.Message) string {
 	if status, ok := message.Options[optionStatus]; ok {
 		return status
 	}
-	return "n/a"
+	return noStatus
 }
 
 func isMessageDeprecated(message vppapi.Message) bool {
@@ -400,24 +432,40 @@ func extractMessageVersions(file *vppapi.File) map[string]map[int]vppapi.Message
 	return messageVersions
 }
 
-func extractMessagesRPC(file *vppapi.File) map[string]vppapi.RPC {
+func extractFileMessagesToRPC(file *vppapi.File) map[string]vppapi.RPC {
+	if file.Service == nil {
+		return nil
+	}
 	messagesRPC := make(map[string]vppapi.RPC)
-	if file.Service != nil {
-		for _, rpc := range file.Service.RPCs {
-			if m := rpc.Request; m != "" {
-				messagesRPC[m] = rpc
-			}
+	for _, rpc := range file.Service.RPCs {
+		for _, m := range extractRPCMessages(rpc) {
+			messagesRPC[m] = rpc
 		}
 	}
 	return messagesRPC
 }
+
+func extractMessageRequestsToRPC(file *vppapi.File) map[string]vppapi.RPC {
+	if file.Service == nil {
+		return nil
+	}
+	messagesRPC := make(map[string]vppapi.RPC)
+	for _, rpc := range file.Service.RPCs {
+		if m := rpc.Request; m != "" {
+			messagesRPC[m] = rpc
+		}
+	}
+	return messagesRPC
+}
+
+const noReply = "null"
 
 func extractRPCMessages(rpc vppapi.RPC) []string {
 	var messages []string
 	if m := rpc.Request; m != "" {
 		messages = append(messages, m)
 	}
-	if m := rpc.Reply; m != "" && m != "null" {
+	if m := rpc.Reply; m != "" && m != noReply {
 		messages = append(messages, m)
 	}
 	if m := rpc.StreamMsg; m != "" {
@@ -428,7 +476,7 @@ func extractRPCMessages(rpc vppapi.RPC) []string {
 }
 
 func getRelatedMessages(file *vppapi.File, msg string) []string {
-	msgsRPC := extractMessagesRPC(file)
+	msgsRPC := extractMessageRequestsToRPC(file)
 	var related []string
 	if rpc, ok := msgsRPC[msg]; ok {
 		for _, m := range extractRPCMessages(rpc) {

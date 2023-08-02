@@ -30,13 +30,18 @@ import (
 //  - option to exit with non-zero status on breaking changes
 
 const exampleVppApiDiffCommand = `
-  <note># Compare VPP API schemas</>
-  govpp vppapi diff . --against https://github.com/FDio/vpp
+  <cyan># Compare VPP API in current directory against master</>
+  govpp vppapi compare . --against https://github.com/FDio/vpp.git
+
+  <cyan># Compare only specific differences of VPP API schemas</>
+  govpp vppapi compare . --against https://github.com/FDio/vpp.git --differences=FileVersion,FileCRC
+  govpp vppapi compare . --against https://github.com/FDio/vpp.git --differences=MessageAdded
 `
 
 type VppApiDiffCmdOptions struct {
 	*VppApiCmdOptions
 
+	Format       string
 	Against      string
 	Differences  []string
 	CommentDiffs bool
@@ -47,8 +52,8 @@ func newVppApiDiffCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		opts = VppApiDiffCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:     "diff [INPUT] --against AGAINST [--differences DIFF]...",
-		Aliases: []string{"cmp", "compare"},
+		Use:     "compare [INPUT] --against AGAINST [--differences DIFF]... | [--list-differences]",
+		Aliases: []string{"cmp", "diff", "comp"},
 		Short:   "Compare VPP API schemas",
 		Long:    "Compares two VPP API schemas and lists the differences.",
 		Example: color.Sprint(exampleVppApiDiffCommand),
@@ -57,26 +62,21 @@ func newVppApiDiffCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			return runVppApiDiffCmd(cmd.OutOrStdout(), opts)
+			return runVppApiDiffCmd(cli.Out(), opts)
 		},
 	}
 
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
 	cmd.PersistentFlags().BoolVar(&opts.CommentDiffs, "comments", false, "Include message comment differences")
-	cmd.PersistentFlags().StringSliceVar(&opts.Differences, "differences", nil, "List only specific differences")
+	cmd.PersistentFlags().StringSliceVarP(&opts.Differences, "differences", "d", nil, "List only specific differences")
 	cmd.PersistentFlags().StringVar(&opts.Against, "against", "", "The VPP API schema to compare against.")
 	must(cobra.MarkFlagRequired(cmd.PersistentFlags(), "against"))
 
 	return cmd
 }
 
-var (
-	clrWhite    = color.Style{color.White}
-	clrCyan     = color.Style{color.Cyan}
-	clrDiffFile = color.Style{color.Yellow}
-)
-
 func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}
@@ -91,8 +91,6 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 	// compare schemas
 	schema1 := vppInput.Schema
 	schema2 := vppAgainst.Schema
-
-	logrus.Tracef("comparing schemas:\n\tSCHEMA 1: %+v\n\tSCHEMA 2: %+v\n", schema1, schema2)
 
 	diffs := CompareSchemas(&schema1, &schema2)
 
@@ -128,9 +126,14 @@ func printDifferencesSimple(out io.Writer, diffs []Difference) {
 		return
 	}
 
+	var lastFile string
 	fmt.Fprintf(out, "Listing %d differences:\n", len(diffs))
-	for _, d := range diffs {
-		color.Fprintf(out, " - %s\n", d)
+	for _, diff := range diffs {
+		if diff.File != lastFile {
+			color.Fprintf(out, " %s\n", clrDiffFile.Sprint(diff.File))
+		}
+		color.Fprintf(out, " - [%v] %v\n", clrWhite.Sprint(diff.Type), diff.Description)
+		lastFile = diff.File
 	}
 }
 
