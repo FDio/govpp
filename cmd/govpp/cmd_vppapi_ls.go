@@ -40,7 +40,7 @@ const exampleVppApiLsCmd = `
   govpp vppapi ls [INPUT] --path "core/"
   govpp vppapi ls [INPUT] --path "vpe,memclnt"
 
-  <cyan># List all files contents</>
+  <cyan># List all contents from files</>
   govpp vppapi ls [INPUT] --show-contents
 
   <cyan># List message definitions</>
@@ -170,6 +170,7 @@ func showVPPAPIRaw(out io.Writer, rawFiles []VppApiRawFile) {
 	}
 }
 
+// VppApiFile holds info about a single VPP API file used for listing files.
 type VppApiFile struct {
 	Name        string
 	Version     string
@@ -257,61 +258,6 @@ func vppApiFilesToList(apifiles []vppapi.File) []VppApiFile {
 		})
 	}
 	return list
-}
-
-func showVPPAPIList(out io.Writer, apifiles []vppapi.File) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs", "Options",
-	})
-	table.SetAutoWrapText(false)
-	table.SetRowLine(false)
-	table.SetBorder(false)
-	table.SetColumnAlignment([]int{
-		tablewriter.ALIGN_RIGHT, 0, 0, tablewriter.ALIGN_LEFT, 0, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_LEFT,
-	})
-
-	for i, apifile := range apifiles {
-		index := i + 1
-
-		typesCount := getFileTypesCount(apifile)
-		apiVersion := getFileVersion(apifile)
-		apiCrc := getShortCrc(apifile.CRC)
-		options := strings.Join(getFileOptionsSlice(apifile), ", ")
-		apiDirPath := path.Dir(pathOfParentAndFile(apifile.Path))
-
-		var msgs string
-		if len(apifile.Messages) > 0 {
-			msgs = fmt.Sprintf("%3d", len(apifile.Messages))
-		} else {
-			msgs = fmt.Sprintf("%3s", "-")
-		}
-		var types string
-		if typesCount > 0 {
-			types = fmt.Sprintf("%2d", typesCount)
-		} else {
-			types = fmt.Sprintf("%2s", "-")
-		}
-		var services string
-		if apifile.Service != nil {
-			services = fmt.Sprintf("%2d", len(apifile.Service.RPCs))
-		} else {
-			services = fmt.Sprintf("%2s", "-")
-		}
-		var importCount string
-		if len(apifile.Imports) > 0 {
-			importCount = fmt.Sprintf("%2d", len(apifile.Imports))
-		} else {
-			importCount = fmt.Sprintf("%2s", "-")
-		}
-
-		row := []string{
-			fmt.Sprint(index), apifile.Name, apiVersion, apiCrc, apiDirPath, importCount, msgs, types, services, options,
-		}
-
-		table.Append(row)
-	}
-	table.Render()
 }
 
 func pathOfParentAndFile(path string) string {

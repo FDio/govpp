@@ -15,8 +15,10 @@
 package vppapi
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -24,6 +26,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 )
+
+// TODO:
+//  - validate format-specific options parsed by input ref
+//  - add support for zip format
+//  - add support for json format to allow using JSON-formatted schema as input
 
 type InputFormat string
 
@@ -147,6 +154,11 @@ func (ref *InputRef) Retrieve() (*VppInput, error) {
 	case FormatDir:
 		info, err := os.Stat(ref.Path)
 		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				return nil, fmt.Errorf("directory path %q does not exist", ref.Path)
+			} else if errors.Is(err, fs.ErrPermission) {
+				return nil, fmt.Errorf("directory path %q does not have sufficient permission", ref.Path)
+			}
 			return nil, fmt.Errorf("path error: %v", err)
 		}
 		if !info.IsDir() {

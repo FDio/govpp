@@ -15,6 +15,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -46,27 +47,8 @@ var defaultLintRules = []string{
 type LintRule struct {
 	Id      string
 	Purpose string
-	//Categories []string
+
 	check func(schema *vppapi.Schema) LintIssues
-}
-
-func LintRules(ids ...string) []*LintRule {
-	var rules []*LintRule
-	for _, id := range ids {
-		rule := GetLintRule(id)
-		if rule != nil {
-			rules = append(rules, rule)
-		}
-	}
-	return rules
-}
-
-func GetLintRule(id string) *LintRule {
-	rule, ok := lintRules[id]
-	if ok {
-		return &rule
-	}
-	return nil
 }
 
 var lintRules = map[string]LintRule{
@@ -90,6 +72,43 @@ var lintRules = map[string]LintRule{
 		Purpose: "Messages should be used in services",
 		check:   checkFiles(checkFileMessageUsed),
 	},
+}
+
+func GetLintRule(id string) *LintRule {
+	rule, ok := lintRules[id]
+	if ok {
+		return &rule
+	}
+	return nil
+}
+
+func ListLintRules(ids ...string) []*LintRule {
+	var rules []*LintRule
+	for _, id := range ids {
+		rule := GetLintRule(id)
+		if rule != nil {
+			rules = append(rules, rule)
+		}
+	}
+	return rules
+}
+
+func checkFiles(checkFn func(file *vppapi.File) LintIssues) func(*vppapi.Schema) LintIssues {
+	return func(schema *vppapi.Schema) LintIssues {
+		var issues LintIssues
+
+		logrus.Tracef("running checkFiles for %d files", len(schema.Files))
+
+		for _, file := range schema.Files {
+			e := checkFn(&file)
+			if e != nil {
+				logrus.Tracef("checked file: %v (%v)", file.Name, e)
+			}
+			issues = append(issues, e...)
+		}
+
+		return issues
+	}
 }
 
 func checkFileBasic(file *vppapi.File) LintIssues {
@@ -194,31 +213,13 @@ func checkFileMessageUsed(file *vppapi.File) LintIssues {
 	return issues
 }
 
-func checkFiles(checkFn func(file *vppapi.File) LintIssues) func(*vppapi.Schema) LintIssues {
-	return func(schema *vppapi.Schema) LintIssues {
-		var issues LintIssues
-
-		logrus.Tracef("running checkFiles for %d files", len(schema.Files))
-
-		for _, file := range schema.Files {
-			e := checkFn(&file)
-			if e != nil {
-				logrus.Tracef("checked file: %v (%v)", file.Name, e)
-			}
-			issues = append(issues, e...)
-		}
-
-		return issues
-	}
-}
-
 type Linter struct {
 	rules []*LintRule
 }
 
 func NewLinter() *Linter {
 	return &Linter{
-		rules: LintRules(defaultLintRules...),
+		rules: ListLintRules(defaultLintRules...),
 	}
 }
 
@@ -248,18 +249,18 @@ func (l *Linter) Disable(rules ...string) {
 	}
 }
 
-func (l *Linter) Lint(schema *vppapi.Schema) error {
-	logrus.Debugf("linter will run %d rule checks for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
+func (l *Linter) Lint(schema *vppapi.Schema) (LintIssues, error) {
+	logrus.Debugf("running %d rule checks for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
 
 	var allIssues LintIssues
 
 	for _, rule := range l.rules {
 		log := logrus.WithField("rule", rule.Id)
-		log.Debugf("running linter rulecheck (purpose: %v)", rule.Purpose)
+		log.Tracef("running rule check (purpose: %v)", rule.Purpose)
 
 		issues := rule.check(schema)
 		if len(issues) > 0 {
-			log.Tracef("linter rule check failed, found %d issues", len(issues))
+			log.Tracef("rule check found %d issues", len(issues))
 
 			for _, issue := range issues {
 				if issue.RuleId == "" {
@@ -268,18 +269,17 @@ func (l *Linter) Lint(schema *vppapi.Schema) error {
 				allIssues = allIssues.Append(issue)
 			}
 		} else {
-			log.Tracef("linter rule check passed")
+			log.Tracef("rule check passed")
 		}
 	}
 
 	if len(allIssues) > 0 {
-		logrus.Debugf("found %d issues in %d files", len(allIssues), len(schema.Files))
-		return allIssues
+		logrus.Tracef("found %d issues in %d files", len(allIssues), len(schema.Files))
 	} else {
-		logrus.Debugf("no issues found in %d files", len(schema.Files))
+		logrus.Tracef("no issues found in %d files", len(schema.Files))
 	}
 
-	return nil
+	return allIssues, nil
 }
 
 func (l *Linter) SetRules(rules []string) {
@@ -300,20 +300,12 @@ func (l *Linter) SetRules(rules []string) {
 }
 
 type LintIssue struct {
-	RuleId string
-
-	File string
-	Line int `json:",omitempty"`
-
-	Object    any `json:",omitempty"`
+	RuleId    string
+	File      string
 	Violation string
-}
 
-func createLintIssue(id string, err error) LintIssue {
-	return LintIssue{
-		RuleId:    id,
-		Violation: err.Error(),
-	}
+	Object any `json:",omitempty"`
+	Line   int `json:",omitempty"`
 }
 
 func (l LintIssue) Error() string {
@@ -322,26 +314,21 @@ func (l LintIssue) Error() string {
 
 type LintIssues []LintIssue
 
-func (le LintIssues) Error() string {
-	if len(le) == 0 {
-		return "no issues"
-	}
-	return fmt.Sprintf("%d issues", len(le))
-}
-
 func (le LintIssues) Append(errs ...error) LintIssues {
 	var r = le
 	for _, err := range errs {
 		if err == nil {
 			continue
 		}
-		switch e := err.(type) {
-		case LintIssue:
+		var e LintIssue
+		switch {
+		case errors.As(err, &e):
 			r = append(r, e)
-		//case LintIssues:
-		//	r = append(r, e...)
 		default:
-			r = append(r, createLintIssue("", err))
+			r = append(r, LintIssue{
+				RuleId:    "",
+				Violation: err.Error(),
+			})
 		}
 	}
 	return r
@@ -351,6 +338,8 @@ const (
 	optionStatus           = "status"
 	optionStatusInProgress = "in_progress"
 	optionStatusDeprecated = "deprecated"
+
+	noReply = "null"
 
 	noStatus = "n/a"
 )
@@ -457,8 +446,6 @@ func extractMessageRequestsToRPC(file *vppapi.File) map[string]vppapi.RPC {
 	}
 	return messagesRPC
 }
-
-const noReply = "null"
 
 func extractRPCMessages(rpc vppapi.RPC) []string {
 	var messages []string

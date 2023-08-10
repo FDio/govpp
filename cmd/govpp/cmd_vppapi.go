@@ -66,7 +66,9 @@ func newVppapiCmd(cli Cli) *cobra.Command {
 		TraverseChildren: true,
 	}
 
-	cmd.PersistentFlags().StringSliceVar(&opts.Paths, "path", nil, "Limit to specific files or directories.\nFor example: \"vpe\" or \"core/\".")
+	cmd.PersistentFlags().StringSliceVar(&opts.Paths, "path", nil, "Limit to specific files or directories.\n"+
+		"For example: \"vpe\" or \"core/\".\n"+
+		"If specified multiple times, the union is taken.")
 
 	cmd.AddCommand(
 		newVppApiLsCmd(cli, &opts),

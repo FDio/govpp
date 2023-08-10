@@ -28,8 +28,7 @@ import (
 type DifferenceType string
 
 const (
-	VersionDifference DifferenceType = "Version"
-
+	VersionDifference     DifferenceType = "Version"
 	TotalFilesDifference  DifferenceType = "FilesCount"
 	FileAddedDifference   DifferenceType = "FileAdded"
 	FileRemovedDifference DifferenceType = "FileRemoved"
@@ -42,41 +41,37 @@ const (
 	MessageRemovedDifference      DifferenceType = "MessageRemoved"
 
 	MessageCrcDifference       DifferenceType = "MessageCRC"
-	MessageCommentDifference   DifferenceType = "MessageComment"
 	MsgOptionChangedDifference DifferenceType = "MsgOptionChanged"
 	MsgOptionAddedDifference   DifferenceType = "MsgOptionAdded"
 	MsgOptionRemovedDifference DifferenceType = "MsgOptionRemoved"
+	MessageCommentDifference   DifferenceType = "MessageComment"
 )
 
-var differenceTypes = []DifferenceType{
+var defaultDifferenceTypes = []DifferenceType{
 	VersionDifference,
 	TotalFilesDifference,
 	FileAddedDifference,
 	FileRemovedDifference,
+
 	FileMovedDifference,
 	FileVersionDifference,
 	FileCrcDifference,
 	FileContentsChangedDifference,
 	MessageAddedDifference,
 	MessageRemovedDifference,
+
 	MessageCrcDifference,
 	MsgOptionChangedDifference,
 	MsgOptionAddedDifference,
 	MsgOptionRemovedDifference,
 }
 
-var (
-	clrWhite    = color.Style{color.White}
-	clrCyan     = color.Style{color.Cyan}
-	clrDiffFile = color.Style{color.Yellow}
-)
-
-// Difference represents a specific difference found between two API schemas.
+// Difference represents a specific difference found between two schemas.
 type Difference struct {
-	Type           DifferenceType // Type is a type of difference
-	File           string         // File is a name of file this difference was found in
-	Description    string         // Description contains difference description
-	Value1, Value2 any            // Value1 & Value2 contain the value this difference refers to from both schemas (or nil for add/remove)
+	Type           DifferenceType // Type is a type of the difference
+	File           string         // File is a file name in which the difference was found in (or nil in case of schema-level differences)
+	Description    string         // Description describes the difference
+	Value1, Value2 any            // Value1 & Value2 contain the values that are being compared (or nil in case of add/remove-kind differences)
 }
 
 func (d Difference) String() string {
