@@ -27,18 +27,18 @@ jobs:
           config_file: '.github/ci/yamllint.yml'
 
   go-mod:
+    name: "Check go.mod"
     strategy:
       matrix:
         go: [ '1.20' ]
-    name: "Check go.mod"
     runs-on: ubuntu-latest
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
       - name: "Setup Go"
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - name: "Checkout"
-        uses: actions/checkout@v3
       - name: "Run go mod tidy"
         run: go mod tidy -v
       - name: "Check go.mod"
@@ -49,20 +49,20 @@ jobs:
           git diff --exit-code go.sum
 
   binapi:
+    name: "Check generated binapi"
     strategy:
       matrix:
         go: [ '1.20' ]
     env:
       VERSION: v0.8.0
-    name: "Check generated binapi"
     runs-on: ubuntu-latest
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
       - name: "Setup Go"
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - name: "Checkout"
-        uses: actions/checkout@v3
       - name: "Generate binapi"
         run: make gen-binapi-docker
       - name: "Check binapi"
@@ -70,13 +70,15 @@ jobs:
           git diff --exit-code binapi
 
   build-test:
+    name: "Build and test"
     strategy:
       matrix:
         go: [ '1.20' ]
         os: [ ubuntu-latest ]
-    name: "Build and test"
     runs-on: ${{ matrix.os }}
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
       - name: "Setup Go"
         uses: actions/setup-go@v4
         with:
@@ -85,8 +87,6 @@ jobs:
         uses: autero1/action-gotestsum@v2.0.0
         with:
           gotestsum_version: 1.9.0
-      - name: "Checkout"
-        uses: actions/checkout@v3
       - name: "Go Build"
         run: go build -v ./...
       - name: "Go Test"
@@ -98,21 +98,21 @@ jobs:
           test-results: test.json
 
   golangci:
+    name: "GolangCI"
     strategy:
       matrix:
         go: [ '1.20' ]
-    name: "GolangCI"
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
     steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
       - name: "Setup Go"
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - name: "Checkout"
-        uses: actions/checkout@v3
       - name: "Run golangci"
         uses: golangci/golangci-lint-action@v3  # docs: https://github.com/golangci/golangci-lint-action
         with:

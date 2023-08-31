@@ -18,17 +18,27 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-// TODO:
-//  - consider adding categories for linter rules
+const exampleVppApiLintCmd = `
+  <cyan># Lint VPP master using default rules</>
+  govpp vppapi lint https://github.com/FDio/vpp
+
+  <cyan># Lint using only specific rules</>
+  govpp vppapi lint https://github.com/FDio/vpp --rules=MESSAGE_DEPRECATE_OLDER_VERSIONS
+
+  <cyan># List all linter rules</>
+  govpp vppapi lint --list-rules
+`
 
 type VppApiLintCmdOptions struct {
 	*VppApiCmdOptions
 
+	Format    string
 	Rules     []string
 	Except    []string
 	ExitCode  bool
@@ -40,20 +50,22 @@ func newVppApiLintCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		opts = VppApiLintCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:   "lint [INPUT] [--rules RULE]...",
-		Short: "Lint VPP API",
-		Long:  "Run linter checks for VPP API files",
-		Args:  cobra.MaximumNArgs(1),
+		Use:     "lint [INPUT] [--rules RULE]... [--except RULE]... [--exit-code] | [--list-rules]",
+		Short:   "Lint VPP API definitions",
+		Long:    "Lint VPP API definitions by running linter with rule checks to detect any violations.",
+		Example: color.Sprint(exampleVppApiLintCmd),
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			return runVppApiLintCmd(cmd.OutOrStdout(), opts)
+			return runVppApiLintCmd(cli.Out(), opts)
 		},
 	}
 
-	cmd.PersistentFlags().StringSliceVar(&opts.Rules, "rules", nil, "Limit to specific linter rules")
-	cmd.PersistentFlags().StringSliceVar(&opts.Except, "except", nil, "Skip specific linter rules.")
+	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
+	cmd.PersistentFlags().StringSliceVar(&opts.Rules, "rules", nil, "Check only specific rules")
+	cmd.PersistentFlags().StringSliceVar(&opts.Except, "except", nil, "Exclude specific rules")
 	cmd.PersistentFlags().BoolVar(&opts.ExitCode, "exit-code", false, "Exit with non-zero exit code if any issue is found")
 	cmd.PersistentFlags().BoolVar(&opts.ListRules, "list-rules", false, "List all known linter rules")
 
@@ -62,7 +74,7 @@ func newVppApiLintCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 
 func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 	if opts.ListRules {
-		rules := LintRules(defaultLintRules...)
+		rules := ListLintRules(defaultLintRules...)
 		if opts.Format == "" {
 			printLintRulesAsTable(out, rules)
 		} else {
@@ -71,51 +83,48 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 		return nil
 	}
 
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
 	schema := vppInput.Schema
 
-	// filter files
-	apifiles := filterFilesByPaths(schema.Files, opts.Paths)
-	if len(apifiles) == 0 {
-		return fmt.Errorf("filter matched no files")
+	apifiles, err := prepareVppApiFiles(schema.Files, opts.Paths, false, true)
+	if err != nil {
+		return err
 	}
-	logrus.Debugf("filtered %d/%d files", len(apifiles), len(schema.Files))
+	schema.Files = apifiles
 
 	linter := NewLinter()
 
 	if len(opts.Rules) > 0 {
-		logrus.Debugf("setting lint rules to: %v", opts.Rules)
+		logrus.Debugf("setting rules to: %v", opts.Rules)
 		linter.SetRules(opts.Rules)
 	}
 	if len(opts.Except) > 0 {
-		logrus.Debugf("disabling lint rules: %v", opts.Except)
+		logrus.Debugf("disabling rules: %v", opts.Except)
 		linter.Disable(opts.Except...)
 	}
 
-	if err := linter.Lint(&schema); err != nil {
-		if errs, ok := err.(LintIssues); ok {
-			if opts.Format == "" {
-				printLintErrorsAsTable(out, errs)
-			} else {
-				return formatAsTemplate(out, opts.Format, errs)
-			}
-			if opts.ExitCode {
-				return err
-			} else {
-				logrus.Errorln("Linter found:", err)
-			}
-		} else {
-			return fmt.Errorf("linter failure: %w", err)
-		}
+	lintIssues, err := linter.Lint(&schema)
+	if err != nil {
+		return fmt.Errorf("linter failure: %w", err)
+	}
+
+	if opts.Format == "" {
+		printLintErrorsAsTable(out, lintIssues)
 	} else {
-		if opts.Format == "" {
-			fmt.Fprintln(out, "No issues found")
+		if err := formatAsTemplate(out, opts.Format, lintIssues); err != nil {
+			return err
+		}
+	}
+
+	if len(lintIssues) > 0 {
+		if opts.ExitCode {
+			return fmt.Errorf("found %d issues", len(lintIssues))
 		} else {
-			return formatAsTemplate(out, opts.Format, nil)
+			logrus.Errorf("found %d issues", len(lintIssues))
 		}
 	}
 
@@ -140,7 +149,12 @@ func printLintRulesAsTable(out io.Writer, rules []*LintRule) {
 	table.Render()
 }
 
-func printLintErrorsAsTable(out io.Writer, errs LintIssues) {
+func printLintErrorsAsTable(out io.Writer, issues LintIssues) {
+	if len(issues) == 0 {
+		fmt.Fprintln(out, "No issues found")
+		return
+	}
+
 	table := tablewriter.NewWriter(out)
 	table.SetHeader([]string{
 		"#", "Rule", "Location", "Violation",
@@ -149,7 +163,7 @@ func printLintErrorsAsTable(out io.Writer, errs LintIssues) {
 	table.SetAutoWrapText(false)
 	table.SetRowLine(true)
 	table.SetBorder(false)
-	for i, e := range errs {
+	for i, e := range issues {
 		index := i + 1
 		loc := e.File
 		if e.Line > 0 {

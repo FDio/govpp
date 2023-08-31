@@ -69,7 +69,7 @@ func newHttpCmd(Cli) *cobra.Command {
 }
 
 func runHttpCmd(opts HttpCmdOptions) error {
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}

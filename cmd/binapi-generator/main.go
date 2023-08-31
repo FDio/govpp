@@ -33,7 +33,7 @@ const (
 
 var (
 	input        = pflag.String("input", "", "Input for VPP API (e.g. path to VPP API directory, local VPP repo)")
-	inputDir     = pflag.String("input-dir", "", "DEPRECATED: Input directory containing API files.")
+	inputDir     = pflag.String("input-dir", "", "Input directory containing API files.")
 	theOutputDir = pflag.StringP("output-dir", "o", DefaultOutputDir, "Output directory where code will be generated.")
 	runPlugins   = pflag.StringSlice("gen", []string{"rpc"}, "List of generator plugins to run for files.")
 	importPrefix = pflag.String("import-prefix", "", "Prefix imports in the generated go code. \nE.g. other API Files (e.g. api_file.ba.go) will be imported with :\nimport (\n  api_file \"<import-prefix>/api_file\"\n)")
@@ -46,6 +46,7 @@ var (
 )
 
 func init() {
+	pflag.Lookup("input-dir").Deprecated = "The --input-dir is deprecated, use --input instead."
 	pflag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "USAGE\n")
 		fmt.Fprintf(os.Stderr, "  Parse API_FILES and generate Go bindings\n")
@@ -101,6 +102,12 @@ func main() {
 			logrus.Fatalf("ignoring deprecated option 'input-dir', using 'input' instead")
 		} else {
 			theInput = theInputDir
+		}
+	}
+	if theInput == "" {
+		if dir := os.Getenv(vppapi.VPPDirEnvVar); dir != "" {
+			logrus.Infof("VPP input directory was set to %q via %s env var", dir, vppapi.VPPDirEnvVar)
+			theInput = dir
 		}
 	}
 

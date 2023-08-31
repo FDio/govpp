@@ -26,32 +26,31 @@ import (
 )
 
 const exampleVppapi = `
-  <note># Specify input source of VPP API</>
+  <cyan># Specify input source forl VPP API</>
   govpp vppapi COMMAND [INPUT]
   govpp vppapi COMMAND ./vpp
   govpp vppapi COMMAND /usr/share/vpp/api
   govpp vppapi COMMAND vppapi.tar.gz 
   govpp vppapi COMMAND http://github.com/FDio/vpp.git
 
-  <note># List VPP API contents</>
-  govpp vppapi ls [INPUT]
-  govpp vppapi ls --show-contents
+  <cyan># List VPP API contents</>
+  govpp vppapi list [INPUT]
+  govpp vppapi list --show-contents
 
-  <note># Export VPP API files</>
+  <cyan># Export VPP API files</>
   govpp vppapi export [INPUT] --output vppapi
   govpp vppapi export [INPUT] --output vppapi.tar.gz
 
-  <note># Lint VPP API definitions</>
+  <cyan># Lint VPP API definitions</>
   govpp vppapi lint [INPUT]
 
-  <note># Compare VPP API schemas</>
+  <cyan># Compare VPP API schemas</>
   govpp vppapi diff [INPUT] --against http://github.com/FDio/vpp.git
 `
 
 type VppApiCmdOptions struct {
-	Input  string
-	Paths  []string
-	Format string
+	Input string
+	Paths []string
 }
 
 func newVppapiCmd(cli Cli) *cobra.Command {
@@ -59,20 +58,22 @@ func newVppapiCmd(cli Cli) *cobra.Command {
 		opts VppApiCmdOptions
 	)
 	cmd := &cobra.Command{
-		Use:              "vppapi",
-		Short:            "Manage VPP API",
-		Long:             "Manage VPP API development.",
+		Use:   "vppapi",
+		Short: "Manage VPP API development",
+		Long: "Manage the development of VPP API using basic commands to list, browse and export API files,\n" +
+			"or with more advanced commands to lint API definitions or compare different API versions.",
 		Example:          color.Sprint(exampleVppapi),
 		TraverseChildren: true,
 	}
 
-	cmd.PersistentFlags().StringSliceVar(&opts.Paths, "path", nil, "Limit to specific files or directories.\nFor example: \"vpe\" or \"core/\".")
-	cmd.PersistentFlags().StringVarP(&opts.Format, "format", "f", "", "Format for the output (json, yaml, go-template..)")
+	cmd.PersistentFlags().StringSliceVar(&opts.Paths, "path", nil, "Limit to specific files or directories.\n"+
+		"For example: \"vpe\" or \"core/\".\n"+
+		"If specified multiple times, the union is taken.")
 
 	cmd.AddCommand(
 		newVppApiLsCmd(cli, &opts),
-		newVppApiExportCmd(cli, &opts),
 		newVppApiDiffCmd(cli, &opts),
+		newVppApiExportCmd(cli, &opts),
 		newVppApiLintCmd(cli, &opts),
 	)
 
@@ -80,6 +81,8 @@ func newVppapiCmd(cli Cli) *cobra.Command {
 }
 
 func prepareVppApiFiles(allapifiles []vppapi.File, paths []string, includeImported, sortByName bool) ([]vppapi.File, error) {
+	logrus.Tracef("preparing %d files", len(allapifiles))
+
 	// remove imported types
 	if !includeImported {
 		binapigen.SortFilesByImports(allapifiles)
@@ -96,11 +99,12 @@ func prepareVppApiFiles(allapifiles []vppapi.File, paths []string, includeImport
 	if len(paths) > 0 {
 		apifiles = filterFilesByPaths(allapifiles, paths)
 		if len(apifiles) == 0 {
-			return nil, fmt.Errorf("no files matching: %q", paths)
+			return nil, fmt.Errorf("no files matched paths: %q", paths)
 		}
-		logrus.Tracef("filter (%d paths) matched %d/%d files", len(paths), len(apifiles), len(allapifiles))
+		logrus.Tracef("%d/%d files matched paths: %q", len(apifiles), len(allapifiles), paths)
 	}
 
+	// sort files
 	if sortByName {
 		binapigen.SortFilesByName(apifiles)
 	}

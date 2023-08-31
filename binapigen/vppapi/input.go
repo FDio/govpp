@@ -64,6 +64,8 @@ import (
 //   - `compression`: compression to use (`gzip`)
 //   - `subdir`:      subdirectory to use as base directory
 //   - 'strip':       strip first N directories, applied before `subdir`
+//
+// Returns VppInput on success.
 func ResolveVppInput(input string) (*VppInput, error) {
 	inputRef, err := ParseInputRef(input)
 	if err != nil {
@@ -84,20 +86,21 @@ func resolveVppInputFromDir(path string) (*VppInput, error) {
 	apidir := ResolveApiDir(path)
 	vppInput.ApiDirectory = apidir
 
-	logrus.Debugf("path %q resolved to api dir: %v", path, apidir)
+	logrus.WithField("path", path).Tracef("resolved API dir: %q", apidir)
 
 	apiFiles, err := ParseDir(apidir)
 	if err != nil {
-		logrus.Warnf("vppapi parsedir error: %v", err)
-	} else {
-		vppInput.Schema.Files = apiFiles
-		logrus.Debugf("resolved %d apifiles", len(apiFiles))
+		//logrus.Warnf("vppapi parsedir error: %v", err)
+		return nil, fmt.Errorf("parsing API dir %s failed: %w", apidir, err)
 	}
+	vppInput.Schema.Files = apiFiles
+	logrus.Tracef("resolved %d apifiles", len(apiFiles))
 
-	vppInput.Schema.Version = ResolveVPPVersion(path)
-	if vppInput.Schema.Version == "" {
-		vppInput.Schema.Version = "unknown"
+	vppVersion := ResolveVPPVersion(path)
+	if vppVersion == "" {
+		vppVersion = "unknown"
 	}
+	vppInput.Schema.Version = vppVersion
 
 	return vppInput, nil
 }
@@ -132,10 +135,16 @@ func cloneRepoLocally(repo string, commit string, branch string, depth int) (str
 	}
 	logrus.Debugf("local repo dir: %q, fetching %q", cachePath, commit)
 
-	cmd := exec.Command("git", "fetch", "-f", "origin", commit)
+	cmd := exec.Command("git", "fetch", "--tags", "origin")
 	cmd.Dir = cachePath
 	if output, err := cmd.CombinedOutput(); err != nil {
-		return "", fmt.Errorf("failed to fetch repository: %w\nOutput: %s", err, output)
+		logrus.Debugf("ERROR: failed to fetch tags: %v\nOutput: %s", err, output)
+	}
+
+	cmd = exec.Command("git", "fetch", "-f", "origin", commit)
+	cmd.Dir = cachePath
+	if output, err := cmd.CombinedOutput(); err != nil {
+		return "", fmt.Errorf("failed to fetch commit: %w\nOutput: %s", err, output)
 	}
 
 	// Resolve the commit hash for the given branch/tag
@@ -163,9 +172,11 @@ func resolveCommitHash(repoPath, ref string) (string, error) {
 	cmd.Dir = repoPath
 
 	outputBytes, err := cmd.Output()
-	logrus.Tracef("command %q output: %s", cmd, outputBytes)
 	if err != nil {
+		logrus.Tracef("[ERR] command %q output: %s", cmd, outputBytes)
 		return "", fmt.Errorf("failed to run command: %w", err)
+	} else {
+		logrus.Tracef("[OK] command %q output: %s", cmd, outputBytes)
 	}
 
 	return strings.TrimSpace(string(outputBytes)), nil
