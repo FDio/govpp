@@ -15,6 +15,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strconv"
@@ -26,42 +27,28 @@ import (
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
+// TODO:
+//  - consider adding categories for linter rules
+
 const (
 	FILE_BASIC                       = "FILE_BASIC"
 	MESSAGE_DEPRECATE_OLDER_VERSIONS = "MESSAGE_DEPRECATE_OLDER_VERSIONS"
 	MESSAGE_SAME_STATUS              = "MESSAGE_SAME_STATUS"
+	UNUSED_MESSAGE                   = "UNUSED_MESSAGE"
 )
 
 var defaultLintRules = []string{
 	FILE_BASIC,
 	MESSAGE_DEPRECATE_OLDER_VERSIONS,
 	MESSAGE_SAME_STATUS,
+	UNUSED_MESSAGE,
 }
 
 type LintRule struct {
 	Id      string
 	Purpose string
-	//Categories []string
+
 	check func(schema *vppapi.Schema) LintIssues
-}
-
-func LintRules(ids ...string) []*LintRule {
-	var rules []*LintRule
-	for _, id := range ids {
-		rule := GetLintRule(id)
-		if rule != nil {
-			rules = append(rules, rule)
-		}
-	}
-	return rules
-}
-
-func GetLintRule(id string) *LintRule {
-	rule, ok := lintRules[id]
-	if ok {
-		return &rule
-	}
-	return nil
 }
 
 var lintRules = map[string]LintRule{
@@ -77,9 +64,51 @@ var lintRules = map[string]LintRule{
 	},
 	MESSAGE_SAME_STATUS: {
 		Id:      MESSAGE_SAME_STATUS,
-		Purpose: "Message request and reply must have the same status",
+		Purpose: "Messages that are related must have the same status",
 		check:   checkFiles(checkFileMessageSameStatus),
 	},
+	UNUSED_MESSAGE: {
+		Id:      UNUSED_MESSAGE,
+		Purpose: "Messages should be used in services",
+		check:   checkFiles(checkFileMessageUsed),
+	},
+}
+
+func GetLintRule(id string) *LintRule {
+	rule, ok := lintRules[id]
+	if ok {
+		return &rule
+	}
+	return nil
+}
+
+func ListLintRules(ids ...string) []*LintRule {
+	var rules []*LintRule
+	for _, id := range ids {
+		rule := GetLintRule(id)
+		if rule != nil {
+			rules = append(rules, rule)
+		}
+	}
+	return rules
+}
+
+func checkFiles(checkFn func(file *vppapi.File) LintIssues) func(*vppapi.Schema) LintIssues {
+	return func(schema *vppapi.Schema) LintIssues {
+		var issues LintIssues
+
+		logrus.Tracef("running checkFiles for %d files", len(schema.Files))
+
+		for _, file := range schema.Files {
+			e := checkFn(&file)
+			if e != nil {
+				logrus.Tracef("checked file: %v (%v)", file.Name, e)
+			}
+			issues = append(issues, e...)
+		}
+
+		return issues
+	}
 }
 
 func checkFileBasic(file *vppapi.File) LintIssues {
@@ -164,22 +193,24 @@ func checkFileMessageSameStatus(file *vppapi.File) LintIssues {
 	return issues
 }
 
-func checkFiles(checkFn func(file *vppapi.File) LintIssues) func(*vppapi.Schema) LintIssues {
-	return func(schema *vppapi.Schema) LintIssues {
-		var issues LintIssues
+func checkFileMessageUsed(file *vppapi.File) LintIssues {
+	var issues LintIssues
 
-		logrus.Tracef("running checkFiles for %d files", len(schema.Files))
+	rpcMsgs := extractFileMessagesToRPC(file)
 
-		for _, file := range schema.Files {
-			e := checkFn(&file)
-			if e != nil {
-				logrus.Tracef("checked file: %v (%v)", file.Name, e)
-			}
-			issues = append(issues, e...)
+	for _, message := range file.Messages {
+		if _, ok := rpcMsgs[message.Name]; !ok {
+			issues = issues.Append(LintIssue{
+				File: file.Path,
+				Object: map[string]any{
+					"Message": message,
+				},
+				Violation: color.Sprintf("message %s is not used by services", color.Cyan.Sprint(message.Name)),
+			})
 		}
-
-		return issues
 	}
+
+	return issues
 }
 
 type Linter struct {
@@ -188,7 +219,7 @@ type Linter struct {
 
 func NewLinter() *Linter {
 	return &Linter{
-		rules: LintRules(defaultLintRules...),
+		rules: ListLintRules(defaultLintRules...),
 	}
 }
 
@@ -218,18 +249,18 @@ func (l *Linter) Disable(rules ...string) {
 	}
 }
 
-func (l *Linter) Lint(schema *vppapi.Schema) error {
-	logrus.Debugf("linter will run %d rule checks for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
+func (l *Linter) Lint(schema *vppapi.Schema) (LintIssues, error) {
+	logrus.Debugf("running %d rule checks for %d files (schema version: %v)", len(l.rules), len(schema.Files), schema.Version)
 
 	var allIssues LintIssues
 
 	for _, rule := range l.rules {
 		log := logrus.WithField("rule", rule.Id)
-		log.Debugf("running linter rulecheck (purpose: %v)", rule.Purpose)
+		log.Tracef("running rule check (purpose: %v)", rule.Purpose)
 
 		issues := rule.check(schema)
 		if len(issues) > 0 {
-			log.Tracef("linter rule check failed, found %d issues", len(issues))
+			log.Tracef("rule check found %d issues", len(issues))
 
 			for _, issue := range issues {
 				if issue.RuleId == "" {
@@ -238,18 +269,17 @@ func (l *Linter) Lint(schema *vppapi.Schema) error {
 				allIssues = allIssues.Append(issue)
 			}
 		} else {
-			log.Tracef("linter rule check passed")
+			log.Tracef("rule check passed")
 		}
 	}
 
 	if len(allIssues) > 0 {
-		logrus.Debugf("found %d issues in %d files", len(allIssues), len(schema.Files))
-		return allIssues
+		logrus.Tracef("found %d issues in %d files", len(allIssues), len(schema.Files))
 	} else {
-		logrus.Debugf("no issues found in %d files", len(schema.Files))
+		logrus.Tracef("no issues found in %d files", len(schema.Files))
 	}
 
-	return nil
+	return allIssues, nil
 }
 
 func (l *Linter) SetRules(rules []string) {
@@ -270,20 +300,12 @@ func (l *Linter) SetRules(rules []string) {
 }
 
 type LintIssue struct {
-	RuleId string
-
-	File string
-	Line int `json:",omitempty"`
-
-	Object    any `json:",omitempty"`
+	RuleId    string
+	File      string
 	Violation string
-}
 
-func createLintIssue(id string, err error) LintIssue {
-	return LintIssue{
-		RuleId:    id,
-		Violation: err.Error(),
-	}
+	Object any `json:",omitempty"`
+	Line   int `json:",omitempty"`
 }
 
 func (l LintIssue) Error() string {
@@ -292,26 +314,21 @@ func (l LintIssue) Error() string {
 
 type LintIssues []LintIssue
 
-func (le LintIssues) Error() string {
-	if len(le) == 0 {
-		return "no issues"
-	}
-	return fmt.Sprintf("%d issues", len(le))
-}
-
 func (le LintIssues) Append(errs ...error) LintIssues {
 	var r = le
 	for _, err := range errs {
 		if err == nil {
 			continue
 		}
-		switch e := err.(type) {
-		case LintIssue:
+		var e LintIssue
+		switch {
+		case errors.As(err, &e):
 			r = append(r, e)
-		//case LintIssues:
-		//	r = append(r, e...)
 		default:
-			r = append(r, createLintIssue("", err))
+			r = append(r, LintIssue{
+				RuleId:    "",
+				Violation: err.Error(),
+			})
 		}
 	}
 	return r
@@ -321,6 +338,10 @@ const (
 	optionStatus           = "status"
 	optionStatusInProgress = "in_progress"
 	optionStatusDeprecated = "deprecated"
+
+	noReply = "null"
+
+	noStatus = "n/a"
 )
 
 func getMessageStatus(message vppapi.Message) string {
@@ -333,7 +354,7 @@ func getMessageStatus(message vppapi.Message) string {
 	if status, ok := message.Options[optionStatus]; ok {
 		return status
 	}
-	return "n/a"
+	return noStatus
 }
 
 func isMessageDeprecated(message vppapi.Message) bool {
@@ -400,13 +421,27 @@ func extractMessageVersions(file *vppapi.File) map[string]map[int]vppapi.Message
 	return messageVersions
 }
 
-func extractMessagesRPC(file *vppapi.File) map[string]vppapi.RPC {
+func extractFileMessagesToRPC(file *vppapi.File) map[string]vppapi.RPC {
+	if file.Service == nil {
+		return nil
+	}
 	messagesRPC := make(map[string]vppapi.RPC)
-	if file.Service != nil {
-		for _, rpc := range file.Service.RPCs {
-			if m := rpc.Request; m != "" {
-				messagesRPC[m] = rpc
-			}
+	for _, rpc := range file.Service.RPCs {
+		for _, m := range extractRPCMessages(rpc) {
+			messagesRPC[m] = rpc
+		}
+	}
+	return messagesRPC
+}
+
+func extractMessageRequestsToRPC(file *vppapi.File) map[string]vppapi.RPC {
+	if file.Service == nil {
+		return nil
+	}
+	messagesRPC := make(map[string]vppapi.RPC)
+	for _, rpc := range file.Service.RPCs {
+		if m := rpc.Request; m != "" {
+			messagesRPC[m] = rpc
 		}
 	}
 	return messagesRPC
@@ -417,7 +452,7 @@ func extractRPCMessages(rpc vppapi.RPC) []string {
 	if m := rpc.Request; m != "" {
 		messages = append(messages, m)
 	}
-	if m := rpc.Reply; m != "" && m != "null" {
+	if m := rpc.Reply; m != "" && m != noReply {
 		messages = append(messages, m)
 	}
 	if m := rpc.StreamMsg; m != "" {
@@ -428,7 +463,7 @@ func extractRPCMessages(rpc vppapi.RPC) []string {
 }
 
 func getRelatedMessages(file *vppapi.File, msg string) []string {
-	msgsRPC := extractMessagesRPC(file)
+	msgsRPC := extractMessageRequestsToRPC(file)
 	var related []string
 	if rpc, ok := msgsRPC[msg]; ok {
 		for _, m := range extractRPCMessages(rpc) {

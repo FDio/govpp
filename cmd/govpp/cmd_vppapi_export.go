@@ -23,21 +23,28 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-// TODO:
-//  - add option for exporting flat structure
-//  - embed VPP version into export somehow
+const exampleVppApiExportCmd = `
+  <cyan># Export VPP API files to directory</>
+  govpp vppapi export [INPUT] --output vppapi
+  govpp vppapi export https://github.com/FDio/vpp --output vppapi
+
+  <cyan># Export to archive</>
+  govpp vppapi export [INPUT] --output vppapi.tar.gz
+`
 
 type VppApiExportCmdOptions struct {
 	*VppApiCmdOptions
 
 	Output string
 	Targz  bool
+	Flat   bool // TODO: use this
 }
 
 func newVppApiExportCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
@@ -45,15 +52,16 @@ func newVppApiExportCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		opts = VppApiExportCmdOptions{VppApiCmdOptions: vppapiOpts}
 	)
 	cmd := &cobra.Command{
-		Use:   "export [INPUT] --output OUTPUT [--targz]",
-		Short: "Export VPP API",
-		Long:  "Export VPP API files from an input location to an output location.",
-		Args:  cobra.MaximumNArgs(1),
+		Use:     "export [INPUT] --output OUTPUT [--targz] [--flat]",
+		Short:   "Export VPP API files",
+		Long:    "Export VPP API files from an input location to an output location.",
+		Example: color.Sprint(exampleVppApiExportCmd),
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.Input = args[0]
 			}
-			// auto-detect .tar.gz
+			// auto-detect archive from output name
 			if !cmd.Flags().Changed("targz") && strings.HasSuffix(opts.Output, ".tar.gz") {
 				opts.Targz = true
 			}
@@ -61,7 +69,8 @@ func newVppApiExportCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 		},
 	}
 
-	cmd.PersistentFlags().BoolVar(&opts.Targz, "targz", false, "Export to gzipped tarball")
+	cmd.PersistentFlags().BoolVar(&opts.Flat, "flat", false, "Export using flat structure")
+	cmd.PersistentFlags().BoolVar(&opts.Targz, "targz", false, "Export to gzipped tarball archive")
 	cmd.PersistentFlags().StringVarP(&opts.Output, "output", "o", "", "Output directory for the exported files")
 	must(cobra.MarkFlagRequired(cmd.PersistentFlags(), "output"))
 
@@ -69,59 +78,103 @@ func newVppApiExportCmd(cli Cli, vppapiOpts *VppApiCmdOptions) *cobra.Command {
 }
 
 func runExportCmd(opts VppApiExportCmdOptions) error {
-	vppInput, err := resolveInput(opts.Input)
+	vppInput, err := resolveVppInput(opts.Input)
 	if err != nil {
 		return err
 	}
 
 	// collect files from input
-	logrus.Tracef("collecting files for export in API dir: %s", vppInput.ApiDirectory)
+	logrus.Tracef("preparing export from API dir: %s", vppInput.ApiDirectory)
 
 	files, err := vppapi.FindFiles(vppInput.ApiDirectory)
 	if err != nil {
 		return err
 	}
 
-	logrus.Debugf("exporting %d files", len(files))
+	logrus.Debugf("prepared %d API files for export from API dir: %s", len(files), vppInput.ApiDirectory)
 
 	if opts.Targz {
 		temp, err := os.MkdirTemp("", "govpp-vppapi-export-*")
 		if err != nil {
 			return fmt.Errorf("creating temp dir failed: %w", err)
 		}
-		tmpDir := filepath.Join(temp, "vppapi")
-		err = exportFilesToDir(tmpDir, files, vppInput)
+
+		tmpApiDir := filepath.Join(temp, "vppapi")
+
+		err = exportVppInputToDir(tmpApiDir, files, vppInput)
 		if err != nil {
-			return fmt.Errorf("exporting to directory failed: %w", err)
+			return fmt.Errorf("exporting files to temp dir failed: %w", err)
 		}
-		var files2 = []string{filepath.Join(tmpDir, "VPP_VERSION")}
-		for _, f := range files {
-			filerel, err := filepath.Rel(vppInput.ApiDirectory, f)
-			if err != nil {
-				filerel = strings.TrimPrefix(f, vppInput.ApiDirectory)
-			}
-			filename := filepath.Join(tmpDir, filerel)
-			files2 = append(files2, filename)
-		}
-		err = exportFilesToTarGz(opts.Output, files2, tmpDir)
+
+		files = append(files, exportVPPVersionFile)
+
+		err = copyFilesToTarGz(opts.Output, files, tmpApiDir)
 		if err != nil {
 			return fmt.Errorf("exporting to gzipped tarball failed: %w", err)
 		}
-	} else {
-		err = exportFilesToDir(opts.Output, files, vppInput)
-		if err != nil {
-			return fmt.Errorf("exporting failed: %w", err)
-		}
-	}
 
-	logrus.Debugf("exported %d files to %s", len(files), opts.Output)
+		logrus.Debugf("exported %d files to archive: %s", len(files), opts.Output)
+	} else {
+		err = exportVppInputToDir(opts.Output, files, vppInput)
+		if err != nil {
+			return fmt.Errorf("exporting failed to dir failed: %w", err)
+		}
+
+		logrus.Debugf("exported %d files to: %s", len(files), opts.Output)
+	}
 
 	return nil
 }
 
-func exportFilesToTarGz(outputFile string, files []string, baseDir string) error {
-	logrus.Tracef("exporting %d files into tarball archive: %s", len(files), outputFile)
+const exportVPPVersionFile = "VPP_VERSION"
 
+func exportVppInputToDir(outputDir string, files []string, vppInput *vppapi.VppInput) error {
+	logrus.Tracef("exporting %d files into directory: %s", len(files), outputDir)
+
+	apiDir := vppInput.ApiDirectory
+
+	// create the output directory
+	if err := os.Mkdir(outputDir, 0750); err != nil {
+		return fmt.Errorf("creating target dir failed: %w", err)
+	}
+
+	if err := exportFilesToDir(outputDir, files, apiDir); err != nil {
+		return err
+	}
+
+	// write VPP version to file
+	filename := filepath.Join(outputDir, exportVPPVersionFile)
+	data := []byte(vppInput.Schema.Version)
+	if err := os.WriteFile(filename, data, 0660); err != nil {
+		return fmt.Errorf("writing VPP version file failed: %w", err)
+	}
+
+	return nil
+}
+
+func exportFilesToDir(outputDir string, files []string, apiDir string) error {
+	logrus.Tracef("exporting %d files to output dir: %s", len(files), outputDir)
+
+	// export files to directory
+	for _, file := range files {
+		data, err := os.ReadFile(filepath.Join(apiDir, file))
+		if err != nil {
+			return err
+		}
+		filename := filepath.Join(outputDir, file)
+		if err := os.MkdirAll(filepath.Dir(filename), 0750); err != nil {
+			return err
+		}
+		if err := os.WriteFile(filename, data, 0660); err != nil {
+			return err
+		}
+		logrus.Tracef("- exported file %s (%d bytes) to %s", file, len(data), filename)
+	}
+
+	return nil
+}
+
+func copyFilesToTarGz(outputFile string, files []string, baseDir string) error {
 	// create the output file for writing
 	fw, err := os.Create(outputFile)
 	if err != nil {
@@ -137,13 +190,15 @@ func exportFilesToTarGz(outputFile string, files []string, baseDir string) error
 	tw := tar.NewWriter(gw)
 	defer tw.Close()
 
+	logrus.Tracef("copying %d files into archive: %s", len(files), outputFile)
+
+	// copy files to archive
 	for _, file := range files {
 		// open the file for reading
-		fr, err := os.Open(file)
+		fr, err := os.Open(filepath.Join(baseDir, file))
 		if err != nil {
 			return err
 		}
-
 		fi, err := fr.Stat()
 		if err != nil {
 			fr.Close()
@@ -160,7 +215,7 @@ func exportFilesToTarGz(outputFile string, files []string, baseDir string) error
 		// update the name to correctly reflect the desired destination when untaring
 		header.Name = strings.TrimPrefix(file, baseDir)
 
-		logrus.Tracef("- exporting file: %q to: %s", file, header.Name)
+		logrus.Tracef("- copying file %s to: %s", file, header.Name)
 
 		// write the header
 		if err := tw.WriteHeader(header); err != nil {
@@ -175,51 +230,6 @@ func exportFilesToTarGz(outputFile string, files []string, baseDir string) error
 		}
 
 		fr.Close()
-	}
-
-	return nil
-}
-
-func exportFilesToDir(outputDir string, files []string, vppInput *vppapi.VppInput) error {
-	logrus.Tracef("exporting files into directory: %s", outputDir)
-
-	apiDir := vppInput.ApiDirectory
-
-	// create the output directory for export
-	if err := os.Mkdir(outputDir, 0750); err != nil {
-		return err
-	}
-
-	// export files to directory
-	for _, f := range files {
-		data, err := os.ReadFile(f)
-		if err != nil {
-			return err
-		}
-		filerel, err := filepath.Rel(apiDir, f)
-		if err != nil {
-			logrus.Debugf("filepath.Rel error: %v", err)
-			filerel = strings.TrimPrefix(f, apiDir)
-		}
-		filename := filepath.Join(outputDir, filerel)
-		dir := filepath.Dir(filename)
-
-		if err := os.MkdirAll(dir, 0750); err != nil {
-			return err
-		}
-
-		if err := os.WriteFile(filename, data, 0660); err != nil {
-			return err
-		}
-
-		logrus.Tracef("file %s exported (%d bytes) to %s", filerel, len(data), dir)
-	}
-
-	// write version
-	filename := filepath.Join(outputDir, "VPP_VERSION")
-	data := []byte(vppInput.Schema.Version)
-	if err := os.WriteFile(filename, data, 0660); err != nil {
-		return err
 	}
 
 	return nil

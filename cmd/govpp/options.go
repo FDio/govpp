@@ -35,8 +35,8 @@ type GlobalOptions struct {
 
 func (glob *GlobalOptions) InstallFlags(flags *pflag.FlagSet) {
 	flags.BoolVarP(&glob.Debug, "debug", "D", false, "Enable debug mode")
-	flags.StringVarP(&glob.LogLevel, "loglevel", "L", "", "Set logging level")
-	flags.StringVar(&glob.Color, "color", "", "Color mode; auto/always/never")
+	flags.StringVarP(&glob.LogLevel, "log-level", "L", "", "Set the logging level [trace/debug/info/warn/error]")
+	flags.StringVar(&glob.Color, "color", "", "Set color mode [auto/always/never]")
 }
 
 func InitOptions(cli Cli, opts *GlobalOptions) {
@@ -80,4 +80,6 @@ func InitOptions(cli Cli, opts *GlobalOptions) {
 	} else {
 		logrus.SetLevel(defaultLogLevel)
 	}
+
+	logrus.Tracef("init global options: %+v", opts)
 }

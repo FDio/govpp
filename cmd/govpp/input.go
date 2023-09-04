@@ -19,27 +19,31 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
-func resolveInput(input string) (*vppapi.VppInput, error) {
+func resolveVppInput(input string) (*vppapi.VppInput, error) {
 	if input == "" {
-		logrus.Tracef("input empty, trying to detect automatically")
+		logrus.Tracef("VPP input is not set, trying to detect automatically")
 		input = detectVppApiInput()
 	}
 
-	logrus.Tracef("resolving VPP input: %q", input)
+	logrus.Tracef("resolving VPP input: %q\n%s", input, strings.Repeat("-", 100))
+	t := time.Now()
 
 	vppInput, err := vppapi.ResolveVppInput(input)
 	if err != nil {
 		return nil, err
 	}
 
-	logrus.Tracef("resolved VPP input:\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
+	tookSec := time.Since(t).Seconds()
+
+	logrus.Tracef("resolved VPP input %q in %.3fs\n%s\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
+		input, tookSec, strings.Repeat("-", 100), vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
 
 	return vppInput, nil
 }
@@ -80,27 +84,35 @@ func dirExists(dir ...string) bool {
 
 func filterFilesByPaths(allapifiles []vppapi.File, paths []string) []vppapi.File {
 	var apifiles []vppapi.File
-	if len(paths) == 0 {
-		return allapifiles
-	}
-	added := make(map[string]bool)
+
 	// filter files
-	for _, arg := range paths {
+	added := make(map[string]bool)
+	for _, p := range paths {
 		var found bool
 		for _, apifile := range allapifiles {
 			if added[apifile.Path] {
 				continue
 			}
-			dir, file := path.Split(apifile.Path)
-			if apifile.Name == strings.TrimSuffix(arg, ".api") || apifile.Path == arg || file == arg || path.Clean(dir) == arg {
+			if fileMatchesPath(apifile, p) {
 				apifiles = append(apifiles, apifile)
 				found = true
 				added[apifile.Path] = true
 			}
 		}
 		if !found {
-			logrus.Warnf("path %q did not match any file", arg)
+			logrus.Debugf("path %q did not match any file", p)
 		}
 	}
 	return apifiles
+}
+
+func fileMatchesPath(apifile vppapi.File, arg string) bool {
+	if apifile.Name == strings.TrimSuffix(arg, ".api") {
+		return true
+	}
+	if apifile.Path == arg {
+		return true
+	}
+	dir, file := path.Split(apifile.Path)
+	return file == arg || path.Clean(dir) == arg
 }

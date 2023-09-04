@@ -20,7 +20,14 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
+)
+
+var (
+	clrWhite    = color.Style{color.White}
+	clrCyan     = color.Style{color.Cyan}
+	clrDiffFile = color.Style{color.Yellow}
 )
 
 const (
