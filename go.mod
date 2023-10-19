@@ -12,7 +12,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.0
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/onsi/gomega v1.27.10
+	github.com/onsi/gomega v1.28.0
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.7.0
@@ -30,8 +30,8 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/net v0.12.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
 
