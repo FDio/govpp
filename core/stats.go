@@ -134,6 +134,11 @@ func (c *StatsConnection) disconnectClient() {
 	}
 }
 
+// Public wrapper for updating stats from patters
+func (c *StatsConnection) UpdateStats(statDir **adapter.StatDir, patterns ...string) error {
+	return c.updateStats(statDir, patterns...)
+}
+
 func (c *StatsConnection) updateStats(statDir **adapter.StatDir, patterns ...string) error {
 	if statDir == nil {
 		panic("statDir must not nil")
