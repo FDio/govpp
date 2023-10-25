@@ -7,7 +7,7 @@ package binapi
 //go:generate binapi-generator --output-dir=. --input-file=/usr/share/vpp/api/core/ip_types.api.json
 //go:generate binapi-generator --output-dir=. --input-file=/usr/share/vpp/api/core/vpe_types.api.json
 
-//go:generate -command binapigen binapi-generator --output-dir=. --import-prefix=git.fd.io/govpp.git/examples/binapi --input-types=/usr/share/vpp/api/core/ethernet_types.api.json,/usr/share/vpp/api/core/ip_types.api.json,/usr/share/vpp/api/core/interface_types.api.json,/usr/share/vpp/api/core/vpe_types.api.json
+//go:generate -command binapigen binapi-generator --output-dir=. --import-prefix=github.com/alkiranet/govpp/examples/binapi --input-types=/usr/share/vpp/api/core/ethernet_types.api.json,/usr/share/vpp/api/core/ip_types.api.json,/usr/share/vpp/api/core/interface_types.api.json,/usr/share/vpp/api/core/vpe_types.api.json
 
 //go:generate binapigen --input-file=/usr/share/vpp/api/core/af_packet.api.json
 //go:generate binapigen --input-file=/usr/share/vpp/api/core/interface.api.json

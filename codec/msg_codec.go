@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"git.fd.io/govpp.git/api"
+	"github.com/alkiranet/govpp/api"
 	"github.com/lunixbochs/struc"
 )
 

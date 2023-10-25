@@ -113,8 +113,8 @@ sudo dpkg -i vpp*.deb
 To build & install GoVPP:
 
 ```sh
-go get -u git.fd.io/govpp.git
-cd $GOPATH/src/git.fd.io/govpp.git
+go get -u github.com/alkiranet/govpp
+cd $GOPATH/src/github.com/alkiranet/govpp
 make test
 make install
 ```

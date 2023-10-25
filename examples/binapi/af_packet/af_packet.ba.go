@@ -18,11 +18,11 @@ import (
 	"io"
 	"strconv"
 
-	api "git.fd.io/govpp.git/api"
+	api "github.com/alkiranet/govpp/api"
 	struc "github.com/lunixbochs/struc"
 
-	ethernet_types "git.fd.io/govpp.git/examples/binapi/ethernet_types"
-	interface_types "git.fd.io/govpp.git/examples/binapi/interface_types"
+	ethernet_types "github.com/alkiranet/govpp/examples/binapi/ethernet_types"
+	interface_types "github.com/alkiranet/govpp/examples/binapi/interface_types"
 )
 
 const (

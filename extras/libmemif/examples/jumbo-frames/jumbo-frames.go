@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"git.fd.io/govpp.git/extras/libmemif"
+	"github.com/alkiranet/govpp/extras/libmemif"
 )
 
 const (
@@ -95,7 +95,7 @@ func SendPackets(memif *libmemif.Memif, queueID uint8) {
 		select {
 		case <-time.After(3 * time.Second):
 			counter++
-			packetMul :=  counter % 100 + 1 // Limit max iterations to 100 to not go out of bounds
+			packetMul := counter%100 + 1 // Limit max iterations to 100 to not go out of bounds
 			packets := []libmemif.RawPacketData{
 				make([]byte, 128*packetMul),
 				make([]byte, 256*packetMul),

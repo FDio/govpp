@@ -43,13 +43,13 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/alkiranet/govpp/extras/libmemif"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"io"
 	"net"
 	"os"
 	"os/signal"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
-	"git.fd.io/govpp.git/extras/libmemif"
 )
 
 var (

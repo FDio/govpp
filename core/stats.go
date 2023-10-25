@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/api"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/api"
 )
 
 var (

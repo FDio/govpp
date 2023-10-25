@@ -12,6 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+//go:build integration
 // +build integration
 
 package integration
@@ -20,9 +21,9 @@ import (
 	"flag"
 	"testing"
 
-	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
+	"github.com/alkiranet/govpp/adapter/statsclient"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/core"
 )
 
 var (

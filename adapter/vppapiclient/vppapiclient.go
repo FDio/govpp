@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !windows && !darwin && !novpp
 // +build !windows,!darwin,!novpp
 
 package vppapiclient
@@ -34,7 +35,7 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 
-	"git.fd.io/govpp.git/adapter"
+	"github.com/alkiranet/govpp/adapter"
 )
 
 var (

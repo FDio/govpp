@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"git.fd.io/govpp.git/api"
+	"github.com/alkiranet/govpp/api"
 )
 
 type MyMsg struct {

@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build windows || darwin || novpp
 // +build windows darwin novpp
 
 package vppapiclient
 
 import (
-	"git.fd.io/govpp.git/adapter"
+	"github.com/alkiranet/govpp/adapter"
 )
 
 // stubVppClient is just an stub adapter that does nothing. It builds only on Windows and OSX, where the real

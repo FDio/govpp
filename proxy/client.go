@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"time"
 
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/core"
 )
 
 type Client struct {

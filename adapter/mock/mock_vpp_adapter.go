@@ -22,10 +22,10 @@ import (
 	"reflect"
 	"sync"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/adapter/mock/binapi"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/codec"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/adapter/mock/binapi"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/codec"
 	"github.com/lunixbochs/struc"
 )
 
@@ -374,7 +374,7 @@ func (a *VppAdapter) MockReplyHandler(replyHandler ReplyHandler) {
 
 // MockClearReplyHanders clears all reply handlers that were registered
 // Will also set the mode to useReplyHandlers
-func (a *VppAdapter) MockClearReplyHandlers () {
+func (a *VppAdapter) MockClearReplyHandlers() {
 	a.repliesLock.Lock()
 	defer a.repliesLock.Unlock()
 

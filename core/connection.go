@@ -24,9 +24,9 @@ import (
 
 	logger "github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/adapter"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/codec"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/codec"
 )
 
 const (

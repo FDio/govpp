@@ -14,7 +14,7 @@ package acl
 import (
 	bytes "bytes"
 	context "context"
-	api "git.fd.io/govpp.git/api"
+	api "github.com/alkiranet/govpp/api"
 	struc "github.com/lunixbochs/struc"
 	io "io"
 	strconv "strconv"

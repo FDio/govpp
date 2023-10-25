@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//go:build !windows && !darwin && !novpp && !beyond18.10
 // +build !windows,!darwin,!novpp,!beyond18.10
 
 package vppapiclient
@@ -29,7 +30,7 @@ import (
 	"os"
 	"unsafe"
 
-	"git.fd.io/govpp.git/adapter"
+	"github.com/alkiranet/govpp/adapter"
 )
 
 // global VPP stats API client, library vppapiclient only supports

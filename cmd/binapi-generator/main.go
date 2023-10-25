@@ -28,7 +28,7 @@ import (
 	"github.com/bennyscetbun/jsongo"
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/version"
+	"github.com/alkiranet/govpp/version"
 )
 
 var (

@@ -21,8 +21,8 @@ import (
 	"log"
 	"net"
 
-	"git.fd.io/govpp.git/examples/binapi/ip"
-	"git.fd.io/govpp.git/examples/binapi/ip_types"
+	"github.com/alkiranet/govpp/examples/binapi/ip"
+	"github.com/alkiranet/govpp/examples/binapi/ip_types"
 
 	"github.com/lunixbochs/struc"
 )

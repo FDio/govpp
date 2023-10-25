@@ -247,7 +247,7 @@ func generateImports(ctx *context, w io.Writer) {
 	fmt.Fprintln(w, `	"io"`)
 	fmt.Fprintln(w, `	"strconv"`)
 	fmt.Fprintln(w)
-	fmt.Fprintf(w, "\tapi \"%s\"\n", "git.fd.io/govpp.git/api")
+	fmt.Fprintf(w, "\tapi \"%s\"\n", "github.com/alkiranet/govpp/api")
 	fmt.Fprintf(w, "\tstruc \"%s\"\n", "github.com/lunixbochs/struc")
 	if len(ctx.packageData.Imports) > 0 {
 		fmt.Fprintln(w)

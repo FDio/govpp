@@ -20,12 +20,12 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"git.fd.io/govpp.git/adapter/mock"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/examples/binapi/interface_types"
-	"git.fd.io/govpp.git/examples/binapi/interfaces"
-	"git.fd.io/govpp.git/examples/binapi/memif"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
+	"github.com/alkiranet/govpp/adapter/mock"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/examples/binapi/interface_types"
+	"github.com/alkiranet/govpp/examples/binapi/interfaces"
+	"github.com/alkiranet/govpp/examples/binapi/memif"
+	"github.com/alkiranet/govpp/examples/binapi/vpe"
 )
 
 type testCtx struct {

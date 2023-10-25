@@ -25,11 +25,11 @@ import (
 	"github.com/pkg/profile"
 	"github.com/sirupsen/logrus"
 
-	"git.fd.io/govpp.git/adapter/socketclient"
-	"git.fd.io/govpp.git/adapter/statsclient"
-	"git.fd.io/govpp.git/api"
-	"git.fd.io/govpp.git/core"
-	"git.fd.io/govpp.git/examples/binapi/vpe"
+	"github.com/alkiranet/govpp/adapter/socketclient"
+	"github.com/alkiranet/govpp/adapter/statsclient"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/core"
+	"github.com/alkiranet/govpp/examples/binapi/vpe"
 )
 
 const (

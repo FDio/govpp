@@ -1,7 +1,7 @@
 package socketclient
 
 import (
-	"git.fd.io/govpp.git/api"
+	"github.com/alkiranet/govpp/api"
 )
 
 // MessageTableEntry represents VPP binary API type 'message_table_entry'.
