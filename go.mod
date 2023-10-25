@@ -1,4 +1,4 @@
-module go.fd.io/govpp
+module github.com/alkiranet/govpp
 
 go 1.18
 

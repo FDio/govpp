@@ -23,10 +23,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/codec"
-	"go.fd.io/govpp/core/genericpool"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/codec"
+	"github.com/alkiranet/govpp/core/genericpool"
 )
 
 const (

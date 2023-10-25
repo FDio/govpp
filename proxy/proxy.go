@@ -21,7 +21,7 @@ import (
 	"net/http"
 	"net/rpc"
 
-	"go.fd.io/govpp/adapter"
+	"github.com/alkiranet/govpp/adapter"
 )
 
 // Server defines a proxy server that serves client requests to stats and binapi.

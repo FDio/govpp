@@ -17,10 +17,10 @@ package govpp
 import (
 	"time"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/core"
-	"go.fd.io/govpp/internal/version"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/adapter/socketclient"
+	"github.com/alkiranet/govpp/core"
+	"github.com/alkiranet/govpp/internal/version"
 )
 
 // Connect connects to the VPP API using a new adapter instance created with NewVppAPIAdapter.

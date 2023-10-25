@@ -23,15 +23,15 @@ import (
 	"log"
 	"os"
 
-	"go.fd.io/govpp"
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/api"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/interface_types"
-	"go.fd.io/govpp/binapi/ip"
-	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapi/vpe"
-	"go.fd.io/govpp/core"
+	"github.com/alkiranet/govpp"
+	"github.com/alkiranet/govpp/adapter/socketclient"
+	"github.com/alkiranet/govpp/api"
+	interfaces "github.com/alkiranet/govpp/binapi/interface"
+	"github.com/alkiranet/govpp/binapi/interface_types"
+	"github.com/alkiranet/govpp/binapi/ip"
+	"github.com/alkiranet/govpp/binapi/ip_types"
+	"github.com/alkiranet/govpp/binapi/vpe"
+	"github.com/alkiranet/govpp/core"
 )
 
 var (

@@ -69,9 +69,12 @@ For other documentation refer to [docs](docs) directory.
 
 Anyone insterested in GoVPP development is welcome to join our bi-weekly [📣 GoVPP Community Meeting](https://github.com/FDio/govpp/discussions/46), where we accept inputs from projects using GoVPP and have technical discussions about actual development.
 
-- **Contribute code**: submit a [Pull Request](https://github.com/FDio/govpp/pulls)
-- **Report bugs**: open an [Issue](https://github.com/FDio/govpp/issues)
-- **Ask questions**: start a [Discussion](https://github.com/FDio/govpp/discussions)
+```sh
+go get -u github.com/alkiranet/govpp
+cd $GOPATH/src/github.com/alkiranet/govpp
+make test
+make install
+```
 
 ## Repository Structure
 

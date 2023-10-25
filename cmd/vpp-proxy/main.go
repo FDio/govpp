@@ -19,14 +19,14 @@ import (
 	"flag"
 	"log"
 
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/adapter/statsclient"
-	"go.fd.io/govpp/api"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/vlib"
-	"go.fd.io/govpp/binapi/vpe"
-	_ "go.fd.io/govpp/core"
-	"go.fd.io/govpp/proxy"
+	"github.com/alkiranet/govpp/adapter/socketclient"
+	"github.com/alkiranet/govpp/adapter/statsclient"
+	"github.com/alkiranet/govpp/api"
+	interfaces "github.com/alkiranet/govpp/binapi/interface"
+	"github.com/alkiranet/govpp/binapi/vlib"
+	"github.com/alkiranet/govpp/binapi/vpe"
+	_ "github.com/alkiranet/govpp/core"
+	"github.com/alkiranet/govpp/proxy"
 )
 
 var (

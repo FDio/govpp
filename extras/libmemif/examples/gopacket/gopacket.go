@@ -47,6 +47,9 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/alkiranet/govpp/extras/libmemif"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"io"
 	"net"
 	"os"
@@ -54,7 +57,7 @@ import (
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
-	"go.fd.io/govpp/extras/libmemif"
+	"github.com/alkiranet/govpp/extras/libmemif"
 )
 
 var (

@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"testing"
 
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/ip"
-	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapi/sr"
-	"go.fd.io/govpp/binapi/vpe"
-	"go.fd.io/govpp/codec"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/binapi/ip"
+	"github.com/alkiranet/govpp/binapi/ip_types"
+	"github.com/alkiranet/govpp/binapi/sr"
+	"github.com/alkiranet/govpp/binapi/vpe"
+	"github.com/alkiranet/govpp/codec"
 )
 
 type MyMsg struct {

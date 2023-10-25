@@ -27,11 +27,11 @@ import (
 	"github.com/pkg/profile"
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/adapter/statsclient"
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/core"
+	"github.com/alkiranet/govpp/adapter/socketclient"
+	"github.com/alkiranet/govpp/adapter/statsclient"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/binapi/memclnt"
+	"github.com/alkiranet/govpp/core"
 )
 
 const (

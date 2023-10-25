@@ -22,14 +22,14 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"go.fd.io/govpp/adapter/mock"
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/ethernet_types"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/interface_types"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/codec"
-	"go.fd.io/govpp/core"
+	"github.com/alkiranet/govpp/adapter/mock"
+	"github.com/alkiranet/govpp/api"
+	"github.com/alkiranet/govpp/binapi/ethernet_types"
+	interfaces "github.com/alkiranet/govpp/binapi/interface"
+	"github.com/alkiranet/govpp/binapi/interface_types"
+	"github.com/alkiranet/govpp/binapi/memclnt"
+	"github.com/alkiranet/govpp/codec"
+	"github.com/alkiranet/govpp/core"
 )
 
 type testCtx struct {

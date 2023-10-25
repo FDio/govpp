@@ -18,7 +18,7 @@
 package mock
 
 import (
-	"go.fd.io/govpp/adapter"
+	"github.com/alkiranet/govpp/adapter"
 )
 
 // implements StatsAPI

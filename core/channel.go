@@ -24,8 +24,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/api"
+	"github.com/alkiranet/govpp/adapter"
+	"github.com/alkiranet/govpp/api"
 )
 
 var (
