@@ -1,6 +1,6 @@
 module github.com/alkiranet/govpp
 
-go 1.12
+go 1.18
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.0
