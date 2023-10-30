@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.1
-	github.com/docker/cli v24.0.6+incompatible
+	github.com/docker/cli v24.0.7+incompatible
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.5.4
@@ -12,7 +12,7 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.0
 	github.com/olekukonko/tablewriter v0.0.5
-	github.com/onsi/gomega v1.28.1
+	github.com/onsi/gomega v1.29.0
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.7.0
