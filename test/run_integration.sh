@@ -42,7 +42,7 @@ docker build --tag "${imgtag}" \
 
 vppver=$(docker run --rm -i "${imgtag}" dpkg-query -f '${Version}' -W vpp)
 
-if [ -n "${GITHUB_STEP_SUMMARY}" ]; then
+if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
     echo "**VPP version**: \`${vppver}\`" >> $GITHUB_STEP_SUMMARY
     echo "" >> $GITHUB_STEP_SUMMARY
 fi
