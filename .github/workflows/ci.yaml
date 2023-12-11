@@ -36,7 +36,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Setup Go"
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
       - name: "Run go mod tidy"
@@ -60,7 +60,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Setup Go"
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
       - name: "Generate binapi"
@@ -80,7 +80,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Setup Go"
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
       - name: "Setup gotestsum"
@@ -110,7 +110,7 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v4
       - name: "Setup Go"
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
       - name: "Run golangci"
