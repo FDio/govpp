@@ -315,6 +315,9 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 		}
 		vecLen := *(*uint32)(vectorLen(dirVector))
 		data := (*stat).(adapter.CombinedCounterStat)
+		if uint32(len(data)) != vecLen {
+			return ErrStatDataLenIncorrect
+		}
 		for i := uint32(0); i < vecLen; i++ {
 			counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
 			counterVector := ss.adjust(vectorLen(counterVectorOffset))
@@ -339,6 +342,9 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 		}
 		vecLen := *(*uint32)(vectorLen(dirVector))
 		data := (*stat).(adapter.NameStat)
+		if uint32(len(data)) != vecLen {
+			return ErrStatDataLenIncorrect
+		}
 		for i := uint32(0); i < vecLen; i++ {
 			nameVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
 			if uintptr(nameVectorOffset) == 0 {
