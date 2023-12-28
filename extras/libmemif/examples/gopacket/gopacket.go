@@ -52,9 +52,9 @@ import (
 	"os"
 	"os/signal"
 
+	"github.com/americanbinary/govpp/extras/libmemif"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
-	"go.fd.io/govpp/extras/libmemif"
 )
 
 var (

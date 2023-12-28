@@ -20,7 +20,7 @@ import (
 	"sort"
 	"strings"
 
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 // SortFileObjectsByName sorts all objects of file by their name.

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // RPCService defines RPC service mss_clamp.

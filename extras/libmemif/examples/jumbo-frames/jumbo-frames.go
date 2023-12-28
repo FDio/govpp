@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"go.fd.io/govpp/extras/libmemif"
+	"github.com/americanbinary/govpp/extras/libmemif"
 )
 
 const (

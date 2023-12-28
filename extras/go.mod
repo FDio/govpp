@@ -1,4 +1,4 @@
-module go.fd.io/govpp/extras
+module github.com/americanbinary/govpp/extras
 
 go 1.18
 

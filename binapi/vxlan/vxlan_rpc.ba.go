@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"io"
 
-	api "go.fd.io/govpp/api"
-	memclnt "go.fd.io/govpp/binapi/memclnt"
+	api "github.com/americanbinary/govpp/api"
+	memclnt "github.com/americanbinary/govpp/binapi/memclnt"
 )
 
 // RPCService defines RPC service vxlan.

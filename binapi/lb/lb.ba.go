@@ -11,11 +11,11 @@
 package lb
 
 import (
-	api "go.fd.io/govpp/api"
-	interface_types "go.fd.io/govpp/binapi/interface_types"
-	ip_types "go.fd.io/govpp/binapi/ip_types"
-	lb_types "go.fd.io/govpp/binapi/lb_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	interface_types "github.com/americanbinary/govpp/binapi/interface_types"
+	ip_types "github.com/americanbinary/govpp/binapi/ip_types"
+	lb_types "github.com/americanbinary/govpp/binapi/lb_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

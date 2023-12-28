@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"strings"
 
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 type File struct {

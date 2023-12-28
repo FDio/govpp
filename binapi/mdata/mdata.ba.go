@@ -11,9 +11,9 @@
 package mdata
 
 import (
-	api "go.fd.io/govpp/api"
-	_ "go.fd.io/govpp/binapi/interface_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	_ "github.com/americanbinary/govpp/binapi/interface_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

@@ -5,7 +5,7 @@ package vxlan_gpe_ioam_export
 import (
 	"context"
 
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // RPCService defines RPC service vxlan_gpe_ioam_export.

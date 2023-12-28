@@ -12,10 +12,10 @@ This document contains information about GoVPP generator which is used for gener
 
 ```shell
 # Latest version (most recent tag)
-go install go.fd.io/govpp/cmd/binapi-generator@latest
+go install github.com/americanbinary/govpp/cmd/binapi-generator@latest
 
 # Development version (master branch)
-go install go.fd.io/govpp/cmd/binapi-generator@master
+go install github.com/americanbinary/govpp/cmd/binapi-generator@master
 ```
 
 ### Install from source

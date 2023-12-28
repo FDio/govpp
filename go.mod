@@ -1,6 +1,6 @@
-module go.fd.io/govpp
+module github.com/americanbinary/govpp
 
-go 1.18
+go 1.21.5
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.1

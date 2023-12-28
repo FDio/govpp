@@ -23,9 +23,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/core"
+	"github.com/americanbinary/govpp/adapter"
+	"github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/core"
 )
 
 const (

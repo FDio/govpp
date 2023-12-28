@@ -20,7 +20,7 @@ import (
 
 	"github.com/lunixbochs/struc"
 
-	"go.fd.io/govpp/api"
+	"github.com/americanbinary/govpp/api"
 )
 
 // Marshaler is the interface implemented by the binary API messages that can

@@ -11,11 +11,11 @@
 package ip_session_redirect
 
 import (
-	api "go.fd.io/govpp/api"
-	fib_types "go.fd.io/govpp/binapi/fib_types"
-	_ "go.fd.io/govpp/binapi/interface_types"
-	_ "go.fd.io/govpp/binapi/ip_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	fib_types "github.com/americanbinary/govpp/binapi/fib_types"
+	_ "github.com/americanbinary/govpp/binapi/interface_types"
+	_ "github.com/americanbinary/govpp/binapi/ip_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

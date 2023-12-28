@@ -20,7 +20,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"go.fd.io/govpp/test/vpptesting"
+	"github.com/americanbinary/govpp/test/vpptesting"
 )
 
 func TestExamples(t *testing.T) {

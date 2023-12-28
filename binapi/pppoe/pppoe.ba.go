@@ -11,11 +11,11 @@
 package pppoe
 
 import (
-	api "go.fd.io/govpp/api"
-	ethernet_types "go.fd.io/govpp/binapi/ethernet_types"
-	interface_types "go.fd.io/govpp/binapi/interface_types"
-	ip_types "go.fd.io/govpp/binapi/ip_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	ethernet_types "github.com/americanbinary/govpp/binapi/ethernet_types"
+	interface_types "github.com/americanbinary/govpp/binapi/interface_types"
+	ip_types "github.com/americanbinary/govpp/binapi/ip_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

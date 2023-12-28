@@ -17,8 +17,8 @@ package integration
 import (
 	"testing"
 
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/test/vpptesting"
+	"github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/test/vpptesting"
 )
 
 func TestStatClientAll(t *testing.T) {

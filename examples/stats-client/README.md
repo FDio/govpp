@@ -21,7 +21,7 @@ To enable stats add following section to you VPP config:
 
 ## Running example
 
-First build the example: `go build go.fd.io/govpp/examples/stats-api`.
+First build the example: `go build github.com/americanbinary/govpp/examples/stats-api`.
 
 ### Higher-level access to stats
 

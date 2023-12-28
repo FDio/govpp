@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"testing"
 
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/ip"
-	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapi/sr"
-	"go.fd.io/govpp/binapi/vpe"
-	"go.fd.io/govpp/codec"
+	"github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/binapi/ip"
+	"github.com/americanbinary/govpp/binapi/ip_types"
+	"github.com/americanbinary/govpp/binapi/sr"
+	"github.com/americanbinary/govpp/binapi/vpe"
+	"github.com/americanbinary/govpp/codec"
 )
 
 type MyMsg struct {

@@ -26,6 +26,7 @@ jobs:
       matrix:
         version:
           - 'master'
+          - '2310'
           - '2306'
           - '2302'
           - '2210'

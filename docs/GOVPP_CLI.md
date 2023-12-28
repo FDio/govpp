@@ -17,13 +17,13 @@ To install GoVPP CLI it is currently required to have Go installed on your syste
 To install from the latest GoVPP release, run:
 
 ```shell
-go install go.fd.io/govpp/cmd/govpp@latest
+go install github.com/americanbinary/govpp/cmd/govpp@latest
 ```
 
 To install the most recent development version, run: 
 
 ```shell
-go install go.fd.io/govpp/cmd/govpp@master
+go install github.com/americanbinary/govpp/cmd/govpp@master
 ```
 
 ## Getting Started

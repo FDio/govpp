@@ -26,8 +26,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/americanbinary/govpp/extras/gomemif/memif"
 	"github.com/pkg/profile"
-	"go.fd.io/govpp/extras/gomemif/memif"
 )
 
 func Disconnected(i *memif.Interface) error {

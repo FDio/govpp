@@ -22,9 +22,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 
-	"go.fd.io/govpp/binapigen"
-	"go.fd.io/govpp/binapigen/vppapi"
-	"go.fd.io/govpp/internal/version"
+	"github.com/americanbinary/govpp/binapigen"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/internal/version"
 )
 
 const (

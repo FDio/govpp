@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/api"
+	"github.com/americanbinary/govpp/adapter"
+	"github.com/americanbinary/govpp/api"
 )
 
 var (

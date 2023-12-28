@@ -5,7 +5,7 @@ package lldp
 import (
 	"context"
 
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // RPCService defines RPC service lldp.

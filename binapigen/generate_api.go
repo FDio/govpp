@@ -20,7 +20,7 @@ import (
 	"strconv"
 	"strings"
 
-	"go.fd.io/govpp/internal/version"
+	"github.com/americanbinary/govpp/internal/version"
 )
 
 // generated names

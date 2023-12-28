@@ -37,13 +37,13 @@ Install binapi-generator into `$GOPATH/bin` (defaults to: `$HOME/go/bin`) using 
 
 ```sh
 # Latest release
-go install go.fd.io/govpp/cmd/binapi-generator@latest
+go install github.com/americanbinary/govpp/cmd/binapi-generator@latest
 
 # Specific version
-go install go.fd.io/govpp/cmd/binapi-generator@v0.7.0
+go install github.com/americanbinary/govpp/cmd/binapi-generator@v0.7.0
 
 # Development branch
-go install go.fd.io/govpp/cmd/binapi-generator@master
+go install github.com/americanbinary/govpp/cmd/binapi-generator@master
 ```
 
 > **Note**

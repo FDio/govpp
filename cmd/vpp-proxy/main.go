@@ -19,14 +19,14 @@ import (
 	"flag"
 	"log"
 
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/adapter/statsclient"
-	"go.fd.io/govpp/api"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/vlib"
-	"go.fd.io/govpp/binapi/vpe"
-	_ "go.fd.io/govpp/core"
-	"go.fd.io/govpp/proxy"
+	"github.com/americanbinary/govpp/adapter/socketclient"
+	"github.com/americanbinary/govpp/adapter/statsclient"
+	"github.com/americanbinary/govpp/api"
+	interfaces "github.com/americanbinary/govpp/binapi/interface"
+	"github.com/americanbinary/govpp/binapi/vlib"
+	"github.com/americanbinary/govpp/binapi/vpe"
+	_ "github.com/americanbinary/govpp/core"
+	"github.com/americanbinary/govpp/proxy"
 )
 
 var (
