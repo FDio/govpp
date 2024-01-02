@@ -54,7 +54,7 @@ jobs:
       matrix:
         go: [ '1.20' ]
     env:
-      VERSION: v0.8.0
+      VERSION: v0.9.0
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"

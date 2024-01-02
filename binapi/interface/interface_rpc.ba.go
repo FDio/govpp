@@ -22,6 +22,7 @@ type RPCService interface {
 	DeleteSubif(ctx context.Context, in *DeleteSubif) (*DeleteSubifReply, error)
 	HwInterfaceSetMtu(ctx context.Context, in *HwInterfaceSetMtu) (*HwInterfaceSetMtuReply, error)
 	InterfaceNameRenumber(ctx context.Context, in *InterfaceNameRenumber) (*InterfaceNameRenumberReply, error)
+	PcapSetFilterFunction(ctx context.Context, in *PcapSetFilterFunction) (*PcapSetFilterFunctionReply, error)
 	PcapTraceOff(ctx context.Context, in *PcapTraceOff) (*PcapTraceOffReply, error)
 	PcapTraceOn(ctx context.Context, in *PcapTraceOn) (*PcapTraceOnReply, error)
 	SwInterfaceAddDelAddress(ctx context.Context, in *SwInterfaceAddDelAddress) (*SwInterfaceAddDelAddressReply, error)
@@ -131,6 +132,15 @@ func (c *serviceClient) HwInterfaceSetMtu(ctx context.Context, in *HwInterfaceSe
 
 func (c *serviceClient) InterfaceNameRenumber(ctx context.Context, in *InterfaceNameRenumber) (*InterfaceNameRenumberReply, error) {
 	out := new(InterfaceNameRenumberReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) PcapSetFilterFunction(ctx context.Context, in *PcapSetFilterFunction) (*PcapSetFilterFunctionReply, error) {
+	out := new(PcapSetFilterFunctionReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service crypto.
 type RPCService interface {
 	CryptoSetAsyncDispatch(ctx context.Context, in *CryptoSetAsyncDispatch) (*CryptoSetAsyncDispatchReply, error)
+	CryptoSetAsyncDispatchV2(ctx context.Context, in *CryptoSetAsyncDispatchV2) (*CryptoSetAsyncDispatchV2Reply, error)
 	CryptoSetHandler(ctx context.Context, in *CryptoSetHandler) (*CryptoSetHandlerReply, error)
 }
 
@@ -24,6 +25,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) CryptoSetAsyncDispatch(ctx context.Context, in *CryptoSetAsyncDispatch) (*CryptoSetAsyncDispatchReply, error) {
 	out := new(CryptoSetAsyncDispatchReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) CryptoSetAsyncDispatchV2(ctx context.Context, in *CryptoSetAsyncDispatchV2) (*CryptoSetAsyncDispatchV2Reply, error) {
+	out := new(CryptoSetAsyncDispatchV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
