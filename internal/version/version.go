@@ -27,7 +27,7 @@ const (
 	Major      = 0
 	Minor      = 9
 	Patch      = 0
-	PreRelease = "dev"
+	PreRelease = "beta"
 )
 
 // String formats the version string using semver format.
@@ -44,7 +44,7 @@ func String() string {
 // even with bare go build/install.
 var (
 	name       = "govpp"
-	version    = "v0.9.0-dev"
+	version    = "v0.9.0-beta"
 	commit     = "unknown"
 	branch     = "HEAD"
 	buildStamp = ""

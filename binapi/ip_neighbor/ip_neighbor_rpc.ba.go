@@ -15,6 +15,7 @@ import (
 type RPCService interface {
 	IPNeighborAddDel(ctx context.Context, in *IPNeighborAddDel) (*IPNeighborAddDelReply, error)
 	IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error)
+	IPNeighborConfigGet(ctx context.Context, in *IPNeighborConfigGet) (*IPNeighborConfigGetReply, error)
 	IPNeighborDump(ctx context.Context, in *IPNeighborDump) (RPCService_IPNeighborDumpClient, error)
 	IPNeighborFlush(ctx context.Context, in *IPNeighborFlush) (*IPNeighborFlushReply, error)
 	IPNeighborReplaceBegin(ctx context.Context, in *IPNeighborReplaceBegin) (*IPNeighborReplaceBeginReply, error)
@@ -42,6 +43,15 @@ func (c *serviceClient) IPNeighborAddDel(ctx context.Context, in *IPNeighborAddD
 
 func (c *serviceClient) IPNeighborConfig(ctx context.Context, in *IPNeighborConfig) (*IPNeighborConfigReply, error) {
 	out := new(IPNeighborConfigReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPNeighborConfigGet(ctx context.Context, in *IPNeighborConfigGet) (*IPNeighborConfigGetReply, error) {
+	out := new(IPNeighborConfigGetReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

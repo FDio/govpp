@@ -11,6 +11,25 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.9.0
+
+> _XX January 2024_
+
+### Changes
+
+- Update run_integration.sh (#151, #154)
+- Add VPP 23.10 to CI (#175)
+- Improvements GoVPP CLI (#156)
+
+### Fixes
+
+- Fix running integration tests outside of GitHub (#168)
+- Add check for stats vector length (#172)
+
+### GoMemif 
+
+- gomemif: Packet sent on Tx queue is received back on Rx queue of sender (#165)
+
 ## 0.8.0
 
 > _18 July 2023_
