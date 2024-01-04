@@ -13,7 +13,7 @@ This file lists changes for the GoVPP releases.
 
 ## 0.9.0
 
-> _XX January 2024_
+> _04 January 2024_
 
 ### Changes
 
