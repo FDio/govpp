@@ -40,7 +40,7 @@ func (e VPPApiError) Error() string {
 	return fmt.Sprintf("VPPApiError: %s", errstr)
 }
 
-// definitions from: vpp/src/vnet/api_errno.h
+// definitions from: vpp/src/vnet/error.h
 const (
 	_                                  VPPApiError = 0
 	UNSPECIFIED                        VPPApiError = -1
