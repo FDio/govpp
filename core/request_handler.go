@@ -262,11 +262,13 @@ func sendReply(ch *Channel, reply *vppReply) {
 		}).Warn("Reply channel full, dropping reply.")
 		return
 	}
+	replyTimeoutTimer := time.NewTimer(ch.receiveReplyTimeout)
+	defer replyTimeoutTimer.Stop()
 	select {
 	case ch.replyChan <- reply:
 		return // reply sent ok
-	case <-time.After(ch.receiveReplyTimeout):
-		// receiver still not ready
+	case <-replyTimeoutTimer.C:
+		// receiver still isn't ready
 		log.WithFields(logger.Fields{
 			"channel": ch.id,
 			"msg_id":  reply.msgID,
