@@ -12,6 +12,7 @@ import (
 type RPCService interface {
 	AfXdpCreate(ctx context.Context, in *AfXdpCreate) (*AfXdpCreateReply, error)
 	AfXdpCreateV2(ctx context.Context, in *AfXdpCreateV2) (*AfXdpCreateV2Reply, error)
+	AfXdpCreateV3(ctx context.Context, in *AfXdpCreateV3) (*AfXdpCreateV3Reply, error)
 	AfXdpDelete(ctx context.Context, in *AfXdpDelete) (*AfXdpDeleteReply, error)
 }
 
@@ -34,6 +35,15 @@ func (c *serviceClient) AfXdpCreate(ctx context.Context, in *AfXdpCreate) (*AfXd
 
 func (c *serviceClient) AfXdpCreateV2(ctx context.Context, in *AfXdpCreateV2) (*AfXdpCreateV2Reply, error) {
 	out := new(AfXdpCreateV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) AfXdpCreateV3(ctx context.Context, in *AfXdpCreateV3) (*AfXdpCreateV3Reply, error) {
+	out := new(AfXdpCreateV3Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

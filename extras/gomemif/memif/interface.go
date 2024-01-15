@@ -470,6 +470,8 @@ func (i *Interface) initializeQueues() (err error) {
 			q.putDescBuf(slot, desc)
 		}
 	}
+
+	txPacketBufOffset := uint32(uint32(i.run.NumQueuePairs) * i.run.PacketBufferSize * (1 << i.run.Log2RingSize))
 	for qid := 0; qid < int(i.run.NumQueuePairs); qid++ {
 		/* RX */
 		q = &Queue{
@@ -497,7 +499,7 @@ func (i *Interface) initializeQueues() (err error) {
 
 		for j := 0; j < q.ring.size; j++ {
 			slot = qid*q.ring.size + j
-			desc.setOffset(int(i.regions[0].packetBufferOffset + uint32(slot)*i.run.PacketBufferSize))
+			desc.setOffset(int(i.regions[0].packetBufferOffset + txPacketBufOffset + uint32(slot)*i.run.PacketBufferSize))
 			q.putDescBuf(slot, desc)
 		}
 	}

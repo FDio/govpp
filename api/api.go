@@ -20,8 +20,6 @@ import (
 )
 
 // Connection represents the client connection to VPP API.
-//
-// NOTE: This API is EXPERIMENTAL.
 type Connection interface {
 	// NewStream creates a new stream for sending and receiving messages.
 	// Context can be used to close the stream using cancel or timeout.
@@ -38,8 +36,6 @@ type Connection interface {
 }
 
 // Watcher provides access to watched event messages. It can be created by calling Connection.WatchEvent.
-//
-// NOTE: This API is EXPERIMENTAL.
 type Watcher interface {
 	// Events returns a channel where events are sent. The channel is closed when
 	// watcher context is canceled or when Close is called.
@@ -52,10 +48,7 @@ type Watcher interface {
 // Stream provides low-level access for sending and receiving messages.
 // Users should handle correct type and ordering of messages.
 //
-// It is not safe to call these methods on the same stream in different
-// goroutines.
-//
-// NOTE: This API is EXPERIMENTAL.
+// It is not safe to call these methods on the same stream in different goroutines.
 type Stream interface {
 	// Context returns the context for this stream.
 	Context() context.Context
@@ -76,6 +69,8 @@ type Stream interface {
 type StreamOption func(Stream)
 
 // ChannelProvider provides the communication channel with govpp core.
+//
+// DEPRECATED: Use Connection instead.
 type ChannelProvider interface {
 	// NewAPIChannel returns a new channel for communication with VPP via govpp core.
 	// It uses default buffer sizes for the request and reply Go channels.
@@ -87,6 +82,8 @@ type ChannelProvider interface {
 }
 
 // Channel provides methods for direct communication with VPP channel.
+//
+// DEPRECATED: Use Stream instead.
 type Channel interface {
 	// SendRequest asynchronously sends a request to VPP. Returns a request context, that can be used to call ReceiveReply.
 	// In case of any errors by sending, the error will be delivered to ReplyChan (and returned by ReceiveReply).
@@ -117,6 +114,8 @@ type Channel interface {
 }
 
 // RequestCtx is helper interface which allows to receive reply on request.
+//
+// DEPRECATED: Use Stream instead.
 type RequestCtx interface {
 	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered
 	// from VPP, or until an error occurs). The reply will be decoded into the msg
@@ -125,6 +124,8 @@ type RequestCtx interface {
 }
 
 // MultiRequestCtx is helper interface which allows to receive reply on multi-request.
+//
+// DEPRECATED: Use Stream instead.
 type MultiRequestCtx interface {
 	// ReceiveReply receives a reply from VPP (blocks until a reply is delivered
 	// from VPP, or until an error occurs).The reply will be decoded into the msg
@@ -137,6 +138,8 @@ type MultiRequestCtx interface {
 
 // SubscriptionCtx is helper interface which allows to control subscription for
 // notification events.
+//
+// DEPRECATED: Use Connection instead.
 type SubscriptionCtx interface {
 	// Unsubscribe unsubscribes from receiving the notifications tied to the
 	// subscription context.
