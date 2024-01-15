@@ -17,6 +17,8 @@ type RPCService interface {
 	TraceClearCache(ctx context.Context, in *TraceClearCache) (*TraceClearCacheReply, error)
 	TraceClearCapture(ctx context.Context, in *TraceClearCapture) (*TraceClearCaptureReply, error)
 	TraceDump(ctx context.Context, in *TraceDump) (RPCService_TraceDumpClient, error)
+	TraceFilterFunctionDump(ctx context.Context, in *TraceFilterFunctionDump) (RPCService_TraceFilterFunctionDumpClient, error)
+	TraceSetFilterFunction(ctx context.Context, in *TraceSetFilterFunction) (*TraceSetFilterFunctionReply, error)
 	TraceSetFilters(ctx context.Context, in *TraceSetFilters) (*TraceSetFiltersReply, error)
 	TraceV2Dump(ctx context.Context, in *TraceV2Dump) (RPCService_TraceV2DumpClient, error)
 }
@@ -98,6 +100,58 @@ func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, *TraceDumpReply, 
 	default:
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) TraceFilterFunctionDump(ctx context.Context, in *TraceFilterFunctionDump) (RPCService_TraceFilterFunctionDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_TraceFilterFunctionDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_TraceFilterFunctionDumpClient interface {
+	Recv() (*TraceFilterFunctionDetails, error)
+	api.Stream
+}
+
+type serviceClient_TraceFilterFunctionDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_TraceFilterFunctionDumpClient) Recv() (*TraceFilterFunctionDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *TraceFilterFunctionDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) TraceSetFilterFunction(ctx context.Context, in *TraceSetFilterFunction) (*TraceSetFilterFunctionReply, error) {
+	out := new(TraceSetFilterFunctionReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) TraceSetFilters(ctx context.Context, in *TraceSetFilters) (*TraceSetFiltersReply, error) {

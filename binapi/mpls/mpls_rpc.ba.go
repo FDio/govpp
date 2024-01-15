@@ -13,6 +13,7 @@ import (
 
 // RPCService defines RPC service mpls.
 type RPCService interface {
+	MplsInterfaceDump(ctx context.Context, in *MplsInterfaceDump) (RPCService_MplsInterfaceDumpClient, error)
 	MplsIPBindUnbind(ctx context.Context, in *MplsIPBindUnbind) (*MplsIPBindUnbindReply, error)
 	MplsRouteAddDel(ctx context.Context, in *MplsRouteAddDel) (*MplsRouteAddDelReply, error)
 	MplsRouteDump(ctx context.Context, in *MplsRouteDump) (RPCService_MplsRouteDumpClient, error)
@@ -29,6 +30,49 @@ type serviceClient struct {
 
 func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
+}
+
+func (c *serviceClient) MplsInterfaceDump(ctx context.Context, in *MplsInterfaceDump) (RPCService_MplsInterfaceDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_MplsInterfaceDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_MplsInterfaceDumpClient interface {
+	Recv() (*MplsInterfaceDetails, error)
+	api.Stream
+}
+
+type serviceClient_MplsInterfaceDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_MplsInterfaceDumpClient) Recv() (*MplsInterfaceDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *MplsInterfaceDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
 
 func (c *serviceClient) MplsIPBindUnbind(ctx context.Context, in *MplsIPBindUnbind) (*MplsIPBindUnbindReply, error) {

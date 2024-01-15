@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service arping.
 type RPCService interface {
 	Arping(ctx context.Context, in *Arping) (*ArpingReply, error)
+	ArpingAcd(ctx context.Context, in *ArpingAcd) (*ArpingAcdReply, error)
 }
 
 type serviceClient struct {
@@ -23,6 +24,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) Arping(ctx context.Context, in *Arping) (*ArpingReply, error) {
 	out := new(ArpingReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) ArpingAcd(ctx context.Context, in *ArpingAcd) (*ArpingAcdReply, error) {
+	out := new(ArpingAcdReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

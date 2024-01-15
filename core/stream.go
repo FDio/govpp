@@ -249,6 +249,7 @@ func (s *Stream) recvReply() (*vppReply, error) {
 		timeout = maxInt64
 	}
 	timeoutTimer := time.NewTimer(timeout)
+	defer timeoutTimer.Stop()
 	select {
 	case reply, ok := <-s.channel.replyChan:
 		if !ok {
