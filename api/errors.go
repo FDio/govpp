@@ -40,7 +40,7 @@ func (e VPPApiError) Error() string {
 	return fmt.Sprintf("VPPApiError: %s", errstr)
 }
 
-// definitions from: vpp/src/vnet/api_errno.h
+// definitions from: vpp/src/vnet/error.h
 const (
 	_                                  VPPApiError = 0
 	UNSPECIFIED                        VPPApiError = -1
@@ -78,7 +78,6 @@ const (
 	ADDRESS_NOT_FOUND_FOR_INTERFACE    VPPApiError = -60
 	ADDRESS_NOT_DELETABLE              VPPApiError = -61
 	IP6_NOT_ENABLED                    VPPApiError = -62
-	IN_PROGRESS                        VPPApiError = 10
 	NO_SUCH_NODE                       VPPApiError = -63
 	NO_SUCH_NODE2                      VPPApiError = -64
 	NO_SUCH_TABLE                      VPPApiError = -65
@@ -184,6 +183,9 @@ const (
 	INVALID_VALUE_4                    VPPApiError = -166
 	BUSY                               VPPApiError = -167
 	BUG                                VPPApiError = -168
+	FEATURE_ALREADY_DISABLED           VPPApiError = -169
+	FEATURE_ALREADY_ENABLED            VPPApiError = -170
+	INVALID_PREFIX_LENGTH              VPPApiError = -171
 )
 
 var vppApiErrors = map[VPPApiError]string{
@@ -222,7 +224,6 @@ var vppApiErrors = map[VPPApiError]string{
 	ADDRESS_NOT_FOUND_FOR_INTERFACE:    "Address not found for interface",
 	ADDRESS_NOT_DELETABLE:              "Address not deletable",
 	IP6_NOT_ENABLED:                    "ip6 not enabled",
-	IN_PROGRESS:                        "Operation in progress",
 	NO_SUCH_NODE:                       "No such graph node",
 	NO_SUCH_NODE2:                      "No such graph node #2",
 	NO_SUCH_TABLE:                      "No such table",
@@ -328,4 +329,7 @@ var vppApiErrors = map[VPPApiError]string{
 	INVALID_VALUE_4:                    "Invalid value #4",
 	BUSY:                               "Busy",
 	BUG:                                "Bug",
+	FEATURE_ALREADY_DISABLED:           "Feature already disabled",
+	FEATURE_ALREADY_ENABLED:            "Feature already enabled",
+	INVALID_PREFIX_LENGTH:              "Invalid prefix length",
 }
