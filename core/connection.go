@@ -135,7 +135,8 @@ type Connection struct {
 	msgControlPing      api.Message
 	msgControlPingReply api.Message
 
-	trace *Trace // API tracer (disabled by default)
+	traceLock sync.Mutex
+	trace     *Trace // API tracer (disabled by default)
 }
 
 type backgroundLoopStatus int
@@ -168,7 +169,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 		subscriptions:       make(map[uint16][]*subscriptionCtx),
 		msgControlPing:      msgControlPing,
 		msgControlPingReply: msgControlPingReply,
-		channelIdPool: newIDPool(0x7fff),
+		channelIdPool:       newIDPool(0x7fff),
 	}
 	c.channelPool = genericpool.New[*Channel](func() *Channel {
 		if isDebugOn(debugOptChannels) {

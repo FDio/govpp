@@ -46,7 +46,9 @@ func NewTrace(c *Connection, size int) (t *Trace) {
 		records: make([]*api.Record, size),
 		buffer:  make(chan *api.Record, bufferSize),
 	}
+	c.traceLock.Lock()
 	c.trace = t
+	c.traceLock.Unlock()
 	t.closeFunc = func() {
 		c.trace = nil // no more records
 		close(t.buffer)
