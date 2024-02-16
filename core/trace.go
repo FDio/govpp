@@ -18,6 +18,7 @@ import (
 	"go.fd.io/govpp/api"
 	"sort"
 	"sync"
+	"time"
 )
 
 // default buffer size
@@ -103,19 +104,15 @@ func (t *Trace) Close() {
 	t.closeFunc()
 }
 
-type registeredRecord struct {
-	r *api.Record
-}
-
-func (t *Trace) newRegisteredRecord(rc *api.Record) *registeredRecord {
+func (t *Trace) registerNew() time.Time {
 	if t != nil {
 		t.wg.Add(1)
 	}
-	return &registeredRecord{r: rc}
+	return time.Now()
 }
 
-func (t *Trace) send(record *registeredRecord) {
+func (t *Trace) send(record *api.Record) {
 	if t != nil {
-		t.buffer <- record.r
+		t.buffer <- record
 	}
 }

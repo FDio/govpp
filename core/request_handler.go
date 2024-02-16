@@ -111,11 +111,14 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 	// send the request to VPP
 	if err = func() (err error) {
-		r := &api.Record{Message: req.msg, Timestamp: time.Now(), ChannelID: ch.id}
-		registered := c.trace.newRegisteredRecord(r)
-		defer c.trace.send(registered)
-		if err = c.vppClient.SendMsg(context, data); err == nil {
-			r.Succeeded = true
+		timestamp := c.trace.registerNew()
+		if err = c.vppClient.SendMsg(context, data); c.trace != nil {
+			c.trace.send(&api.Record{
+				Message:   req.msg,
+				Timestamp: timestamp,
+				ChannelID: ch.id,
+				Succeeded: err == nil,
+			})
 		}
 		return
 	}(); err != nil {
@@ -150,11 +153,14 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}
 		// send the control ping request to VPP
 		if err = func() (err error) {
-			r := &api.Record{Message: c.msgControlPing, Timestamp: time.Now(), ChannelID: ch.id}
-			registered := c.trace.newRegisteredRecord(r)
-			defer c.trace.send(registered)
-			if err = c.vppClient.SendMsg(context, pingData); err == nil {
-				r.Succeeded = true
+			timestamp := c.trace.registerNew()
+			if err = c.vppClient.SendMsg(context, pingData); c.trace != nil {
+				c.trace.send(&api.Record{
+					Message:   c.msgControlPing,
+					Timestamp: timestamp,
+					ChannelID: ch.id,
+					Succeeded: err == nil,
+				})
 			}
 			return
 		}(); err != nil {
@@ -200,12 +206,15 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	// decode and trace the message
 	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 	if err = func() (err error) {
-		r := &api.Record{Timestamp: time.Now(), IsReceived: true, ChannelID: chanID}
-		registered := c.trace.newRegisteredRecord(r)
-		defer c.trace.send(registered)
-		if err = c.codec.DecodeMsg(data, msg); err == nil {
-			r.Message = msg
-			r.Succeeded = true
+		timestamp := c.trace.registerNew()
+		if err = c.codec.DecodeMsg(data, msg); c.trace != nil {
+			c.trace.send(&api.Record{
+				Message:    msg,
+				Timestamp:  timestamp,
+				IsReceived: true,
+				ChannelID:  chanID,
+				Succeeded:  err == nil,
+			})
 		}
 		return
 	}(); err != nil {
