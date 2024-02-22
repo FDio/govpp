@@ -106,11 +106,12 @@ func (t *Trace) Close() {
 	t.closeFunc()
 }
 
-func (t *Trace) registerNew() time.Time {
+func (t *Trace) registerNew() (now time.Time, enabled bool) {
 	if t != nil {
 		t.wg.Add(1)
+		enabled = true
 	}
-	return time.Now()
+	return time.Now(), enabled
 }
 
 func (t *Trace) send(record *api.Record) {

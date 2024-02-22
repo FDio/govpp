@@ -111,9 +111,9 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 	// send the request to VPP
 	if err = func() (err error) {
-		timestamp := c.trace.registerNew()
+		timestamp, enabled := c.trace.registerNew()
 		err = c.vppClient.SendMsg(context, data)
-		if c.trace != nil {
+		if enabled {
 			c.traceLock.Lock()
 			defer c.traceLock.Unlock()
 			c.trace.send(&api.Record{
@@ -156,9 +156,9 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}
 		// send the control ping request to VPP
 		if err = func() (err error) {
-			timestamp := c.trace.registerNew()
+			timestamp, enabled := c.trace.registerNew()
 			err = c.vppClient.SendMsg(context, pingData)
-			if c.trace != nil {
+			if enabled {
 				c.traceLock.Lock()
 				defer c.traceLock.Unlock()
 				c.trace.send(&api.Record{
@@ -212,9 +212,9 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	// decode and trace the message
 	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 	if err = func() (err error) {
-		timestamp := c.trace.registerNew()
+		timestamp, enabled := c.trace.registerNew()
 		err = c.codec.DecodeMsg(data, msg)
-		if c.trace != nil {
+		if enabled {
 			c.traceLock.Lock()
 			defer c.traceLock.Unlock()
 			c.trace.send(&api.Record{
