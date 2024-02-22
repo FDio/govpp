@@ -18,29 +18,30 @@ import (
 	"time"
 )
 
-// Trace gives access to the API trace tool, capturing outcoming and incoming messages
-// to and from GoVPP.
+// Trace is the GoVPP utility tool capturing processed API messages. The trace is not operational
+// by default.
+// Enable trace for a given connection by calling `NewTrace(connection, size)`
 type Trace interface {
-	// Enable allows to enable or disable API trace for a connection.
-	Enable(enable bool)
-
-	// GetRecords retrieves all messages collected (from all channels if they are used)
-	// since the point the trace was enabled or cleared.
+	// GetRecords returns all API messages from all channels captured since the trace
+	// was initialized or cleared up to the point of the call.
 	GetRecords() []*Record
 
-	// GetRecordsForChannel retrieves messages collected by the given channel since
-	// the point the trace was enabled or cleared.
+	// GetRecordsForChannel returns all API messages recorded by the given channel.
 	GetRecordsForChannel(chId uint16) []*Record
 
 	// Clear erases messages captured so far.
 	Clear()
+
+	// Close the tracer and release associated resources
+	Close()
 }
 
-// Record contains essential information about traced message, its timestamp and whether
+// Record contains essential information about the traced message, its timestamp and whether
 // the message was received or sent
 type Record struct {
 	Message    Message
 	Timestamp  time.Time
 	IsReceived bool
 	ChannelID  uint16
+	Succeeded  bool
 }

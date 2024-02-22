@@ -249,7 +249,6 @@ func (req *requestCtx) ReceiveReply(msg api.Message) error {
 	} else if lastReplyReceived {
 		return errors.New("multipart reply recieved while a single reply expected")
 	}
-
 	return nil
 }
 
