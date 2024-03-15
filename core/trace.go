@@ -18,51 +18,104 @@ import (
 	"go.fd.io/govpp/api"
 	"sort"
 	"sync"
-	"sync/atomic"
+	"time"
 )
 
-// trace is the API tracer object synchronizing and keeping recoded messages.
-type trace struct {
-	list []*api.Record
-	mux  *sync.Mutex
+// default buffer size
+const bufferSize = 100
 
-	isEnabled int32
+// Trace is the default trace API implementation.
+type Trace struct {
+	*sync.RWMutex
+	wg sync.WaitGroup
+
+	records []*api.Record
+	buffer  chan *api.Record
+	index   int
+
+	closeFunc func()
 }
 
-func (c *trace) Enable(enable bool) {
-	if enable && atomic.CompareAndSwapInt32(&c.isEnabled, 0, 1) {
-		log.Debugf("API trace enabled")
-	} else if atomic.CompareAndSwapInt32(&c.isEnabled, 1, 0) {
-		log.Debugf("API trace disabled")
+// NewTrace initializes the trace object, always bound to a GoVPP connection.
+// The size limits the number of records stored.
+// Initializing a new trace for the same connection replaces the old one and
+// discards all values already collected.
+func NewTrace(c *Connection, size int) (t *Trace) {
+	t = &Trace{
+		RWMutex: &sync.RWMutex{},
+		records: make([]*api.Record, size),
+		buffer:  make(chan *api.Record, bufferSize),
 	}
+	c.traceLock.Lock()
+	c.trace = t
+	c.traceLock.Unlock()
+	t.closeFunc = func() {
+		c.trace = nil // no more records
+		close(t.buffer)
+	}
+	go func() {
+		for {
+			record, ok := <-t.buffer
+			if !ok {
+				return
+			}
+			if t.index < len(t.records) {
+				t.Lock()
+				t.records[t.index] = record
+				t.index++
+				t.Unlock()
+			}
+			t.wg.Done()
+		}
+	}()
+	return
 }
 
-func (c *trace) GetRecords() (list []*api.Record) {
-	c.mux.Lock()
-	list = append(list, c.list...)
-	c.mux.Unlock()
+func (t *Trace) GetRecords() (list []*api.Record) {
+	// it is supposed to wait until all API messages sent to the
+	// buffer are processed before returning the list
+	t.wg.Wait()
+	list = make([]*api.Record, t.index)
+	t.RLock()
+	copy(list, t.records[:t.index])
+	t.RUnlock()
 	sort.Slice(list, func(i, j int) bool {
 		return list[i].Timestamp.Before(list[j].Timestamp)
 	})
 	return list
 }
 
-func (c *trace) GetRecordsForChannel(chId uint16) (list []*api.Record) {
-	c.mux.Lock()
-	for _, entry := range c.list {
-		if entry.ChannelID == chId {
-			list = append(list, entry)
+func (t *Trace) GetRecordsForChannel(chId uint16) (list []*api.Record) {
+	records := t.GetRecords()
+	for _, record := range records {
+		if record.ChannelID == chId {
+			list = append(list, record)
 		}
 	}
-	c.mux.Unlock()
-	sort.Slice(list, func(i, j int) bool {
-		return list[i].Timestamp.Before(list[j].Timestamp)
-	})
 	return list
 }
 
-func (c *trace) Clear() {
-	c.mux.Lock()
-	c.list = make([]*api.Record, 0)
-	c.mux.Unlock()
+func (t *Trace) Clear() {
+	t.Lock()
+	t.records = make([]*api.Record, len(t.records))
+	t.index = 0
+	t.Unlock()
+}
+
+func (t *Trace) Close() {
+	t.closeFunc()
+}
+
+func (t *Trace) registerNew() (now time.Time, enabled bool) {
+	if t != nil {
+		t.wg.Add(1)
+		enabled = true
+	}
+	return time.Now(), enabled
+}
+
+func (t *Trace) send(record *api.Record) {
+	if t != nil {
+		t.buffer <- record
+	}
 }

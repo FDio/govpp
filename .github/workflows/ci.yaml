@@ -93,7 +93,7 @@ jobs:
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
       - name: "Test results"
         if: always()
-        uses: guyarb/golang-test-annotations@v0.7.0
+        uses: guyarb/golang-test-annotations@v0.8.0
         with:
           test-results: test.json
 
@@ -114,6 +114,6 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
       - name: "Run golangci"
-        uses: golangci/golangci-lint-action@v3  # docs: https://github.com/golangci/golangci-lint-action
+        uses: golangci/golangci-lint-action@v4  # docs: https://github.com/golangci/golangci-lint-action
         with:
           version: latest

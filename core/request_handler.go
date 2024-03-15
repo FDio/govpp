@@ -110,9 +110,21 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 	}
 
 	// send the request to VPP
-	t := time.Now()
-	err = c.vppClient.SendMsg(context, data)
-	if err != nil {
+	if err = func() (err error) {
+		timestamp, enabled := c.trace.registerNew()
+		err = c.vppClient.SendMsg(context, data)
+		if enabled {
+			c.traceLock.Lock()
+			defer c.traceLock.Unlock()
+			c.trace.send(&api.Record{
+				Message:   req.msg,
+				Timestamp: timestamp,
+				ChannelID: ch.id,
+				Succeeded: err == nil,
+			})
+		}
+		return
+	}(); err != nil {
 		log.WithFields(logger.Fields{
 			"channel":  ch.id,
 			"msg_id":   msgID,
@@ -126,7 +138,6 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}).Warnf("Unable to send message")
 		return err
 	}
-	c.trace(req.msg, ch.id, t, false)
 
 	if req.multi {
 		// send a control ping to determine end of the multipart response
@@ -143,16 +154,28 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				"data_len": len(pingData),
 			}).Debugf(" -> SEND MSG: %T", c.msgControlPing)
 		}
-
-		t = time.Now()
-		if err := c.vppClient.SendMsg(context, pingData); err != nil {
+		// send the control ping request to VPP
+		if err = func() (err error) {
+			timestamp, enabled := c.trace.registerNew()
+			err = c.vppClient.SendMsg(context, pingData)
+			if enabled {
+				c.traceLock.Lock()
+				defer c.traceLock.Unlock()
+				c.trace.send(&api.Record{
+					Message:   c.msgControlPing,
+					Timestamp: timestamp,
+					ChannelID: ch.id,
+					Succeeded: err == nil,
+				})
+			}
+			return
+		}(); err != nil {
 			log.WithFields(logger.Fields{
 				"context": context,
 				"seq_num": req.seqNum,
 				"error":   err,
 			}).Warnf("unable to send control ping")
 		}
-		c.trace(c.msgControlPing, ch.id, t, false)
 	}
 
 	return nil
@@ -188,11 +211,25 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 
 	// decode and trace the message
 	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-	if err = c.codec.DecodeMsg(data, msg); err != nil {
+	if err = func() (err error) {
+		timestamp, enabled := c.trace.registerNew()
+		err = c.codec.DecodeMsg(data, msg)
+		if enabled {
+			c.traceLock.Lock()
+			defer c.traceLock.Unlock()
+			c.trace.send(&api.Record{
+				Message:    msg,
+				Timestamp:  timestamp,
+				IsReceived: true,
+				ChannelID:  chanID,
+				Succeeded:  err == nil,
+			})
+		}
+		return
+	}(); err != nil {
 		log.WithField("msg", msg).Warnf("Unable to decode message: %v", err)
 		return
 	}
-	c.trace(msg, chanID, time.Now(), true)
 
 	if log.Level == logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		log.WithFields(logger.Fields{

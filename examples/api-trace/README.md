@@ -1,17 +1,30 @@
 # API trace example
 
-The example demonstrates how to use GoVPP API trace functionality. Connection object `core.Connection` contains
-API tracer able to record API messages sent to and from VPP.
+The example demonstrates how to use the GoVPP API trace functionality. The trace is bound to a connection.
+The `core.Connection` includes the API trace object capable of recording API messages processed during the VPP API
+message exchange. Traced messages are called `records`.
 
-Access to the tracer is done via `Trace()`. It allows accessing several methods to manage collected entries:
-* `Enable(<bool>)` either enables or disables the trace. Note that the trace is disabled by default and messages are not recorded while so.
-* `GetRecords() []*api.Record` provide messages collected since the plugin was enabled or cleared.
-* `GetRecordsForChannel(<channelID>) []*api.Record` provide messages collected on the given channel since the plugin was enabled or cleared.
-* `Clear()` removes recorded messages.
+Each record contains information about the API message, its direction, time, and the channel ID.
 
-A record is represented by `Record` type. It contains information about the message, its direction, time and channel ID. Following fields are available:
-* `Message api.Message` returns recorded entry as GoVPP Message.
-* `Timestamp time.Time` is the message timestamp.
-* `IsReceived bool` is true if the message is a reply or details message, false otherwise.
-* `ChannelID uint16` is the ID of channel processing the traced message. 
+The trace is disabled by default. In order to enable it, call `NewTrace`:
 
+```go
+c, err := govpp.Connect(*sockAddr)
+if err != nil {
+// handler error
+}
+size := 10
+trace := core.NewTrace(c, size)
+defer trace.Close()
+```
+
+The code above initializes the new tracer which records a certain number of messages defined by the `size`.
+
+The following methods are available to call on the trace:
+
+* `GetRecords() []*Record` returns all records beginning with the initialization of the trace till the point of the
+  method call. The size also restricts the maximum number of records. All records received after the tracer is full are
+  discarded.
+* `GetRecordsForChannel(chId uint16) []*Record` works the same as the method above, but filters messages per channel.
+* `Clear()` resets the tracer and allows to reuse it with (the size remains the same).
+* `Close()` closes the tracer.

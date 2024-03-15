@@ -49,15 +49,19 @@ func main() {
 	}
 	defer conn.Disconnect()
 
-	singleChannel(conn)
-	multiChannel(conn)
-	stream(conn)
+	fmt.Printf("=> Enabling API trace...\n")
+	trace := core.NewTrace(conn, 50)
 
+	singleChannel(conn, trace)
+	multiChannel(conn, trace)
+	stream(conn, trace)
+
+	trace.Close()
 	fmt.Printf("Api-trace tool example finished\n\n")
 }
 
-func singleChannel(conn *core.Connection) {
-	// create new channel and perform simple compatibility check
+func singleChannel(conn *core.Connection, trace api.Trace) {
+	// create the new channel and perform simple compatibility check
 	ch, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -65,12 +69,10 @@ func singleChannel(conn *core.Connection) {
 	defer ch.Close()
 
 	fmt.Printf("=> Example 1\n\nEnabling API trace...\n")
-	conn.Trace().Enable(true)
-
-	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
+	if err = ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
 		log.Fatalf("compatibility check failed: %v", err)
 	}
-	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
+	if err = ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
 		log.Printf("compatibility check failed: %v", err)
 	}
 
@@ -83,18 +85,18 @@ func singleChannel(conn *core.Connection) {
 	deleteLoopback(ch, idx)
 	fmt.Println()
 
-	fmt.Printf("API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().Clear()
+	trace.Clear()
 }
 
-func multiChannel(conn *core.Connection) {
+func multiChannel(conn *core.Connection, trace api.Trace) {
 	ch1, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -106,7 +108,7 @@ func multiChannel(conn *core.Connection) {
 	}
 	defer ch2.Close()
 
-	//do API calls again
+	// do API call again
 	fmt.Printf("=> Example 2\n\nCalling VPP API (multi-channel)...\n")
 	retrieveVersion(ch1)
 	idx1 := createLoopback(ch1)
@@ -127,31 +129,31 @@ func multiChannel(conn *core.Connection) {
 		log.Fatalln("ERROR: incorrect type of channel 2:", err)
 	}
 
-	fmt.Printf("API trace for channel 1 (api calls: %d):\n", len(conn.Trace().GetRecordsForChannel(chan1.GetID())))
+	fmt.Printf("API trace for channel 1 (api calls: %d):\n", len(trace.GetRecordsForChannel(chan1.GetID())))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecordsForChannel(chan1.GetID()) {
+	for _, item := range trace.GetRecordsForChannel(chan1.GetID()) {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
-	fmt.Printf("API trace for channel 2 (api calls: %d):\n", len(conn.Trace().GetRecordsForChannel(chan2.GetID())))
+	fmt.Printf("API trace for channel 2 (api calls: %d):\n", len(trace.GetRecordsForChannel(chan2.GetID())))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecordsForChannel(chan2.GetID()) {
+	for _, item := range trace.GetRecordsForChannel(chan2.GetID()) {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
-	fmt.Printf("cumulative API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("cumulative API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().Clear()
+	trace.Clear()
 }
 
-func stream(conn *core.Connection) {
-	// create new channel and perform simple compatibility check
+func stream(conn *core.Connection, trace api.Trace) {
+	// create the new channel and perform simple compatibility check
 	s, err := conn.NewStream(context.Background())
 	if err != nil {
 		log.Fatalln("ERROR: creating channel failed:", err)
@@ -171,15 +173,15 @@ func stream(conn *core.Connection) {
 	invokeDeleteLoopback(conn, idx)
 	fmt.Println()
 
-	fmt.Printf("stream API trace (api calls: %d):\n", len(conn.Trace().GetRecords()))
+	fmt.Printf("stream API trace (api calls: %d):\n", len(trace.GetRecords()))
 	fmt.Printf("--------------------\n")
-	for _, item := range conn.Trace().GetRecords() {
+	for _, item := range trace.GetRecords() {
 		printTrace(item)
 	}
 	fmt.Printf("--------------------\n")
 
 	fmt.Printf("Clearing API trace...\n\n")
-	conn.Trace().GetRecords()
+	trace.GetRecords()
 }
 
 func retrieveVersion(ch api.Channel) {
@@ -267,7 +269,7 @@ func addIPAddress(addr string, ch api.Channel, index interface_types.InterfaceIn
 	}
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
-	if err := ch.SendRequest(req).ReceiveReply(reply); err != nil {
+	if err = ch.SendRequest(req).ReceiveReply(reply); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -288,7 +290,7 @@ func invokeAddIPAddress(addr string, c api.Connection, index interface_types.Int
 	}
 	reply := &interfaces.SwInterfaceAddDelAddressReply{}
 
-	if err := c.Invoke(context.Background(), req, reply); err != nil {
+	if err = c.Invoke(context.Background(), req, reply); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -319,11 +321,11 @@ func invokeInterfaceDump(c api.Connection) {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
-	if err := s.SendMsg(&interfaces.SwInterfaceDump{}); err != nil {
+	if err = s.SendMsg(&interfaces.SwInterfaceDump{}); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
-	if err := s.SendMsg(&memclnt.ControlPing{}); err != nil {
+	if err = s.SendMsg(&memclnt.ControlPing{}); err != nil {
 		fmt.Printf("ERROR: %v\n", err)
 		return
 	}
@@ -348,6 +350,6 @@ func printTrace(item *api.Record) {
 	if item.IsReceived {
 		reply = "(reply)"
 	}
-	fmt.Printf("%dh:%dm:%ds:%dns %s %s\n", h, m, s,
-		item.Timestamp.Nanosecond(), item.Message.GetMessageName(), reply)
+	fmt.Printf("%dh:%dm:%ds:%dns %s sucess: %t %s\n", h, m, s,
+		item.Timestamp.Nanosecond(), item.Message.GetMessageName(), item.Succeeded, reply)
 }
