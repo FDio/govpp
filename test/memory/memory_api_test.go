@@ -18,11 +18,13 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	interfaces "go.fd.io/govpp/binapi/interface"
 	"go.fd.io/govpp/binapi/vpe"
 	"go.fd.io/govpp/test/vpptesting"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 	"runtime"
 	"runtime/metrics"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -36,6 +38,7 @@ const (
 	heapBytesFrees   = "/gc/heap/frees:bytes"
 	heapObjectAllocs = "/gc/heap/allocs:objects"
 	heapObjectFrees  = "/gc/heap/frees:objects"
+	heapObjects      = "/gc/heap/objects:objects"
 	goroutines       = "/sched/goroutines:goroutines"
 )
 
@@ -46,91 +49,174 @@ func BenchmarkAPIMemory(b *testing.B) {
 	fmt.Printf("Running GoVPP API calls memory test\n\n")
 	test := vpptesting.SetupVPP(b)
 	vpeRPC := vpe.NewServiceClient(test.Conn)
+	ifRPC := interfaces.NewServiceClient(test.Conn)
 
 	samples := []metrics.Sample{
 		{Name: heapBytesAllocs},
 		{Name: heapBytesFrees},
 		{Name: heapObjectAllocs},
 		{Name: heapObjectFrees},
+		{Name: heapObjects},
 		{Name: goroutines},
 	}
-	pass := true
-	testAPICalls := func(n uint, thresholds [3]uint64) {
-		tHolds0, tHolds1, tHolds2 := "N/A", "N/A", "N/A"
 
-		now := time.Now()
-
-		fmt.Printf("For %d:\tMeasured\tThreshold\n%s\n", n, strings.Repeat("-", 41))
-
-		runtime.GC()
-		metricsBefore := readMetrics(samples)
-		for i := 0; i < int(n); i++ {
-			if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
-				b.Fatal("calling show version failed:", err)
-			}
+	shVerApiFunc := func() {
+		// called twice to keep the number of API calls per func the same
+		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
+			b.Fatal("calling show version failed:", err)
 		}
-		metricsAfter := readMetrics(samples)
-		d := time.Since(now)
-
-		totalAlloc := metricsAfter[heapBytesAllocs] - metricsBefore[heapBytesAllocs]
-		if uint64(totalAlloc) > thresholds[0] {
-			pass = false
+		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
+			b.Fatal("calling show version failed:", err)
 		}
-		heapFrees := metricsAfter[heapBytesFrees] - metricsBefore[heapBytesFrees]
-		heapAlloc := totalAlloc - heapFrees
-		if uint64(heapAlloc) > thresholds[1] {
-			pass = false
-		}
-		objectAlloc := metricsAfter[heapObjectAllocs] - metricsBefore[heapObjectAllocs]
-		objectFreed := metricsAfter[heapObjectFrees] - metricsBefore[heapObjectFrees]
-		objectRemain := objectAlloc - objectFreed
-		if uint64(objectRemain) > thresholds[2] {
-			pass = false
-		}
-
-		// if thresholds are set, use them in the output
-		if !(thresholds[0] == 0 && thresholds[1] == 0 && thresholds[2] == 0) {
-			tHolds0 = goMetric(thresholds[0]).format()
-			tHolds1 = goMetric(thresholds[1]).format()
-			tHolds2 = goMetric(thresholds[2]).addSep()
-		}
-		fmt.Printf("Total alloc:\t%s\t%s\n", totalAlloc.format(), tHolds0)
-		fmt.Printf("Memory Freed:\t%s\n", heapFrees.format())
-		fmt.Printf("Heap alloc:\t%s\t%s\n", heapAlloc.format(), tHolds1)
-		fmt.Printf("Objects alloc:\t%s\nObj freed:\t%s\n", objectAlloc.addSep(), objectFreed.addSep())
-		fmt.Printf("Objects remain:\t%s\t%s\n", objectRemain.addSep(), tHolds2)
-		fmt.Printf("Num goroutines:\t%d\nDuration:\t%s\n\n", metricsAfter[goroutines], d.String())
 	}
+	loopApiFunc := func() {
+		if reply, err := ifRPC.CreateLoopback(context.Background(), &interfaces.CreateLoopback{}); err != nil {
+			b.Fatal("calling create loopback failed:", err)
+		} else if _, err = ifRPC.DeleteLoopback(context.Background(), &interfaces.DeleteLoopback{
+			SwIfIndex: reply.SwIfIndex,
+		}); err != nil {
+			b.Fatal("calling delete loopback failed:", err)
+		}
+	}
+	shVerApiName, loopApiName := "show-version", "create/delete loopback"
 
-	// run the custom soak test and skip the rest
+	// run the custom soak only
 	if *apiNum != 0 {
-		testAPICalls(*apiNum, [3]uint64{})
+		testAPICalls(shVerApiName, *apiNum, &memMetrics{}, samples, shVerApiFunc)
+		testAPICalls(loopApiName, *apiNum, &memMetrics{}, samples, loopApiFunc)
 		return
 	}
-	testAPICalls(1000, [3]uint64{2621440, 3145728, 50000})
-	testAPICalls(10000, [3]uint64{26214400, 3145728, 50000})
-	testAPICalls(100000, [3]uint64{262144000, 5242880, 50000})
-	//testAPICalls(1000000, [3]uint64{2684364560, 5242880, 50000})
-	//testAPICalls(10000000, [3]uint64{26843645600, 5242880, 50000})
 
+	// threshold values for the 'show version' (m0) or 'loopback create/delete' (m1) API call for 1k, 10k, 100k
+	// and 1M number of repeats.
+	m0 := []*memMetrics{
+		{totalAllocMax: 2621440, heapAllocMax: 3145728, objectRemainMax: 50000},
+		{totalAllocMax: 26214400, heapAllocMax: 3145728, objectRemainMax: 50000},
+		{totalAllocMax: 262144000, heapAllocMax: 5242880, objectRemainMax: 50000},
+		{totalAllocMax: 2684364560, heapAllocMax: 5242880, objectRemainMax: 50000},
+	}
+	m1 := []*memMetrics{
+		{totalAllocMax: 3145728, heapAllocMax: 3670016, objectRemainMax: 50000},
+		{totalAllocMax: 36700160, heapAllocMax: 3670016, objectRemainMax: 50000},
+		{totalAllocMax: 367001600, heapAllocMax: 5242880, objectRemainMax: 50000},
+		{totalAllocMax: 3758110384, heapAllocMax: 5242880, objectRemainMax: 50000},
+	}
+
+	pass := true
+	for i, repeats := range []uint{1000, 10000, 100000, 1000000} {
+		if passed := testAPICalls(shVerApiName, repeats, m0[i], samples, shVerApiFunc); !passed {
+			pass = false
+		}
+		if passed := testAPICalls(loopApiName, repeats, m1[i], samples, loopApiFunc); !passed {
+			pass = false
+		}
+	}
 	if !pass {
 		b.Fatal("one or more memory thresholds was exceeded")
 	}
 }
 
-type goMetric uint64
+func testAPICalls(name string, repeats uint, m *memMetrics, samples []metrics.Sample, f func()) (pass bool) {
+	now := time.Now()
 
-func readMetrics(s []metrics.Sample) map[string]goMetric {
-	metrics.Read(s)
-	goMetrics := make(map[string]goMetric)
-	for _, sample := range s {
-		goMetrics[sample.Name] = goMetric(sample.Value.Uint64())
+	fmt.Printf("For %d %s calls:\n\t\tMeasured\tThreshold\n%s\n", repeats, name, strings.Repeat("-", 41))
+
+	runtime.GC()
+	metricsBefore := &memMetrics{}
+	metricsBefore.readMetrics(samples)
+	for i := 0; i < int(repeats); i++ {
+		f()
 	}
-	return goMetrics
+	m.readMetrics(samples)
+	m.d = time.Since(now)
+	m.rps = int(float64(repeats) / m.d.Seconds())
+
+	defer m.print()
+	return m.diff(metricsBefore)
+}
+
+// memMetrics is a list of metrics relevant to the memory test. Metrics suffixed with 'Max' can be pre-defined
+// to serve as test criteria (these are not filled during 'readMetrics()').
+type memMetrics struct {
+	totalAlloc      uint64
+	totalAllocMax   uint64
+	memoryFreed     uint64
+	heapAlloc       uint64
+	heapAllocMax    uint64
+	objectAlloc     uint64
+	objectFreed     uint64
+	objectRemain    uint64
+	objectRemainMax uint64
+	goroutines      int
+	rps             int
+	d               time.Duration
+}
+
+// readMetrics populates memory metrics
+func (m *memMetrics) readMetrics(s []metrics.Sample) {
+	metrics.Read(s)
+	for _, sample := range s {
+		switch sample.Name {
+		case heapBytesAllocs:
+			m.totalAlloc = sample.Value.Uint64()
+		case heapBytesFrees:
+			m.memoryFreed = sample.Value.Uint64()
+		case heapObjectAllocs:
+			m.objectAlloc = sample.Value.Uint64()
+		case heapObjectFrees:
+			m.objectFreed = sample.Value.Uint64()
+		case heapObjects:
+			m.objectRemain = sample.Value.Uint64()
+		case goroutines:
+			m.goroutines = int(sample.Value.Uint64())
+		}
+	}
+	m.heapAlloc = m.totalAlloc - m.memoryFreed
+}
+
+// compares metrics with another metric snapshot taken earlier. Calculates difference between those
+// and for selected metrics evaluates pass/fail criteria
+func (m *memMetrics) diff(before *memMetrics) (pass bool) {
+	pass = true
+	m.totalAlloc -= before.totalAlloc
+	if m.totalAlloc > m.totalAllocMax {
+		pass = false
+	}
+	m.memoryFreed -= before.memoryFreed
+	m.heapAlloc -= before.heapAlloc
+	if m.heapAlloc > m.heapAllocMax {
+		pass = false
+	}
+	m.objectAlloc -= before.objectAlloc
+	m.objectFreed -= before.objectFreed
+	m.objectRemain -= before.objectRemain
+	if m.objectRemain > m.objectRemainMax {
+		pass = false
+	}
+	return
+}
+
+func (m *memMetrics) print() {
+	p := message.NewPrinter(language.English)
+	var totalAllocMax, heapAllocMax, objectReaminMax string
+	// if thresholds are set, use them in the output
+	if !(m.totalAllocMax == 0 && m.heapAllocMax == 0 && m.objectRemainMax == 0) {
+		totalAllocMax = format(m.totalAllocMax)
+		heapAllocMax = format(m.heapAllocMax)
+		objectReaminMax = p.Sprintf("%d", m.objectRemainMax)
+	}
+	fmt.Printf("Total alloc:\t%s\t%s\n", format(m.totalAlloc), totalAllocMax)
+	fmt.Printf("Memory Freed:\t%s\n", format(m.objectFreed))
+	fmt.Printf("Heap alloc:\t%s\t%s\n", format(m.heapAlloc), heapAllocMax)
+	fmt.Printf("Objects alloc:\t%s\nObj freed:\t%s\n", p.Sprintf("%d", m.objectAlloc),
+		p.Sprintf("%d", m.objectFreed))
+	fmt.Printf("Objects remain:\t%s\t\t%s\n", p.Sprintf("%d", m.objectRemain), objectReaminMax)
+	fmt.Printf("Message rate:\t%d m/s\n", m.rps)
+	fmt.Printf("Num goroutines:\t%d\nDuration:\t%s\n\n", m.goroutines, m.d.String())
 }
 
 // shortens the number and adds unit
-func (m goMetric) format() string {
+func format(v uint64) string {
 	const (
 		_  = iota
 		KB = 1 << (10 * iota)
@@ -141,21 +227,21 @@ func (m goMetric) format() string {
 	)
 
 	var unit string
-	value := float64(m)
+	value := float64(v)
 
 	switch {
-	case m < KB:
+	case value < KB:
 		unit = "B"
-	case m < MB:
+	case value < MB:
 		unit = "KB"
 		value /= KB
-	case m < GB:
+	case value < GB:
 		unit = "MB"
 		value /= MB
-	case m < TB:
+	case value < TB:
 		unit = "GB"
 		value /= GB
-	case m < PB:
+	case value < PB:
 		unit = "TB"
 		value /= TB
 	default:
@@ -163,23 +249,6 @@ func (m goMetric) format() string {
 		value /= PB
 	}
 	return align(fmt.Sprintf("%.2f %s", value, unit))
-}
-
-// add number separators for better readability, like 1000 => 1,000
-func (m goMetric) addSep() string {
-	numStr := strconv.Itoa(int(m))
-	numColumns := (len(numStr) - 1) / 3
-	result := make([]rune, 0, len(numStr)+numColumns)
-	for i := len(numStr) - 1; i >= 0; i-- {
-		result = append(result, rune(numStr[i]))
-		if i > 0 && (len(numStr)-i)%3 == 0 {
-			result = append(result, ',')
-		}
-	}
-	for i, j := 0, len(result)-1; i < j; i, j = i+1, j-1 {
-		result[i], result[j] = result[j], result[i]
-	}
-	return align(string(result))
 }
 
 // align the table
