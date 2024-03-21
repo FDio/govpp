@@ -26,9 +26,9 @@ jobs:
       matrix:
         version:
           - 'master'
+          - '2402'
           - '2310'
           - '2306'
-          - '2302'
 
     steps:
       - name: "Checkout"
