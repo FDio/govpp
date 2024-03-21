@@ -22,11 +22,13 @@ type RPCService interface {
 	IpsecSaV2Dump(ctx context.Context, in *IpsecSaV2Dump) (RPCService_IpsecSaV2DumpClient, error)
 	IpsecSaV3Dump(ctx context.Context, in *IpsecSaV3Dump) (RPCService_IpsecSaV3DumpClient, error)
 	IpsecSaV4Dump(ctx context.Context, in *IpsecSaV4Dump) (RPCService_IpsecSaV4DumpClient, error)
+	IpsecSaV5Dump(ctx context.Context, in *IpsecSaV5Dump) (RPCService_IpsecSaV5DumpClient, error)
 	IpsecSadBind(ctx context.Context, in *IpsecSadBind) (*IpsecSadBindReply, error)
 	IpsecSadEntryAdd(ctx context.Context, in *IpsecSadEntryAdd) (*IpsecSadEntryAddReply, error)
 	IpsecSadEntryAddDel(ctx context.Context, in *IpsecSadEntryAddDel) (*IpsecSadEntryAddDelReply, error)
 	IpsecSadEntryAddDelV2(ctx context.Context, in *IpsecSadEntryAddDelV2) (*IpsecSadEntryAddDelV2Reply, error)
 	IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadEntryAddDelV3) (*IpsecSadEntryAddDelV3Reply, error)
+	IpsecSadEntryAddV2(ctx context.Context, in *IpsecSadEntryAddV2) (*IpsecSadEntryAddV2Reply, error)
 	IpsecSadEntryDel(ctx context.Context, in *IpsecSadEntryDel) (*IpsecSadEntryDelReply, error)
 	IpsecSadEntryUpdate(ctx context.Context, in *IpsecSadEntryUpdate) (*IpsecSadEntryUpdateReply, error)
 	IpsecSadUnbind(ctx context.Context, in *IpsecSadUnbind) (*IpsecSadUnbindReply, error)
@@ -336,6 +338,49 @@ func (c *serviceClient_IpsecSaV4DumpClient) Recv() (*IpsecSaV4Details, error) {
 	}
 }
 
+func (c *serviceClient) IpsecSaV5Dump(ctx context.Context, in *IpsecSaV5Dump) (RPCService_IpsecSaV5DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IpsecSaV5DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IpsecSaV5DumpClient interface {
+	Recv() (*IpsecSaV5Details, error)
+	api.Stream
+}
+
+type serviceClient_IpsecSaV5DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IpsecSaV5DumpClient) Recv() (*IpsecSaV5Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IpsecSaV5Details:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
 func (c *serviceClient) IpsecSadBind(ctx context.Context, in *IpsecSadBind) (*IpsecSadBindReply, error) {
 	out := new(IpsecSadBindReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -374,6 +419,15 @@ func (c *serviceClient) IpsecSadEntryAddDelV2(ctx context.Context, in *IpsecSadE
 
 func (c *serviceClient) IpsecSadEntryAddDelV3(ctx context.Context, in *IpsecSadEntryAddDelV3) (*IpsecSadEntryAddDelV3Reply, error) {
 	out := new(IpsecSadEntryAddDelV3Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IpsecSadEntryAddV2(ctx context.Context, in *IpsecSadEntryAddV2) (*IpsecSadEntryAddV2Reply, error) {
+	out := new(IpsecSadEntryAddV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
