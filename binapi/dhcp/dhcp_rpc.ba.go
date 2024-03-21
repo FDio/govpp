@@ -18,6 +18,7 @@ type RPCService interface {
 	DHCP6PdSendClientMessage(ctx context.Context, in *DHCP6PdSendClientMessage) (*DHCP6PdSendClientMessageReply, error)
 	DHCP6SendClientMessage(ctx context.Context, in *DHCP6SendClientMessage) (*DHCP6SendClientMessageReply, error)
 	DHCPClientConfig(ctx context.Context, in *DHCPClientConfig) (*DHCPClientConfigReply, error)
+	DHCPClientDetectEnableDisable(ctx context.Context, in *DHCPClientDetectEnableDisable) (*DHCPClientDetectEnableDisableReply, error)
 	DHCPClientDump(ctx context.Context, in *DHCPClientDump) (RPCService_DHCPClientDumpClient, error)
 	DHCPPluginControlPing(ctx context.Context, in *DHCPPluginControlPing) (*DHCPPluginControlPingReply, error)
 	DHCPPluginGetVersion(ctx context.Context, in *DHCPPluginGetVersion) (*DHCPPluginGetVersionReply, error)
@@ -74,6 +75,15 @@ func (c *serviceClient) DHCP6SendClientMessage(ctx context.Context, in *DHCP6Sen
 
 func (c *serviceClient) DHCPClientConfig(ctx context.Context, in *DHCPClientConfig) (*DHCPClientConfigReply, error) {
 	out := new(DHCPClientConfigReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) DHCPClientDetectEnableDisable(ctx context.Context, in *DHCPClientDetectEnableDisable) (*DHCPClientDetectEnableDisableReply, error) {
+	out := new(DHCPClientDetectEnableDisableReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
