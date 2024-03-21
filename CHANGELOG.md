@@ -11,6 +11,20 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.10.0
+
+> _XX March 2024_
+
+### Changes
+
+- Add missing VPPApiError (#183)
+- Trace refactored (#116)
+
+### Fixes
+
+- Fix stream timer leak (#182)
+- Memory leaks in govpp core (#184)
+
 ## 0.9.0
 
 > _04 January 2024_
