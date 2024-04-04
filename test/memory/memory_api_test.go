@@ -24,7 +24,7 @@ import (
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 	"runtime"
-	"runtime/metrics"
+	runtimeMetrics "runtime/metrics"
 	"strings"
 	"testing"
 	"time"
@@ -32,7 +32,20 @@ import (
 
 var apiNum = flag.Uint("api-num", 0, "Custom number API to test")
 
-// required go runtime metrics
+// metric names
+const (
+	totalAlloc = "Total alloc"
+	memFreed   = "Memory freed"
+	heapAlloc  = "Heap alloc"
+	objAlloc   = "Objects alloc"
+	objFreed   = "Objects freed"
+	objRemain  = "Objects remain"
+	msgRate    = "Message rate"
+	numGo      = "Num goroutines"
+	duration   = "Duration"
+)
+
+// metric samples
 const (
 	heapBytesAllocs  = "/gc/heap/allocs:bytes"
 	heapBytesFrees   = "/gc/heap/frees:bytes"
@@ -51,13 +64,13 @@ func BenchmarkAPIMemory(b *testing.B) {
 	vpeRPC := vpe.NewServiceClient(test.Conn)
 	ifRPC := interfaces.NewServiceClient(test.Conn)
 
-	samples := []metrics.Sample{
-		{Name: heapBytesAllocs},
-		{Name: heapBytesFrees},
-		{Name: heapObjectAllocs},
-		{Name: heapObjectFrees},
-		{Name: heapObjects},
-		{Name: goroutines},
+	samples := []namedSample{
+		{name: totalAlloc, sample: runtimeMetrics.Sample{Name: heapBytesAllocs}},
+		{name: memFreed, sample: runtimeMetrics.Sample{Name: heapBytesFrees}},
+		{name: objAlloc, sample: runtimeMetrics.Sample{Name: heapObjectAllocs}},
+		{name: objFreed, sample: runtimeMetrics.Sample{Name: heapObjectFrees}},
+		{name: objRemain, sample: runtimeMetrics.Sample{Name: heapObjects}},
+		{name: numGo, sample: runtimeMetrics.Sample{Name: goroutines}},
 	}
 
 	shVerApiFunc := func() {
@@ -81,25 +94,54 @@ func BenchmarkAPIMemory(b *testing.B) {
 	shVerApiName, loopApiName := "show-version", "create/delete loopback"
 
 	// run the custom soak only
+	nameOrder := []string{totalAlloc, memFreed, heapAlloc, objAlloc, objFreed, objRemain, msgRate, numGo, duration}
 	if *apiNum != 0 {
-		testAPICalls(shVerApiName, *apiNum, &memMetrics{}, samples, shVerApiFunc)
-		testAPICalls(loopApiName, *apiNum, &memMetrics{}, samples, loopApiFunc)
+		testAPICalls(shVerApiName, *apiNum, &metrics{names: nameOrder}, samples, shVerApiFunc)
+		testAPICalls(loopApiName, *apiNum, &metrics{names: nameOrder}, samples, loopApiFunc)
 		return
 	}
 
 	// threshold values for the 'show version' (m0) or 'loopback create/delete' (m1) API call for 1k, 10k, 100k
 	// and 1M number of repeats.
-	m0 := []*memMetrics{
-		{totalAllocMax: 2621440, heapAllocMax: 3145728, objectRemainMax: 50000},
-		{totalAllocMax: 26214400, heapAllocMax: 3145728, objectRemainMax: 50000},
-		{totalAllocMax: 262144000, heapAllocMax: 5242880, objectRemainMax: 50000},
-		{totalAllocMax: 2684364560, heapAllocMax: 5242880, objectRemainMax: 50000},
+	m0 := []*metrics{
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 2621440},
+			heapAlloc:  {max: 3145728},
+			objRemain:  {max: 50000}},
+		},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 26214400},
+			heapAlloc:  {max: 3145728},
+			objRemain:  {max: 50000}},
+		},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 262144000},
+			heapAlloc:  {max: 5242880},
+			objRemain:  {max: 50000}},
+		},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 2684364560},
+			heapAlloc:  {max: 5242880},
+			objRemain:  {max: 50000}},
+		},
 	}
-	m1 := []*memMetrics{
-		{totalAllocMax: 3145728, heapAllocMax: 3670016, objectRemainMax: 50000},
-		{totalAllocMax: 36700160, heapAllocMax: 3670016, objectRemainMax: 50000},
-		{totalAllocMax: 367001600, heapAllocMax: 5242880, objectRemainMax: 50000},
-		{totalAllocMax: 3758110384, heapAllocMax: 5242880, objectRemainMax: 50000},
+	m1 := []*metrics{
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 3145728},
+			heapAlloc:  {max: 3670016},
+			objRemain:  {max: 50000}}},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 36700160},
+			heapAlloc:  {max: 3670016},
+			objRemain:  {max: 50000}}},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 367001600},
+			heapAlloc:  {max: 5242880},
+			objRemain:  {max: 50000}}},
+		{names: nameOrder, metricsByName: map[string]metric{
+			totalAlloc: {max: 3758110384},
+			heapAlloc:  {max: 5242880},
+			objRemain:  {max: 50000}}},
 	}
 
 	pass := true
@@ -116,103 +158,101 @@ func BenchmarkAPIMemory(b *testing.B) {
 	}
 }
 
-func testAPICalls(name string, repeats uint, m *memMetrics, samples []metrics.Sample, f func()) (pass bool) {
+func testAPICalls(name string, repeats uint, m *metrics, samples []namedSample, f func()) (pass bool) {
 	now := time.Now()
 
 	fmt.Printf("For %d %s calls:\n\t\tMeasured\tThreshold\n%s\n", repeats, name, strings.Repeat("-", 41))
 
 	runtime.GC()
-	metricsBefore := &memMetrics{}
+	metricsBefore := &metrics{}
 	metricsBefore.readMetrics(samples)
 	for i := 0; i < int(repeats); i++ {
 		f()
 	}
 	m.readMetrics(samples)
-	m.d = time.Since(now)
-	m.rps = int(float64(repeats) / m.d.Seconds())
+	d := time.Since(now)
+	m.metricsByName[duration] = metric{value: uint64(d)}
+	m.metricsByName[msgRate] = metric{value: uint64(int(float64(repeats) / d.Seconds()))}
 
 	defer m.print()
 	return m.diff(metricsBefore)
 }
 
+type namedSample struct {
+	name   string
+	sample runtimeMetrics.Sample
+}
+
+type metric struct {
+	value uint64
+	max   uint64
+}
+
 // memMetrics is a list of metrics relevant to the memory test. Metrics suffixed with 'Max' can be pre-defined
 // to serve as test criteria (these are not filled during 'readMetrics()').
-type memMetrics struct {
-	totalAlloc      uint64
-	totalAllocMax   uint64
-	memoryFreed     uint64
-	heapAlloc       uint64
-	heapAllocMax    uint64
-	objectAlloc     uint64
-	objectFreed     uint64
-	objectRemain    uint64
-	objectRemainMax uint64
-	goroutines      int
-	rps             int
-	d               time.Duration
+type metrics struct {
+	names         []string
+	metricsByName map[string]metric
 }
 
 // readMetrics populates memory metrics
-func (m *memMetrics) readMetrics(s []metrics.Sample) {
-	metrics.Read(s)
-	for _, sample := range s {
-		switch sample.Name {
-		case heapBytesAllocs:
-			m.totalAlloc = sample.Value.Uint64()
-		case heapBytesFrees:
-			m.memoryFreed = sample.Value.Uint64()
-		case heapObjectAllocs:
-			m.objectAlloc = sample.Value.Uint64()
-		case heapObjectFrees:
-			m.objectFreed = sample.Value.Uint64()
-		case heapObjects:
-			m.objectRemain = sample.Value.Uint64()
-		case goroutines:
-			m.goroutines = int(sample.Value.Uint64())
+func (m *metrics) readMetrics(namedSamples []namedSample) {
+	if m.metricsByName == nil {
+		m.metricsByName = make(map[string]metric, len(namedSamples))
+	}
+	samples := make([]runtimeMetrics.Sample, len(namedSamples))
+	for sIdx, entry := range namedSamples {
+		samples[sIdx] = entry.sample
+	}
+	runtimeMetrics.Read(samples)
+	for sIdx := 0; sIdx < len(namedSamples); sIdx++ {
+		if metricEntry, ok := m.metricsByName[namedSamples[sIdx].name]; !ok {
+			m.metricsByName[namedSamples[sIdx].name] = metric{value: samples[sIdx].Value.Uint64()}
+		} else {
+			m.metricsByName[namedSamples[sIdx].name] = metric{value: samples[sIdx].Value.Uint64(), max: metricEntry.max}
 		}
 	}
-	m.heapAlloc = m.totalAlloc - m.memoryFreed
+	// other metrics that were not directly read from samples
+	heapAllocVal := m.metricsByName[totalAlloc].value - m.metricsByName[memFreed].value
+	m.metricsByName[heapAlloc] = metric{value: heapAllocVal, max: m.metricsByName[heapAlloc].max}
 }
 
 // compares metrics with another metric snapshot taken earlier. Calculates difference between those
 // and for selected metrics evaluates pass/fail criteria
-func (m *memMetrics) diff(before *memMetrics) (pass bool) {
+func (m *metrics) diff(before *metrics) (pass bool) {
 	pass = true
-	m.totalAlloc -= before.totalAlloc
-	if m.totalAlloc > m.totalAllocMax {
-		pass = false
-	}
-	m.memoryFreed -= before.memoryFreed
-	m.heapAlloc -= before.heapAlloc
-	if m.heapAlloc > m.heapAllocMax {
-		pass = false
-	}
-	m.objectAlloc -= before.objectAlloc
-	m.objectFreed -= before.objectFreed
-	m.objectRemain -= before.objectRemain
-	if m.objectRemain > m.objectRemainMax {
-		pass = false
+	for name, entry := range m.metricsByName {
+		if beforeEntry, ok := before.metricsByName[name]; !ok {
+			pass = false
+		} else if entry.value-beforeEntry.value > entry.max {
+			pass = false
+		}
 	}
 	return
 }
 
-func (m *memMetrics) print() {
+func (m *metrics) print() {
 	p := message.NewPrinter(language.English)
-	var totalAllocMax, heapAllocMax, objectReaminMax string
-	// if thresholds are set, use them in the output
-	if !(m.totalAllocMax == 0 && m.heapAllocMax == 0 && m.objectRemainMax == 0) {
-		totalAllocMax = format(m.totalAllocMax)
-		heapAllocMax = format(m.heapAllocMax)
-		objectReaminMax = p.Sprintf("%d", m.objectRemainMax)
+	for _, name := range m.names {
+		entry := m.metricsByName[name]
+		switch name {
+		case totalAlloc, heapAlloc:
+			fmt.Printf("%s:\t%s\t%s\n", name, format(entry.value), format(entry.max))
+		case memFreed:
+			fmt.Printf("%s:\t%s\n", name, format(entry.value))
+		case objAlloc, objFreed, numGo:
+			fmt.Printf("%s:\t%s\n", name, p.Sprintf("%d", entry.value))
+		case objRemain:
+			fmt.Printf("%s:\t%s\t\t%s\n", name, p.Sprintf("%d", entry.value), p.Sprintf("%d", entry.max))
+		case msgRate:
+			fmt.Printf("%s:\t%d m/s\n", name, entry.value)
+		case duration:
+			fmt.Printf("%s:\t%s\n", name, time.Duration(entry.value).String())
+		default:
+			fmt.Printf("%s:\t%d\t%d\n", name, entry.value, entry.max)
+		}
 	}
-	fmt.Printf("Total alloc:\t%s\t%s\n", format(m.totalAlloc), totalAllocMax)
-	fmt.Printf("Memory Freed:\t%s\n", format(m.objectFreed))
-	fmt.Printf("Heap alloc:\t%s\t%s\n", format(m.heapAlloc), heapAllocMax)
-	fmt.Printf("Objects alloc:\t%s\nObj freed:\t%s\n", p.Sprintf("%d", m.objectAlloc),
-		p.Sprintf("%d", m.objectFreed))
-	fmt.Printf("Objects remain:\t%s\t\t%s\n", p.Sprintf("%d", m.objectRemain), objectReaminMax)
-	fmt.Printf("Message rate:\t%d m/s\n", m.rps)
-	fmt.Printf("Num goroutines:\t%d\nDuration:\t%s\n\n", m.goroutines, m.d.String())
+	fmt.Println()
 }
 
 // shortens the number and adds unit
