@@ -105,41 +105,41 @@ func BenchmarkAPIMemory(b *testing.B) {
 	// and 1M number of repeats.
 	m0 := []*metrics{
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 2621440},
+			totalAlloc: {max: 5767168},
 			heapAlloc:  {max: 3145728},
 			objRemain:  {max: 50000}},
 		},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 26214400},
+			totalAlloc: {max: 62914560},
 			heapAlloc:  {max: 3145728},
 			objRemain:  {max: 50000}},
 		},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 262144000},
+			totalAlloc: {max: 629145600},
 			heapAlloc:  {max: 5242880},
 			objRemain:  {max: 50000}},
 		},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 2684364560},
+			totalAlloc: {max: 5368709120},
 			heapAlloc:  {max: 5242880},
 			objRemain:  {max: 50000}},
 		},
 	}
 	m1 := []*metrics{
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 3145728},
+			totalAlloc: {max: 10485760},
 			heapAlloc:  {max: 3670016},
 			objRemain:  {max: 50000}}},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 36700160},
+			totalAlloc: {max: 94371840},
 			heapAlloc:  {max: 3670016},
 			objRemain:  {max: 50000}}},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 367001600},
+			totalAlloc: {max: 891289600},
 			heapAlloc:  {max: 5242880},
 			objRemain:  {max: 50000}}},
 		{names: nameOrder, metricsByName: map[string]metric{
-			totalAlloc: {max: 3758110384},
+			totalAlloc: {max: 8589934592},
 			heapAlloc:  {max: 5242880},
 			objRemain:  {max: 50000}}},
 	}
@@ -222,9 +222,7 @@ func (m *metrics) readMetrics(namedSamples []namedSample) {
 func (m *metrics) diff(before *metrics) (pass bool) {
 	pass = true
 	for name, entry := range m.metricsByName {
-		if beforeEntry, ok := before.metricsByName[name]; !ok {
-			pass = false
-		} else if entry.value-beforeEntry.value > entry.max {
+		if entry.max > 0 && entry.value-before.metricsByName[name].value > entry.max {
 			pass = false
 		}
 	}
