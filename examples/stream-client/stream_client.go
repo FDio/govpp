@@ -290,9 +290,7 @@ Loop:
 	}
 }
 
-// interfaceNotifications shows the usage of notification API. Note that for notifications,
-// you are supposed to create your own Go channel with your preferred buffer size. If the channel's
-// buffer is full, the notifications will not be delivered into it.
+// interfaceNotifications demonstrates how to watch for interface events.
 func interfaceNotifications(conn api.Connection, index interface_types.InterfaceIndex) {
 
 	// start watcher for specific event message
