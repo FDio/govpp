@@ -8,6 +8,8 @@
 .cache/
 
 /bin/
+/dist/
+/govpp
 
 # cmd
 cmd/binapi-generator/binapi-generator

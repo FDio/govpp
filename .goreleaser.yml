@@ -1,0 +1,80 @@
+# GoReleser config
+#
+# documentation at http://goreleaser.com
+---
+project_name: govpp
+
+builds:
+  - id: govpp-build
+    main: ./cmd/govpp
+    binary: govpp
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+    ignore:
+      - goos: darwin
+        goarch: "386"
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X go.fd.io/govpp/version.version=v{{.Version}}
+      - -X go.fd.io/govpp/version.commit={{.FullCommit}}
+      - -X go.fd.io/govpp/version.branch={{.Branch}}
+      - -X go.fd.io/govpp/version.buildStamp={{.Timestamp}}
+
+archives:
+  - id: govpp-archive
+    builds:
+      - govpp-build
+    format: tar.gz
+    wrap_in_directory: true
+    files:
+      - README.md
+      - docs/*
+    allow_different_binary_count: true
+    name_template: "govpp_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  skip: false
+  sort: asc
+  filters:
+    exclude:
+      - '!^docs:'
+      - typo
+
+dockers:
+  - dockerfile: Dockerfile.govpp
+    image_templates:
+      - "ghcr.io/fdio/govpp:{{ .Tag }}"
+      - "ghcr.io/fdio/govpp:v{{ .Major }}.{{ .Minor }}"
+      - "ghcr.io/fdio/govpp:latest"
+    build_flag_templates:
+      - "--pull"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.source={{.GitURL}}"
+    ids:
+      - govpp-build
+
+sboms:
+  - artifacts: archive
+
+release:
+  github:
+    owner: FDio
+    name: govpp
+  ids:
+    - govpp-archive
+  prerelease: auto
+  name_template: "{{.Tag}}"

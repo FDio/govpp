@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - 'v*'
+  pull_request:
+  workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
+
+permissions:
+  contents: write
+  packages: write
+  issues: write
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Go"
+        uses: actions/setup-go@v5
+
+      - name: "Download Syft"
+        uses: anchore/sbom-action/download-syft@v0 #v0.15.10
+
+      - name: "Release Version"
+        if: success() && startsWith(github.ref, 'refs/tags/v')
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOSTNAME: github
+
+      - name: "Release Snapshot"
+        if: success() && !startsWith(github.ref, 'refs/tags/v')
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: latest
+          args: release --clean --snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOSTNAME: github
