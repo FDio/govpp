@@ -21,6 +21,7 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+
       - name: "Run YAML linter"
         uses: ibiqlik/action-yamllint@v3
         with:
@@ -35,15 +36,19 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+
       - name: "Setup Go"
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
+
       - name: "Run go mod tidy"
         run: go mod tidy -v
+
       - name: "Check go.mod"
         run: |
           git diff --exit-code go.mod
+
       - name: "Check go.sum"
         run: |
           git diff --exit-code go.sum
@@ -59,12 +64,15 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+
       - name: "Setup Go"
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
+
       - name: "Generate binapi"
         run: make gen-binapi-docker
+
       - name: "Check binapi"
         run: |
           git diff --exit-code binapi
@@ -79,18 +87,23 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+
       - name: "Setup Go"
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
+
       - name: "Setup gotestsum"
         uses: autero1/action-gotestsum@v2.0.0
         with:
           gotestsum_version: 1.11.0
+
       - name: "Go Build"
         run: go build -v ./...
+
       - name: "Go Test"
         run: gotestsum --format testname --jsonfile test.json -- -race ./...
+
       - name: "Test results"
         if: always()
         uses: guyarb/golang-test-annotations@v0.8.0
@@ -109,10 +122,12 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+
       - name: "Setup Go"
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
+
       - name: "Run golangci"
         uses: golangci/golangci-lint-action@v4  # docs: https://github.com/golangci/golangci-lint-action
         with:
