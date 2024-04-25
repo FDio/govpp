@@ -76,5 +76,6 @@ release:
     name: govpp
   ids:
     - govpp-archive
+  draft: true
   prerelease: auto
   name_template: "{{.Tag}}"
