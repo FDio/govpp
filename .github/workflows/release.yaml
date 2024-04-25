@@ -48,3 +48,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOSTNAME: github
+
+      - name: "Upload assets"
+        uses: actions/upload-artifact@v3
+        with:
+          name: govpp
+          path: dist/*
