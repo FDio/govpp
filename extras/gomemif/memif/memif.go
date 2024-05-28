@@ -164,44 +164,44 @@ func (q *Queue) putDescBuf(slot int, db descBuf) {
 	copy(q.i.regions[q.ring.region].data[q.ring.offset+ringSize+slot*descSize:], db)
 }
 
-func (db descBuf) getFlags() int {
-	return (int)(binary.LittleEndian.Uint16((db)[descFlagsOffset:]))
+func (db descBuf) getFlags() uint16 {
+	return binary.LittleEndian.Uint16((db)[descFlagsOffset:])
 }
 
-func (db descBuf) getRegion() int {
-	return (int)(binary.LittleEndian.Uint16((db)[descRegionOffset:]))
+func (db descBuf) getRegion() uint16 {
+	return binary.LittleEndian.Uint16((db)[descRegionOffset:])
 }
 
-func (db descBuf) getLength() int {
-	return (int)(binary.LittleEndian.Uint32((db)[descLengthOffset:]))
+func (db descBuf) getLength() uint32 {
+	return binary.LittleEndian.Uint32((db)[descLengthOffset:])
 }
 
-func (db descBuf) getOffset() int {
-	return (int)(binary.LittleEndian.Uint32((db)[descOffsetOffset:]))
+func (db descBuf) getOffset() uint32 {
+	return binary.LittleEndian.Uint32((db)[descOffsetOffset:])
 }
 
-func (db descBuf) getMetadata() int {
-	return (int)(binary.LittleEndian.Uint32((db)[descMetadataOffset:]))
+func (db descBuf) getMetadata() uint32 {
+	return binary.LittleEndian.Uint32((db)[descMetadataOffset:])
 }
 
-func (db descBuf) setFlags(val int) {
-	binary.LittleEndian.PutUint16((db)[descFlagsOffset:], uint16(val))
+func (db descBuf) setFlags(val uint16) {
+	binary.LittleEndian.PutUint16((db)[descFlagsOffset:], val)
 }
 
-func (db descBuf) setRegion(val int) {
-	binary.LittleEndian.PutUint16((db)[descRegionOffset:], uint16(val))
+func (db descBuf) setRegion(val uint16) {
+	binary.LittleEndian.PutUint16((db)[descRegionOffset:], val)
 }
 
-func (db descBuf) setLength(val int) {
-	binary.LittleEndian.PutUint32((db)[descLengthOffset:], uint32(val))
+func (db descBuf) setLength(val uint32) {
+	binary.LittleEndian.PutUint32((db)[descLengthOffset:], val)
 }
 
-func (db descBuf) setOffset(val int) {
-	binary.LittleEndian.PutUint32((db)[descOffsetOffset:], uint32(val))
+func (db descBuf) setOffset(val uint32) {
+	binary.LittleEndian.PutUint32((db)[descOffsetOffset:], val)
 }
 
-func (db descBuf) setMetadata(val int) {
-	binary.LittleEndian.PutUint32((db)[descMetadataOffset:], uint32(val))
+func (db descBuf) setMetadata(val uint32) {
+	binary.LittleEndian.PutUint32((db)[descMetadataOffset:], val)
 }
 
 /* DESCRIPTOR END */
@@ -222,6 +222,7 @@ const ringCookieOffset = 0
 const ringFlagsOffset = 4
 const ringHeadOffset = 6
 const ringTailOffset = 64
+const ringDescOffset = 128
 
 // ringBuf represents a memif ring as array of bytes
 type ringBuf []byte
@@ -241,6 +242,7 @@ func newRing(regionIndex int, ringType ringType, ringOffset int, log2RingSize in
 		ringType: ringType,
 		size:     (1 << log2RingSize),
 		log2Size: log2RingSize,
+		region:   regionIndex,
 		rb:       make(ringBuf, ringSize),
 		offset:   ringOffset,
 	}
@@ -254,6 +256,7 @@ func (i *Interface) newRing(regionIndex int, ringType ringType, ringIndex int) *
 		ringType: ringType,
 		size:     (1 << i.run.Log2RingSize),
 		log2Size: int(i.run.Log2RingSize),
+		region:   regionIndex,
 		rb:       make(ringBuf, ringSize),
 	}
 
