@@ -38,7 +38,7 @@ jobs:
 
       - name: "Release Version"
         if: success() && startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean
@@ -48,7 +48,7 @@ jobs:
 
       - name: "Release Snapshot"
         if: success() && !startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
           version: latest
           args: release --clean --snapshot
