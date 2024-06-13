@@ -40,7 +40,7 @@ jobs:
         if: success() && startsWith(github.ref, 'refs/tags/v')
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: latest
+          version: '~> v2'
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
         if: success() && !startsWith(github.ref, 'refs/tags/v')
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: latest
+          version: '~> v2'
           args: release --clean --snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
