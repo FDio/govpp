@@ -22,8 +22,6 @@ import (
 	"github.com/olekukonko/tablewriter"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-
-	"go.fd.io/govpp/binapigen/vppapi"
 )
 
 // TODO:
@@ -103,7 +101,7 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 		return err
 	}
 
-	vppAgainst, err := vppapi.ResolveVppInput(opts.Against)
+	vppAgainst, err := resolveVppInput(opts.Against)
 	if err != nil {
 		return fmt.Errorf("resolving --against failed: %w", err)
 	}

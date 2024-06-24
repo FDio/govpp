@@ -156,10 +156,11 @@ The `diff` command allows you to compare two VPP API schemas and lists the diffe
 Here's an example usage of the `diff` command:
 
 ```sh
-govpp vppapi diff "./vppapi2210" --against "./vppapi2302"
+ govpp vppapi diff 'http://github.com/FDio/vpp.git#tag=v23.10' --against 'http://github.com/FDio/vpp.git#tag=v24.02'
 ```
 
-This command compares the VPP API schema from `vppapi2210` directory against the VPP API schema in `vppapi2302` and lists the differences between them. The output shows related information details for each difference.
+This command compares the VPP API schema of version`v23.10` against the VPP API schema of veersion `v24.02` and lists the differences between them. 
+The output shows related information details for each difference.
 
 You can use the `--help` flag to get more information about the available flags and options.
 

@@ -15,6 +15,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"path/filepath"
@@ -42,8 +43,13 @@ func resolveVppInput(input string) (*vppapi.VppInput, error) {
 
 	tookSec := time.Since(t).Seconds()
 
-	logrus.Tracef("resolved VPP input %q in %.3fs\n%s\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
-		input, tookSec, strings.Repeat("-", 100), vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
+	logrus.WithFields(map[string]interface{}{
+		"took":    fmt.Sprintf("%.3fs", tookSec),
+		"version": vppInput.Schema.Version,
+		"files":   len(vppInput.Schema.Files),
+		"apiDir":  len(vppInput.Schema.Files),
+	}).Tracef("resolved VPP input %q\n%s\n - API dir: %s\n - VPP Version: %s\n - Files: %v",
+		input, strings.Repeat("-", 100), vppInput.ApiDirectory, vppInput.Schema.Version, len(vppInput.Schema.Files))
 
 	return vppInput, nil
 }

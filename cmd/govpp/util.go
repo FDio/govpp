@@ -25,9 +25,12 @@ import (
 )
 
 var (
-	clrWhite    = color.Style{color.White}
-	clrCyan     = color.Style{color.Cyan}
-	clrDiffFile = color.Style{color.Yellow}
+	clrWhite       = color.Style{color.White}
+	clrDiffMessage = color.Style{color.Cyan}
+	clrDiffOption  = color.Style{color.Blue}
+	clrDiffFile    = color.Style{color.Yellow}
+	clrDiffVersion = color.Style{color.LightMagenta}
+	clrDiffNumber  = color.Style{color.LightBlue}
 )
 
 const (

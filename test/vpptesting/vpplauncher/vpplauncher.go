@@ -203,9 +203,9 @@ func (p *VPP) Start() error {
 			var exiterr *exec.ExitError
 			if errors.As(err, &exiterr) {
 				if strings.Contains(exiterr.Error(), "core dumped") {
-					err = fmt.Errorf("VPP crashed (%w) stderr: %s", exiterr, exiterr.Stderr)
+					err = fmt.Errorf("VPP crashed (%w) stderr: %s", exiterr, p.stderr.Bytes())
 				} else {
-					err = fmt.Errorf("VPP exited (%w) stderr: %s", exiterr, exiterr.Stderr)
+					err = fmt.Errorf("VPP exited (%w) stderr: %s", exiterr, p.stderr.Bytes())
 				}
 			}
 		}
@@ -249,6 +249,9 @@ func (p *VPP) Stop() error {
 	defer func() {
 		p.cmd = nil
 	}()
+	if p.exitErr != nil {
+		return nil
+	}
 	// send signal to stop
 	if err := p.cmd.Process.Signal(syscall.SIGTERM); err != nil {
 		return fmt.Errorf("sending TERM signal failed: %w", err)

@@ -17,11 +17,11 @@ package integration
 import (
 	"context"
 	"fmt"
-	"go.fd.io/govpp/core"
 	"testing"
 
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/binapi/vpe"
+	"go.fd.io/govpp/core"
 	"go.fd.io/govpp/test/vpptesting"
 )
 

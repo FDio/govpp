@@ -35,7 +35,7 @@ The make target above simply runs a helper script which accepts additional argum
 #  ./test/integration/run_integration.sh <ARGS>
 
 # Run with verbose mode
-./test/integration/run_integration.sh -test.v
+./test/run_integration.sh -test.v
 ```
 
 ### Run Specific Test Case
@@ -43,7 +43,7 @@ The make target above simply runs a helper script which accepts additional argum
 To run a specific integration test case(s):
 
 ```shell
-./test/integration/run_integration.sh -test.run="Interfaces"
+./test/run_integration.sh -test.run="Interfaces"
 ```
 
 ## Running Tests on your Host

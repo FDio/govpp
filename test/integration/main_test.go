@@ -18,9 +18,12 @@ package integration
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"os/exec"
 	"testing"
+
+	_ "net/http/pprof"
 )
 
 var (
@@ -30,6 +33,9 @@ var (
 
 func TestMain(m *testing.M) {
 	if IntegrationTestsActive {
+		go func() {
+			fmt.Fprintln(os.Stderr, http.ListenAndServe(":6060", nil))
+		}()
 		os.Exit(m.Run())
 	}
 	fmt.Fprintf(os.Stderr, "integration tests are NOT enabled (set TEST='integration' to enable)\n")
