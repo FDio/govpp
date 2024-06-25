@@ -548,10 +548,10 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 			n++
 			nn++
 
-			if c.pingReqID == 0 && msg.GetMessageName() == c.msgControlPing.GetMessageName() {
+			if msg.GetMessageName() == c.msgControlPing.GetMessageName() {
 				c.pingReqID = msgID
 				c.msgControlPing = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-			} else if c.pingReplyID == 0 && msg.GetMessageName() == c.msgControlPingReply.GetMessageName() {
+			} else if msg.GetMessageName() == c.msgControlPingReply.GetMessageName() {
 				c.pingReplyID = msgID
 				c.msgControlPingReply = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 			}
