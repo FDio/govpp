@@ -133,7 +133,7 @@ func cloneRepoLocally(repo string, commit string, branch string, depth int) (str
 	} else if err != nil {
 		return "", fmt.Errorf("failed to check if cache exists: %w", err)
 	}
-	logrus.Debugf("local repo dir: %q, fetching %q", cachePath, commit)
+	logrus.Debugf("using local repo dir: %q, fetching %q", cachePath, commit)
 
 	cmd := exec.Command("git", "fetch", "--tags", "origin")
 	cmd.Dir = cachePath

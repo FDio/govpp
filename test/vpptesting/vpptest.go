@@ -50,10 +50,13 @@ const (
 	vppConnectRetryNum   = 3
 	vppStopDelay         = time.Millisecond * 50
 	vppDisconnectTimeout = time.Millisecond * 50
+	vppReplyTimeout      = time.Second * 1
 )
 
 type TestCtx struct {
 	T          testing.TB
+	Context    context.Context
+	Cancel     context.CancelFunc
 	vppCmd     *vpplauncher.VPP
 	Conn       *govppcore.Connection
 	statsConn  *govppcore.StatsConnection
@@ -104,6 +107,7 @@ func SetupVPP(t testing.TB) (tc *TestCtx) {
 
 	var conn *govppcore.Connection
 	err = retry(vppConnectRetryNum, func() (err error) {
+		govppcore.DefaultReplyTimeout = vppReplyTimeout
 		conn, err = govppcore.Connect(adapter)
 		return
 	})
@@ -126,8 +130,27 @@ func SetupVPP(t testing.TB) (tc *TestCtx) {
 		t.Fatalf("expected VPP PID to be %v, got %v", vppPID, vpeInfo.VpePID)
 	}
 
+	go func() {
+		q := make(chan struct{})
+		t.Cleanup(func() {
+			close(q)
+		})
+		select {
+		case <-q:
+			// do no wait after test
+		case exitErr := <-vppCmd.OnExit():
+			if exitErr != nil {
+				t.Errorf("VPP process exited with error: %v", exitErr)
+			}
+		}
+	}()
+
+	ctx, cancel := context.WithCancel(context.Background())
+
 	return &TestCtx{
 		T:          t,
+		Context:    ctx,
+		Cancel:     cancel,
 		vppCmd:     vppCmd,
 		Conn:       conn,
 		memclntRPC: memclntRPC,
@@ -184,6 +207,8 @@ func (ctx *TestCtx) TeardownVPP() {
 
 	if err := ctx.vppCmd.Stop(); err != nil {
 		ctx.T.Logf("stopping VPP failed: %v", err)
+	} else {
+		ctx.T.Logf("VPP stopped")
 	}
 }
 

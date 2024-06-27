@@ -268,7 +268,7 @@ func (c *Client) Connect() error {
 		return err
 	}
 
-	if err := c.open(); err != nil {
+	if err := c.open(c.clientName); err != nil {
 		_ = c.disconnect()
 		return err
 	}
@@ -353,12 +353,12 @@ const (
 	deleteMsgContext = byte(124)
 )
 
-func (c *Client) open() error {
+func (c *Client) open(clientName string) error {
 	var msgCodec = codec.DefaultCodec
 
 	// Request socket client create
 	req := &memclnt.SockclntCreate{
-		Name: c.clientName,
+		Name: clientName,
 	}
 	msg, err := msgCodec.EncodeMsg(req, sockCreateMsgId)
 	if err != nil {
@@ -540,6 +540,7 @@ func (c *Client) readerLoop() {
 		msg, err := c.readMsg(buf[:])
 		if err != nil {
 			if isClosedError(err) {
+				log.Debugf("reader closed: %v", err)
 				return
 			}
 			log.Debugf("readMsg error: %v", err)

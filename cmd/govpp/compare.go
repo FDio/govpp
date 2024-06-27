@@ -115,7 +115,7 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 		differences = append(differences, Difference{
 			Type: VersionDifference,
 			Description: color.Sprintf("Schema version is different: %s vs %s",
-				clrWhite.Sprint(schema1.Version), clrWhite.Sprint(schema2.Version)),
+				clrDiffVersion.Sprint(schema1.Version), clrDiffVersion.Sprint(schema2.Version)),
 			Value1: schema1.Version,
 			Value2: schema2.Version,
 		})
@@ -126,7 +126,7 @@ func CompareSchemas(schema1, schema2 *vppapi.Schema) []Difference {
 			Type: TotalFilesDifference,
 			Description: color.Sprintf("Total file count %s from %v to %v",
 				clrWhite.Sprint(numberChangeString(len(schema1.Files), len(schema2.Files))),
-				clrWhite.Sprint(len(schema1.Files)), clrWhite.Sprint(len(schema2.Files))),
+				clrDiffNumber.Sprint(len(schema1.Files)), clrDiffNumber.Sprint(len(schema2.Files))),
 			Value1: len(schema1.Files),
 			Value2: len(schema2.Files),
 		})
@@ -169,7 +169,7 @@ func compareSchemaFiles(files1 []vppapi.File, files2 []vppapi.File) []Difference
 		} else {
 			differences = append(differences, Difference{
 				Type:        FileRemovedDifference,
-				Description: color.Sprintf("File removed: %s", clrWhite.Sprint(fileName)),
+				Description: color.Sprintf("File removed: %s", clrDiffFile.Sprint(fileName)),
 				Value1:      file1,
 				Value2:      nil,
 			})
@@ -181,7 +181,7 @@ func compareSchemaFiles(files1 []vppapi.File, files2 []vppapi.File) []Difference
 		if _, ok := fileMap1[fileName]; !ok {
 			differences = append(differences, Difference{
 				Type:        FileAddedDifference,
-				Description: color.Sprintf("File added: %s", clrWhite.Sprint(fileName)),
+				Description: color.Sprintf("File added: %s", clrDiffFile.Sprint(fileName)),
 				Value1:      nil,
 				Value2:      file2,
 			})
@@ -228,7 +228,7 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		differences = append(differences, Difference{
 			Type: FileVersionDifference,
 			Description: color.Sprintf("File version changed from %s to %s",
-				clrWhite.Sprint(fileVer1), clrWhite.Sprint(fileVer2)),
+				clrDiffVersion.Sprint(fileVer1), clrDiffVersion.Sprint(fileVer2)),
 			Value1: fileVer1,
 			Value2: fileVer2,
 		})
@@ -237,7 +237,7 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		differences = append(differences, Difference{
 			Type: FileCrcDifference,
 			Description: color.Sprintf("File CRC changed from %s to %s",
-				clrWhite.Sprint(file1.CRC), clrWhite.Sprint(file2.CRC)),
+				clrDiffVersion.Sprint(file1.CRC), clrDiffVersion.Sprint(file2.CRC)),
 			Value1: file1.CRC,
 			Value2: file2.CRC,
 		})
@@ -289,7 +289,7 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		} else {
 			differences = append(differences, Difference{
 				Type:        MessageRemovedDifference,
-				Description: color.Sprintf("Message removed: %s", clrCyan.Sprint(msgName)),
+				Description: color.Sprintf("Message removed: %s", clrDiffMessage.Sprint(msgName)),
 				Value1:      msg1,
 				Value2:      nil,
 			})
@@ -300,7 +300,7 @@ func compareFiles(file1, file2 vppapi.File) []Difference {
 		if _, ok := msgMap1[msgName]; !ok {
 			differences = append(differences, Difference{
 				Type:        MessageAddedDifference,
-				Description: color.Sprintf("Message added: %s", clrCyan.Sprint(msgName)),
+				Description: color.Sprintf("Message added: %s", clrDiffMessage.Sprint(msgName)),
 				Value1:      nil,
 				Value2:      msg,
 			})
@@ -324,7 +324,7 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 		differences = append(differences, Difference{
 			Type: MessageCrcDifference,
 			Description: color.Sprintf("Message %s changed CRC from %s to %s",
-				clrCyan.Sprint(msg1.Name), clrWhite.Sprint(msg1.CRC), clrWhite.Sprint(msg2.CRC)),
+				clrDiffMessage.Sprint(msg1.Name), clrDiffVersion.Sprint(msg1.CRC), clrDiffVersion.Sprint(msg2.CRC)),
 			Value1: msg1.CRC,
 			Value2: msg2.CRC,
 		})
@@ -332,7 +332,7 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 
 	// Compare message comments
 	if msg1.Comment != msg2.Comment {
-		desc := color.Sprintf("Message %s comment ", clrCyan.Sprint(msg1.Name))
+		desc := color.Sprintf("Message %s comment ", clrDiffMessage.Sprint(msg1.Name))
 		if msg1.Comment == "" {
 			desc += "added"
 		} else if msg2.Comment == "" {
@@ -355,7 +355,7 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 				differences = append(differences, Difference{
 					Type: MsgOptionChangedDifference,
 					Description: color.Sprintf("Message %s changed option %s from %q to %q",
-						clrCyan.Sprint(msg1.Name), clrWhite.Sprint(option), clrWhite.Sprint(val1), clrWhite.Sprint(val2)),
+						clrDiffMessage.Sprint(msg1.Name), clrDiffOption.Sprint(option), clrDiffOption.Sprint(val1), clrDiffOption.Sprint(val2)),
 					Value1: keyValString(option, val1),
 					Value2: keyValString(option, val2),
 				})
@@ -364,7 +364,7 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 			differences = append(differences, Difference{
 				Type: MsgOptionRemovedDifference,
 				Description: color.Sprintf("Message %s removed option: %s",
-					clrCyan.Sprint(msg1.Name), clrWhite.Sprint(option)),
+					clrDiffMessage.Sprint(msg1.Name), clrDiffOption.Sprint(keyValString(option, val1))),
 				Value1: keyValString(option, val1),
 				Value2: "",
 			})
@@ -376,7 +376,7 @@ func compareMessages(msg1 vppapi.Message, msg2 vppapi.Message) []Difference {
 			differences = append(differences, Difference{
 				Type: MsgOptionAddedDifference,
 				Description: color.Sprintf("Message %s added option: %s",
-					clrCyan.Sprint(msg2.Name), clrWhite.Sprint(keyValString(option, val2))),
+					clrDiffMessage.Sprint(msg2.Name), clrDiffOption.Sprint(keyValString(option, val2))),
 				Value1: "",
 				Value2: keyValString(option, val2),
 			})
@@ -390,7 +390,7 @@ func numberOfContentChangedDifference(typ string, c1, c2 int) Difference {
 	return Difference{
 		Type: FileContentsChangedDifference,
 		Description: color.Sprintf("Number of %s has %s from %v to %v",
-			clrWhite.Sprint(typ), clrWhite.Sprint(numberChangeString(c1, c2)), clrWhite.Sprint(c1), clrWhite.Sprint(c2)),
+			clrWhite.Sprint(typ), clrWhite.Sprint(numberChangeString(c1, c2)), clrDiffNumber.Sprint(c1), clrDiffNumber.Sprint(c2)),
 		Value1: c1,
 		Value2: c2,
 	}
@@ -411,5 +411,5 @@ func keyValString(k, v string) string {
 	if v == "" {
 		return k
 	}
-	return color.Sprintf("%s=%s", k, v)
+	return color.Sprintf("%s=%q", k, v)
 }
