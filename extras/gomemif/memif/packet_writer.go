@@ -20,10 +20,10 @@ package memif
 // WritePacket writes one packet to the shared memory and
 // returns the number of bytes written
 func (q *Queue) WritePacket(pkt []byte) int {
-	var mask int = q.ring.size - 1
+	var mask uint32 = uint32(q.ring.size - 1)
 	var slot int
 	var nFree uint16
-	var packetBufferSize int = int(q.i.run.PacketBufferSize)
+	var packetBufferSize uint32 = q.i.run.PacketBufferSize
 
 	if q.i.args.IsMaster {
 		slot = q.readTail()
@@ -40,7 +40,7 @@ func (q *Queue) WritePacket(pkt []byte) int {
 
 	// copy descriptor from shm
 	desc := newDescBuf()
-	q.getDescBuf(slot&mask, desc)
+	q.getDescBuf(slot&int(mask), desc)
 	// reset flags
 	desc.setFlags(0)
 	// reset length
@@ -52,7 +52,7 @@ func (q *Queue) WritePacket(pkt []byte) int {
 
 	// write packet into memif buffer
 	n := copy(q.i.regions[desc.getRegion()].data[offset:offset+packetBufferSize], pkt[:])
-	desc.setLength(n)
+	desc.setLength(uint32(n))
 	for n < len(pkt) {
 		nFree--
 		if nFree == 0 {
@@ -60,11 +60,11 @@ func (q *Queue) WritePacket(pkt []byte) int {
 			return 0
 		}
 		desc.setFlags(descFlagNext)
-		q.putDescBuf(slot&mask, desc)
+		q.putDescBuf(slot&int(mask), desc)
 		slot++
 
 		// copy descriptor from shm
-		q.getDescBuf(slot&mask, desc)
+		q.getDescBuf(slot&int(mask), desc)
 		// reset flags
 		desc.setFlags(0)
 		// reset length
@@ -75,12 +75,12 @@ func (q *Queue) WritePacket(pkt []byte) int {
 		offset := desc.getOffset()
 
 		tmp := copy(q.i.regions[desc.getRegion()].data[offset:offset+packetBufferSize], pkt[:])
-		desc.setLength(tmp)
+		desc.setLength(uint32(tmp))
 		n += tmp
 	}
 
 	// copy descriptor to shm
-	q.putDescBuf(slot&mask, desc)
+	q.putDescBuf(slot&int(mask), desc)
 	slot++
 
 	if q.i.args.IsMaster {
@@ -95,10 +95,10 @@ func (q *Queue) WritePacket(pkt []byte) int {
 }
 
 func (q *Queue) Tx_burst(pkt []MemifPacketBuffer) int {
-	var mask int = q.ring.size - 1
+	var mask uint32 = uint32(q.ring.size - 1)
 	var slot int
 	var nFree uint16
-	var packetBufferSize int = int(q.i.run.PacketBufferSize)
+	var packetBufferSize uint32 = q.i.run.PacketBufferSize
 
 	if q.i.args.IsMaster {
 		slot = q.readTail()
@@ -117,7 +117,7 @@ func (q *Queue) Tx_burst(pkt []MemifPacketBuffer) int {
 	for i := 0; i < len(pkt); i++ {
 		// copy descriptor from shm
 		desc := newDescBuf()
-		q.getDescBuf(slot&mask, desc)
+		q.getDescBuf(slot&int(mask), desc)
 		// reset flags
 		desc.setFlags(0)
 		// reset length
@@ -128,7 +128,7 @@ func (q *Queue) Tx_burst(pkt []MemifPacketBuffer) int {
 		offset := desc.getOffset()
 		// write packet into memif buffer
 		n = copy(q.i.regions[desc.getRegion()].data[offset:offset+packetBufferSize], pkt[i].Buf[:])
-		desc.setLength(n)
+		desc.setLength(uint32(n))
 		for n < len(pkt[i].Buf) {
 			nFree--
 			if nFree == 0 {
@@ -136,11 +136,11 @@ func (q *Queue) Tx_burst(pkt []MemifPacketBuffer) int {
 				return 0
 			}
 			desc.setFlags(descFlagNext)
-			q.putDescBuf(slot&mask, desc)
+			q.putDescBuf(slot&int(mask), desc)
 			slot++
 
 			// copy descriptor from shm
-			q.getDescBuf(slot&mask, desc)
+			q.getDescBuf(slot&int(mask), desc)
 			// reset flags
 			desc.setFlags(0)
 			// reset length
@@ -151,12 +151,12 @@ func (q *Queue) Tx_burst(pkt []MemifPacketBuffer) int {
 			offset := desc.getOffset()
 
 			tmp := copy(q.i.regions[desc.getRegion()].data[offset:offset+packetBufferSize], pkt[i].Buf[:])
-			desc.setLength(tmp)
+			desc.setLength(uint32(tmp))
 			n += tmp
 		}
 
 		// copy descriptor to shm
-		q.putDescBuf(slot&mask, desc)
+		q.putDescBuf(slot&int(mask), desc)
 		slot++
 	}
 	if q.i.args.IsMaster {

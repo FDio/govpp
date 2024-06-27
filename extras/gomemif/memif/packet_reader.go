@@ -29,13 +29,13 @@ type MemifPacketBuffer struct {
 
 // ReadPacket reads one packet form the shared memory and
 // returns the number of bytes read
-func (q *Queue) ReadPacket(pkt []byte) (int, error) {
-	var mask int = q.ring.size - 1
+func (q *Queue) ReadPacket(pkt []byte) (uint32, error) {
+	var mask uint32 = uint32(q.ring.size - 1)
 	var slot int
 	var lastSlot int
-	var length int
-	var offset int
-	var pktOffset int = 0
+	var length uint32
+	var offset uint32
+	var pktOffset uint32 = 0
 	var nSlots uint16
 	var desc descBuf = newDescBuf()
 
@@ -53,7 +53,7 @@ func (q *Queue) ReadPacket(pkt []byte) (int, error) {
 	}
 
 	// copy descriptor from shm
-	q.getDescBuf(slot&mask, desc)
+	q.getDescBuf(slot&int(mask), desc)
 	length = desc.getLength()
 	offset = desc.getOffset()
 
@@ -68,7 +68,7 @@ func (q *Queue) ReadPacket(pkt []byte) (int, error) {
 			return 0, fmt.Errorf("Incomplete chained buffer, may suggest peer error.")
 		}
 
-		q.getDescBuf(slot&mask, desc)
+		q.getDescBuf(slot&int(mask), desc)
 		length = desc.getLength()
 		offset = desc.getOffset()
 
@@ -89,7 +89,7 @@ refill:
 		head := q.readHead()
 
 		for nSlots := uint16(q.ring.size - head + int(q.lastTail)); nSlots > 0; nSlots-- {
-			q.setDescLength(head&mask, int(q.i.run.PacketBufferSize))
+			q.setDescLength(head&int(mask), int(q.i.run.PacketBufferSize))
 			head++
 		}
 		q.writeHead(head)
@@ -101,11 +101,11 @@ refill:
 // ReadPacket reads one packet form the shared memory and
 // returns the number of packets
 func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
-	var mask int = q.ring.size - 1
+	var mask uint32 = uint32(q.ring.size - 1)
 	var slot int
 	var lastSlot int
-	var length int
-	var offset int
+	var length uint32
+	var offset uint32
 	var nSlots uint16
 	var desc descBuf = newDescBuf()
 
@@ -127,11 +127,11 @@ func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
 	rx := 0
 	for nSlots > 0 {
 		// copy descriptor from shm
-		q.getDescBuf(slot&mask, desc)
+		q.getDescBuf(slot&int(mask), desc)
 		length = desc.getLength()
 		offset = desc.getOffset()
 		copy(pkt[rx].Buf[:], q.i.regions[desc.getRegion()].data[offset:offset+length])
-		pkt[rx].Buflen = length
+		pkt[rx].Buflen = int(length)
 		rx++
 		nSlots--
 		slot++

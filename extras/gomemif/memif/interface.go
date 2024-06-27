@@ -61,7 +61,7 @@ type ConnectedFunc func(i *Interface) error
 // DisconnectedFunc is a callback called when an interface is disconnected
 type DisconnectedFunc func(i *Interface) error
 
-type InterruptFunc func(i *Interface) error
+type InterruptFunc func(i *Interface, rx_qid int) error
 
 // MemoryConfig represents shared memory configuration
 type MemoryConfig struct {
@@ -383,7 +383,7 @@ func (i *Interface) addRegion(hasPacketBuffers bool, hasRings bool) (err error) 
 	var r memoryRegion
 
 	if hasRings {
-		r.packetBufferOffset = uint32((i.run.NumQueuePairs + i.run.NumQueuePairs) * (ringSize + descSize*(1<<i.run.Log2RingSize)))
+		r.packetBufferOffset = uint32(uint32(i.run.NumQueuePairs+i.run.NumQueuePairs) * (ringSize + descSize*(1<<i.run.Log2RingSize)))
 	} else {
 		r.packetBufferOffset = 0
 	}
@@ -442,7 +442,7 @@ func (i *Interface) initializeQueues() (err error) {
 	desc = newDescBuf()
 	desc.setFlags(0)
 	desc.setRegion(0)
-	desc.setLength(int(i.run.PacketBufferSize))
+	desc.setLength(i.run.PacketBufferSize)
 
 	for qid := 0; qid < int(i.run.NumQueuePairs); qid++ {
 		/* TX */
@@ -459,15 +459,13 @@ func (i *Interface) initializeQueues() (err error) {
 			return err
 		}
 
-		i.args.InterruptFd = uint16(q.interruptFd)
-
 		q.putRing()
 		i.txQueues = append(i.txQueues, *q)
 
 		for j := 0; j < q.ring.size; j++ {
 			slot = qid*q.ring.size + j
-			desc.setOffset(int(i.regions[0].packetBufferOffset + uint32(slot)*i.run.PacketBufferSize))
-			q.putDescBuf(slot, desc)
+			desc.setOffset(i.regions[q.ring.region].packetBufferOffset + uint32(slot)*i.run.PacketBufferSize)
+			q.putDescBuf(j, desc)
 		}
 	}
 
@@ -490,17 +488,14 @@ func (i *Interface) initializeQueues() (err error) {
 		if err != nil {
 			return err
 		}
-		if !i.args.IsMaster {
-			i.args.InterruptFd = uint16(q.interruptFd)
-		}
 		i.socket.addInterrupt(q.interruptFd)
 		q.putRing()
 		i.rxQueues = append(i.rxQueues, *q)
 
 		for j := 0; j < q.ring.size; j++ {
 			slot = qid*q.ring.size + j
-			desc.setOffset(int(i.regions[0].packetBufferOffset + txPacketBufOffset + uint32(slot)*i.run.PacketBufferSize))
-			q.putDescBuf(slot, desc)
+			desc.setOffset(i.regions[q.ring.region].packetBufferOffset + txPacketBufOffset + uint32(slot)*i.run.PacketBufferSize)
+			q.putDescBuf(j, desc)
 		}
 	}
 
@@ -542,4 +537,40 @@ func (i *Interface) connect() (err error) {
 	}
 
 	return i.args.ConnectedFunc(i)
+}
+
+func (i *Interface) String() string {
+	socketFileName := i.GetSocket().GetFilename()
+	role := RoleToString(i.IsMaster())
+	id := i.GetId()
+	remoteName := i.GetRemoteName()
+	peerName := i.GetPeerName()
+	interfaceName := i.GetName()
+	memoryConfig := i.GetMemoryConfig()
+	isConnected := i.IsConnected()
+
+	result := fmt.Sprintf("Interface Name: %s\n", interfaceName)
+	result += fmt.Sprintf("  Socket: %s\n", socketFileName)
+	result += fmt.Sprintf("  Id: %v\n", id)
+	result += fmt.Sprintf("  Role: %s\n", role)
+	result += fmt.Sprintf("  Connected: %v\n", isConnected)
+	result += fmt.Sprintf("  Remote: %s\n", remoteName)
+	result += fmt.Sprintf("  Peer Interface Name: %s\n", peerName)
+	result += fmt.Sprintf("  Number of Queue Pairs: %v\n", memoryConfig.NumQueuePairs)
+	result += fmt.Sprintf("  Buffer Size: %v\n", memoryConfig.PacketBufferSize)
+
+	result += fmt.Sprintf("\n\tTX Queues\n")
+	for qid := 0; qid < int(memoryConfig.NumQueuePairs); qid++ {
+		txq, _ := i.GetTxQueue(qid)
+
+		result += fmt.Sprintf("\t\tqueue:%v Region:%v Type:%v  Size:%v Offset:%v\n", qid, txq.ring.region, txq.ring.ringType, txq.ring.size, txq.ring.offset)
+		result += fmt.Sprintf("\t\tHead:%v Tail:%v Interrupt Fd:%v\n", txq.lastHead, txq.lastTail, txq.interruptFd)
+	}
+	result += fmt.Sprintf("\n\tRX Queues\n")
+	for qid := 0; qid < int(memoryConfig.NumQueuePairs); qid++ {
+		rxq, _ := i.GetRxQueue(qid)
+		result += fmt.Sprintf("\t\tqueue:%v Region:%v Type:%v  Size:%v Offset:%v\n", qid, rxq.ring.region, rxq.ring.ringType, rxq.ring.size, rxq.ring.offset)
+		result += fmt.Sprintf("\t\tHead:%v Tail:%v Interrupt Fd:%v\n", rxq.lastHead, rxq.lastTail, rxq.interruptFd)
+	}
+	return result
 }

@@ -47,8 +47,8 @@ func Disconnected(i *memif.Interface) error {
 	return nil
 }
 
-func Responder(i *memif.Interface) error {
-	data, ok := i.GetPrivateData().(*interfaceData)
+func Responder(itf *memif.Interface, rx_qid int) error {
+	data, ok := itf.GetPrivateData().(*interfaceData)
 	if !ok {
 		return fmt.Errorf("Invalid private data")
 	}
@@ -57,41 +57,47 @@ func Responder(i *memif.Interface) error {
 	data.wg.Add(1)
 
 	// allocate packet buffers
-	pkt := i.Pkt
+	pkt := itf.Pkt
 	var tx_bufs []memif.MemifPacketBuffer
 	for i := range pkt {
 		pkt[i].Buf = make([]byte, 2048)
 		pkt[i].Buflen = 2048
 	}
-	// get rx queue
-	rxq0, err := i.GetRxQueue(0)
-	if err != nil {
-		return err
-	}
-	// get tx queue
-	txq0, err := i.GetTxQueue(0)
-	if err != nil {
-		return err
-	}
-	_ = txq0
 
-	nPackets, err := rxq0.Rx_burst(pkt)
+	// get rx queue
+	rxq, err := itf.GetRxQueue(rx_qid)
+	if err != nil {
+		return err
+	}
+	// As this is an example, we will use the same queue id for transmit.
+	// i.e. if rx_queue id is 1, we will use tx_queue id 1.
+	// get tx queue
+	txq, err := itf.GetTxQueue(rx_qid)
+	if err != nil {
+		return err
+	}
+	_ = txq
+
+	nPackets, err := rxq.Rx_burst(pkt)
 	if err != nil {
 		return err
 	}
 
 	fmt.Println(nPackets)
-	rxq0.Refill(int(nPackets))
+
+	rxq.Refill(int(nPackets))
 	_ = err
 
 	for i := 0; i < int(nPackets); i++ {
 		gopkt := gopacket.NewPacket(pkt[i].Buf[:pkt[i].Buflen], layers.LayerTypeEthernet, gopacket.NoCopy)
 		etherLayer := gopkt.Layer(layers.LayerTypeEthernet)
 
+		// received frame src mac address will become trasmit frame dst mac address.
+		tx_dstMAC := etherLayer.(*layers.Ethernet).SrcMAC
 		if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeARP {
 			rEth := layers.Ethernet{
 				SrcMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-				DstMAC: net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+				DstMAC: tx_dstMAC,
 
 				EthernetType: layers.EthernetTypeARP,
 			}
@@ -103,7 +109,7 @@ func Responder(i *memif.Interface) error {
 				Operation:         layers.ARPReply,
 				SourceHwAddress:   []byte(net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}),
 				SourceProtAddress: []byte("\xc0\xa8\x01\x01"),
-				DstHwAddress:      []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
+				DstHwAddress:      []byte(tx_dstMAC),
 				DstProtAddress:    []byte("\xc0\xa8\x01\x02"),
 			}
 			buf := gopacket.NewSerializeBuffer()
@@ -113,7 +119,7 @@ func Responder(i *memif.Interface) error {
 			}
 			gopacket.SerializeLayers(buf, opts, &rEth, &rArp)
 			// write packet to shared memory
-			txq0.WritePacket(buf.Bytes())
+			txq.WritePacket(buf.Bytes())
 		}
 		if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeIPv4 {
 			ipLayer := gopkt.Layer(layers.LayerTypeIPv4)
@@ -136,8 +142,8 @@ func Responder(i *memif.Interface) error {
 
 			// Build packet layers.
 			ethResp := layers.Ethernet{
-				DstMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-				SrcMAC: []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
+				SrcMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
+				DstMAC: []byte(tx_dstMAC),
 
 				EthernetType: layers.EthernetTypeIPv4,
 			}
@@ -172,10 +178,11 @@ func Responder(i *memif.Interface) error {
 
 		}
 	}
-	txq0.Tx_burst(tx_bufs)
-	return nil
+	txq.Tx_burst(tx_bufs)
 
+	return nil
 }
+
 func Connected(i *memif.Interface) error {
 	data, ok := i.GetPrivateData().(*interfaceData)
 	_ = data
@@ -186,9 +193,10 @@ func Connected(i *memif.Interface) error {
 	i.Pkt = make([]memif.MemifPacketBuffer, 64)
 
 	// get rx queue
-	rxq0, err := i.GetRxQueue(0)
-	_ = err
-	rxq0.Refill(0)
+	for j := 0; j < int(i.GetMemoryConfig().NumQueuePairs); j++ {
+		rxq, _ := i.GetRxQueue(j)
+		rxq.Refill(0)
+	}
 
 	return nil
 }
@@ -246,6 +254,7 @@ func main() {
 	}
 
 	data := interfaceData{}
+	MemoryConfig := memif.MemoryConfig{NumQueuePairs: 2, Log2RingSize: 11}
 	args := &memif.Arguments{
 		IsMaster:         isMaster,
 		ConnectedFunc:    Connected,
@@ -253,6 +262,7 @@ func main() {
 		PrivateData:      &data,
 		Name:             *name,
 		InterruptFunc:    Responder,
+		MemoryConfig:     MemoryConfig,
 	}
 
 	i, err := socket.NewInterface(args)
@@ -293,8 +303,7 @@ func main() {
 				// start polling for events on this socket
 				socket.StartPolling(memifErrChan)
 			case "show":
-				fmt.Println("remote: ", i.GetRemoteName())
-				fmt.Println("peer: ", i.GetPeerName())
+				fmt.Print(i.String())
 			case "exit":
 				err = socket.StopPolling()
 				if err != nil {
