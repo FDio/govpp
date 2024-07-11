@@ -131,10 +131,10 @@ func (socket *Socket) StartPolling(errChan chan<- error) {
 				}
 
 				for ev := 0; ev < num; ev++ {
-					if events[0].Fd == socket.wakeEvent.Fd {
+					if events[ev].Fd == socket.wakeEvent.Fd {
 						continue
 					}
-					err = socket.handleEvent(&events[0])
+					err = socket.handleEvent(&events[ev])
 					if err != nil {
 						errChan <- fmt.Errorf("handleEvent: ", err)
 					}
@@ -236,11 +236,17 @@ func (socket *Socket) handleEvent(event *syscall.EpollEvent) error {
 	if socket.listener != nil && socket.listener.event.Fd == event.Fd {
 		return socket.listener.handleEvent(event)
 	}
-	intf := socket.interfaceList.Back().Value.(*Interface)
-	if intf.args.InterruptFunc != nil {
-		if int(event.Fd) == int(intf.args.InterruptFd) {
-			intf.onInterrupt(intf)
-			return nil
+	for elt := socket.interfaceList.Front(); elt != nil; elt = elt.Next() {
+		intf := elt.Value.(*Interface)
+		if intf.args.InterruptFunc != nil {
+			for rx_qid := 0; rx_qid < int(intf.GetMemoryConfig().NumQueuePairs); rx_qid++ {
+				queue, _ := intf.GetRxQueue(rx_qid)
+				interruptFd, _ := queue.GetEventFd()
+				if int(event.Fd) == interruptFd {
+					intf.onInterrupt(intf, rx_qid)
+					return nil
+				}
+			}
 		}
 	}
 
@@ -767,18 +773,18 @@ func (cc *controlChannel) parseConnect() (err error) {
 	if err != nil {
 		return err
 	}
-	q, err := cc.i.GetRxQueue(0)
 	i := cc.i
-	if err != nil {
-		return err
-	}
-	if i.args.IsMaster {
-		i.args.InterruptFd = uint16(q.interruptFd)
 
-	}
-	err = i.socket.addInterrupt(q.interruptFd)
-	if err != nil {
-		return err
+	for j := 0; j < int(i.run.NumQueuePairs); j++ {
+		q, err := cc.i.GetRxQueue(j)
+		if err != nil {
+			return err
+		}
+
+		err = i.socket.addInterrupt(q.interruptFd)
+		if err != nil {
+			return err
+		}
 	}
 	cc.isConnected = true
 
