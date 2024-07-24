@@ -124,6 +124,10 @@ func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
 		return 0, nil
 	}
 
+	if nSlots > uint16(len(pkt)) {
+		nSlots = uint16(len(pkt))
+	}
+
 	rx := 0
 	for nSlots > 0 {
 		// copy descriptor from shm
