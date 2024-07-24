@@ -61,16 +61,17 @@ type controlChannel struct {
 // Socket represents a UNIX domain socket used for communication
 // between memif peers
 type Socket struct {
-	appName       string
-	filename      string
-	listener      *listener
-	interfaceList *list.List
-	ccList        *list.List
-	epfd          int
-	interruptfd   int
-	wakeEvent     syscall.EpollEvent
-	stopPollChan  chan struct{}
-	wg            sync.WaitGroup
+	appName           string
+	filename          string
+	intfQueueEventMap map[int]memifIntfQueue
+	listener          *listener
+	interfaceList     *list.List
+	ccList            *list.List
+	epfd              int
+	interruptfd       int
+	wakeEvent         syscall.EpollEvent
+	stopPollChan      chan struct{}
+	wg                sync.WaitGroup
 }
 
 type interrupt struct {
@@ -81,6 +82,11 @@ type interrupt struct {
 type memifInterrupt struct {
 	connection *Socket
 	qid        uint16
+}
+
+type memifIntfQueue struct {
+	intf *Interface
+	qid  uint16
 }
 
 // StopPolling stops polling events on the socket
@@ -216,6 +222,7 @@ func NewSocket(appName string, filename string) (socket *Socket, err error) {
 		socket.filename = DefaultSocketFilename
 	}
 
+	socket.intfQueueEventMap = make(map[int]memifIntfQueue)
 	socket.epfd, _ = syscall.EpollCreate1(0)
 
 	efd, err := eventFd()
@@ -236,18 +243,10 @@ func (socket *Socket) handleEvent(event *syscall.EpollEvent) error {
 	if socket.listener != nil && socket.listener.event.Fd == event.Fd {
 		return socket.listener.handleEvent(event)
 	}
-	for elt := socket.interfaceList.Front(); elt != nil; elt = elt.Next() {
-		intf := elt.Value.(*Interface)
-		if intf.args.InterruptFunc != nil {
-			for rx_qid := 0; rx_qid < int(intf.GetMemoryConfig().NumQueuePairs); rx_qid++ {
-				queue, _ := intf.GetRxQueue(rx_qid)
-				interruptFd, _ := queue.GetEventFd()
-				if int(event.Fd) == interruptFd {
-					intf.onInterrupt(intf, rx_qid)
-					return nil
-				}
-			}
-		}
+
+	intfQueue, found := socket.intfQueueEventMap[int(event.Fd)]
+	if found {
+		return intfQueue.intf.onInterrupt(intfQueue.intf, int(intfQueue.qid))
 	}
 
 	for elt := socket.ccList.Front(); elt != nil; elt = elt.Next() {

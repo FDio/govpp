@@ -525,7 +525,7 @@ func (i *Interface) connect() (err error) {
 		q.lastTail = 0
 	}
 
-	for _, q := range i.rxQueues {
+	for qid, q := range i.rxQueues {
 		q.updateRing()
 
 		if q.ring.getCookie() != cookie {
@@ -534,6 +534,11 @@ func (i *Interface) connect() (err error) {
 
 		q.lastHead = 0
 		q.lastTail = 0
+
+		if i.args.InterruptFunc != nil {
+			interruptFd, _ := q.GetEventFd()
+			i.socket.intfQueueEventMap[interruptFd] = memifIntfQueue{i, uint16(qid)}
+		}
 	}
 
 	return i.args.ConnectedFunc(i)
