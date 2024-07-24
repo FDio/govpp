@@ -107,6 +107,7 @@ func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
 	var length uint32
 	var offset uint32
 	var nSlots uint16
+	var readQueueInterrupt bool = true
 	var desc descBuf = newDescBuf()
 
 	if q.i.args.IsMaster {
@@ -126,6 +127,7 @@ func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
 
 	if nSlots > uint16(len(pkt)) {
 		nSlots = uint16(len(pkt))
+		readQueueInterrupt = false
 	}
 
 	rx := 0
@@ -148,8 +150,10 @@ func (q *Queue) Rx_burst(pkt []MemifPacketBuffer) (uint16, error) {
 
 	}
 
-	b := make([]byte, 8)
-	syscall.Read(int(q.interruptFd), b)
+	if readQueueInterrupt {
+		b := make([]byte, 8)
+		syscall.Read(int(q.interruptFd), b)
+	}
 
 	return uint16(rx), nil
 }
