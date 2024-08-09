@@ -14,6 +14,7 @@ to the compiler.
 
 For example, to install C-libmemif system-wide into the standard
 locations, execute:
+
 ```
 $ git clone https://gerrit.fd.io/r/vpp
 $ cd vpp/extras/libmemif
@@ -28,6 +29,7 @@ Package **libmemif** is not part of the **GoVPP** core and as such it is
 not included in the [make build](../../Makefile) target.
 Instead, it has its own target in the [top-level Makefile](../../Makefile)
 used to build the attached examples with the adapter:
+
 ```
 $ make extras
 ```
@@ -59,6 +61,7 @@ structure representing the underlying memif interface.
 
 Callbacks are optional and can be shared across multiple memif instances.
 Available callbacks are:
+
 1. **OnConnect**: called when the connection is established.
    By the time the callback is called, the Rx/Tx queues are initialized
    and ready for data transmission. Interrupt channels are also
@@ -103,7 +106,7 @@ Do not touch memif after it was closed, let garbage collector to remove
 the `Memif` instance. In the end, `Cleanup()` will also ensure that all
 active memif interfaces are closed before the cleanup finalizes.
 
-To use libmemif with `google/gopacket`, simply call `Memif.NewPacketHandle()`
+To use libmemif with `google/gopacket`, simply call `libmemif.NewPacketHandle()`
 to create `google/gopacket/PacketDataSource` from memif queue. After this you
 can use gopacket API to read from `MemifPacketHandle` as normal. You can pass
 optional `rxCount` when creating the packet handle and then when reading data,
@@ -119,46 +122,48 @@ The examples can be found in the subdirectory [examples](./examples).
 
 #### Raw data (libmemif <-> libmemif)
 
-*raw-data* is a basic example showing how to create a memif interface,
+_raw-data_ is a basic example showing how to create a memif interface,
 handle events through callbacks and perform Rx/Tx of raw data. Before
 handling an actual packets it is important to understand the skeleton
 of libmemif-based applications.
 
 Since VPP expects proper packet data, it is not very useful to connect
-*raw-data* example with VPP, even though it will work, since all
+_raw-data_ example with VPP, even though it will work, since all
 the received data will get dropped on the VPP side.
 
 To create a connection of two raw-data instances, start two processes
 concurrently in an arbitrary order:
- - *master* memif:
-   ```
-   $ cd extras/libmemif/examples/raw-data
-   $ ./raw-data
-   ```
- - *slave* memif:
-   ```
-   $ cd extras/libmemif/examples/raw-data
-   $ ./raw-data --slave
-   ```
+
+- _master_ memif:
+  ```
+  $ cd extras/libmemif/examples/raw-data
+  $ ./raw-data
+  ```
+- _slave_ memif:
+  ```
+  $ cd extras/libmemif/examples/raw-data
+  $ ./raw-data --slave
+  ```
 
 Every 3 seconds both sides send 3 raw-data packets to the opposite end
 through each of the 3 queues. The received packets are printed to stdout.
 
-Stop an instance of *raw-data* with an interrupt signal (^C).
+Stop an instance of _raw-data_ with an interrupt signal (^C).
 
 #### Jumbo Frames Raw data (libmemif <-> libmemif)
 
-*jumbo-frames* is simple example how to send larger and larger jumbo
-packets with libmemif adapter. This is simple copy of *raw-data* but with
+_jumbo-frames_ is simple example how to send larger and larger jumbo
+packets with libmemif adapter. This is simple copy of _raw-data_ but with
 sending larger packets, so for more information read its code and documentation.
 
 #### ICMP Responder
 
-*icmp-responder* is a simple example showing how to answer APR and ICMP
+_icmp-responder_ is a simple example showing how to answer APR and ICMP
 echo requests through a memif interface. Package `google/gopacket` is
 used to decode and construct packets.
 
 The appropriate VPP configuration for the opposite memif is:
+
 ```
 vpp$ create memif socket id 1 filename /tmp/icmp-responder-example
 vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
@@ -167,15 +172,17 @@ vpp$ set int ip address memif1/1 192.168.1.2/24
 ```
 
 To start the example, simply type:
+
 ```
 root$ ./icmp-responder
 ```
 
-*icmp-responder* needs to be run as root so that it can access the socket
+_icmp-responder_ needs to be run as root so that it can access the socket
 created by VPP.
 
 Normally, the memif interface is in the master mode. Pass CLI flag `--slave`
 to create memif in the slave mode:
+
 ```
 root$ ./icmp-responder --slave
 ```
@@ -183,6 +190,7 @@ root$ ./icmp-responder --slave
 Don't forget to put the opposite memif into the master mode in that case.
 
 To verify the connection, run:
+
 ```
 vpp$ ping 192.168.1.1
 64 bytes from 192.168.1.1: icmp_seq=2 ttl=255 time=.6974 ms
@@ -195,20 +203,22 @@ vpp$ sh ip arp
     Time           IP4       Flags      Ethernet              Interface
     68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
 ```
-*Note*: it is expected that the first ping is shown as lost.
-        It was actually converted to an ARP request. This is a VPP
-        specific feature common to all interface types.
+
+_Note_: it is expected that the first ping is shown as lost.
+It was actually converted to an ARP request. This is a VPP
+specific feature common to all interface types.
 
 Stop the example with an interrupt signal (^C).
 
 #### GoPacket ICMP Responder
 
-*gopacket* is a simple example showing how to answer APR and ICMP echo
+_gopacket_ is a simple example showing how to answer APR and ICMP echo
 requests through a memif interface. This example is mostly identical
 to icmp-responder example, but it is using MemifPacketHandle API to
 read and write packets using gopacket API.
 
 The appropriate VPP configuration for the opposite memif is:
+
 ```
 vpp$ create memif socket id 1 filename /tmp/gopacket-example
 vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
@@ -217,6 +227,7 @@ vpp$ set int ip address memif1/1 192.168.1.2/24
 ```
 
 To start the example, simply type:
+
 ```
 root$ ./gopacket
 ```
@@ -226,6 +237,7 @@ created by VPP.
 
 Normally, the memif interface is in the master mode. Pass CLI flag "--slave"
 to create memif in the slave mode:
+
 ```
 root$ ./gopacket --slave
 ```
@@ -233,6 +245,7 @@ root$ ./gopacket --slave
 Don't forget to put the opposite memif into the master mode in that case.
 
 To verify the connection, run:
+
 ```
 vpp$ ping 192.168.1.1
 64 bytes from 192.168.1.1: icmp_seq=2 ttl=255 time=.6974 ms
@@ -246,8 +259,8 @@ Time           IP4       Flags      Ethernet              Interface
 68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
 ```
 
-*Note*: it is expected that the first ping is shown as lost.
-        It was actually converted to an ARP request. This is a VPP
-        specific feature common to all interface types.
+_Note_: it is expected that the first ping is shown as lost.
+It was actually converted to an ARP request. This is a VPP
+specific feature common to all interface types.
 
 Stop the example with an interrupt signal (^C).

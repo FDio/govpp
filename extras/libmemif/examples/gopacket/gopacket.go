@@ -4,34 +4,38 @@
 // read and write packets using gopacket API.
 //
 // The appropriate VPP configuration for the opposite memif is:
-//   vpp$ create memif socket id 1 filename /tmp/gopacket-example
-//   vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
-//   vpp$ set int state memif1/1 up
-//   vpp$ set int ip address memif1/1 192.168.1.2/24
+//
+//	vpp$ create memif socket id 1 filename /tmp/gopacket-example
+//	vpp$ create interface memif id 1 socket-id 1 slave secret secret no-zero-copy
+//	vpp$ set int state memif1/1 up
+//	vpp$ set int ip address memif1/1 192.168.1.2/24
 //
 // To start the example, simply type:
-//   root$ ./gopacket
+//
+//	root$ ./gopacket
 //
 // gopacket needs to be run as root so that it can access the socket
 // created by VPP.
 //
 // Normally, the memif interface is in the master mode. Pass CLI flag "--slave"
 // to create memif in the slave mode:
-//   root$ ./gopacket --slave
+//
+//	root$ ./gopacket --slave
 //
 // Don't forget to put the opposite memif into the master mode in that case.
 //
 // To verify the connection, run:
-//   vpp$ ping 192.168.1.1
-//   64 bytes from 192.168.1.1: icmp_seq=2 ttl=255 time=.6974 ms
-//   64 bytes from 192.168.1.1: icmp_seq=3 ttl=255 time=.6310 ms
-//   64 bytes from 192.168.1.1: icmp_seq=4 ttl=255 time=1.0350 ms
-//   64 bytes from 192.168.1.1: icmp_seq=5 ttl=255 time=.5359 ms
 //
-//   Statistics: 5 sent, 4 received, 20% packet loss
-//   vpp$ sh ip arp
-//   Time           IP4       Flags      Ethernet              Interface
-//   68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
+//	vpp$ ping 192.168.1.1
+//	64 bytes from 192.168.1.1: icmp_seq=2 ttl=255 time=.6974 ms
+//	64 bytes from 192.168.1.1: icmp_seq=3 ttl=255 time=.6310 ms
+//	64 bytes from 192.168.1.1: icmp_seq=4 ttl=255 time=1.0350 ms
+//	64 bytes from 192.168.1.1: icmp_seq=5 ttl=255 time=.5359 ms
+//
+//	Statistics: 5 sent, 4 received, 20% packet loss
+//	vpp$ sh ip arp
+//	Time           IP4       Flags      Ethernet              Interface
+//	68.5648   192.168.1.1     D    aa:aa:aa:aa:aa:aa memif0/1
 //
 // Note: it is expected that the first ping is shown as lost. It was actually
 // converted to an ARP request. This is a VPP feature common to all interface
@@ -43,13 +47,14 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/alkiranet/govpp/extras/libmemif"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
 	"io"
 	"net"
 	"os"
 	"os/signal"
+
+	"github.com/alkiranet/govpp/extras/libmemif"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 )
 
 var (
@@ -89,7 +94,7 @@ func OnConnect(memif *libmemif.Memif) (err error) {
 			continue
 		}
 
-		go CreateInterruptCallback(memif.NewPacketHandle(queue.QueueID, 10), ch, OnInterrupt)
+		go CreateInterruptCallback(libmemif.NewPacketHandle(memif, queue.QueueID, 10), ch, OnInterrupt)
 	}
 
 	return
