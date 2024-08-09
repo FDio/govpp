@@ -26,8 +26,14 @@ type memoizedPacket struct {
 	ci   gopacket.CaptureInfo
 }
 
+// BurstHandler is an interface that implements methods for reading and writing packets in bursts.
+type BurstHandler interface {
+	RxBurst(queueID uint8, count uint16) (packets []RawPacketData, err error)
+	TxBurst(queueID uint8, packets []RawPacketData) (count uint16, err error)
+}
+
 type MemifPacketHandle struct {
-	memif   *Memif
+	handler BurstHandler
 	queueId uint8
 	rxCount uint16
 
@@ -43,13 +49,13 @@ type MemifPacketHandle struct {
 
 // Create new GoPacket packet handle from libmemif queue. rxCount determines how many packets will be read
 // at once, minimum value is 1
-func (memif *Memif) NewPacketHandle(queueId uint8, rxCount uint16) *MemifPacketHandle {
+func NewPacketHandle(burstHandler BurstHandler, queueId uint8, rxCount uint16) *MemifPacketHandle {
 	if rxCount == 0 {
 		rxCount = 1
 	}
 
 	return &MemifPacketHandle{
-		memif:   memif,
+		handler: burstHandler,
 		queueId: queueId,
 		rxCount: rxCount,
 	}
@@ -70,7 +76,7 @@ func (handle *MemifPacketHandle) ReadPacketData() (data []byte, ci gopacket.Capt
 	queueLen := len(handle.packetQueue)
 
 	if queueLen == 0 {
-		packets, burstErr := handle.memif.RxBurst(handle.queueId, handle.rxCount)
+		packets, burstErr := handle.handler.RxBurst(handle.queueId, handle.rxCount)
 		packetsLen := len(packets)
 
 		if burstErr != nil {
@@ -118,7 +124,7 @@ func (handle *MemifPacketHandle) WritePacketData(data []byte) (err error) {
 		return
 	}
 
-	count, err := handle.memif.TxBurst(handle.queueId, []RawPacketData{data})
+	count, err := handle.handler.TxBurst(handle.queueId, []RawPacketData{data})
 
 	if err != nil {
 		return

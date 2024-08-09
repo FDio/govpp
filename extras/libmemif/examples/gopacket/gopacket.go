@@ -47,9 +47,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/alkiranet/govpp/extras/libmemif"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
 	"io"
 	"net"
 	"os"
@@ -97,7 +94,7 @@ func OnConnect(memif *libmemif.Memif) (err error) {
 			continue
 		}
 
-		go CreateInterruptCallback(memif.NewPacketHandle(queue.QueueID, 10), ch, OnInterrupt)
+		go CreateInterruptCallback(libmemif.NewPacketHandle(memif, queue.QueueID, 10), ch, OnInterrupt)
 	}
 
 	return
