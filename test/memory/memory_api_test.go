@@ -18,16 +18,17 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/vpe"
-	"go.fd.io/govpp/test/vpptesting"
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 	"runtime"
 	runtimeMetrics "runtime/metrics"
 	"strings"
 	"testing"
 	"time"
+
+	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/vpe"
+	"go.fd.io/govpp/test/vpptesting"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 var apiNum = flag.Uint("api-num", 0, "Custom number API to test")
