@@ -1,0 +1,48 @@
+FROM buildpack-deps:22.04-scm
+
+# Install gotestsum
+ARG GOTESTSUM_VERSION=1.12.0
+RUN set -eux; \
+    curl -fsSL https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_linux_amd64.tar.gz -o gotestsum.tar.gz; \
+    tar -xf gotestsum.tar.gz gotestsum; \
+    mv gotestsum /usr/local/bin/gotestsum; \
+    rm gotestsum.tar.gz;
+
+# Install Go
+ENV GOLANG_VERSION=1.22.4
+
+RUN set -eux; \
+	dpkgArch="$(dpkg --print-architecture)"; \
+		case "${dpkgArch##*-}" in \
+			amd64) goRelArch='linux-amd64'; ;; \
+			armhf) goRelArch='linux-armv6l'; ;; \
+			arm64) goRelArch='linux-arm64'; ;; \
+		esac; \
+ 	wget -nv -O go.tgz "https://golang.org/dl/go${GOLANG_VERSION}.${goRelArch}.tar.gz"; \
+ 	tar -C /usr/local -xzf go.tgz; \
+ 	rm go.tgz;
+
+ENV GOPATH=/go
+ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
+
+RUN set -eux; \
+    mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
+    chmod -R 777 "$GOPATH";
+
+ARG VPP_REPO=master
+
+# Install VPP
+RUN set -eux; \
+	apt-get update; \
+	curl -fsSL https://packagecloud.io/install/repositories/fdio/${VPP_REPO}/script.deb.sh | bash; \
+	apt-get update && apt-get install -V -y \
+        vpp \
+        vpp-plugin-core \
+	; \
+	rm -rf /var/lib/apt/lists/*
+
+COPY vpp.conf /etc/vpp/vpp.conf
+
+WORKDIR /src
+
+CMD ["/usr/bin/vpp", "-c", "/etc/vpp/vpp.conf"]
