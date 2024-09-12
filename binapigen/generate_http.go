@@ -25,9 +25,9 @@ func init() {
 
 // library dependencies
 const (
-	httpPkg   = GoImportPath("net/http")
-	ioutilPkg = GoImportPath("io/ioutil")
-	jsonPkg   = GoImportPath("encoding/json")
+	httpPkg = GoImportPath("net/http")
+	OsPkg   = GoImportPath("os")
+	jsonPkg = GoImportPath("encoding/json")
 )
 
 func GenerateHTTP(gen *Generator, file *File) *GenFile {
@@ -72,7 +72,7 @@ func genHTTPHandler(g *GenFile, svc *Service) {
 		g.P("mux.HandleFunc(", strconv.Quote("/"+rpc.VPP.Request), ", func(w ", httpPkg.Ident("ResponseWriter"), ", req *", httpPkg.Ident("Request"), ") {")
 		g.P("var request = new(", rpc.MsgRequest.GoName, ")")
 		if len(rpc.MsgRequest.Fields) > 0 {
-			g.P("b, err := ", ioutilPkg.Ident("ReadAll"), "(req.Body)")
+			g.P("b, err := ", OsPkg.Ident("ReadAll"), "(req.Body)")
 			g.P("if err != nil {")
 			g.P("	", httpPkg.Ident("Error"), "(w, \"read body failed\", ", httpPkg.Ident("StatusBadRequest"), ")")
 			g.P("	return")
