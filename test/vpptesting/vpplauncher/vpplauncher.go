@@ -18,7 +18,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strconv"
@@ -133,7 +132,7 @@ func (p *VPP) CheckRunning() bool {
 	if _, err := os.Stat(p.opts.Pidfile); err != nil {
 		return false
 	}
-	b, err := ioutil.ReadFile(p.opts.Pidfile)
+	b, err := os.ReadFile(p.opts.Pidfile)
 	if err != nil {
 		return false
 	}
