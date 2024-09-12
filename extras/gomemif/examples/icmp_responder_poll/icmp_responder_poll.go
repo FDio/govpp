@@ -85,11 +85,12 @@ func Connected(i *memif.Interface) error {
 					fmt.Printf("pktLen: %d\n", pktLen)
 					gopkt := gopacket.NewPacket(pkt[:pktLen], layers.LayerTypeEthernet, gopacket.NoCopy)
 					etherLayer := gopkt.Layer(layers.LayerTypeEthernet)
+					tx_dstMAC := etherLayer.(*layers.Ethernet).SrcMAC
 					if etherLayer.(*layers.Ethernet).EthernetType == layers.EthernetTypeARP {
 
 						rEth := layers.Ethernet{
 							SrcMAC:       net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-							DstMAC:       net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+							DstMAC:       tx_dstMAC,
 							EthernetType: layers.EthernetTypeARP,
 						}
 						rArp := layers.ARP{
@@ -100,7 +101,7 @@ func Connected(i *memif.Interface) error {
 							Operation:         layers.ARPReply,
 							SourceHwAddress:   []byte(net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}),
 							SourceProtAddress: []byte("\xc0\xa8\x01\x01"),
-							DstHwAddress:      []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
+							DstHwAddress:      []byte(tx_dstMAC),
 							DstProtAddress:    []byte("\xc0\xa8\x01\x02"),
 						}
 						buf := gopacket.NewSerializeBuffer()
@@ -135,9 +136,8 @@ func Connected(i *memif.Interface) error {
 
 						// Build packet layers.
 						ethResp := layers.Ethernet{
-							DstMAC: net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa},
-							//DstMAC: net.HardwareAddr{0x02, 0xfe, 0xa8, 0x77, 0xaf, 0x20},
-							SrcMAC: []byte(net.HardwareAddr{0x02, 0xfe, 0x08, 0x88, 0x45, 0x7f}),
+							SrcMAC: []byte(net.HardwareAddr{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}),
+							DstMAC: []byte(tx_dstMAC),
 
 							EthernetType: layers.EthernetTypeIPv4,
 						}
