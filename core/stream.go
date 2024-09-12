@@ -263,7 +263,7 @@ func (s *Stream) recvReply() (*vppReply, error) {
 		}
 		return reply, nil
 	case <-timeoutTimer.C:
-		err := fmt.Errorf("no reply received within the timeout period %s", timeout)
+		err := fmt.Errorf("%w %s", ErrReplyTimeout, timeout)
 		return nil, err
 	case <-s.ctx.Done():
 		return nil, s.ctx.Err()

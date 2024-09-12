@@ -337,7 +337,7 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 				"expSeqNum": expSeqNum,
 				"channel":   ch.id,
 			}).Debugf("timeout (%v) waiting for reply: %s", timeout, msg.GetMessageName())
-			err = fmt.Errorf("no reply received within the timeout period %s", timeout)
+			err = fmt.Errorf("%w %s", ErrReplyTimeout, timeout)
 			return false, err
 		}
 	}

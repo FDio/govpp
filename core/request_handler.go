@@ -31,6 +31,7 @@ var ReplyChannelTimeout = time.Millisecond * 100
 var (
 	ErrNotConnected = errors.New("not connected to VPP, ignoring the request")
 	ErrProbeTimeout = errors.New("probe reply not received within timeout period")
+	ErrReplyTimeout = errors.New("no reply received within the timeout period")
 )
 
 // watchRequests watches for requests on the request API channel and forwards them as messages to VPP.
