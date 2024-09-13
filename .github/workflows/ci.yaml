@@ -27,6 +27,15 @@ jobs:
         with:
           config_file: '.github/ci/yamllint.yml'
 
+  markdownlint:
+    name: "Lint Markdown"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: DavidAnson/markdownlint-cli2-action@v17
+        with:
+          fix: true
+          globs: '**/*.md'
+
   go-mod:
     name: "Check go.mod"
     strategy:
