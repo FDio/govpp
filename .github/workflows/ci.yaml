@@ -68,7 +68,7 @@ jobs:
       matrix:
         go: [ '1.22' ]
     env:
-      VERSION: v0.10.0
+      VERSION: v0.11.0
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
