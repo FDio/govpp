@@ -47,6 +47,10 @@ func TestAPIJSON(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
 	ctx := test.Context
 
+	if test.VPPVersion() < "24.06" {
+		t.Skip("memclnt.GetAPIJSON is not supported in VPP < 24.06")
+	}
+
 	c := memclnt.NewServiceClient(test.Conn)
 
 	reply, err := c.GetAPIJSON(ctx, &memclnt.GetAPIJSON{})
