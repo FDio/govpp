@@ -15,37 +15,53 @@
 package integration
 
 import (
-	"context"
 	"io"
 	"testing"
 
 	interfaces "go.fd.io/govpp/binapi/interface"
+	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/vpe"
 	"go.fd.io/govpp/test/vpptesting"
 )
 
-// TestVersion tests that getting VPP version works.
+// TestVersion tests getting VPP version works.
 func TestVersion(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
+	ctx := test.Context
 
-	vpeRPC := vpe.NewServiceClient(test.Conn)
+	c := vpe.NewServiceClient(test.Conn)
 
-	versionInfo, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{})
+	reply, err := c.ShowVersion(ctx, &vpe.ShowVersion{})
 	if err != nil {
 		t.Fatalf("getting version failed: %v", err)
 	}
 
-	t.Logf("VPP version: %v", versionInfo.Version)
-	if versionInfo.Version == "" {
+	t.Logf("VPP version: %v", reply.Version)
+	if reply.Version == "" {
 		t.Fatal("expected VPP version to not be empty")
 	}
 }
 
-// TestInterfacesLoopback tests that creating a loopback interface works and returns
+// TestAPIJSON tests getting VPP API JSON.
+func TestAPIJSON(t *testing.T) {
+	test := vpptesting.SetupVPP(t)
+	ctx := test.Context
+
+	c := memclnt.NewServiceClient(test.Conn)
+
+	reply, err := c.GetAPIJSON(ctx, &memclnt.GetAPIJSON{})
+	if err != nil {
+		t.Fatalf("getting version failed: %v", err)
+	}
+
+	t.Logf("JSON:\n%s", reply.JSON)
+}
+
+// TestInterfacesLoopback tests creating a loopback interface works and returns
 // non-zero ID and that the interface will be listed in interface dump.
 func TestInterfacesLoopback(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
-	ctx := context.Background()
+	ctx := test.Context
 
 	ifacesRPC := interfaces.NewServiceClient(test.Conn)
 

@@ -11,6 +11,27 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.11.0
+
+> _19 September 2024_
+
+### Changes
+
+- Minor changes (#223)
+- Add well-known reply timeout error (#234)
+
+### GoMemif
+
+- Gomemif improvemets (#228)
+- Improves gomemif library (#216)
+
+### CI
+
+- Add Release workflow with goreleaser (#202)
+- Add Login to ghcr step to release Workflow (#212)
+- Extras integration testing (#233)
+- lint: check markdown files (#238)
+
 ## 0.10.0
 
 > _03 April 2024_
