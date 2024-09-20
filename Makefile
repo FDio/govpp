@@ -110,7 +110,7 @@ install-goreleaser: ## Install goreleaser
 	@go install github.com/goreleaser/goreleaser/v2@latest
 
 .PHONY: release-snapshot
-release-snapshot:
+release-snapshot: ## Release snapshot
 	@goreleaser release --clean --snapshot
 
 .PHONY: generate
