@@ -104,6 +104,15 @@ install-proxy: ## Install vpp-proxy
 	@echo "# installing vpp-proxy ${VERSION}"
 	@go install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
 
+.PHONY: install-goreleaser
+install-goreleaser: ## Install goreleaser
+	@echo "# installing goreleaser"
+	@go install github.com/goreleaser/goreleaser/v2@latest
+
+.PHONY: release-snapshot
+release-snapshot: ## Release snapshot
+	@goreleaser release --clean --snapshot
+
 .PHONY: generate
 generate: generate-binapi ## Generate all
 
