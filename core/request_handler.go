@@ -204,7 +204,12 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	//
 	context, err := c.codec.DecodeMsgContext(data, msg.GetMessageType())
 	if err != nil {
-		log.WithField("msg_id", msgID).Warnf("Unable to decode message context: %v", err)
+		log.WithFields(logger.Fields{
+			"context":  context,
+			"msg_id":   msgID,
+			"msg_name": msg.GetMessageName(),
+			"msg_crc":  msg.GetCrcString(),
+		}).Warnf("Unable to decode message context: %v", err)
 		return
 	}
 
@@ -228,7 +233,12 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		}
 		return
 	}(); err != nil {
-		log.WithField("msg", msg).Warnf("Unable to decode message: %v", err)
+		log.WithFields(logger.Fields{
+			"context":  context,
+			"msg_id":   msgID,
+			"msg_name": msg.GetMessageName(),
+			"msg_crc":  msg.GetCrcString(),
+		}).Warnf("Unable to decode message: %v", err)
 		return
 	}
 
@@ -236,11 +246,12 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		log.WithFields(logger.Fields{
 			"context":  context,
 			"msg_id":   msgID,
+			"msg_name": msg.GetMessageName(),
+			"msg_crc":  msg.GetCrcString(),
 			"msg_size": len(data),
 			"channel":  chanID,
 			"is_multi": isMulti,
 			"seq_num":  seqNum,
-			"msg_crc":  msg.GetCrcString(),
 		}).Debugf("<-- govpp RECEIVE: %s", msg.GetMessageName())
 	}
 
@@ -256,8 +267,11 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	c.channelsLock.RUnlock()
 	if !ok {
 		log.WithFields(logger.Fields{
-			"channel": chanID,
-			"msg_id":  msgID,
+			"context":  context,
+			"channel":  chanID,
+			"msg_id":   msgID,
+			"msg_name": msg.GetMessageName(),
+			"msg_crc":  msg.GetCrcString(),
 		}).Error("Channel ID not known, ignoring the message.")
 		return
 	}

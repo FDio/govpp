@@ -10,6 +10,7 @@ import (
 const (
 	DebugEnvVar = "DEBUG_GOVPP"
 
+	debugOptConn     = "conn"
 	debugOptMsgId    = "msgid"
 	debugOptChannels = "channels"
 )
@@ -23,6 +24,9 @@ var (
 
 // init initializes global logger
 func init() {
+	if os.Getenv("DEBUG_GOVPP_CONN") != "" {
+		debugMap[debugOptConn] = "true"
+	}
 	log.Formatter = &logrus.TextFormatter{
 		EnvironmentOverrideColors: true,
 	}

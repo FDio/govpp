@@ -58,6 +58,7 @@ if docker run -i --privileged \
     -e TEST=integration \
     -e CGO_ENABLED=0 \
     -e DEBUG_GOVPP \
+    -e DEBUG_GOVPP_CONN \
     -e GOTESTSUM_FORMAT \
     -e CLICOLOR_FORCE \
     -v "$(cd "${SCRIPT_DIR}/.." && pwd)":/src \

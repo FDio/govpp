@@ -23,6 +23,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"go.fd.io/govpp/adapter"
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/codec"
@@ -96,8 +97,14 @@ type ConnectionEvent struct {
 	Error error
 }
 
+var (
+	connIdCounter uint64 // global connection ID counter
+)
+
 // Connection represents a shared memory connection to VPP via vppAdapter.
 type Connection struct {
+	connId uint64 // connection ID
+
 	vppClient adapter.VppAPI // VPP binary API client
 
 	maxAttempts int           // interval for reconnect attempts
@@ -155,6 +162,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 	}
 
 	c := &Connection{
+		connId:              atomic.AddUint64(&connIdCounter, 1),
 		vppClient:           binapi,
 		maxAttempts:         attempts,
 		recInterval:         interval,
@@ -173,7 +181,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 	}
 	c.channelPool = genericpool.New[*Channel](func() *Channel {
 		if isDebugOn(debugOptChannels) {
-			log.Debugf("allocating new channel")
+			log.Debugf("govpp: allocating new channel")
 		}
 		// create new channel without ID
 		return &Channel{
@@ -186,6 +194,13 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 			receiveReplyTimeout: ReplyChannelTimeout,
 		}
 	})
+
+	if isDebugOn(debugOptConn) {
+		log.WithFields(logrus.Fields{
+			"connId": c.connId,
+			"async":  async,
+		}).Infof("govpp: NEW Connection")
+	}
 
 	binapi.SetMsgCallback(c.msgCallback)
 	return c
@@ -263,6 +278,13 @@ func (c *Connection) Disconnect() {
 
 	if c.vppClient != nil {
 		c.disconnectVPP()
+	}
+
+	if isDebugOn(debugOptConn) {
+		log.WithFields(logrus.Fields{
+			"connId": c.connId,
+			"async":  c.async,
+		}).Infof("govpp: Connection CLOSED")
 	}
 }
 
