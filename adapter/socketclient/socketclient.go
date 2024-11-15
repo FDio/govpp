@@ -423,8 +423,6 @@ func (c *Client) close() error {
 	}
 	setMsgRequestHeader(msg, c.clientIndex, uint32(deleteMsgContext))
 
-	log.Infof("sending socklntDel (%d bytes): % 0X", len(msg), msg)
-
 	if err := c.writeMsg(msg); err != nil {
 		log.Debugln("Write error: ", err)
 		return err
@@ -434,9 +432,8 @@ func (c *Client) close() error {
 	if err != nil {
 		var nerr net.Error
 		if errors.As(err, &nerr) && nerr.Timeout() {
-			log.Info("sockclnt_delete_reply: timeout")
-			// we accept timeout for reply
-			return nil
+			log.Debugf("timeout read sockclnt_delete_reply: %w", err)
+			return nil // we accept timeout for reply
 		}
 		log.Debugln("Read sockclnt_delete_reply error:", err)
 		return err
