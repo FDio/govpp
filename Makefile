@@ -43,7 +43,7 @@ endif
 # Package cloud repo for VPP.
 VPP_REPO		  ?= release
 # VPP Docker image to use for api generation (gen-binapi-docker)
-VPP_IMG 	      ?= ligato/vpp-base:24.02-release
+VPP_IMG 	      ?= ligato/vpp-base:24.06-release
 # Local VPP directory used for binary api generation (gen-binapi-from-code)
 VPP_DIR           ?=
 # Target directory for generated go api bindings
@@ -103,6 +103,15 @@ install-generator: ## Install binapi-generator
 install-proxy: ## Install vpp-proxy
 	@echo "# installing vpp-proxy ${VERSION}"
 	@go install ${GO_BUILD_ARGS} ./cmd/vpp-proxy
+
+.PHONY: install-goreleaser
+install-goreleaser: ## Install goreleaser
+	@echo "# installing goreleaser"
+	@go install github.com/goreleaser/goreleaser/v2@latest
+
+.PHONY: release-snapshot
+release-snapshot: ## Release snapshot
+	@goreleaser release --clean --snapshot
 
 .PHONY: generate
 generate: generate-binapi ## Generate all

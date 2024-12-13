@@ -15,10 +15,11 @@
 package libmemif
 
 import (
-	"github.com/google/gopacket"
 	"io"
 	"sync"
 	"time"
+
+	"github.com/google/gopacket"
 )
 
 type memoizedPacket struct {

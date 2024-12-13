@@ -36,6 +36,10 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
+      - name: "Print environment"
+        run: |
+          env | sort
+
       - name: "Release Version"
         if: success() && startsWith(github.ref, 'refs/tags/v')
         uses: goreleaser/goreleaser-action@v6

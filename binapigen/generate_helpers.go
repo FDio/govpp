@@ -50,7 +50,7 @@ func genHelperMethods(g *GenFile, typName, goName string) {
 		genIPXPrefixHelpers(g, goName, 4)
 	case "ip6_prefix":
 		genIPXPrefixHelpers(g, goName, 6)
-		
+
 	}
 }
 

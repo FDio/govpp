@@ -1,6 +1,9 @@
 package core_test
 
 import (
+	"strings"
+	"testing"
+
 	. "github.com/onsi/gomega"
 	"go.fd.io/govpp/api"
 	interfaces "go.fd.io/govpp/binapi/interface"
@@ -9,8 +12,6 @@ import (
 	"go.fd.io/govpp/binapi/memclnt"
 	"go.fd.io/govpp/binapi/memif"
 	"go.fd.io/govpp/core"
-	"strings"
-	"testing"
 )
 
 const traceSize = 10

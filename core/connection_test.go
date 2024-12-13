@@ -15,6 +15,7 @@
 package core_test
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"testing"
@@ -341,6 +342,7 @@ func TestSimpleRequestWithTimeout(t *testing.T) {
 	err := reqCtx1.ReceiveReply(reply)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
+	Expect(errors.Is(err, core.ErrReplyTimeout)).To(Equal(true))
 
 	ctx.mockVpp.MockReplyWithContext(
 		// reply for the previous request
@@ -492,6 +494,7 @@ func TestRequestsOrdering(t *testing.T) {
 	err = reqCtx1.ReceiveReply(reply1)
 	Expect(err).ToNot(BeNil())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
+	Expect(errors.Is(err, core.ErrReplyTimeout)).To(Equal(true))
 }
 
 func TestCycleOverSetOfSequenceNumbers(t *testing.T) {

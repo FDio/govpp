@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -60,4 +61,5 @@ func TestStreamReply(t *testing.T) {
 	_, err = ctx.stream.RecvMsg()
 	Expect(err).Should(HaveOccurred())
 	Expect(err.Error()).To(HavePrefix("no reply received within the timeout period"))
+	Expect(errors.Is(err, ErrReplyTimeout)).To(Equal(true))
 }

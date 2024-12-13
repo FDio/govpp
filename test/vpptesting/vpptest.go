@@ -26,6 +26,7 @@ import (
 
 	"github.com/mitchellh/go-ps"
 	"github.com/sirupsen/logrus"
+	"go.fd.io/govpp/binapi/vpe"
 
 	"go.fd.io/govpp/adapter/socketclient"
 	"go.fd.io/govpp/adapter/statsclient"
@@ -62,6 +63,7 @@ type TestCtx struct {
 	statsConn  *govppcore.StatsConnection
 	memclntRPC memclnt.RPCService
 	vlibRPC    vlib.RPCService
+	version    string
 }
 
 func SetupVPP(t testing.TB) (tc *TestCtx) {
@@ -117,6 +119,7 @@ func SetupVPP(t testing.TB) (tc *TestCtx) {
 
 	memclntRPC := memclnt.NewServiceClient(conn)
 	vlibRPC := vlib.NewServiceClient(conn)
+	vpeRPC := vpe.NewServiceClient(conn)
 
 	// send ping
 	vpeInfo, err := memclntRPC.ControlPing(context.Background(), &memclnt.ControlPing{})
@@ -128,6 +131,12 @@ func SetupVPP(t testing.TB) (tc *TestCtx) {
 	vppPID := uint32(vppCmd.PID())
 	if vpeInfo.VpePID != vppPID {
 		t.Fatalf("expected VPP PID to be %v, got %v", vppPID, vpeInfo.VpePID)
+	}
+
+	// get version
+	versionInfo, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{})
+	if err != nil {
+		t.Fatalf("getting vpp version failed: %v", err)
 	}
 
 	go func() {
@@ -155,6 +164,7 @@ func SetupVPP(t testing.TB) (tc *TestCtx) {
 		Conn:       conn,
 		memclntRPC: memclntRPC,
 		vlibRPC:    vlibRPC,
+		version:    versionInfo.Version,
 	}
 }
 
@@ -171,6 +181,10 @@ func vppAlreadyRunning() error {
 		}
 	}
 	return nil
+}
+
+func (ctx *TestCtx) VPPVersion() string {
+	return ctx.version
 }
 
 func (ctx *TestCtx) StatsConn() *govppcore.StatsConnection {

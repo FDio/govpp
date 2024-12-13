@@ -15,10 +15,11 @@
 package core
 
 import (
-	"go.fd.io/govpp/api"
 	"sort"
 	"sync"
 	"time"
+
+	"go.fd.io/govpp/api"
 )
 
 // default buffer size

@@ -28,6 +28,8 @@ builds:
       - -X go.fd.io/govpp/version.commit={{.FullCommit}}
       - -X go.fd.io/govpp/version.branch={{.Branch}}
       - -X go.fd.io/govpp/version.buildStamp={{.Timestamp}}
+      - -X go.fd.io/govpp/version.buildUser={{if index .Env "USER"}}{{.Env.USER}}{{else}}goreleaser{{end}}
+      - -X go.fd.io/govpp/version.buildHost={{if index .Env "HOSTNAME"}}{{.Env.HOSTNAME}}{{else}}goreleaser{{end}}
 
 archives:
   - id: govpp-archive
@@ -53,10 +55,11 @@ changelog:
 
 dockers:
   - dockerfile: Dockerfile.govpp
+    skip_push: auto
     image_templates:
       - "ghcr.io/fdio/govpp:{{ .Tag }}"
-      - "ghcr.io/fdio/govpp:v{{ .Major }}.{{ .Minor }}"
-      - "ghcr.io/fdio/govpp:latest"
+      - "{{if not .Prerelease}}ghcr.io/fdio/govpp:v{{ .Major }}.{{ .Minor }}{{end}}"
+      - "{{if not .Prerelease}}ghcr.io/fdio/govpp:latest{{end}}"
     build_flag_templates:
       - "--pull"
       - "--label=org.opencontainers.image.created={{.Date}}"

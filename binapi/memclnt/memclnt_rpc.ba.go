@@ -12,6 +12,7 @@ import (
 type RPCService interface {
 	APIVersions(ctx context.Context, in *APIVersions) (*APIVersionsReply, error)
 	ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error)
+	GetAPIJSON(ctx context.Context, in *GetAPIJSON) (*GetAPIJSONReply, error)
 	GetFirstMsgID(ctx context.Context, in *GetFirstMsgID) (*GetFirstMsgIDReply, error)
 	MemclntCreate(ctx context.Context, in *MemclntCreate) (*MemclntCreateReply, error)
 	MemclntCreateV2(ctx context.Context, in *MemclntCreateV2) (*MemclntCreateV2Reply, error)
@@ -46,6 +47,15 @@ func (c *serviceClient) APIVersions(ctx context.Context, in *APIVersions) (*APIV
 
 func (c *serviceClient) ControlPing(ctx context.Context, in *ControlPing) (*ControlPingReply, error) {
 	out := new(ControlPingReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) GetAPIJSON(ctx context.Context, in *GetAPIJSON) (*GetAPIJSONReply, error) {
+	out := new(GetAPIJSONReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

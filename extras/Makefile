@@ -16,5 +16,9 @@ clean:
 	@echo "=> cleaning extras"
 	go clean -v ./...
 
+test-extras: extras
+	## Run extras integration tests
+	@echo "# running extras integration tests"
+	VPP_REPO=$(VPP_REPO) ./test/run_integration.sh
 
 .PHONY: build extras clean
