@@ -194,6 +194,7 @@ func (s *Stream) SendMsg(msg api.Message) error {
 	if err := s.conn.processRequest(s.channel, req); err != nil {
 		return err
 	}
+	s.conn.requestPool.Put(req)
 	s.Lock()
 	s.pkgPath = s.conn.GetMessagePath(msg)
 	s.Unlock()
@@ -216,9 +217,12 @@ func (s *Stream) RecvMsg() (api.Message, error) {
 	// allocate message instance
 	msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 	// decode message data
-	if err := s.channel.msgCodec.DecodeMsg(reply.data, msg); err != nil {
+	if err = s.channel.msgCodec.DecodeMsg(reply.data, msg); err != nil {
 		return nil, err
 	}
+	reply.err = nil
+	s.conn.replyPool.Put(reply)
+
 	return msg, nil
 }
 
