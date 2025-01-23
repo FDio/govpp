@@ -29,8 +29,7 @@ func newStatsClient() adapter.StatsAPI {
 }
 
 func BenchmarkStatClientNodeStatsGet(b *testing.B) {
-	ctx := vpptesting.SetupVPP(b)
-	defer ctx.TeardownVPP()
+	vpptesting.SetupVPP(b)
 
 	b.Run("1", func(b *testing.B) {
 		benchStatClientNodeStatsGet(b, 1)
@@ -61,8 +60,7 @@ func benchStatClientNodeStatsGet(b *testing.B, repeatN int) {
 }
 
 func BenchmarkStatClientNodeStatsUpdate(b *testing.B) {
-	ctx := vpptesting.SetupVPP(b)
-	defer ctx.TeardownVPP()
+	vpptesting.SetupVPP(b)
 
 	b.Run("1", func(b *testing.B) {
 		benchStatClientNodeStatsLoad(b, 1)
@@ -93,8 +91,7 @@ func benchStatClientNodeStatsLoad(b *testing.B, repeatN int) {
 }
 
 func BenchmarkStatClientStatsUpdate(b *testing.B) {
-	ctx := vpptesting.SetupVPP(b)
-	defer ctx.TeardownVPP()
+	vpptesting.SetupVPP(b)
 
 	b.Run("1", func(b *testing.B) {
 		benchStatClientStatsUpdate(b, 1)
