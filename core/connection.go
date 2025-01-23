@@ -135,6 +135,9 @@ type Connection struct {
 	msgControlPing      api.Message
 	msgControlPingReply api.Message
 
+	requestPool sync.Pool
+	replyPool   sync.Pool
+
 	traceLock sync.Mutex
 	trace     *Trace // API tracer (disabled by default)
 }
@@ -170,6 +173,8 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 		msgControlPing:      msgControlPing,
 		msgControlPingReply: msgControlPingReply,
 		channelIdPool:       newIDPool(0x7fff),
+		requestPool:         sync.Pool{New: func() interface{} { return &vppRequest{} }},
+		replyPool:           sync.Pool{New: func() interface{} { return &vppReply{} }},
 	}
 	c.channelPool = genericpool.New[*Channel](func() *Channel {
 		if isDebugOn(debugOptChannels) {
