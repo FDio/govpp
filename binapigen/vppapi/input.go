@@ -71,7 +71,11 @@ func ResolveVppInput(input string) (*VppInput, error) {
 	if err != nil {
 		return nil, err
 	}
-	return inputRef.Retrieve()
+	v, err := inputRef.Retrieve()
+	if err != nil {
+		return v, fmt.Errorf("retrieve error: %w", err)
+	}
+	return v, nil
 }
 
 // VppInput defines VPP API input source.
