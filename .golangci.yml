@@ -5,9 +5,11 @@
 ---
 run:
   timeout: 5m
-  skip-dirs:
+
+issues:
+  exclude-dirs:
     - adapter/mock
-  skip-files:
+  exclude-files:
     - ".*\\.ba.\\.go$"
 
 linters:
