@@ -79,44 +79,57 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 	// print contents
 	logf("file contents:")
 	for _, rootKey := range rootNode.GetKeys() {
-		length := rootNode.At(rootKey).Len()
-		if length > 0 {
-			logf(" - %2d %s", length, rootKey)
-		}
+		keyNode := rootNode.At(rootKey)
+		length := keyNode.Len()
+		logf(" - %-15s %3d\t(type: %v)", rootKey, length, keyNode.GetType())
 	}
 
 	file = new(File)
 
+	logf("parsing file CRC")
+
 	// parse file CRC
-	crc := rootNode.At(fileVersionCrc)
-	if crc.GetType() == jsongo.TypeValue {
-		file.CRC = crc.MustGetString()
+	crcNode := rootNode.At(fileVersionCrc)
+	if crcNode.GetType() == jsongo.TypeValue {
+		file.CRC = crcNode.MustGetString()
+	} else {
+		logf("key %q expected to be TypeValue, but is %v", fileVersionCrc, crcNode.GetType())
 	}
 
+	logf("parsing file options")
+
 	// parse file options
-	opt := rootNode.Map(fileOptions)
-	if opt.GetType() == jsongo.TypeMap {
+	optNode := rootNode.Map(fileOptions)
+	if optNode.GetType() == jsongo.TypeMap {
 		file.Options = make(map[string]string)
-		for _, key := range opt.GetKeys() {
+		for _, key := range optNode.GetKeys() {
 			optionKey := key.(string)
-			optionVal := opt.At(key).MustGetString()
+			optionVal := optNode.At(key).MustGetString()
 			file.Options[optionKey] = optionVal
 		}
+	} else {
+		logf("key %q expected to be TypeMap, but is %v", fileOptions, optNode.GetType())
 	}
+
+	logf("parsing file imports")
 
 	// parse imports
 	importsNode := rootNode.Map(fileImports)
-	file.Imports = make([]string, 0, importsNode.Len())
-	uniq := make(map[string]struct{})
-	for i := 0; i < importsNode.Len(); i++ {
-		importNode := importsNode.At(i)
-		imp := importNode.MustGetString()
-		if _, ok := uniq[imp]; ok {
-			logf("duplicate import found: %v", imp)
-			continue
+	if importsNode.GetType() == jsongo.TypeArray {
+		file.Imports = make([]string, 0, importsNode.Len())
+		uniq := make(map[string]struct{})
+		for i := 0; i < importsNode.Len(); i++ {
+			importNode := importsNode.At(i)
+			imp := importNode.MustGetString()
+			if _, ok := uniq[imp]; ok {
+				logf("duplicate import found: %v", imp)
+				continue
+			}
+			uniq[imp] = struct{}{}
+			file.Imports = append(file.Imports, imp)
 		}
-		uniq[imp] = struct{}{}
-		file.Imports = append(file.Imports, imp)
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileImports, importsNode.GetType())
 	}
 
 	// avoid duplicate objects
@@ -130,33 +143,47 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 		return false
 	}
 
+	logf("parsing enums")
+
 	// parse enum types
 	enumsNode := rootNode.Map(fileEnums)
-	file.EnumTypes = make([]EnumType, 0)
-	for i := 0; i < enumsNode.Len(); i++ {
-		enum, err := parseEnum(enumsNode.At(i))
-		if err != nil {
-			return nil, err
+	if enumsNode.GetType() == jsongo.TypeArray {
+		file.EnumTypes = make([]EnumType, 0)
+		for i := 0; i < enumsNode.Len(); i++ {
+			enum, err := parseEnum(enumsNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			if exists(enum.Name) {
+				continue
+			}
+			file.EnumTypes = append(file.EnumTypes, *enum)
 		}
-		if exists(enum.Name) {
-			continue
-		}
-		file.EnumTypes = append(file.EnumTypes, *enum)
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileEnums, enumsNode.GetType())
 	}
+
+	logf("parsing enum flags")
 
 	// parse enumflags types
 	enumflagsNode := rootNode.Map(fileEnumflags)
-	file.EnumflagTypes = make([]EnumType, 0)
-	for i := 0; i < enumflagsNode.Len(); i++ {
-		enumflag, err := parseEnum(enumflagsNode.At(i))
-		if err != nil {
-			return nil, err
+	if enumflagsNode.GetType() == jsongo.TypeArray {
+		file.EnumflagTypes = make([]EnumType, 0)
+		for i := 0; i < enumflagsNode.Len(); i++ {
+			enumflag, err := parseEnum(enumflagsNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			if exists(enumflag.Name) {
+				continue
+			}
+			file.EnumflagTypes = append(file.EnumflagTypes, *enumflag)
 		}
-		if exists(enumflag.Name) {
-			continue
-		}
-		file.EnumflagTypes = append(file.EnumflagTypes, *enumflag)
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileEnumflags, enumflagsNode.GetType())
 	}
+
+	logf("parsing aliases")
 
 	// parse alias types
 	aliasesNode := rootNode.Map(fileAliases)
@@ -173,35 +200,51 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 			}
 			file.AliasTypes = append(file.AliasTypes, *alias)
 		}
+	} else {
+		logf("key %q expected to be TypeMap, but is %v", fileAliases, aliasesNode.GetType())
 	}
+
+	logf("parsing types")
 
 	// parse struct types
 	typesNode := rootNode.Map(fileTypes)
-	file.StructTypes = make([]StructType, 0)
-	for i := 0; i < typesNode.Len(); i++ {
-		structyp, err := parseStruct(typesNode.At(i))
-		if err != nil {
-			return nil, err
+	if typesNode.GetType() == jsongo.TypeArray {
+		file.StructTypes = make([]StructType, 0)
+		for i := 0; i < typesNode.Len(); i++ {
+			structyp, err := parseStruct(typesNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			if exists(structyp.Name) {
+				continue
+			}
+			file.StructTypes = append(file.StructTypes, *structyp)
 		}
-		if exists(structyp.Name) {
-			continue
-		}
-		file.StructTypes = append(file.StructTypes, *structyp)
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileTypes, typesNode.GetType())
 	}
+
+	logf("parsing unions")
 
 	// parse union types
 	unionsNode := rootNode.Map(fileUnions)
-	file.UnionTypes = make([]UnionType, 0)
-	for i := 0; i < unionsNode.Len(); i++ {
-		union, err := parseUnion(unionsNode.At(i))
-		if err != nil {
-			return nil, err
+	if unionsNode.GetType() == jsongo.TypeArray {
+		file.UnionTypes = make([]UnionType, 0)
+		for i := 0; i < unionsNode.Len(); i++ {
+			union, err := parseUnion(unionsNode.At(i))
+			if err != nil {
+				return nil, err
+			}
+			if exists(union.Name) {
+				continue
+			}
+			file.UnionTypes = append(file.UnionTypes, *union)
 		}
-		if exists(union.Name) {
-			continue
-		}
-		file.UnionTypes = append(file.UnionTypes, *union)
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileUnions, unionsNode.GetType())
 	}
+
+	logf("parsing messages")
 
 	// parse messages
 	messagesNode := rootNode.Map(fileMessages)
@@ -214,7 +257,11 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 			}
 			file.Messages[i] = *msg
 		}
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileMessages, messagesNode.GetType())
 	}
+
+	logf("parsing services")
 
 	// parse services
 	servicesNode := rootNode.Map(fileServices)
@@ -230,7 +277,11 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 			}
 			file.Service.RPCs[i] = *svc
 		}
+	} else {
+		logf("key %q expected to be TypeMap, but is %v", fileServices, servicesNode.GetType())
 	}
+
+	logf("parsing counters")
 
 	// parse counters
 	countersNode := rootNode.Map(fileCounters)
@@ -243,7 +294,11 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 			}
 			file.Counters[i] = *c
 		}
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", fileCounters, countersNode.GetType())
 	}
+
+	logf("parsing paths")
 
 	// parse paths
 	pathsNode := rootNode.Map(filePaths)
@@ -253,9 +308,13 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 			counterPaths, err := parsePath(pathsNode.At(i))
 			if err != nil {
 				return nil, err
+			} else if counterPaths == nil {
+				continue
 			}
 			file.Paths = append(file.Paths, *counterPaths...)
 		}
+	} else {
+		logf("key %q expected to be TypeArray, but is %v", filePaths, pathsNode.GetType())
 	}
 
 	return file, nil
@@ -616,18 +675,26 @@ func parseCounter(counterNode *jsongo.Node) (*Counter, error) {
 // parseCounter parses VPP binary API service object from JSON node
 func parsePath(pathsNode *jsongo.Node) (*[]CounterPaths, error) {
 	paths := make([]CounterPaths, 0)
+	if pathsNode.GetType() == jsongo.TypeMap {
+		// TODO: fix parsing for this case
+		logf("PATHS NODE IS MAP")
+		return nil, nil
+	} /*else if pathsNode.GetType() == jsongo.TypeArray {
+		// expected
+	}*/
 NodeLoop:
 	for i := 0; i < pathsNode.Len(); i++ {
-		if pathValues := pathsNode.At(i); pathValues.GetType() == jsongo.TypeMap {
+		pathNode := pathsNode.At(i)
+		if pathValues := pathNode; pathValues.GetType() == jsongo.TypeMap {
 			for j, path := range paths {
-				if path.Name == pathsNode.At(i).At(counter).Get().(string) {
-					paths[j].Paths = append(path.Paths, pathsNode.At(i).At(counterPath).Get().(string))
+				if path.Name == pathNode.At(counter).Get().(string) {
+					paths[j].Paths = append(path.Paths, pathNode.At(counterPath).Get().(string))
 					continue NodeLoop
 				}
 			}
 			path := CounterPaths{
-				Name:  pathsNode.At(i).At(counter).Get().(string),
-				Paths: []string{pathsNode.At(i).At(counterPath).Get().(string)},
+				Name:  pathNode.At(counter).Get().(string),
+				Paths: []string{pathNode.At(counterPath).Get().(string)},
 			}
 			paths = append(paths, path)
 		}

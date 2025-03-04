@@ -121,11 +121,11 @@ func ParseFile(apiFile string) (*File, error) {
 	base := filepath.Base(apiFile)
 	name := base[:strings.Index(base, ".")]
 
-	logf("parsing file %q (%d bytes)", base, len(content))
+	logf("Parsing file: %q (%d bytes)", base, len(content))
 
 	file, err := ParseRaw(content)
 	if err != nil {
-		return nil, fmt.Errorf("parsing API file %q data failed: %w", base, err)
+		return nil, fmt.Errorf("parsing API file %q failed: %w", base, err)
 	}
 	file.Name = name
 	file.Path = apiFile
