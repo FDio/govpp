@@ -266,14 +266,15 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	// treat this as a last part of the reply
 	lastReplyReceived := isMulti && msgID == c.pingReplyID
 
+	reply := c.replyPool.Get().(*vppReply)
+	reply.msgID = msgID
+	reply.seqNum = seqNum
+	reply.data = append([]byte(nil), data...)
+	reply.lastReceived = lastReplyReceived
+
 	// send the data to the channel, it needs to be copied,
 	// because it will be freed after this function returns
-	sendReply(ch, &vppReply{
-		msgID:        msgID,
-		seqNum:       seqNum,
-		data:         append([]byte(nil), data...),
-		lastReceived: lastReplyReceived,
-	})
+	sendReply(ch, reply)
 
 	// store actual time of this reply
 	c.lastReplyLock.Lock()
