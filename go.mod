@@ -1,6 +1,7 @@
 module go.fd.io/govpp
 
 go 1.18
+toolchain go1.24.1
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.2
@@ -30,8 +31,8 @@ require (
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/net v0.33.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
 
