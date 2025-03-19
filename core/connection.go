@@ -112,8 +112,7 @@ type Connection struct {
 	async             bool          // connection to be operated in async mode
 	healthCheckExited chan struct{} // used to notify Disconnect() callers about healthcheck loop exit
 
-	codec  MessageCodec      // message codec
-	msgIDs map[string]uint16 // map of message IDs indexed by message name + CRC
+	codec MessageCodec // message codec
 
 	msgMapByPathLock sync.RWMutex                      // lock for the msgMapByPath map
 	msgMapByPath     map[string]map[uint16]api.Message // map of messages indexed by message ID which are indexed by path
@@ -166,7 +165,6 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 		healthCheckExited:   make(chan struct{}),
 		async:               async,
 		codec:               codec.DefaultCodec,
-		msgIDs:              make(map[string]uint16),
 		msgMapByPath:        make(map[string]map[uint16]api.Message),
 		channels:            make(map[uint16]*Channel),
 		subscriptions:       make(map[uint16][]*subscriptionCtx),
@@ -437,7 +435,7 @@ HealthCheck:
 				break
 			}
 
-			if err == ErrProbeTimeout {
+			if errors.Is(err, ErrProbeTimeout) {
 				failedChecks++
 				log.Warnf("VPP health check probe timed out after %v (%d. timeout)", HealthCheckReplyTimeout, failedChecks)
 				if failedChecks > HealthCheckThreshold {
@@ -484,27 +482,7 @@ func (c *Connection) GetMessageID(msg api.Message) (uint16, error) {
 	if c == nil {
 		return 0, errors.New("nil connection passed in")
 	}
-	pkgPath := c.GetMessagePath(msg)
-	msgID, err := c.vppClient.GetMsgID(msg.GetMessageName(), msg.GetCrcString())
-	if err != nil {
-		return 0, err
-	}
-	func() {
-		c.msgMapByPathLock.Lock()
-		defer c.msgMapByPathLock.Unlock()
-
-		if pathMsgs, pathOk := c.msgMapByPath[pkgPath]; !pathOk {
-			c.msgMapByPath[pkgPath] = make(map[uint16]api.Message)
-			c.msgMapByPath[pkgPath][msgID] = msg
-		} else if _, msgOk := pathMsgs[msgID]; !msgOk {
-			c.msgMapByPath[pkgPath][msgID] = msg
-		}
-	}()
-	if _, ok := c.msgIDs[getMsgNameWithCrc(msg)]; ok {
-		return msgID, nil
-	}
-	c.msgIDs[getMsgNameWithCrc(msg)] = msgID
-	return msgID, nil
+	return c.vppClient.GetMsgID(msg.GetMessageName(), msg.GetCrcString())
 }
 
 // LookupByID looks up message name and crc by ID.
@@ -540,6 +518,7 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 		if debugMsgIDs {
 			l.Debugf("retrieving IDs for %d messages", len(msgs))
 		}
+		c.msgMapByPath[pkgPath] = make(map[uint16]api.Message)
 		tt := time.Now()
 		var nn int
 		for _, msg := range msgs {
@@ -553,6 +532,7 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 			n++
 			nn++
 
+			c.msgMapByPath[pkgPath][msgID] = msg
 			if msg.GetMessageName() == c.msgControlPing.GetMessageName() {
 				c.pingReqID = msgID
 				c.msgControlPing = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
