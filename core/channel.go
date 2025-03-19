@@ -171,11 +171,11 @@ func (ch *Channel) nextSeqNum() uint16 {
 }
 
 func (ch *Channel) newRequest(msg api.Message, multi bool) *vppRequest {
-	return &vppRequest{
-		msg:    msg,
-		seqNum: ch.nextSeqNum(),
-		multi:  multi,
-	}
+	request := ch.conn.requestPool.Get().(*vppRequest)
+	request.msg = msg
+	request.seqNum = ch.nextSeqNum()
+	request.multi = multi
+	return request
 }
 
 func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
