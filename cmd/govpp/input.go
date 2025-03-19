@@ -38,7 +38,7 @@ func resolveVppInput(input string) (*vppapi.VppInput, error) {
 
 	vppInput, err := vppapi.ResolveVppInput(input)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("resolve VPP input: %w", err)
 	}
 
 	tookSec := time.Since(t).Seconds()

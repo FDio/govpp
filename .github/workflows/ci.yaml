@@ -1,5 +1,7 @@
 ---
 name: CI
+env:
+  GO_VERSION: '1.23'
 on:
   push:
     tags:
@@ -8,7 +10,7 @@ on:
       - master
       - ci
   pull_request:
-# Allows running this workflow manually
+  # Allows running this workflow manually
   workflow_dispatch:
 
 permissions:
@@ -40,7 +42,7 @@ jobs:
     name: "Check go.mod"
     strategy:
       matrix:
-        go: [ '1.22' ]
+        go: [ '${{ env.GO_VERSION }}' ]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -66,7 +68,7 @@ jobs:
     name: "Check generated binapi"
     strategy:
       matrix:
-        go: [ '1.22' ]
+        go: [ '${{ env.GO_VERSION }}' ]
     env:
       VERSION: v0.11.0
     runs-on: ubuntu-latest
@@ -90,7 +92,7 @@ jobs:
     name: "Build and test"
     strategy:
       matrix:
-        go: [ '1.22' ]
+        go: [ '${{ env.GO_VERSION }}' ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -123,7 +125,7 @@ jobs:
     name: "GolangCI"
     strategy:
       matrix:
-        go: [ '1.22' ]
+        go: [ '${{ env.GO_VERSION }}' ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
