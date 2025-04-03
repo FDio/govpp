@@ -23,6 +23,8 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/sirupsen/logrus"
+
 	"go.fd.io/govpp/adapter"
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/codec"
@@ -96,8 +98,15 @@ type ConnectionEvent struct {
 	Error error
 }
 
+var (
+	connIdCounter uint64 // global connection ID counter
+)
+
 // Connection represents a shared memory connection to VPP via vppAdapter.
 type Connection struct {
+	logger logrus.Ext1FieldLogger
+	connId uint64 // connection ID
+
 	vppClient adapter.VppAPI // VPP binary API client
 
 	maxAttempts int           // interval for reconnect attempts
@@ -154,6 +163,7 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 	}
 
 	c := &Connection{
+		connId:              atomic.AddUint64(&connIdCounter, 1),
 		vppClient:           binapi,
 		maxAttempts:         attempts,
 		recInterval:         interval,
@@ -169,9 +179,13 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 		msgControlPingReply: msgControlPingReply,
 		channelIdPool:       newIDPool(0x7fff),
 	}
+	c.logger = log.WithFields(logrus.Fields{"connId": c.connId})
+	if async {
+		c.logger = c.logger.WithField("async", true)
+	}
 	c.channelPool = genericpool.New[*Channel](func() *Channel {
 		if isDebugOn(debugOptChannels) {
-			log.Debugf("allocating new channel")
+			c.logger.Debugf("allocating new channel")
 		}
 		// create new channel without ID
 		return &Channel{
@@ -184,6 +198,10 @@ func newConnection(binapi adapter.VppAPI, attempts int, interval time.Duration, 
 			receiveReplyTimeout: ReplyChannelTimeout,
 		}
 	})
+
+	if isDebugOn(debugOptConn) {
+		c.logger.Infof("govpp: NEW Connection")
+	}
 
 	binapi.SetMsgCallback(c.msgCallback)
 	return c
@@ -223,17 +241,24 @@ func AsyncConnect(binapi adapter.VppAPI, attempts int, interval time.Duration) (
 
 // connectVPP performs blocking attempt to connect to VPP.
 func (c *Connection) connectVPP() error {
-	log.Debug("Connecting to VPP..")
+	var t0 time.Time
+	if isDebugOn(debugOptCore) {
+		c.logger.Debug("Connecting to VPP..")
+		t0 = time.Now()
+	}
 
 	// blocking connect
 	if err := c.vppClient.Connect(); err != nil {
 		return err
 	}
-	log.Debugf("Connected to VPP")
+
+	if isDebugOn(debugOptCore) {
+		c.logger.Debugf("Connected to VPP (took %v)", time.Since(t0))
+	}
 
 	if err := c.retrieveMessageIDs(); err != nil {
 		if err := c.vppClient.Disconnect(); err != nil {
-			log.Debugf("disconnecting vpp client failed: %v", err)
+			c.logger.Debugf("disconnecting vpp client failed: %v", err)
 		}
 		return fmt.Errorf("VPP is incompatible: %v", err)
 	}
@@ -262,17 +287,21 @@ func (c *Connection) Disconnect() {
 	if c.vppClient != nil {
 		c.disconnectVPP()
 	}
+
+	if isDebugOn(debugOptConn) {
+		c.logger.Infof("govpp: Connection CLOSED")
+	}
 }
 
 // disconnectVPP disconnects from VPP in case it is connected
 func (c *Connection) disconnectVPP() {
 	if atomic.CompareAndSwapUint32(&c.vppConnected, 1, 0) {
-		log.Debug("Disconnecting from VPP..")
+		c.logger.Debug("Disconnecting from VPP..")
 
 		if err := c.vppClient.Disconnect(); err != nil {
-			log.Debugf("Disconnect from VPP failed: %v", err)
+			c.logger.Debugf("Disconnect from VPP failed: %v", err)
 		}
-		log.Debug("Disconnected from VPP")
+		c.logger.Debug("Disconnected from VPP")
 	}
 }
 
@@ -304,9 +333,10 @@ func (c *Connection) newAPIChannel(reqChanBufSize, replyChanBufSize int) (*Chann
 
 // releaseAPIChannel releases API channel that needs to be closed.
 func (c *Connection) releaseAPIChannel(ch *Channel) {
-	l := log.WithField("id", ch.id)
 	if isDebugOn(debugOptChannels) {
+		l := c.logger.WithField("chanId", ch.id)
 		l.Debug("releasing channel")
+		defer l.Debug("channel ID returned to pool")
 	}
 
 	// delete the channel from channels map
@@ -315,9 +345,6 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 	c.channelsLock.Unlock()
 	// return ID to the ID pool
 	c.channelIdPool.Put(ch.id)
-	if isDebugOn(debugOptChannels) {
-		l.Debug("channel ID returned to pool")
-	}
 	// return channel to the pool
 	go c.channelPool.Put(ch)
 }
@@ -345,7 +372,7 @@ func (c *Connection) connectLoop() backgroundLoopStatus {
 	// loop until connected
 	for {
 		if err := c.vppClient.WaitReady(); err != nil {
-			log.Debugf("wait ready failed: %v", err)
+			c.logger.Debugf("wait ready failed: %v", err)
 		}
 		if err := c.connectVPP(); err == nil {
 			// signal connected event
@@ -353,7 +380,7 @@ func (c *Connection) connectLoop() backgroundLoopStatus {
 			return resume
 		} else if reconnectAttempts < c.maxAttempts {
 			reconnectAttempts++
-			log.Warnf("connecting failed (attempt %d/%d): %v", reconnectAttempts, c.maxAttempts, err)
+			c.logger.Debugf("connecting failed (attempt %d/%d): %v", reconnectAttempts, c.maxAttempts, err)
 		} else {
 			c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Failed, Error: err})
 			return terminate
@@ -362,7 +389,7 @@ func (c *Connection) connectLoop() backgroundLoopStatus {
 		select {
 		case <-c.healthCheckDone:
 			// Terminate the connect loop on connection disconnect
-			log.Debug("Disconnected on request, exiting connect loop.")
+			c.logger.Debug("Disconnected on request, exiting connect loop.")
 			return terminate
 		case <-time.After(c.recInterval):
 		}
@@ -375,7 +402,7 @@ func (c *Connection) healthCheckLoop() backgroundLoopStatus {
 	// create a separate API channel for health check probes
 	ch, err := c.newAPIChannel(1, 1)
 	if err != nil {
-		log.Error("Failed to create health check API channel, health check will be disabled:", err)
+		c.logger.Warn("Failed to create health check API channel, health check will be disabled:", err)
 		return terminate
 	}
 	defer ch.Close()
@@ -394,13 +421,13 @@ HealthCheck:
 		select {
 		case <-c.healthCheckDone:
 			// Terminate the health check loop on connection disconnect
-			log.Debug("Disconnected on request, exiting health check loop.")
+			c.logger.Debug("Disconnected on request, exiting health check loop.")
 			return terminate
 		case <-probeInterval.C:
 			// try draining probe replies from previous request before sending next one
 			select {
 			case <-ch.replyChan:
-				log.Debug("drained old probe reply from reply channel")
+				c.logger.Debug("drained old probe reply from reply channel")
 			default:
 			}
 
@@ -423,7 +450,7 @@ HealthCheck:
 					c.lastReplyLock.Unlock()
 
 					if sinceLastReply < HealthCheckReplyTimeout {
-						log.Warnf("VPP health check probe timing out, but some request on other channel was received %v ago, continue waiting!", sinceLastReply)
+						c.logger.Warnf("VPP health check probe timing out, but some request on other channel was received %v ago, continue waiting!", sinceLastReply)
 						continue
 					}
 				}
@@ -432,22 +459,22 @@ HealthCheck:
 
 			if errors.Is(err, ErrProbeTimeout) {
 				failedChecks++
-				log.Warnf("VPP health check probe timed out after %v (%d. timeout)", HealthCheckReplyTimeout, failedChecks)
+				c.logger.Warnf("VPP health check probe timed out after %v (%d. timeout)", HealthCheckReplyTimeout, failedChecks)
 				if failedChecks > HealthCheckThreshold {
 					// in case of exceeded failed check threshold, assume VPP unresponsive
-					log.Errorf("VPP does not responding, the health check exceeded threshold for timeouts (>%d)", HealthCheckThreshold)
+					c.logger.Warnf("VPP is not responding, the health check exceeded threshold for timeouts (>%d)", HealthCheckThreshold)
 					c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: NotResponding})
 					break HealthCheck
 				}
 			} else if err != nil {
 				// in case of error, assume VPP disconnected
-				log.Errorf("VPP health check probe failed: %v", err)
+				c.logger.Warnf("VPP health check probe failed: %v", err)
 				c.sendConnEvent(ConnectionEvent{Timestamp: time.Now(), State: Disconnected, Error: err})
 				break HealthCheck
 			} else if failedChecks > 0 {
 				// in case of success after failed checks, clear failed check counter
 				failedChecks = 0
-				log.Infof("VPP health check probe OK")
+				c.logger.Debugf("VPP health check probe OK")
 			}
 		}
 	}
@@ -505,11 +532,11 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 	t := time.Now()
 	debugMsgIDs := isDebugOn(debugOptMsgId)
 	if debugMsgIDs {
-		log.Debugf("start retrieving message IDs for %d pkg paths", len(msgsByPath))
+		c.logger.Debugf("start retrieving message IDs for %d pkg paths", len(msgsByPath))
 	}
 	var n int
 	for pkgPath, msgs := range msgsByPath {
-		l := log.WithField("pkgPath", pkgPath)
+		l := c.logger.WithField("pkgPath", pkgPath)
 		if debugMsgIDs {
 			l.Debugf("retrieving IDs for %d messages", len(msgs))
 		}
@@ -546,7 +573,7 @@ func (c *Connection) retrieveMessageIDs() (err error) {
 		}
 	}
 	if debugMsgIDs {
-		log.WithField("took", time.Since(t)).
+		c.logger.WithField("took", time.Since(t)).
 			Debugf("done retrieving IDs for %d messages", n)
 	}
 
@@ -557,6 +584,6 @@ func (c *Connection) sendConnEvent(event ConnectionEvent) {
 	select {
 	case c.connChan <- event:
 	default:
-		log.Warn("Connection state channel is full, discarding value.")
+		c.logger.Warn("Connection state channel is full, discarding value.")
 	}
 }

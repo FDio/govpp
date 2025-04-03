@@ -23,22 +23,6 @@ import (
 	"time"
 )
 
-const (
-	Major      = 0
-	Minor      = 12
-	Patch      = 0
-	PreRelease = "dev"
-)
-
-// String formats the version string using semver format.
-func String() string {
-	v := fmt.Sprintf("v%d.%d.%d", Major, Minor, Patch)
-	if PreRelease != "" {
-		v += "-" + PreRelease
-	}
-	return v
-}
-
 // Following variables should normally be updated via `-ldflags "-X ..."`.
 // However, the version string is hard-coded to ensure it is always included
 // even with bare go build/install.
@@ -80,6 +64,7 @@ func binaryModTime() (time.Time, error) {
 	return fileInfo.ModTime(), nil
 }
 
+// Version return semver string.
 func Version() string {
 	return version
 }

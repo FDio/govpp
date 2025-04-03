@@ -38,7 +38,7 @@ func newRootCmd(cli Cli) *cobra.Command {
 		Short: "GoVPP CLI tool",
 		Long: color.Sprintf(logo, version.Short(), version.BuiltBy(), version.BuildTime()) + "\n" +
 			"GoVPP is an universal CLI tool for any VPP-related development.",
-		Version: version.String(),
+		Version: version.Version(),
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			InitOptions(cli, &glob)
 			return nil

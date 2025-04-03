@@ -10,25 +10,31 @@ import (
 const (
 	DebugEnvVar = "DEBUG_GOVPP"
 
+	debugOptCore     = "core"
+	debugOptConn     = "conn"
 	debugOptMsgId    = "msgid"
 	debugOptChannels = "channels"
 )
 
 var (
-	debugOn  = os.Getenv(DebugEnvVar) != ""
-	debugMap = initDebugMap(os.Getenv(DebugEnvVar))
+	debugMap map[string]struct{}
+	debugOn  bool
 
-	log = logrus.New()
+	log *logrus.Logger
 )
 
 // init initializes global logger
 func init() {
+	debugMap = initDebugMap(os.Getenv(DebugEnvVar))
+	debugOn = isDebugOn(debugOptCore)
+
+	log = logrus.New()
 	log.Formatter = &logrus.TextFormatter{
 		EnvironmentOverrideColors: true,
 	}
 	if debugOn {
 		log.Level = logrus.DebugLevel
-		log.Debugf("govpp: debug enabled %+v", debugMap)
+		log.Debugf("govpp: debug enabled %v", debugMap)
 	}
 }
 
@@ -37,29 +43,18 @@ func isDebugOn(u string) bool {
 	return ok
 }
 
-func initDebugMap(s string) map[string]string {
-	debugMap := make(map[string]string)
+func initDebugMap(s string) map[string]struct{} {
+	debugSet := make(map[string]struct{})
 	for _, p := range splitString(s) {
-		var key, val string
-		kv := strings.SplitN(p, "=", 2)
-		key = kv[0]
-		if len(kv) > 1 {
-			val = kv[1]
-		} else {
-			val = "true"
-		}
-		debugMap[key] = val
+		key := strings.SplitN(p, "=", 2)[0] // We only need the key
+		debugSet[key] = struct{}{}
 	}
-	return debugMap
+	return debugSet
 }
 
 func splitString(s string) []string {
 	return strings.FieldsFunc(s, func(c rune) bool {
-		switch c {
-		case ';', ',', ' ':
-			return true
-		}
-		return false
+		return c == ';' || c == ','
 	})
 }
 
