@@ -244,12 +244,14 @@ func (s *Stream) recvReply() (*vppReply, error) {
 	if s.conn == nil {
 		return nil, errors.New("stream closed")
 	}
+	var timeoutC <-chan time.Time
 	timeout := s.replyTimeout
-	if timeout <= 0 {
+	if timeout > 0 {
 		timeout = maxInt64
+		timeoutTimer := time.NewTimer(timeout)
+		defer timeoutTimer.Stop()
+		timeoutC = timeoutTimer.C
 	}
-	timeoutTimer := time.NewTimer(timeout)
-	defer timeoutTimer.Stop()
 	select {
 	case reply, ok := <-s.channel.replyChan:
 		if !ok {
@@ -262,7 +264,7 @@ func (s *Stream) recvReply() (*vppReply, error) {
 			return nil, reply.err
 		}
 		return reply, nil
-	case <-timeoutTimer.C:
+	case <-timeoutC:
 		err := fmt.Errorf("%w %s", ErrReplyTimeout, timeout)
 		return nil, err
 	case <-s.ctx.Done():
