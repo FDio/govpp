@@ -94,7 +94,10 @@ type subscriptionCtx struct {
 // via methods provided by Channel interface in this package. Do not use the same channel from multiple goroutines
 // concurrently, otherwise the responses could mix! Use multiple channels instead.
 type Channel struct {
-	id   uint16
+	logger logrus.Ext1FieldLogger
+
+	id uint16
+
 	conn *Connection
 
 	reqChan   chan *vppRequest // channel for sending the requests to VPP
@@ -116,9 +119,11 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 	if err != nil {
 		return nil, err
 	}
-	l := log.WithField("id", chID)
+
+	chanLogger := c.logger.WithField("chanId", chID)
 	if isDebugOn(debugOptChannels) {
-		l.Debugf("start preparing channel")
+		chanLogger.Debugf("start preparing channel")
+		defer chanLogger.Debugf("done preparing channel")
 	}
 	// get a channel from the channel pool
 	channel := c.channelPool.Get()
@@ -128,6 +133,7 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 	}
 	// set channel ID
 	channel.id = chID
+	channel.logger = chanLogger
 	// recreate request/reply channels if not the right capacity
 	if cap(channel.reqChan) != reqChanBufSize {
 		channel.reqChan = make(chan *vppRequest, reqChanBufSize)
@@ -139,9 +145,6 @@ func (c *Connection) newChannel(reqChanBufSize, replyChanBufSize int) (*Channel,
 	c.channelsLock.Lock()
 	c.channels[channel.id] = channel
 	c.channelsLock.Unlock()
-	if isDebugOn(debugOptChannels) {
-		l.Debugf("done preparing channel")
-	}
 	return channel, nil
 }
 
@@ -200,7 +203,7 @@ func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
 		for _, msg := range comperr.IncompatibleMessages {
 			s += fmt.Sprintf(" - %s\n", msg)
 		}
-		log.Debugf("ERROR: check compatibility: %v:\nIncompatible messages:\n%v", comperr, s)
+		ch.logger.Debugf("ERROR: check compatibility: %v:\nIncompatible messages:\n%v", comperr, s)
 	}
 	return &comperr
 }
@@ -209,7 +212,7 @@ func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.M
 	msgID, err := ch.msgIdentifier.GetMessageID(event)
 	if err != nil {
 		if debugOn {
-			log.WithFields(logrus.Fields{
+			ch.logger.WithFields(logrus.Fields{
 				"msg_name": event.GetMessageName(),
 				"msg_crc":  event.GetCrcString(),
 			}).Errorf("unable to retrieve message ID: %v", err)
@@ -261,7 +264,7 @@ func (req *multiRequestCtx) ReceiveReply(msg api.Message) (lastReplyReceived boo
 }
 
 func (sub *subscriptionCtx) Unsubscribe() error {
-	log.WithFields(logrus.Fields{
+	sub.conn.logger.WithFields(logrus.Fields{
 		"msg_name": sub.event.GetMessageName(),
 		"msg_id":   sub.msgID,
 	}).Debug("Removing notification subscription.")
@@ -319,7 +322,7 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 		case vppReply := <-ch.replyChan:
 			ignore, lastReplyReceived, err = ch.processReply(vppReply, expSeqNum, msg)
 			if ignore {
-				log.WithFields(logrus.Fields{
+				ch.logger.WithFields(logrus.Fields{
 					"expSeqNum": expSeqNum,
 					"channel":   ch.id,
 				}).Warnf("ignoring received reply: %+v (expecting: %s)", vppReply, msg.GetMessageName())
@@ -327,13 +330,13 @@ func (ch *Channel) receiveReplyInternal(msg api.Message, expSeqNum uint16) (last
 			}
 			return lastReplyReceived, err
 		case <-slowTimer.C:
-			log.WithFields(logrus.Fields{
+			ch.logger.WithFields(logrus.Fields{
 				"expSeqNum": expSeqNum,
 				"channel":   ch.id,
 			}).Warnf("reply is taking too long (>%v): %v ", slowReplyDur, msg.GetMessageName())
 			continue
 		case <-timeoutTimer.C:
-			log.WithFields(logrus.Fields{
+			ch.logger.WithFields(logrus.Fields{
 				"expSeqNum": expSeqNum,
 				"channel":   ch.id,
 			}).Debugf("timeout (%v) waiting for reply: %s", timeout, msg.GetMessageName())
@@ -348,7 +351,7 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 	cmpSeqNums := compareSeqNumbers(reply.seqNum, expSeqNum)
 	if cmpSeqNums == -1 {
 		// reply received too late, ignore the message
-		log.WithField("seqNum", reply.seqNum).
+		ch.logger.WithField("seqNum", reply.seqNum).
 			Warn("Received reply to an already closed binary API request")
 		ignore = true
 		return
@@ -408,7 +411,7 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 			case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 				retval = int32(f.Uint())
 			default:
-				logrus.Warnf("invalid kind (%v) for Retval field of message %v", f.Kind(), msg.GetMessageName())
+				ch.logger.Warnf("invalid kind (%v) for Retval field of message %v", f.Kind(), msg.GetMessageName())
 			}
 			err = api.RetvalToVPPApiError(retval)
 		}
@@ -419,7 +422,7 @@ func (ch *Channel) processReply(reply *vppReply, expSeqNum uint16, msg api.Messa
 
 func (ch *Channel) Reset() {
 	if len(ch.reqChan) > 0 || len(ch.replyChan) > 0 {
-		log.WithField("channel", ch.id).Debugf("draining channel buffers (req: %d, reply: %d)", len(ch.reqChan), len(ch.replyChan))
+		ch.logger.WithField("channel", ch.id).Debugf("draining channel buffers (req: %d, reply: %d)", len(ch.reqChan), len(ch.replyChan))
 	}
 	// Drain any lingering items in the buffers
 	for empty := false; !empty; {

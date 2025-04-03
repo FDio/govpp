@@ -137,10 +137,12 @@ func (w *watcher) watch() {
 func (c *Connection) WatchEvent(ctx context.Context, event api.Message) (api.Watcher, error) {
 	msgID, err := c.GetMessageID(event)
 	if err != nil {
-		log.WithFields(logrus.Fields{
-			"msg_name": event.GetMessageName(),
-			"msg_crc":  event.GetCrcString(),
-		}).Debugf("unable to retrieve event message ID: %v", err)
+		if isDebugOn(debugOptCore) {
+			c.logger.WithFields(logrus.Fields{
+				"msg_name": event.GetMessageName(),
+				"msg_crc":  event.GetCrcString(),
+			}).Debugf("unable to retrieve event message ID: %v", err)
+		}
 		return nil, fmt.Errorf("unable to retrieve event message ID: %v", err)
 	}
 
