@@ -22,9 +22,9 @@ import (
 )
 
 func genMessageEncodingMethods(g *GenFile, msg *Message) {
-	genMessageMethodSize(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageMethodMarshal(g, msg.GoIdent.GoName, msg.Fields)
-	genMessageMethodUnmarshal(g, msg.GoIdent.GoName, msg.Fields)
+	genMessageMethodSize(g, msg.GoName, msg.Fields)
+	genMessageMethodMarshal(g, msg.GoName, msg.Fields)
+	genMessageMethodUnmarshal(g, msg.GoName, msg.Fields)
 }
 
 func genMessageMethodSize(g *GenFile, name string, fields []*Field) {
