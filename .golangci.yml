@@ -3,6 +3,8 @@
 # see docs: https://golangci-lint.run/usage/configuration/
 
 ---
+version: "2"
+
 run:
   timeout: 5m
 
