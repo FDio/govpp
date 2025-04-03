@@ -311,7 +311,9 @@ const defaultBufferSize = 4096
 func (c *Client) connect(sockAddr string) error {
 	addr := &net.UnixAddr{Name: sockAddr, Net: "unix"}
 
-	log.Debugf("Connecting to: %v", c.socketPath)
+	if debug {
+		log.Debugf("Connecting to: %v", c.socketPath)
+	}
 
 	conn, err := net.DialUnix("unix", nil, addr)
 	if err != nil {
@@ -328,7 +330,9 @@ func (c *Client) connect(sockAddr string) error {
 	}
 
 	c.conn = conn
-	log.Debugf("Connected to socket (local addr: %v)", c.conn.LocalAddr().(*net.UnixAddr))
+	if debug {
+		log.Debugf("Connected to socket (local addr: %v)", c.conn.LocalAddr().(*net.UnixAddr))
+	}
 
 	c.reader = bufio.NewReaderSize(c.conn, defaultBufferSize)
 	c.writer = bufio.NewWriterSize(c.conn, defaultBufferSize)
@@ -527,7 +531,9 @@ func (c *Client) writeMsg(msg []byte) error {
 		return err
 	}
 
-	log.Debugf(" -- writeMsg done")
+	if debug {
+		log.Debugf(" -- writeMsg done")
+	}
 
 	return nil
 }
@@ -634,7 +640,9 @@ func (c *Client) readMsgTimeout(buf []byte, timeout time.Duration) ([]byte, erro
 }
 
 func (c *Client) readMsg(buf []byte) ([]byte, error) {
-	log.Debug("reading msg..")
+	if debug {
+		log.Debug("reading msg..")
+	}
 
 	header, ok := c.headerPool.Get().(*[]byte)
 	if !ok {
@@ -651,7 +659,9 @@ func (c *Client) readMsg(buf []byte) ([]byte, error) {
 		return nil, err
 	}
 
-	log.Debugf(" -- readMsg done (buffered: %d)", c.reader.Buffered())
+	if debug {
+		log.Debugf(" -- readMsg done (buffered: %d)", c.reader.Buffered())
+	}
 
 	return msg, nil
 }
@@ -662,10 +672,14 @@ func readMsgHeader(r io.Reader, header []byte) (int, error) {
 		return 0, err
 	}
 	if n == 0 {
-		log.Debugln("zero bytes header")
+		if debug {
+			log.Debugln("zero bytes header")
+		}
 		return 0, nil
 	} else if n != 16 {
-		log.Debugf("invalid header (%d bytes): % 0X", n, header[:n])
+		if debug {
+			log.Debugf("invalid header (%d bytes): % 0X", n, header[:n])
+		}
 		return 0, fmt.Errorf("invalid header (expected 16 bytes, got %d)", n)
 	}
 
@@ -692,7 +706,9 @@ func readMsgData(r io.Reader, buf []byte, dataLen int) ([]byte, error) {
 
 	if dataLen > n {
 		remain := dataLen - n
-		log.Debugf("continue reading remaining %d bytes", remain)
+		if debug {
+			log.Debugf("continue reading remaining %d bytes", remain)
+		}
 		view := msg[n:]
 
 		for remain > 0 {
@@ -704,7 +720,9 @@ func readMsgData(r io.Reader, buf []byte, dataLen int) ([]byte, error) {
 			}
 
 			remain -= nbytes
-			log.Debugf("another data received: %d bytes (remain: %d)", nbytes, remain)
+			if debug {
+				log.Debugf("another data received: %d bytes (remain: %d)", nbytes, remain)
+			}
 
 			view = view[nbytes:]
 		}
