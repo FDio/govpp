@@ -48,5 +48,5 @@ var NewVppAdapter = func(target string) adapter.VppAPI {
 
 // Version returns version of GoVPP.
 func Version() string {
-	return version.String()
+	return version.Version()
 }
