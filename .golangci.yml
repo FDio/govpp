@@ -15,7 +15,6 @@ issues:
     - ".*\\.ba.\\.go$"
 
 linters:
-  disable-all: true
   enable:
     - errcheck
     - gosimple
