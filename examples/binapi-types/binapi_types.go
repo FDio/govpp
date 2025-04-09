@@ -59,6 +59,7 @@ func usageUnion() {
 
 	// initialize union using constructors
 	union = ip_types.AddressUnionIP4(ip_types.IP4Address{192, 168, 1, 10})
+	_ = union
 	union = ip_types.AddressUnionIP6(ip_types.IP6Address{0xff, 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x02})
 
 	// get union value using getters

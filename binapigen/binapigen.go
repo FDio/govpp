@@ -365,12 +365,13 @@ func getMsgType(m vppapi.Message) (msgType, error) {
 				return msgType(-1), fmt.Errorf("message %s is missing ID field", m.Name)
 			}
 		case 1:
-			if field.Name == fieldClientIndex {
+			switch field.Name {
+			case fieldClientIndex:
 				// "client_index" as the second member,
 				// this might be an event message or a request
 				typ = msgTypeEvent
 				wasClientIndex = true
-			} else if field.Name == fieldContext {
+			case fieldContext:
 				// reply needs "context" as the second member
 				typ = msgTypeReply
 			}

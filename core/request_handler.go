@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	logger "github.com/sirupsen/logrus"
 
 	"go.fd.io/govpp/api"
 )
@@ -56,7 +55,7 @@ func (c *Connection) watchRequests(ch *Channel) {
 
 // processRequest processes a single request received on the request channel.
 func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
-	l := ch.logger.WithFields(logger.Fields{
+	l := ch.logger.WithFields(logrus.Fields{
 		"chanId":  ch.id,
 		"seqNum":  req.seqNum,
 		"msgName": req.msg.GetMessageName(),
@@ -78,7 +77,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		return err
 	}
 
-	l = l.WithFields(logger.Fields{
+	l = l.WithFields(logrus.Fields{
 		"msgId": msgID,
 	})
 
@@ -91,12 +90,12 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 	context := packRequestContext(ch.id, req.multi, req.seqNum)
 
-	l = l.WithFields(logger.Fields{
+	l = l.WithFields(logrus.Fields{
 		"context": context,
 		"msgLen":  len(data),
 	})
 
-	if log.Level >= logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
+	if log.Level >= logrus.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		l.Debugf("-->govpp SEND: %T %+v", req.msg, req.msg)
 	}
 
@@ -134,7 +133,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		// send a control ping to determine end of the multipart response
 		pingData, _ := c.codec.EncodeMsg(c.msgControlPing, c.pingReqID)
 
-		if log.Level >= logger.DebugLevel {
+		if log.Level >= logrus.DebugLevel {
 			l.WithField("error", err).Debugf("-->govpp SEND PING: %T", c.msgControlPing)
 		}
 		if c.trace != nil {
@@ -172,10 +171,15 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 // msgCallback is called whenever any binary API message comes from VPP.
 func (c *Connection) msgCallback(msgID uint16, data []byte) {
-	l := c.logger.WithFields(logrus.Fields{
-		"msgId":  msgID,
-		"msgLen": len(data),
-	})
+	var l logrus.Ext1FieldLogger
+	if c.logger == nil {
+		l = logrus.StandardLogger()
+	} else {
+		l = c.logger.WithFields(logrus.Fields{
+			"msgId":  msgID,
+			"msgLen": len(data),
+		})
+	}
 
 	if c == nil {
 		l.Warn("Connection already disconnected, ignoring the message.")
@@ -208,7 +212,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 
 	chanID, isMulti, seqNum := unpackRequestContext(context)
 
-	l = l.WithFields(logger.Fields{
+	l = l.WithFields(logrus.Fields{
 		"chanId":  chanID,
 		"isMulti": isMulti,
 		"seqNum":  seqNum,
@@ -237,7 +241,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		}
 	}
 
-	if log.Level >= logger.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
+	if log.Level >= logrus.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
 		if !decoded {
 			decoded = true
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
@@ -260,7 +264,6 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	c.channelsLock.RUnlock()
 	if !ok {
 		if !decoded {
-			decoded = true
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 			if err := c.codec.DecodeMsg(data, msg); err != nil {
 				l.Debugf("Unable to decode message: %v", err)

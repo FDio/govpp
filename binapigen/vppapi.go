@@ -273,11 +273,11 @@ func CleanMessageComment(comment string) string {
 	comment = strings.TrimSuffix(comment, "*/")
 
 	// remove \\brief from the comment
-	comment = strings.Replace(comment, `\\brief`, "", -1)
-	comment = strings.Replace(comment, `\brief`, "", -1)
+	comment = strings.ReplaceAll(comment, `\\brief`, "")
+	comment = strings.ReplaceAll(comment, `\brief`, "")
 
 	// replace @param with a dash (-)
-	comment = strings.Replace(comment, "@param", "-", -1)
+	comment = strings.ReplaceAll(comment, "@param", "-")
 
 	return strings.TrimSpace(comment)
 }

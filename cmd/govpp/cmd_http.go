@@ -133,7 +133,8 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			return
 		}
 
-		if req.Method == http.MethodPost {
+		switch req.Method {
+		case http.MethodPost:
 			reqData := make(map[string]interface{})
 
 			// parse body data
@@ -150,7 +151,7 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 
 			// TODO: unmarshal body data into message, send request to VPP, marshal it and send as response
 			http.Error(w, "Sending requests is not implemented yet", http.StatusNotImplemented)
-		} else if req.Method == http.MethodGet {
+		case http.MethodGet:
 			b, err := json.MarshalIndent(msg, "", "  ")
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -160,7 +161,7 @@ func reqHandler(apifile *vppapi.File) func(http.ResponseWriter, *http.Request) {
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 			}
-		} else {
+		default:
 			http.Error(w, "GET or POST are allowed only", http.StatusMethodNotAllowed)
 		}
 	}
