@@ -11,6 +11,7 @@ builds:
     binary: govpp
     env:
       - CGO_ENABLED=0
+      - GOTOOLCHAIN=go1.18
     goos:
       - linux
       - darwin
@@ -33,9 +34,9 @@ builds:
 
 archives:
   - id: govpp-archive
-    builds:
+    ids:
       - govpp-build
-    format: tar.gz
+    formats: [ 'tar.gz' ]
     wrap_in_directory: true
     files:
       - README.md
