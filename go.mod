@@ -1,6 +1,8 @@
 module go.fd.io/govpp
 
-go 1.18
+go 1.23.0
+
+toolchain go1.24.0
 
 require (
 	github.com/bennyscetbun/jsongo v1.1.2
