@@ -11,7 +11,7 @@ builds:
     binary: govpp
     env:
       - CGO_ENABLED=0
-      - GOTOOLCHAIN=go1.18
+      - GOTOOLCHAIN=go1.23
     goos:
       - linux
       - darwin
