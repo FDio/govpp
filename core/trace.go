@@ -51,7 +51,9 @@ func NewTrace(c *Connection, size int) (t *Trace) {
 	c.trace = t
 	c.traceLock.Unlock()
 	t.closeFunc = func() {
+		c.traceLock.Lock()
 		c.trace = nil // no more records
+		c.traceLock.Unlock()
 		close(t.buffer)
 	}
 	go func() {
