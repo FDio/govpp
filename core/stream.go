@@ -249,7 +249,6 @@ func (s *Stream) recvReply() (*vppReply, error) {
 	var timeoutC <-chan time.Time
 	timeout := s.replyTimeout
 	if timeout > 0 {
-		timeout = maxInt64
 		timeoutTimer := time.NewTimer(timeout)
 		defer timeoutTimer.Stop()
 		timeoutC = timeoutTimer.C
