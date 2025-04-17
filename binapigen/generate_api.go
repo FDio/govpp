@@ -446,7 +446,7 @@ func genMessage(g *GenFile, msg *Message) {
 	logf("gen MESSAGE %s (%s) - %d fields", msg.GoName, msg.Name, len(msg.Fields))
 
 	genMessageComment(g, msg)
-	genGenericDefinesComment(g, msg.GoIdent.GoName, msg.Name, "message")
+	genGenericDefinesComment(g, msg.GoName, msg.Name, "message")
 	genMessageStatusInfoComment(g, msg)
 
 	// generate message definition
@@ -472,7 +472,7 @@ func genMessage(g *GenFile, msg *Message) {
 
 func genMessageBaseMethods(g *GenFile, msg *Message) {
 	// Reset method
-	g.P("func (m *", msg.GoIdent.GoName, ") Reset() { *m = ", msg.GoIdent.GoName, "{} }")
+	g.P("func (m *", msg.GoName, ") Reset() { *m = ", msg.GoName, "{} }")
 
 	// GetXXX methods
 	genMessageMethods(g, msg)
@@ -482,20 +482,20 @@ func genMessageBaseMethods(g *GenFile, msg *Message) {
 
 func genMessageComment(g *GenFile, msg *Message) {
 	if msg.Comment != "" {
-		comment := strings.Replace(msg.Comment, "\n", "\n// ", -1)
+		comment := strings.ReplaceAll(msg.Comment, "\n", "\n// ")
 		g.P("// ", comment)
 	}
 }
 
 func genMessageMethods(g *GenFile, msg *Message) {
 	// GetMessageName method
-	g.P("func (*", msg.GoIdent.GoName, ") GetMessageName() string { return ", strconv.Quote(msg.Name), " }")
+	g.P("func (*", msg.GoName, ") GetMessageName() string { return ", strconv.Quote(msg.Name), " }")
 
 	// GetCrcString method
-	g.P("func (*", msg.GoIdent.GoName, ") GetCrcString() string { return ", strconv.Quote(msg.CRC), " }")
+	g.P("func (*", msg.GoName, ") GetCrcString() string { return ", strconv.Quote(msg.CRC), " }")
 
 	// GetMessageType method
-	g.P("func (*", msg.GoIdent.GoName, ") GetMessageType() api.MessageType {")
+	g.P("func (*", msg.GoName, ") GetMessageType() api.MessageType {")
 	g.P("	return ", msgType2apiMessageType(msg.msgType))
 	g.P("}")
 
