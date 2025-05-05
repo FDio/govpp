@@ -138,6 +138,6 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: "Run golangci"
-        uses: golangci/golangci-lint-action@v7  # docs: https://github.com/golangci/golangci-lint-action
+        uses: golangci/golangci-lint-action@v8  # docs: https://github.com/golangci/golangci-lint-action
         with:
           version: latest
