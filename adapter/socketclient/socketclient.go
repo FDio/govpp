@@ -682,9 +682,11 @@ func readMsgHeader(r io.Reader, header []byte) (int, error) {
 		}
 		return 0, fmt.Errorf("invalid header (expected 16 bytes, got %d)", n)
 	}
+	if debug {
+		log.Debugf(" - header read (%d/%d): % 0X", n, len(header), header)
+	}
 
 	dataLen := binary.BigEndian.Uint32(header[8:12])
-
 	return int(dataLen), nil
 }
 
