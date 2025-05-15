@@ -45,7 +45,6 @@ type RPCService interface {
 	IPSourceAndPortRangeCheckAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckAddDel) (*IPSourceAndPortRangeCheckAddDelReply, error)
 	IPSourceAndPortRangeCheckInterfaceAddDel(ctx context.Context, in *IPSourceAndPortRangeCheckInterfaceAddDel) (*IPSourceAndPortRangeCheckInterfaceAddDelReply, error)
 	IPTableAddDel(ctx context.Context, in *IPTableAddDel) (*IPTableAddDelReply, error)
-	IPTableAddDelV2(ctx context.Context, in *IPTableAddDelV2) (*IPTableAddDelV2Reply, error)
 	IPTableAllocate(ctx context.Context, in *IPTableAllocate) (*IPTableAllocateReply, error)
 	IPTableDump(ctx context.Context, in *IPTableDump) (RPCService_IPTableDumpClient, error)
 	IPTableFlush(ctx context.Context, in *IPTableFlush) (*IPTableFlushReply, error)
@@ -57,7 +56,6 @@ type RPCService interface {
 	SetIPFlowHashRouterID(ctx context.Context, in *SetIPFlowHashRouterID) (*SetIPFlowHashRouterIDReply, error)
 	SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2) (*SetIPFlowHashV2Reply, error)
 	SetIPFlowHashV3(ctx context.Context, in *SetIPFlowHashV3) (*SetIPFlowHashV3Reply, error)
-	SwInterfaceIP4EnableDisable(ctx context.Context, in *SwInterfaceIP4EnableDisable) (*SwInterfaceIP4EnableDisableReply, error)
 	SwInterfaceIP6EnableDisable(ctx context.Context, in *SwInterfaceIP6EnableDisable) (*SwInterfaceIP6EnableDisableReply, error)
 	SwInterfaceIP6GetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6GetLinkLocalAddress) (*SwInterfaceIP6GetLinkLocalAddressReply, error)
 	SwInterfaceIP6SetLinkLocalAddress(ctx context.Context, in *SwInterfaceIP6SetLinkLocalAddress) (*SwInterfaceIP6SetLinkLocalAddressReply, error)
@@ -700,15 +698,6 @@ func (c *serviceClient) IPTableAddDel(ctx context.Context, in *IPTableAddDel) (*
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
-func (c *serviceClient) IPTableAddDelV2(ctx context.Context, in *IPTableAddDelV2) (*IPTableAddDelV2Reply, error) {
-	out := new(IPTableAddDelV2Reply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
 func (c *serviceClient) IPTableAllocate(ctx context.Context, in *IPTableAllocate) (*IPTableAllocateReply, error) {
 	out := new(IPTableAllocateReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -903,15 +892,6 @@ func (c *serviceClient) SetIPFlowHashV2(ctx context.Context, in *SetIPFlowHashV2
 
 func (c *serviceClient) SetIPFlowHashV3(ctx context.Context, in *SetIPFlowHashV3) (*SetIPFlowHashV3Reply, error) {
 	out := new(SetIPFlowHashV3Reply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) SwInterfaceIP4EnableDisable(ctx context.Context, in *SwInterfaceIP4EnableDisable) (*SwInterfaceIP4EnableDisableReply, error) {
-	out := new(SwInterfaceIP4EnableDisableReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

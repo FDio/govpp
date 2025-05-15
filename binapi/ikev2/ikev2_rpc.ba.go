@@ -14,15 +14,12 @@ import (
 // RPCService defines RPC service ikev2.
 type RPCService interface {
 	Ikev2ChildSaDump(ctx context.Context, in *Ikev2ChildSaDump) (RPCService_Ikev2ChildSaDumpClient, error)
-	Ikev2ChildSaV2Dump(ctx context.Context, in *Ikev2ChildSaV2Dump) (RPCService_Ikev2ChildSaV2DumpClient, error)
-	Ikev2GetSleepInterval(ctx context.Context, in *Ikev2GetSleepInterval) (*Ikev2GetSleepIntervalReply, error)
 	Ikev2InitiateDelChildSa(ctx context.Context, in *Ikev2InitiateDelChildSa) (*Ikev2InitiateDelChildSaReply, error)
 	Ikev2InitiateDelIkeSa(ctx context.Context, in *Ikev2InitiateDelIkeSa) (*Ikev2InitiateDelIkeSaReply, error)
 	Ikev2InitiateRekeyChildSa(ctx context.Context, in *Ikev2InitiateRekeyChildSa) (*Ikev2InitiateRekeyChildSaReply, error)
 	Ikev2InitiateSaInit(ctx context.Context, in *Ikev2InitiateSaInit) (*Ikev2InitiateSaInitReply, error)
 	Ikev2NonceGet(ctx context.Context, in *Ikev2NonceGet) (*Ikev2NonceGetReply, error)
 	Ikev2PluginGetVersion(ctx context.Context, in *Ikev2PluginGetVersion) (*Ikev2PluginGetVersionReply, error)
-	Ikev2PluginSetSleepInterval(ctx context.Context, in *Ikev2PluginSetSleepInterval) (*Ikev2PluginSetSleepIntervalReply, error)
 	Ikev2ProfileAddDel(ctx context.Context, in *Ikev2ProfileAddDel) (*Ikev2ProfileAddDelReply, error)
 	Ikev2ProfileDisableNatt(ctx context.Context, in *Ikev2ProfileDisableNatt) (*Ikev2ProfileDisableNattReply, error)
 	Ikev2ProfileDump(ctx context.Context, in *Ikev2ProfileDump) (RPCService_Ikev2ProfileDumpClient, error)
@@ -33,8 +30,6 @@ type RPCService interface {
 	Ikev2ProfileSetTs(ctx context.Context, in *Ikev2ProfileSetTs) (*Ikev2ProfileSetTsReply, error)
 	Ikev2ProfileSetUDPEncap(ctx context.Context, in *Ikev2ProfileSetUDPEncap) (*Ikev2ProfileSetUDPEncapReply, error)
 	Ikev2SaDump(ctx context.Context, in *Ikev2SaDump) (RPCService_Ikev2SaDumpClient, error)
-	Ikev2SaV2Dump(ctx context.Context, in *Ikev2SaV2Dump) (RPCService_Ikev2SaV2DumpClient, error)
-	Ikev2SaV3Dump(ctx context.Context, in *Ikev2SaV3Dump) (RPCService_Ikev2SaV3DumpClient, error)
 	Ikev2SetEspTransforms(ctx context.Context, in *Ikev2SetEspTransforms) (*Ikev2SetEspTransformsReply, error)
 	Ikev2SetIkeTransforms(ctx context.Context, in *Ikev2SetIkeTransforms) (*Ikev2SetIkeTransformsReply, error)
 	Ikev2SetLocalKey(ctx context.Context, in *Ikev2SetLocalKey) (*Ikev2SetLocalKeyReply, error)
@@ -96,58 +91,6 @@ func (c *serviceClient_Ikev2ChildSaDumpClient) Recv() (*Ikev2ChildSaDetails, err
 	}
 }
 
-func (c *serviceClient) Ikev2ChildSaV2Dump(ctx context.Context, in *Ikev2ChildSaV2Dump) (RPCService_Ikev2ChildSaV2DumpClient, error) {
-	stream, err := c.conn.NewStream(ctx)
-	if err != nil {
-		return nil, err
-	}
-	x := &serviceClient_Ikev2ChildSaV2DumpClient{stream}
-	if err := x.Stream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type RPCService_Ikev2ChildSaV2DumpClient interface {
-	Recv() (*Ikev2ChildSaV2Details, error)
-	api.Stream
-}
-
-type serviceClient_Ikev2ChildSaV2DumpClient struct {
-	api.Stream
-}
-
-func (c *serviceClient_Ikev2ChildSaV2DumpClient) Recv() (*Ikev2ChildSaV2Details, error) {
-	msg, err := c.Stream.RecvMsg()
-	if err != nil {
-		return nil, err
-	}
-	switch m := msg.(type) {
-	case *Ikev2ChildSaV2Details:
-		return m, nil
-	case *memclnt.ControlPingReply:
-		err = c.Stream.Close()
-		if err != nil {
-			return nil, err
-		}
-		return nil, io.EOF
-	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
-	}
-}
-
-func (c *serviceClient) Ikev2GetSleepInterval(ctx context.Context, in *Ikev2GetSleepInterval) (*Ikev2GetSleepIntervalReply, error) {
-	out := new(Ikev2GetSleepIntervalReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
 func (c *serviceClient) Ikev2InitiateDelChildSa(ctx context.Context, in *Ikev2InitiateDelChildSa) (*Ikev2InitiateDelChildSaReply, error) {
 	out := new(Ikev2InitiateDelChildSaReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -200,15 +143,6 @@ func (c *serviceClient) Ikev2PluginGetVersion(ctx context.Context, in *Ikev2Plug
 		return nil, err
 	}
 	return out, nil
-}
-
-func (c *serviceClient) Ikev2PluginSetSleepInterval(ctx context.Context, in *Ikev2PluginSetSleepInterval) (*Ikev2PluginSetSleepIntervalReply, error) {
-	out := new(Ikev2PluginSetSleepIntervalReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) Ikev2ProfileAddDel(ctx context.Context, in *Ikev2ProfileAddDel) (*Ikev2ProfileAddDelReply, error) {
@@ -357,92 +291,6 @@ func (c *serviceClient_Ikev2SaDumpClient) Recv() (*Ikev2SaDetails, error) {
 	}
 	switch m := msg.(type) {
 	case *Ikev2SaDetails:
-		return m, nil
-	case *memclnt.ControlPingReply:
-		err = c.Stream.Close()
-		if err != nil {
-			return nil, err
-		}
-		return nil, io.EOF
-	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
-	}
-}
-
-func (c *serviceClient) Ikev2SaV2Dump(ctx context.Context, in *Ikev2SaV2Dump) (RPCService_Ikev2SaV2DumpClient, error) {
-	stream, err := c.conn.NewStream(ctx)
-	if err != nil {
-		return nil, err
-	}
-	x := &serviceClient_Ikev2SaV2DumpClient{stream}
-	if err := x.Stream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type RPCService_Ikev2SaV2DumpClient interface {
-	Recv() (*Ikev2SaV2Details, error)
-	api.Stream
-}
-
-type serviceClient_Ikev2SaV2DumpClient struct {
-	api.Stream
-}
-
-func (c *serviceClient_Ikev2SaV2DumpClient) Recv() (*Ikev2SaV2Details, error) {
-	msg, err := c.Stream.RecvMsg()
-	if err != nil {
-		return nil, err
-	}
-	switch m := msg.(type) {
-	case *Ikev2SaV2Details:
-		return m, nil
-	case *memclnt.ControlPingReply:
-		err = c.Stream.Close()
-		if err != nil {
-			return nil, err
-		}
-		return nil, io.EOF
-	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
-	}
-}
-
-func (c *serviceClient) Ikev2SaV3Dump(ctx context.Context, in *Ikev2SaV3Dump) (RPCService_Ikev2SaV3DumpClient, error) {
-	stream, err := c.conn.NewStream(ctx)
-	if err != nil {
-		return nil, err
-	}
-	x := &serviceClient_Ikev2SaV3DumpClient{stream}
-	if err := x.Stream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		return nil, err
-	}
-	return x, nil
-}
-
-type RPCService_Ikev2SaV3DumpClient interface {
-	Recv() (*Ikev2SaV3Details, error)
-	api.Stream
-}
-
-type serviceClient_Ikev2SaV3DumpClient struct {
-	api.Stream
-}
-
-func (c *serviceClient_Ikev2SaV3DumpClient) Recv() (*Ikev2SaV3Details, error) {
-	msg, err := c.Stream.RecvMsg()
-	if err != nil {
-		return nil, err
-	}
-	switch m := msg.(type) {
-	case *Ikev2SaV3Details:
 		return m, nil
 	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()

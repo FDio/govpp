@@ -21,7 +21,6 @@ type RPCService interface {
 	BfdUDPAuthDeactivate(ctx context.Context, in *BfdUDPAuthDeactivate) (*BfdUDPAuthDeactivateReply, error)
 	BfdUDPDel(ctx context.Context, in *BfdUDPDel) (*BfdUDPDelReply, error)
 	BfdUDPDelEchoSource(ctx context.Context, in *BfdUDPDelEchoSource) (*BfdUDPDelEchoSourceReply, error)
-	BfdUDPEnableMultihop(ctx context.Context, in *BfdUDPEnableMultihop) (*BfdUDPEnableMultihopReply, error)
 	BfdUDPGetEchoSource(ctx context.Context, in *BfdUDPGetEchoSource) (*BfdUDPGetEchoSourceReply, error)
 	BfdUDPMod(ctx context.Context, in *BfdUDPMod) (*BfdUDPModReply, error)
 	BfdUDPSessionDump(ctx context.Context, in *BfdUDPSessionDump) (RPCService_BfdUDPSessionDumpClient, error)
@@ -138,15 +137,6 @@ func (c *serviceClient) BfdUDPDel(ctx context.Context, in *BfdUDPDel) (*BfdUDPDe
 
 func (c *serviceClient) BfdUDPDelEchoSource(ctx context.Context, in *BfdUDPDelEchoSource) (*BfdUDPDelEchoSourceReply, error) {
 	out := new(BfdUDPDelEchoSourceReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) BfdUDPEnableMultihop(ctx context.Context, in *BfdUDPEnableMultihop) (*BfdUDPEnableMultihopReply, error) {
-	out := new(BfdUDPEnableMultihopReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

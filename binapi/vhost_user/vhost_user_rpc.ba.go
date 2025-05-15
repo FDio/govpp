@@ -15,6 +15,7 @@ import (
 type RPCService interface {
 	CreateVhostUserIf(ctx context.Context, in *CreateVhostUserIf) (*CreateVhostUserIfReply, error)
 	CreateVhostUserIfV2(ctx context.Context, in *CreateVhostUserIfV2) (*CreateVhostUserIfV2Reply, error)
+	CreateVhostUserIfV3(ctx context.Context, in *CreateVhostUserIfV3) (*CreateVhostUserIfV3Reply, error)
 	DeleteVhostUserIf(ctx context.Context, in *DeleteVhostUserIf) (*DeleteVhostUserIfReply, error)
 	ModifyVhostUserIf(ctx context.Context, in *ModifyVhostUserIf) (*ModifyVhostUserIfReply, error)
 	ModifyVhostUserIfV2(ctx context.Context, in *ModifyVhostUserIfV2) (*ModifyVhostUserIfV2Reply, error)
@@ -40,6 +41,15 @@ func (c *serviceClient) CreateVhostUserIf(ctx context.Context, in *CreateVhostUs
 
 func (c *serviceClient) CreateVhostUserIfV2(ctx context.Context, in *CreateVhostUserIfV2) (*CreateVhostUserIfV2Reply, error) {
 	out := new(CreateVhostUserIfV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) CreateVhostUserIfV3(ctx context.Context, in *CreateVhostUserIfV3) (*CreateVhostUserIfV3Reply, error) {
+	out := new(CreateVhostUserIfV3Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

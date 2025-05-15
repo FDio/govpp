@@ -11,7 +11,6 @@ import (
 // RPCService defines RPC service bpf_trace_filter.
 type RPCService interface {
 	BpfTraceFilterSet(ctx context.Context, in *BpfTraceFilterSet) (*BpfTraceFilterSetReply, error)
-	BpfTraceFilterSetV2(ctx context.Context, in *BpfTraceFilterSetV2) (*BpfTraceFilterSetV2Reply, error)
 }
 
 type serviceClient struct {
@@ -24,15 +23,6 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) BpfTraceFilterSet(ctx context.Context, in *BpfTraceFilterSet) (*BpfTraceFilterSetReply, error) {
 	out := new(BpfTraceFilterSetReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) BpfTraceFilterSetV2(ctx context.Context, in *BpfTraceFilterSetV2) (*BpfTraceFilterSetV2Reply, error) {
-	out := new(BpfTraceFilterSetV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
