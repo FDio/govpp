@@ -26,6 +26,7 @@ import (
 
 	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
@@ -113,17 +114,17 @@ func runVppApiLsCmd(out io.Writer, opts VppApiLsCmdOptions) error {
 	if opts.Format == "" {
 		if opts.ShowMessages {
 			apimsgs := listVPPAPIMessages(apifiles)
-			showVPPAPIMessages(out, apimsgs, opts.IncludeFields)
+			return showVPPAPIMessages(out, apimsgs, opts.IncludeFields)
 		} else if opts.ShowRPC {
-			showVPPAPIRPCs(out, apifiles)
+			return showVPPAPIRPCs(out, apifiles)
 		} else if opts.ShowContents {
-			showVPPAPIContents(out, apifiles)
+			return showVPPAPIContents(out, apifiles)
 		} else if opts.ShowRaw {
 			rawFiles := getVppApiRawFiles(vppInput.ApiDirectory, apifiles)
-			showVPPAPIRaw(out, rawFiles)
+			return showVPPAPIRaw(out, rawFiles)
 		} else {
 			files := vppApiFilesToList(apifiles)
-			showVPPAPIFilesTable(out, files)
+			return showVPPAPIFilesTable(out, files)
 		}
 	} else {
 		if err := formatAsTemplate(out, opts.Format, apifiles); err != nil {
@@ -158,16 +159,17 @@ func getVppApiRawFiles(apiDir string, files []vppapi.File) []VppApiRawFile {
 	return rawFiles
 }
 
-func showVPPAPIRaw(out io.Writer, rawFiles []VppApiRawFile) {
+func showVPPAPIRaw(out io.Writer, rawFiles []VppApiRawFile) error {
 	if len(rawFiles) == 0 {
 		logrus.Errorf("no files to show")
-		return
+		return nil
 	}
 	for _, f := range rawFiles {
 		fmt.Fprintf(out, "# %s (%v)\n", f.Name, f.Path)
 		fmt.Fprintf(out, "%s\n", f.Content)
 		fmt.Fprintln(out)
 	}
+	return nil
 }
 
 // VppApiFile holds info about a single VPP API file used for listing files.
@@ -183,18 +185,28 @@ type VppApiFile struct {
 	NumRPCs     int
 }
 
-func showVPPAPIFilesTable(out io.Writer, apifiles []VppApiFile) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "API", "Version", "CRC", "Path", "Imports", "Messages", "Types", "RPCs", "Options",
+func showVPPAPIFilesTable(out io.Writer, apifiles []VppApiFile) error {
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Row().Alignment().WithPerColumn([]tw.Align{
+		tw.AlignRight, tw.AlignNone, tw.AlignNone, tw.AlignLeft, tw.AlignNone,
+		tw.AlignRight, tw.AlignRight, tw.AlignRight, tw.AlignRight, tw.AlignLeft,
 	})
-	table.SetAutoWrapText(false)
-	table.SetRowLine(false)
-	table.SetBorder(false)
-	table.SetColumnAlignment([]int{
-		tablewriter.ALIGN_RIGHT, 0, 0, tablewriter.ALIGN_LEFT, 0, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_RIGHT, tablewriter.ALIGN_LEFT,
-	})
+	cfg.WithRowAutoWrap(tw.WrapNone)
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Separators: tw.Separators{BetweenRows: tw.Off},
+			},
+		}),
+		tablewriter.WithConfig(cfg.Build()),
+	)
 
+	table.Header(
+		"#", "API", "Version", "CRC", "Path",
+		"Imports", "Messages", "Types", "RPCs", "Options",
+	)
 	for i, apifile := range apifiles {
 		index := i + 1
 
@@ -229,13 +241,15 @@ func showVPPAPIFilesTable(out io.Writer, apifiles []VppApiFile) {
 			importCount = fmt.Sprintf("%2s", "-")
 		}
 
-		row := []string{
-			fmt.Sprint(index), apifile.Name, apiVersion, apiCrc, apiDirPath, importCount, msgs, types, services, options,
+		err := table.Append(
+			fmt.Sprint(index), apifile.Name, apiVersion, apiCrc, apiDirPath,
+			importCount, msgs, types, services, options,
+		)
+		if err != nil {
+			return err
 		}
-
-		table.Append(row)
 	}
-	table.Render()
+	return table.Render()
 }
 
 func vppApiFilesToList(apifiles []vppapi.File) []VppApiFile {
@@ -275,7 +289,7 @@ func pathOfParentAndFile(path string) string {
 
 const maxCommentLengthInColumn = 80
 
-func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
+func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 	var buf bytes.Buffer
 
 	for _, apifile := range apifiles {
@@ -293,14 +307,27 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 
 		// Messages
 		if len(apifile.Messages) > 0 {
-			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "Message", "CRC", "Fields", "Options", "Comment"})
-			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-			table.SetAutoWrapText(false)
-			table.SetRowLine(false)
-			table.SetColumnSeparator(" ")
-			table.SetHeaderLine(false)
-			table.SetBorder(false)
+			cfg := tablewriter.NewConfigBuilder()
+			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			table := tablewriter.NewTable(
+				&buf,
+				tablewriter.WithRendition(tw.Rendition{
+					Borders: tw.BorderNone,
+					Settings: tw.Settings{
+						Separators: tw.Separators{
+							BetweenRows:    tw.Off,
+							BetweenColumns: tw.Off,
+						},
+						Lines: tw.Lines{
+							ShowHeaderLine: tw.Off,
+						},
+					},
+				}),
+				tablewriter.WithRowAutoWrap(tw.WrapNone),
+				tablewriter.WithConfig(cfg.Build()),
+			)
+
+			table.Header("#", "Message", "CRC", "Fields", "Options", "Comment")
 
 			for i, msg := range apifile.Messages {
 				index := i + 1
@@ -308,104 +335,181 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 				msgFields := fmt.Sprintf("%v", len(msg.Fields))
 				msgOptions := shorMessageOptions(msg.Options)
 				msgComment := normalizeMessageComment(msg.Comment)
-				row := []string{strconv.Itoa(index), msg.Name, msgCrc, msgFields, msgOptions, msgComment}
-				table.Append(row)
+				err := table.Append(
+					strconv.Itoa(index), msg.Name, msgCrc, msgFields, msgOptions, msgComment,
+				)
+				if err != nil {
+					return err
+				}
 			}
 
-			table.Render()
+			err := table.Render()
+			if err != nil {
+				return err
+			}
 			buf.Write([]byte("\n"))
 		}
 
 		// Structs
 		if len(apifile.StructTypes) > 0 {
-			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "Type", "Fields"})
-			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-			table.SetAutoWrapText(false)
-			table.SetRowLine(false)
-			table.SetColumnSeparator(" ")
-			table.SetHeaderLine(false)
-			table.SetBorder(false)
+			cfg := tablewriter.NewConfigBuilder()
+			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			table := tablewriter.NewTable(
+				&buf,
+				tablewriter.WithRendition(tw.Rendition{
+					Borders: tw.BorderNone,
+					Settings: tw.Settings{
+						Separators: tw.Separators{
+							BetweenRows:    tw.Off,
+							BetweenColumns: tw.Off,
+						},
+						Lines: tw.Lines{
+							ShowHeaderLine: tw.Off,
+						},
+					},
+				}),
+				tablewriter.WithRowAutoWrap(tw.WrapNone),
+				tablewriter.WithConfig(cfg.Build()),
+			)
+			table.Header("#", "Type", "Fields")
 
 			for i, typ := range apifile.StructTypes {
-				index := i + 1
 				fields := fmt.Sprintf("%v", len(typ.Fields))
-				row := []string{strconv.Itoa(index), typ.Name, fields}
-				table.Append(row)
+				err := table.Append(strconv.Itoa(i+1), typ.Name, fields)
+				if err != nil {
+					return err
+				}
 			}
 
-			table.Render()
+			err := table.Render()
+			if err != nil {
+				return err
+			}
 			buf.Write([]byte("\n"))
 		}
 
 		// Unions
 		if len(apifile.UnionTypes) > 0 {
-			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "UNION", "FIELDS"})
-			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-			table.SetAutoWrapText(false)
-			table.SetRowLine(false)
-			table.SetColumnSeparator(" ")
-			table.SetHeaderLine(false)
-			table.SetBorder(false)
+			cfg := tablewriter.NewConfigBuilder()
+			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			table := tablewriter.NewTable(
+				&buf,
+				tablewriter.WithRendition(tw.Rendition{
+					Borders: tw.BorderNone,
+					Settings: tw.Settings{
+						Separators: tw.Separators{
+							BetweenRows:    tw.Off,
+							BetweenColumns: tw.Off,
+						},
+						Lines: tw.Lines{
+							ShowHeaderLine: tw.Off,
+						},
+					},
+				}),
+				tablewriter.WithRowAutoWrap(tw.WrapNone),
+				tablewriter.WithConfig(cfg.Build()),
+			)
+			table.Header("#", "UNION", "FIELDS")
 
 			for i, typ := range apifile.UnionTypes {
-				index := i + 1
 				fields := fmt.Sprintf("%v", len(typ.Fields))
-				row := []string{strconv.Itoa(index), typ.Name, fields}
-				table.Append(row)
+				err := table.Append(strconv.Itoa(i+1), typ.Name, fields)
+				if err != nil {
+					return err
+				}
 			}
-
-			table.Render()
+			err := table.Render()
+			if err != nil {
+				return err
+			}
 			buf.Write([]byte("\n"))
 		}
 
 		// Enums
 		if len(apifile.EnumTypes) > 0 || len(apifile.EnumflagTypes) > 0 {
-			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "Enum", "Type", "Kind", "Entries"})
-			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-			table.SetAutoWrapText(false)
-			table.SetRowLine(false)
-			table.SetColumnSeparator(" ")
-			table.SetHeaderLine(false)
-			table.SetBorder(false)
+			cfg := tablewriter.NewConfigBuilder()
+			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			table := tablewriter.NewTable(
+				&buf,
+				tablewriter.WithRendition(tw.Rendition{
+					Borders: tw.BorderNone,
+					Settings: tw.Settings{
+						Separators: tw.Separators{
+							BetweenRows:    tw.Off,
+							BetweenColumns: tw.Off,
+						},
+						Lines: tw.Lines{
+							ShowHeaderLine: tw.Off,
+						},
+					},
+				}),
+				tablewriter.WithRowAutoWrap(tw.WrapNone),
+				tablewriter.WithConfig(cfg.Build()),
+			)
+			table.Header("#", "Enum", "Type", "Kind", "Entries")
 
 			for i, typ := range apifile.EnumTypes {
-				index := i + 1
 				typEntries := fmt.Sprintf("%v", len(typ.Entries))
-				row := []string{strconv.Itoa(index), typ.Name, typ.Type, "enum", typEntries}
-				table.Append(row)
+				err := table.Append(
+					strconv.Itoa(i+1), typ.Name, typ.Type, "enum", typEntries,
+				)
+				if err != nil {
+					return err
+				}
 			}
 			for i, typ := range apifile.EnumflagTypes {
-				index := i + 1
 				typEntries := fmt.Sprintf("%v", len(typ.Entries))
-				row := []string{strconv.Itoa(index), typ.Name, typ.Type, "flag", typEntries}
-				table.Append(row)
+				err := table.Append(
+					strconv.Itoa(i+1), typ.Name, typ.Type, "flag", typEntries,
+				)
+				if err != nil {
+					return err
+				}
 			}
 
-			table.Render()
+			err := table.Render()
+			if err != nil {
+				return err
+			}
 			buf.Write([]byte("\n"))
 		}
 
 		// Aliases
 		if len(apifile.AliasTypes) > 0 {
-			table := tablewriter.NewWriter(&buf)
-			table.SetHeader([]string{"#", "Alias", "Type", "Length"})
-			table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-			table.SetAutoWrapText(false)
-			table.SetRowLine(false)
-			table.SetColumnSeparator(" ")
-			table.SetHeaderLine(false)
-			table.SetBorder(false)
+			cfg := tablewriter.NewConfigBuilder()
+			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			table := tablewriter.NewTable(
+				&buf,
+				tablewriter.WithRendition(tw.Rendition{
+					Borders: tw.BorderNone,
+					Settings: tw.Settings{
+						Separators: tw.Separators{
+							BetweenRows:    tw.Off,
+							BetweenColumns: tw.Off,
+						},
+						Lines: tw.Lines{
+							ShowHeaderLine: tw.Off,
+						},
+					},
+				}),
+				tablewriter.WithRowAutoWrap(tw.WrapNone),
+				tablewriter.WithConfig(cfg.Build()),
+			)
+			table.Header("#", "Alias", "Type", "Length")
 
 			for i, typ := range apifile.AliasTypes {
-				index := i + 1
-				row := []string{strconv.Itoa(index), typ.Name, typ.Type, strconv.Itoa(typ.Length)}
-				table.Append(row)
+				err := table.Append(
+					strconv.Itoa(i+1), typ.Name, typ.Type, strconv.Itoa(typ.Length),
+				)
+				if err != nil {
+					return err
+				}
 			}
 
-			table.Render()
+			err := table.Render()
+			if err != nil {
+				return err
+			}
 			buf.Write([]byte("\n"))
 
 		}
@@ -413,6 +517,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) {
 	}
 
 	fmt.Fprint(out, buf.String())
+	return nil
 }
 
 func getShortCrc(crc string) string {
@@ -480,21 +585,29 @@ func listVPPAPIMessages(apifiles []vppapi.File) []VppApiFileMessage {
 	return msgs
 }
 
-func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "File", "Message", "Fields", "Options",
-	})
-	table.SetAutoWrapText(false)
-	table.SetRowLine(true)
-	table.SetAutoWrapText(false)
-	table.SetRowLine(false)
-	table.SetColumnSeparator(" ")
-	table.SetHeaderLine(false)
-	table.SetBorder(false)
+func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool) error {
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Separators: tw.Separators{
+					BetweenRows:    tw.Off,
+					BetweenColumns: tw.Off,
+				},
+				Lines: tw.Lines{
+					ShowHeaderLine: tw.Off,
+				},
+			},
+		}),
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithConfig(cfg.Build()),
+	)
+	table.Header("#", "File", "Message", "Fields", "Options")
 
 	for i, msg := range msgs {
-		index := fmt.Sprint(i + 1)
 		fileName := ""
 		if msg.File != nil {
 			fileName = msg.File.Name
@@ -504,22 +617,27 @@ func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool
 			msgFields = strings.TrimSpace(yamlTmpl(msgFieldsStr(msg.Fields)))
 		}
 		msgOptions := shorMessageOptions(msg.Options)
-
-		row := []string{
-			index, fileName, msg.Name, msgFields, msgOptions,
+		err := table.Append(
+			fmt.Sprint(i+1), fileName, msg.Name, msgFields, msgOptions,
+		)
+		if err != nil {
+			return err
 		}
-		table.Append(row)
 	}
-	table.Render()
+	return table.Render()
 }
 
-func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"API", "Request", "Reply", "Stream", "StreamMsg", "Events",
-	})
-	table.SetAutoWrapText(false)
-	table.SetRowLine(true)
+func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) error {
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Settings: tw.Settings{
+				Separators: tw.Separators{BetweenRows: tw.On},
+			},
+		}),
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+	)
+	table.Header("API", "Request", "Reply", "Stream", "StreamMsg", "Events")
 
 	for _, apifile := range apifiles {
 		if apifile.Service == nil {
@@ -527,14 +645,16 @@ func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) {
 		}
 		for _, rpc := range apifile.Service.RPCs {
 			rpcEvents := strings.Join(rpc.Events, ", ")
-
-			row := []string{
-				apifile.Name, rpc.Request, rpc.Reply, fmt.Sprint(rpc.Stream), rpc.StreamMsg, rpcEvents,
+			err := table.Append(
+				apifile.Name, rpc.Request, rpc.Reply,
+				fmt.Sprint(rpc.Stream), rpc.StreamMsg, rpcEvents,
+			)
+			if err != nil {
+				return err
 			}
-			table.Append(row)
 		}
 	}
-	table.Render()
+	return table.Render()
 }
 
 func msgFieldsStr(fields []vppapi.Field) []string {

@@ -13,7 +13,7 @@ require (
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.2
-	github.com/olekukonko/tablewriter v1.0.7
+	github.com/olekukonko/tablewriter v1.0.8
 	github.com/onsi/gomega v1.37.0
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.3

@@ -20,6 +20,7 @@ import (
 
 	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -76,11 +77,10 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 	if opts.ListRules {
 		rules := ListLintRules(defaultLintRules...)
 		if opts.Format == "" {
-			printLintRulesAsTable(out, rules)
+			return printLintRulesAsTable(out, rules)
 		} else {
 			return formatAsTemplate(out, opts.Format, rules)
 		}
-		return nil
 	}
 
 	vppInput, err := resolveVppInput(opts.Input)
@@ -113,7 +113,10 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 	}
 
 	if opts.Format == "" {
-		printLintErrorsAsTable(out, lintIssues)
+		err := printLintErrorsAsTable(out, lintIssues)
+		if err != nil {
+			return err
+		}
 	} else {
 		if err := formatAsTemplate(out, opts.Format, lintIssues); err != nil {
 			return err
@@ -131,47 +134,56 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 	return nil
 }
 
-func printLintRulesAsTable(out io.Writer, rules []*LintRule) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "Id", "Purpose",
-	})
-	table.SetAutoMergeCells(false)
-	table.SetAutoWrapText(false)
-	table.SetRowLine(false)
-	table.SetBorder(false)
+func printLintRulesAsTable(out io.Writer, rules []*LintRule) error {
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Separators: tw.Separators{BetweenRows: tw.Off},
+			},
+		}),
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithRowMergeMode(tw.MergeNone),
+	)
+	table.Header("#", "Id", "Purpose")
 	for i, r := range rules {
-		index := i + 1
-		table.Append([]string{
-			fmt.Sprint(index), r.Id, r.Purpose,
-		})
+		err := table.Append(fmt.Sprint(i+1), r.Id, r.Purpose)
+		if err != nil {
+			return err
+		}
 	}
-	table.Render()
+	return table.Render()
 }
 
-func printLintErrorsAsTable(out io.Writer, issues LintIssues) {
+func printLintErrorsAsTable(out io.Writer, issues LintIssues) error {
 	if len(issues) == 0 {
 		fmt.Fprintln(out, "No issues found")
-		return
+		return nil
 	}
 
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "Rule", "Location", "Violation",
-	})
-	table.SetAutoMergeCells(true)
-	table.SetAutoWrapText(false)
-	table.SetRowLine(true)
-	table.SetBorder(false)
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Separators: tw.Separators{BetweenRows: tw.On},
+			},
+		}),
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithRowMergeMode(tw.MergeVertical),
+	)
+
+	table.Header("#", "Rule", "Location", "Violation")
 	for i, e := range issues {
-		index := i + 1
 		loc := e.File
 		if e.Line > 0 {
 			loc += fmt.Sprintf(":%d", e.Line)
 		}
-		table.Append([]string{
-			fmt.Sprint(index), e.RuleId, loc, e.Violation,
-		})
+		err := table.Append(fmt.Sprint(i+1), e.RuleId, loc, e.Violation)
+		if err != nil {
+			return err
+		}
 	}
-	table.Render()
+	return table.Render()
 }

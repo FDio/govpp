@@ -20,6 +20,7 @@ import (
 
 	"github.com/gookit/color"
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -89,11 +90,10 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 	if opts.ListDifferences {
 		diffs := defaultDifferenceTypes
 		if opts.Format == "" {
-			printDiffsAsTable(out, diffs)
+			return printDiffsAsTable(out, diffs)
 		} else {
 			return formatAsTemplate(out, opts.Format, diffs)
 		}
-		return nil
 	}
 
 	vppInput, err := resolveVppInput(opts.Input)
@@ -140,22 +140,28 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 	return nil
 }
 
-func printDiffsAsTable(out io.Writer, diffs []DifferenceType) {
-	table := tablewriter.NewWriter(out)
-	table.SetHeader([]string{
-		"#", "Difference Type",
-	})
-	table.SetAutoMergeCells(false)
-	table.SetAutoWrapText(false)
-	table.SetRowLine(false)
-	table.SetBorder(false)
+func printDiffsAsTable(out io.Writer, diffs []DifferenceType) error {
+	table := tablewriter.NewTable(
+		out,
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Separators: tw.Separators{
+					BetweenRows: tw.Off,
+				},
+			},
+		}),
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithRowMergeMode(tw.MergeNone),
+	)
+	table.Header("#", "Difference Type")
 	for i, d := range diffs {
-		index := i + 1
-		table.Append([]string{
-			fmt.Sprint(index), fmt.Sprint(d),
-		})
+		err := table.Append(fmt.Sprint(i+1), fmt.Sprint(d))
+		if err != nil {
+			return err
+		}
 	}
-	table.Render()
+	return table.Render()
 }
 
 func printDifferencesSimple(out io.Writer, diffs []Difference) {
