@@ -45,58 +45,71 @@ func (c *Connection) watchRequests(ch *Channel) {
 			return
 		}
 		if err := c.processRequest(ch, req); err != nil {
-			sendReply(ch.logger, ch, &vppReply{
+			if err = sendReply(ch, &vppReply{
 				seqNum: req.seqNum,
 				err:    fmt.Errorf("unable to process request: %w", err),
-			})
+			}); err != nil {
+				c.logger.Errorf("unable to send reply request: %w", err)
+			}
 		}
 	}
 }
 
 // processRequest processes a single request received on the request channel.
 func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
-	l := ch.logger.WithFields(logrus.Fields{
-		"chanId":  ch.id,
-		"seqNum":  req.seqNum,
-		"msgName": req.msg.GetMessageName(),
-		"msgCrc":  req.msg.GetCrcString(),
-		"isMulti": req.multi,
-	})
-
 	// check whether we are connected to VPP
 	if atomic.LoadUint32(&c.vppConnected) == 0 {
 		err := ErrNotConnected
-		l.WithField("error", err).Warnf("Unable to process request")
+		ch.logger.WithFields(logrus.Fields{
+			"chanId":  ch.id,
+			"seqNum":  req.seqNum,
+			"msgName": req.msg.GetMessageName(),
+			"msgCrc":  req.msg.GetCrcString(),
+			"isMulti": req.multi,
+		}).WithField("error", err).Warnf("Unable to process request")
 		return err
 	}
 
 	// retrieve message ID
 	msgID, err := c.GetMessageID(req.msg)
 	if err != nil {
-		l.WithField("error", err).Warnf("Unable to retrieve message ID")
+		ch.logger.WithFields(logrus.Fields{
+			"chanId":  ch.id,
+			"seqNum":  req.seqNum,
+			"msgName": req.msg.GetMessageName(),
+			"msgCrc":  req.msg.GetCrcString(),
+			"isMulti": req.multi,
+		}).WithField("error", err).Warnf("Unable to retrieve message ID")
 		return err
 	}
-
-	l = l.WithFields(logrus.Fields{
-		"msgId": msgID,
-	})
 
 	// encode the message into binary
 	data, err := c.codec.EncodeMsg(req.msg, msgID)
 	if err != nil {
-		l.WithField("error", err).Warnf("Unable to encode message: %T %+v", req.msg, req.msg)
+		ch.logger.WithFields(logrus.Fields{
+			"chanId":  ch.id,
+			"seqNum":  req.seqNum,
+			"msgName": req.msg.GetMessageName(),
+			"msgCrc":  req.msg.GetCrcString(),
+			"isMulti": req.multi,
+			"msgId":   msgID,
+		}).WithField("error", err).Warnf("Unable to encode message: %T %+v", req.msg, req.msg)
 		return err
 	}
 
 	context := packRequestContext(ch.id, req.multi, req.seqNum)
 
-	l = l.WithFields(logrus.Fields{
-		"context": context,
-		"msgLen":  len(data),
-	})
-
 	if log.Level >= logrus.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
-		l.Debugf("-->govpp SEND: %T %+v", req.msg, req.msg)
+		ch.logger.WithFields(logrus.Fields{
+			"chanId":  ch.id,
+			"seqNum":  req.seqNum,
+			"msgName": req.msg.GetMessageName(),
+			"msgCrc":  req.msg.GetCrcString(),
+			"isMulti": req.multi,
+			"msgId":   msgID,
+			"context": context,
+			"msgLen":  len(data),
+		}).Debugf("-->govpp SEND: %T %+v", req.msg, req.msg)
 	}
 
 	var timestamp time.Time
@@ -118,7 +131,16 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				})
 			}
 			c.traceLock.Unlock()
-			l.WithField("error", err).Warnf("Unable to send message")
+			ch.logger.WithFields(logrus.Fields{
+				"chanId":  ch.id,
+				"seqNum":  req.seqNum,
+				"msgName": req.msg.GetMessageName(),
+				"msgCrc":  req.msg.GetCrcString(),
+				"isMulti": req.multi,
+				"msgId":   msgID,
+				"context": context,
+				"msgLen":  len(data),
+			}).WithField("error", err).Warnf("Unable to send message")
 			return err
 		}
 	}
@@ -139,7 +161,16 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		pingData, _ := c.codec.EncodeMsg(c.msgControlPing, c.pingReqID)
 
 		if log.Level >= logrus.DebugLevel {
-			l.WithField("error", err).Debugf("-->govpp SEND PING: %T", c.msgControlPing)
+			ch.logger.WithFields(logrus.Fields{
+				"chanId":  ch.id,
+				"seqNum":  req.seqNum,
+				"msgName": req.msg.GetMessageName(),
+				"msgCrc":  req.msg.GetCrcString(),
+				"isMulti": req.multi,
+				"msgId":   msgID,
+				"context": context,
+				"msgLen":  len(data),
+			}).WithField("error", err).Debugf("-->govpp SEND PING: %T", c.msgControlPing)
 		}
 		c.traceLock.Lock()
 		if c.trace != nil {
@@ -158,7 +189,16 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				})
 				c.traceLock.Unlock()
 			}
-			l.WithField("error", err).Warnf("unable to send control ping")
+			ch.logger.WithFields(logrus.Fields{
+				"chanId":  ch.id,
+				"seqNum":  req.seqNum,
+				"msgName": req.msg.GetMessageName(),
+				"msgCrc":  req.msg.GetCrcString(),
+				"isMulti": req.multi,
+				"msgId":   msgID,
+				"context": context,
+				"msgLen":  len(data),
+			}).WithField("error", err).Warnf("unable to send control ping")
 		} else {
 			if c.trace != nil {
 				c.traceLock.Lock()
@@ -178,18 +218,8 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 // msgCallback is called whenever any binary API message comes from VPP.
 func (c *Connection) msgCallback(msgID uint16, data []byte) {
-	var l logrus.Ext1FieldLogger
-	if c.logger == nil {
-		l = logrus.StandardLogger()
-	} else {
-		l = c.logger.WithFields(logrus.Fields{
-			"msgId":  msgID,
-			"msgLen": len(data),
-		})
-	}
-
 	if c == nil {
-		l.Warn("Connection already disconnected, ignoring the message.")
+		c.logger.Warn("Connection already disconnected, ignoring the message.")
 		return
 	}
 
@@ -199,11 +229,6 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		return
 	}
 
-	l = l.WithFields(logrus.Fields{
-		"msgName": msg.GetMessageName(),
-		"msgCrc":  msg.GetCrcString(),
-	})
-
 	// decode message context to fix for special cases of messages,
 	// for example:
 	// - replies that don't have context as first field (comes as zero)
@@ -211,19 +236,14 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	//
 	context, err := c.codec.DecodeMsgContext(data, msg.GetMessageType())
 	if err != nil {
-		l.Warnf("Unable to decode message context: %v", err)
+		c.logger.WithFields(logrus.Fields{
+			"msgName": msg.GetMessageName(),
+			"msgCrc":  msg.GetCrcString(),
+		}).Warnf("Unable to decode message context: %v", err)
 		return
 	}
 
-	l = l.WithField("context", context)
-
 	chanID, isMulti, seqNum := unpackRequestContext(context)
-
-	l = l.WithFields(logrus.Fields{
-		"chanId":  chanID,
-		"isMulti": isMulti,
-		"seqNum":  seqNum,
-	})
 
 	var decoded bool
 
@@ -234,8 +254,15 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		timestamp, _ = c.trace.registerNew()
 		decoded = true
 		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-		if err := c.codec.DecodeMsg(data, msg); err != nil {
-			l.Debugf("Unable to decode message: %v", err)
+		if err = c.codec.DecodeMsg(data, msg); err != nil {
+			c.logger.WithFields(logrus.Fields{
+				"msgName": msg.GetMessageName(),
+				"msgCrc":  msg.GetCrcString(),
+				"context": context,
+				"chanId":  chanID,
+				"isMulti": isMulti,
+				"seqNum":  seqNum,
+			}).Debugf("Unable to decode message: %v", err)
 		} else {
 			c.trace.send(&api.Record{
 				Message:    msg,
@@ -252,16 +279,37 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		if !decoded {
 			decoded = true
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-			if err := c.codec.DecodeMsg(data, msg); err != nil {
-				l.Debugf("Unable to decode message: %v", err)
+			if err = c.codec.DecodeMsg(data, msg); err != nil {
+				c.logger.WithFields(logrus.Fields{
+					"msgName": msg.GetMessageName(),
+					"msgCrc":  msg.GetCrcString(),
+					"context": context,
+					"chanId":  chanID,
+					"isMulti": isMulti,
+					"seqNum":  seqNum,
+				}).Debugf("Unable to decode message: %v", err)
 			}
 		}
-		l.Debugf("<--govpp RECV: %T %+v", msg, msg)
+		c.logger.WithFields(logrus.Fields{
+			"msgName": msg.GetMessageName(),
+			"msgCrc":  msg.GetCrcString(),
+			"context": context,
+			"chanId":  chanID,
+			"isMulti": isMulti,
+			"seqNum":  seqNum,
+		}).Debugf("<--govpp RECV: %T %+v", msg, msg)
 	}
 
 	if context == 0 || c.isNotificationMessage(msgID) {
 		// process the message as a notification
-		c.sendNotifications(l, msgID, data)
+		c.sendNotifications(c.logger.WithFields(logrus.Fields{
+			"msgName": msg.GetMessageName(),
+			"msgCrc":  msg.GetCrcString(),
+			"context": context,
+			"chanId":  chanID,
+			"isMulti": isMulti,
+			"seqNum":  seqNum,
+		}), msgID, data)
 		return
 	}
 
@@ -272,11 +320,18 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	if !ok {
 		if !decoded {
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-			if err := c.codec.DecodeMsg(data, msg); err != nil {
-				l.Debugf("Unable to decode message: %v", err)
+			if err = c.codec.DecodeMsg(data, msg); err != nil {
+				c.logger.WithFields(logrus.Fields{
+					"msgName": msg.GetMessageName(),
+					"msgCrc":  msg.GetCrcString(),
+					"context": context,
+					"chanId":  chanID,
+					"isMulti": isMulti,
+					"seqNum":  seqNum,
+				}).Debugf("Unable to decode message: %v", err)
 			}
 		}
-		l.Errorf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
+		c.logger.Errorf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
 		return
 	}
 
@@ -286,12 +341,21 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 
 	// send the data to the channel, it needs to be copied,
 	// because it will be freed after this function returns
-	sendReply(l, ch, &vppReply{
+	if err = sendReply(ch, &vppReply{
 		msgID:        msgID,
 		seqNum:       seqNum,
 		data:         append([]byte(nil), data...),
 		lastReceived: lastReplyReceived,
-	})
+	}); err != nil {
+		c.logger.WithFields(logrus.Fields{
+			"msgName": msg.GetMessageName(),
+			"msgCrc":  msg.GetCrcString(),
+			"context": context,
+			"chanId":  chanID,
+			"isMulti": isMulti,
+			"seqNum":  seqNum,
+		}).WithField("error", err).Warnf("unable to send control ping")
+	}
 
 	// store actual time of this reply
 	c.lastReplyLock.Lock()
@@ -301,26 +365,26 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 
 // sendReply sends the reply into the go channel, if it cannot be completed without blocking, otherwise
 // it logs the error and do not send the message.
-func sendReply(l logrus.Ext1FieldLogger, ch *Channel, reply *vppReply) {
+func sendReply(ch *Channel, reply *vppReply) error {
 	// first try to avoid creating timer
 	select {
 	case ch.replyChan <- reply:
-		return // reply sent ok
+		return nil // reply sent ok
 	default:
 		// reply channel full
 	}
 	if ch.receiveReplyTimeout == 0 {
-		l.WithField("error", reply.err).Warn("Reply channel full, dropping reply.")
-		return
+		return errors.Join(errors.New("reply channel full, dropping reply"), reply.err)
 	}
 	replyTimeoutTimer := time.NewTimer(ch.receiveReplyTimeout)
 	defer replyTimeoutTimer.Stop()
 	select {
 	case ch.replyChan <- reply:
-		return // reply sent ok
+		return nil // reply sent ok
 	case <-replyTimeoutTimer.C:
 		// receiver still isn't ready
-		l.WithField("error", reply.err).Warnf("Unable to send reply (reciever end not ready in %v).", ch.receiveReplyTimeout)
+		return errors.Join(errors.New("Unable to send reply (reciever end not ready in "+
+			ch.receiveReplyTimeout.String()), reply.err)
 	}
 }
 
