@@ -169,11 +169,12 @@ func (c *StatsConnection) Disconnect() {
 			log.Debugf("disconnecting stats client failed: %v", err)
 		}
 	}
-	close(c.connChan)
 	close(c.done)
 }
 
 func (c *StatsConnection) monitorSocket() {
+	defer close(c.connChan)
+
 	var state, lastState ConnectionState
 	ticker := time.NewTicker(HealthCheckInterval)
 
