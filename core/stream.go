@@ -134,7 +134,46 @@ func (w *watcher) watch() {
 	}
 }
 
+// WatchEvent creates a new watcher for watching events with default buffer sizes.
+// Use WatchEventWithOptions for custom buffer sizes.
 func (c *Connection) WatchEvent(ctx context.Context, event api.Message) (api.Watcher, error) {
+	return c.WatchEventWithOptions(ctx, event, WithEventBufferSize(100), WithNotifBufferSize(100))
+}
+
+// WatchEventOptions holds configuration for event watching
+type WatchEventOptions struct {
+	EventBufferSize int // Size of the events channel buffer
+	NotifBufferSize int // Size of the internal notification channel buffer
+}
+
+// WatchEventOption is a function that modifies WatchEventOptions
+type WatchEventOption func(*WatchEventOptions)
+
+// WithEventBufferSize sets the buffer size for the events channel
+func WithEventBufferSize(size int) WatchEventOption {
+	return func(opts *WatchEventOptions) {
+		opts.EventBufferSize = size
+	}
+}
+
+// WithNotifBufferSize sets the buffer size for the internal notification channel
+func WithNotifBufferSize(size int) WatchEventOption {
+	return func(opts *WatchEventOptions) {
+		opts.NotifBufferSize = size
+	}
+}
+
+// WatchEventWithOptions creates a new watcher with custom options
+func (c *Connection) WatchEventWithOptions(ctx context.Context, event api.Message, options ...WatchEventOption) (api.Watcher, error) {
+	opts := &WatchEventOptions{
+		EventBufferSize: 100, // default to 100 instead of 0
+		NotifBufferSize: 100, // default to 100 instead of 10
+	}
+
+	for _, opt := range options {
+		opt(opts)
+	}
+
 	msgID, err := c.GetMessageID(event)
 	if err != nil {
 		if isDebugOn(debugOptCore) {
@@ -152,13 +191,13 @@ func (c *Connection) WatchEvent(ctx context.Context, event api.Message) (api.Wat
 		conn:   c,
 		ctx:    cctx,
 		cancel: cancel,
-		events: make(chan api.Message),
+		events: make(chan api.Message, opts.EventBufferSize),
 		quit:   make(chan struct{}),
 	}
 
 	w.sub = &subscriptionCtx{
 		conn:       c,
-		notifChan:  make(chan api.Message, 10),
+		notifChan:  make(chan api.Message, opts.NotifBufferSize),
 		msgID:      msgID,
 		event:      event,
 		msgFactory: getMsgFactory(event),
