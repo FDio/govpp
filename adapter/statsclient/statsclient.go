@@ -164,11 +164,12 @@ func (sc *StatsClient) Disconnect() error {
 }
 
 func (sc *StatsClient) ListStats(patterns ...string) (entries []adapter.StatIdentifier, err error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
 	}
-	sc.accessLock.RLock()
-	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -186,12 +187,13 @@ func (sc *StatsClient) ListStats(patterns ...string) (entries []adapter.StatIden
 }
 
 func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntry, err error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
 	}
 
-	sc.accessLock.RLock()
-	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -209,12 +211,13 @@ func (sc *StatsClient) DumpStats(patterns ...string) (entries []adapter.StatEntr
 }
 
 func (sc *StatsClient) PrepareDir(patterns ...string) (*adapter.StatDir, error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
 	}
 
-	sc.accessLock.RLock()
-	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -238,12 +241,13 @@ func (sc *StatsClient) PrepareDir(patterns ...string) (*adapter.StatDir, error) 
 }
 
 func (sc *StatsClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
 	if !sc.isConnected() {
 		return nil, adapter.ErrStatsDisconnected
 	}
 
-	sc.accessLock.RLock()
-	defer sc.accessLock.RUnlock()
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return nil, adapter.ErrStatsAccessFailed
@@ -271,12 +275,13 @@ func (sc *StatsClient) PrepareDirOnIndex(indexes ...uint32) (*adapter.StatDir, e
 
 // UpdateDir refreshes directory data for all counters
 func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
 	if !sc.isConnected() {
 		return adapter.ErrStatsDisconnected
 	}
 
-	sc.accessLock.RLock()
-	defer sc.accessLock.RUnlock()
 	epoch, _ := sc.GetEpoch()
 	if dir.Epoch != epoch {
 		return adapter.ErrStatsDirStale
