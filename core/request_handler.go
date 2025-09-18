@@ -219,13 +219,19 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 // msgCallback is called whenever any binary API message comes from VPP.
 func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	if c == nil {
-		c.logger.Warn("Connection already disconnected, ignoring the message.")
+		c.logger.WithFields(logrus.Fields{
+			"msgId":  msgID,
+			"msgLen": len(data),
+		}).Warn("Connection already disconnected, ignoring the message.")
 		return
 	}
 
 	msg, err := c.getMessageByID(msgID)
 	if err != nil {
-		c.logger.Warnln("Unable to get message by ID", err)
+		c.logger.WithFields(logrus.Fields{
+			"msgId":  msgID,
+			"msgLen": len(data),
+		}).Warnln("Unable to get message by ID", err)
 		return
 	}
 
@@ -237,6 +243,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	context, err := c.codec.DecodeMsgContext(data, msg.GetMessageType())
 	if err != nil {
 		c.logger.WithFields(logrus.Fields{
+			"msgId":   msgID,
+			"msgLen":  len(data),
 			"msgName": msg.GetMessageName(),
 			"msgCrc":  msg.GetCrcString(),
 		}).Warnf("Unable to decode message context: %v", err)
@@ -256,6 +264,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 		if err = c.codec.DecodeMsg(data, msg); err != nil {
 			c.logger.WithFields(logrus.Fields{
+				"msgId":   msgID,
+				"msgLen":  len(data),
 				"msgName": msg.GetMessageName(),
 				"msgCrc":  msg.GetCrcString(),
 				"context": context,
@@ -281,6 +291,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 			if err = c.codec.DecodeMsg(data, msg); err != nil {
 				c.logger.WithFields(logrus.Fields{
+					"msgId":   msgID,
+					"msgLen":  len(data),
 					"msgName": msg.GetMessageName(),
 					"msgCrc":  msg.GetCrcString(),
 					"context": context,
@@ -291,6 +303,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			}
 		}
 		c.logger.WithFields(logrus.Fields{
+			"msgId":   msgID,
+			"msgLen":  len(data),
 			"msgName": msg.GetMessageName(),
 			"msgCrc":  msg.GetCrcString(),
 			"context": context,
@@ -303,6 +317,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	if context == 0 || c.isNotificationMessage(msgID) {
 		// process the message as a notification
 		c.sendNotifications(c.logger.WithFields(logrus.Fields{
+			"msgId":   msgID,
+			"msgLen":  len(data),
 			"msgName": msg.GetMessageName(),
 			"msgCrc":  msg.GetCrcString(),
 			"context": context,
@@ -322,6 +338,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
 			if err = c.codec.DecodeMsg(data, msg); err != nil {
 				c.logger.WithFields(logrus.Fields{
+					"msgId":   msgID,
+					"msgLen":  len(data),
 					"msgName": msg.GetMessageName(),
 					"msgCrc":  msg.GetCrcString(),
 					"context": context,
@@ -348,6 +366,8 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		lastReceived: lastReplyReceived,
 	}); err != nil {
 		c.logger.WithFields(logrus.Fields{
+			"msgId":   msgID,
+			"msgLen":  len(data),
 			"msgName": msg.GetMessageName(),
 			"msgCrc":  msg.GetCrcString(),
 			"context": context,
@@ -363,7 +383,7 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 	c.lastReplyLock.Unlock()
 }
 
-// sendReply sends the reply into the go channel, if it cannot be completed without blocking, otherwise
+// sendReply sends the reply into the go channel if it cannot be completed without blocking, otherwise
 // it logs the error and do not send the message.
 func sendReply(ch *Channel, reply *vppReply) error {
 	// first try to avoid creating timer
@@ -374,7 +394,7 @@ func sendReply(ch *Channel, reply *vppReply) error {
 		// reply channel full
 	}
 	if ch.receiveReplyTimeout == 0 {
-		return errors.Join(errors.New("reply channel full, dropping reply"), reply.err)
+		return fmt.Errorf("reply channel full, dropping reply %v", reply.err)
 	}
 	replyTimeoutTimer := time.NewTimer(ch.receiveReplyTimeout)
 	defer replyTimeoutTimer.Stop()
@@ -383,8 +403,8 @@ func sendReply(ch *Channel, reply *vppReply) error {
 		return nil // reply sent ok
 	case <-replyTimeoutTimer.C:
 		// receiver still isn't ready
-		return errors.Join(errors.New("Unable to send reply (reciever end not ready in "+
-			ch.receiveReplyTimeout.String()), reply.err)
+		return fmt.Errorf("unable to send reply (reciever end not ready in %v) %v",
+			ch.receiveReplyTimeout.String(), reply.err)
 	}
 }
 
