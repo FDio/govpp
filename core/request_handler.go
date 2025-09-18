@@ -54,49 +54,40 @@ func (c *Connection) watchRequests(ch *Channel) {
 }
 
 // processRequest processes a single request received on the request channel.
-func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
-	l := ch.logger.WithFields(logrus.Fields{
-		"chanId":  ch.id,
-		"seqNum":  req.seqNum,
-		"msgName": req.msg.GetMessageName(),
-		"msgCrc":  req.msg.GetCrcString(),
-		"isMulti": req.multi,
-	})
-
+func (c *Connection) processRequest(ch *Channel, req *vppRequest) (err error) {
+	ctx := &requestContext{
+		chanelID: ch.id,
+		seqNum:   req.seqNum,
+		msgName:  req.msg.GetMessageName(),
+		msgCrc:   req.msg.GetCrcString(),
+		isMulti:  req.multi,
+	}
 	// check whether we are connected to VPP
 	if atomic.LoadUint32(&c.vppConnected) == 0 {
-		err := ErrNotConnected
-		l.WithField("error", err).Warnf("Unable to process request")
+		err = ErrNotConnected
+		ctx.toLogEntry().WithField("error", err).Warnf("Unable to process request")
 		return err
 	}
 
 	// retrieve message ID
-	msgID, err := c.GetMessageID(req.msg)
+	ctx.msgID, err = c.GetMessageID(req.msg)
 	if err != nil {
-		l.WithField("error", err).Warnf("Unable to retrieve message ID")
+		ctx.toLogEntry().WithField("error", err).Warnf("Unable to retrieve message ID")
 		return err
 	}
-
-	l = l.WithFields(logrus.Fields{
-		"msgId": msgID,
-	})
 
 	// encode the message into binary
-	data, err := c.codec.EncodeMsg(req.msg, msgID)
+	data, err := c.codec.EncodeMsg(req.msg, ctx.msgID)
 	if err != nil {
-		l.WithField("error", err).Warnf("Unable to encode message: %T %+v", req.msg, req.msg)
+		ctx.toLogEntry().WithField("error", err).Warnf("Unable to encode message: %T %+v", req.msg, req.msg)
 		return err
 	}
+	ctx.msgLen = len(data)
 
-	context := packRequestContext(ch.id, req.multi, req.seqNum)
-
-	l = l.WithFields(logrus.Fields{
-		"context": context,
-		"msgLen":  len(data),
-	})
+	ctx.context = packRequestContext(ch.id, req.multi, req.seqNum)
 
 	if log.Level >= logrus.DebugLevel { // for performance reasons - logrus does some processing even if debugs are disabled
-		l.Debugf("-->govpp SEND: %T %+v", req.msg, req.msg)
+		ctx.toLogEntry().Debugf("-->govpp SEND: %T %+v", req.msg, req.msg)
 	}
 
 	var timestamp time.Time
@@ -107,7 +98,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}
 		c.traceLock.Unlock()
 		// send the request to VPP
-		if err := c.vppClient.SendMsg(context, data); err != nil {
+		if err := c.vppClient.SendMsg(ctx.context, data); err != nil {
 			c.traceLock.Lock()
 			if c.trace != nil {
 				c.trace.send(&api.Record{
@@ -118,7 +109,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				})
 			}
 			c.traceLock.Unlock()
-			l.WithField("error", err).Warnf("Unable to send message")
+			ctx.toLogEntry().WithField("error", err).Warnf("Unable to send message")
 			return err
 		}
 	}
@@ -139,7 +130,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		pingData, _ := c.codec.EncodeMsg(c.msgControlPing, c.pingReqID)
 
 		if log.Level >= logrus.DebugLevel {
-			l.WithField("error", err).Debugf("-->govpp SEND PING: %T", c.msgControlPing)
+			ctx.toLogEntry().WithField("error", err).Debugf("-->govpp SEND PING: %T", c.msgControlPing)
 		}
 		c.traceLock.Lock()
 		if c.trace != nil {
@@ -147,7 +138,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 		}
 		c.traceLock.Unlock()
 		// send the control ping request to VPP
-		if err := c.vppClient.SendMsg(context, pingData); err != nil {
+		if err = c.vppClient.SendMsg(ctx.context, pingData); err != nil {
 			if c.trace != nil {
 				c.traceLock.Lock()
 				c.trace.send(&api.Record{
@@ -158,7 +149,7 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 				})
 				c.traceLock.Unlock()
 			}
-			l.WithField("error", err).Warnf("unable to send control ping")
+			ctx.toLogEntry().WithField("error", err).Warnf("unable to send control ping")
 		} else {
 			if c.trace != nil {
 				c.traceLock.Lock()
@@ -178,18 +169,13 @@ func (c *Connection) processRequest(ch *Channel, req *vppRequest) error {
 
 // msgCallback is called whenever any binary API message comes from VPP.
 func (c *Connection) msgCallback(msgID uint16, data []byte) {
-	var l logrus.Ext1FieldLogger
-	if c.logger == nil {
-		l = logrus.StandardLogger()
-	} else {
-		l = c.logger.WithFields(logrus.Fields{
-			"msgId":  msgID,
-			"msgLen": len(data),
-		})
+	ctx := &requestContext{
+		msgID:  msgID,
+		msgLen: len(data),
 	}
 
 	if c == nil {
-		l.Warn("Connection already disconnected, ignoring the message.")
+		ctx.toLogEntry().Warn("Connection already disconnected, ignoring the message.")
 		return
 	}
 
@@ -198,32 +184,21 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		c.logger.Warnln("Unable to get message by ID", err)
 		return
 	}
-
-	l = l.WithFields(logrus.Fields{
-		"msgName": msg.GetMessageName(),
-		"msgCrc":  msg.GetCrcString(),
-	})
+	ctx.msgName = msg.GetMessageName()
+	ctx.msgCrc = msg.GetCrcString()
 
 	// decode message context to fix for special cases of messages,
 	// for example:
 	// - replies that don't have context as first field (comes as zero)
 	// - events that don't have context at all (comes as non zero)
 	//
-	context, err := c.codec.DecodeMsgContext(data, msg.GetMessageType())
+	ctx.context, err = c.codec.DecodeMsgContext(data, msg.GetMessageType())
 	if err != nil {
-		l.Warnf("Unable to decode message context: %v", err)
+		ctx.toLogEntry().Warnf("Unable to decode message context: %v", err)
 		return
 	}
 
-	l = l.WithField("context", context)
-
-	chanID, isMulti, seqNum := unpackRequestContext(context)
-
-	l = l.WithFields(logrus.Fields{
-		"chanId":  chanID,
-		"isMulti": isMulti,
-		"seqNum":  seqNum,
-	})
+	ctx.chanelID, ctx.isMulti, ctx.seqNum = unpackRequestContext(ctx.context)
 
 	var decoded bool
 
@@ -234,14 +209,14 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		timestamp, _ = c.trace.registerNew()
 		decoded = true
 		msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-		if err := c.codec.DecodeMsg(data, msg); err != nil {
-			l.Debugf("Unable to decode message: %v", err)
+		if err = c.codec.DecodeMsg(data, msg); err != nil {
+			ctx.toLogEntry().Debugf("Unable to decode message: %v", err)
 		} else {
 			c.trace.send(&api.Record{
 				Message:    msg,
 				Timestamp:  timestamp,
 				IsReceived: true,
-				ChannelID:  chanID,
+				ChannelID:  ctx.chanelID,
 				Succeeded:  err == nil,
 			})
 		}
@@ -252,43 +227,43 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 		if !decoded {
 			decoded = true
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-			if err := c.codec.DecodeMsg(data, msg); err != nil {
-				l.Debugf("Unable to decode message: %v", err)
+			if err = c.codec.DecodeMsg(data, msg); err != nil {
+				ctx.toLogEntry().Debugf("Unable to decode message: %v", err)
 			}
 		}
-		l.Debugf("<--govpp RECV: %T %+v", msg, msg)
+		ctx.toLogEntry().Debugf("<--govpp RECV: %T %+v", msg, msg)
 	}
 
-	if context == 0 || c.isNotificationMessage(msgID) {
+	if ctx.context == 0 || c.isNotificationMessage(msgID) {
 		// process the message as a notification
-		c.sendNotifications(l, msgID, data)
+		c.sendNotifications(ctx.toLogEntry(), msgID, data)
 		return
 	}
 
 	// match ch according to the context
 	c.channelsLock.RLock()
-	ch, ok := c.channels[chanID]
+	ch, ok := c.channels[ctx.chanelID]
 	c.channelsLock.RUnlock()
 	if !ok {
 		if !decoded {
 			msg = reflect.New(reflect.TypeOf(msg).Elem()).Interface().(api.Message)
-			if err := c.codec.DecodeMsg(data, msg); err != nil {
-				l.Debugf("Unable to decode message: %v", err)
+			if err = c.codec.DecodeMsg(data, msg); err != nil {
+				ctx.toLogEntry().Debugf("Unable to decode message: %v", err)
 			}
 		}
-		l.Errorf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
+		ctx.toLogEntry().Errorf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
 		return
 	}
 
 	// if this is a control ping reply to a multipart request,
 	// treat this as a last part of the reply
-	lastReplyReceived := isMulti && msgID == c.pingReplyID
+	lastReplyReceived := ctx.isMulti && msgID == c.pingReplyID
 
 	// send the data to the channel, it needs to be copied,
 	// because it will be freed after this function returns
-	sendReply(l, ch, &vppReply{
+	sendReply(ctx.toLogEntry(), ch, &vppReply{
 		msgID:        msgID,
-		seqNum:       seqNum,
+		seqNum:       ctx.seqNum,
 		data:         append([]byte(nil), data...),
 		lastReceived: lastReplyReceived,
 	})
@@ -421,4 +396,28 @@ func (c *Connection) getMessageByID(msgID uint16) (msg api.Message, err error) {
 		}
 	}
 	return nil, fmt.Errorf("unknown message received, ID: %d", msgID)
+}
+
+type requestContext struct {
+	chanelID uint16
+	seqNum   uint16
+	msgName  string
+	msgCrc   string
+	isMulti  bool
+	msgID    uint16
+	msgLen   int
+	context  uint32
+}
+
+func (ctx *requestContext) toLogEntry() *logrus.Entry {
+	return log.WithFields(logrus.Fields{
+		"chanId":  ctx.chanelID,
+		"seqNum":  ctx.seqNum,
+		"msgName": ctx.msgName,
+		"msgCrc":  ctx.msgCrc,
+		"isMulti": ctx.isMulti,
+		"msgID":   ctx.msgID,
+		"msgLen":  ctx.msgLen,
+		"context": ctx.context,
+	})
 }
