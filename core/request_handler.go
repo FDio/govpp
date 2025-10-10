@@ -276,7 +276,11 @@ func (c *Connection) msgCallback(msgID uint16, data []byte) {
 				l.Debugf("Unable to decode message: %v", err)
 			}
 		}
-		l.Errorf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
+		// This can happen when a stream was closed explicitly before the last message received.
+		// It's expected and not an error.
+		if log.Level >= logrus.DebugLevel {
+			l.Debugf("Channel ID not known, ignoring the message: %T %+v", msg, msg)
+		}
 		return
 	}
 
