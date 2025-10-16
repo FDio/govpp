@@ -15,6 +15,7 @@
 package binapigen
 
 import (
+	"bytes"
 	"fmt"
 	"path"
 	"strconv"
@@ -470,9 +471,53 @@ func genMessage(g *GenFile, msg *Message) {
 	g.P()
 }
 
+func genMessageResetBody(_ *GenFile, msg *Message) string {
+	if msg.Fields == nil || len(msg.Fields) == 0 {
+		return ""
+	}
+	res := bytes.Buffer{}
+	for _, field := range msg.Fields {
+		if field.DefaultValue == nil {
+			continue
+		}
+		res.WriteString(field.GoName)
+		res.WriteString(":")
+		val := field.DefaultValue
+		switch val.(type) {
+		case bool:
+			res.WriteString(strconv.FormatBool(val.(bool)))
+		case uint8:
+			res.WriteString(strconv.FormatUint(uint64(val.(uint8)), 10))
+		case uint16:
+			res.WriteString(strconv.FormatUint(uint64(val.(uint16)), 10))
+		case uint32:
+			res.WriteString(strconv.FormatUint(uint64(val.(uint32)), 10))
+		case uint64:
+			res.WriteString(strconv.FormatUint(val.(uint64), 10))
+		case int8:
+			res.WriteString(strconv.FormatInt(int64(val.(int8)), 10))
+		case int16:
+			res.WriteString(strconv.FormatInt(int64(val.(int16)), 10))
+		case int32:
+			res.WriteString(strconv.FormatInt(int64(val.(int32)), 10))
+		case int64:
+			res.WriteString(strconv.FormatInt(val.(int64), 10))
+		case float32:
+			res.WriteString(strconv.FormatFloat(float64(val.(float32)), 'f', -1, 32))
+		case float64:
+			res.WriteString(strconv.FormatFloat(val.(float64), 'f', -1, 64))
+		case string:
+			res.WriteString(val.(string))
+		}
+		res.WriteString(",")
+	}
+	return res.String()
+}
+
 func genMessageBaseMethods(g *GenFile, msg *Message) {
+	body := genMessageResetBody(g, msg)
 	// Reset method
-	g.P("func (m *", msg.GoName, ") Reset() { *m = ", msg.GoName, "{} }")
+	g.P("func (m *", msg.GoName, ") Reset() { *m = ", msg.GoName, "{", body, "} }")
 
 	// GetXXX methods
 	genMessageMethods(g, msg)
