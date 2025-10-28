@@ -155,7 +155,8 @@ func BenchmarkAPIMemory(b *testing.B) {
 		}
 	}
 	if !pass {
-		b.Fatal("one or more memory thresholds was exceeded")
+		b.Errorf("one or more memory thresholds was exceeded")
+		b.FailNow()
 	}
 }
 

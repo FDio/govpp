@@ -43,3 +43,4 @@ jobs:
       - name: "Run Tests"
         run: |
           make test-integration
+          make test-memory-benchmark
