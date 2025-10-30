@@ -14,6 +14,8 @@ import (
 type RPCService interface {
 	LcpDefaultNsGet(ctx context.Context, in *LcpDefaultNsGet) (*LcpDefaultNsGetReply, error)
 	LcpDefaultNsSet(ctx context.Context, in *LcpDefaultNsSet) (*LcpDefaultNsSetReply, error)
+	LcpEthertypeEnable(ctx context.Context, in *LcpEthertypeEnable) (*LcpEthertypeEnableReply, error)
+	LcpEthertypeGet(ctx context.Context, in *LcpEthertypeGet) (*LcpEthertypeGetReply, error)
 	LcpItfPairAddDel(ctx context.Context, in *LcpItfPairAddDel) (*LcpItfPairAddDelReply, error)
 	LcpItfPairAddDelV2(ctx context.Context, in *LcpItfPairAddDelV2) (*LcpItfPairAddDelV2Reply, error)
 	LcpItfPairAddDelV3(ctx context.Context, in *LcpItfPairAddDelV3) (*LcpItfPairAddDelV3Reply, error)
@@ -42,6 +44,24 @@ func (c *serviceClient) LcpDefaultNsGet(ctx context.Context, in *LcpDefaultNsGet
 
 func (c *serviceClient) LcpDefaultNsSet(ctx context.Context, in *LcpDefaultNsSet) (*LcpDefaultNsSetReply, error) {
 	out := new(LcpDefaultNsSetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpEthertypeEnable(ctx context.Context, in *LcpEthertypeEnable) (*LcpEthertypeEnableReply, error) {
+	out := new(LcpEthertypeEnableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpEthertypeGet(ctx context.Context, in *LcpEthertypeGet) (*LcpEthertypeGetReply, error) {
+	out := new(LcpEthertypeGetReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

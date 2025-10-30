@@ -10,8 +10,8 @@ import (
 
 // RPCService defines RPC service http_static.
 type RPCService interface {
-	HTTPStaticEnableV2(ctx context.Context, in *HTTPStaticEnableV2) (*HTTPStaticEnableV2Reply, error)
-	HTTPStaticEnableV3(ctx context.Context, in *HTTPStaticEnableV3) (*HTTPStaticEnableV3Reply, error)
+	HTTPStaticEnableV4(ctx context.Context, in *HTTPStaticEnableV4) (*HTTPStaticEnableV4Reply, error)
+	HTTPStaticEnableV5(ctx context.Context, in *HTTPStaticEnableV5) (*HTTPStaticEnableV5Reply, error)
 }
 
 type serviceClient struct {
@@ -22,8 +22,8 @@ func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
 }
 
-func (c *serviceClient) HTTPStaticEnableV2(ctx context.Context, in *HTTPStaticEnableV2) (*HTTPStaticEnableV2Reply, error) {
-	out := new(HTTPStaticEnableV2Reply)
+func (c *serviceClient) HTTPStaticEnableV4(ctx context.Context, in *HTTPStaticEnableV4) (*HTTPStaticEnableV4Reply, error) {
+	out := new(HTTPStaticEnableV4Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
@@ -31,8 +31,8 @@ func (c *serviceClient) HTTPStaticEnableV2(ctx context.Context, in *HTTPStaticEn
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
-func (c *serviceClient) HTTPStaticEnableV3(ctx context.Context, in *HTTPStaticEnableV3) (*HTTPStaticEnableV3Reply, error) {
-	out := new(HTTPStaticEnableV3Reply)
+func (c *serviceClient) HTTPStaticEnableV5(ctx context.Context, in *HTTPStaticEnableV5) (*HTTPStaticEnableV5Reply, error) {
+	out := new(HTTPStaticEnableV5Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

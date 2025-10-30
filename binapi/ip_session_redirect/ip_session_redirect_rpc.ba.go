@@ -4,8 +4,11 @@ package ip_session_redirect
 
 import (
 	"context"
+	"fmt"
+	"io"
 
 	api "go.fd.io/govpp/api"
+	memclnt "go.fd.io/govpp/binapi/memclnt"
 )
 
 // RPCService defines RPC service ip_session_redirect.
@@ -13,6 +16,7 @@ type RPCService interface {
 	IPSessionRedirectAdd(ctx context.Context, in *IPSessionRedirectAdd) (*IPSessionRedirectAddReply, error)
 	IPSessionRedirectAddV2(ctx context.Context, in *IPSessionRedirectAddV2) (*IPSessionRedirectAddV2Reply, error)
 	IPSessionRedirectDel(ctx context.Context, in *IPSessionRedirectDel) (*IPSessionRedirectDelReply, error)
+	IPSessionRedirectDump(ctx context.Context, in *IPSessionRedirectDump) (RPCService_IPSessionRedirectDumpClient, error)
 }
 
 type serviceClient struct {
@@ -48,4 +52,47 @@ func (c *serviceClient) IPSessionRedirectDel(ctx context.Context, in *IPSessionR
 		return nil, err
 	}
 	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) IPSessionRedirectDump(ctx context.Context, in *IPSessionRedirectDump) (RPCService_IPSessionRedirectDumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_IPSessionRedirectDumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_IPSessionRedirectDumpClient interface {
+	Recv() (*IPSessionRedirectDetails, error)
+	api.Stream
+}
+
+type serviceClient_IPSessionRedirectDumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_IPSessionRedirectDumpClient) Recv() (*IPSessionRedirectDetails, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *IPSessionRedirectDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
 }
