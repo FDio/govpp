@@ -13,6 +13,10 @@ import (
 
 // RPCService defines RPC service sflow.
 type RPCService interface {
+	SflowDirectionGet(ctx context.Context, in *SflowDirectionGet) (*SflowDirectionGetReply, error)
+	SflowDirectionSet(ctx context.Context, in *SflowDirectionSet) (*SflowDirectionSetReply, error)
+	SflowDropMonitoringGet(ctx context.Context, in *SflowDropMonitoringGet) (*SflowDropMonitoringGetReply, error)
+	SflowDropMonitoringSet(ctx context.Context, in *SflowDropMonitoringSet) (*SflowDropMonitoringSetReply, error)
 	SflowEnableDisable(ctx context.Context, in *SflowEnableDisable) (*SflowEnableDisableReply, error)
 	SflowHeaderBytesGet(ctx context.Context, in *SflowHeaderBytesGet) (*SflowHeaderBytesGetReply, error)
 	SflowHeaderBytesSet(ctx context.Context, in *SflowHeaderBytesSet) (*SflowHeaderBytesSetReply, error)
@@ -29,6 +33,42 @@ type serviceClient struct {
 
 func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
+}
+
+func (c *serviceClient) SflowDirectionGet(ctx context.Context, in *SflowDirectionGet) (*SflowDirectionGetReply, error) {
+	out := new(SflowDirectionGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SflowDirectionSet(ctx context.Context, in *SflowDirectionSet) (*SflowDirectionSetReply, error) {
+	out := new(SflowDirectionSetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SflowDropMonitoringGet(ctx context.Context, in *SflowDropMonitoringGet) (*SflowDropMonitoringGetReply, error) {
+	out := new(SflowDropMonitoringGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serviceClient) SflowDropMonitoringSet(ctx context.Context, in *SflowDropMonitoringSet) (*SflowDropMonitoringSetReply, error) {
+	out := new(SflowDropMonitoringSetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SflowEnableDisable(ctx context.Context, in *SflowEnableDisable) (*SflowEnableDisableReply, error) {

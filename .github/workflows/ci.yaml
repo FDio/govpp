@@ -40,7 +40,7 @@ jobs:
     name: "Check go.mod"
     strategy:
       matrix:
-        go: [ '1.24' ]
+        go: [ '1.25' ]
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -66,7 +66,7 @@ jobs:
     name: "Check generated binapi"
     strategy:
       matrix:
-        go: [ '1.24' ]
+        go: [ '1.25' ]
     env:
       VERSION: v0.12.0
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
     name: "Build and test"
     strategy:
       matrix:
-        go: [ '1.24' ]
+        go: [ '1.25' ]
         os: [ ubuntu-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -123,7 +123,7 @@ jobs:
     name: "GolangCI"
     strategy:
       matrix:
-        go: [ '1.24' ]
+        go: [ '1.25' ]
     runs-on: ubuntu-latest
     permissions:
       contents: read

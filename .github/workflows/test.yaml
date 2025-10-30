@@ -27,9 +27,9 @@ jobs:
       matrix:
         version:
           - 'master'
+          - '2510'
           - '2502'
           - '2406'
-          - '2402'
 
     steps:
       - name: "Checkout"
@@ -38,7 +38,7 @@ jobs:
       - name: "Setup Go"
         uses: actions/setup-go@v6
         with:
-          go-version: '1.24'
+          go-version: '1.25'
 
       - name: "Run Tests"
         run: |

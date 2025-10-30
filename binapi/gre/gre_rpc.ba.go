@@ -4,17 +4,16 @@ package gre
 
 import (
 	"context"
-	"fmt"
-	"io"
 
 	api "go.fd.io/govpp/api"
-	memclnt "go.fd.io/govpp/binapi/memclnt"
 )
 
 // RPCService defines RPC service gre.
 type RPCService interface {
 	GreTunnelAddDel(ctx context.Context, in *GreTunnelAddDel) (*GreTunnelAddDelReply, error)
-	GreTunnelDump(ctx context.Context, in *GreTunnelDump) (RPCService_GreTunnelDumpClient, error)
+	GreTunnelAddDelV2(ctx context.Context, in *GreTunnelAddDelV2) (*GreTunnelAddDelV2Reply, error)
+	GreTunnelDump(ctx context.Context, in *GreTunnelDump) (*GreTunnelDumpReply, error)
+	GreTunnelDumpV2(ctx context.Context, in *GreTunnelDumpV2) (*GreTunnelDumpV2Reply, error)
 }
 
 type serviceClient struct {
@@ -34,45 +33,29 @@ func (c *serviceClient) GreTunnelAddDel(ctx context.Context, in *GreTunnelAddDel
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
-func (c *serviceClient) GreTunnelDump(ctx context.Context, in *GreTunnelDump) (RPCService_GreTunnelDumpClient, error) {
-	stream, err := c.conn.NewStream(ctx)
+func (c *serviceClient) GreTunnelAddDelV2(ctx context.Context, in *GreTunnelAddDelV2) (*GreTunnelAddDelV2Reply, error) {
+	out := new(GreTunnelAddDelV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
-	x := &serviceClient_GreTunnelDumpClient{stream}
-	if err := x.Stream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
-type RPCService_GreTunnelDumpClient interface {
-	Recv() (*GreTunnelDetails, error)
-	api.Stream
-}
-
-type serviceClient_GreTunnelDumpClient struct {
-	api.Stream
-}
-
-func (c *serviceClient_GreTunnelDumpClient) Recv() (*GreTunnelDetails, error) {
-	msg, err := c.Stream.RecvMsg()
+func (c *serviceClient) GreTunnelDump(ctx context.Context, in *GreTunnelDump) (*GreTunnelDumpReply, error) {
+	out := new(GreTunnelDumpReply)
+	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
 	}
-	switch m := msg.(type) {
-	case *GreTunnelDetails:
-		return m, nil
-	case *memclnt.ControlPingReply:
-		err = c.Stream.Close()
-		if err != nil {
-			return nil, err
-		}
-		return nil, io.EOF
-	default:
-		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) GreTunnelDumpV2(ctx context.Context, in *GreTunnelDumpV2) (*GreTunnelDumpV2Reply, error) {
+	out := new(GreTunnelDumpV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
 	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }

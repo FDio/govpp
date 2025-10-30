@@ -1,4 +1,4 @@
-ARG VPP_VERSION=v25.02
+ARG VPP_VERSION=v25.10
 ARG UBUNTU_VERSION=22.04
 
 FROM ubuntu:${UBUNTU_VERSION} as vppbuild
@@ -36,7 +36,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /pkg
 
-FROM golang:1.22-alpine3.19 as binapi-generator
+FROM golang:1.25-alpine3.22 as binapi-generator
 
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
