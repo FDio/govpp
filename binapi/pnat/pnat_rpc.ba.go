@@ -18,6 +18,7 @@ type RPCService interface {
 	PnatBindingDel(ctx context.Context, in *PnatBindingDel) (*PnatBindingDelReply, error)
 	PnatBindingDetach(ctx context.Context, in *PnatBindingDetach) (*PnatBindingDetachReply, error)
 	PnatBindingsGet(ctx context.Context, in *PnatBindingsGet) (RPCService_PnatBindingsGetClient, error)
+	PnatFlowLookup(ctx context.Context, in *PnatFlowLookup) (*PnatFlowLookupReply, error)
 	PnatInterfacesGet(ctx context.Context, in *PnatInterfacesGet) (RPCService_PnatInterfacesGetClient, error)
 }
 
@@ -116,6 +117,15 @@ func (c *serviceClient_PnatBindingsGetClient) Recv() (*PnatBindingsDetails, *Pna
 	default:
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) PnatFlowLookup(ctx context.Context, in *PnatFlowLookup) (*PnatFlowLookupReply, error) {
+	out := new(PnatFlowLookupReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PnatInterfacesGet(ctx context.Context, in *PnatInterfacesGet) (RPCService_PnatInterfacesGetClient, error) {

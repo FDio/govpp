@@ -43,7 +43,7 @@ endif
 # Package cloud repo for VPP.
 VPP_REPO		  ?= release
 # VPP Docker image to use for api generation (gen-binapi-docker)
-VPP_IMG 	      ?= ligato/vpp-base:25.02-release
+VPP_IMG 	      ?= ligato/vpp-base:25.10-release
 # Local VPP directory used for binary api generation (gen-binapi-from-code)
 VPP_DIR           ?=
 # Target directory for generated go api bindings

@@ -11,6 +11,7 @@ import (
 // RPCService defines RPC service feature.
 type RPCService interface {
 	FeatureEnableDisable(ctx context.Context, in *FeatureEnableDisable) (*FeatureEnableDisableReply, error)
+	FeatureIsEnabled(ctx context.Context, in *FeatureIsEnabled) (*FeatureIsEnabledReply, error)
 }
 
 type serviceClient struct {
@@ -23,6 +24,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) FeatureEnableDisable(ctx context.Context, in *FeatureEnableDisable) (*FeatureEnableDisableReply, error) {
 	out := new(FeatureEnableDisableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) FeatureIsEnabled(ctx context.Context, in *FeatureIsEnabled) (*FeatureIsEnabledReply, error) {
+	out := new(FeatureIsEnabledReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
