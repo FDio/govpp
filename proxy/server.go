@@ -332,8 +332,9 @@ func (s *BinapiRPC) serviceAvailable() bool {
 }
 
 type RPCStreamReqResp struct {
-	ID  uint32
-	Msg api.Message
+	ID    uint32
+	Msg   api.Message
+	Check []api.Message
 }
 
 func (s *BinapiRPC) NewAPIStream(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
@@ -390,6 +391,21 @@ func (s *BinapiRPC) ReceiveMessage(req RPCStreamReqResp, resp *RPCStreamReqResp)
 
 	resp.Msg, err = stream.RecvMsg()
 	return err
+}
+
+func (s *BinapiRPC) CheckCompatibility(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
+	if !s.serviceAvailable() {
+		log.Print(binapiErrorMsg)
+		return errors.New("server does not support RPC calls at this time, try again later")
+	}
+	log.Debugf("BinapiRPC.CheckCompatibility - REQ: %#v", req)
+
+	stream, err := s.getStream(req.ID)
+	if err != nil {
+		return err
+	}
+
+	return stream.CheckCompatibility(req.Check...)
 }
 
 func (s *BinapiRPC) CloseStream(req RPCStreamReqResp, resp *RPCStreamReqResp) error {

@@ -60,6 +60,10 @@ type Stream interface {
 	// RecvMsg blocks until a message is received or error occurs.
 	RecvMsg() (Message, error)
 
+	// CheckCompatibility checks the compatibility for the given set of messages.
+	// It will return an error if any of the given messages are not compatible.
+	CheckCompatibility(msgs ...Message) error
+
 	// Close closes the stream. Calling SendMsg and RecvMsg will return error
 	// after closing stream.
 	Close() error

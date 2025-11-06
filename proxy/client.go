@@ -169,6 +169,19 @@ func (s *RPCStream) RecvMsg() (api.Message, error) {
 	return resp.Msg, nil
 }
 
+func (s *RPCStream) CheckCompatibility(msgs ...api.Message) error {
+	req := RPCStreamReqResp{
+		ID:    s.id,
+		Check: msgs,
+	}
+	resp := RPCStreamReqResp{}
+	err := s.rpc.Call("BinapiRPC.CheckCompatibility", req, &resp)
+	if err != nil {
+		return fmt.Errorf("RPC CheckCompatibility call failed: %v", err)
+	}
+	return nil
+}
+
 func (s *RPCStream) Close() error {
 	req := RPCStreamReqResp{
 		ID: s.id,
