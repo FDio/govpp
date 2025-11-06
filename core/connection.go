@@ -234,7 +234,7 @@ func AsyncConnect(binapi adapter.VppAPI, attempts int, interval time.Duration) (
 	atomic.StoreUint32(&conn.backgroundLoopActive, 1)
 
 	// asynchronously attempt to connect to VPP
-	go conn.backgroudConnectionLoop()
+	go conn.backgroundConnectionLoop()
 
 	return conn, conn.connChan, nil
 }
@@ -350,7 +350,7 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 }
 
 // runs connectionLoop and healthCheckLoop until they fail
-func (c *Connection) backgroudConnectionLoop() {
+func (c *Connection) backgroundConnectionLoop() {
 	defer close(c.healthCheckExited)
 
 	for {

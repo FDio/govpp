@@ -273,14 +273,24 @@ func (sub *subscriptionCtx) Unsubscribe() error {
 	sub.conn.subscriptionsLock.Lock()
 	defer sub.conn.subscriptionsLock.Unlock()
 
-	for i, item := range sub.conn.subscriptions[sub.msgID] {
-		if item == sub {
-			// close notification channel
-			close(sub.conn.subscriptions[sub.msgID][i].notifChan)
-			// remove i-th item in the slice
-			sub.conn.subscriptions[sub.msgID] = append(sub.conn.subscriptions[sub.msgID][:i], sub.conn.subscriptions[sub.msgID][i+1:]...)
-			return nil
+	msgSubscriptions := sub.conn.subscriptions[sub.msgID]
+	for i, item := range msgSubscriptions {
+		if item != sub {
+			continue
 		}
+		// close notification channel
+		close(msgSubscriptions[i].notifChan)
+
+		// remove i-th item in the slice
+		msgSubscriptions[i] = msgSubscriptions[len(msgSubscriptions)-1]
+		msgSubscriptions = msgSubscriptions[:len(msgSubscriptions)-1]
+
+		// delete msgID subscriptions from subscriptions map in case its empty
+		if len(msgSubscriptions) == 0 {
+			delete(sub.conn.subscriptions, sub.msgID)
+		}
+
+		return nil
 	}
 
 	return fmt.Errorf("subscription for %q not found", sub.event.GetMessageName())
