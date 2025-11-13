@@ -135,6 +135,9 @@ func runVppApiLintCmd(out io.Writer, opts VppApiLintCmdOptions) error {
 }
 
 func printLintRulesAsTable(out io.Writer, rules []*LintRule) error {
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Row().Merging().WithMode(tw.MergeNone)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -143,8 +146,7 @@ func printLintRulesAsTable(out io.Writer, rules []*LintRule) error {
 				Separators: tw.Separators{BetweenRows: tw.Off},
 			},
 		}),
-		tablewriter.WithRowAutoWrap(tw.WrapNone),
-		tablewriter.WithRowMergeMode(tw.MergeNone),
+		tablewriter.WithConfig(cfg.Build()),
 	)
 	table.Header("#", "Id", "Purpose")
 	for i, r := range rules {
@@ -162,6 +164,9 @@ func printLintErrorsAsTable(out io.Writer, issues LintIssues) error {
 		return nil
 	}
 
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Row().Merging().WithMode(tw.MergeVertical)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -170,8 +175,7 @@ func printLintErrorsAsTable(out io.Writer, issues LintIssues) error {
 				Separators: tw.Separators{BetweenRows: tw.On},
 			},
 		}),
-		tablewriter.WithRowAutoWrap(tw.WrapNone),
-		tablewriter.WithRowMergeMode(tw.MergeVertical),
+		tablewriter.WithConfig(cfg.Build()),
 	)
 
 	table.Header("#", "Rule", "Location", "Violation")
