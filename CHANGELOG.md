@@ -11,6 +11,38 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## 0.13.0
+
+> _13 November 2025_
+
+### Changes
+
+- Add VPP 25.10 (#318)
+- Update ControlPing/Reply in core (#291)
+- buffered events and notifications channel (#310)
+- optimize Unsubscribe with the latest element in msgSubscriptions (#321)
+
+### Fixes
+- Upgrade tablewriter and fix API changes (#298)
+- Fix stats connection panic (#309)
+- statsclient: fix race between reconnect() and access (#305)
+- do not build debug logger entries until necessary (#301)
+
+## 0.12.0
+
+> _14 May 2025_
+
+### Changes
+
+- Add VPP 25.02 (#282)
+- Add binapi benchmarks (#269)
+- Docker image and release improvements (#242)
+- Enhance logging and optimize some usage (#281)
+
+### Fixes
+
+- Send `vl_api_sockclnt_delete_t` message on disconnect (#248)
+
 ## 0.11.0
 
 > _19 September 2024_

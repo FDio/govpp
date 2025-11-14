@@ -28,7 +28,7 @@ import (
 // even with bare go build/install.
 var (
 	name       = "govpp"
-	version    = "v0.13.0-dev"
+	version    = "v0.14.0-dev"
 	commit     = "unknown"
 	branch     = "HEAD"
 	buildStamp = ""
