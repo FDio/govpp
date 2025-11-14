@@ -46,6 +46,7 @@ var dirTypeMapping = map[dirType]adapter.StatType{
 	4: adapter.NameVector,
 	5: adapter.Empty,
 	6: adapter.Symlink,
+	9: adapter.GaugeIndex,
 }
 
 var dirTypeMappingLegacy = map[dirType]adapter.StatType{
