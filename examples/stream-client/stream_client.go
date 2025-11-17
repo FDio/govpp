@@ -94,7 +94,7 @@ func main() {
 		}
 	}()
 
-	// send and receive messages using stream (low-low level API)
+	// send and receive messages using stream (low-level API)
 	getVppVersion(stream)
 	idx := createLoopback(stream)
 	interfaceDump(stream)
