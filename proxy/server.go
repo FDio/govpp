@@ -332,9 +332,8 @@ func (s *BinapiRPC) serviceAvailable() bool {
 }
 
 type RPCStreamReqResp struct {
-	ID    uint32
-	Msg   api.Message
-	Check []api.Message
+	ID  uint32
+	Msg api.Message
 }
 
 func (s *BinapiRPC) NewAPIStream(req RPCStreamReqResp, resp *RPCStreamReqResp) error {
