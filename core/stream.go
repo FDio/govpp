@@ -263,13 +263,6 @@ func (s *Stream) RecvMsg() (api.Message, error) {
 	return msg, nil
 }
 
-func (s *Stream) CheckCompatibility(msgs ...api.Message) error {
-	if s.channel == nil {
-		return errors.New("unable to do compatibility check, stream channel is closed")
-	}
-	return s.channel.CheckCompatiblity(msgs...)
-}
-
 func WithRequestSize(size int) api.StreamOption {
 	return func(stream api.Stream) {
 		stream.(*Stream).requestSize = size

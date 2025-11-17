@@ -71,6 +71,14 @@ func main() {
 		}
 	}()
 
+	// check the compatibility of used messages
+	if err = conn.CheckCompatibility(vpe.AllMessages()...); err != nil {
+		log.Fatalf("compatibility check failed: %v", err)
+	}
+	if err = conn.CheckCompatibility(interfaces.AllMessages()...); err != nil {
+		log.Printf("compatibility check failed: %v", err)
+	}
+
 	// initialize a new stream object
 	stream, err := conn.NewStream(context.Background(),
 		core.WithRequestSize(50),
@@ -78,14 +86,6 @@ func main() {
 		core.WithReplyTimeout(2*time.Second))
 	if err != nil {
 		panic(err)
-	}
-
-	// check the compatibility of used messages
-	if err = stream.CheckCompatibility(vpe.AllMessages()...); err != nil {
-		log.Fatalf("compatibility check failed: %v", err)
-	}
-	if err = stream.CheckCompatibility(interfaces.AllMessages()...); err != nil {
-		log.Printf("compatibility check failed: %v", err)
 	}
 
 	defer func() {

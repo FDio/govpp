@@ -33,6 +33,10 @@ type Connection interface {
 	// WatchEvent creates a new watcher for watching events of type specified by
 	// event parameter. Context can be used to close the watcher.
 	WatchEvent(ctx context.Context, event Message) (Watcher, error)
+
+	// CheckCompatibility checks the compatibility for the given set of messages.
+	// It will return an error if any of the provided messages are not compatible.
+	CheckCompatibility(msgs ...Message) error
 }
 
 // Watcher provides access to watched event messages. It can be created by calling Connection.WatchEvent.
@@ -59,10 +63,6 @@ type Stream interface {
 
 	// RecvMsg blocks until a message is received or error occurs.
 	RecvMsg() (Message, error)
-
-	// CheckCompatibility checks the compatibility for the given set of messages.
-	// It will return an error if any of the given messages are not compatible.
-	CheckCompatibility(msgs ...Message) error
 
 	// Close closes the stream. Calling SendMsg and RecvMsg will return error
 	// after closing stream.
