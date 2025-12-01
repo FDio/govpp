@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Run YAML linter"
         uses: ibiqlik/action-yamllint@v3
@@ -31,7 +31,7 @@ jobs:
     name: "Lint Markdown"
     runs-on: ubuntu-latest
     steps:
-      - uses: DavidAnson/markdownlint-cli2-action@v20
+      - uses: DavidAnson/markdownlint-cli2-action@v21
         with:
           fix: true
           globs: '**/*.md'
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Setup Go"
         uses: actions/setup-go@v6
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Setup Go"
         uses: actions/setup-go@v6
@@ -95,7 +95,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Setup Go"
         uses: actions/setup-go@v6
@@ -130,7 +130,7 @@ jobs:
       pull-requests: read
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: "Setup Go"
         uses: actions/setup-go@v6
