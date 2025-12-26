@@ -565,6 +565,7 @@ func (cc *controlChannel) msgEnqInit() (err error) {
 		Version: Version,
 		Id:      cc.i.args.Id,
 		Mode:    cc.i.args.Mode,
+		Secret:  cc.i.args.Secret, // Fix: include secret in INIT message for VPP authentication
 	}
 
 	copy(init.Name[:], []byte(cc.socket.appName))
