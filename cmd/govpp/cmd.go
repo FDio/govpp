@@ -18,7 +18,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/spf13/cobra"
 
-	"go.fd.io/govpp/internal/version"
+	"github.com/americanbinary/govpp/internal/version"
 )
 
 const logo = `

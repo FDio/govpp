@@ -20,8 +20,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapi/ip_types"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 const testOutputDir = "test_output_dir"

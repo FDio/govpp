@@ -30,7 +30,7 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/ftrvxmtrx/fd"
 	logger "github.com/sirupsen/logrus"
-	"go.fd.io/govpp/adapter"
+	"github.com/americanbinary/govpp/adapter"
 )
 
 const (

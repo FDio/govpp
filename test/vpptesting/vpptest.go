@@ -26,15 +26,15 @@ import (
 
 	"github.com/mitchellh/go-ps"
 	"github.com/sirupsen/logrus"
-	"go.fd.io/govpp/binapi/vpe"
+	"github.com/americanbinary/govpp/binapi/vpe"
 
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/adapter/statsclient"
-	govppapi "go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/binapi/vlib"
-	govppcore "go.fd.io/govpp/core"
-	"go.fd.io/govpp/test/vpptesting/vpplauncher"
+	"github.com/americanbinary/govpp/adapter/socketclient"
+	"github.com/americanbinary/govpp/adapter/statsclient"
+	govppapi "github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/binapi/vlib"
+	govppcore "github.com/americanbinary/govpp/core"
+	"github.com/americanbinary/govpp/test/vpptesting/vpplauncher"
 )
 
 var (

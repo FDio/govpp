@@ -11,7 +11,7 @@
 package pci_types
 
 import (
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // This is a compile-time assertion to ensure that this generated file

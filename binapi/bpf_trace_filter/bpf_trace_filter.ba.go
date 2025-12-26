@@ -11,8 +11,8 @@
 package bpf_trace_filter
 
 import (
-	api "go.fd.io/govpp/api"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

@@ -31,9 +31,9 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/adapter"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/codec"
+	"github.com/americanbinary/govpp/adapter"
+	"github.com/americanbinary/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/codec"
 )
 
 const (

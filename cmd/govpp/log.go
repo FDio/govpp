@@ -25,7 +25,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const modulePath = "go.fd.io/govpp"
+const modulePath = "github.com/americanbinary/govpp"
 
 var (
 	logstyleFilename = color.Style{color.LightWhite}

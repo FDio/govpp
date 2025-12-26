@@ -23,7 +23,7 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 func TestGenerator(t *testing.T) {
@@ -63,7 +63,7 @@ func TestGenerator(t *testing.T) {
 }
 
 func TestGoModule(t *testing.T) {
-	const expected = "go.fd.io/govpp/binapi"
+	const expected = "github.com/americanbinary/govpp/binapi"
 
 	impPath, err := ResolveImportPath("../binapi")
 	if err != nil {

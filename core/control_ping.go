@@ -1,8 +1,8 @@
 package core
 
 import (
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/binapi/memclnt"
 )
 
 var (

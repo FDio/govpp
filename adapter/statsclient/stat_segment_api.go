@@ -20,7 +20,7 @@ import (
 	"time"
 	"unsafe"
 
-	"go.fd.io/govpp/adapter"
+	"github.com/americanbinary/govpp/adapter"
 )
 
 var (

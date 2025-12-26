@@ -26,7 +26,7 @@ import (
 	"strings"
 	"sync"
 
-	"go.fd.io/govpp/extras/gomemif/memif"
+	"github.com/americanbinary/govpp/extras/gomemif/memif"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"

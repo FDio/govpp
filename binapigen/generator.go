@@ -31,7 +31,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 // Options is set of input parameters for the Generator.

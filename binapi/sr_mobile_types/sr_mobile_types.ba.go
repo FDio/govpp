@@ -13,7 +13,7 @@ package sr_mobile_types
 import (
 	"strconv"
 
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // This is a compile-time assertion to ensure that this generated file

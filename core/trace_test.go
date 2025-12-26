@@ -5,13 +5,13 @@ import (
 	"testing"
 
 	. "github.com/onsi/gomega"
-	"go.fd.io/govpp/api"
-	interfaces "go.fd.io/govpp/binapi/interface"
-	"go.fd.io/govpp/binapi/ip"
-	"go.fd.io/govpp/binapi/l2"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/binapi/memif"
-	"go.fd.io/govpp/core"
+	"github.com/americanbinary/govpp/api"
+	interfaces "github.com/americanbinary/govpp/binapi/interface"
+	"github.com/americanbinary/govpp/binapi/ip"
+	"github.com/americanbinary/govpp/binapi/l2"
+	"github.com/americanbinary/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/binapi/memif"
+	"github.com/americanbinary/govpp/core"
 )
 
 const traceSize = 10

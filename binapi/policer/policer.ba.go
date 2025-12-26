@@ -11,10 +11,10 @@
 package policer
 
 import (
-	api "go.fd.io/govpp/api"
-	interface_types "go.fd.io/govpp/binapi/interface_types"
-	policer_types "go.fd.io/govpp/binapi/policer_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	interface_types "github.com/americanbinary/govpp/binapi/interface_types"
+	policer_types "github.com/americanbinary/govpp/binapi/policer_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

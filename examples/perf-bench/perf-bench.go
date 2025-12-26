@@ -27,11 +27,11 @@ import (
 	"github.com/pkg/profile"
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/adapter/socketclient"
-	"go.fd.io/govpp/adapter/statsclient"
-	"go.fd.io/govpp/api"
-	"go.fd.io/govpp/binapi/memclnt"
-	"go.fd.io/govpp/core"
+	"github.com/americanbinary/govpp/adapter/socketclient"
+	"github.com/americanbinary/govpp/adapter/statsclient"
+	"github.com/americanbinary/govpp/api"
+	"github.com/americanbinary/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/core"
 )
 
 const (

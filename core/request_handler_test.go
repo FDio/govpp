@@ -5,8 +5,8 @@ import (
 
 	. "github.com/onsi/gomega"
 
-	"go.fd.io/govpp/api"
-	interfaces "go.fd.io/govpp/binapi/interface"
+	"github.com/americanbinary/govpp/api"
+	interfaces "github.com/americanbinary/govpp/binapi/interface"
 )
 
 func TestNotificationMessageAfterUnsubscribe(t *testing.T) {

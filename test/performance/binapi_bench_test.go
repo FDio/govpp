@@ -3,9 +3,9 @@ package performance
 import (
 	"testing"
 
-	"go.fd.io/govpp/binapi/memclnt"
+	"github.com/americanbinary/govpp/binapi/memclnt"
 
-	"go.fd.io/govpp/test/vpptesting"
+	"github.com/americanbinary/govpp/test/vpptesting"
 )
 
 func BenchmarkBinapiControlPing(b *testing.B) {

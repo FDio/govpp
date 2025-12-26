@@ -21,11 +21,11 @@ import (
 	"log"
 	"time"
 
-	"go.fd.io/govpp/binapi/ethernet_types"
-	"go.fd.io/govpp/binapi/ip"
-	"go.fd.io/govpp/binapi/ip_types"
-	"go.fd.io/govpp/binapi/vpe_types"
-	"go.fd.io/govpp/codec"
+	"github.com/americanbinary/govpp/binapi/ethernet_types"
+	"github.com/americanbinary/govpp/binapi/ip"
+	"github.com/americanbinary/govpp/binapi/ip_types"
+	"github.com/americanbinary/govpp/binapi/vpe_types"
+	"github.com/americanbinary/govpp/codec"
 )
 
 func init() {

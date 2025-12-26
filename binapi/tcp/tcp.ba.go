@@ -11,9 +11,9 @@
 package tcp
 
 import (
-	api "go.fd.io/govpp/api"
-	ip_types "go.fd.io/govpp/binapi/ip_types"
-	codec "go.fd.io/govpp/codec"
+	api "github.com/americanbinary/govpp/api"
+	ip_types "github.com/americanbinary/govpp/binapi/ip_types"
+	codec "github.com/americanbinary/govpp/codec"
 )
 
 // This is a compile-time assertion to ensure that this generated file

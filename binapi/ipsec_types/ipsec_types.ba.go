@@ -14,10 +14,10 @@ package ipsec_types
 import (
 	"strconv"
 
-	api "go.fd.io/govpp/api"
-	_ "go.fd.io/govpp/binapi/interface_types"
-	ip_types "go.fd.io/govpp/binapi/ip_types"
-	tunnel_types "go.fd.io/govpp/binapi/tunnel_types"
+	api "github.com/americanbinary/govpp/api"
+	_ "github.com/americanbinary/govpp/binapi/interface_types"
+	ip_types "github.com/americanbinary/govpp/binapi/ip_types"
+	tunnel_types "github.com/americanbinary/govpp/binapi/tunnel_types"
 )
 
 // This is a compile-time assertion to ensure that this generated file

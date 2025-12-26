@@ -19,7 +19,7 @@ import (
 	"sync"
 	"time"
 
-	"go.fd.io/govpp/api"
+	"github.com/americanbinary/govpp/api"
 )
 
 // default buffer size

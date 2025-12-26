@@ -5,7 +5,7 @@ package dhcp6_pd_client_cp
 import (
 	"context"
 
-	api "go.fd.io/govpp/api"
+	api "github.com/americanbinary/govpp/api"
 )
 
 // RPCService defines RPC service dhcp6_pd_client_cp.

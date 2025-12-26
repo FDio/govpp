@@ -1,4 +1,4 @@
-module go.fd.io/govpp
+module github.com/americanbinary/govpp
 
 go 1.24.0
 
@@ -41,6 +41,3 @@ require (
 	golang.org/x/sys v0.35.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
-
-// Versions v0.5.0 and older use old module path git.fd.io/govpp.git
-retract [v0.1.0, v0.5.0]

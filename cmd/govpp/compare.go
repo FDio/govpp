@@ -21,7 +21,7 @@ import (
 	"github.com/gookit/color"
 	"github.com/sirupsen/logrus"
 
-	"go.fd.io/govpp/binapigen/vppapi"
+	"github.com/americanbinary/govpp/binapigen/vppapi"
 )
 
 // DifferenceType represents the type of difference found in the comparison.
