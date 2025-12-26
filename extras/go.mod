@@ -3,10 +3,10 @@ module github.com/americanbinary/govpp/extras
 go 1.22
 
 require (
+	github.com/americanbinary/govpp v0.9.0
 	github.com/google/gopacket v1.1.17
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/americanbinary/govpp v0.10.0
 )
 
 require (
