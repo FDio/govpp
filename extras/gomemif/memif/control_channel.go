@@ -729,12 +729,29 @@ func (cc *controlChannel) parseAddRing() (err error) {
 		interruptFd: fd,
 	}
 
+	// BUG FIX: Queue assignment depends on whether we are master or slave.
+	// S2M = Slave-to-Master ring (slave writes, master reads)
+	// M2S = Master-to-Slave ring (master writes, slave reads)
+	//
+	// When RECEIVING ring info from peer:
+	// - Master receives S2M info → master will READ from it → rxQueues
+	// - Master receives M2S info → master will WRITE to it → txQueues
+	// - Slave receives S2M info → slave will WRITE to it → txQueues
+	// - Slave receives M2S info → slave will READ from it → rxQueues
 	if (addRing.Flags & msgAddRingFlagS2M) == msgAddRingFlagS2M {
 		q.ring = newRing(int(addRing.Region), ringTypeS2M, int(addRing.Offset), int(addRing.RingSizeLog2))
-		cc.i.rxQueues = append(cc.i.rxQueues, q)
+		if cc.i.args.IsMaster {
+			cc.i.rxQueues = append(cc.i.rxQueues, q) // Master reads from S2M
+		} else {
+			cc.i.txQueues = append(cc.i.txQueues, q) // Slave writes to S2M
+		}
 	} else {
 		q.ring = newRing(int(addRing.Region), ringTypeM2S, int(addRing.Offset), int(addRing.RingSizeLog2))
-		cc.i.txQueues = append(cc.i.txQueues, q)
+		if cc.i.args.IsMaster {
+			cc.i.txQueues = append(cc.i.txQueues, q) // Master writes to M2S
+		} else {
+			cc.i.rxQueues = append(cc.i.rxQueues, q) // Slave reads from M2S
+		}
 	}
 
 	return nil
