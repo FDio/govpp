@@ -94,7 +94,7 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 	dirEntry := (*statSegDirectoryEntryV2)(segment)
 	typ := getStatType(dirEntry.directoryType, ss.getErrorVector() != nil)
 	// skip zero pointer value
-	if typ != adapter.ScalarIndex && typ != adapter.Empty && typ != adapter.ErrorIndex && dirEntry.unionData == 0 {
+	if typ != adapter.ScalarIndex && typ != adapter.GaugeIndex && typ != adapter.Empty && typ != adapter.ErrorIndex && dirEntry.unionData == 0 {
 		debugf("data pointer not defined for %s", dirEntry.name)
 		return nil
 	}
@@ -246,6 +246,9 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		// stats for the required item
 		return ss.CopyEntryData(statSegDir2, i2)
 
+	case adapter.GaugeIndex:
+		return adapter.GaugeStat(dirEntry.unionData)
+
 	default:
 		// TODO: monitor occurrences with metrics
 		debugf("Unknown type %d for stat entry: %q", dirEntry.directoryType, dirEntry.name)
@@ -370,6 +373,9 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 				nameData[j] = value
 			}
 		}
+
+	case adapter.GaugeStat:
+		*stat = adapter.GaugeStat(dirEntry.unionData)
 
 	default:
 		if Debug {
