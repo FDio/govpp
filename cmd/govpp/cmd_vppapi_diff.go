@@ -141,6 +141,9 @@ func runVppApiDiffCmd(out io.Writer, opts VppApiDiffCmdOptions) error {
 }
 
 func printDiffsAsTable(out io.Writer, diffs []DifferenceType) error {
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Row().Merging().WithMode(tw.MergeNone)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -151,8 +154,7 @@ func printDiffsAsTable(out io.Writer, diffs []DifferenceType) error {
 				},
 			},
 		}),
-		tablewriter.WithRowAutoWrap(tw.WrapNone),
-		tablewriter.WithRowMergeMode(tw.MergeNone),
+		tablewriter.WithConfig(cfg.Build()),
 	)
 	table.Header("#", "Difference Type")
 	for i, d := range diffs {

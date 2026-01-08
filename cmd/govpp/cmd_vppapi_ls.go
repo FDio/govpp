@@ -191,7 +191,7 @@ func showVPPAPIFilesTable(out io.Writer, apifiles []VppApiFile) error {
 		tw.AlignRight, tw.AlignNone, tw.AlignNone, tw.AlignLeft, tw.AlignNone,
 		tw.AlignRight, tw.AlignRight, tw.AlignRight, tw.AlignRight, tw.AlignLeft,
 	})
-	cfg.WithRowAutoWrap(tw.WrapNone)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -309,6 +309,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 		if len(apifile.Messages) > 0 {
 			cfg := tablewriter.NewConfigBuilder()
 			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 			table := tablewriter.NewTable(
 				&buf,
 				tablewriter.WithRendition(tw.Rendition{
@@ -323,7 +324,6 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 						},
 					},
 				}),
-				tablewriter.WithRowAutoWrap(tw.WrapNone),
 				tablewriter.WithConfig(cfg.Build()),
 			)
 
@@ -354,6 +354,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 		if len(apifile.StructTypes) > 0 {
 			cfg := tablewriter.NewConfigBuilder()
 			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 			table := tablewriter.NewTable(
 				&buf,
 				tablewriter.WithRendition(tw.Rendition{
@@ -368,7 +369,6 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 						},
 					},
 				}),
-				tablewriter.WithRowAutoWrap(tw.WrapNone),
 				tablewriter.WithConfig(cfg.Build()),
 			)
 			table.Header("#", "Type", "Fields")
@@ -392,6 +392,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 		if len(apifile.UnionTypes) > 0 {
 			cfg := tablewriter.NewConfigBuilder()
 			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 			table := tablewriter.NewTable(
 				&buf,
 				tablewriter.WithRendition(tw.Rendition{
@@ -406,7 +407,6 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 						},
 					},
 				}),
-				tablewriter.WithRowAutoWrap(tw.WrapNone),
 				tablewriter.WithConfig(cfg.Build()),
 			)
 			table.Header("#", "UNION", "FIELDS")
@@ -429,6 +429,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 		if len(apifile.EnumTypes) > 0 || len(apifile.EnumflagTypes) > 0 {
 			cfg := tablewriter.NewConfigBuilder()
 			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+			cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 			table := tablewriter.NewTable(
 				&buf,
 				tablewriter.WithRendition(tw.Rendition{
@@ -443,7 +444,6 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 						},
 					},
 				}),
-				tablewriter.WithRowAutoWrap(tw.WrapNone),
 				tablewriter.WithConfig(cfg.Build()),
 			)
 			table.Header("#", "Enum", "Type", "Kind", "Entries")
@@ -478,6 +478,7 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 		if len(apifile.AliasTypes) > 0 {
 			cfg := tablewriter.NewConfigBuilder()
 			cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 			table := tablewriter.NewTable(
 				&buf,
 				tablewriter.WithRendition(tw.Rendition{
@@ -492,7 +493,6 @@ func showVPPAPIContents(out io.Writer, apifiles []vppapi.File) error {
 						},
 					},
 				}),
-				tablewriter.WithRowAutoWrap(tw.WrapNone),
 				tablewriter.WithConfig(cfg.Build()),
 			)
 			table.Header("#", "Alias", "Type", "Length")
@@ -588,6 +588,7 @@ func listVPPAPIMessages(apifiles []vppapi.File) []VppApiFileMessage {
 func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool) error {
 	cfg := tablewriter.NewConfigBuilder()
 	cfg.Header().Alignment().WithGlobal(tw.AlignLeft)
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -602,7 +603,6 @@ func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool
 				},
 			},
 		}),
-		tablewriter.WithRowAutoWrap(tw.WrapNone),
 		tablewriter.WithConfig(cfg.Build()),
 	)
 	table.Header("#", "File", "Message", "Fields", "Options")
@@ -628,6 +628,8 @@ func showVPPAPIMessages(out io.Writer, msgs []VppApiFileMessage, withFields bool
 }
 
 func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) error {
+	cfg := tablewriter.NewConfigBuilder()
+	cfg.Row().Formatting().WithAutoWrap(tw.WrapNone)
 	table := tablewriter.NewTable(
 		out,
 		tablewriter.WithRendition(tw.Rendition{
@@ -635,7 +637,7 @@ func showVPPAPIRPCs(out io.Writer, apifiles []vppapi.File) error {
 				Separators: tw.Separators{BetweenRows: tw.On},
 			},
 		}),
-		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithConfig(cfg.Build()),
 	)
 	table.Header("API", "Request", "Reply", "Stream", "StreamMsg", "Events")
 
