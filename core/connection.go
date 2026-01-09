@@ -147,6 +147,15 @@ type Connection struct {
 	trace     *Trace // API tracer (disabled by default)
 }
 
+func (c *Connection) CheckCompatibility(msgs ...api.Message) error {
+	ch, err := c.newAPIChannel(1, 1)
+	if err != nil {
+		return fmt.Errorf("unable to do compatibility check: failed to create a new channel: %v", err)
+	}
+	defer ch.Close()
+	return ch.CheckCompatiblity(msgs...)
+}
+
 type backgroundLoopStatus int
 
 const (
