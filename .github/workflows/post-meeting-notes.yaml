@@ -129,8 +129,12 @@ jobs:
           print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
 
           valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
+          required_path_fragment = "govpp_community_meeting"
           meeting_files = []
           for link in collect_meeting_files(BASE_URL):
+              if required_path_fragment not in link:
+                  print(f"Skipping non-govpp community meeting path: {link}")
+                  continue
               if not link.lower().endswith(valid_suffixes):
                   print(f"Skipping non-meeting file (extension mismatch): {link}")
                   continue
@@ -152,13 +156,13 @@ jobs:
           filtered = []
           for filename in meeting_files:
               note_date = extract_date(filename)
-              if note_date and note_date < cutoff_date:
+              if note_date is None:
+                  print(f"Skipping {filename} (no date found in filename).")
+                  continue
+              if note_date < cutoff_date:
                   print(f"Skipping {filename} (date {note_date} older than cutoff).")
                   continue
-              if note_date is None:
-                  print(f"Including {filename} (no date found in filename).")
-              else:
-                  print(f"Including {filename} (date {note_date}).")
+              print(f"Including {filename} (date {note_date}).")
               filtered.append(filename)
 
           meeting_files = sorted(set(filtered))
@@ -233,8 +237,17 @@ jobs:
                   print(f"Skipping already-posted meeting notes: {filename}")
                   continue
               note_url = urllib.parse.urljoin(BASE_URL, filename)
+              note_date = extract_date(filename)
+              if note_date is None:
+                  print(f"Skipping {filename} during posting (no date found in filename).")
+                  continue
+              badge_date = note_date.strftime("%Y-%b-%d")
+              badge_label = f"{badge_date}-GoVPP Community Meeting"
+              badge_label_escaped = urllib.parse.quote(badge_label.replace("-", "--"))
+              badge_url = f"https://img.shields.io/badge/{badge_label_escaped}-16b"
               body = (
                   f"### FD.io meeting notes `{filename}`\n\n"
+                  f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
                   f"Source: {note_url}\n\n"
                   f"<!-- meeting-notes:{filename} -->"
               )
