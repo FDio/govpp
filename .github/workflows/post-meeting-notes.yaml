@@ -29,6 +29,7 @@ jobs:
           import os
           import re
           import sys
+          import urllib.error
           import urllib.parse
           import urllib.request
           from html.parser import HTMLParser
@@ -37,6 +38,9 @@ jobs:
           OWNER = "FDio"
           REPO = "govpp"
           DISCUSSION_NUMBER = 46
+
+          print(f"Starting meeting notes sync from {BASE_URL}")
+          print(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}")
 
           class LinkParser(HTMLParser):
               def __init__(self):
@@ -51,8 +55,52 @@ jobs:
                           self.links.append(value)
 
           def fetch_url(url):
-              with urllib.request.urlopen(url) as response:
-                  return response.read().decode("utf-8", errors="replace")
+              print(f"Fetching URL: {url}")
+              try:
+                  with urllib.request.urlopen(url) as response:
+                      payload = response.read().decode("utf-8", errors="replace")
+                      print(f"Fetched {len(payload)} bytes from {url}")
+                      return payload
+              except urllib.error.HTTPError as exc:
+                  print(f"Failed to fetch {url}: {exc}")
+                  return ""
+
+          def collect_meeting_files(base_url):
+              queue = [base_url]
+              seen = set()
+              files = []
+              print("Collecting meeting files by traversing directories under base URL.")
+              while queue:
+                  url = queue.pop(0)
+                  if url in seen:
+                      continue
+                  seen.add(url)
+                  html = fetch_url(url)
+                  if not html:
+                      print(f"Skipping {url} due to empty response.")
+                      continue
+                  parser = LinkParser()
+                  parser.feed(html)
+                  for link in parser.links:
+                      if link.startswith("#"):
+                          continue
+                      next_url = urllib.parse.urljoin(url, link)
+                      if not next_url.startswith(base_url):
+                          print(f"Skipping external link: {next_url}")
+                          continue
+                      if link.endswith("/"):
+                          print(f"Discovered directory: {next_url}")
+                          queue.append(next_url)
+                          continue
+                      relative_path = urllib.parse.urlparse(next_url).path.replace(
+                          urllib.parse.urlparse(base_url).path,
+                          "",
+                          1,
+                      ).lstrip("/")
+                      print(f"Discovered file: {relative_path}")
+                      files.append(relative_path)
+              print(f"Traversal complete. Found {len(files)} file(s).")
+              return files
 
           def github_graphql(token, query, variables):
               payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
@@ -78,17 +126,13 @@ jobs:
               sys.exit(1)
 
           cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
-
-          html = fetch_url(BASE_URL)
-          parser = LinkParser()
-          parser.feed(html)
+          print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
 
           valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
           meeting_files = []
-          for link in parser.links:
-              if link.endswith("/"):
-                  continue
+          for link in collect_meeting_files(BASE_URL):
               if not link.lower().endswith(valid_suffixes):
+                  print(f"Skipping non-meeting file (extension mismatch): {link}")
                   continue
               meeting_files.append(link)
 
@@ -109,10 +153,16 @@ jobs:
           for filename in meeting_files:
               note_date = extract_date(filename)
               if note_date and note_date < cutoff_date:
+                  print(f"Skipping {filename} (date {note_date} older than cutoff).")
                   continue
+              if note_date is None:
+                  print(f"Including {filename} (no date found in filename).")
+              else:
+                  print(f"Including {filename} (date {note_date}).")
               filtered.append(filename)
 
           meeting_files = sorted(set(filtered))
+          print(f"{len(meeting_files)} meeting file(s) remain after filtering and de-duplication.")
           if not meeting_files:
               print("No meeting notes within the configured date window.")
               sys.exit(0)
@@ -160,12 +210,14 @@ jobs:
               if not page_info["hasNextPage"]:
                   break
               cursor = page_info["endCursor"]
+          print(f"Fetched {len(comments)} existing discussion comment(s) for de-duplication.")
 
           existing_markers = set()
           marker_pattern = re.compile(r"<!-- meeting-notes:([^\s>]+) -->")
           for body in comments:
               for match in marker_pattern.findall(body):
                   existing_markers.add(match)
+          print(f"Found {len(existing_markers)} existing meeting note marker(s).")
 
           mutation = """
           mutation($discussionId: ID!, $body: String!) {
@@ -178,6 +230,7 @@ jobs:
           posted = 0
           for filename in meeting_files:
               if filename in existing_markers:
+                  print(f"Skipping already-posted meeting notes: {filename}")
                   continue
               note_url = urllib.parse.urljoin(BASE_URL, filename)
               body = (
@@ -185,6 +238,7 @@ jobs:
                   f"Source: {note_url}\n\n"
                   f"<!-- meeting-notes:{filename} -->"
               )
+              print(f"Posting new meeting notes comment for {filename}")
               result = github_graphql(
                   token,
                   mutation,
