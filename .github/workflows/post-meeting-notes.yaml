@@ -1,0 +1,198 @@
+name: Post FD.io meeting notes
+
+on:
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: "Days to look back for meeting notes"
+        required: false
+        default: "30"
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  post-meeting-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post meeting notes to discussion
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAYS_BACK: ${{ github.event.inputs.days_back }}
+        run: |
+          python - <<'PY'
+          import datetime
+          import json
+          import os
+          import re
+          import sys
+          import urllib.parse
+          import urllib.request
+          from html.parser import HTMLParser
+
+          BASE_URL = "https://ircbot.wl.linuxfoundation.org/meetings/fdio-meeting/"
+          OWNER = "FDio"
+          REPO = "govpp"
+          DISCUSSION_NUMBER = 46
+
+          class LinkParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links = []
+
+              def handle_starttag(self, tag, attrs):
+                  if tag != "a":
+                      return
+                  for key, value in attrs:
+                      if key == "href" and value:
+                          self.links.append(value)
+
+          def fetch_url(url):
+              with urllib.request.urlopen(url) as response:
+                  return response.read().decode("utf-8", errors="replace")
+
+          def github_graphql(token, query, variables):
+              payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+              request = urllib.request.Request(
+                  "https://api.github.com/graphql",
+                  data=payload,
+                  headers={
+                      "Authorization": f"Bearer {token}",
+                      "Content-Type": "application/json",
+                  },
+              )
+              with urllib.request.urlopen(request) as response:
+                  data = json.loads(response.read().decode("utf-8"))
+              if "errors" in data:
+                  raise RuntimeError(data["errors"])
+              return data["data"]
+
+          days_back_raw = os.getenv("DAYS_BACK") or "30"
+          try:
+              days_back = int(days_back_raw)
+          except ValueError:
+              print(f"Invalid DAYS_BACK value: {days_back_raw}")
+              sys.exit(1)
+
+          cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
+
+          html = fetch_url(BASE_URL)
+          parser = LinkParser()
+          parser.feed(html)
+
+          valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
+          meeting_files = []
+          for link in parser.links:
+              if link.endswith("/"):
+                  continue
+              if not link.lower().endswith(valid_suffixes):
+                  continue
+              meeting_files.append(link)
+
+          if not meeting_files:
+              print("No meeting notes found.")
+              sys.exit(0)
+
+          def extract_date(filename):
+              match = re.search(r"(20\d{2}-\d{2}-\d{2})", filename)
+              if not match:
+                  return None
+              try:
+                  return datetime.datetime.strptime(match.group(1), "%Y-%m-%d").date()
+              except ValueError:
+                  return None
+
+          filtered = []
+          for filename in meeting_files:
+              note_date = extract_date(filename)
+              if note_date and note_date < cutoff_date:
+                  continue
+              filtered.append(filename)
+
+          meeting_files = sorted(set(filtered))
+          if not meeting_files:
+              print("No meeting notes within the configured date window.")
+              sys.exit(0)
+
+          token = os.environ.get("GITHUB_TOKEN")
+          if not token:
+              print("GITHUB_TOKEN is required.")
+              sys.exit(1)
+
+          query = """
+          query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
+            repository(owner: $owner, name: $repo) {
+              discussion(number: $number) {
+                id
+                comments(first: 100, after: $cursor) {
+                  nodes { body }
+                  pageInfo { hasNextPage endCursor }
+                }
+              }
+            }
+          }
+          """
+
+          discussion_id = None
+          comments = []
+          cursor = None
+          while True:
+              data = github_graphql(
+                  token,
+                  query,
+                  {
+                      "owner": OWNER,
+                      "repo": REPO,
+                      "number": DISCUSSION_NUMBER,
+                      "cursor": cursor,
+                  },
+              )
+              discussion = data["repository"]["discussion"]
+              if discussion is None:
+                  print("Discussion not found.")
+                  sys.exit(1)
+              discussion_id = discussion_id or discussion["id"]
+              comments.extend(node["body"] for node in discussion["comments"]["nodes"])
+              page_info = discussion["comments"]["pageInfo"]
+              if not page_info["hasNextPage"]:
+                  break
+              cursor = page_info["endCursor"]
+
+          existing_markers = set()
+          marker_pattern = re.compile(r"<!-- meeting-notes:([^\s>]+) -->")
+          for body in comments:
+              for match in marker_pattern.findall(body):
+                  existing_markers.add(match)
+
+          mutation = """
+          mutation($discussionId: ID!, $body: String!) {
+            addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
+              comment { id url }
+            }
+          }
+          """
+
+          posted = 0
+          for filename in meeting_files:
+              if filename in existing_markers:
+                  continue
+              note_url = urllib.parse.urljoin(BASE_URL, filename)
+              body = (
+                  f"### FD.io meeting notes `{filename}`\n\n"
+                  f"Source: {note_url}\n\n"
+                  f"<!-- meeting-notes:{filename} -->"
+              )
+              result = github_graphql(
+                  token,
+                  mutation,
+                  {"discussionId": discussion_id, "body": body},
+              )
+              comment_url = result["addDiscussionComment"]["comment"]["url"]
+              print(f"Posted comment: {comment_url}")
+              posted += 1
+
+          print(f"Posted {posted} new meeting note comment(s).")
+          PY
