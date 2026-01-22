@@ -9,6 +9,10 @@ on:
         description: "Days to look back for meeting notes"
         required: false
         default: "30"
+      year_min:
+        description: "Minimum meeting year to include (empty defaults to this year and last year)"
+        required: false
+        default: ""
       dry_run:
         description: "When true, do not post comments; only print planned comments"
         required: false
@@ -26,6 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DAYS_BACK: ${{ github.event.inputs.days_back }}
+          YEAR_MIN: ${{ github.event.inputs.year_min }}
           DRY_RUN: ${{ github.event.inputs.dry_run }}
           SUMMARY_PATH: meeting-notes-summary.txt
         run: |
@@ -137,7 +142,24 @@ jobs:
               sys.exit(1)
 
           cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
+          current_year = datetime.date.today().year
+          year_min_raw = (os.getenv("YEAR_MIN") or "").strip()
+          if year_min_raw:
+              try:
+                  year_min = int(year_min_raw)
+              except ValueError:
+                  print(f"Invalid YEAR_MIN value: {year_min_raw}")
+                  sys.exit(1)
+              allowed_years = None
+          else:
+              year_min = current_year - 1
+              allowed_years = {current_year - 1, current_year}
+
           print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
+          if allowed_years is None:
+              print(f"Filtering meeting notes with year >= {year_min}")
+          else:
+              print(f"Filtering meeting notes to years: {sorted(allowed_years)}")
 
           valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
           required_path_fragment = "govpp_community_meeting"
@@ -147,6 +169,7 @@ jobs:
               "extension_filtered": 0,
               "missing_date": 0,
               "too_old": 0,
+              "too_old_year": 0,
               "eligible": 0,
               "existing_markers": 0,
               "planned": 0,
@@ -184,6 +207,14 @@ jobs:
               if note_date is None:
                   stats["missing_date"] += 1
                   print(f"Skipping {filename} (no date found in filename).")
+                  continue
+              if allowed_years is not None and note_date.year not in allowed_years:
+                  stats["too_old_year"] += 1
+                  print(f"Skipping {filename} (year {note_date.year} outside allowed years).")
+                  continue
+              if allowed_years is None and note_date.year < year_min:
+                  stats["too_old_year"] += 1
+                  print(f"Skipping {filename} (year {note_date.year} older than minimum {year_min}).")
                   continue
               if note_date < cutoff_date:
                   stats["too_old"] += 1
@@ -271,14 +302,14 @@ jobs:
               if note_date is None:
                   print(f"Skipping {filename} during posting (no date found in filename).")
                   continue
-              badge_date = note_date.strftime("%Y-%b-%d")
+              badge_date = note_date.strftime("%Y-%b-%d").replace("-", "--")
               badge_label = f"{badge_date}-GoVPP Community Meeting"
-              badge_label_escaped = urllib.parse.quote(badge_label.replace("-", "--"))
+              badge_label_escaped = urllib.parse.quote(badge_label)
               badge_url = f"https://img.shields.io/badge/{badge_label_escaped}-16b"
               body = (
-                  f"### FD.io meeting notes `{filename}`\n\n"
+                  "## FDio-GoVPP Community Meeting - Notes\n\n"
                   f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
-                  f"Source: {note_url}\n\n"
+                  f"<sub>Source: [#fdio-meeting: GoVPP Community Meeting]({note_url})</sub>\n\n"
                   f"<!-- meeting-notes:{filename} -->"
               )
               planned_bodies.append(body)
@@ -312,6 +343,7 @@ jobs:
               summary_file.write(f"Filtered (extension): {stats['extension_filtered']}\n")
               summary_file.write(f"Filtered (missing date): {stats['missing_date']}\n")
               summary_file.write(f"Filtered (too old): {stats['too_old']}\n")
+              summary_file.write(f"Filtered (year constraint): {stats['too_old_year']}\n")
               summary_file.write(f"Eligible after filtering: {stats['eligible']}\n")
               summary_file.write(f"Existing markers: {stats['existing_markers']}\n")
               summary_file.write(f"Planned comments: {stats['planned']}\n")
