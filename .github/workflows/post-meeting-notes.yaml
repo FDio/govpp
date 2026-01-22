@@ -9,6 +9,10 @@ on:
         description: "Days to look back for meeting notes"
         required: false
         default: "30"
+      dry_run:
+        description: "When true, do not post comments; only print planned comments"
+        required: false
+        default: "true"
 
 permissions:
   contents: read
@@ -22,6 +26,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DAYS_BACK: ${{ github.event.inputs.days_back }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          SUMMARY_PATH: meeting-notes-summary.txt
         run: |
           python - <<'PY'
           import datetime
@@ -39,8 +45,13 @@ jobs:
           REPO = "govpp"
           DISCUSSION_NUMBER = 46
 
+          summary_path = os.getenv("SUMMARY_PATH", "meeting-notes-summary.txt")
+          dry_run_raw = (os.getenv("DRY_RUN") or "true").strip().lower()
+          dry_run = dry_run_raw in {"1", "true", "yes", "y", "on"}
+
           print(f"Starting meeting notes sync from {BASE_URL}")
           print(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}")
+          print(f"Dry run enabled: {dry_run}")
 
           class LinkParser(HTMLParser):
               def __init__(self):
@@ -130,12 +141,26 @@ jobs:
 
           valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
           required_path_fragment = "govpp_community_meeting"
+          stats = {
+              "total_discovered": 0,
+              "path_filtered": 0,
+              "extension_filtered": 0,
+              "missing_date": 0,
+              "too_old": 0,
+              "eligible": 0,
+              "existing_markers": 0,
+              "planned": 0,
+              "posted": 0,
+          }
           meeting_files = []
           for link in collect_meeting_files(BASE_URL):
+              stats["total_discovered"] += 1
               if required_path_fragment not in link:
+                  stats["path_filtered"] += 1
                   print(f"Skipping non-govpp community meeting path: {link}")
                   continue
               if not link.lower().endswith(valid_suffixes):
+                  stats["extension_filtered"] += 1
                   print(f"Skipping non-meeting file (extension mismatch): {link}")
                   continue
               meeting_files.append(link)
@@ -157,15 +182,18 @@ jobs:
           for filename in meeting_files:
               note_date = extract_date(filename)
               if note_date is None:
+                  stats["missing_date"] += 1
                   print(f"Skipping {filename} (no date found in filename).")
                   continue
               if note_date < cutoff_date:
+                  stats["too_old"] += 1
                   print(f"Skipping {filename} (date {note_date} older than cutoff).")
                   continue
               print(f"Including {filename} (date {note_date}).")
               filtered.append(filename)
 
           meeting_files = sorted(set(filtered))
+          stats["eligible"] = len(meeting_files)
           print(f"{len(meeting_files)} meeting file(s) remain after filtering and de-duplication.")
           if not meeting_files:
               print("No meeting notes within the configured date window.")
@@ -221,6 +249,7 @@ jobs:
           for body in comments:
               for match in marker_pattern.findall(body):
                   existing_markers.add(match)
+          stats["existing_markers"] = len(existing_markers)
           print(f"Found {len(existing_markers)} existing meeting note marker(s).")
 
           mutation = """
@@ -231,6 +260,7 @@ jobs:
           }
           """
 
+          planned_bodies = []
           posted = 0
           for filename in meeting_files:
               if filename in existing_markers:
@@ -251,15 +281,52 @@ jobs:
                   f"Source: {note_url}\n\n"
                   f"<!-- meeting-notes:{filename} -->"
               )
+              planned_bodies.append(body)
+              stats["planned"] += 1
               print(f"Posting new meeting notes comment for {filename}")
-              result = github_graphql(
-                  token,
-                  mutation,
-                  {"discussionId": discussion_id, "body": body},
-              )
-              comment_url = result["addDiscussionComment"]["comment"]["url"]
-              print(f"Posted comment: {comment_url}")
-              posted += 1
+              if dry_run:
+                  print("Dry run: skipping comment creation.")
+                  print(body)
+              else:
+                  result = github_graphql(
+                      token,
+                      mutation,
+                      {"discussionId": discussion_id, "body": body},
+                  )
+                  comment_url = result["addDiscussionComment"]["comment"]["url"]
+                  print(f"Posted comment: {comment_url}")
+                  posted += 1
 
+          stats["posted"] = posted
           print(f"Posted {posted} new meeting note comment(s).")
+
+          with open(summary_path, "w", encoding="utf-8") as summary_file:
+              summary_file.write("Meeting notes sync summary\n")
+              summary_file.write("==========================\n")
+              summary_file.write(f"Base URL: {BASE_URL}\n")
+              summary_file.write(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}\n")
+              summary_file.write(f"Dry run: {dry_run}\n")
+              summary_file.write(f"Cutoff date: {cutoff_date}\n")
+              summary_file.write(f"Total discovered: {stats['total_discovered']}\n")
+              summary_file.write(f"Filtered (path fragment): {stats['path_filtered']}\n")
+              summary_file.write(f"Filtered (extension): {stats['extension_filtered']}\n")
+              summary_file.write(f"Filtered (missing date): {stats['missing_date']}\n")
+              summary_file.write(f"Filtered (too old): {stats['too_old']}\n")
+              summary_file.write(f"Eligible after filtering: {stats['eligible']}\n")
+              summary_file.write(f"Existing markers: {stats['existing_markers']}\n")
+              summary_file.write(f"Planned comments: {stats['planned']}\n")
+              summary_file.write(f"Posted comments: {stats['posted']}\n")
+              summary_file.write("\nPlanned comment bodies:\n")
+              summary_file.write("-----------------------\n")
+              if not planned_bodies:
+                  summary_file.write("None\n")
+              else:
+                  for body in planned_bodies:
+                      summary_file.write(body)
+                      summary_file.write("\n\n---\n\n")
           PY
+      - name: Summarize meeting notes run
+        run: |
+          echo "Meeting notes workflow summary"
+          echo "-------------------------------"
+          cat meeting-notes-summary.txt
