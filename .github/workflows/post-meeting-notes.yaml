@@ -240,6 +240,7 @@ jobs:
             repository(owner: $owner, name: $repo) {
               discussion(number: $number) {
                 id
+                body
                 comments(first: 100, after: $cursor) {
                   nodes { body }
                   pageInfo { hasNextPage endCursor }
@@ -251,6 +252,7 @@ jobs:
 
           discussion_id = None
           comments = []
+          discussion_body = None
           cursor = None
           while True:
               data = github_graphql(
@@ -268,6 +270,7 @@ jobs:
                   print("Discussion not found.")
                   sys.exit(1)
               discussion_id = discussion_id or discussion["id"]
+              discussion_body = discussion_body or discussion.get("body")
               comments.extend(node["body"] for node in discussion["comments"]["nodes"])
               page_info = discussion["comments"]["pageInfo"]
               if not page_info["hasNextPage"]:
@@ -275,13 +278,26 @@ jobs:
               cursor = page_info["endCursor"]
           print(f"Fetched {len(comments)} existing discussion comment(s) for de-duplication.")
 
-          existing_markers = set()
-          marker_pattern = re.compile(r"<!-- meeting-notes:([^\s>]+) -->")
+          existing_file_markers = set()
+          existing_date_markers = set()
+          file_marker_pattern = re.compile(r"<!-- meeting-notes:([^\s>]+) -->")
+          date_marker_pattern = re.compile(r"<!-- meeting-notes-date:(\d{4}-\d{2}-\d{2}) -->")
+          if discussion_body:
+              for match in file_marker_pattern.findall(discussion_body):
+                  existing_file_markers.add(match)
+              for match in date_marker_pattern.findall(discussion_body):
+                  existing_date_markers.add(match)
           for body in comments:
-              for match in marker_pattern.findall(body):
-                  existing_markers.add(match)
-          stats["existing_markers"] = len(existing_markers)
-          print(f"Found {len(existing_markers)} existing meeting note marker(s).")
+              for match in file_marker_pattern.findall(body):
+                  existing_file_markers.add(match)
+              for match in date_marker_pattern.findall(body):
+                  existing_date_markers.add(match)
+          stats["existing_markers"] = len(existing_file_markers) + len(existing_date_markers)
+          print(
+              "Found "
+              f"{len(existing_file_markers)} existing meeting note file marker(s) and "
+              f"{len(existing_date_markers)} meeting note date marker(s)."
+          )
 
           mutation = """
           mutation($discussionId: ID!, $body: String!) {
@@ -293,28 +309,45 @@ jobs:
 
           planned_bodies = []
           posted = 0
+          notes_by_date = {}
           for filename in meeting_files:
-              if filename in existing_markers:
-                  print(f"Skipping already-posted meeting notes: {filename}")
-                  continue
-              note_url = urllib.parse.urljoin(BASE_URL, filename)
               note_date = extract_date(filename)
               if note_date is None:
-                  print(f"Skipping {filename} during posting (no date found in filename).")
+                  print(f"Skipping {filename} during grouping (no date found in filename).")
                   continue
+              notes_by_date.setdefault(note_date, []).append(filename)
+
+          for note_date in sorted(notes_by_date):
+              date_str = note_date.strftime("%Y-%m-%d")
+              if date_str in existing_date_markers:
+                  print(f"Skipping already-posted meeting date: {date_str}")
+                  continue
+              filenames = sorted(notes_by_date[note_date])
+              if any(filename in existing_file_markers for filename in filenames):
+                  print(f"Skipping meeting date {date_str} due to existing file marker.")
+                  continue
+              note_url = urllib.parse.urljoin(BASE_URL, filenames[0])
               badge_date = note_date.strftime("%Y-%b-%d").replace("-", "--")
               badge_label = f"{badge_date}-GoVPP Community Meeting"
               badge_label_escaped = urllib.parse.quote(badge_label)
               badge_url = f"https://img.shields.io/badge/{badge_label_escaped}-16b"
+              link_lines = [
+                  f"- [{filename}]({urllib.parse.urljoin(BASE_URL, filename)})"
+                  for filename in filenames
+              ]
               body = (
                   "## FDio-GoVPP Community Meeting - Notes\n\n"
                   f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
                   f"<sub>Source: [#fdio-meeting: GoVPP Community Meeting]({note_url})</sub>\n\n"
-                  f"<!-- meeting-notes:{filename} -->"
+                  + "\n".join(link_lines)
+                  + "\n\n"
+                  + "\n".join(f"<!-- meeting-notes:{filename} -->" for filename in filenames)
+                  + "\n"
+                  + f"<!-- meeting-notes-date:{date_str} -->"
               )
               planned_bodies.append(body)
               stats["planned"] += 1
-              print(f"Posting new meeting notes comment for {filename}")
+              print(f"Posting new meeting notes comment for {date_str}")
               if dry_run:
                   print("Dry run: skipping comment creation.")
                   print(body)
