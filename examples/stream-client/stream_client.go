@@ -61,19 +61,6 @@ func main() {
 		log.Fatalln("ERROR: connecting to VPP failed:", e.Error)
 	}
 
-	// check compatibility of used messages
-	ch, err := conn.NewAPIChannel()
-	if err != nil {
-		log.Fatalln("ERROR: creating channel failed:", err)
-	}
-	defer ch.Close()
-	if err := ch.CheckCompatiblity(vpe.AllMessages()...); err != nil {
-		log.Fatalf("compatibility check failed: %v", err)
-	}
-	if err := ch.CheckCompatiblity(interfaces.AllMessages()...); err != nil {
-		log.Printf("compatibility check failed: %v", err)
-	}
-
 	// process errors encountered during the example
 	defer func() {
 		if len(errors) > 0 {
@@ -84,7 +71,15 @@ func main() {
 		}
 	}()
 
-	// send and receive messages using stream (low-low level API)
+	// check the compatibility of used messages
+	if err = conn.CheckCompatibility(vpe.AllMessages()...); err != nil {
+		log.Fatalf("compatibility check failed: %v", err)
+	}
+	if err = conn.CheckCompatibility(interfaces.AllMessages()...); err != nil {
+		log.Printf("compatibility check failed: %v", err)
+	}
+
+	// initialize a new stream object
 	stream, err := conn.NewStream(context.Background(),
 		core.WithRequestSize(50),
 		core.WithReplySize(50),
@@ -92,12 +87,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	defer func() {
 		if err := stream.Close(); err != nil {
 			logError(err, "closing the stream")
 		}
 	}()
 
+	// send and receive messages using stream (low-level API)
 	getVppVersion(stream)
 	idx := createLoopback(stream)
 	interfaceDump(stream)

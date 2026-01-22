@@ -182,30 +182,31 @@ func (ch *Channel) newRequest(msg api.Message, multi bool) *vppRequest {
 }
 
 func (ch *Channel) CheckCompatiblity(msgs ...api.Message) error {
-	var comperr api.CompatibilityError
+	var compErr api.CompatibilityError
 	for _, msg := range msgs {
 		_, err := ch.msgIdentifier.GetMessageID(msg)
 		if err != nil {
-			if uerr, ok := err.(*adapter.UnknownMsgError); ok {
-				comperr.IncompatibleMessages = append(comperr.IncompatibleMessages, getMsgID(uerr.MsgName, uerr.MsgCrc))
+			var uErr *adapter.UnknownMsgError
+			if errors.As(err, &uErr) {
+				compErr.IncompatibleMessages = append(compErr.IncompatibleMessages, getMsgID(uErr.MsgName, uErr.MsgCrc))
 				continue
 			}
-			// other errors return immediatelly
+			// other errors return immediately
 			return err
 		}
-		comperr.CompatibleMessages = append(comperr.CompatibleMessages, getMsgNameWithCrc(msg))
+		compErr.CompatibleMessages = append(compErr.CompatibleMessages, getMsgNameWithCrc(msg))
 	}
-	if len(comperr.IncompatibleMessages) == 0 {
+	if len(compErr.IncompatibleMessages) == 0 {
 		return nil
 	}
 	if debugOn {
 		s := ""
-		for _, msg := range comperr.IncompatibleMessages {
+		for _, msg := range compErr.IncompatibleMessages {
 			s += fmt.Sprintf(" - %s\n", msg)
 		}
-		ch.logger.Debugf("ERROR: check compatibility: %v:\nIncompatible messages:\n%v", comperr, s)
+		ch.logger.Debugf("ERROR: check compatibility: %v:\nIncompatible messages:\n%v", compErr, s)
 	}
-	return &comperr
+	return &compErr
 }
 
 func (ch *Channel) SubscribeNotification(notifChan chan api.Message, event api.Message) (api.SubscriptionCtx, error) {
