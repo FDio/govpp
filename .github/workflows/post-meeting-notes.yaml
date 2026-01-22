@@ -364,7 +364,7 @@ jobs:
               header_date = note_date.strftime("%B %d, %Y").replace(" 0", " ")
               link_lines = [f"- [HTML notes]({urllib.parse.urljoin(BASE_URL, primary_html)})"]
               if raw_txt:
-                  link_lines.append(f"- [Raw text]({urllib.parse.urljoin(BASE_URL, raw_txt)})")
+                  link_lines.append(f"- [Raw notes]({urllib.parse.urljoin(BASE_URL, raw_txt)})")
               body = (
                   f"## FDio-GoVPP Community Meeting - Notes ({header_date})\n\n"
                   f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
