@@ -58,6 +58,33 @@ jobs:
           print(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}")
           print(f"Dry run enabled: {dry_run}")
 
+          days_back_raw = os.getenv("DAYS_BACK") or "30"
+          try:
+              days_back = int(days_back_raw)
+          except ValueError:
+              print(f"Invalid DAYS_BACK value: {days_back_raw}")
+              sys.exit(1)
+
+          cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
+          current_year = datetime.date.today().year
+          year_min_raw = (os.getenv("YEAR_MIN") or "").strip()
+          if year_min_raw:
+              try:
+                  year_min = int(year_min_raw)
+              except ValueError:
+                  print(f"Invalid YEAR_MIN value: {year_min_raw}")
+                  sys.exit(1)
+              allowed_years = None
+          else:
+              year_min = current_year - 1
+              allowed_years = {current_year - 1, current_year}
+
+          print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
+          if allowed_years is None:
+              print(f"Filtering meeting notes with year >= {year_min}")
+          else:
+              print(f"Filtering meeting notes to years: {sorted(allowed_years)}")
+
           class LinkParser(HTMLParser):
               def __init__(self):
                   super().__init__()
@@ -105,6 +132,16 @@ jobs:
                           print(f"Skipping external link: {next_url}")
                           continue
                       if link.endswith("/"):
+                          year_match = re.match(r"^(\d{4})/$", link)
+                          if year_match:
+                              year_value = int(year_match.group(1))
+                              if allowed_years is not None and year_value not in allowed_years:
+                                  print(f"Skipping directory outside allowed years: {next_url}")
+                                  continue
+                              if allowed_years is None and year_value < year_min:
+                                  print(f"Skipping directory older than minimum year: {next_url}")
+                                  continue
+                      if link.endswith("/"):
                           print(f"Discovered directory: {next_url}")
                           queue.append(next_url)
                           continue
@@ -134,34 +171,7 @@ jobs:
                   raise RuntimeError(data["errors"])
               return data["data"]
 
-          days_back_raw = os.getenv("DAYS_BACK") or "30"
-          try:
-              days_back = int(days_back_raw)
-          except ValueError:
-              print(f"Invalid DAYS_BACK value: {days_back_raw}")
-              sys.exit(1)
-
-          cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
-          current_year = datetime.date.today().year
-          year_min_raw = (os.getenv("YEAR_MIN") or "").strip()
-          if year_min_raw:
-              try:
-                  year_min = int(year_min_raw)
-              except ValueError:
-                  print(f"Invalid YEAR_MIN value: {year_min_raw}")
-                  sys.exit(1)
-              allowed_years = None
-          else:
-              year_min = current_year - 1
-              allowed_years = {current_year - 1, current_year}
-
-          print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
-          if allowed_years is None:
-              print(f"Filtering meeting notes with year >= {year_min}")
-          else:
-              print(f"Filtering meeting notes to years: {sorted(allowed_years)}")
-
-          valid_suffixes = (".html", ".txt", ".log", ".log.html", ".log.txt")
+          valid_suffixes = (".html", ".txt")
           required_path_fragment = "govpp_community_meeting"
           stats = {
               "total_discovered": 0,
@@ -307,6 +317,19 @@ jobs:
           }
           """
 
+          def pick_preferred_files(filenames):
+              primary_html = None
+              raw_txt = None
+              for filename in filenames:
+                  lower_name = filename.lower()
+                  if lower_name.endswith(".log.html") or lower_name.endswith(".log.txt"):
+                      continue
+                  if lower_name.endswith(".html") and primary_html is None:
+                      primary_html = filename
+                  if lower_name.endswith(".txt") and raw_txt is None:
+                      raw_txt = filename
+              return primary_html, raw_txt
+
           planned_bodies = []
           posted = 0
           notes_by_date = {}
@@ -323,25 +346,31 @@ jobs:
                   print(f"Skipping already-posted meeting date: {date_str}")
                   continue
               filenames = sorted(notes_by_date[note_date])
-              if any(filename in existing_file_markers for filename in filenames):
+              primary_html, raw_txt = pick_preferred_files(filenames)
+              if not primary_html:
+                  print(f"Skipping meeting date {date_str} (no primary HTML notes found).")
+                  continue
+              selected_files = [primary_html]
+              if raw_txt:
+                  selected_files.append(raw_txt)
+              if any(filename in existing_file_markers for filename in selected_files):
                   print(f"Skipping meeting date {date_str} due to existing file marker.")
                   continue
-              note_url = urllib.parse.urljoin(BASE_URL, filenames[0])
+              note_url = urllib.parse.urljoin(BASE_URL, primary_html)
               badge_date = note_date.strftime("%Y-%b-%d").replace("-", "--")
               badge_label = f"{badge_date}-GoVPP Community Meeting"
               badge_label_escaped = urllib.parse.quote(badge_label)
               badge_url = f"https://img.shields.io/badge/{badge_label_escaped}-16b"
-              link_lines = [
-                  f"- [{filename}]({urllib.parse.urljoin(BASE_URL, filename)})"
-                  for filename in filenames
-              ]
+              header_date = note_date.strftime("%B %d, %Y").replace(" 0", " ")
+              link_lines = [f"- [HTML notes]({urllib.parse.urljoin(BASE_URL, primary_html)})"]
+              if raw_txt:
+                  link_lines.append(f"- [Raw text]({urllib.parse.urljoin(BASE_URL, raw_txt)})")
               body = (
-                  "## FDio-GoVPP Community Meeting - Notes\n\n"
+                  f"## FDio-GoVPP Community Meeting - Notes ({header_date})\n\n"
                   f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
-                  f"<sub>Source: [#fdio-meeting: GoVPP Community Meeting]({note_url})</sub>\n\n"
                   + "\n".join(link_lines)
                   + "\n\n"
-                  + "\n".join(f"<!-- meeting-notes:{filename} -->" for filename in filenames)
+                  + "\n".join(f"<!-- meeting-notes:{filename} -->" for filename in selected_files)
                   + "\n"
                   + f"<!-- meeting-notes-date:{date_str} -->"
               )
