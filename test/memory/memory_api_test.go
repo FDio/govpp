@@ -57,11 +57,11 @@ const (
 )
 
 // TestAPIMemory tests the GoVPP memory consumption for various numbers of API calls
-func TestAPIMemory(t *testing.T) {
+func BenchmarkAPIMemory(b *testing.B) {
 	flag.Parse()
 
 	fmt.Printf("Running GoVPP API calls memory test\n\n")
-	test := vpptesting.SetupVPP(t)
+	test := vpptesting.SetupVPP(b)
 	vpeRPC := vpe.NewServiceClient(test.Conn)
 	ifRPC := interfaces.NewServiceClient(test.Conn)
 
@@ -77,19 +77,19 @@ func TestAPIMemory(t *testing.T) {
 	shVerApiFunc := func() {
 		// called twice to keep the number of API calls per func the same
 		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
-			t.Fatal("calling show version failed:", err)
+			b.Fatal("calling show version failed:", err)
 		}
 		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
-			t.Fatal("calling show version failed:", err)
+			b.Fatal("calling show version failed:", err)
 		}
 	}
 	loopApiFunc := func() {
 		if reply, err := ifRPC.CreateLoopback(context.Background(), &interfaces.CreateLoopback{}); err != nil {
-			t.Fatal("calling create loopback failed:", err)
+			b.Fatal("calling create loopback failed:", err)
 		} else if _, err = ifRPC.DeleteLoopback(context.Background(), &interfaces.DeleteLoopback{
 			SwIfIndex: reply.SwIfIndex,
 		}); err != nil {
-			t.Fatal("calling delete loopback failed:", err)
+			b.Fatal("calling delete loopback failed:", err)
 		}
 	}
 	shVerApiName, loopApiName := "show-version", "create/delete loopback"
@@ -146,16 +146,16 @@ func TestAPIMemory(t *testing.T) {
 	}
 
 	//pass := true
-	for i, repeats := range []uint{1000, 10000/*, 100000, 1000000*/} {
+	for i, repeats := range []uint{1000, 10000 /*, 100000, 1000000*/} {
 		if passed := testAPICalls(shVerApiName, repeats, m0[i], samples, shVerApiFunc); !passed {
-	//		pass = false
+			//		pass = false
 		}
 		if passed := testAPICalls(loopApiName, repeats, m1[i], samples, loopApiFunc); !passed {
-	//		pass = false
+			//		pass = false
 		}
 	}
 	//	if !pass {
-	t.Fatal("one or more memory thresholds was exceeded")
+	b.Fatal("one or more memory thresholds was exceeded")
 	//	}
 }
 
