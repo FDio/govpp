@@ -34,7 +34,7 @@ echo "-  VPP version: $VPP_VERSION"
 echo "--------------------------------------------------------------------------"
 
 # Run benchmark tests
-if docker run -i --privileged -v "$(cd "$SCRIPT_DIR/.." && pwd)":/src -w /src/test/memory "$IMGTAG" go test -bench=. -run=^$ -failfast; then
+if docker run -i --privileged -v "$(cd "$SCRIPT_DIR/.." && pwd)":/src -w /src/test/memory "$IMGTAG" go test -bench=.; then
     echo -e "\e[32mPASSED\e[0m (took: ${SECONDS}s)"
     exit 0
 else

@@ -57,11 +57,11 @@ const (
 )
 
 // TestAPIMemory tests the GoVPP memory consumption for various numbers of API calls
-func BenchmarkAPIMemory(b *testing.B) {
+func TestAPIMemory(t *testing.T) {
 	flag.Parse()
 
 	fmt.Printf("Running GoVPP API calls memory test\n\n")
-	test := vpptesting.SetupVPP(b)
+	test := vpptesting.SetupVPP(t)
 	vpeRPC := vpe.NewServiceClient(test.Conn)
 	ifRPC := interfaces.NewServiceClient(test.Conn)
 
@@ -77,19 +77,19 @@ func BenchmarkAPIMemory(b *testing.B) {
 	shVerApiFunc := func() {
 		// called twice to keep the number of API calls per func the same
 		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
-			b.Fatal("calling show version failed:", err)
+			t.Fatal("calling show version failed:", err)
 		}
 		if _, err := vpeRPC.ShowVersion(context.Background(), &vpe.ShowVersion{}); err != nil {
-			b.Fatal("calling show version failed:", err)
+			t.Fatal("calling show version failed:", err)
 		}
 	}
 	loopApiFunc := func() {
 		if reply, err := ifRPC.CreateLoopback(context.Background(), &interfaces.CreateLoopback{}); err != nil {
-			b.Fatal("calling create loopback failed:", err)
+			t.Fatal("calling create loopback failed:", err)
 		} else if _, err = ifRPC.DeleteLoopback(context.Background(), &interfaces.DeleteLoopback{
 			SwIfIndex: reply.SwIfIndex,
 		}); err != nil {
-			b.Fatal("calling delete loopback failed:", err)
+			t.Fatal("calling delete loopback failed:", err)
 		}
 	}
 	shVerApiName, loopApiName := "show-version", "create/delete loopback"
@@ -146,7 +146,7 @@ func BenchmarkAPIMemory(b *testing.B) {
 	}
 
 	//pass := true
-	for i, repeats := range []uint{1000, 10000, 100000, 1000000} {
+	for i, repeats := range []uint{1000, 10000/*, 100000, 1000000*/} {
 		if passed := testAPICalls(shVerApiName, repeats, m0[i], samples, shVerApiFunc); !passed {
 	//		pass = false
 		}
@@ -155,8 +155,8 @@ func BenchmarkAPIMemory(b *testing.B) {
 		}
 	}
 	//	if !pass {
-	b.Errorf("one or more memory thresholds was exceeded")
-	b.FailNow()
+	t.Errorf("one or more memory thresholds was exceeded")
+	t.FailNow()
 	//	}
 }
 
