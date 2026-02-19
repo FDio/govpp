@@ -90,7 +90,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse file CRC
 	crcNode := rootNode.At(fileVersionCrc)
-	if crcNode.GetType() == jsongo.TypeValue {
+	if crcNode.GetType() == jsongo.NodeTypeValue {
 		file.CRC = crcNode.MustGetString()
 	} else {
 		logf("key %q expected to be TypeValue, but is %v", fileVersionCrc, crcNode.GetType())
@@ -100,7 +100,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse file options
 	optNode := rootNode.Map(fileOptions)
-	if optNode.GetType() == jsongo.TypeMap {
+	if optNode.GetType() == jsongo.NodeTypeMap {
 		file.Options = make(map[string]string)
 		for _, key := range optNode.GetKeys() {
 			optionKey := key.(string)
@@ -115,7 +115,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse imports
 	importsNode := rootNode.Map(fileImports)
-	if importsNode.GetType() == jsongo.TypeArray {
+	if importsNode.GetType() == jsongo.NodeTypeArray {
 		file.Imports = make([]string, 0, importsNode.Len())
 		uniq := make(map[string]struct{})
 		for i := 0; i < importsNode.Len(); i++ {
@@ -147,7 +147,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse enum types
 	enumsNode := rootNode.Map(fileEnums)
-	if enumsNode.GetType() == jsongo.TypeArray {
+	if enumsNode.GetType() == jsongo.NodeTypeArray {
 		file.EnumTypes = make([]EnumType, 0)
 		for i := 0; i < enumsNode.Len(); i++ {
 			enum, err := parseEnum(enumsNode.At(i))
@@ -167,7 +167,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse enumflags types
 	enumflagsNode := rootNode.Map(fileEnumflags)
-	if enumflagsNode.GetType() == jsongo.TypeArray {
+	if enumflagsNode.GetType() == jsongo.NodeTypeArray {
 		file.EnumflagTypes = make([]EnumType, 0)
 		for i := 0; i < enumflagsNode.Len(); i++ {
 			enumflag, err := parseEnum(enumflagsNode.At(i))
@@ -187,7 +187,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse alias types
 	aliasesNode := rootNode.Map(fileAliases)
-	if aliasesNode.GetType() == jsongo.TypeMap {
+	if aliasesNode.GetType() == jsongo.NodeTypeMap {
 		file.AliasTypes = make([]AliasType, 0)
 		for _, key := range aliasesNode.GetKeys() {
 			aliasName := key.(string)
@@ -208,7 +208,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse struct types
 	typesNode := rootNode.Map(fileTypes)
-	if typesNode.GetType() == jsongo.TypeArray {
+	if typesNode.GetType() == jsongo.NodeTypeArray {
 		file.StructTypes = make([]StructType, 0)
 		for i := 0; i < typesNode.Len(); i++ {
 			structyp, err := parseStruct(typesNode.At(i))
@@ -228,7 +228,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse union types
 	unionsNode := rootNode.Map(fileUnions)
-	if unionsNode.GetType() == jsongo.TypeArray {
+	if unionsNode.GetType() == jsongo.NodeTypeArray {
 		file.UnionTypes = make([]UnionType, 0)
 		for i := 0; i < unionsNode.Len(); i++ {
 			union, err := parseUnion(unionsNode.At(i))
@@ -248,7 +248,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse messages
 	messagesNode := rootNode.Map(fileMessages)
-	if messagesNode.GetType() == jsongo.TypeArray {
+	if messagesNode.GetType() == jsongo.NodeTypeArray {
 		file.Messages = make([]Message, messagesNode.Len())
 		for i := 0; i < messagesNode.Len(); i++ {
 			msg, err := parseMessage(messagesNode.At(i))
@@ -265,7 +265,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse services
 	servicesNode := rootNode.Map(fileServices)
-	if servicesNode.GetType() == jsongo.TypeMap {
+	if servicesNode.GetType() == jsongo.NodeTypeMap {
 		file.Service = &Service{
 			RPCs: make([]RPC, servicesNode.Len()),
 		}
@@ -285,7 +285,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse counters
 	countersNode := rootNode.Map(fileCounters)
-	if countersNode.GetType() == jsongo.TypeArray {
+	if countersNode.GetType() == jsongo.NodeTypeArray {
 		file.Counters = make([]Counter, countersNode.Len())
 		for i := 0; i < countersNode.Len(); i++ {
 			c, err := parseCounter(countersNode.At(i))
@@ -302,7 +302,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse paths
 	pathsNode := rootNode.Map(filePaths)
-	if pathsNode.GetType() == jsongo.TypeArray {
+	if pathsNode.GetType() == jsongo.NodeTypeArray {
 		file.Paths = make([]CounterPaths, 0)
 		for i := 0; i < pathsNode.Len(); i++ {
 			counterPaths, err := parsePath(pathsNode.At(i))
@@ -322,7 +322,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 // parseEnum parses VPP binary API enum object from JSON node
 func parseEnum(enumNode *jsongo.Node) (*EnumType, error) {
-	if enumNode.Len() == 0 || enumNode.At(0).GetType() != jsongo.TypeValue {
+	if enumNode.Len() == 0 || enumNode.At(0).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for enum specified")
 	}
 
@@ -342,10 +342,10 @@ func parseEnum(enumNode *jsongo.Node) (*EnumType, error) {
 
 	// loop through enum entries, skip first (name) and last (enumtype)
 	for j := 1; j < enumNode.Len()-1; j++ {
-		if enumNode.At(j).GetType() == jsongo.TypeArray {
+		if enumNode.At(j).GetType() == jsongo.NodeTypeArray {
 			entry := enumNode.At(j)
 
-			if entry.Len() < 2 || entry.At(0).GetType() != jsongo.TypeValue || entry.At(1).GetType() != jsongo.TypeValue {
+			if entry.Len() < 2 || entry.At(0).GetType() != jsongo.NodeTypeValue || entry.At(1).GetType() != jsongo.NodeTypeValue {
 				return nil, errors.New("invalid JSON for enum entry specified")
 			}
 
@@ -367,7 +367,7 @@ func parseEnum(enumNode *jsongo.Node) (*EnumType, error) {
 
 // parseUnion parses VPP binary API union object from JSON node
 func parseUnion(unionNode *jsongo.Node) (*UnionType, error) {
-	if unionNode.Len() == 0 || unionNode.At(0).GetType() != jsongo.TypeValue {
+	if unionNode.Len() == 0 || unionNode.At(0).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for union specified")
 	}
 
@@ -382,7 +382,7 @@ func parseUnion(unionNode *jsongo.Node) (*UnionType, error) {
 
 	// loop through union fields, skip first (name)
 	for j := 1; j < unionNode.Len(); j++ {
-		if unionNode.At(j).GetType() == jsongo.TypeArray {
+		if unionNode.At(j).GetType() == jsongo.NodeTypeArray {
 			fieldNode := unionNode.At(j)
 
 			field, err := parseField(fieldNode)
@@ -399,7 +399,7 @@ func parseUnion(unionNode *jsongo.Node) (*UnionType, error) {
 
 // parseStruct parses VPP binary API type object from JSON node
 func parseStruct(typeNode *jsongo.Node) (*StructType, error) {
-	if typeNode.Len() == 0 || typeNode.At(0).GetType() != jsongo.TypeValue {
+	if typeNode.Len() == 0 || typeNode.At(0).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for type specified")
 	}
 
@@ -414,7 +414,7 @@ func parseStruct(typeNode *jsongo.Node) (*StructType, error) {
 
 	// loop through type fields, skip first (name)
 	for j := 1; j < typeNode.Len(); j++ {
-		if typeNode.At(j).GetType() == jsongo.TypeArray {
+		if typeNode.At(j).GetType() == jsongo.NodeTypeArray {
 			fieldNode := typeNode.At(j)
 
 			field, err := parseField(fieldNode)
@@ -431,7 +431,7 @@ func parseStruct(typeNode *jsongo.Node) (*StructType, error) {
 
 // parseAlias parses VPP binary API alias object from JSON node
 func parseAlias(aliasName string, aliasNode *jsongo.Node) (*AliasType, error) {
-	if aliasNode.Len() == 0 || aliasNode.At(aliasType).GetType() != jsongo.TypeValue {
+	if aliasNode.Len() == 0 || aliasNode.At(aliasType).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for alias specified")
 	}
 
@@ -439,7 +439,7 @@ func parseAlias(aliasName string, aliasNode *jsongo.Node) (*AliasType, error) {
 		Name: aliasName,
 	}
 
-	if typeNode := aliasNode.At(aliasType); typeNode.GetType() == jsongo.TypeValue {
+	if typeNode := aliasNode.At(aliasType); typeNode.GetType() == jsongo.NodeTypeValue {
 		typ, ok := typeNode.Get().(string)
 		if !ok {
 			return nil, fmt.Errorf("alias type is %T, not a string", typeNode.Get())
@@ -449,7 +449,7 @@ func parseAlias(aliasName string, aliasNode *jsongo.Node) (*AliasType, error) {
 		}
 	}
 
-	if lengthNode := aliasNode.At(aliasLength); lengthNode.GetType() == jsongo.TypeValue {
+	if lengthNode := aliasNode.At(aliasLength); lengthNode.GetType() == jsongo.NodeTypeValue {
 		length, ok := lengthNode.Get().(float64)
 		if !ok {
 			return nil, fmt.Errorf("alias length is %T, not a float64", lengthNode.Get())
@@ -462,7 +462,7 @@ func parseAlias(aliasName string, aliasNode *jsongo.Node) (*AliasType, error) {
 
 // parseMessage parses VPP binary API message object from JSON node
 func parseMessage(msgNode *jsongo.Node) (*Message, error) {
-	if msgNode.Len() < 2 || msgNode.At(0).GetType() != jsongo.TypeValue {
+	if msgNode.Len() < 2 || msgNode.At(0).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for message specified")
 	}
 
@@ -482,7 +482,7 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 	// parse message options
 	var msgOpts map[string]string
 	msgOptsNode := msgMeta.Map(messageOptions)
-	if msgOptsNode.GetType() == jsongo.TypeMap {
+	if msgOptsNode.GetType() == jsongo.NodeTypeMap {
 		msgOpts = make(map[string]string)
 		for _, opt := range msgOptsNode.GetKeys() {
 			if _, ok := opt.(string); !ok {
@@ -503,7 +503,7 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 	// parse message comment
 	var msgComment string
 	msgCommentNode := msgMeta.At(messageComment)
-	if msgCommentNode.GetType() == jsongo.TypeValue {
+	if msgCommentNode.GetType() == jsongo.NodeTypeValue {
 		comment, ok := msgCommentNode.Get().(string)
 		if !ok {
 			logf("message comment value invalid, expected string")
@@ -521,7 +521,7 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 
 	// loop through message fields, skip first (name) and last (crc)
 	for j := 1; j < msgNode.Len()-1; j++ {
-		if msgNode.At(j).GetType() == jsongo.TypeArray {
+		if msgNode.At(j).GetType() == jsongo.NodeTypeArray {
 			fieldNode := msgNode.At(j)
 
 			field, err := parseField(fieldNode)
@@ -538,7 +538,7 @@ func parseMessage(msgNode *jsongo.Node) (*Message, error) {
 
 // parseField parses VPP binary API object field from JSON node
 func parseField(field *jsongo.Node) (*Field, error) {
-	if field.Len() < 2 || field.At(0).GetType() != jsongo.TypeValue || field.At(1).GetType() != jsongo.TypeValue {
+	if field.Len() < 2 || field.At(0).GetType() != jsongo.NodeTypeValue || field.At(1).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for field specified")
 	}
 
@@ -559,7 +559,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 	// field length (array) or field meta
 	if field.Len() >= 3 {
 		switch field.At(2).GetType() {
-		case jsongo.TypeValue:
+		case jsongo.NodeTypeValue:
 			fieldLength, ok := field.At(2).Get().(float64)
 			if !ok {
 				return nil, fmt.Errorf("field length is %T, not float64", field.At(2).Get())
@@ -567,7 +567,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 			f.Length = int(fieldLength)
 			f.Array = true
 
-		case jsongo.TypeMap:
+		case jsongo.NodeTypeMap:
 			fieldMeta := field.At(2)
 			if fieldMeta.Len() == 0 {
 				break
@@ -597,7 +597,7 @@ func parseField(field *jsongo.Node) (*Field, error) {
 
 // parseServiceRPC parses VPP binary API service object from JSON node
 func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
-	if rpcNode.Len() == 0 || rpcNode.At(serviceReply).GetType() != jsongo.TypeValue {
+	if rpcNode.Len() == 0 || rpcNode.At(serviceReply).GetType() != jsongo.NodeTypeValue {
 		return nil, errors.New("invalid JSON for service RPC specified")
 	}
 
@@ -605,7 +605,7 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 		Request: rpcName,
 	}
 
-	if replyNode := rpcNode.At(serviceReply); replyNode.GetType() == jsongo.TypeValue {
+	if replyNode := rpcNode.At(serviceReply); replyNode.GetType() == jsongo.NodeTypeValue {
 		reply, ok := replyNode.Get().(string)
 		if !ok {
 			return nil, fmt.Errorf("service RPC reply is %T, not a string", replyNode.Get())
@@ -614,7 +614,7 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 	}
 
 	// is stream (dump)
-	if streamNode := rpcNode.At(serviceStream); streamNode.GetType() == jsongo.TypeValue {
+	if streamNode := rpcNode.At(serviceStream); streamNode.GetType() == jsongo.NodeTypeValue {
 		var ok bool
 		rpc.Stream, ok = streamNode.Get().(bool)
 		if !ok {
@@ -623,7 +623,7 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 	}
 
 	// stream message
-	if streamMsgNode := rpcNode.At(serviceStreamMsg); streamMsgNode.GetType() == jsongo.TypeValue {
+	if streamMsgNode := rpcNode.At(serviceStreamMsg); streamMsgNode.GetType() == jsongo.NodeTypeValue {
 		var ok bool
 		rpc.StreamMsg, ok = streamMsgNode.Get().(string)
 		if !ok {
@@ -632,7 +632,7 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 	}
 
 	// events service (event subscription)
-	if eventsNode := rpcNode.At(serviceEvents); eventsNode.GetType() == jsongo.TypeArray {
+	if eventsNode := rpcNode.At(serviceEvents); eventsNode.GetType() == jsongo.NodeTypeArray {
 		for j := 0; j < eventsNode.Len(); j++ {
 			event := eventsNode.At(j).Get().(string)
 			rpc.Events = append(rpc.Events, event)
@@ -646,7 +646,7 @@ func parseServiceRPC(rpcName string, rpcNode *jsongo.Node) (*RPC, error) {
 func parseCounter(counterNode *jsongo.Node) (*Counter, error) {
 	// counter name
 	c := &Counter{}
-	if counterNameNode := counterNode.At(counterName); counterNameNode.GetType() == jsongo.TypeValue {
+	if counterNameNode := counterNode.At(counterName); counterNameNode.GetType() == jsongo.NodeTypeValue {
 		var ok bool
 		if c.Name, ok = counterNameNode.Get().(string); !ok {
 			return nil, fmt.Errorf("counter name is %T, not a string", counterNameNode.Get())
@@ -654,10 +654,10 @@ func parseCounter(counterNode *jsongo.Node) (*Counter, error) {
 	}
 
 	// counter elements
-	if elementsNode := counterNode.At(elements); elementsNode.GetType() == jsongo.TypeArray {
+	if elementsNode := counterNode.At(elements); elementsNode.GetType() == jsongo.NodeTypeArray {
 		c.Elements = make([]Element, elementsNode.Len())
 		for i := 0; i < elementsNode.Len(); i++ {
-			if elementNode := elementsNode.At(i); elementNode.GetType() == jsongo.TypeMap {
+			if elementNode := elementsNode.At(i); elementNode.GetType() == jsongo.NodeTypeMap {
 				c.Elements[i] = Element{
 					Name:        elementNode.At(elementName).Get().(string),
 					Severity:    elementNode.At(elementSeverity).Get().(string),
@@ -675,17 +675,17 @@ func parseCounter(counterNode *jsongo.Node) (*Counter, error) {
 // parseCounter parses VPP binary API service object from JSON node
 func parsePath(pathsNode *jsongo.Node) (*[]CounterPaths, error) {
 	paths := make([]CounterPaths, 0)
-	if pathsNode.GetType() == jsongo.TypeMap {
+	if pathsNode.GetType() == jsongo.NodeTypeMap {
 		// TODO: fix parsing for this case
 		logf("PATHS NODE IS MAP")
 		return nil, nil
-	} /*else if pathsNode.GetType() == jsongo.TypeArray {
+	} /*else if pathsNode.GetType() == jsongo.NodeTypeArray {
 		// expected
 	}*/
 NodeLoop:
 	for i := 0; i < pathsNode.Len(); i++ {
 		pathNode := pathsNode.At(i)
-		if pathValues := pathNode; pathValues.GetType() == jsongo.TypeMap {
+		if pathValues := pathNode; pathValues.GetType() == jsongo.NodeTypeMap {
 			for j, path := range paths {
 				if path.Name == pathNode.At(counter).Get().(string) {
 					paths[j].Paths = append(path.Paths, pathNode.At(counterPath).Get().(string))
