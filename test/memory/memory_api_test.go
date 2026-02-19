@@ -155,8 +155,7 @@ func TestAPIMemory(t *testing.T) {
 		}
 	}
 	//	if !pass {
-	t.Errorf("one or more memory thresholds was exceeded")
-	t.FailNow()
+	t.Fatal("one or more memory thresholds was exceeded")
 	//	}
 }
 
