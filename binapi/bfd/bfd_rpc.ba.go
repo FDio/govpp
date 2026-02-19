@@ -23,10 +23,12 @@ type RPCService interface {
 	BfdUDPDelEchoSource(ctx context.Context, in *BfdUDPDelEchoSource) (*BfdUDPDelEchoSourceReply, error)
 	BfdUDPEnableMultihop(ctx context.Context, in *BfdUDPEnableMultihop) (*BfdUDPEnableMultihopReply, error)
 	BfdUDPGetEchoSource(ctx context.Context, in *BfdUDPGetEchoSource) (*BfdUDPGetEchoSourceReply, error)
+	BfdUDPGetTos(ctx context.Context, in *BfdUDPGetTos) (*BfdUDPGetTosReply, error)
 	BfdUDPMod(ctx context.Context, in *BfdUDPMod) (*BfdUDPModReply, error)
 	BfdUDPSessionDump(ctx context.Context, in *BfdUDPSessionDump) (RPCService_BfdUDPSessionDumpClient, error)
 	BfdUDPSessionSetFlags(ctx context.Context, in *BfdUDPSessionSetFlags) (*BfdUDPSessionSetFlagsReply, error)
 	BfdUDPSetEchoSource(ctx context.Context, in *BfdUDPSetEchoSource) (*BfdUDPSetEchoSourceReply, error)
+	BfdUDPSetTos(ctx context.Context, in *BfdUDPSetTos) (*BfdUDPSetTosReply, error)
 	BfdUDPUpd(ctx context.Context, in *BfdUDPUpd) (*BfdUDPUpdReply, error)
 	WantBfdEvents(ctx context.Context, in *WantBfdEvents) (*WantBfdEventsReply, error)
 }
@@ -163,6 +165,15 @@ func (c *serviceClient) BfdUDPGetEchoSource(ctx context.Context, in *BfdUDPGetEc
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) BfdUDPGetTos(ctx context.Context, in *BfdUDPGetTos) (*BfdUDPGetTosReply, error) {
+	out := new(BfdUDPGetTosReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) BfdUDPMod(ctx context.Context, in *BfdUDPMod) (*BfdUDPModReply, error) {
 	out := new(BfdUDPModReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -226,6 +237,15 @@ func (c *serviceClient) BfdUDPSessionSetFlags(ctx context.Context, in *BfdUDPSes
 
 func (c *serviceClient) BfdUDPSetEchoSource(ctx context.Context, in *BfdUDPSetEchoSource) (*BfdUDPSetEchoSourceReply, error) {
 	out := new(BfdUDPSetEchoSourceReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) BfdUDPSetTos(ctx context.Context, in *BfdUDPSetTos) (*BfdUDPSetTosReply, error) {
+	out := new(BfdUDPSetTosReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

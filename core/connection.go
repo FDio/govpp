@@ -147,6 +147,15 @@ type Connection struct {
 	trace     *Trace // API tracer (disabled by default)
 }
 
+func (c *Connection) CheckCompatibility(msgs ...api.Message) error {
+	ch, err := c.newAPIChannel(1, 1)
+	if err != nil {
+		return fmt.Errorf("unable to do compatibility check: failed to create a new channel: %v", err)
+	}
+	defer ch.Close()
+	return ch.CheckCompatiblity(msgs...)
+}
+
 type backgroundLoopStatus int
 
 const (
@@ -234,7 +243,7 @@ func AsyncConnect(binapi adapter.VppAPI, attempts int, interval time.Duration) (
 	atomic.StoreUint32(&conn.backgroundLoopActive, 1)
 
 	// asynchronously attempt to connect to VPP
-	go conn.backgroudConnectionLoop()
+	go conn.backgroundConnectionLoop()
 
 	return conn, conn.connChan, nil
 }
@@ -350,7 +359,7 @@ func (c *Connection) releaseAPIChannel(ch *Channel) {
 }
 
 // runs connectionLoop and healthCheckLoop until they fail
-func (c *Connection) backgroudConnectionLoop() {
+func (c *Connection) backgroundConnectionLoop() {
 	defer close(c.healthCheckExited)
 
 	for {
