@@ -145,18 +145,18 @@ func BenchmarkAPIMemory(b *testing.B) {
 			objRemain:  {max: 50000}}},
 	}
 
-	//pass := true
-	for i, repeats := range []uint{1000, 10000 /*, 100000, 1000000*/} {
+	pass := true
+	for i, repeats := range []uint{1000, 10000, 100000, 1000000} {
 		if passed := testAPICalls(shVerApiName, repeats, m0[i], samples, shVerApiFunc); !passed {
-			//		pass = false
+			pass = false
 		}
 		if passed := testAPICalls(loopApiName, repeats, m1[i], samples, loopApiFunc); !passed {
-			//		pass = false
+			pass = false
 		}
 	}
-	//	if !pass {
-	b.Fatal("one or more memory thresholds was exceeded")
-	//	}
+	if !pass {
+		b.Fatal("one or more memory thresholds was exceeded")
+	}
 }
 
 func testAPICalls(name string, repeats uint, m *metrics, samples []namedSample, f func()) (pass bool) {
