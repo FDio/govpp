@@ -48,9 +48,11 @@ func (c *serviceClient) IgmpDump(ctx context.Context, in *IgmpDump) (RPCService_
 	}
 	x := &serviceClient_IgmpDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -80,6 +82,7 @@ func (c *serviceClient_IgmpDumpClient) Recv() (*IgmpDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -100,9 +103,11 @@ func (c *serviceClient) IgmpGroupPrefixDump(ctx context.Context, in *IgmpGroupPr
 	}
 	x := &serviceClient_IgmpGroupPrefixDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -132,6 +137,7 @@ func (c *serviceClient_IgmpGroupPrefixDumpClient) Recv() (*IgmpGroupPrefixDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

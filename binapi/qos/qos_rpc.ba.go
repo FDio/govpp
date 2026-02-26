@@ -48,9 +48,11 @@ func (c *serviceClient) QosEgressMapDump(ctx context.Context, in *QosEgressMapDu
 	}
 	x := &serviceClient_QosEgressMapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -80,6 +82,7 @@ func (c *serviceClient_QosEgressMapDumpClient) Recv() (*QosEgressMapDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -100,9 +103,11 @@ func (c *serviceClient) QosMarkDump(ctx context.Context, in *QosMarkDump) (RPCSe
 	}
 	x := &serviceClient_QosMarkDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -132,6 +137,7 @@ func (c *serviceClient_QosMarkDumpClient) Recv() (*QosMarkDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -152,9 +158,11 @@ func (c *serviceClient) QosRecordDump(ctx context.Context, in *QosRecordDump) (R
 	}
 	x := &serviceClient_QosRecordDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -184,6 +192,7 @@ func (c *serviceClient_QosRecordDumpClient) Recv() (*QosRecordDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -204,9 +213,11 @@ func (c *serviceClient) QosStoreDump(ctx context.Context, in *QosStoreDump) (RPC
 	}
 	x := &serviceClient_QosStoreDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -236,6 +247,7 @@ func (c *serviceClient_QosStoreDumpClient) Recv() (*QosStoreDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

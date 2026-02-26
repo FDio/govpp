@@ -73,9 +73,11 @@ func (c *serviceClient) MapDomainDump(ctx context.Context, in *MapDomainDump) (R
 	}
 	x := &serviceClient_MapDomainDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -105,6 +107,7 @@ func (c *serviceClient_MapDomainDumpClient) Recv() (*MapDomainDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -116,6 +119,7 @@ func (c *serviceClient) MapDomainsGet(ctx context.Context, in *MapDomainsGet) (R
 	}
 	x := &serviceClient_MapDomainsGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -149,6 +153,7 @@ func (c *serviceClient_MapDomainsGetClient) Recv() (*MapDomainDetails, *MapDomai
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -241,9 +246,11 @@ func (c *serviceClient) MapRuleDump(ctx context.Context, in *MapRuleDump) (RPCSe
 	}
 	x := &serviceClient_MapRuleDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -273,6 +280,7 @@ func (c *serviceClient_MapRuleDumpClient) Recv() (*MapRuleDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

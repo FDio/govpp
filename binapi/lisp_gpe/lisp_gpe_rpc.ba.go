@@ -85,9 +85,11 @@ func (c *serviceClient) GpeFwdEntryPathDump(ctx context.Context, in *GpeFwdEntry
 	}
 	x := &serviceClient_GpeFwdEntryPathDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -117,6 +119,7 @@ func (c *serviceClient_GpeFwdEntryPathDumpClient) Recv() (*GpeFwdEntryPathDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

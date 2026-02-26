@@ -34,9 +34,11 @@ func (c *serviceClient) SwInterfaceTapV2Dump(ctx context.Context, in *SwInterfac
 	}
 	x := &serviceClient_SwInterfaceTapV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -66,6 +68,7 @@ func (c *serviceClient_SwInterfaceTapV2DumpClient) Recv() (*SwInterfaceTapV2Deta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -72,9 +72,11 @@ func (c *serviceClient) AfPacketDump(ctx context.Context, in *AfPacketDump) (RPC
 	}
 	x := &serviceClient_AfPacketDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -104,6 +106,7 @@ func (c *serviceClient_AfPacketDumpClient) Recv() (*AfPacketDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

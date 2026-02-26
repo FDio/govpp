@@ -103,9 +103,11 @@ func (c *serviceClient) Det44InterfaceDump(ctx context.Context, in *Det44Interfa
 	}
 	x := &serviceClient_Det44InterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -135,6 +137,7 @@ func (c *serviceClient_Det44InterfaceDumpClient) Recv() (*Det44InterfaceDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -146,9 +149,11 @@ func (c *serviceClient) Det44MapDump(ctx context.Context, in *Det44MapDump) (RPC
 	}
 	x := &serviceClient_Det44MapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -178,6 +183,7 @@ func (c *serviceClient_Det44MapDumpClient) Recv() (*Det44MapDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -207,9 +213,11 @@ func (c *serviceClient) Det44SessionDump(ctx context.Context, in *Det44SessionDu
 	}
 	x := &serviceClient_Det44SessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -239,6 +247,7 @@ func (c *serviceClient_Det44SessionDumpClient) Recv() (*Det44SessionDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -295,9 +304,11 @@ func (c *serviceClient) NatDetMapDump(ctx context.Context, in *NatDetMapDump) (R
 	}
 	x := &serviceClient_NatDetMapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -327,6 +338,7 @@ func (c *serviceClient_NatDetMapDumpClient) Recv() (*NatDetMapDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -347,9 +359,11 @@ func (c *serviceClient) NatDetSessionDump(ctx context.Context, in *NatDetSession
 	}
 	x := &serviceClient_NatDetSessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -379,6 +393,7 @@ func (c *serviceClient_NatDetSessionDumpClient) Recv() (*NatDetSessionDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

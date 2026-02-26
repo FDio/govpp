@@ -41,9 +41,11 @@ func (c *serviceClient) FibSourceDump(ctx context.Context, in *FibSourceDump) (R
 	}
 	x := &serviceClient_FibSourceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -73,6 +75,7 @@ func (c *serviceClient_FibSourceDumpClient) Recv() (*FibSourceDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -84,9 +84,11 @@ func (c *serviceClient) GtpuTunnelDump(ctx context.Context, in *GtpuTunnelDump) 
 	}
 	x := &serviceClient_GtpuTunnelDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -116,6 +118,7 @@ func (c *serviceClient_GtpuTunnelDumpClient) Recv() (*GtpuTunnelDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -136,9 +139,11 @@ func (c *serviceClient) GtpuTunnelV2Dump(ctx context.Context, in *GtpuTunnelV2Du
 	}
 	x := &serviceClient_GtpuTunnelV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -168,6 +173,7 @@ func (c *serviceClient_GtpuTunnelV2DumpClient) Recv() (*GtpuTunnelV2Details, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

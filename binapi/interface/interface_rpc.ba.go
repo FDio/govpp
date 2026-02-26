@@ -218,9 +218,11 @@ func (c *serviceClient) SwInterfaceDump(ctx context.Context, in *SwInterfaceDump
 	}
 	x := &serviceClient_SwInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -250,6 +252,7 @@ func (c *serviceClient_SwInterfaceDumpClient) Recv() (*SwInterfaceDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -279,9 +282,11 @@ func (c *serviceClient) SwInterfaceRxPlacementDump(ctx context.Context, in *SwIn
 	}
 	x := &serviceClient_SwInterfaceRxPlacementDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -311,6 +316,7 @@ func (c *serviceClient_SwInterfaceRxPlacementDumpClient) Recv() (*SwInterfaceRxP
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -430,6 +436,7 @@ func (c *serviceClient) SwInterfaceTxPlacementGet(ctx context.Context, in *SwInt
 	}
 	x := &serviceClient_SwInterfaceTxPlacementGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -463,6 +470,7 @@ func (c *serviceClient_SwInterfaceTxPlacementGetClient) Recv() (*SwInterfaceTxPl
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

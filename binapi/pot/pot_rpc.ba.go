@@ -61,9 +61,11 @@ func (c *serviceClient) PotProfileShowConfigDump(ctx context.Context, in *PotPro
 	}
 	x := &serviceClient_PotProfileShowConfigDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -93,6 +95,7 @@ func (c *serviceClient_PotProfileShowConfigDumpClient) Recv() (*PotProfileShowCo
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

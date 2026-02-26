@@ -121,9 +121,11 @@ func (c *serviceClient) Nat44AddressDump(ctx context.Context, in *Nat44AddressDu
 	}
 	x := &serviceClient_Nat44AddressDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -153,6 +155,7 @@ func (c *serviceClient_Nat44AddressDumpClient) Recv() (*Nat44AddressDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -200,6 +203,7 @@ func (c *serviceClient) Nat44EdOutputInterfaceGet(ctx context.Context, in *Nat44
 	}
 	x := &serviceClient_Nat44EdOutputInterfaceGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -233,6 +237,7 @@ func (c *serviceClient_Nat44EdOutputInterfaceGetClient) Recv() (*Nat44EdOutputIn
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -271,9 +276,11 @@ func (c *serviceClient) Nat44EdVrfTablesDump(ctx context.Context, in *Nat44EdVrf
 	}
 	x := &serviceClient_Nat44EdVrfTablesDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -303,6 +310,7 @@ func (c *serviceClient_Nat44EdVrfTablesDumpClient) Recv() (*Nat44EdVrfTablesDeta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -314,9 +322,11 @@ func (c *serviceClient) Nat44EdVrfTablesV2Dump(ctx context.Context, in *Nat44EdV
 	}
 	x := &serviceClient_Nat44EdVrfTablesV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -346,6 +356,7 @@ func (c *serviceClient_Nat44EdVrfTablesV2DumpClient) Recv() (*Nat44EdVrfTablesV2
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -366,9 +377,11 @@ func (c *serviceClient) Nat44IdentityMappingDump(ctx context.Context, in *Nat44I
 	}
 	x := &serviceClient_Nat44IdentityMappingDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -398,6 +411,7 @@ func (c *serviceClient_Nat44IdentityMappingDumpClient) Recv() (*Nat44IdentityMap
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -418,9 +432,11 @@ func (c *serviceClient) Nat44InterfaceAddrDump(ctx context.Context, in *Nat44Int
 	}
 	x := &serviceClient_Nat44InterfaceAddrDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -450,6 +466,7 @@ func (c *serviceClient_Nat44InterfaceAddrDumpClient) Recv() (*Nat44InterfaceAddr
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -461,9 +478,11 @@ func (c *serviceClient) Nat44InterfaceDump(ctx context.Context, in *Nat44Interfa
 	}
 	x := &serviceClient_Nat44InterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -493,6 +512,7 @@ func (c *serviceClient_Nat44InterfaceDumpClient) Recv() (*Nat44InterfaceDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -513,9 +533,11 @@ func (c *serviceClient) Nat44LbStaticMappingDump(ctx context.Context, in *Nat44L
 	}
 	x := &serviceClient_Nat44LbStaticMappingDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -545,6 +567,7 @@ func (c *serviceClient_Nat44LbStaticMappingDumpClient) Recv() (*Nat44LbStaticMap
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -574,9 +597,11 @@ func (c *serviceClient) Nat44StaticMappingDump(ctx context.Context, in *Nat44Sta
 	}
 	x := &serviceClient_Nat44StaticMappingDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -606,6 +631,7 @@ func (c *serviceClient_Nat44StaticMappingDumpClient) Recv() (*Nat44StaticMapping
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -617,9 +643,11 @@ func (c *serviceClient) Nat44UserDump(ctx context.Context, in *Nat44UserDump) (R
 	}
 	x := &serviceClient_Nat44UserDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -649,6 +677,7 @@ func (c *serviceClient_Nat44UserDumpClient) Recv() (*Nat44UserDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -660,9 +689,11 @@ func (c *serviceClient) Nat44UserSessionDump(ctx context.Context, in *Nat44UserS
 	}
 	x := &serviceClient_Nat44UserSessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -692,6 +723,7 @@ func (c *serviceClient_Nat44UserSessionDumpClient) Recv() (*Nat44UserSessionDeta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -703,9 +735,11 @@ func (c *serviceClient) Nat44UserSessionV2Dump(ctx context.Context, in *Nat44Use
 	}
 	x := &serviceClient_Nat44UserSessionV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -735,6 +769,7 @@ func (c *serviceClient_Nat44UserSessionV2DumpClient) Recv() (*Nat44UserSessionV2
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -746,9 +781,11 @@ func (c *serviceClient) Nat44UserSessionV3Dump(ctx context.Context, in *Nat44Use
 	}
 	x := &serviceClient_Nat44UserSessionV3DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -778,6 +815,7 @@ func (c *serviceClient_Nat44UserSessionV3DumpClient) Recv() (*Nat44UserSessionV3
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -834,9 +872,11 @@ func (c *serviceClient) NatWorkerDump(ctx context.Context, in *NatWorkerDump) (R
 	}
 	x := &serviceClient_NatWorkerDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -866,6 +906,7 @@ func (c *serviceClient_NatWorkerDumpClient) Recv() (*NatWorkerDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -105,9 +105,11 @@ func (c *serviceClient) IPAddressDump(ctx context.Context, in *IPAddressDump) (R
 	}
 	x := &serviceClient_IPAddressDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -137,6 +139,7 @@ func (c *serviceClient_IPAddressDumpClient) Recv() (*IPAddressDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -157,9 +160,11 @@ func (c *serviceClient) IPContainerProxyDump(ctx context.Context, in *IPContaine
 	}
 	x := &serviceClient_IPContainerProxyDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -189,6 +194,7 @@ func (c *serviceClient_IPContainerProxyDumpClient) Recv() (*IPContainerProxyDeta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -200,9 +206,11 @@ func (c *serviceClient) IPDump(ctx context.Context, in *IPDump) (RPCService_IPDu
 	}
 	x := &serviceClient_IPDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -232,6 +240,7 @@ func (c *serviceClient_IPDumpClient) Recv() (*IPDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -270,9 +279,11 @@ func (c *serviceClient) IPMrouteDump(ctx context.Context, in *IPMrouteDump) (RPC
 	}
 	x := &serviceClient_IPMrouteDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -302,6 +313,7 @@ func (c *serviceClient_IPMrouteDumpClient) Recv() (*IPMrouteDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -313,9 +325,11 @@ func (c *serviceClient) IPMtableDump(ctx context.Context, in *IPMtableDump) (RPC
 	}
 	x := &serviceClient_IPMtableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -345,6 +359,7 @@ func (c *serviceClient_IPMtableDumpClient) Recv() (*IPMtableDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -356,6 +371,7 @@ func (c *serviceClient) IPPathMtuGet(ctx context.Context, in *IPPathMtuGet) (RPC
 	}
 	x := &serviceClient_IPPathMtuGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -389,6 +405,7 @@ func (c *serviceClient_IPPathMtuGetClient) Recv() (*IPPathMtuDetails, *IPPathMtu
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -445,9 +462,11 @@ func (c *serviceClient) IPPuntRedirectDump(ctx context.Context, in *IPPuntRedire
 	}
 	x := &serviceClient_IPPuntRedirectDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -477,6 +496,7 @@ func (c *serviceClient_IPPuntRedirectDumpClient) Recv() (*IPPuntRedirectDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -488,9 +508,11 @@ func (c *serviceClient) IPPuntRedirectV2Dump(ctx context.Context, in *IPPuntRedi
 	}
 	x := &serviceClient_IPPuntRedirectV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -520,6 +542,7 @@ func (c *serviceClient_IPPuntRedirectV2DumpClient) Recv() (*IPPuntRedirectV2Deta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -576,9 +599,11 @@ func (c *serviceClient) IPRouteDump(ctx context.Context, in *IPRouteDump) (RPCSe
 	}
 	x := &serviceClient_IPRouteDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -608,6 +633,7 @@ func (c *serviceClient_IPRouteDumpClient) Recv() (*IPRouteDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -637,9 +663,11 @@ func (c *serviceClient) IPRouteV2Dump(ctx context.Context, in *IPRouteV2Dump) (R
 	}
 	x := &serviceClient_IPRouteV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -669,6 +697,7 @@ func (c *serviceClient_IPRouteV2DumpClient) Recv() (*IPRouteV2Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -725,9 +754,11 @@ func (c *serviceClient) IPTableDump(ctx context.Context, in *IPTableDump) (RPCSe
 	}
 	x := &serviceClient_IPTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -757,6 +788,7 @@ func (c *serviceClient_IPTableDumpClient) Recv() (*IPTableDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -795,9 +827,11 @@ func (c *serviceClient) IPUnnumberedDump(ctx context.Context, in *IPUnnumberedDu
 	}
 	x := &serviceClient_IPUnnumberedDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -827,6 +861,7 @@ func (c *serviceClient_IPUnnumberedDumpClient) Recv() (*IPUnnumberedDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -838,9 +873,11 @@ func (c *serviceClient) MfibSignalDump(ctx context.Context, in *MfibSignalDump) 
 	}
 	x := &serviceClient_MfibSignalDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -870,6 +907,7 @@ func (c *serviceClient_MfibSignalDumpClient) Recv() (*MfibSignalDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

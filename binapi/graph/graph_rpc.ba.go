@@ -30,6 +30,7 @@ func (c *serviceClient) GraphNodeGet(ctx context.Context, in *GraphNodeGet) (RPC
 	}
 	x := &serviceClient_GraphNodeGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -63,6 +64,7 @@ func (c *serviceClient_GraphNodeGetClient) Recv() (*GraphNodeDetails, *GraphNode
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

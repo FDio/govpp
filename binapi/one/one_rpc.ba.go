@@ -192,9 +192,11 @@ func (c *serviceClient) OneEidTableDump(ctx context.Context, in *OneEidTableDump
 	}
 	x := &serviceClient_OneEidTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -224,6 +226,7 @@ func (c *serviceClient_OneEidTableDumpClient) Recv() (*OneEidTableDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -235,9 +238,11 @@ func (c *serviceClient) OneEidTableMapDump(ctx context.Context, in *OneEidTableM
 	}
 	x := &serviceClient_OneEidTableMapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -267,6 +272,7 @@ func (c *serviceClient_OneEidTableMapDumpClient) Recv() (*OneEidTableMapDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -278,9 +284,11 @@ func (c *serviceClient) OneEidTableVniDump(ctx context.Context, in *OneEidTableV
 	}
 	x := &serviceClient_OneEidTableVniDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -310,6 +318,7 @@ func (c *serviceClient_OneEidTableVniDumpClient) Recv() (*OneEidTableVniDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -393,9 +402,11 @@ func (c *serviceClient) OneLocatorDump(ctx context.Context, in *OneLocatorDump) 
 	}
 	x := &serviceClient_OneLocatorDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -425,6 +436,7 @@ func (c *serviceClient_OneLocatorDumpClient) Recv() (*OneLocatorDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -436,9 +448,11 @@ func (c *serviceClient) OneLocatorSetDump(ctx context.Context, in *OneLocatorSet
 	}
 	x := &serviceClient_OneLocatorSetDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -468,6 +482,7 @@ func (c *serviceClient_OneLocatorSetDumpClient) Recv() (*OneLocatorSetDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -515,9 +530,11 @@ func (c *serviceClient) OneMapResolverDump(ctx context.Context, in *OneMapResolv
 	}
 	x := &serviceClient_OneMapResolverDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -547,6 +564,7 @@ func (c *serviceClient_OneMapResolverDumpClient) Recv() (*OneMapResolverDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -558,9 +576,11 @@ func (c *serviceClient) OneMapServerDump(ctx context.Context, in *OneMapServerDu
 	}
 	x := &serviceClient_OneMapServerDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -590,6 +610,7 @@ func (c *serviceClient_OneMapServerDumpClient) Recv() (*OneMapServerDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -682,9 +703,11 @@ func (c *serviceClient) OneStatsDump(ctx context.Context, in *OneStatsDump) (RPC
 	}
 	x := &serviceClient_OneStatsDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -714,6 +737,7 @@ func (c *serviceClient_OneStatsDumpClient) Recv() (*OneStatsDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
