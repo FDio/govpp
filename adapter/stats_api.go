@@ -63,6 +63,7 @@ const (
 	NameVector            StatType = "NameVector"
 	Empty                 StatType = "Empty"
 	Symlink               StatType = "Symlink"
+	GaugeIndex            StatType = "GaugeIndex"
 )
 
 // StatDir defines directory of stats entries created by PrepareDir.
@@ -122,6 +123,9 @@ type Stat interface {
 // ScalarStat represents stat for ScalarIndex.
 type ScalarStat float64
 
+// ScalarStat represents stat for GaugeIndex.
+type GaugeStat float64
+
 // ErrorStat represents stat for ErrorIndex. The array represents workers.
 type ErrorStat []Counter
 
@@ -149,6 +153,7 @@ func (SimpleCounterStat) isStat()   {}
 func (CombinedCounterStat) isStat() {}
 func (NameStat) isStat()            {}
 func (EmptyStat) isStat()           {}
+func (GaugeStat) isStat()           {}
 
 func (s ScalarStat) IsZero() bool {
 	return s == 0
@@ -254,4 +259,12 @@ func ReduceCombinedCounterStatIndex(s CombinedCounterStat, i int) [2]uint64 {
 		val[1] += w[i][1]
 	}
 	return val
+}
+
+func (s GaugeStat) IsZero() bool {
+	return s == 0
+}
+
+func (s GaugeStat) Type() StatType {
+	return GaugeIndex
 }

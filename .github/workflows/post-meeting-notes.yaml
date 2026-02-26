@@ -1,0 +1,426 @@
+name: Post FD.io meeting notes
+
+on:
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+    inputs:
+      days_back:
+        description: "Days to look back for meeting notes"
+        required: false
+        default: "30"
+      year_min:
+        description: "Minimum meeting year to include (empty defaults to this year and last year)"
+        required: false
+        default: ""
+      dry_run:
+        description: "When true, do not post comments; only print planned comments"
+        required: false
+        default: "true"
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  post-meeting-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post meeting notes to discussion
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DAYS_BACK: ${{ github.event.inputs.days_back }}
+          YEAR_MIN: ${{ github.event.inputs.year_min }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          SUMMARY_PATH: meeting-notes-summary.txt
+        run: |
+          python - <<'PY'
+          import datetime
+          import json
+          import os
+          import re
+          import sys
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+          from html.parser import HTMLParser
+
+          BASE_URL = "https://ircbot.wl.linuxfoundation.org/meetings/fdio-meeting/"
+          OWNER = "FDio"
+          REPO = "govpp"
+          DISCUSSION_NUMBER = 46
+
+          summary_path = os.getenv("SUMMARY_PATH", "meeting-notes-summary.txt")
+          dry_run_raw = (os.getenv("DRY_RUN") or "true").strip().lower()
+          dry_run = dry_run_raw in {"1", "true", "yes", "y", "on"}
+
+          print(f"Starting meeting notes sync from {BASE_URL}")
+          print(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}")
+          print(f"Dry run enabled: {dry_run}")
+
+          days_back_raw = os.getenv("DAYS_BACK") or "30"
+          try:
+              days_back = int(days_back_raw)
+          except ValueError:
+              print(f"Invalid DAYS_BACK value: {days_back_raw}")
+              sys.exit(1)
+
+          cutoff_date = datetime.date.today() - datetime.timedelta(days=days_back)
+          current_year = datetime.date.today().year
+          year_min_raw = (os.getenv("YEAR_MIN") or "").strip()
+          if year_min_raw:
+              try:
+                  year_min = int(year_min_raw)
+              except ValueError:
+                  print(f"Invalid YEAR_MIN value: {year_min_raw}")
+                  sys.exit(1)
+              allowed_years = None
+          else:
+              year_min = current_year - 1
+              allowed_years = {current_year - 1, current_year}
+
+          print(f"Filtering meeting notes from the last {days_back} day(s); cutoff date: {cutoff_date}")
+          if allowed_years is None:
+              print(f"Filtering meeting notes with year >= {year_min}")
+          else:
+              print(f"Filtering meeting notes to years: {sorted(allowed_years)}")
+
+          class LinkParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links = []
+
+              def handle_starttag(self, tag, attrs):
+                  if tag != "a":
+                      return
+                  for key, value in attrs:
+                      if key == "href" and value:
+                          self.links.append(value)
+
+          def fetch_url(url):
+              print(f"Fetching URL: {url}")
+              try:
+                  with urllib.request.urlopen(url) as response:
+                      payload = response.read().decode("utf-8", errors="replace")
+                      print(f"Fetched {len(payload)} bytes from {url}")
+                      return payload
+              except urllib.error.HTTPError as exc:
+                  print(f"Failed to fetch {url}: {exc}")
+                  return ""
+
+          def collect_meeting_files(base_url):
+              queue = [base_url]
+              seen = set()
+              files = []
+              print("Collecting meeting files by traversing directories under base URL.")
+              while queue:
+                  url = queue.pop(0)
+                  if url in seen:
+                      continue
+                  seen.add(url)
+                  html = fetch_url(url)
+                  if not html:
+                      print(f"Skipping {url} due to empty response.")
+                      continue
+                  parser = LinkParser()
+                  parser.feed(html)
+                  for link in parser.links:
+                      if link.startswith("#"):
+                          continue
+                      next_url = urllib.parse.urljoin(url, link)
+                      if not next_url.startswith(base_url):
+                          print(f"Skipping external link: {next_url}")
+                          continue
+                      if link.endswith("/"):
+                          year_match = re.match(r"^(\d{4})/$", link)
+                          if year_match:
+                              year_value = int(year_match.group(1))
+                              if allowed_years is not None and year_value not in allowed_years:
+                                  print(f"Skipping directory outside allowed years: {next_url}")
+                                  continue
+                              if allowed_years is None and year_value < year_min:
+                                  print(f"Skipping directory older than minimum year: {next_url}")
+                                  continue
+                      if link.endswith("/"):
+                          print(f"Discovered directory: {next_url}")
+                          queue.append(next_url)
+                          continue
+                      relative_path = urllib.parse.urlparse(next_url).path.replace(
+                          urllib.parse.urlparse(base_url).path,
+                          "",
+                          1,
+                      ).lstrip("/")
+                      print(f"Discovered file: {relative_path}")
+                      files.append(relative_path)
+              print(f"Traversal complete. Found {len(files)} file(s).")
+              return files
+
+          def github_graphql(token, query, variables):
+              payload = json.dumps({"query": query, "variables": variables}).encode("utf-8")
+              request = urllib.request.Request(
+                  "https://api.github.com/graphql",
+                  data=payload,
+                  headers={
+                      "Authorization": f"Bearer {token}",
+                      "Content-Type": "application/json",
+                  },
+              )
+              with urllib.request.urlopen(request) as response:
+                  data = json.loads(response.read().decode("utf-8"))
+              if "errors" in data:
+                  raise RuntimeError(data["errors"])
+              return data["data"]
+
+          valid_suffixes = (".html", ".txt")
+          required_path_fragment = "govpp_community_meeting"
+          stats = {
+              "total_discovered": 0,
+              "path_filtered": 0,
+              "extension_filtered": 0,
+              "missing_date": 0,
+              "too_old": 0,
+              "too_old_year": 0,
+              "eligible": 0,
+              "existing_markers": 0,
+              "planned": 0,
+              "posted": 0,
+          }
+          meeting_files = []
+          for link in collect_meeting_files(BASE_URL):
+              stats["total_discovered"] += 1
+              if required_path_fragment not in link:
+                  stats["path_filtered"] += 1
+                  print(f"Skipping non-govpp community meeting path: {link}")
+                  continue
+              if not link.lower().endswith(valid_suffixes):
+                  stats["extension_filtered"] += 1
+                  print(f"Skipping non-meeting file (extension mismatch): {link}")
+                  continue
+              meeting_files.append(link)
+
+          if not meeting_files:
+              print("No meeting notes found.")
+              sys.exit(0)
+
+          def extract_date(filename):
+              match = re.search(r"(20\d{2}-\d{2}-\d{2})", filename)
+              if not match:
+                  return None
+              try:
+                  return datetime.datetime.strptime(match.group(1), "%Y-%m-%d").date()
+              except ValueError:
+                  return None
+
+          filtered = []
+          for filename in meeting_files:
+              note_date = extract_date(filename)
+              if note_date is None:
+                  stats["missing_date"] += 1
+                  print(f"Skipping {filename} (no date found in filename).")
+                  continue
+              if allowed_years is not None and note_date.year not in allowed_years:
+                  stats["too_old_year"] += 1
+                  print(f"Skipping {filename} (year {note_date.year} outside allowed years).")
+                  continue
+              if allowed_years is None and note_date.year < year_min:
+                  stats["too_old_year"] += 1
+                  print(f"Skipping {filename} (year {note_date.year} older than minimum {year_min}).")
+                  continue
+              if note_date < cutoff_date:
+                  stats["too_old"] += 1
+                  print(f"Skipping {filename} (date {note_date} older than cutoff).")
+                  continue
+              print(f"Including {filename} (date {note_date}).")
+              filtered.append(filename)
+
+          meeting_files = sorted(set(filtered))
+          stats["eligible"] = len(meeting_files)
+          print(f"{len(meeting_files)} meeting file(s) remain after filtering and de-duplication.")
+          if not meeting_files:
+              print("No meeting notes within the configured date window.")
+              sys.exit(0)
+
+          token = os.environ.get("GITHUB_TOKEN")
+          if not token:
+              print("GITHUB_TOKEN is required.")
+              sys.exit(1)
+
+          query = """
+          query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
+            repository(owner: $owner, name: $repo) {
+              discussion(number: $number) {
+                id
+                body
+                comments(first: 100, after: $cursor) {
+                  nodes { body }
+                  pageInfo { hasNextPage endCursor }
+                }
+              }
+            }
+          }
+          """
+
+          discussion_id = None
+          comments = []
+          discussion_body = None
+          cursor = None
+          while True:
+              data = github_graphql(
+                  token,
+                  query,
+                  {
+                      "owner": OWNER,
+                      "repo": REPO,
+                      "number": DISCUSSION_NUMBER,
+                      "cursor": cursor,
+                  },
+              )
+              discussion = data["repository"]["discussion"]
+              if discussion is None:
+                  print("Discussion not found.")
+                  sys.exit(1)
+              discussion_id = discussion_id or discussion["id"]
+              discussion_body = discussion_body or discussion.get("body")
+              comments.extend(node["body"] for node in discussion["comments"]["nodes"])
+              page_info = discussion["comments"]["pageInfo"]
+              if not page_info["hasNextPage"]:
+                  break
+              cursor = page_info["endCursor"]
+          print(f"Fetched {len(comments)} existing discussion comment(s) for de-duplication.")
+
+          existing_file_markers = set()
+          existing_date_markers = set()
+          file_marker_pattern = re.compile(r"<!-- meeting-notes:([^\s>]+) -->")
+          date_marker_pattern = re.compile(r"<!-- meeting-notes-date:(\d{4}-\d{2}-\d{2}) -->")
+          if discussion_body:
+              for match in file_marker_pattern.findall(discussion_body):
+                  existing_file_markers.add(match)
+              for match in date_marker_pattern.findall(discussion_body):
+                  existing_date_markers.add(match)
+          for body in comments:
+              for match in file_marker_pattern.findall(body):
+                  existing_file_markers.add(match)
+              for match in date_marker_pattern.findall(body):
+                  existing_date_markers.add(match)
+          stats["existing_markers"] = len(existing_file_markers) + len(existing_date_markers)
+          print(
+              "Found "
+              f"{len(existing_file_markers)} existing meeting note file marker(s) and "
+              f"{len(existing_date_markers)} meeting note date marker(s)."
+          )
+
+          mutation = """
+          mutation($discussionId: ID!, $body: String!) {
+            addDiscussionComment(input: {discussionId: $discussionId, body: $body}) {
+              comment { id url }
+            }
+          }
+          """
+
+          def pick_preferred_files(filenames):
+              primary_html = None
+              raw_txt = None
+              for filename in filenames:
+                  lower_name = filename.lower()
+                  if lower_name.endswith(".log.html") or lower_name.endswith(".log.txt"):
+                      continue
+                  if lower_name.endswith(".html") and primary_html is None:
+                      primary_html = filename
+                  if lower_name.endswith(".txt") and raw_txt is None:
+                      raw_txt = filename
+              return primary_html, raw_txt
+
+          planned_bodies = []
+          posted = 0
+          notes_by_date = {}
+          for filename in meeting_files:
+              note_date = extract_date(filename)
+              if note_date is None:
+                  print(f"Skipping {filename} during grouping (no date found in filename).")
+                  continue
+              notes_by_date.setdefault(note_date, []).append(filename)
+
+          for note_date in sorted(notes_by_date):
+              date_str = note_date.strftime("%Y-%m-%d")
+              if date_str in existing_date_markers:
+                  print(f"Skipping already-posted meeting date: {date_str}")
+                  continue
+              filenames = sorted(notes_by_date[note_date])
+              primary_html, raw_txt = pick_preferred_files(filenames)
+              if not primary_html:
+                  print(f"Skipping meeting date {date_str} (no primary HTML notes found).")
+                  continue
+              selected_files = [primary_html]
+              if raw_txt:
+                  selected_files.append(raw_txt)
+              if any(filename in existing_file_markers for filename in selected_files):
+                  print(f"Skipping meeting date {date_str} due to existing file marker.")
+                  continue
+              note_url = urllib.parse.urljoin(BASE_URL, primary_html)
+              badge_date = note_date.strftime("%Y-%b-%d").replace("-", "--")
+              badge_label = f"{badge_date}-GoVPP Community Meeting"
+              badge_label_escaped = urllib.parse.quote(badge_label)
+              badge_url = f"https://img.shields.io/badge/{badge_label_escaped}-16b"
+              header_date = note_date.strftime("%B %d, %Y").replace(" 0", " ")
+              link_lines = [f"- [HTML notes]({urllib.parse.urljoin(BASE_URL, primary_html)})"]
+              if raw_txt:
+                  link_lines.append(f"- [Raw notes]({urllib.parse.urljoin(BASE_URL, raw_txt)})")
+              body = (
+                  f"## FDio-GoVPP Community Meeting - Notes ({header_date})\n\n"
+                  f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
+                  + "\n".join(link_lines)
+                  + "\n\n"
+                  + "\n".join(f"<!-- meeting-notes:{filename} -->" for filename in selected_files)
+                  + "\n"
+                  + f"<!-- meeting-notes-date:{date_str} -->"
+              )
+              planned_bodies.append(body)
+              stats["planned"] += 1
+              print(f"Posting new meeting notes comment for {date_str}")
+              if dry_run:
+                  print("Dry run: skipping comment creation.")
+                  print(body)
+              else:
+                  result = github_graphql(
+                      token,
+                      mutation,
+                      {"discussionId": discussion_id, "body": body},
+                  )
+                  comment_url = result["addDiscussionComment"]["comment"]["url"]
+                  print(f"Posted comment: {comment_url}")
+                  posted += 1
+
+          stats["posted"] = posted
+          print(f"Posted {posted} new meeting note comment(s).")
+
+          with open(summary_path, "w", encoding="utf-8") as summary_file:
+              summary_file.write("Meeting notes sync summary\n")
+              summary_file.write("==========================\n")
+              summary_file.write(f"Base URL: {BASE_URL}\n")
+              summary_file.write(f"Target discussion: {OWNER}/{REPO}#{DISCUSSION_NUMBER}\n")
+              summary_file.write(f"Dry run: {dry_run}\n")
+              summary_file.write(f"Cutoff date: {cutoff_date}\n")
+              summary_file.write(f"Total discovered: {stats['total_discovered']}\n")
+              summary_file.write(f"Filtered (path fragment): {stats['path_filtered']}\n")
+              summary_file.write(f"Filtered (extension): {stats['extension_filtered']}\n")
+              summary_file.write(f"Filtered (missing date): {stats['missing_date']}\n")
+              summary_file.write(f"Filtered (too old): {stats['too_old']}\n")
+              summary_file.write(f"Filtered (year constraint): {stats['too_old_year']}\n")
+              summary_file.write(f"Eligible after filtering: {stats['eligible']}\n")
+              summary_file.write(f"Existing markers: {stats['existing_markers']}\n")
+              summary_file.write(f"Planned comments: {stats['planned']}\n")
+              summary_file.write(f"Posted comments: {stats['posted']}\n")
+              summary_file.write("\nPlanned comment bodies:\n")
+              summary_file.write("-----------------------\n")
+              if not planned_bodies:
+                  summary_file.write("None\n")
+              else:
+                  for body in planned_bodies:
+                      summary_file.write(body)
+                      summary_file.write("\n\n---\n\n")
+          PY
+      - name: Summarize meeting notes run
+        run: |
+          echo "Meeting notes workflow summary"
+          echo "-------------------------------"
+          cat meeting-notes-summary.txt
