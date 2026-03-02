@@ -42,7 +42,7 @@ jobs:
 
       - name: "Release Version"
         if: success() && startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           version: '~> v2'
           args: release --clean
@@ -52,7 +52,7 @@ jobs:
 
       - name: "Release Snapshot"
         if: success() && !startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           version: '~> v2'
           args: release --clean --snapshot
@@ -61,7 +61,7 @@ jobs:
           HOSTNAME: github
 
       - name: "Upload Artifacts"
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: govpp-artifacts
           path: |
