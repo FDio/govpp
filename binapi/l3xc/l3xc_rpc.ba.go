@@ -43,9 +43,11 @@ func (c *serviceClient) L3xcDump(ctx context.Context, in *L3xcDump) (RPCService_
 	}
 	x := &serviceClient_L3xcDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -75,6 +77,7 @@ func (c *serviceClient_L3xcDumpClient) Recv() (*L3xcDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

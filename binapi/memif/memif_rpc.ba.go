@@ -64,9 +64,11 @@ func (c *serviceClient) MemifDump(ctx context.Context, in *MemifDump) (RPCServic
 	}
 	x := &serviceClient_MemifDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -96,6 +98,7 @@ func (c *serviceClient_MemifDumpClient) Recv() (*MemifDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -125,9 +128,11 @@ func (c *serviceClient) MemifSocketFilenameDump(ctx context.Context, in *MemifSo
 	}
 	x := &serviceClient_MemifSocketFilenameDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -157,6 +162,7 @@ func (c *serviceClient_MemifSocketFilenameDumpClient) Recv() (*MemifSocketFilena
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

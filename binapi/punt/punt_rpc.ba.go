@@ -35,9 +35,11 @@ func (c *serviceClient) PuntReasonDump(ctx context.Context, in *PuntReasonDump) 
 	}
 	x := &serviceClient_PuntReasonDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -67,6 +69,7 @@ func (c *serviceClient_PuntReasonDumpClient) Recv() (*PuntReasonDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -87,9 +90,11 @@ func (c *serviceClient) PuntSocketDump(ctx context.Context, in *PuntSocketDump) 
 	}
 	x := &serviceClient_PuntSocketDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -119,6 +124,7 @@ func (c *serviceClient_PuntSocketDumpClient) Recv() (*PuntSocketDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

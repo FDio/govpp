@@ -3,8 +3,8 @@ module go.fd.io/govpp
 go 1.24.0
 
 require (
-	github.com/bennyscetbun/jsongo v1.1.2
-	github.com/docker/cli v29.1.5+incompatible
+	github.com/bennyscetbun/jsongo v1.2.1
+	github.com/docker/cli v29.2.1+incompatible
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.6.0
@@ -12,12 +12,12 @@ require (
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.2
 	github.com/olekukonko/tablewriter v1.1.3
-	github.com/onsi/gomega v1.39.0
+	github.com/onsi/gomega v1.39.1
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
-	golang.org/x/text v0.33.0
+	golang.org/x/text v0.34.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -29,7 +29,7 @@ require (
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/fgprof v0.9.3 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
+	github.com/google/pprof v0.0.0-20260115054156-294ebfa9ad83 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -40,8 +40,8 @@ require (
 	github.com/olekukonko/ll v0.1.4-0.20260115111900-9e59c2286df0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
-	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
+	golang.org/x/sys v0.40.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
 

@@ -150,9 +150,11 @@ func (c *serviceClient) LispEidTableDump(ctx context.Context, in *LispEidTableDu
 	}
 	x := &serviceClient_LispEidTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -182,6 +184,7 @@ func (c *serviceClient_LispEidTableDumpClient) Recv() (*LispEidTableDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -193,9 +196,11 @@ func (c *serviceClient) LispEidTableMapDump(ctx context.Context, in *LispEidTabl
 	}
 	x := &serviceClient_LispEidTableMapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -225,6 +230,7 @@ func (c *serviceClient_LispEidTableMapDumpClient) Recv() (*LispEidTableMapDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -236,9 +242,11 @@ func (c *serviceClient) LispEidTableVniDump(ctx context.Context, in *LispEidTabl
 	}
 	x := &serviceClient_LispEidTableVniDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -268,6 +276,7 @@ func (c *serviceClient_LispEidTableVniDumpClient) Recv() (*LispEidTableVniDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -297,9 +306,11 @@ func (c *serviceClient) LispLocatorDump(ctx context.Context, in *LispLocatorDump
 	}
 	x := &serviceClient_LispLocatorDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -329,6 +340,7 @@ func (c *serviceClient_LispLocatorDumpClient) Recv() (*LispLocatorDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -340,9 +352,11 @@ func (c *serviceClient) LispLocatorSetDump(ctx context.Context, in *LispLocatorS
 	}
 	x := &serviceClient_LispLocatorSetDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -372,6 +386,7 @@ func (c *serviceClient_LispLocatorSetDumpClient) Recv() (*LispLocatorSetDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -401,9 +416,11 @@ func (c *serviceClient) LispMapResolverDump(ctx context.Context, in *LispMapReso
 	}
 	x := &serviceClient_LispMapResolverDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -433,6 +450,7 @@ func (c *serviceClient_LispMapResolverDumpClient) Recv() (*LispMapResolverDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -444,9 +462,11 @@ func (c *serviceClient) LispMapServerDump(ctx context.Context, in *LispMapServer
 	}
 	x := &serviceClient_LispMapServerDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -476,6 +496,7 @@ func (c *serviceClient_LispMapServerDumpClient) Recv() (*LispMapServerDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -54,9 +54,11 @@ func (c *serviceClient) FlowprobeInterfaceDump(ctx context.Context, in *Flowprob
 	}
 	x := &serviceClient_FlowprobeInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -86,6 +88,7 @@ func (c *serviceClient_FlowprobeInterfaceDumpClient) Recv() (*FlowprobeInterface
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

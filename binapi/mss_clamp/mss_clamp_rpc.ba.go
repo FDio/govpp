@@ -40,6 +40,7 @@ func (c *serviceClient) MssClampGet(ctx context.Context, in *MssClampGet) (RPCSe
 	}
 	x := &serviceClient_MssClampGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -73,6 +74,7 @@ func (c *serviceClient_MssClampGetClient) Recv() (*MssClampDetails, *MssClampGet
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

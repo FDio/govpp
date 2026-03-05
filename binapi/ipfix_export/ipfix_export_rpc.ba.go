@@ -39,6 +39,7 @@ func (c *serviceClient) IpfixAllExporterGet(ctx context.Context, in *IpfixAllExp
 	}
 	x := &serviceClient_IpfixAllExporterGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -72,6 +73,7 @@ func (c *serviceClient_IpfixAllExporterGetClient) Recv() (*IpfixAllExporterDetai
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -83,9 +85,11 @@ func (c *serviceClient) IpfixClassifyStreamDump(ctx context.Context, in *IpfixCl
 	}
 	x := &serviceClient_IpfixClassifyStreamDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -115,6 +119,7 @@ func (c *serviceClient_IpfixClassifyStreamDumpClient) Recv() (*IpfixClassifyStre
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -135,9 +140,11 @@ func (c *serviceClient) IpfixClassifyTableDump(ctx context.Context, in *IpfixCla
 	}
 	x := &serviceClient_IpfixClassifyTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -167,6 +174,7 @@ func (c *serviceClient_IpfixClassifyTableDumpClient) Recv() (*IpfixClassifyTable
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -187,9 +195,11 @@ func (c *serviceClient) IpfixExporterDump(ctx context.Context, in *IpfixExporter
 	}
 	x := &serviceClient_IpfixExporterDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -219,6 +229,7 @@ func (c *serviceClient_IpfixExporterDumpClient) Recv() (*IpfixExporterDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

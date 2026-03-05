@@ -61,9 +61,11 @@ func (c *serviceClient) UDPEncapDump(ctx context.Context, in *UDPEncapDump) (RPC
 	}
 	x := &serviceClient_UDPEncapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -93,6 +95,7 @@ func (c *serviceClient_UDPEncapDumpClient) Recv() (*UDPEncapDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
