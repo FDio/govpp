@@ -41,6 +41,7 @@ func (c *serviceClient) LldpDump(ctx context.Context, in *LldpDump) (RPCService_
 	}
 	x := &serviceClient_LldpDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -74,6 +75,7 @@ func (c *serviceClient_LldpDumpClient) Recv() (*LldpDetails, *LldpDumpReply, err
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

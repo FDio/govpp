@@ -70,9 +70,11 @@ func (c *serviceClient) BdIPMacDump(ctx context.Context, in *BdIPMacDump) (RPCSe
 	}
 	x := &serviceClient_BdIPMacDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -102,6 +104,7 @@ func (c *serviceClient_BdIPMacDumpClient) Recv() (*BdIPMacDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -140,9 +143,11 @@ func (c *serviceClient) BridgeDomainDump(ctx context.Context, in *BridgeDomainDu
 	}
 	x := &serviceClient_BridgeDomainDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -172,6 +177,7 @@ func (c *serviceClient_BridgeDomainDumpClient) Recv() (*BridgeDomainDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -246,9 +252,11 @@ func (c *serviceClient) L2FibTableDump(ctx context.Context, in *L2FibTableDump) 
 	}
 	x := &serviceClient_L2FibTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -278,6 +286,7 @@ func (c *serviceClient_L2FibTableDumpClient) Recv() (*L2FibTableDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -334,9 +343,11 @@ func (c *serviceClient) L2XconnectDump(ctx context.Context, in *L2XconnectDump) 
 	}
 	x := &serviceClient_L2XconnectDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -366,6 +377,7 @@ func (c *serviceClient_L2XconnectDumpClient) Recv() (*L2XconnectDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

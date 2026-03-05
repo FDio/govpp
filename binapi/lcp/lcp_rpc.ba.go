@@ -103,6 +103,7 @@ func (c *serviceClient) LcpItfPairGet(ctx context.Context, in *LcpItfPairGet) (R
 	}
 	x := &serviceClient_LcpItfPairGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -136,6 +137,7 @@ func (c *serviceClient_LcpItfPairGetClient) Recv() (*LcpItfPairDetails, *LcpItfP
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -147,6 +149,7 @@ func (c *serviceClient) LcpItfPairGetV2(ctx context.Context, in *LcpItfPairGetV2
 	}
 	x := &serviceClient_LcpItfPairGetV2Client{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -180,6 +183,7 @@ func (c *serviceClient_LcpItfPairGetV2Client) Recv() (*LcpItfPairDetails, *LcpIt
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

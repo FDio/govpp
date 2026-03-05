@@ -50,9 +50,11 @@ func (c *serviceClient) BierDispEntryDump(ctx context.Context, in *BierDispEntry
 	}
 	x := &serviceClient_BierDispEntryDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -82,6 +84,7 @@ func (c *serviceClient_BierDispEntryDumpClient) Recv() (*BierDispEntryDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -102,9 +105,11 @@ func (c *serviceClient) BierDispTableDump(ctx context.Context, in *BierDispTable
 	}
 	x := &serviceClient_BierDispTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -134,6 +139,7 @@ func (c *serviceClient_BierDispTableDumpClient) Recv() (*BierDispTableDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -163,9 +169,11 @@ func (c *serviceClient) BierImpDump(ctx context.Context, in *BierImpDump) (RPCSe
 	}
 	x := &serviceClient_BierImpDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -195,6 +203,7 @@ func (c *serviceClient_BierImpDumpClient) Recv() (*BierImpDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -215,9 +224,11 @@ func (c *serviceClient) BierRouteDump(ctx context.Context, in *BierRouteDump) (R
 	}
 	x := &serviceClient_BierRouteDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -247,6 +258,7 @@ func (c *serviceClient_BierRouteDumpClient) Recv() (*BierRouteDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -267,9 +279,11 @@ func (c *serviceClient) BierTableDump(ctx context.Context, in *BierTableDump) (R
 	}
 	x := &serviceClient_BierTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -299,6 +313,7 @@ func (c *serviceClient_BierTableDumpClient) Recv() (*BierTableDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

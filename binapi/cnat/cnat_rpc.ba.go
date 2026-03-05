@@ -49,9 +49,11 @@ func (c *serviceClient) CnatSessionDump(ctx context.Context, in *CnatSessionDump
 	}
 	x := &serviceClient_CnatSessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -81,6 +83,7 @@ func (c *serviceClient_CnatSessionDumpClient) Recv() (*CnatSessionDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -146,9 +149,11 @@ func (c *serviceClient) CnatTranslationDump(ctx context.Context, in *CnatTransla
 	}
 	x := &serviceClient_CnatTranslationDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -178,6 +183,7 @@ func (c *serviceClient_CnatTranslationDumpClient) Recv() (*CnatTranslationDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

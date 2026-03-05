@@ -32,9 +32,11 @@ func (c *serviceClient) TeibDump(ctx context.Context, in *TeibDump) (RPCService_
 	}
 	x := &serviceClient_TeibDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -64,6 +66,7 @@ func (c *serviceClient_TeibDumpClient) Recv() (*TeibDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

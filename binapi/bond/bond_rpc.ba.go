@@ -105,9 +105,11 @@ func (c *serviceClient) SwBondInterfaceDump(ctx context.Context, in *SwBondInter
 	}
 	x := &serviceClient_SwBondInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -137,6 +139,7 @@ func (c *serviceClient_SwBondInterfaceDumpClient) Recv() (*SwBondInterfaceDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -148,9 +151,11 @@ func (c *serviceClient) SwInterfaceBondDump(ctx context.Context, in *SwInterface
 	}
 	x := &serviceClient_SwInterfaceBondDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -180,6 +185,7 @@ func (c *serviceClient_SwInterfaceBondDumpClient) Recv() (*SwInterfaceBondDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -200,9 +206,11 @@ func (c *serviceClient) SwInterfaceSlaveDump(ctx context.Context, in *SwInterfac
 	}
 	x := &serviceClient_SwInterfaceSlaveDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -232,6 +240,7 @@ func (c *serviceClient_SwInterfaceSlaveDumpClient) Recv() (*SwInterfaceSlaveDeta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -243,9 +252,11 @@ func (c *serviceClient) SwMemberInterfaceDump(ctx context.Context, in *SwMemberI
 	}
 	x := &serviceClient_SwMemberInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -275,6 +286,7 @@ func (c *serviceClient_SwMemberInterfaceDumpClient) Recv() (*SwMemberInterfaceDe
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

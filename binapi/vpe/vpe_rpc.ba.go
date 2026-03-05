@@ -33,9 +33,11 @@ func (c *serviceClient) LogDump(ctx context.Context, in *LogDump) (RPCService_Lo
 	}
 	x := &serviceClient_LogDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -65,6 +67,7 @@ func (c *serviceClient_LogDumpClient) Recv() (*LogDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

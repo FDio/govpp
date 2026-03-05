@@ -43,9 +43,11 @@ func (c *serviceClient) ProxyArpDump(ctx context.Context, in *ProxyArpDump) (RPC
 	}
 	x := &serviceClient_ProxyArpDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -75,6 +77,7 @@ func (c *serviceClient_ProxyArpDumpClient) Recv() (*ProxyArpDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -86,9 +89,11 @@ func (c *serviceClient) ProxyArpIntfcDump(ctx context.Context, in *ProxyArpIntfc
 	}
 	x := &serviceClient_ProxyArpIntfcDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -118,6 +123,7 @@ func (c *serviceClient_ProxyArpIntfcDumpClient) Recv() (*ProxyArpIntfcDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

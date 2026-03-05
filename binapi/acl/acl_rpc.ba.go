@@ -69,9 +69,11 @@ func (c *serviceClient) ACLDump(ctx context.Context, in *ACLDump) (RPCService_AC
 	}
 	x := &serviceClient_ACLDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -101,6 +103,7 @@ func (c *serviceClient_ACLDumpClient) Recv() (*ACLDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -121,9 +124,11 @@ func (c *serviceClient) ACLInterfaceEtypeWhitelistDump(ctx context.Context, in *
 	}
 	x := &serviceClient_ACLInterfaceEtypeWhitelistDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -153,6 +158,7 @@ func (c *serviceClient_ACLInterfaceEtypeWhitelistDumpClient) Recv() (*ACLInterfa
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -164,9 +170,11 @@ func (c *serviceClient) ACLInterfaceListDump(ctx context.Context, in *ACLInterfa
 	}
 	x := &serviceClient_ACLInterfaceListDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -196,6 +204,7 @@ func (c *serviceClient_ACLInterfaceListDumpClient) Recv() (*ACLInterfaceListDeta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -306,9 +315,11 @@ func (c *serviceClient) MacipACLDump(ctx context.Context, in *MacipACLDump) (RPC
 	}
 	x := &serviceClient_MacipACLDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -338,6 +349,7 @@ func (c *serviceClient_MacipACLDumpClient) Recv() (*MacipACLDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -367,9 +379,11 @@ func (c *serviceClient) MacipACLInterfaceListDump(ctx context.Context, in *Macip
 	}
 	x := &serviceClient_MacipACLInterfaceListDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -399,6 +413,7 @@ func (c *serviceClient_MacipACLInterfaceListDumpClient) Recv() (*MacipACLInterfa
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

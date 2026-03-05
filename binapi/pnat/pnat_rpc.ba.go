@@ -82,6 +82,7 @@ func (c *serviceClient) PnatBindingsGet(ctx context.Context, in *PnatBindingsGet
 	}
 	x := &serviceClient_PnatBindingsGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -115,6 +116,7 @@ func (c *serviceClient_PnatBindingsGetClient) Recv() (*PnatBindingsDetails, *Pna
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -135,6 +137,7 @@ func (c *serviceClient) PnatInterfacesGet(ctx context.Context, in *PnatInterface
 	}
 	x := &serviceClient_PnatInterfacesGetClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -168,6 +171,7 @@ func (c *serviceClient_PnatInterfacesGetClient) Recv() (*PnatInterfacesDetails, 
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

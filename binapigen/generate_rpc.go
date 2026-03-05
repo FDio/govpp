@@ -123,10 +123,12 @@ func genService(g *GenFile, svc *Service) {
 			g.P("if err != nil { return nil, err }")
 			g.P("x := &", streamImpl, "{stream}")
 			g.P("if err := x.Stream.SendMsg(in); err != nil {")
+			g.P("	x.Stream.Close()")
 			g.P("	return nil, err")
 			g.P("}")
 			if rpc.MsgStream == nil {
 				g.P("if err = x.Stream.SendMsg(&", msgControlPing.GoIdent, "{}); err != nil {")
+				g.P("	x.Stream.Close()")
 				g.P("	return nil, err")
 				g.P("}")
 			}
@@ -191,6 +193,7 @@ func genService(g *GenFile, svc *Service) {
 				g.P("		return nil, ", ioPkg.Ident("EOF"))
 			}
 			g.P("	default:")
+			g.P("		c.Stream.Close()")
 			if msgReply != msgControlPingReply {
 				g.P("		return nil, nil, ", fmtPkg.Ident("Errorf"), "(\"unexpected message: %T %v\", m, m)")
 			} else {

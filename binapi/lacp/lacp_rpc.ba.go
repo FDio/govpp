@@ -31,9 +31,11 @@ func (c *serviceClient) SwInterfaceLacpDump(ctx context.Context, in *SwInterface
 	}
 	x := &serviceClient_SwInterfaceLacpDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -63,6 +65,7 @@ func (c *serviceClient_SwInterfaceLacpDumpClient) Recv() (*SwInterfaceLacpDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -62,9 +62,11 @@ func (c *serviceClient) VxlanGpeTunnelDump(ctx context.Context, in *VxlanGpeTunn
 	}
 	x := &serviceClient_VxlanGpeTunnelDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -94,6 +96,7 @@ func (c *serviceClient_VxlanGpeTunnelDumpClient) Recv() (*VxlanGpeTunnelDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -105,9 +108,11 @@ func (c *serviceClient) VxlanGpeTunnelV2Dump(ctx context.Context, in *VxlanGpeTu
 	}
 	x := &serviceClient_VxlanGpeTunnelV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -137,6 +142,7 @@ func (c *serviceClient_VxlanGpeTunnelV2DumpClient) Recv() (*VxlanGpeTunnelV2Deta
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

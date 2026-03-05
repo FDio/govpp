@@ -158,9 +158,11 @@ func (c *serviceClient) SessionRulesDump(ctx context.Context, in *SessionRulesDu
 	}
 	x := &serviceClient_SessionRulesDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -190,6 +192,7 @@ func (c *serviceClient_SessionRulesDumpClient) Recv() (*SessionRulesDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -201,9 +204,11 @@ func (c *serviceClient) SessionRulesV2Dump(ctx context.Context, in *SessionRules
 	}
 	x := &serviceClient_SessionRulesV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -233,6 +238,7 @@ func (c *serviceClient_SessionRulesV2DumpClient) Recv() (*SessionRulesV2Details,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -271,9 +277,11 @@ func (c *serviceClient) SessionSdlDump(ctx context.Context, in *SessionSdlDump) 
 	}
 	x := &serviceClient_SessionSdlDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -303,6 +311,7 @@ func (c *serviceClient_SessionSdlDumpClient) Recv() (*SessionSdlDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -314,9 +323,11 @@ func (c *serviceClient) SessionSdlV2Dump(ctx context.Context, in *SessionSdlV2Du
 	}
 	x := &serviceClient_SessionSdlV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -346,6 +357,7 @@ func (c *serviceClient_SessionSdlV2DumpClient) Recv() (*SessionSdlV2Details, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -357,9 +369,11 @@ func (c *serviceClient) SessionSdlV3Dump(ctx context.Context, in *SessionSdlV3Du
 	}
 	x := &serviceClient_SessionSdlV3DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -389,6 +403,7 @@ func (c *serviceClient_SessionSdlV3DumpClient) Recv() (*SessionSdlV3Details, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

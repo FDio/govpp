@@ -60,9 +60,11 @@ func (c *serviceClient) Ikev2ChildSaDump(ctx context.Context, in *Ikev2ChildSaDu
 	}
 	x := &serviceClient_Ikev2ChildSaDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -92,6 +94,7 @@ func (c *serviceClient_Ikev2ChildSaDumpClient) Recv() (*Ikev2ChildSaDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -103,9 +106,11 @@ func (c *serviceClient) Ikev2ChildSaV2Dump(ctx context.Context, in *Ikev2ChildSa
 	}
 	x := &serviceClient_Ikev2ChildSaV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -135,6 +140,7 @@ func (c *serviceClient_Ikev2ChildSaV2DumpClient) Recv() (*Ikev2ChildSaV2Details,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -236,9 +242,11 @@ func (c *serviceClient) Ikev2ProfileDump(ctx context.Context, in *Ikev2ProfileDu
 	}
 	x := &serviceClient_Ikev2ProfileDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -268,6 +276,7 @@ func (c *serviceClient_Ikev2ProfileDumpClient) Recv() (*Ikev2ProfileDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -333,9 +342,11 @@ func (c *serviceClient) Ikev2SaDump(ctx context.Context, in *Ikev2SaDump) (RPCSe
 	}
 	x := &serviceClient_Ikev2SaDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -365,6 +376,7 @@ func (c *serviceClient_Ikev2SaDumpClient) Recv() (*Ikev2SaDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -376,9 +388,11 @@ func (c *serviceClient) Ikev2SaV2Dump(ctx context.Context, in *Ikev2SaV2Dump) (R
 	}
 	x := &serviceClient_Ikev2SaV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -408,6 +422,7 @@ func (c *serviceClient_Ikev2SaV2DumpClient) Recv() (*Ikev2SaV2Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -419,9 +434,11 @@ func (c *serviceClient) Ikev2SaV3Dump(ctx context.Context, in *Ikev2SaV3Dump) (R
 	}
 	x := &serviceClient_Ikev2SaV3DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -451,6 +468,7 @@ func (c *serviceClient_Ikev2SaV3DumpClient) Recv() (*Ikev2SaV3Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -525,9 +543,11 @@ func (c *serviceClient) Ikev2TrafficSelectorDump(ctx context.Context, in *Ikev2T
 	}
 	x := &serviceClient_Ikev2TrafficSelectorDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -557,6 +577,7 @@ func (c *serviceClient_Ikev2TrafficSelectorDumpClient) Recv() (*Ikev2TrafficSele
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

@@ -58,9 +58,11 @@ func (c *serviceClient) VrrpVrDump(ctx context.Context, in *VrrpVrDump) (RPCServ
 	}
 	x := &serviceClient_VrrpVrDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -90,6 +92,7 @@ func (c *serviceClient_VrrpVrDumpClient) Recv() (*VrrpVrDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -101,9 +104,11 @@ func (c *serviceClient) VrrpVrPeerDump(ctx context.Context, in *VrrpVrPeerDump) 
 	}
 	x := &serviceClient_VrrpVrPeerDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -133,6 +138,7 @@ func (c *serviceClient_VrrpVrPeerDumpClient) Recv() (*VrrpVrPeerDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -171,9 +177,11 @@ func (c *serviceClient) VrrpVrTrackIfDump(ctx context.Context, in *VrrpVrTrackIf
 	}
 	x := &serviceClient_VrrpVrTrackIfDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -203,6 +211,7 @@ func (c *serviceClient_VrrpVrTrackIfDumpClient) Recv() (*VrrpVrTrackIfDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

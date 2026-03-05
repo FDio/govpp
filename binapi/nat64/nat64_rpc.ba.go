@@ -88,9 +88,11 @@ func (c *serviceClient) Nat64BibDump(ctx context.Context, in *Nat64BibDump) (RPC
 	}
 	x := &serviceClient_Nat64BibDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -120,6 +122,7 @@ func (c *serviceClient_Nat64BibDumpClient) Recv() (*Nat64BibDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -140,9 +143,11 @@ func (c *serviceClient) Nat64InterfaceDump(ctx context.Context, in *Nat64Interfa
 	}
 	x := &serviceClient_Nat64InterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -172,6 +177,7 @@ func (c *serviceClient_Nat64InterfaceDumpClient) Recv() (*Nat64InterfaceDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -192,9 +198,11 @@ func (c *serviceClient) Nat64PoolAddrDump(ctx context.Context, in *Nat64PoolAddr
 	}
 	x := &serviceClient_Nat64PoolAddrDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -224,6 +232,7 @@ func (c *serviceClient_Nat64PoolAddrDumpClient) Recv() (*Nat64PoolAddrDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -235,9 +244,11 @@ func (c *serviceClient) Nat64PrefixDump(ctx context.Context, in *Nat64PrefixDump
 	}
 	x := &serviceClient_Nat64PrefixDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -267,6 +278,7 @@ func (c *serviceClient_Nat64PrefixDumpClient) Recv() (*Nat64PrefixDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -287,9 +299,11 @@ func (c *serviceClient) Nat64StDump(ctx context.Context, in *Nat64StDump) (RPCSe
 	}
 	x := &serviceClient_Nat64StDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -319,6 +333,7 @@ func (c *serviceClient_Nat64StDumpClient) Recv() (*Nat64StDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

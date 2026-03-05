@@ -34,9 +34,11 @@ func (c *serviceClient) SwVmxnet3InterfaceDump(ctx context.Context, in *SwVmxnet
 	}
 	x := &serviceClient_SwVmxnet3InterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -66,6 +68,7 @@ func (c *serviceClient_SwVmxnet3InterfaceDumpClient) Recv() (*SwVmxnet3Interface
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -95,9 +98,11 @@ func (c *serviceClient) Vmxnet3Dump(ctx context.Context, in *Vmxnet3Dump) (RPCSe
 	}
 	x := &serviceClient_Vmxnet3DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -127,6 +132,7 @@ func (c *serviceClient_Vmxnet3DumpClient) Recv() (*Vmxnet3Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
