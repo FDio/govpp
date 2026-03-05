@@ -249,6 +249,9 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 	case adapter.GaugeIndex:
 		return adapter.GaugeStat(dirEntry.unionData)
 
+	case adapter.RingBuffer:
+		return ss.copyRingBufferData(dirEntry)
+
 	default:
 		// TODO: monitor occurrences with metrics
 		debugf("Unknown type %d for stat entry: %q", dirEntry.directoryType, dirEntry.name)
@@ -377,12 +380,139 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 	case adapter.GaugeStat:
 		*stat = adapter.GaugeStat(dirEntry.unionData)
 
+	case adapter.RingBufferStat:
+		ringBufferStat := ss.copyRingBufferData(dirEntry)
+		if ringBufferStat == nil {
+			debugf("failed to read ring buffer data for %s", dirEntry.name)
+			return ErrStatDataLenIncorrect
+		}
+		*stat = ringBufferStat
+
 	default:
 		if Debug {
 			Log.Debugf("Unrecognized stat type %T for stat entry: %v", stat, dirEntry.name)
 		}
 	}
 	return nil
+}
+
+type ringBufferHeader struct {
+	EntrySize      uint32
+	RingSize       uint32
+	NThreads       uint32
+	SchemaSize     uint32
+	SchemaVersion  uint32
+	MetadataOffset uint32
+	DataOffset     uint32
+}
+
+// Respective VPP struct vlib_stats_ring_metadata_t is padded to 64 bytes for cache alignment
+const ringBufferMetaSize = 64
+
+type ringBufferThreadMeta struct {
+	Head          uint32
+	SchemaVersion uint32
+	Sequence      uint64
+	SchemaOffset  uint32
+	SchemaSize    uint32
+	_             [40]byte // padding to cache line size
+}
+
+func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) adapter.Stat {
+	base := ss.adjust(dirVector(&dirEntry.unionData))
+	if base == nil {
+		debugf("ring buffer data pointer is out of range for %s", dirEntry.name)
+		return nil
+	}
+
+	// Get start and end of ring buffer entry mapped region.
+	baseAddr := uintptr(unsafe.Pointer(base))
+	segEnd := uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) + 1
+
+	// Verify the ring buffer header fits within the mapped region.
+	headerSize := unsafe.Sizeof(ringBufferHeader{})
+	if baseAddr+headerSize > segEnd {
+		debugf("ring buffer header extends beyond shared memory for %s", dirEntry.name)
+		return nil
+	}
+
+	// Cast to header struct instead of reading fields individually.
+	header := (*ringBufferHeader)(unsafe.Pointer(base))
+
+	// Verify metadata region fits within the mapped region.
+	metaEnd := baseAddr + uintptr(header.MetadataOffset) + uintptr(header.NThreads)*ringBufferMetaSize
+	if metaEnd > segEnd {
+		debugf("ring buffer metadata extends beyond shared memory for %s (metaEnd=%d, segEnd=%d)",
+			dirEntry.name, metaEnd, segEnd)
+		return nil
+	}
+
+	// Verify data region fits within the mapped region.
+	threadDataSize := uintptr(header.RingSize) * uintptr(header.EntrySize)
+	dataEnd := baseAddr + uintptr(header.DataOffset) + uintptr(header.NThreads)*threadDataSize
+	if dataEnd > segEnd {
+		debugf("ring buffer data extends beyond shared memory for %s (dataEnd=%d, segEnd=%d)",
+			dirEntry.name, dataEnd, segEnd)
+		return nil
+	}
+
+	config := adapter.RingBufferConfig{
+		EntrySize:     header.EntrySize,
+		RingSize:      header.RingSize,
+		NThreads:      header.NThreads,
+		SchemaSize:    header.SchemaSize,
+		SchemaVersion: header.SchemaVersion,
+	}
+
+	// Read per-thread metadata by casting to the raw struct.
+	threads := make([]adapter.RingBufferThreadMeta, header.NThreads)
+	for i := uint32(0); i < header.NThreads; i++ {
+		meta := (*ringBufferThreadMeta)(unsafe.Pointer(
+			baseAddr + uintptr(header.MetadataOffset) + uintptr(i)*ringBufferMetaSize,
+		))
+		threads[i] = adapter.RingBufferThreadMeta{
+			Head:          meta.Head,
+			SchemaVersion: meta.SchemaVersion,
+			Sequence:      meta.Sequence,
+			SchemaOffset:  meta.SchemaOffset,
+			SchemaSize:    meta.SchemaSize,
+		}
+	}
+
+	// Read schema from the first thread that has one.
+	var schema []byte
+	for _, t := range threads {
+		if t.SchemaSize > 0 && t.SchemaOffset > 0 {
+			schemaEnd := baseAddr + uintptr(t.SchemaOffset) + uintptr(t.SchemaSize)
+			if schemaEnd > segEnd {
+				debugf("ring buffer schema extends beyond shared memory for %s (schemaEnd=%d, segEnd=%d)",
+					dirEntry.name, schemaEnd, segEnd)
+				continue
+			}
+			schemaPtr := unsafe.Pointer(baseAddr + uintptr(t.SchemaOffset))
+			srcSchema := unsafe.Slice((*byte)(schemaPtr), t.SchemaSize)
+			schema = make([]byte, t.SchemaSize)
+			copy(schema, srcSchema)
+			break
+		}
+	}
+
+	// Copy per-thread raw ring data.
+	data := make([][]byte, header.NThreads)
+	for i := uint32(0); i < header.NThreads; i++ {
+		srcPtr := unsafe.Pointer(baseAddr + uintptr(header.DataOffset) + uintptr(i)*threadDataSize)
+		srcSlice := unsafe.Slice((*byte)(srcPtr), threadDataSize)
+		threadData := make([]byte, threadDataSize)
+		copy(threadData, srcSlice)
+		data[i] = threadData
+	}
+
+	return adapter.RingBufferStat{
+		Config:  config,
+		Threads: threads,
+		Schema:  schema,
+		Data:    data,
+	}
 }
 
 // Adjust data pointer using shared header and base and return
