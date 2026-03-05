@@ -51,9 +51,11 @@ func (c *serviceClient) PvtiInterfaceDump(ctx context.Context, in *PvtiInterface
 	}
 	x := &serviceClient_PvtiInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -83,6 +85,7 @@ func (c *serviceClient_PvtiInterfaceDumpClient) Recv() (*PvtiInterfaceDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

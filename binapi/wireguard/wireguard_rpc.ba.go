@@ -74,9 +74,11 @@ func (c *serviceClient) WireguardInterfaceDump(ctx context.Context, in *Wireguar
 	}
 	x := &serviceClient_WireguardInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -106,6 +108,7 @@ func (c *serviceClient_WireguardInterfaceDumpClient) Recv() (*WireguardInterface
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -135,9 +138,11 @@ func (c *serviceClient) WireguardPeersDump(ctx context.Context, in *WireguardPee
 	}
 	x := &serviceClient_WireguardPeersDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -167,6 +172,7 @@ func (c *serviceClient_WireguardPeersDumpClient) Recv() (*WireguardPeersDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

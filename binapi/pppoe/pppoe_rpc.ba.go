@@ -51,9 +51,11 @@ func (c *serviceClient) PppoeSessionDump(ctx context.Context, in *PppoeSessionDu
 	}
 	x := &serviceClient_PppoeSessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -83,6 +85,7 @@ func (c *serviceClient_PppoeSessionDumpClient) Recv() (*PppoeSessionDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

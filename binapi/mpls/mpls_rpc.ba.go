@@ -39,9 +39,11 @@ func (c *serviceClient) MplsInterfaceDump(ctx context.Context, in *MplsInterface
 	}
 	x := &serviceClient_MplsInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -71,6 +73,7 @@ func (c *serviceClient_MplsInterfaceDumpClient) Recv() (*MplsInterfaceDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -100,9 +103,11 @@ func (c *serviceClient) MplsRouteDump(ctx context.Context, in *MplsRouteDump) (R
 	}
 	x := &serviceClient_MplsRouteDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -132,6 +137,7 @@ func (c *serviceClient_MplsRouteDumpClient) Recv() (*MplsRouteDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -152,9 +158,11 @@ func (c *serviceClient) MplsTableDump(ctx context.Context, in *MplsTableDump) (R
 	}
 	x := &serviceClient_MplsTableDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -184,6 +192,7 @@ func (c *serviceClient_MplsTableDumpClient) Recv() (*MplsTableDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -204,9 +213,11 @@ func (c *serviceClient) MplsTunnelDump(ctx context.Context, in *MplsTunnelDump) 
 	}
 	x := &serviceClient_MplsTunnelDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -236,6 +247,7 @@ func (c *serviceClient_MplsTunnelDumpClient) Recv() (*MplsTunnelDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

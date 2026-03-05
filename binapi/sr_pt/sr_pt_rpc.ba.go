@@ -51,9 +51,11 @@ func (c *serviceClient) SrPtIfaceDump(ctx context.Context, in *SrPtIfaceDump) (R
 	}
 	x := &serviceClient_SrPtIfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -83,6 +85,7 @@ func (c *serviceClient_SrPtIfaceDumpClient) Recv() (*SrPtIfaceDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

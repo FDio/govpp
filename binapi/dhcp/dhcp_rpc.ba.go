@@ -98,9 +98,11 @@ func (c *serviceClient) DHCPClientDump(ctx context.Context, in *DHCPClientDump) 
 	}
 	x := &serviceClient_DHCPClientDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -130,6 +132,7 @@ func (c *serviceClient_DHCPClientDumpClient) Recv() (*DHCPClientDetails, error) 
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -168,9 +171,11 @@ func (c *serviceClient) DHCPProxyDump(ctx context.Context, in *DHCPProxyDump) (R
 	}
 	x := &serviceClient_DHCPProxyDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -200,6 +205,7 @@ func (c *serviceClient_DHCPProxyDumpClient) Recv() (*DHCPProxyDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

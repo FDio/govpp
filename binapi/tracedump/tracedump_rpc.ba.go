@@ -65,6 +65,7 @@ func (c *serviceClient) TraceDump(ctx context.Context, in *TraceDump) (RPCServic
 	}
 	x := &serviceClient_TraceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -98,6 +99,7 @@ func (c *serviceClient_TraceDumpClient) Recv() (*TraceDetails, *TraceDumpReply, 
 		}
 		return nil, m, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -109,9 +111,11 @@ func (c *serviceClient) TraceFilterFunctionDump(ctx context.Context, in *TraceFi
 	}
 	x := &serviceClient_TraceFilterFunctionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -141,6 +145,7 @@ func (c *serviceClient_TraceFilterFunctionDumpClient) Recv() (*TraceFilterFuncti
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -170,9 +175,11 @@ func (c *serviceClient) TraceV2Dump(ctx context.Context, in *TraceV2Dump) (RPCSe
 	}
 	x := &serviceClient_TraceV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -202,6 +209,7 @@ func (c *serviceClient_TraceV2DumpClient) Recv() (*TraceV2Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

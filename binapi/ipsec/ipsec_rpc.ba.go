@@ -60,9 +60,11 @@ func (c *serviceClient) IpsecBackendDump(ctx context.Context, in *IpsecBackendDu
 	}
 	x := &serviceClient_IpsecBackendDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -92,6 +94,7 @@ func (c *serviceClient_IpsecBackendDumpClient) Recv() (*IpsecBackendDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -130,9 +133,11 @@ func (c *serviceClient) IpsecItfDump(ctx context.Context, in *IpsecItfDump) (RPC
 	}
 	x := &serviceClient_IpsecItfDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -162,6 +167,7 @@ func (c *serviceClient_IpsecItfDumpClient) Recv() (*IpsecItfDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -173,9 +179,11 @@ func (c *serviceClient) IpsecSaDump(ctx context.Context, in *IpsecSaDump) (RPCSe
 	}
 	x := &serviceClient_IpsecSaDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -205,6 +213,7 @@ func (c *serviceClient_IpsecSaDumpClient) Recv() (*IpsecSaDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -216,9 +225,11 @@ func (c *serviceClient) IpsecSaV2Dump(ctx context.Context, in *IpsecSaV2Dump) (R
 	}
 	x := &serviceClient_IpsecSaV2DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -248,6 +259,7 @@ func (c *serviceClient_IpsecSaV2DumpClient) Recv() (*IpsecSaV2Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -259,9 +271,11 @@ func (c *serviceClient) IpsecSaV3Dump(ctx context.Context, in *IpsecSaV3Dump) (R
 	}
 	x := &serviceClient_IpsecSaV3DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -291,6 +305,7 @@ func (c *serviceClient_IpsecSaV3DumpClient) Recv() (*IpsecSaV3Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -302,9 +317,11 @@ func (c *serviceClient) IpsecSaV4Dump(ctx context.Context, in *IpsecSaV4Dump) (R
 	}
 	x := &serviceClient_IpsecSaV4DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -334,6 +351,7 @@ func (c *serviceClient_IpsecSaV4DumpClient) Recv() (*IpsecSaV4Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -345,9 +363,11 @@ func (c *serviceClient) IpsecSaV5Dump(ctx context.Context, in *IpsecSaV5Dump) (R
 	}
 	x := &serviceClient_IpsecSaV5DumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -377,6 +397,7 @@ func (c *serviceClient_IpsecSaV5DumpClient) Recv() (*IpsecSaV5Details, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -496,9 +517,11 @@ func (c *serviceClient) IpsecSpdDump(ctx context.Context, in *IpsecSpdDump) (RPC
 	}
 	x := &serviceClient_IpsecSpdDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -528,6 +551,7 @@ func (c *serviceClient_IpsecSpdDumpClient) Recv() (*IpsecSpdDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -557,9 +581,11 @@ func (c *serviceClient) IpsecSpdInterfaceDump(ctx context.Context, in *IpsecSpdI
 	}
 	x := &serviceClient_IpsecSpdInterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -589,6 +615,7 @@ func (c *serviceClient_IpsecSpdInterfaceDumpClient) Recv() (*IpsecSpdInterfaceDe
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -600,9 +627,11 @@ func (c *serviceClient) IpsecSpdsDump(ctx context.Context, in *IpsecSpdsDump) (R
 	}
 	x := &serviceClient_IpsecSpdsDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -632,6 +661,7 @@ func (c *serviceClient_IpsecSpdsDumpClient) Recv() (*IpsecSpdsDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -652,9 +682,11 @@ func (c *serviceClient) IpsecTunnelProtectDump(ctx context.Context, in *IpsecTun
 	}
 	x := &serviceClient_IpsecTunnelProtectDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -684,6 +716,7 @@ func (c *serviceClient_IpsecTunnelProtectDumpClient) Recv() (*IpsecTunnelProtect
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

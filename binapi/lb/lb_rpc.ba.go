@@ -84,9 +84,11 @@ func (c *serviceClient) LbAsDump(ctx context.Context, in *LbAsDump) (RPCService_
 	}
 	x := &serviceClient_LbAsDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -116,6 +118,7 @@ func (c *serviceClient_LbAsDumpClient) Recv() (*LbAsDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -145,9 +148,11 @@ func (c *serviceClient) LbVipDump(ctx context.Context, in *LbVipDump) (RPCServic
 	}
 	x := &serviceClient_LbVipDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -177,6 +182,7 @@ func (c *serviceClient_LbVipDumpClient) Recv() (*LbVipDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

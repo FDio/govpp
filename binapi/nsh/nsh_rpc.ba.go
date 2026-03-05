@@ -52,9 +52,11 @@ func (c *serviceClient) NshEntryDump(ctx context.Context, in *NshEntryDump) (RPC
 	}
 	x := &serviceClient_NshEntryDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -84,6 +86,7 @@ func (c *serviceClient_NshEntryDumpClient) Recv() (*NshEntryDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -95,9 +98,11 @@ func (c *serviceClient) NshMapDump(ctx context.Context, in *NshMapDump) (RPCServ
 	}
 	x := &serviceClient_NshMapDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -127,6 +132,7 @@ func (c *serviceClient_NshMapDumpClient) Recv() (*NshMapDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

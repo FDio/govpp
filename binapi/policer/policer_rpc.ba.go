@@ -88,9 +88,11 @@ func (c *serviceClient) PolicerDump(ctx context.Context, in *PolicerDump) (RPCSe
 	}
 	x := &serviceClient_PolicerDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -120,6 +122,7 @@ func (c *serviceClient_PolicerDumpClient) Recv() (*PolicerDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -131,9 +134,11 @@ func (c *serviceClient) PolicerDumpV2(ctx context.Context, in *PolicerDumpV2) (R
 	}
 	x := &serviceClient_PolicerDumpV2Client{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -163,6 +168,7 @@ func (c *serviceClient_PolicerDumpV2Client) Recv() (*PolicerDetails, error) {
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

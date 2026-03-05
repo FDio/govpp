@@ -57,9 +57,11 @@ func (c *serviceClient) BfdAuthKeysDump(ctx context.Context, in *BfdAuthKeysDump
 	}
 	x := &serviceClient_BfdAuthKeysDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -89,6 +91,7 @@ func (c *serviceClient_BfdAuthKeysDumpClient) Recv() (*BfdAuthKeysDetails, error
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -190,9 +193,11 @@ func (c *serviceClient) BfdUDPSessionDump(ctx context.Context, in *BfdUDPSession
 	}
 	x := &serviceClient_BfdUDPSessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -222,6 +227,7 @@ func (c *serviceClient_BfdUDPSessionDumpClient) Recv() (*BfdUDPSessionDetails, e
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

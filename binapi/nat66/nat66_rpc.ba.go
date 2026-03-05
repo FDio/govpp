@@ -53,9 +53,11 @@ func (c *serviceClient) Nat66InterfaceDump(ctx context.Context, in *Nat66Interfa
 	}
 	x := &serviceClient_Nat66InterfaceDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -85,6 +87,7 @@ func (c *serviceClient_Nat66InterfaceDumpClient) Recv() (*Nat66InterfaceDetails,
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -105,9 +108,11 @@ func (c *serviceClient) Nat66StaticMappingDump(ctx context.Context, in *Nat66Sta
 	}
 	x := &serviceClient_Nat66StaticMappingDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -137,6 +142,7 @@ func (c *serviceClient_Nat66StaticMappingDumpClient) Recv() (*Nat66StaticMapping
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }

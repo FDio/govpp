@@ -97,9 +97,11 @@ func (c *serviceClient) ClassifySessionDump(ctx context.Context, in *ClassifySes
 	}
 	x := &serviceClient_ClassifySessionDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -129,6 +131,7 @@ func (c *serviceClient_ClassifySessionDumpClient) Recv() (*ClassifySessionDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -212,9 +215,11 @@ func (c *serviceClient) FlowClassifyDump(ctx context.Context, in *FlowClassifyDu
 	}
 	x := &serviceClient_FlowClassifyDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -244,6 +249,7 @@ func (c *serviceClient_FlowClassifyDumpClient) Recv() (*FlowClassifyDetails, err
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
@@ -282,9 +288,11 @@ func (c *serviceClient) PolicerClassifyDump(ctx context.Context, in *PolicerClas
 	}
 	x := &serviceClient_PolicerClassifyDumpClient{stream}
 	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
 		return nil, err
 	}
 	return x, nil
@@ -314,6 +322,7 @@ func (c *serviceClient_PolicerClassifyDumpClient) Recv() (*PolicerClassifyDetail
 		}
 		return nil, io.EOF
 	default:
+		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
 }
