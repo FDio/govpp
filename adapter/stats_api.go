@@ -16,6 +16,8 @@ package adapter
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 )
 
 const (
@@ -64,6 +66,7 @@ const (
 	Empty                 StatType = "Empty"
 	Symlink               StatType = "Symlink"
 	GaugeIndex            StatType = "GaugeIndex"
+	RingBuffer            StatType = "RingBuffer"
 )
 
 // StatDir defines directory of stats entries created by PrepareDir.
@@ -147,6 +150,33 @@ type NameStat []Name
 // EmptyStat represents removed counter directory
 type EmptyStat string
 
+// RingBufferConfig holds the configuration for a ring buffer.
+type RingBufferConfig struct {
+	EntrySize     uint32
+	RingSize      uint32
+	NThreads      uint32
+	SchemaSize    uint32
+	SchemaVersion uint32
+}
+
+// RingBufferThreadMeta holds per-thread metadata for a ring buffer.
+type RingBufferThreadMeta struct {
+	Head          uint32
+	SchemaVersion uint32
+	Sequence      uint64
+	SchemaOffset  uint32
+	SchemaSize    uint32
+}
+
+// RingBufferStat represents a snapshot of a ring buffer's configuration, per-thread metadata,
+// and raw ring data.
+type RingBufferStat struct {
+	Config  RingBufferConfig
+	Threads []RingBufferThreadMeta
+	Schema  []byte
+	Data    [][]byte // per-thread raw ring data
+}
+
 func (ScalarStat) isStat()          {}
 func (ErrorStat) isStat()           {}
 func (SimpleCounterStat) isStat()   {}
@@ -154,6 +184,7 @@ func (CombinedCounterStat) isStat() {}
 func (NameStat) isStat()            {}
 func (EmptyStat) isStat()           {}
 func (GaugeStat) isStat()           {}
+func (RingBufferStat) isStat()      {}
 
 func (s ScalarStat) IsZero() bool {
 	return s == 0
@@ -267,4 +298,25 @@ func (s GaugeStat) IsZero() bool {
 
 func (s GaugeStat) Type() StatType {
 	return GaugeIndex
+}
+
+func (s RingBufferStat) IsZero() bool {
+	return s.Config.NThreads == 0 || s.Config.EntrySize == 0
+}
+
+func (s RingBufferStat) Type() StatType {
+	return RingBuffer
+}
+
+func (s RingBufferStat) String() string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "\n  config: entry_size=%d, ring_size=%d, threads=%d, schema_version=%d, schema_size=%d",
+		s.Config.EntrySize, s.Config.RingSize, s.Config.NThreads, s.Config.SchemaVersion, s.Config.SchemaSize)
+
+	for i, t := range s.Threads {
+		fmt.Fprintf(&b, "\n  thread[%d]: head=%d seq=%d schema_version=%d",
+			i, t.Head, t.Sequence, t.SchemaVersion)
+	}
+
+	return b.String()
 }
