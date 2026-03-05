@@ -595,6 +595,11 @@ func (c *Client) readerLoop() {
 			continue
 		}
 
+		if len(msg) < 6 {
+			log.Errorf("truncated message received (%d bytes)", len(msg))
+			break
+		}
+
 		msgID, context := getMsgReplyHeader(msg)
 		if debug {
 			log.Debugf("recvMsg (%d) msgID=%d context=%v", len(msg), msgID, context)
