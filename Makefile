@@ -86,6 +86,11 @@ test-integration: ## Run integration tests
 	@echo "# running integration tests"
 	VPP_REPO=$(VPP_REPO) ./test/run_integration.sh
 
+.PHONY: test-memory-benchmark
+test-memory-benchmark: ## Run memory benchmark tests
+	@echo "# running memory benchmark tests"
+	VPP_REPO=$(VPP_REPO) ./test/run_memory_benchmark.sh
+
 .PHONY: lint ## Run code linter
 lint:
 	@golangci-lint run
