@@ -15,6 +15,7 @@
 package binapigen
 
 import (
+	"bytes"
 	"fmt"
 	"path"
 	"strconv"
@@ -470,9 +471,52 @@ func genMessage(g *GenFile, msg *Message) {
 	g.P()
 }
 
+func genMessageResetBody(_ *GenFile, msg *Message) (string, string) {
+	if msg == nil || msg.Fields == nil || len(msg.Fields) == 0 {
+		return "", ""
+	}
+	res := bytes.Buffer{}
+	unmarshalText := bytes.Buffer{}
+	for _, field := range msg.Fields {
+		if field.DefaultValue == nil {
+			continue
+		}
+		val := field.Meta[optFieldDefault]
+		switch field.Type {
+		case "vl_api_ip4_address_t":
+			fallthrough
+		case "vl_api_ip6_address_t":
+			fallthrough
+		case "vl_api_mac_address_t":
+			fallthrough
+		case "vl_api_address_t":
+			unmarshalText.WriteString(fmt.Sprintf("\n//%s default %s", field.GoName, val.(string)))
+			unmarshalText.WriteString(fmt.Sprintf("\nm.%s.UnmarshalText([]byte(\"%s\"))", field.GoName, val.(string)))
+			continue
+		}
+
+		res.WriteString(field.GoName)
+		res.WriteString(":")
+		switch v := val.(type) {
+		case float64:
+			res.WriteString(strconv.FormatFloat(v, 'f', -1, 64))
+		case string:
+
+			res.WriteString(v)
+		case bool:
+			res.WriteString(strconv.FormatBool(v))
+		default:
+			panic("unknown field type")
+		}
+		res.WriteString(",")
+	}
+	return res.String(), unmarshalText.String()
+}
+
 func genMessageBaseMethods(g *GenFile, msg *Message) {
+	body, initBody := genMessageResetBody(g, msg)
 	// Reset method
-	g.P("func (m *", msg.GoName, ") Reset() { *m = ", msg.GoName, "{} }")
+	g.P("func (m *", msg.GoName, ") Reset() { *m = ", msg.GoName, "{", body, "}", initBody, " }")
 
 	// GetXXX methods
 	genMessageMethods(g, msg)
