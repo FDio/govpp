@@ -16,6 +16,8 @@ package adapter
 
 import (
 	"errors"
+	"fmt"
+	"strings"
 )
 
 const (
@@ -64,6 +66,7 @@ const (
 	Empty                 StatType = "Empty"
 	Symlink               StatType = "Symlink"
 	GaugeIndex            StatType = "GaugeIndex"
+	HistogramLog2         StatType = "HistogramLog2"
 )
 
 // StatDir defines directory of stats entries created by PrepareDir.
@@ -147,6 +150,16 @@ type NameStat []Name
 // EmptyStat represents removed counter directory
 type EmptyStat string
 
+// HistogramLog2Bin represents histogram data.
+// Counts[j] represents the histogram bucket with values in range [2^(MinExp + j), 2^(MinExp + j + 1) - 1].
+type HistogramLog2Bin struct {
+	MinExp uint64
+	Counts []uint64
+}
+
+// HistogramLog2Stat represents stat for a log2 histogram. The array represents workers.
+type HistogramLog2Stat []HistogramLog2Bin
+
 func (ScalarStat) isStat()          {}
 func (ErrorStat) isStat()           {}
 func (SimpleCounterStat) isStat()   {}
@@ -154,6 +167,7 @@ func (CombinedCounterStat) isStat() {}
 func (NameStat) isStat()            {}
 func (EmptyStat) isStat()           {}
 func (GaugeStat) isStat()           {}
+func (HistogramLog2Stat) isStat()   {}
 
 func (s ScalarStat) IsZero() bool {
 	return s == 0
@@ -267,4 +281,36 @@ func (s GaugeStat) IsZero() bool {
 
 func (s GaugeStat) Type() StatType {
 	return GaugeIndex
+}
+
+func (s HistogramLog2Stat) IsZero() bool {
+	if s == nil {
+		return true
+	}
+	for _, bins := range s {
+		for _, c := range bins.Counts {
+			if c != 0 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+func (s HistogramLog2Stat) Type() StatType {
+	return HistogramLog2
+}
+
+func (s HistogramLog2Stat) String() string {
+	var b strings.Builder
+	for i, bin := range s {
+		fmt.Fprintf(&b, "\n  [thread %d]: min_exp=%d", i, bin.MinExp)
+		var cumulative uint64
+		for j, count := range bin.Counts {
+			cumulative += count
+			fmt.Fprintf(&b, "\n    <= %d: %d (cumulative: %d)",
+				uint64(1)<<(bin.MinExp+uint64(j)), count, cumulative)
+		}
+	}
+	return b.String()
 }
