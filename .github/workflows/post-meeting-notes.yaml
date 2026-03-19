@@ -44,6 +44,7 @@ jobs:
           import urllib.parse
           import urllib.request
           from html.parser import HTMLParser
+          from html import escape
 
           BASE_URL = "https://ircbot.wl.linuxfoundation.org/meetings/fdio-meeting/"
           OWNER = "FDio"
@@ -97,6 +98,18 @@ jobs:
                       if key == "href" and value:
                           self.links.append(value)
 
+          class TextParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.parts = []
+
+              def handle_data(self, data):
+                  if data and not data.isspace():
+                      self.parts.append(data)
+
+              def text(self):
+                  return " ".join(self.parts)
+
           def fetch_url(url):
               print(f"Fetching URL: {url}")
               try:
@@ -107,6 +120,20 @@ jobs:
               except urllib.error.HTTPError as exc:
                   print(f"Failed to fetch {url}: {exc}")
                   return ""
+
+          def load_meeting_content(primary_html, raw_txt):
+              content = ""
+              if raw_txt:
+                  raw_text = fetch_url(urllib.parse.urljoin(BASE_URL, raw_txt)).strip()
+                  if raw_text:
+                      content = raw_text
+              if not content and primary_html:
+                  html_text = fetch_url(urllib.parse.urljoin(BASE_URL, primary_html))
+                  if html_text:
+                      parser = TextParser()
+                      parser.feed(html_text)
+                      content = parser.text().strip()
+              return content
 
           def collect_meeting_files(base_url):
               queue = [base_url]
@@ -332,6 +359,7 @@ jobs:
 
           planned_bodies = []
           posted = 0
+          max_content_chars = 50000
           notes_by_date = {}
           for filename in meeting_files:
               note_date = extract_date(filename)
@@ -365,10 +393,25 @@ jobs:
               link_lines = [f"- [HTML notes]({urllib.parse.urljoin(BASE_URL, primary_html)})"]
               if raw_txt:
                   link_lines.append(f"- [Raw notes]({urllib.parse.urljoin(BASE_URL, raw_txt)})")
+              meeting_content = load_meeting_content(primary_html, raw_txt)
+              content_suffix = ""
+              if meeting_content:
+                  truncated = ""
+                  if len(meeting_content) > max_content_chars:
+                      truncated = "\n\n_Note: Content truncated due to size limits._"
+                      meeting_content = meeting_content[:max_content_chars]
+                  content_suffix = (
+                      "\n\n### Meeting Notes Content\n\n"
+                      "<details><summary>Show content</summary>\n\n"
+                      f"<pre>{escape(meeting_content)}</pre>"
+                      f"{truncated}\n\n"
+                      "</details>"
+                  )
               body = (
                   f"## FDio-GoVPP Community Meeting - Notes ({header_date})\n\n"
                   f"<a href=\"{note_url}\"><img src=\"{badge_url}\"></a>\n\n"
                   + "\n".join(link_lines)
+                  + content_suffix
                   + "\n\n"
                   + "\n".join(f"<!-- meeting-notes:{filename} -->" for filename in selected_files)
                   + "\n"
