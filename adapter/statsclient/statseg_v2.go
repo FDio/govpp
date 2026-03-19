@@ -246,6 +246,9 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		// stats for the required item
 		return ss.CopyEntryData(statSegDir2, i2)
 
+	case adapter.HistogramLog2:
+		return ss.copyHistogramLog2Data(dirEntry)
+
 	case adapter.GaugeIndex:
 		return adapter.GaugeStat(dirEntry.unionData)
 
@@ -374,6 +377,14 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 			}
 		}
 
+	case adapter.HistogramLog2Stat:
+		histStat := ss.copyHistogramLog2Data(dirEntry)
+		if histStat == nil {
+			debugf("failed to read histogram log2 data for %s", dirEntry.name)
+			return ErrStatDataLenIncorrect
+		}
+		*stat = histStat
+
 	case adapter.GaugeStat:
 		*stat = adapter.GaugeStat(dirEntry.unionData)
 
@@ -383,6 +394,39 @@ func (ss *statSegmentV2) UpdateEntryData(segment dirSegment, stat *adapter.Stat)
 		}
 	}
 	return nil
+}
+
+func (ss *statSegmentV2) copyHistogramLog2Data(dirEntry *statSegDirectoryEntryV2) adapter.Stat {
+	dirVector := ss.adjust(dirVector(&dirEntry.unionData))
+	if dirVector == nil {
+		debugf("data vector pointer is out of range for %s", dirEntry.name)
+		return nil
+	}
+	vecLen := *(*uint32)(vectorLen(dirVector))
+	data := make(adapter.HistogramLog2Stat, vecLen)
+	// Iterate over each worker's vector of bins
+	for i := uint32(0); i < vecLen; i++ {
+		counterVectorOffset := statSegPointer(dirVector, uintptr(i+1)*unsafe.Sizeof(uint64(0)))
+		counterVector := ss.adjust(vectorLen(counterVectorOffset))
+		if counterVector == nil {
+			debugf("histogram log2 pointer out of range for thread %d", i)
+			continue
+		}
+		counterVectorLength := *(*uint32)(vectorLen(counterVector))
+		if counterVectorLength < 1 {
+			continue
+		}
+
+		// Per thread vectors: bins[0] = min_exp, bins[1:] = bin counts.
+		data[i].MinExp = *(*uint64)(statSegPointer(counterVector, 0))
+		binCount := counterVectorLength - 1
+		data[i].Counts = make([]uint64, binCount)
+		for j := uint32(0); j < binCount; j++ {
+			offset := uintptr(j+1) * unsafe.Sizeof(uint64(0))
+			data[i].Counts[j] = *(*uint64)(statSegPointer(counterVector, offset))
+		}
+	}
+	return data
 }
 
 // Adjust data pointer using shared header and base and return
