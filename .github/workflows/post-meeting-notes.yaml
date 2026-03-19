@@ -31,7 +31,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DAYS_BACK: ${{ github.event.inputs.days_back }}
           YEAR_MIN: ${{ github.event.inputs.year_min }}
-          DRY_RUN: ${{ github.event.inputs.dry_run }}
+          DRY_RUN: ${{ github.event_name == 'schedule' && 'false' || github.event.inputs.dry_run }}
           SUMMARY_PATH: meeting-notes-summary.txt
         run: |
           python - <<'PY'
