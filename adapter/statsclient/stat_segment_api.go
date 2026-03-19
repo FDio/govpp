@@ -47,6 +47,7 @@ var dirTypeMapping = map[dirType]adapter.StatType{
 	5: adapter.Empty,
 	6: adapter.Symlink,
 	7: adapter.HistogramLog2,
+	8: adapter.RingBuffer,
 	9: adapter.GaugeIndex,
 }
 
