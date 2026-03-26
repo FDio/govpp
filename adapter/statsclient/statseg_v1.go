@@ -15,6 +15,7 @@
 package statsclient
 
 import (
+	"bytes"
 	"sync/atomic"
 	"unsafe"
 
@@ -76,7 +77,10 @@ func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 	var name []byte
 	for n := 0; n < len(dir.name); n++ {
 		if dir.name[n] == 0 {
-			name = dir.name[:n]
+			// Copy the name off the statseg shared memory region before returning.
+			// The caller must not hold a reference into the mmap'd region after
+			// DumpStats returns, because VPP may unmap the segment at any time.
+			name = bytes.Clone(dir.name[:n])
 			break
 		}
 	}
