@@ -265,7 +265,7 @@ func parseApiJsonFile(data []byte) (file *File, err error) {
 
 	// parse services
 	servicesNode := rootNode.Map(fileServices)
-	if servicesNode.GetType() == jsongo.NodeTypeMap {
+	if servicesNode.GetType() == jsongo.NodeTypeMap && servicesNode.Len() > 0 {
 		file.Service = &Service{
 			RPCs: make([]RPC, servicesNode.Len()),
 		}
