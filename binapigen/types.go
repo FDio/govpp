@@ -125,9 +125,8 @@ func getFieldType(g *GenFile, field *Field) string {
 
 func getUnionSize(union *Union) (maxSize int) {
 	for _, field := range union.Fields {
-		if size, isBaseType := getSizeOfField(field); isBaseType {
-			logrus.Panicf("union %s field %s has unexpected type %q", union.Name, field.Name, field.Type)
-		} else if size > maxSize {
+		size, _ := getSizeOfField(field)
+		if size > maxSize {
 			maxSize = size
 		}
 	}
@@ -152,16 +151,16 @@ func getSizeOfField(field *Field) (size int, isBaseType bool) {
 		size = getUnionSize(union)
 		return
 	}
+
+	// Reaching here is indication of being a BaseType.
+	size = getSizeOfBinapiBaseType(field.Type, field.Length)
+
 	return size, true
 }
 
 func getSizeOfStruct(typ *Struct) (size int) {
 	for _, field := range typ.Fields {
-		fieldSize, isBaseType := getSizeOfField(field)
-		if isBaseType {
-			size += getSizeOfBinapiBaseType(field.Type, field.Length)
-			continue
-		}
+		fieldSize, _ := getSizeOfField(field)
 		size += fieldSize
 	}
 	return size
