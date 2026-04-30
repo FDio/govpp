@@ -11,6 +11,7 @@ extras:
 	cd gomemif/examples/bridge && $(GO) build -v
 	cd gomemif/examples/icmp_responder_cb && $(GO) build -v
 	cd gomemif/examples/icmp_responder_poll && $(GO) build -v
+	cd vpp_if_stats && $(GO) build -v
 
 clean:
 	@echo "=> cleaning extras"
