@@ -4,15 +4,15 @@ go 1.25.0
 
 require (
 	github.com/bennyscetbun/jsongo v1.2.1
-	github.com/docker/cli v29.4.1+incompatible
-	github.com/fsnotify/fsnotify v1.9.0
+	github.com/docker/cli v29.4.2+incompatible
+	github.com/fsnotify/fsnotify v1.10.0
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
-	github.com/gookit/color v1.6.0
+	github.com/gookit/color v1.6.1
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.2
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/onsi/gomega v1.39.1
+	github.com/onsi/gomega v1.40.0
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/spf13/cobra v1.10.2
@@ -31,7 +31,7 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/pprof v0.0.0-20260115054156-294ebfa9ad83 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/kr/pretty v0.1.0 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.19 // indirect
@@ -42,7 +42,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
 
 // Versions v0.5.0 and older use old module path git.fd.io/govpp.git
