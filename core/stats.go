@@ -533,8 +533,10 @@ func (c *StatsConnection) GetBufferStats(bufStats *api.BufferStats) (err error) 
 		}
 
 		var val float64
-		s, ok := stat.Data.(adapter.ScalarStat)
-		if ok {
+		switch s := stat.Data.(type) {
+		case adapter.ScalarStat:
+			val = float64(s)
+		case adapter.GaugeStat:
 			val = float64(s)
 		}
 		switch f {
