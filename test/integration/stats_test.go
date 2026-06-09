@@ -17,9 +17,15 @@ package integration
 import (
 	"testing"
 
+	"go.fd.io/govpp/adapter"
+	"go.fd.io/govpp/adapter/statsclient"
 	"go.fd.io/govpp/api"
 	"go.fd.io/govpp/test/vpptesting"
 )
+
+// statsSocket is the default VPP stats segment socket, matching the path the
+// vpptesting harness launches VPP with.
+const statsSocket = "/run/vpp/stats.sock"
 
 func TestStatClientAll(t *testing.T) {
 	test := vpptesting.SetupVPP(t)
@@ -96,4 +102,112 @@ func TestStatClientNodeStatsAgain(t *testing.T) {
 	if err := c.GetNodeStats(stats); err != nil {
 		t.Fatal("getting node stats failed:", err)
 	}
+}
+
+// TestStatClientSymlinkRefresh exercises the lower-level statsclient adapter against
+// a live VPP: the symlink-target metadata on StatEntry, the Epoch() accessor, and
+// that UpdateDir refreshes a prepared dir (and rejects one prepared under a stale
+// epoch). A loopback is created up front so per-interface symlinks (/interfaces/*
+// aliasing into /if/*) are present.
+func TestStatClientSymlinkRefresh(t *testing.T) {
+	test := vpptesting.SetupVPP(t)
+
+	// create an interface so the directory carries per-interface symlink entries
+	test.MustCli("create loopback interface", "set interface state loop0 up")
+
+	client := statsclient.NewStatsClient(statsSocket)
+	if err := client.Connect(); err != nil {
+		t.Fatal("connecting stats client failed:", err)
+	}
+	defer client.Disconnect()
+
+	t.Run("Epoch", func(t *testing.T) {
+		epoch, _, err := client.Epoch()
+		if err != nil {
+			t.Fatal("Epoch failed:", err)
+		}
+		if epoch == 0 {
+			t.Fatal("expected a non-zero stats epoch")
+		}
+		t.Logf("stats epoch = %d", epoch)
+	})
+
+	t.Run("SymlinkTargetsResolve", func(t *testing.T) {
+		// A full dump lets us resolve each symlink's target index (a directory index,
+		// the same space as StatIdentifier.Index) back to a real backing entry.
+		all, err := client.DumpStats()
+		if err != nil {
+			t.Fatal("DumpStats failed:", err)
+		}
+		nameByIndex := make(map[uint32]string, len(all))
+		symlinkByIndex := make(map[uint32]bool, len(all))
+		var symlinks []adapter.StatEntry
+		for _, e := range all {
+			nameByIndex[e.Index] = string(e.Name)
+			symlinkByIndex[e.Index] = e.Symlink
+			if e.Symlink {
+				symlinks = append(symlinks, e)
+			}
+		}
+		if len(symlinks) == 0 {
+			t.Fatal("expected at least one symlink entry in the stats directory")
+		}
+		for _, e := range symlinks {
+			target, ok := nameByIndex[e.SymlinkTarget]
+			if !ok {
+				t.Fatalf("%s: symlink target index %d not present in directory", e.Name, e.SymlinkTarget)
+			}
+			if symlinkByIndex[e.SymlinkTarget] {
+				t.Fatalf("%s: symlink target %q is itself a symlink", e.Name, target)
+			}
+		}
+		t.Logf("validated %d symlink entries resolve to real backing vectors", len(symlinks))
+	})
+
+	t.Run("UpdateDirRefresh", func(t *testing.T) {
+		dir, err := client.PrepareDir("/if", "/interfaces")
+		if err != nil {
+			t.Fatal("PrepareDir failed:", err)
+		}
+		// Under an unchanged epoch UpdateDir must succeed and re-resolve symlink
+		// entries (the change under test) rather than leaving them stale.
+		if err := client.UpdateDir(dir); err != nil {
+			t.Fatal("UpdateDir failed:", err)
+		}
+		for i := range dir.Entries {
+			if e := &dir.Entries[i]; e.Symlink && e.Data == nil {
+				t.Fatalf("%s: symlink entry has nil data after UpdateDir", e.Name)
+			}
+		}
+	})
+
+	t.Run("EpochChangeInvalidatesDir", func(t *testing.T) {
+		dir, err := client.PrepareDir("/if", "/interfaces")
+		if err != nil {
+			t.Fatal("PrepareDir failed:", err)
+		}
+		before, _, err := client.Epoch()
+		if err != nil {
+			t.Fatal("Epoch failed:", err)
+		}
+
+		// Adding an interface changes the directory layout, which bumps the epoch.
+		test.MustCli("create loopback interface")
+
+		after, _, err := client.Epoch()
+		if err != nil {
+			t.Fatal("Epoch failed:", err)
+		}
+		if after == before {
+			t.Fatalf("expected epoch to change after adding an interface (still %d)", before)
+		}
+		// A dir prepared under the old epoch is now stale.
+		if err := client.UpdateDir(dir); err != adapter.ErrStatsDirStale {
+			t.Fatalf("expected ErrStatsDirStale after epoch change, got %v", err)
+		}
+		// Re-preparing under the new epoch works again.
+		if _, err := client.PrepareDir("/if", "/interfaces"); err != nil {
+			t.Fatal("re-PrepareDir after epoch change failed:", err)
+		}
+	})
 }
