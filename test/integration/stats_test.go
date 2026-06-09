@@ -119,7 +119,7 @@ func TestStatClientSymlinkRefresh(t *testing.T) {
 	if err := client.Connect(); err != nil {
 		t.Fatal("connecting stats client failed:", err)
 	}
-	defer client.Disconnect()
+	defer func() { _ = client.Disconnect() }()
 
 	t.Run("Epoch", func(t *testing.T) {
 		epoch, _, err := client.Epoch()
