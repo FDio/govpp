@@ -89,6 +89,13 @@ type StatEntry struct {
 	Type    StatType
 	Data    Stat
 	Symlink bool
+	// SymlinkTarget is the directory index of the entry a symlink points to, and
+	// SymlinkItem the item (column) index within that target. They are only
+	// meaningful when Symlink is true (stats segment v2; zero otherwise). They let a
+	// caller read the backing vector directly and map its columns, instead of
+	// resolving every symlink individually.
+	SymlinkTarget uint32
+	SymlinkItem   uint32
 }
 
 // Counter represents simple counter with single value, which is usually packet count.
