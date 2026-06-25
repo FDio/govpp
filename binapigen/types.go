@@ -78,7 +78,7 @@ var BaseTypesGo = map[string]string{
 
 func fieldActualType(field *Field) (actual string) {
 	switch {
-	case field.TypeAlias != nil:
+	case field.TypeAlias != nil && field.TypeAlias.Length == 0:
 		actual = field.TypeAlias.Type
 	case field.TypeEnum != nil:
 		actual = field.TypeEnum.Type
