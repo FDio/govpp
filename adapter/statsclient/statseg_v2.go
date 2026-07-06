@@ -580,6 +580,12 @@ func (ss *statSegmentV2) getErrorVector() dirVector {
 	return ss.adjust(dirVector(&header.errorVector))
 }
 
+// GetSymlinkIndexes returns the target directory index and item index encoded in a
+// symlink directory segment's union data.
+func (ss *statSegmentV2) GetSymlinkIndexes(segment dirSegment) (targetIndex, itemIndex uint32) {
+	return ss.getSymlinkIndexes((*statSegDirectoryEntryV2)(segment))
+}
+
 func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (index1, index2 uint32) {
 	var b bytes.Buffer
 	if err := binary.Write(&b, binary.LittleEndian, dirEntry.unionData); err != nil {

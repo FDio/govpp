@@ -92,6 +92,11 @@ func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	return sh.epoch, sh.inProgress != 0
 }
 
+// GetSymlinkIndexes is a no-op for stats segment v1, which has no symlinks.
+func (ss *statSegmentV1) GetSymlinkIndexes(dirSegment) (uint32, uint32) {
+	return 0, 0
+}
+
 func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Stat {
 	dirEntry := (*statSegDirectoryEntryV1)(segment)
 	typ := getStatType(dirEntry.directoryType, true)

@@ -93,6 +93,11 @@ type statSegment interface {
 	// Use ^uint32(0) as an empty index (since 0 is a valid value).
 	CopyEntryData(segment dirSegment, index uint32) adapter.Stat
 
+	// GetSymlinkIndexes returns, for a symlink directory segment, the directory index
+	// of the entry it points to and the item (column) index within that target.
+	// Only meaningful for symlink segments; non-symlink segments / v1 return (0, 0).
+	GetSymlinkIndexes(segment dirSegment) (targetIndex, itemIndex uint32)
+
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update
 	UpdateEntryData(segment dirSegment, s *adapter.Stat) error

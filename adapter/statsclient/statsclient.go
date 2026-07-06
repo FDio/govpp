@@ -306,6 +306,20 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	return nil
 }
 
+// Epoch returns the current stats-segment epoch and whether an update is in progress.
+// The epoch changes whenever the directory layout changes (counters added/removed), so
+// a StatDir prepared under a different epoch is stale and must be re-prepared. Lets a
+// caller pre-check staleness instead of relying on an UpdateDir error.
+func (sc *StatsClient) Epoch() (epoch int64, inProgress bool, err error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+	if !sc.isConnected() {
+		return 0, false, adapter.ErrStatsDisconnected
+	}
+	epoch, inProgress = sc.GetEpoch()
+	return epoch, inProgress, nil
+}
+
 // checks the socket existence and waits for it for the designated
 // time if it is not available immediately
 func (sc *StatsClient) waitForSocket() error {
@@ -540,7 +554,7 @@ func (sc *StatsClient) getStatEntriesOnIndex(vector dirVector, indexes ...uint32
 		if d != nil {
 			t = d.Type()
 		}
-		entries = append(entries, adapter.StatEntry{
+		entry := adapter.StatEntry{
 			StatIdentifier: adapter.StatIdentifier{
 				Index: index,
 				Name:  dirName,
@@ -548,7 +562,13 @@ func (sc *StatsClient) getStatEntriesOnIndex(vector dirVector, indexes ...uint32
 			Type:    t,
 			Data:    d,
 			Symlink: dirType == adapter.Symlink,
-		})
+		}
+		if entry.Symlink {
+			// expose the backing (target, item) so callers can read the target
+			// vector directly instead of resolving each symlink every refresh.
+			entry.SymlinkTarget, entry.SymlinkItem = sc.GetSymlinkIndexes(dirPtr)
+		}
+		entries = append(entries, entry)
 	}
 	return entries, nil
 }
@@ -629,10 +649,20 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return fmt.Errorf("stat entry index %d out of dir vector length (%d)", entry.Index, dirLen)
 	}
 	dirPtr, dirName, dirType := sc.GetStatDirOnIndex(vector, entry.Index)
-	if len(dirName) == 0 ||
-		!bytes.Equal(dirName, entry.Name) ||
-		dirType != entry.Type ||
-		entry.Data == nil {
+	// Identity is the name; if it no longer matches, the directory changed under us
+	// (the epoch check in UpdateDir normally catches this first).
+	if len(dirName) == 0 || !bytes.Equal(dirName, entry.Name) || entry.Data == nil {
+		return nil
+	}
+	if dirType == adapter.Symlink {
+		// A symlink's directory entry holds (target, item) indexes, not data: its
+		// resolved Type never equals dirType, and UpdateEntryData would misread the
+		// union as a data pointer. Re-resolve through the symlink instead, which
+		// reads the current value of the backing counter.
+		entry.Data = sc.CopyEntryData(dirPtr, ^uint32(0))
+		return nil
+	}
+	if dirType != entry.Type {
 		return nil
 	}
 	if err := sc.UpdateEntryData(dirPtr, &entry.Data); err != nil {
