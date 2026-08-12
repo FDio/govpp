@@ -1,4 +1,5 @@
 // Copyright (c) 2019 Cisco and/or its affiliates.
+// Copyright (c) 2026 Meter, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -629,10 +630,22 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return fmt.Errorf("stat entry index %d out of dir vector length (%d)", entry.Index, dirLen)
 	}
 	dirPtr, dirName, dirType := sc.GetStatDirOnIndex(vector, entry.Index)
-	if len(dirName) == 0 ||
-		!bytes.Equal(dirName, entry.Name) ||
-		dirType != entry.Type ||
-		entry.Data == nil {
+	// Identity is the name; if it no longer matches, the directory changed under us
+	// (the epoch check in UpdateDir normally catches this first).
+	if len(dirName) == 0 || !bytes.Equal(dirName, entry.Name) || entry.Data == nil {
+		return nil
+	}
+	if dirType == adapter.Symlink {
+		// A symlink's directory entry holds (target, item) indexes rather than a data
+		// pointer, so its resolved Type never equals dirType and the type check below
+		// would skip it, leaving the entry frozen at its PrepareDir value forever.
+		// Re-resolve through the symlink instead. This allocates, unlike the in-place
+		// UpdateEntryData path, because the resolved item does not have a stable
+		// backing slice to write into.
+		entry.Data = sc.CopyEntryData(dirPtr, ^uint32(0))
+		return nil
+	}
+	if dirType != entry.Type {
 		return nil
 	}
 	if err := sc.UpdateEntryData(dirPtr, &entry.Data); err != nil {
