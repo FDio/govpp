@@ -283,18 +283,21 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 		return adapter.ErrStatsDisconnected
 	}
 
-	epoch, _ := sc.GetEpoch()
-	if dir.Epoch != epoch {
-		return adapter.ErrStatsDirStale
-	}
-
+	// Compare the prepared dir against the epoch accessStart settled on, not against
+	// a separately read one: with two reads the directory can be re-laid-out in
+	// between, in which case the staleness check passes against the old epoch while
+	// the entries are resolved against the new directory - and accessEnd then
+	// confirms that same new epoch, so nothing catches it.
 	accessEpoch := sc.accessStart()
 	if accessEpoch == 0 {
 		return adapter.ErrStatsAccessFailed
 	}
+	if dir.Epoch != accessEpoch {
+		return adapter.ErrStatsDirStale
+	}
 	dirVector := sc.GetDirectoryVector()
 	if dirVector == nil {
-		return err
+		return fmt.Errorf("failed to update dir: directory vector is nil")
 	}
 	for i := 0; i < len(dir.Entries); i++ {
 		if err := sc.updateStatOnIndex(&dir.Entries[i], dirVector); err != nil {
