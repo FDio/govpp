@@ -17,7 +17,6 @@
 package statsclient
 
 import (
-	"bytes"
 	"fmt"
 	"net"
 	"os"
@@ -661,10 +660,12 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 	if entry.Index >= dirLen {
 		return ref, false, fmt.Errorf("stat entry index %d out of dir vector length (%d)", entry.Index, dirLen)
 	}
-	dirPtr, dirName, dirType := sc.GetStatDirOnIndex(vector, entry.Index)
-	// Identity is the name; if it no longer matches, the directory changed under us
-	// (the epoch check in UpdateDir normally catches this first).
-	if len(dirName) == 0 || !bytes.Equal(dirName, entry.Name) || entry.Data == nil {
+	// Identity is the name; if it no longer matches, the directory changed under
+	// us (the epoch check in UpdateDir normally catches this first). Compared in
+	// place: this runs once per prepared entry per tick, and cloning the name to
+	// compare it would allocate per entry for a value discarded immediately after.
+	dirPtr, dirType, match := sc.StatDirOnIndexMatches(vector, entry.Index, entry.Name)
+	if !match || entry.Data == nil {
 		return ref, false, nil
 	}
 	if dirType == adapter.Symlink {
@@ -684,7 +685,7 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return ref, false, nil
 	}
 	if err := sc.UpdateEntryData(dirPtr, &entry.Data); err != nil {
-		return ref, false, fmt.Errorf("updating stat data for entry %s failed: %v", dirName, err)
+		return ref, false, fmt.Errorf("updating stat data for entry %s failed: %v", entry.Name, err)
 	}
 	return ref, false, nil
 }

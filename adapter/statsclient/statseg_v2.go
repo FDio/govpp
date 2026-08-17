@@ -88,6 +88,27 @@ func (ss *statSegmentV2) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 	return statSegDir, name, getStatType(dir.directoryType, ss.getErrorVector() != nil)
 }
 
+// StatDirOnIndexMatches compares the entry name in place - see the interface.
+func (ss *statSegmentV2) StatDirOnIndexMatches(v dirVector, index uint32, want []byte) (dirSegment, adapter.StatType, bool) {
+	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
+	dir := (*statSegDirectoryEntryV2)(statSegDir)
+	n := 0
+	for ; n < len(dir.name); n++ {
+		if dir.name[n] == 0 {
+			break
+		}
+	}
+	if n == 0 || n != len(want) {
+		return statSegDir, adapter.Unknown, false
+	}
+	for i := 0; i < n; i++ {
+		if dir.name[i] != want[i] {
+			return statSegDir, adapter.Unknown, false
+		}
+	}
+	return statSegDir, getStatType(dir.directoryType, ss.getErrorVector() != nil), true
+}
+
 func (ss *statSegmentV2) GetEpoch() (int64, bool) {
 	sh := ss.loadSharedHeader(ss.sharedHeader)
 	return sh.epoch, sh.inProgress != 0

@@ -84,6 +84,17 @@ type statSegment interface {
 	// the same memory address as the argument.
 	GetStatDirOnIndex(v dirVector, index uint32) (dirSegment, dirName, adapter.StatType)
 
+	// StatDirOnIndexMatches is GetStatDirOnIndex for callers that only need to
+	// confirm an entry is still the one they prepared. It compares the name in
+	// place instead of copying it out, which matters on a refresh path: UpdateDir
+	// runs it once per prepared entry per tick, and cloning a name to compare it
+	// is an allocation per entry for a value discarded immediately afterwards.
+	//
+	// ok reports whether the name at index equals want. The segment pointer is
+	// returned either way; the StatType is meaningful only when ok is true, and
+	// is adapter.Unknown otherwise.
+	StatDirOnIndexMatches(v dirVector, index uint32, want []byte) (dirSegment, adapter.StatType, bool)
+
 	// GetEpoch re-loads stats header and returns current epoch
 	//and 'inProgress' value
 	GetEpoch() (int64, bool)

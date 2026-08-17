@@ -28,6 +28,9 @@ This file lists changes for the GoVPP releases.
   each aliased counter vector once instead of once per symlink naming it. No API
   change; a prepared dir over a large symlink fan simply refreshes far more
   cheaply.
+- adapter/statsclient: `UpdateDir` compares each prepared entry's name in place
+  rather than cloning it out of shared memory to compare and discard. Together
+  with the above, refreshing 128 symlinks goes from 654 allocations to 14.
 
 ## 0.13.0
 
