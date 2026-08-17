@@ -299,10 +299,27 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	if dirVector == nil {
 		return fmt.Errorf("failed to update dir: directory vector is nil")
 	}
+	// Symlinks are not refreshed one by one. VPP names every item of a counter
+	// vector with its own symlink - /node/errors and its thousands of
+	// /err/<node>/<reason> aliases being the case that hurts - so resolving them
+	// individually re-reads the same backing vector once per item. Collect them
+	// by target instead and read each target once, below.
+	var symlinks map[uint32][]symlinkRef
 	for i := 0; i < len(dir.Entries); i++ {
-		if err := sc.updateStatOnIndex(&dir.Entries[i], dirVector); err != nil {
+		ref, isSymlink, err := sc.updateStatOnIndex(&dir.Entries[i], dirVector)
+		if err != nil {
 			return err
 		}
+		if !isSymlink {
+			continue
+		}
+		if symlinks == nil {
+			symlinks = make(map[uint32][]symlinkRef)
+		}
+		symlinks[ref.target] = append(symlinks[ref.target], ref)
+	}
+	if err := sc.updateSymlinkGroups(dirVector, symlinks); err != nil {
+		return err
 	}
 	if !sc.accessEnd(accessEpoch) {
 		return adapter.ErrStatsDataBusy
@@ -627,32 +644,127 @@ func (sc *StatsClient) isConnected() bool {
 }
 
 // updateStatOnIndex refreshes the entry data.
-func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVector) (err error) {
+// symlinkRef is a prepared symlink entry and the counter it aliases, held until
+// its target can be read once for the whole group.
+type symlinkRef struct {
+	entry  *adapter.StatEntry
+	dirPtr dirSegment // the symlink's own directory segment, for the fallback
+	target uint32     // directory index of the aliased entry
+	item   uint32     // item within that entry
+}
+
+// updateStatOnIndex refreshes one entry. A symlink is not resolved here: it is
+// reported to the caller so that every symlink sharing a target can be served
+// from a single read of it.
+func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVector) (ref symlinkRef, isSymlink bool, err error) {
 	dirLen := *(*uint32)(vectorLen(vector))
 	if entry.Index >= dirLen {
-		return fmt.Errorf("stat entry index %d out of dir vector length (%d)", entry.Index, dirLen)
+		return ref, false, fmt.Errorf("stat entry index %d out of dir vector length (%d)", entry.Index, dirLen)
 	}
 	dirPtr, dirName, dirType := sc.GetStatDirOnIndex(vector, entry.Index)
 	// Identity is the name; if it no longer matches, the directory changed under us
 	// (the epoch check in UpdateDir normally catches this first).
 	if len(dirName) == 0 || !bytes.Equal(dirName, entry.Name) || entry.Data == nil {
-		return nil
+		return ref, false, nil
 	}
 	if dirType == adapter.Symlink {
-		// A symlink's directory entry holds (target, item) indexes rather than a data
-		// pointer, so its resolved Type never equals dirType and the type check below
-		// would skip it, leaving the entry frozen at its PrepareDir value forever.
-		// Re-resolve through the symlink instead. This allocates, unlike the in-place
-		// UpdateEntryData path, because the resolved item does not have a stable
-		// backing slice to write into.
-		entry.Data = sc.CopyEntryData(dirPtr, ^uint32(0))
-		return nil
+		// A symlink's directory entry holds (target, item) indexes rather than a
+		// data pointer, so its resolved Type never equals dirType and the type
+		// check below would skip it, leaving the entry frozen at its PrepareDir
+		// value forever.
+		target, item, ok := sc.GetSymlinkIndexes(dirPtr)
+		if !ok {
+			// No target encoding (segment v1): resolve it on its own.
+			entry.Data = sc.CopyEntryData(dirPtr, ^uint32(0))
+			return ref, false, nil
+		}
+		return symlinkRef{entry: entry, dirPtr: dirPtr, target: target, item: item}, true, nil
 	}
 	if dirType != entry.Type {
-		return nil
+		return ref, false, nil
 	}
 	if err := sc.UpdateEntryData(dirPtr, &entry.Data); err != nil {
-		return fmt.Errorf("updating stat data for entry %s failed: %v", dirName, err)
+		return ref, false, fmt.Errorf("updating stat data for entry %s failed: %v", dirName, err)
 	}
-	return
+	return ref, false, nil
+}
+
+// updateSymlinkGroups reads each aliased entry once and fans its items out to
+// the symlinks that name them. Reading the target once is the whole point: a
+// vector of n items aliased by n symlinks costs one read here rather than n.
+func (sc *StatsClient) updateSymlinkGroups(vector dirVector, groups map[uint32][]symlinkRef) error {
+	if len(groups) == 0 {
+		return nil
+	}
+	dirLen := *(*uint32)(vectorLen(vector))
+	for target, refs := range groups {
+		if target >= dirLen {
+			debugf("symlink target index %d out of dir vector length (%d)", target, dirLen)
+			continue
+		}
+		targetPtr, targetName, _ := sc.GetStatDirOnIndex(vector, target)
+		if len(targetName) == 0 {
+			continue
+		}
+		full := sc.CopyEntryData(targetPtr, ^uint32(0))
+		for _, ref := range refs {
+			if !symlinkItem(full, ref.item, &ref.entry.Data) {
+				// A shape this cannot fan out - resolve the symlink on its own
+				// so behaviour matches the one-at-a-time path exactly.
+				ref.entry.Data = sc.CopyEntryData(ref.dirPtr, ^uint32(0))
+			}
+		}
+	}
+	return nil
+}
+
+// symlinkItem extracts one item from an already-read counter vector into dst, in
+// the same shape resolving the symlink directly would produce: one value per
+// worker thread.
+//
+// It writes THROUGH dst rather than returning a new value, and only stores back
+// when the outer slice had to be reallocated. Storing a slice into an
+// adapter.Stat boxes it, which allocates - once per symlink per tick, for a
+// value that is usually identical to the one already there.
+//
+// Reports false for anything it cannot fan out, so the caller can fall back.
+func symlinkItem(full adapter.Stat, item uint32, dst *adapter.Stat) bool {
+	switch d := full.(type) {
+	case adapter.SimpleCounterStat:
+		out, ok := (*dst).(adapter.SimpleCounterStat)
+		if !ok || len(out) != len(d) {
+			out = make(adapter.SimpleCounterStat, len(d))
+			*dst = out
+		}
+		for i, worker := range d {
+			if len(out[i]) != 1 {
+				out[i] = make([]adapter.Counter, 1)
+			}
+			if int(item) < len(worker) {
+				out[i][0] = worker[item]
+			} else {
+				out[i][0] = 0
+			}
+		}
+		return true
+
+	case adapter.CombinedCounterStat:
+		out, ok := (*dst).(adapter.CombinedCounterStat)
+		if !ok || len(out) != len(d) {
+			out = make(adapter.CombinedCounterStat, len(d))
+			*dst = out
+		}
+		for i, worker := range d {
+			if len(out[i]) != 1 {
+				out[i] = make([]adapter.CombinedCounter, 1)
+			}
+			if int(item) < len(worker) {
+				out[i][0] = worker[item]
+			} else {
+				out[i][0] = adapter.CombinedCounter{}
+			}
+		}
+		return true
+	}
+	return false
 }

@@ -68,7 +68,8 @@ type fakeSegment struct {
 // counter values, plus one /err/fake-node/rN symlink per value, in reverse order so
 // that a symlink's own directory index is never its item index (which would let an
 // off-by-one confusion pass unnoticed).
-func newFakeSegment(t *testing.T, values []uint64) *fakeSegment {
+// Takes testing.TB so benchmarks can build a segment too.
+func newFakeSegment(t testing.TB, values []uint64) *fakeSegment {
 	t.Helper()
 
 	const (
@@ -132,7 +133,7 @@ func fakeErrName(item uint32) string {
 
 // fakeErrItem is the inverse of fakeErrName, so a test can tell which counter a
 // symlink entry should be showing without relying on the API under test.
-func fakeErrItem(t *testing.T, name []byte) uint32 {
+func fakeErrItem(t testing.TB, name []byte) uint32 {
 	t.Helper()
 	for item := uint32(0); item < 32; item++ {
 		if fakeErrName(item) == string(name) {
@@ -174,7 +175,7 @@ func (f *fakeSegment) client() *StatsClient {
 
 // symlinkValue returns the single counter value an entry resolved through a symlink
 // carries.
-func symlinkValue(t *testing.T, e adapter.StatEntry) uint64 {
+func symlinkValue(t testing.TB, e adapter.StatEntry) uint64 {
 	t.Helper()
 	s, ok := e.Data.(adapter.SimpleCounterStat)
 	if !ok {

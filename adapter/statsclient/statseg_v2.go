@@ -1,4 +1,5 @@
 //  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2026 Meter, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ package statsclient
 
 import (
 	"bytes"
-	"encoding/binary"
 	"sync/atomic"
 	"unsafe"
 
@@ -580,21 +580,25 @@ func (ss *statSegmentV2) getErrorVector() dirVector {
 	return ss.adjust(dirVector(&header.errorVector))
 }
 
+// GetSymlinkIndexes returns the target directory index and item index encoded in a
+// symlink directory segment's union data, or ok false if the segment is not a symlink.
+func (ss *statSegmentV2) GetSymlinkIndexes(segment dirSegment) (targetIndex, itemIndex uint32, ok bool) {
+	dirEntry := (*statSegDirectoryEntryV2)(segment)
+	if getStatType(dirEntry.directoryType, ss.getErrorVector() != nil) != adapter.Symlink {
+		return 0, 0, false
+	}
+	targetIndex, itemIndex = ss.getSymlinkIndexes(dirEntry)
+	return targetIndex, itemIndex, true
+}
+
 func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (index1, index2 uint32) {
-	var b bytes.Buffer
-	if err := binary.Write(&b, binary.LittleEndian, dirEntry.unionData); err != nil {
-		debugf("error getting symlink indexes for %s: %v", dirEntry.name, err)
-		return
-	}
-	if len(b.Bytes()) != 8 {
-		debugf("incorrect symlink union data length for %s: expected 8, got %d", dirEntry.name, len(b.Bytes()))
-		return
-	}
-	for i := range b.Bytes()[:4] {
-		index1 += uint32(b.Bytes()[i]) << (uint32(i) * 8)
-	}
-	for i := range b.Bytes()[4:] {
-		index2 += uint32(b.Bytes()[i+4]) << (uint32(i) * 8)
-	}
-	return
+	// The union holds the two indexes packed into one uint64, low half first.
+	// Serialising it through a bytes.Buffer to take them apart allocated three
+	// times per call - which UpdateDir now pays once per prepared symlink per
+	// refresh, thousands of times on a real box.
+	//
+	// unionData is read as a host-order uint64, and the old code wrote it out
+	// little-endian and reassembled it little-endian, so it round-tripped to the
+	// same numeric value on any host. Shifting does the same, without the buffer.
+	return uint32(dirEntry.unionData), uint32(dirEntry.unionData >> 32)
 }

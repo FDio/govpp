@@ -1,4 +1,5 @@
 //  Copyright (c) 2020 Cisco and/or its affiliates.
+//  Copyright (c) 2026 Meter, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -92,6 +93,12 @@ type statSegment interface {
 	// (used by symlinks) returning stats for item on the given index only.
 	// Use ^uint32(0) as an empty index (since 0 is a valid value).
 	CopyEntryData(segment dirSegment, index uint32) adapter.Stat
+
+	// GetSymlinkIndexes returns, for a symlink directory segment, the directory
+	// index of the entry it aliases and the item index within that entry.
+	// ok is false if the segment is not a symlink, or if the segment version has
+	// no notion of symlinks.
+	GetSymlinkIndexes(segment dirSegment) (targetIndex, itemIndex uint32, ok bool)
 
 	// UpdateEntryData accepts pointer to a directory segment with data, and stat
 	// segment to update

@@ -1,4 +1,5 @@
 //  Copyright (c) 2019 Cisco and/or its affiliates.
+//  Copyright (c) 2026 Meter, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -90,6 +91,12 @@ func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	sh := ss.loadSharedHeader(ss.sharedHeader)
 	return sh.epoch, sh.inProgress != 0
+}
+
+// GetSymlinkIndexes is unsupported for stats segment v1, which does not encode
+// symlink target indexes.
+func (ss *statSegmentV1) GetSymlinkIndexes(dirSegment) (uint32, uint32, bool) {
+	return 0, 0, false
 }
 
 func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Stat {

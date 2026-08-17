@@ -11,6 +11,24 @@ This file lists changes for the GoVPP releases.
 -
 -->
 
+## Unreleased
+
+### Fixes
+
+- adapter/statsclient: `UpdateDir` now refreshes symlink entries. Their resolved
+  type never equals the directory type, so the type check skipped them and a
+  prepared dir kept returning its `PrepareDir` values indefinitely.
+- adapter/statsclient: `UpdateDir` compares the prepared dir against the epoch
+  `accessStart` settled on, closing a window where a directory re-layout between
+  the two epoch reads went undetected.
+
+### Other
+
+- adapter/statsclient: `UpdateDir` resolves symlinks by target group, reading
+  each aliased counter vector once instead of once per symlink naming it. No API
+  change; a prepared dir over a large symlink fan simply refreshes far more
+  cheaply.
+
 ## 0.13.0
 
 > _13 November 2025_
