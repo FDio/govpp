@@ -769,3 +769,77 @@ func symlinkItem(full adapter.Stat, item uint32, dst *adapter.Stat) bool {
 	}
 	return false
 }
+
+var _ adapter.RingBufferAPI = (*StatsClient)(nil)
+
+// PrepareRingBuffer resolves one ring-buffer stat by name and returns a StatDir
+// holding an incremental reader for it, to be refreshed with UpdateDir.
+//
+// It exists because PrepareDir cannot express this: PrepareDir populates every
+// entry it prepares by way of CopyEntryData, which for a ring buffer copies the
+// whole ring. On a ring sized for burst headroom that one copy at prepare time is
+// the largest allocation the process makes, and it is repeated on every epoch
+// change. Here nothing is read but the directory entry itself; the first
+// UpdateDir reads the geometry and sizes the reader's buffers from maxEntries.
+//
+// maxEntries bounds entries per thread per refresh, and so bounds both the
+// buffers allocated and the work one refresh does; zero means the ring size. A
+// consumer draining a fast producer should set it and loop while any window
+// reports Pending. skipBacklog starts at the producer's head rather than at the
+// oldest entry still in the ring.
+//
+// name is matched exactly, not as a pattern: this returns one entry or an error,
+// because a caller reading a specific producer's records has nothing sensible to
+// do with a second ring that happened to match.
+func (sc *StatsClient) PrepareRingBuffer(name string, maxEntries uint32, skipBacklog bool) (*adapter.StatDir, error) {
+	sc.accessLock.RLock()
+	defer sc.accessLock.RUnlock()
+
+	if !sc.isConnected() {
+		return nil, adapter.ErrStatsDisconnected
+	}
+
+	accessEpoch := sc.accessStart()
+	if accessEpoch == 0 {
+		return nil, adapter.ErrStatsAccessFailed
+	}
+
+	vector := sc.GetDirectoryVector()
+	if vector == nil {
+		return nil, fmt.Errorf("failed to prepare ring buffer: directory vector is nil")
+	}
+
+	want := []byte(name)
+	var entry *adapter.StatEntry
+	vecLen := *(*uint32)(vectorLen(vector))
+	for i := uint32(0); i < vecLen; i++ {
+		// Compared in place: GetStatDirOnIndex clones every name it walks past,
+		// and on a real directory that is thousands of allocations to find one
+		// entry.
+		_, dirType, ok := sc.StatDirOnIndexMatches(vector, i, want)
+		if !ok {
+			continue
+		}
+		if dirType != adapter.RingBuffer {
+			return nil, fmt.Errorf("stat %q is %v, not a ring buffer", name, dirType)
+		}
+		entry = &adapter.StatEntry{
+			StatIdentifier: adapter.StatIdentifier{Index: i, Name: want},
+			Type:           adapter.RingBuffer,
+			Data: &adapter.RingBufferWindowStat{
+				MaxEntries:  maxEntries,
+				SkipBacklog: skipBacklog,
+			},
+		}
+		break
+	}
+	if entry == nil {
+		return nil, fmt.Errorf("ring buffer stat %q not found", name)
+	}
+
+	if !sc.accessEnd(accessEpoch) {
+		return nil, adapter.ErrStatsDataBusy
+	}
+
+	return &adapter.StatDir{Epoch: accessEpoch, Entries: []adapter.StatEntry{*entry}}, nil
+}
