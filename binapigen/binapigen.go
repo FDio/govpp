@@ -21,6 +21,8 @@ import (
 	"strconv"
 	"strings"
 
+	"go.fd.io/govpp/binapi/ethernet_types"
+	"go.fd.io/govpp/binapi/ip_types"
 	"go.fd.io/govpp/binapigen/vppapi"
 )
 
@@ -448,6 +450,96 @@ type Field struct {
 	FieldSizeFrom *Field
 }
 
+func convertDefaultValue(val interface{}, typ *Field) {
+	var err error
+	switch typ.Type {
+	case "bool":
+		switch v := val.(type) {
+		case bool:
+			typ.DefaultValue = v
+		case string:
+			typ.DefaultValue, err = strconv.ParseBool(v)
+			if err != nil {
+				panic(err)
+			}
+		case float64:
+			typ.DefaultValue = v != 0
+		default:
+			panic("bool default unknown value")
+		}
+	case "int64":
+		switch v := val.(type) {
+		case int64:
+			typ.DefaultValue = v
+		case uint64:
+			typ.DefaultValue = v
+		case string:
+			typ.DefaultValue, err = strconv.ParseInt(v, 10, 64)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("int64 default unknown value")
+		}
+	case "uint64":
+		switch v := val.(type) {
+		case int64:
+			typ.DefaultValue = v
+		case uint64:
+			typ.DefaultValue = v
+		case string:
+			typ.DefaultValue, err = strconv.ParseInt(v, 10, 64)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("uint64 default unknown value")
+		}
+	case "vl_api_address_t":
+		switch v := val.(type) {
+		case string:
+			typ.DefaultValue, err = ip_types.ParseAddress(v)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("vl_api_address_t default unknown value")
+		}
+	case "vl_api_ip4_address_t":
+		switch v := val.(type) {
+		case string:
+			typ.DefaultValue, err = ip_types.ParseIP4Address(v)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("vl_api_ip4_address_t default unknown value")
+		}
+	case "vl_api_ip6_address_t":
+		switch v := val.(type) {
+		case string:
+			typ.DefaultValue, err = ip_types.ParseIP6Address(v)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("vl_api_ip6_address_t default unknown value")
+		}
+	case "vl_api_mac_address_t":
+		switch v := val.(type) {
+		case string:
+			typ.DefaultValue, err = ethernet_types.ParseMacAddress(v)
+			if err != nil {
+				panic(err)
+			}
+		default:
+			panic("vl_api_mac_address_t default unknown value")
+		}
+	default:
+		typ.DefaultValue = val
+	}
+}
+
 func newField(gen *Generator, file *File, parent interface{}, apitype vppapi.Field, index int) *Field {
 	typ := &Field{
 		Field:  apitype,
@@ -466,7 +558,7 @@ func newField(gen *Generator, file *File, parent interface{}, apitype vppapi.Fie
 	}
 	if apitype.Meta != nil {
 		if val, ok := apitype.Meta[optFieldDefault]; ok {
-			typ.DefaultValue = val
+			convertDefaultValue(val, typ)
 		}
 	}
 	return typ
