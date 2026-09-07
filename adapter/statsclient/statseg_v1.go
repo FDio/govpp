@@ -1,4 +1,5 @@
 //  Copyright (c) 2019 Cisco and/or its affiliates.
+//  Copyright (c) 2026 Meter, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -87,9 +88,36 @@ func (ss *statSegmentV1) GetStatDirOnIndex(v dirVector, index uint32) (dirSegmen
 	return statSegDir, name, getStatType(dir.directoryType, true)
 }
 
+// StatDirOnIndexMatches compares the entry name in place - see the interface.
+func (ss *statSegmentV1) StatDirOnIndexMatches(v dirVector, index uint32, want []byte) (dirSegment, adapter.StatType, bool) {
+	statSegDir := dirSegment(uintptr(v) + uintptr(index)*unsafe.Sizeof(statSegDirectoryEntryV1{}))
+	dir := (*statSegDirectoryEntryV1)(statSegDir)
+	n := 0
+	for ; n < len(dir.name); n++ {
+		if dir.name[n] == 0 {
+			break
+		}
+	}
+	if n == 0 || n != len(want) {
+		return statSegDir, adapter.Unknown, false
+	}
+	for i := 0; i < n; i++ {
+		if dir.name[i] != want[i] {
+			return statSegDir, adapter.Unknown, false
+		}
+	}
+	return statSegDir, getStatType(dir.directoryType, true), true
+}
+
 func (ss *statSegmentV1) GetEpoch() (int64, bool) {
 	sh := ss.loadSharedHeader(ss.sharedHeader)
 	return sh.epoch, sh.inProgress != 0
+}
+
+// GetSymlinkIndexes is unsupported for stats segment v1, which does not encode
+// symlink target indexes.
+func (ss *statSegmentV1) GetSymlinkIndexes(dirSegment) (uint32, uint32, bool) {
+	return 0, 0, false
 }
 
 func (ss *statSegmentV1) CopyEntryData(segment dirSegment, _ uint32) adapter.Stat {
