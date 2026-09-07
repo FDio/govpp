@@ -264,6 +264,21 @@ func (ss *statSegmentV2) CopyEntryData(segment dirSegment, index uint32) adapter
 		// use first index to get the stats directory the symlink points to
 		header := ss.loadSharedHeader(ss.sharedHeader)
 		dirVector := ss.adjust(dirVector(&header.dirVector))
+		if dirVector == nil {
+			debugf("directory vector pointer is out of range for %s", dirEntry.name)
+			return nil
+		}
+		// The target index is read from the segment, so it is only as
+		// trustworthy as the process writing it. A directory entry is 144
+		// bytes, so an out-of-range uint32 addresses hundreds of gigabytes
+		// past the mapping and the recursive call faults on its first read
+		// rather than returning anything. This is the only guard on the
+		// DumpStats and PrepareDir paths; UpdateDir has updateSymlinkGroups.
+		if dirLen := *(*uint32)(vectorLen(dirVector)); i1 >= dirLen {
+			debugf("symlink target index %d out of dir vector length (%d) for %s",
+				i1, dirLen, dirEntry.name)
+			return nil
+		}
 		statSegDir2 := dirSegment(uintptr(dirVector) + uintptr(i1)*unsafe.Sizeof(statSegDirectoryEntryV2{}))
 
 		// retry with actual stats segment and use second index to get

@@ -699,12 +699,23 @@ func (sc *StatsClient) updateSymlinkGroups(vector dirVector, groups map[uint32][
 	}
 	dirLen := *(*uint32)(vectorLen(vector))
 	for target, refs := range groups {
+		// Deliberately no fallback to resolving each symlink on its own here,
+		// unlike the shape mismatch below: CopyEntryData derives the target's
+		// directory segment from this same index, so handing it one already
+		// known to be out of range would turn a skipped group into an
+		// out-of-bounds read of the mapped segment. The group keeps its
+		// previous value, which no caller observes: a directory that has been
+		// re-laid-out fails accessEnd and the whole refresh is rejected.
 		if target >= dirLen {
 			debugf("symlink target index %d out of dir vector length (%d)", target, dirLen)
 			continue
 		}
 		targetPtr, targetName, _ := sc.GetStatDirOnIndex(vector, target)
 		if len(targetName) == 0 {
+			// A freed directory slot - VPP zeroes the name when it removes an
+			// entry. Resolving through it would read whatever the slot still
+			// points at, so skip it for the same reason as above.
+			debugf("symlink target index %d has no name", target)
 			continue
 		}
 		full := sc.CopyEntryData(targetPtr, ^uint32(0))
