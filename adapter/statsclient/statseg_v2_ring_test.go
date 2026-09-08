@@ -17,6 +17,7 @@ package statsclient
 import (
 	"encoding/binary"
 	"fmt"
+	"runtime"
 	"sync/atomic"
 	"testing"
 	"unsafe"
@@ -168,6 +169,22 @@ func (f *fakeRing) publishHeadAhead(thread uint32) {
 	f.putU32(m+0, (f.head[thread]+1)%f.ringSize)
 }
 
+// dropSchema clears the schema the ring advertises, as a ring registered with
+// schema_size 0 has it. The metadata array keeps its stride; nothing states it
+// any more.
+func (f *fakeRing) dropSchema() {
+	f.putU32(f.ringBase+12, 0)
+	for i := uint32(0); i < f.nThreads; i++ {
+		m := f.ringBase + f.metaOff + int(i)*f.metaStride
+		f.putU32(m+16, 0)
+		f.putU32(m+20, 0)
+	}
+}
+
+// setHeader overwrites one of the ring header's u32 fields, to stand in for a
+// header that is corrupt or being rewritten as it is read.
+func (f *fakeRing) setHeader(off int, v uint32) { f.putU32(f.ringBase+off, v) }
+
 // rewindSequence makes the producer's count go backwards, as a VPP restart on
 // the same segment would.
 func (f *fakeRing) rewindSequence(thread uint32, to uint64) {
@@ -213,6 +230,13 @@ func refresh(t testing.TB, sc *StatsClient, dir *adapter.StatDir) {
 	t.Helper()
 	if err := sc.UpdateDir(dir); err != nil {
 		t.Fatalf("UpdateDir: %v", err)
+	}
+}
+
+func refreshErr(t testing.TB, sc *StatsClient, dir *adapter.StatDir) {
+	t.Helper()
+	if err := sc.UpdateDir(dir); err == nil {
+		t.Fatal("UpdateDir succeeded, want rejection")
 	}
 }
 
@@ -404,6 +428,125 @@ func TestRingBufferWindowDerivesMetaStride(t *testing.T) {
 			wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2, 3, 4}, 0, 0)
 			wantWindow(t, s.Windows[1], 16, []uint64{0, 1, 2}, 0, 0)
 		})
+	}
+}
+
+// The stride is derived from where the schema sits, so everything that can make
+// that unreliable has to land on 64 rather than on a guess: VPP's own default
+// for anything but an aarch64 build.
+func TestRingBufferMetaStrideDerivation(t *testing.T) {
+	const metaOff = 64
+	tests := []struct {
+		name       string
+		nThreads   uint32
+		schemaSize uint32
+		metaOff    uint32
+		schemaOff  uint32
+		want       uintptr
+	}{
+		{"64-byte lines", 2, 64, metaOff, metaOff + 2*64, 64},
+		{"128-byte lines", 2, 64, metaOff, metaOff + 2*128, 128},
+		{"four threads at 128", 4, 64, metaOff, metaOff + 4*128, 128},
+		// No schema, so nothing records the array's size. A ring laid out at 128
+		// is read as 64 here: the fallback is wrong on such a build and only the
+		// header carrying the stride outright would fix it.
+		{"no schema falls back", 2, 0, metaOff, metaOff + 2*128, 64},
+		{"schema before metadata", 2, 64, metaOff, metaOff, 64},
+		{"schema inside metadata", 2, 64, metaOff, metaOff - 8, 64},
+		{"array size indivisible by threads", 3, 64, metaOff, metaOff + 200, 64},
+		{"implausible stride", 2, 64, metaOff, metaOff + 2*96, 64},
+		{"metadata past the segment", 2, 64, 1 << 20, 1<<20 + 128, 64},
+		{"no threads", 0, 64, metaOff, metaOff + 128, 64},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			buf := make([]byte, 4096)
+			base := dirVector(unsafe.Pointer(&buf[0]))
+			h := (*ringBufferHeader)(unsafe.Pointer(&buf[0]))
+			h.NThreads = tc.nThreads
+			h.SchemaSize = tc.schemaSize
+			h.MetadataOffset = tc.metaOff
+			if int(tc.metaOff)+24 <= len(buf) {
+				(*ringBufferThreadMeta)(unsafe.Pointer(&buf[tc.metaOff])).SchemaOffset = tc.schemaOff
+			}
+
+			got := ringBufferMetaStride(base, h, uint64(len(buf)))
+			if got != tc.want {
+				t.Errorf("stride = %d, want %d", got, tc.want)
+			}
+			runtime.KeepAlive(buf)
+		})
+	}
+}
+
+// A ring whose geometry multiplies out past the address space must be rejected,
+// not have its regions bounded by an end address that wrapped and compared as
+// though it fit. n_threads * ring_size * entry_size is the one product that can:
+// 4 threads of 2^31 entries at 2^31 bytes is exactly 2^64, so an end address
+// formed from it lands back on the ring's own base and looks like it fits, and
+// the refresh goes on to copy from slots the segment never had. Reaching that
+// copy is an out-of-bounds read, so the assertion is as much that nothing
+// panics.
+func TestRingBufferRejectsOverflowingGeometry(t *testing.T) {
+	// Offsets of the ring header's u32 fields.
+	const (
+		offEntrySize = 0
+		offRingSize  = 4
+		offNThreads  = 8
+		offMetaOff   = 20
+		offDataOff   = 24
+	)
+	tests := []struct {
+		name   string
+		fields map[int]uint32
+	}{
+		{"data size wraps to zero", map[int]uint32{
+			offNThreads: 4, offRingSize: 1 << 31, offEntrySize: 1 << 31,
+		}},
+		{"data size wraps on a wider ring", map[int]uint32{
+			offNThreads: 8, offRingSize: 1 << 31, offEntrySize: 1 << 30,
+		}},
+		// Not wrapping, but the same guard: an offset alone past the segment.
+		{"metadata offset past the segment", map[int]uint32{offMetaOff: 0xFFFFFFF0}},
+		{"data offset past the segment", map[int]uint32{offDataOff: 0xFFFFFFF0}},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			f := newFakeRing(t, 16, 8, 2)
+			f.produce(0, 4)
+			sc, dir, _ := prepareRing(t, f, 0, false)
+
+			// Corrupted after preparing: PrepareRingBuffer reads the directory
+			// entry only, so the header is first read by the refresh.
+			for off, v := range tc.fields {
+				f.setHeader(off, v)
+			}
+			refreshErr(t, sc, dir)
+		})
+	}
+}
+
+// A ring registered without a schema still has to read, on the stride the
+// fallback assumes.
+func TestRingBufferWindowWithoutSchema(t *testing.T) {
+	f := newFakeRing(t, 16, 8, 2)
+	f.dropSchema()
+	f.produce(0, 2)
+	f.produce(1, 1)
+
+	sc, dir, s := prepareRing(t, f, 0, false)
+	refresh(t, sc, dir)
+	f.produce(0, 3)
+	f.produce(1, 2)
+	refresh(t, sc, dir)
+
+	wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2, 3, 4}, 0, 0)
+	wantWindow(t, s.Windows[1], 16, []uint64{0, 1, 2}, 0, 0)
+	if s.Schema != nil {
+		t.Errorf("Schema = %q, want nil", s.Schema)
+	}
+	if s.Config.SchemaSize != 0 {
+		t.Errorf("Config.SchemaSize = %d, want 0", s.Config.SchemaSize)
 	}
 }
 
