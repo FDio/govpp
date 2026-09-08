@@ -16,6 +16,7 @@ package statsclient
 
 import (
 	"encoding/binary"
+	"fmt"
 	"sync/atomic"
 	"testing"
 	"unsafe"
@@ -40,18 +41,26 @@ const (
 )
 
 type fakeRing struct {
-	buf       []byte
-	ringBase  int // offset of the ring buffer's own header
-	dataOff   int // relative to ringBase
-	metaOff   int // relative to ringBase
-	entrySize uint32
-	ringSize  uint32
-	nThreads  uint32
-	head      []uint32
-	seq       []uint64
+	buf        []byte
+	ringBase   int // offset of the ring buffer's own header
+	dataOff    int // relative to ringBase
+	metaOff    int // relative to ringBase
+	entrySize  uint32
+	ringSize   uint32
+	nThreads   uint32
+	metaStride int
+	head       []uint32
+	seq        []uint64
 }
 
 func newFakeRing(t testing.TB, entrySize, ringSize, nThreads uint32) *fakeRing {
+	t.Helper()
+	return newFakeRingStride(t, entrySize, ringSize, nThreads, ringBufferMetaSize)
+}
+
+// newFakeRingStride lays the metadata array out with the given stride, which on
+// a real segment is VPP's CLIB_CACHE_LINE_BYTES.
+func newFakeRingStride(t testing.TB, entrySize, ringSize, nThreads uint32, metaStride int) *fakeRing {
 	t.Helper()
 
 	const (
@@ -68,20 +77,21 @@ func newFakeRing(t testing.TB, entrySize, ringSize, nThreads uint32) *fakeRing {
 
 	// Offsets below are relative to ringBase, which is what the header declares.
 	metaOff := 64 // past the ring header, cache-line aligned as VPP has it
-	schemaOff := metaOff + int(nThreads)*ringBufferMetaSize
+	schemaOff := metaOff + int(nThreads)*metaStride
 	dataOff := align8(schemaOff + len(fakeRingSchema) + 1)
 	total := ringBase + dataOff + int(nThreads)*int(ringSize)*int(entrySize) + trailer
 
 	f := &fakeRing{
-		buf:       make([]byte, total),
-		ringBase:  ringBase,
-		dataOff:   dataOff,
-		metaOff:   metaOff,
-		entrySize: entrySize,
-		ringSize:  ringSize,
-		nThreads:  nThreads,
-		head:      make([]uint32, nThreads),
-		seq:       make([]uint64, nThreads),
+		buf:        make([]byte, total),
+		ringBase:   ringBase,
+		dataOff:    dataOff,
+		metaOff:    metaOff,
+		entrySize:  entrySize,
+		ringSize:   ringSize,
+		nThreads:   nThreads,
+		metaStride: metaStride,
+		head:       make([]uint32, nThreads),
+		seq:        make([]uint64, nThreads),
 	}
 
 	f.putU64(fakeOffVersion, 2)
@@ -107,7 +117,7 @@ func newFakeRing(t testing.TB, entrySize, ringSize, nThreads uint32) *fakeRing {
 	copy(f.buf[ringBase+schemaOff:], fakeRingSchema)
 
 	for i := uint32(0); i < nThreads; i++ {
-		m := ringBase + metaOff + int(i)*ringBufferMetaSize
+		m := ringBase + metaOff + int(i)*metaStride
 		f.putU32(m+0, 0)                  // head
 		f.putU32(m+4, 1)                  // schema version
 		f.putU64(m+8, 0)                  // sequence
@@ -130,8 +140,10 @@ func (f *fakeRing) putDirEntry(dirOff, index int, typ dirType, union uint64, nam
 	e.name[len(name)] = 0
 }
 
-// produce writes n entries as a VPP worker would: entry body first, then the
-// head and sequence that publish it.
+// produce writes n entries as vlib_stats_ring_produce does: entry body first,
+// then head, then the sequence that publishes it. Head and sequence are tracked
+// separately here, as VPP tracks them, so a slot derived from the wrong one is
+// still a visible difference.
 func (f *fakeRing) produce(thread uint32, n int) {
 	for i := 0; i < n; i++ {
 		slot := f.head[thread]
@@ -142,25 +154,25 @@ func (f *fakeRing) produce(thread uint32, n int) {
 		f.head[thread] = (slot + 1) % f.ringSize
 		f.seq[thread]++
 	}
-	m := f.ringBase + f.metaOff + int(thread)*ringBufferMetaSize
+	m := f.ringBase + f.metaOff + int(thread)*f.metaStride
 	f.putU32(m+0, f.head[thread])
 	f.putU64(m+8, f.seq[thread])
 }
 
-// rewindSequence makes the producer's count go backwards, as a VPP restart on
-// the same segment would.
 // publishHeadAhead advances the published head by one without publishing the
 // sequence that explains it. That is the state a producer is in between its
 // plain store of head and its release store of the sequence, and it is what a
 // consumer sees when it reads the two astride a commit.
 func (f *fakeRing) publishHeadAhead(thread uint32) {
-	m := f.ringBase + f.metaOff + int(thread)*ringBufferMetaSize
+	m := f.ringBase + f.metaOff + int(thread)*f.metaStride
 	f.putU32(m+0, (f.head[thread]+1)%f.ringSize)
 }
 
+// rewindSequence makes the producer's count go backwards, as a VPP restart on
+// the same segment would.
 func (f *fakeRing) rewindSequence(thread uint32, to uint64) {
 	f.seq[thread] = to
-	f.putU64(f.ringBase+f.metaOff+int(thread)*ringBufferMetaSize+8, to)
+	f.putU64(f.ringBase+f.metaOff+int(thread)*f.metaStride+8, to)
 }
 
 func (f *fakeRing) client() *StatsClient {
@@ -363,6 +375,35 @@ func TestRingBufferWindowResyncsOnSequenceRewind(t *testing.T) {
 	}
 	if s.Windows[0].NextSeq != 2 {
 		t.Errorf("NextSeq = %d, want 2: the reader must re-sync to what is there now", s.Windows[0].NextSeq)
+	}
+}
+
+// VPP pads its metadata array to CLIB_CACHE_LINE_BYTES, 128 on aarch64 builds,
+// and the ring header does not say which. Thread 0 sits at the start of the
+// array either way, so only threads after it can catch a wrong stride: at 128
+// with a hard-coded 64, thread 1's metadata is read out of thread 0's padding
+// and the thread looks idle.
+func TestRingBufferWindowDerivesMetaStride(t *testing.T) {
+	for _, stride := range []int{ringBufferMetaSize, ringBufferMetaSizeAlt} {
+		t.Run(fmt.Sprint(stride), func(t *testing.T) {
+			f := newFakeRingStride(t, 16, 8, 2, stride)
+			f.produce(0, 3)
+			f.produce(1, 2)
+
+			sc, dir, s := prepareRing(t, f, 0, false)
+			refresh(t, sc, dir)
+
+			if got := s.Threads[1].Sequence; got != 2 {
+				t.Fatalf("thread 1 sequence = %d, want 2", got)
+			}
+
+			f.produce(0, 2)
+			f.produce(1, 1)
+			refresh(t, sc, dir)
+
+			wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2, 3, 4}, 0, 0)
+			wantWindow(t, s.Windows[1], 16, []uint64{0, 1, 2}, 0, 0)
+		})
 	}
 }
 

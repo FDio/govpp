@@ -193,6 +193,9 @@ type RingBufferStat struct {
 // serving a window means carrying a read cursor between refreshes. That cursor
 // is consumer-side state - the segment itself is mapped read-only - and a mock
 // or a v1 segment has nowhere to keep one. Callers type-assert for it.
+//
+// core.StatsConnection holds its StatsAPI unexported and offers no accessor, so
+// this is reached through a *statsclient.StatsClient the caller owns.
 type RingBufferAPI interface {
 	// PrepareRingBuffer resolves one ring-buffer stat by name and returns a
 	// StatDir holding an incremental reader for it, to be refreshed with

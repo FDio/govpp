@@ -788,6 +788,11 @@ var _ adapter.RingBufferAPI = (*StatsClient)(nil)
 // reports Pending. skipBacklog starts at the producer's head rather than at the
 // oldest entry still in the ring.
 //
+// Passing zero therefore makes the first refresh allocate the whole ring per
+// thread - RingSize*EntrySize, 1 MiB on an 8192x128 ring - once. The per-read
+// saving stands either way, but a bound is what keeps the allocation off the
+// ring's size too.
+//
 // name is matched exactly, not as a pattern: this returns one entry or an error,
 // because a caller reading a specific producer's records has nothing sensible to
 // do with a second ring that happened to match.

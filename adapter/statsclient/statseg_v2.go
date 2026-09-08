@@ -482,9 +482,15 @@ type ringBufferHeader struct {
 	DataOffset     uint32
 }
 
-// Respective VPP struct vlib_stats_ring_metadata_t is padded to 64 bytes for cache alignment
-const ringBufferMetaSize = 64
+// VPP pads vlib_stats_ring_metadata_t to CLIB_CACHE_LINE_BYTES, which
+// src/cmake/cpu.cmake sets to 128 on aarch64 and 64 everywhere else.
+const (
+	ringBufferMetaSize    = 64
+	ringBufferMetaSizeAlt = 128
+)
 
+// Only the leading fields are read; the stride between threads is
+// ringBufferMetaStride, not this struct's size.
 type ringBufferThreadMeta struct {
 	Head          uint32
 	SchemaVersion uint32
@@ -494,8 +500,39 @@ type ringBufferThreadMeta struct {
 	_             [40]byte // padding to cache line size
 }
 
+// ringBufferMetaStride returns the byte distance between adjacent threads'
+// metadata.
+//
+// A schema-bearing ring states it: VPP puts the schema directly after the
+// metadata array and records that offset in every thread's metadata, including
+// thread 0's, which sits at the start of the array whatever the stride is. So
+// the array's size, and from it the stride, follows from thread 0 alone.
+// Without a schema there is nothing to derive it from and 64 is assumed.
+func ringBufferMetaStride(base dirVector, header *ringBufferHeader, segSize uint64) uintptr {
+	if header.SchemaSize == 0 || header.NThreads == 0 {
+		return ringBufferMetaSize
+	}
+	if uint64(header.MetadataOffset)+ringBufferMetaSize > segSize {
+		return ringBufferMetaSize
+	}
+	meta := (*ringBufferThreadMeta)(unsafe.Pointer(
+		uintptr(unsafe.Pointer(base)) + uintptr(header.MetadataOffset),
+	))
+	schemaOffset := meta.SchemaOffset
+	if schemaOffset <= header.MetadataOffset {
+		return ringBufferMetaSize
+	}
+	metaSize := uint64(schemaOffset - header.MetadataOffset)
+	if stride := metaSize / uint64(header.NThreads); stride*uint64(header.NThreads) == metaSize {
+		if stride == ringBufferMetaSize || stride == ringBufferMetaSizeAlt {
+			return uintptr(stride)
+		}
+	}
+	return ringBufferMetaSize
+}
+
 func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) adapter.Stat {
-	base, header, ok := ss.ringBufferRegions(dirEntry)
+	base, header, stride, ok := ss.ringBufferRegions(dirEntry)
 	if !ok {
 		return nil
 	}
@@ -510,7 +547,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 
 	threads := make([]adapter.RingBufferThreadMeta, header.NThreads)
 	for i := uint32(0); i < header.NThreads; i++ {
-		meta := ringBufferThreadMetaAt(base, header, i)
+		meta := ringBufferThreadMetaAt(base, header, stride, i)
 		threads[i] = adapter.RingBufferThreadMeta{
 			Head:          meta.Head,
 			SchemaVersion: meta.SchemaVersion,
@@ -534,7 +571,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 	return adapter.RingBufferStat{
 		Config:  config,
 		Threads: threads,
-		Schema:  ss.ringBufferSchema(base, threads, dirEntry.name[:]),
+		Schema:  ss.ringBufferSchema(base, threads, dirEntry),
 		Data:    data,
 	}
 }
@@ -587,44 +624,54 @@ func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (i
 // tidiness: these checks are what stand between a corrupt or racing header and
 // an out-of-bounds read of the mapped segment, so a second copy of them is a
 // second chance to get one of them subtly wrong.
-func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header *ringBufferHeader, ok bool) {
+func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header *ringBufferHeader, stride uintptr, ok bool) {
 	base = ss.adjust(dirVector(&dirEntry.unionData))
 	if base == nil {
 		debugf("ring buffer data pointer is out of range for %s", dirEntry.name)
-		return nil, nil, false
+		return nil, nil, 0, false
 	}
 
 	baseAddr := uintptr(unsafe.Pointer(base))
 	segEnd := uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) + 1
+	if baseAddr >= segEnd {
+		debugf("ring buffer base is outside shared memory for %s", dirEntry.name)
+		return nil, nil, 0, false
+	}
+	// Every region is sized against the room left in the segment rather than by
+	// forming its end address, because a header claiming absurd geometry makes
+	// base+offset+size wrap and compare as if it fit.
+	segSize := uint64(segEnd - baseAddr)
 
-	if baseAddr+unsafe.Sizeof(ringBufferHeader{}) > segEnd {
+	if uint64(unsafe.Sizeof(ringBufferHeader{})) > segSize {
 		debugf("ring buffer header extends beyond shared memory for %s", dirEntry.name)
-		return nil, nil, false
+		return nil, nil, 0, false
 	}
 	header = (*ringBufferHeader)(unsafe.Pointer(base))
 
-	metaEnd := baseAddr + uintptr(header.MetadataOffset) + uintptr(header.NThreads)*ringBufferMetaSize
-	if metaEnd > segEnd {
-		debugf("ring buffer metadata extends beyond shared memory for %s (metaEnd=%d, segEnd=%d)",
-			dirEntry.name, metaEnd, segEnd)
-		return nil, nil, false
+	stride = ringBufferMetaStride(base, header, segSize)
+	if uint64(header.MetadataOffset) > segSize ||
+		uint64(header.NThreads) > (segSize-uint64(header.MetadataOffset))/uint64(stride) {
+		debugf("ring buffer metadata extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
+			dirEntry.name, header.MetadataOffset, header.NThreads, segSize)
+		return nil, nil, 0, false
 	}
 
-	threadDataSize := uintptr(header.RingSize) * uintptr(header.EntrySize)
-	dataEnd := baseAddr + uintptr(header.DataOffset) + uintptr(header.NThreads)*threadDataSize
-	if dataEnd > segEnd {
-		debugf("ring buffer data extends beyond shared memory for %s (dataEnd=%d, segEnd=%d)",
-			dirEntry.name, dataEnd, segEnd)
-		return nil, nil, false
+	// Both factors are uint32, so the product cannot overflow uint64.
+	threadDataSize := uint64(header.RingSize) * uint64(header.EntrySize)
+	if uint64(header.DataOffset) > segSize || (threadDataSize > 0 &&
+		uint64(header.NThreads) > (segSize-uint64(header.DataOffset))/threadDataSize) {
+		debugf("ring buffer data extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
+			dirEntry.name, header.DataOffset, header.NThreads, segSize)
+		return nil, nil, 0, false
 	}
 
-	return base, header, true
+	return base, header, stride, true
 }
 
 // ringBufferThreadMetaAt returns thread t's producer metadata.
-func ringBufferThreadMetaAt(base dirVector, header *ringBufferHeader, t uint32) *ringBufferThreadMeta {
+func ringBufferThreadMetaAt(base dirVector, header *ringBufferHeader, stride uintptr, t uint32) *ringBufferThreadMeta {
 	return (*ringBufferThreadMeta)(unsafe.Pointer(
-		uintptr(unsafe.Pointer(base)) + uintptr(header.MetadataOffset) + uintptr(t)*ringBufferMetaSize,
+		uintptr(unsafe.Pointer(base)) + uintptr(header.MetadataOffset) + uintptr(t)*stride,
 	))
 }
 
@@ -638,7 +685,7 @@ func ringBufferThreadData(base dirVector, header *ringBufferHeader, t uint32) []
 
 // ringBufferSchema copies the schema blob from the first thread that publishes
 // one, or returns nil when none does.
-func (ss *statSegmentV2) ringBufferSchema(base dirVector, threads []adapter.RingBufferThreadMeta, name []byte) []byte {
+func (ss *statSegmentV2) ringBufferSchema(base dirVector, threads []adapter.RingBufferThreadMeta, dirEntry *statSegDirectoryEntryV2) []byte {
 	baseAddr := uintptr(unsafe.Pointer(base))
 	segEnd := uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) + 1
 	for _, t := range threads {
@@ -646,7 +693,7 @@ func (ss *statSegmentV2) ringBufferSchema(base dirVector, threads []adapter.Ring
 			continue
 		}
 		if baseAddr+uintptr(t.SchemaOffset)+uintptr(t.SchemaSize) > segEnd {
-			debugf("ring buffer schema extends beyond shared memory for %s", name)
+			debugf("ring buffer schema extends beyond shared memory for %s", dirEntry.name)
 			continue
 		}
 		// Derived from base in one expression: a uintptr held across statements
@@ -677,11 +724,13 @@ var ringWindowCopyHook func()
 // the producer has not written since we last looked. The cost of a refresh is
 // the entries produced, not the size of the ring they were produced into.
 func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntryV2, s *adapter.RingBufferWindowStat) error {
-	base, header, ok := ss.ringBufferRegions(dirEntry)
+	base, header, stride, ok := ss.ringBufferRegions(dirEntry)
 	if !ok {
 		return ErrStatDataLenIncorrect
 	}
 	if header.EntrySize == 0 || header.RingSize == 0 || header.NThreads == 0 {
+		debugf("ring buffer has zero geometry for %s (entry_size=%d, ring_size=%d, threads=%d)",
+			dirEntry.name, header.EntrySize, header.RingSize, header.NThreads)
 		return ErrStatDataLenIncorrect
 	}
 
@@ -710,7 +759,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 	}
 
 	for t := uint32(0); t < header.NThreads; t++ {
-		meta := ringBufferThreadMetaAt(base, header, t)
+		meta := ringBufferThreadMetaAt(base, header, stride, t)
 		// The sequence is the only field of the pair that carries an ordering
 		// guarantee: a producer writes the entry, advances head with a plain
 		// store, and then publishes the sequence with a release store. So a
@@ -741,6 +790,10 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// also returned a ring of history would make "what happened since I
 			// last looked" mean something different on the first call than on
 			// every later one.
+			//
+			// A geometry change mid-stream reaches here too, SchemaVersion
+			// included, so with SkipBacklog whatever the ring already held is
+			// dropped without appearing in Lost.
 			if s.SkipBacklog {
 				w.NextSeq = seq
 			} else {
@@ -840,7 +893,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 	}
 
 	if s.Schema == nil || reinit {
-		s.Schema = ss.ringBufferSchema(base, s.Threads, dirEntry.name[:])
+		s.Schema = ss.ringBufferSchema(base, s.Threads, dirEntry)
 	}
 	return nil
 }
