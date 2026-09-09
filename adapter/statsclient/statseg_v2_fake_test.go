@@ -62,6 +62,16 @@ type fakeSegment struct {
 	buf []byte
 	// counters is the offset of the backing counter data for thread 0.
 	counters int
+	// dirOff is the offset of the directory vector's data, and nDir its declared
+	// length, so a test can reach in and corrupt an entry.
+	dirOff int
+	nDir   int
+	// spareDir is a directory slot present in the buffer but beyond the vector's
+	// declared length, holding a perfectly valid counter-vector entry. A symlink
+	// pointed at it resolves cleanly if the declared length is not honoured, and
+	// is rejected if it is - which is what makes the bounds check testable
+	// without depending on an out-of-range read happening to fault.
+	spareDir int
 }
 
 // newFakeSegment builds a segment holding a /node/errors vector with the given
@@ -84,13 +94,15 @@ func newFakeSegment(t testing.TB, values []uint64) *fakeSegment {
 
 	dirLenOff := hdrSize
 	dirOff := dirLenOff + vecHdr
-	ptLenOff := dirOff + nDir*dirEntLen // per-thread vector of pointers
+	// One slot past the declared length, see fakeSegment.spareDir.
+	ptLenOff := dirOff + (nDir+1)*dirEntLen // per-thread vector of pointers
 	ptOff := ptLenOff + vecHdr
 	ctLenOff := ptOff + threads*ptrSize // thread 0 counter vector
 	ctOff := ctLenOff + vecHdr
 	total := ctOff + len(values)*ptrSize + trailer
 
-	f := &fakeSegment{buf: make([]byte, total), counters: ctOff}
+	f := &fakeSegment{buf: make([]byte, total), counters: ctOff,
+		dirOff: dirOff, nDir: nDir, spareDir: nDir}
 
 	// Shared header. errorVector stays zero: adjust() then rejects it, which is how
 	// the client decides a segment uses the modern (non-legacy) type mapping.
@@ -124,6 +136,10 @@ func newFakeSegment(t testing.TB, values []uint64) *fakeSegment {
 		union := uint64(fakeTargetIndex) | uint64(item)<<32
 		f.putDirEntry(dirOff, fakeTargetIndex+1+i, fakeTypeSymlink, union, fakeErrName(item))
 	}
+
+	// The spare slot: a valid entry the declared vector length excludes.
+	f.putDirEntry(dirOff, f.spareDir, fakeTypeSimpleCounterVector,
+		fakeBase+uint64(ptOff), "/sys/fake-beyond-vector")
 	return f
 }
 
@@ -146,6 +162,13 @@ func fakeErrItem(t testing.TB, name []byte) uint32 {
 
 func (f *fakeSegment) putU64(off int, v uint64) {
 	*(*uint64)(unsafe.Pointer(&f.buf[off])) = v
+}
+
+// dirEntry returns the directory entry at index, so a test can corrupt one the
+// way a misbehaving producer would.
+func (f *fakeSegment) dirEntry(index int) *statSegDirectoryEntryV2 {
+	return (*statSegDirectoryEntryV2)(unsafe.Pointer(
+		&f.buf[f.dirOff+index*int(unsafe.Sizeof(statSegDirectoryEntryV2{}))]))
 }
 
 func (f *fakeSegment) putDirEntry(dirOff, index int, typ dirType, union uint64, name string) {
