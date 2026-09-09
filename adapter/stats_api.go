@@ -188,6 +188,104 @@ type RingBufferStat struct {
 	Data    [][]byte // per-thread raw ring data
 }
 
+// RingBufferAPI is implemented by adapters that can read a ring-buffer stat
+// incrementally, and is separate from StatsAPI because not every adapter can:
+// serving a window means carrying a read cursor between refreshes. That cursor
+// is consumer-side state - the segment itself is mapped read-only - and a mock
+// or a v1 segment has nowhere to keep one. Callers type-assert for it.
+//
+// core.StatsConnection holds its StatsAPI unexported and offers no accessor, so
+// this is reached through a *statsclient.StatsClient the caller owns.
+type RingBufferAPI interface {
+	// PrepareRingBuffer resolves one ring-buffer stat by name and returns a
+	// StatDir holding an incremental reader for it, to be refreshed with
+	// UpdateDir. maxEntries bounds entries delivered per thread per refresh, zero
+	// meaning the ring size; skipBacklog starts at the producer's head rather
+	// than at the oldest entry the ring still holds.
+	PrepareRingBuffer(name string, maxEntries uint32, skipBacklog bool) (*StatDir, error)
+}
+
+// RingBufferWindow is the run of entries one producer thread appended since a
+// consumer last read it.
+type RingBufferWindow struct {
+	// Entries holds Count entries of RingBufferConfig.EntrySize bytes each,
+	// oldest first and already unwrapped, so a consumer indexes it without
+	// knowing where the ring's seam fell.
+	//
+	// It aliases a buffer the stat owns and reuses, so it is only valid until
+	// the next refresh. Copy anything that must outlive that.
+	//
+	// The slice always starts at the buffer's origin and is capped to the entries
+	// this refresh delivered, so cap(Entries) is the room a refresh has to fill
+	// and there is no second buffer field to keep in step with it.
+	Entries []byte
+	Count   uint32
+
+	// FirstSeq is the producer sequence of Entries[0], and NextSeq the sequence
+	// the following read will start from. Both are absolute counts of entries
+	// this thread has ever written, so they stay meaningful across wraps.
+	FirstSeq uint64
+	NextSeq  uint64
+
+	// Lost counts entries the producer overwrote before this read reached them:
+	// data that is gone. Pending counts entries still in the ring that this read
+	// did not return because MaxEntries capped it: data that the next read will
+	// deliver.
+	//
+	// They are separate because they call for opposite responses. Pending means
+	// read again immediately; Lost means the reader is not keeping up and the
+	// gap is unrecoverable. A single "missed" figure would conflate a reader
+	// that is behind with one that is merely rate-limited.
+	Lost    uint64
+	Pending uint64
+}
+
+// RingBufferWindowStat reads a ring buffer incrementally: every refresh copies
+// only what the producers appended since the previous one, into buffers the stat
+// already owns.
+//
+// This is the difference between a cost proportional to entries produced and one
+// proportional to ring size. RingBufferStat copies the whole ring, for every
+// thread, into a fresh allocation on every read - so a ring sized for burst
+// headroom rather than for poll latency becomes unreadable long before it
+// becomes useful. A 16M-entry ring of 128-byte records is 2 GiB per thread per
+// read as a RingBufferStat, and the entries actually produced as this.
+//
+// Put one in a prepared StatDir entry's Data and refresh it with
+// StatsClient.UpdateDir, or let StatsClient.PrepareRingBuffer build both.
+// CopyEntryData never produces one: windowing needs a read cursor, and only the
+// consumer has it.
+//
+// The zero value is valid and self-initialising. The first refresh reads the
+// geometry, allocates the per-thread buffers, and positions the cursor - at the
+// oldest entry the ring still holds, or at the producer's head if SkipBacklog is
+// set - and returns no entries. SkipBacklog only decides where that first
+// refresh starts and is ignored afterwards; MaxEntries is honoured on every
+// refresh.
+type RingBufferWindowStat struct {
+	// MaxEntries bounds how many entries one refresh delivers per thread, and so
+	// bounds both the buffer this stat allocates and the work one refresh does.
+	// Zero means the ring size, which is the largest window that can ever be
+	// available. A consumer draining a fast producer wants this small enough to
+	// bound a single read and to loop while Pending is non-zero.
+	//
+	// It is read on every refresh, so raising or lowering it between refreshes
+	// takes effect on the next one; the buffers grow to match and are not shrunk.
+	MaxEntries uint32
+
+	// SkipBacklog starts the first read at the producer's head rather than at the
+	// oldest entry still in the ring, so a consumer that wants only what happens
+	// from now on does not first have to read and discard a ring of history.
+	SkipBacklog bool
+
+	Config  RingBufferConfig
+	Threads []RingBufferThreadMeta
+	Schema  []byte
+
+	// Windows holds one window per producer thread, in thread order.
+	Windows []RingBufferWindow
+}
+
 func (ScalarStat) isStat()          {}
 func (ErrorStat) isStat()           {}
 func (SimpleCounterStat) isStat()   {}
@@ -197,6 +295,9 @@ func (EmptyStat) isStat()           {}
 func (GaugeStat) isStat()           {}
 func (HistogramLog2Stat) isStat()   {}
 func (RingBufferStat) isStat()      {}
+
+// Pointer receiver: refreshed in place, so a value must not satisfy Stat.
+func (*RingBufferWindowStat) isStat() {}
 
 func (s ScalarStat) IsZero() bool {
 	return s == 0
@@ -350,6 +451,25 @@ func (s RingBufferStat) IsZero() bool {
 
 func (s RingBufferStat) Type() StatType {
 	return RingBuffer
+}
+
+func (s *RingBufferWindowStat) IsZero() bool {
+	return s.Config.NThreads == 0 || s.Config.EntrySize == 0
+}
+
+func (s *RingBufferWindowStat) Type() StatType {
+	return RingBuffer
+}
+
+func (s *RingBufferWindowStat) String() string {
+	var b strings.Builder
+	fmt.Fprintf(&b, "\n  config: entry_size=%d, ring_size=%d, threads=%d, schema_version=%d, schema_size=%d",
+		s.Config.EntrySize, s.Config.RingSize, s.Config.NThreads, s.Config.SchemaVersion, s.Config.SchemaSize)
+	for i, w := range s.Windows {
+		fmt.Fprintf(&b, "\n  thread[%d]: entries=%d first_seq=%d next_seq=%d lost=%d pending=%d",
+			i, w.Count, w.FirstSeq, w.NextSeq, w.Lost, w.Pending)
+	}
+	return b.String()
 }
 
 func (s RingBufferStat) String() string {
