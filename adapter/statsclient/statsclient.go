@@ -156,6 +156,14 @@ func (sc *StatsClient) Disconnect() error {
 		close(sc.done)
 	}
 
+	// Without this lock, disconnect()'s munmap races any reader holding only
+	// accessLock.RLock() (DumpStats, ListStats, PrepareDir, UpdateDir): the
+	// isConnected atomic is checked, munmap runs concurrently with a read still
+	// in progress, and the read segfaults on the now-unmapped region.
+	// reconnect() already takes this lock around the same disconnect() call.
+	sc.accessLock.Lock()
+	defer sc.accessLock.Unlock()
+
 	if !sc.isConnected() {
 		return nil
 	}
