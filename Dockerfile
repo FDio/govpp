@@ -36,7 +36,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*; \
     rm -rf /pkg
 
-FROM golang:1.25-alpine3.22 as binapi-generator
+FROM golang:1.26.1-alpine3.22 as binapi-generator
 
 ENV GO111MODULE=on
 ENV CGO_ENABLED=0
