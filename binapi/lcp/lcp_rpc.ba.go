@@ -23,6 +23,10 @@ type RPCService interface {
 	LcpItfPairGetV2(ctx context.Context, in *LcpItfPairGetV2) (RPCService_LcpItfPairGetV2Client, error)
 	LcpItfPairReplaceBegin(ctx context.Context, in *LcpItfPairReplaceBegin) (*LcpItfPairReplaceBeginReply, error)
 	LcpItfPairReplaceEnd(ctx context.Context, in *LcpItfPairReplaceEnd) (*LcpItfPairReplaceEndReply, error)
+	LcpOsiProtoEnable(ctx context.Context, in *LcpOsiProtoEnable) (*LcpOsiProtoEnableReply, error)
+	LcpOsiProtoGet(ctx context.Context, in *LcpOsiProtoGet) (*LcpOsiProtoGetReply, error)
+	LcpSyncUnnumberedGet(ctx context.Context, in *LcpSyncUnnumberedGet) (*LcpSyncUnnumberedGetReply, error)
+	LcpSyncUnnumberedSet(ctx context.Context, in *LcpSyncUnnumberedSet) (*LcpSyncUnnumberedSetReply, error)
 }
 
 type serviceClient struct {
@@ -199,6 +203,42 @@ func (c *serviceClient) LcpItfPairReplaceBegin(ctx context.Context, in *LcpItfPa
 
 func (c *serviceClient) LcpItfPairReplaceEnd(ctx context.Context, in *LcpItfPairReplaceEnd) (*LcpItfPairReplaceEndReply, error) {
 	out := new(LcpItfPairReplaceEndReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpOsiProtoEnable(ctx context.Context, in *LcpOsiProtoEnable) (*LcpOsiProtoEnableReply, error) {
+	out := new(LcpOsiProtoEnableReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpOsiProtoGet(ctx context.Context, in *LcpOsiProtoGet) (*LcpOsiProtoGetReply, error) {
+	out := new(LcpOsiProtoGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpSyncUnnumberedGet(ctx context.Context, in *LcpSyncUnnumberedGet) (*LcpSyncUnnumberedGetReply, error) {
+	out := new(LcpSyncUnnumberedGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) LcpSyncUnnumberedSet(ctx context.Context, in *LcpSyncUnnumberedSet) (*LcpSyncUnnumberedSetReply, error) {
+	out := new(LcpSyncUnnumberedSetReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err
