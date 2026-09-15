@@ -14,6 +14,7 @@ import (
 // RPCService defines RPC service sr.
 type RPCService interface {
 	SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error)
+	SrLocalsidAddDelV2(ctx context.Context, in *SrLocalsidAddDelV2) (*SrLocalsidAddDelV2Reply, error)
 	SrLocalsidsDump(ctx context.Context, in *SrLocalsidsDump) (RPCService_SrLocalsidsDumpClient, error)
 	SrLocalsidsWithPacketStatsDump(ctx context.Context, in *SrLocalsidsWithPacketStatsDump) (RPCService_SrLocalsidsWithPacketStatsDumpClient, error)
 	SrPoliciesDump(ctx context.Context, in *SrPoliciesDump) (RPCService_SrPoliciesDumpClient, error)
@@ -40,6 +41,15 @@ func NewServiceClient(conn api.Connection) RPCService {
 
 func (c *serviceClient) SrLocalsidAddDel(ctx context.Context, in *SrLocalsidAddDel) (*SrLocalsidAddDelReply, error) {
 	out := new(SrLocalsidAddDelReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) SrLocalsidAddDelV2(ctx context.Context, in *SrLocalsidAddDelV2) (*SrLocalsidAddDelV2Reply, error) {
+	out := new(SrLocalsidAddDelV2Reply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

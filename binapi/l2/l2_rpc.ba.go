@@ -28,7 +28,11 @@ type RPCService interface {
 	L2FibClearTable(ctx context.Context, in *L2FibClearTable) (*L2FibClearTableReply, error)
 	L2FibTableDump(ctx context.Context, in *L2FibTableDump) (RPCService_L2FibTableDumpClient, error)
 	L2Flags(ctx context.Context, in *L2Flags) (*L2FlagsReply, error)
+	L2FlagsGet(ctx context.Context, in *L2FlagsGet) (*L2FlagsGetReply, error)
+	L2FlagsSet(ctx context.Context, in *L2FlagsSet) (*L2FlagsSetReply, error)
 	L2InterfaceEfpFilter(ctx context.Context, in *L2InterfaceEfpFilter) (*L2InterfaceEfpFilterReply, error)
+	L2InterfaceFeatFlagsGet(ctx context.Context, in *L2InterfaceFeatFlagsGet) (*L2InterfaceFeatFlagsGetReply, error)
+	L2InterfaceFeatFlagsSet(ctx context.Context, in *L2InterfaceFeatFlagsSet) (*L2InterfaceFeatFlagsSetReply, error)
 	L2InterfacePbbTagRewrite(ctx context.Context, in *L2InterfacePbbTagRewrite) (*L2InterfacePbbTagRewriteReply, error)
 	L2InterfaceVlanTagRewrite(ctx context.Context, in *L2InterfaceVlanTagRewrite) (*L2InterfaceVlanTagRewriteReply, error)
 	L2PatchAddDel(ctx context.Context, in *L2PatchAddDel) (*L2PatchAddDelReply, error)
@@ -300,8 +304,44 @@ func (c *serviceClient) L2Flags(ctx context.Context, in *L2Flags) (*L2FlagsReply
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) L2FlagsGet(ctx context.Context, in *L2FlagsGet) (*L2FlagsGetReply, error) {
+	out := new(L2FlagsGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) L2FlagsSet(ctx context.Context, in *L2FlagsSet) (*L2FlagsSetReply, error) {
+	out := new(L2FlagsSetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) L2InterfaceEfpFilter(ctx context.Context, in *L2InterfaceEfpFilter) (*L2InterfaceEfpFilterReply, error) {
 	out := new(L2InterfaceEfpFilterReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) L2InterfaceFeatFlagsGet(ctx context.Context, in *L2InterfaceFeatFlagsGet) (*L2InterfaceFeatFlagsGetReply, error) {
+	out := new(L2InterfaceFeatFlagsGetReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
+func (c *serviceClient) L2InterfaceFeatFlagsSet(ctx context.Context, in *L2InterfaceFeatFlagsSet) (*L2InterfaceFeatFlagsSetReply, error) {
+	out := new(L2InterfaceFeatFlagsSetReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

@@ -13,6 +13,7 @@ import (
 
 // RPCService defines RPC service policer.
 type RPCService interface {
+	IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error)
 	PolicerAdd(ctx context.Context, in *PolicerAdd) (*PolicerAddReply, error)
 	PolicerAddDel(ctx context.Context, in *PolicerAddDel) (*PolicerAddDelReply, error)
 	PolicerBind(ctx context.Context, in *PolicerBind) (*PolicerBindReply, error)
@@ -34,6 +35,15 @@ type serviceClient struct {
 
 func NewServiceClient(conn api.Connection) RPCService {
 	return &serviceClient{conn}
+}
+
+func (c *serviceClient) IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error) {
+	out := new(IPPuntPoliceReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) PolicerAdd(ctx context.Context, in *PolicerAdd) (*PolicerAddReply, error) {
