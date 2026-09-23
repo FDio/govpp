@@ -4,15 +4,15 @@ go 1.26.0
 
 require (
 	github.com/bennyscetbun/jsongo v1.2.4
-	github.com/docker/cli v29.8.0+incompatible
+	github.com/docker/cli v29.8.1+incompatible
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.6.1
 	github.com/lunixbochs/struc v0.0.0-20200521075829-a4cb8d33dbbe
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/moby/term v0.5.2
-	github.com/olekukonko/tablewriter v1.1.4
-	github.com/onsi/gomega v1.43.0
+	github.com/olekukonko/tablewriter v1.1.5
+	github.com/onsi/gomega v1.43.1
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
