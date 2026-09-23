@@ -1,5 +1,5 @@
-ARG VPP_VERSION=v25.10
-ARG UBUNTU_VERSION=22.04
+ARG VPP_VERSION=v26.06
+ARG UBUNTU_VERSION=24.04
 
 FROM ubuntu:${UBUNTU_VERSION} as vppbuild
 
@@ -14,7 +14,7 @@ RUN set -eux;\
     python3 \
     sudo \
     tcpdump \
-    rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/FDio/vpp.git
 

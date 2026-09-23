@@ -19,8 +19,10 @@ type RPCService interface {
 	WireguardInterfaceDelete(ctx context.Context, in *WireguardInterfaceDelete) (*WireguardInterfaceDeleteReply, error)
 	WireguardInterfaceDump(ctx context.Context, in *WireguardInterfaceDump) (RPCService_WireguardInterfaceDumpClient, error)
 	WireguardPeerAdd(ctx context.Context, in *WireguardPeerAdd) (*WireguardPeerAddReply, error)
+	WireguardPeerAddV2(ctx context.Context, in *WireguardPeerAddV2) (*WireguardPeerAddV2Reply, error)
 	WireguardPeerRemove(ctx context.Context, in *WireguardPeerRemove) (*WireguardPeerRemoveReply, error)
 	WireguardPeersDump(ctx context.Context, in *WireguardPeersDump) (RPCService_WireguardPeersDumpClient, error)
+	WireguardPeersV2Dump(ctx context.Context, in *WireguardPeersV2Dump) (RPCService_WireguardPeersV2DumpClient, error)
 }
 
 type serviceClient struct {
@@ -122,6 +124,15 @@ func (c *serviceClient) WireguardPeerAdd(ctx context.Context, in *WireguardPeerA
 	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
+func (c *serviceClient) WireguardPeerAddV2(ctx context.Context, in *WireguardPeerAddV2) (*WireguardPeerAddV2Reply, error) {
+	out := new(WireguardPeerAddV2Reply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) WireguardPeerRemove(ctx context.Context, in *WireguardPeerRemove) (*WireguardPeerRemoveReply, error) {
 	out := new(WireguardPeerRemoveReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -164,6 +175,52 @@ func (c *serviceClient_WireguardPeersDumpClient) Recv() (*WireguardPeersDetails,
 	}
 	switch m := msg.(type) {
 	case *WireguardPeersDetails:
+		return m, nil
+	case *memclnt.ControlPingReply:
+		err = c.Stream.Close()
+		if err != nil {
+			return nil, err
+		}
+		return nil, io.EOF
+	default:
+		c.Stream.Close()
+		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
+	}
+}
+
+func (c *serviceClient) WireguardPeersV2Dump(ctx context.Context, in *WireguardPeersV2Dump) (RPCService_WireguardPeersV2DumpClient, error) {
+	stream, err := c.conn.NewStream(ctx)
+	if err != nil {
+		return nil, err
+	}
+	x := &serviceClient_WireguardPeersV2DumpClient{stream}
+	if err := x.Stream.SendMsg(in); err != nil {
+		x.Stream.Close()
+		return nil, err
+	}
+	if err = x.Stream.SendMsg(&memclnt.ControlPing{}); err != nil {
+		x.Stream.Close()
+		return nil, err
+	}
+	return x, nil
+}
+
+type RPCService_WireguardPeersV2DumpClient interface {
+	Recv() (*WireguardPeersV2Details, error)
+	api.Stream
+}
+
+type serviceClient_WireguardPeersV2DumpClient struct {
+	api.Stream
+}
+
+func (c *serviceClient_WireguardPeersV2DumpClient) Recv() (*WireguardPeersV2Details, error) {
+	msg, err := c.Stream.RecvMsg()
+	if err != nil {
+		return nil, err
+	}
+	switch m := msg.(type) {
+	case *WireguardPeersV2Details:
 		return m, nil
 	case *memclnt.ControlPingReply:
 		err = c.Stream.Close()

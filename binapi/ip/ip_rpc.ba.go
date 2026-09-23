@@ -29,7 +29,6 @@ type RPCService interface {
 	IPPathMtuReplaceBegin(ctx context.Context, in *IPPathMtuReplaceBegin) (*IPPathMtuReplaceBeginReply, error)
 	IPPathMtuReplaceEnd(ctx context.Context, in *IPPathMtuReplaceEnd) (*IPPathMtuReplaceEndReply, error)
 	IPPathMtuUpdate(ctx context.Context, in *IPPathMtuUpdate) (*IPPathMtuUpdateReply, error)
-	IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error)
 	IPPuntRedirect(ctx context.Context, in *IPPuntRedirect) (*IPPuntRedirectReply, error)
 	IPPuntRedirectDump(ctx context.Context, in *IPPuntRedirectDump) (RPCService_IPPuntRedirectDumpClient, error)
 	IPPuntRedirectV2Dump(ctx context.Context, in *IPPuntRedirectV2Dump) (RPCService_IPPuntRedirectV2DumpClient, error)
@@ -430,15 +429,6 @@ func (c *serviceClient) IPPathMtuReplaceEnd(ctx context.Context, in *IPPathMtuRe
 
 func (c *serviceClient) IPPathMtuUpdate(ctx context.Context, in *IPPathMtuUpdate) (*IPPathMtuUpdateReply, error) {
 	out := new(IPPathMtuUpdateReply)
-	err := c.conn.Invoke(ctx, in, out)
-	if err != nil {
-		return nil, err
-	}
-	return out, api.RetvalToVPPApiError(out.Retval)
-}
-
-func (c *serviceClient) IPPuntPolice(ctx context.Context, in *IPPuntPolice) (*IPPuntPoliceReply, error) {
-	out := new(IPPuntPoliceReply)
 	err := c.conn.Invoke(ctx, in, out)
 	if err != nil {
 		return nil, err

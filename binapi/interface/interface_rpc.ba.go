@@ -31,9 +31,11 @@ type RPCService interface {
 	SwInterfaceAddressReplaceEnd(ctx context.Context, in *SwInterfaceAddressReplaceEnd) (*SwInterfaceAddressReplaceEndReply, error)
 	SwInterfaceClearStats(ctx context.Context, in *SwInterfaceClearStats) (*SwInterfaceClearStatsReply, error)
 	SwInterfaceDump(ctx context.Context, in *SwInterfaceDump) (RPCService_SwInterfaceDumpClient, error)
+	SwInterfaceGetDefaultRxMode(ctx context.Context, in *SwInterfaceGetDefaultRxMode) (*SwInterfaceGetDefaultRxModeReply, error)
 	SwInterfaceGetMacAddress(ctx context.Context, in *SwInterfaceGetMacAddress) (*SwInterfaceGetMacAddressReply, error)
 	SwInterfaceGetTable(ctx context.Context, in *SwInterfaceGetTable) (*SwInterfaceGetTableReply, error)
 	SwInterfaceRxPlacementDump(ctx context.Context, in *SwInterfaceRxPlacementDump) (RPCService_SwInterfaceRxPlacementDumpClient, error)
+	SwInterfaceSetDefaultRxMode(ctx context.Context, in *SwInterfaceSetDefaultRxMode) (*SwInterfaceSetDefaultRxModeReply, error)
 	SwInterfaceSetFlags(ctx context.Context, in *SwInterfaceSetFlags) (*SwInterfaceSetFlagsReply, error)
 	SwInterfaceSetInterfaceName(ctx context.Context, in *SwInterfaceSetInterfaceName) (*SwInterfaceSetInterfaceNameReply, error)
 	SwInterfaceSetIPDirectedBroadcast(ctx context.Context, in *SwInterfaceSetIPDirectedBroadcast) (*SwInterfaceSetIPDirectedBroadcastReply, error)
@@ -257,6 +259,15 @@ func (c *serviceClient_SwInterfaceDumpClient) Recv() (*SwInterfaceDetails, error
 	}
 }
 
+func (c *serviceClient) SwInterfaceGetDefaultRxMode(ctx context.Context, in *SwInterfaceGetDefaultRxMode) (*SwInterfaceGetDefaultRxModeReply, error) {
+	out := new(SwInterfaceGetDefaultRxModeReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
+}
+
 func (c *serviceClient) SwInterfaceGetMacAddress(ctx context.Context, in *SwInterfaceGetMacAddress) (*SwInterfaceGetMacAddressReply, error) {
 	out := new(SwInterfaceGetMacAddressReply)
 	err := c.conn.Invoke(ctx, in, out)
@@ -319,6 +330,15 @@ func (c *serviceClient_SwInterfaceRxPlacementDumpClient) Recv() (*SwInterfaceRxP
 		c.Stream.Close()
 		return nil, fmt.Errorf("unexpected message: %T %v", m, m)
 	}
+}
+
+func (c *serviceClient) SwInterfaceSetDefaultRxMode(ctx context.Context, in *SwInterfaceSetDefaultRxMode) (*SwInterfaceSetDefaultRxModeReply, error) {
+	out := new(SwInterfaceSetDefaultRxModeReply)
+	err := c.conn.Invoke(ctx, in, out)
+	if err != nil {
+		return nil, err
+	}
+	return out, api.RetvalToVPPApiError(out.Retval)
 }
 
 func (c *serviceClient) SwInterfaceSetFlags(ctx context.Context, in *SwInterfaceSetFlags) (*SwInterfaceSetFlagsReply, error) {
