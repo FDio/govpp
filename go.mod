@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/bennyscetbun/jsongo v1.2.4
-	github.com/docker/cli v29.8.1+incompatible
+	github.com/docker/cli v29.8.2+incompatible
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.6.1
