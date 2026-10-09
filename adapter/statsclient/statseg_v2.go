@@ -768,9 +768,12 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		s.Windows = make([]adapter.RingBufferWindow, header.NThreads)
 	}
 
+	// Slot seq%RingSize may be mid-write and holds entry seq-RingSize, so only the
+	// RingSize-1 entries before it are whole.
+	capacity := header.RingSize - 1
 	maxEntries := s.MaxEntries
-	if maxEntries == 0 || maxEntries > header.RingSize {
-		maxEntries = header.RingSize
+	if maxEntries == 0 || maxEntries > capacity {
+		maxEntries = capacity
 	}
 
 	for t := uint32(0); t < header.NThreads; t++ {
@@ -812,7 +815,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			if s.SkipBacklog {
 				w.NextSeq = seq
 			} else {
-				w.NextSeq = seq - min(seq, uint64(header.RingSize))
+				w.NextSeq = seq - min(seq, uint64(capacity))
 			}
 			w.FirstSeq = w.NextSeq
 			w.Entries = buf[:0]
@@ -824,15 +827,15 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// was reused for a different ring. Re-sync to what is there now and do
 			// not report it as loss - nothing was overwritten, the count simply is
 			// not comparable to the one we held.
-			w.NextSeq = seq - min(seq, uint64(header.RingSize))
+			w.NextSeq = seq - min(seq, uint64(capacity))
 		}
 
 		available := seq - w.NextSeq
-		if available > uint64(header.RingSize) {
-			// Lapped: everything older than the last RingSize entries is gone.
-			w.Lost = available - uint64(header.RingSize)
-			w.NextSeq = seq - uint64(header.RingSize)
-			available = uint64(header.RingSize)
+		if available > uint64(capacity) {
+			// Lapped: everything older than the last capacity entries is gone.
+			w.Lost = available - uint64(capacity)
+			w.NextSeq = seq - uint64(capacity)
+			available = uint64(capacity)
 		}
 
 		deliver := available
@@ -879,16 +882,16 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		// Check the copy against the producer, which did not stop while it ran:
 		// the segment's optimistic lock covers directory changes, not ring data,
 		// so a worker is free to overwrite the slots being copied. Anything older
-		// than seqAfter-RingSize was overwritten underneath us, and those are the
-		// oldest entries of the window, so dropping them from the front of the
-		// buffer leaves exactly the ones that are still whole.
+		// than seqAfter-RingSize+1 was or is being overwritten underneath us, and
+		// those are the oldest entries of the window, so dropping them from the
+		// front of the buffer leaves exactly the ones that are still whole.
 		//
 		// Without this a lapped reader delivers entries that are half one record
 		// and half another and reports no loss, which is worse than losing them:
 		// loss is visible and a torn record is not.
 		windowStart := w.NextSeq
-		if seqAfter := atomic.LoadUint64(&meta.Sequence); seqAfter > uint64(header.RingSize) {
-			if oldest := seqAfter - uint64(header.RingSize); oldest > windowStart {
+		if seqAfter := atomic.LoadUint64(&meta.Sequence); seqAfter >= uint64(header.RingSize) {
+			if oldest := seqAfter - uint64(header.RingSize) + 1; oldest > windowStart {
 				overrun := min(oldest-windowStart, uint64(n))
 				if overrun < uint64(n) {
 					copy(buf, buf[uintptr(overrun)*entry:uintptr(n)*entry])

@@ -160,6 +160,15 @@ func (f *fakeRing) produce(thread uint32, n int) {
 	f.putU64(m+8, f.seq[thread])
 }
 
+// writeUncommitted scribbles over the slot at head without publishing anything,
+// as a producer between vlib_stats_ring_reserve_slot and its commit has it.
+func (f *fakeRing) writeUncommitted(thread uint32) {
+	off := f.ringBase + f.dataOff +
+		int(thread)*int(f.ringSize)*int(f.entrySize) +
+		int(f.head[thread])*int(f.entrySize)
+	binary.LittleEndian.PutUint64(f.buf[off:], 0xdead)
+}
+
 // publishHeadAhead advances the published head by one without publishing the
 // sequence that explains it. That is the state a producer is in between its
 // plain store of head and its release store of the sequence, and it is what a
@@ -346,9 +355,9 @@ func TestRingBufferWindowReportsLostOnLap(t *testing.T) {
 	sc, dir, s := prepareRing(t, f, 0, false)
 	refresh(t, sc, dir)
 
-	f.produce(0, 10) // ring holds 4: sequences 6..9 survive, 0..5 are gone
+	f.produce(0, 10) // a ring of 4 delivers 3: sequences 7..9 survive, 0..6 are gone
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{6, 7, 8, 9}, 6, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{7, 8, 9}, 7, 0)
 
 	// And the reader is re-synced, so the next read is clean.
 	f.produce(0, 2)
@@ -671,18 +680,19 @@ func TestRingBufferWindowDropsEntriesOverwrittenDuringCopy(t *testing.T) {
 	sc, dir, s := prepareRing(t, f, 0, false)
 	refresh(t, sc, dir)
 
-	f.produce(0, 8) // fills the ring: sequences 0..7
+	f.produce(0, 7) // fills the window: sequences 0..6
 
 	// Three more entries land while the copy is in flight, overwriting the three
-	// oldest slots it just read.
+	// oldest slots it just read, and a fourth is being written into the next.
 	ringWindowCopyHook = func() {
 		ringWindowCopyHook = nil
 		f.produce(0, 3)
+		f.writeUncommitted(0)
 	}
 	t.Cleanup(func() { ringWindowCopyHook = nil })
 
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{3, 4, 5, 6, 7}, 3, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{3, 4, 5, 6}, 3, 0)
 	if s.Windows[0].FirstSeq != 3 {
 		t.Errorf("FirstSeq = %d, want 3: it must name the first entry actually delivered",
 			s.Windows[0].FirstSeq)
@@ -691,5 +701,41 @@ func TestRingBufferWindowDropsEntriesOverwrittenDuringCopy(t *testing.T) {
 	// The cursor is past the whole window, overwritten entries included, so the
 	// next refresh picks up the three that arrived during the copy.
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{8, 9, 10}, 0, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{7, 8, 9}, 0, 0)
+}
+
+// While the sequence is S the producer may be writing slot S%RingSize, which
+// still holds entry S-RingSize, so that entry is never delivered.
+func TestRingBufferWindowSkipsSlotUnderWrite(t *testing.T) {
+	t.Run("full ring", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+
+		f.produce(0, 8)
+		f.writeUncommitted(0)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{1, 2, 3, 4, 5, 6, 7}, 1, 0)
+	})
+	t.Run("after a lap", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+		f.produce(0, 8)
+		refresh(t, sc, dir)
+
+		f.produce(0, 20)
+		f.writeUncommitted(0)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{21, 22, 23, 24, 25, 26, 27}, 13, 0)
+	})
+	t.Run("backlog", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		f.produce(0, 8)
+		f.writeUncommitted(0)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{1, 2, 3, 4, 5, 6, 7}, 0, 0)
+	})
 }

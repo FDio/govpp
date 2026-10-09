@@ -200,8 +200,8 @@ type RingBufferAPI interface {
 	// PrepareRingBuffer resolves one ring-buffer stat by name and returns a
 	// StatDir holding an incremental reader for it, to be refreshed with
 	// UpdateDir. maxEntries bounds entries delivered per thread per refresh, zero
-	// meaning the ring size; skipBacklog starts at the producer's head rather
-	// than at the oldest entry the ring still holds.
+	// meaning the ring size less one; skipBacklog starts at the producer's head
+	// rather than at the oldest entry the ring still holds.
 	PrepareRingBuffer(name string, maxEntries uint32, skipBacklog bool) (*StatDir, error)
 }
 
@@ -265,8 +265,9 @@ type RingBufferWindow struct {
 type RingBufferWindowStat struct {
 	// MaxEntries bounds how many entries one refresh delivers per thread, and so
 	// bounds both the buffer this stat allocates and the work one refresh does.
-	// Zero means the ring size, which is the largest window that can ever be
-	// available. A consumer draining a fast producer wants this small enough to
+	// Zero means the ring size less one, which is the largest window that can
+	// ever be available: the slot the producer writes next is never delivered.
+	// A consumer draining a fast producer wants this small enough to
 	// bound a single read and to loop while Pending is non-zero.
 	//
 	// It is read on every refresh, so raising or lowering it between refreshes
