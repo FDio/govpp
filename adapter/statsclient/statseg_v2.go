@@ -732,6 +732,9 @@ func (ss *statSegmentV2) ringBufferSchema(base dirVector, threads []adapter.Ring
 // a test can assert on.
 var ringWindowCopyHook func()
 
+// ringCopyFence is the target of the release RMW that orders a window's copy.
+var ringCopyFence uint32
+
 // refreshRingBufferWindow copies, for each producer thread, only the entries
 // appended since the previous refresh - into buffers the stat already owns.
 //
@@ -891,6 +894,8 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		// and half another and reports no loss, which is worse than losing them:
 		// loss is visible and a torn record is not.
 		windowStart := w.NextSeq
+		// Keeps the copy's plain loads ahead of the sequence load on arm64.
+		atomic.AddUint32(&ringCopyFence, 1)
 		if seqAfter := atomic.LoadUint64(&meta.Sequence); seqAfter >= uint64(header.RingSize) {
 			if oldest := seqAfter - uint64(header.RingSize) + 1; oldest > windowStart {
 				overrun := min(oldest-windowStart, uint64(n))
