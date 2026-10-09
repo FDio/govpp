@@ -562,7 +562,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 
 	threads := make([]adapter.RingBufferThreadMeta, header.NThreads)
 	for i := uint32(0); i < header.NThreads; i++ {
-		meta := ringBufferThreadMetaAt(base, header, stride, i)
+		meta := ringBufferThreadMetaAt(base, &header, stride, i)
 		threads[i] = adapter.RingBufferThreadMeta{
 			Head:          meta.Head,
 			SchemaVersion: meta.SchemaVersion,
@@ -577,7 +577,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 	// has produced into it.
 	data := make([][]byte, header.NThreads)
 	for i := uint32(0); i < header.NThreads; i++ {
-		src := ringBufferThreadData(base, header, i)
+		src := ringBufferThreadData(base, &header, i)
 		threadData := make([]byte, len(src))
 		copy(threadData, src)
 		data[i] = threadData
@@ -633,24 +633,25 @@ func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (i
 }
 
 // ringBufferRegions resolves and bounds-checks the three regions of a ring
-// buffer entry: its header, its per-thread metadata and its data.
+// buffer entry: its header, its per-thread metadata and its data. The header is
+// returned as a copy; VPP may free the ring and reuse its memory at any time.
 //
 // Every read of a ring has to do this, and doing it in one place is not only
 // tidiness: these checks are what stand between a corrupt or racing header and
 // an out-of-bounds read of the mapped segment, so a second copy of them is a
 // second chance to get one of them subtly wrong.
-func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header *ringBufferHeader, stride uintptr, ok bool) {
+func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header ringBufferHeader, stride uintptr, ok bool) {
 	base = ss.adjust(dirVector(&dirEntry.unionData))
 	if base == nil {
 		debugf("ring buffer data pointer is out of range for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	baseAddr := uintptr(unsafe.Pointer(base))
 	segEnd := uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) + 1
 	if baseAddr >= segEnd {
 		debugf("ring buffer base is outside shared memory for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 	// Every region is sized against the room left in the segment rather than by
 	// forming its end address, because a header claiming absurd geometry makes
@@ -659,16 +660,16 @@ func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (b
 
 	if uint64(unsafe.Sizeof(ringBufferHeader{})) > segSize {
 		debugf("ring buffer header extends beyond shared memory for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
-	header = (*ringBufferHeader)(unsafe.Pointer(base))
+	header = *(*ringBufferHeader)(unsafe.Pointer(base))
 
-	stride = ringBufferMetaStride(base, header, segSize)
+	stride = ringBufferMetaStride(base, &header, segSize)
 	if uint64(header.MetadataOffset) > segSize ||
 		uint64(header.NThreads) > (segSize-uint64(header.MetadataOffset))/uint64(stride) {
 		debugf("ring buffer metadata extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
 			dirEntry.name, header.MetadataOffset, header.NThreads, segSize)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	// Both factors are uint32, so the product cannot overflow uint64.
@@ -677,7 +678,7 @@ func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (b
 		uint64(header.NThreads) > (segSize-uint64(header.DataOffset))/threadDataSize) {
 		debugf("ring buffer data extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
 			dirEntry.name, header.DataOffset, header.NThreads, segSize)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	return base, header, stride, true
@@ -777,7 +778,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 	}
 
 	for t := uint32(0); t < header.NThreads; t++ {
-		meta := ringBufferThreadMetaAt(base, header, stride, t)
+		meta := ringBufferThreadMetaAt(base, &header, stride, t)
 		// The sequence is the only field of the pair that carries an ordering
 		// guarantee: a producer writes the entry, advances head with a plain
 		// store, and then publishes the sequence with a release store. So a
@@ -859,7 +860,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		// commit.
 		first := uint32(w.NextSeq % uint64(header.RingSize))
 
-		data := ringBufferThreadData(base, header, t)
+		data := ringBufferThreadData(base, &header, t)
 		entry := uintptr(header.EntrySize)
 		n := uint32(deliver)
 

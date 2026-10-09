@@ -739,3 +739,24 @@ func TestRingBufferWindowSkipsSlotUnderWrite(t *testing.T) {
 		wantWindow(t, s.Windows[0], 16, []uint64{1, 2, 3, 4, 5, 6, 7}, 0, 0)
 	})
 }
+
+// VPP frees a ring when its entry is removed and the allocator then reuses the
+// header's memory, so a refresh must not trust anything it re-reads from it.
+func TestRingBufferWindowHeaderRewrittenDuringRefresh(t *testing.T) {
+	f := newFakeRing(t, 16, 8, 1)
+	sc, dir, s := prepareRing(t, f, 0, false)
+	refresh(t, sc, dir)
+
+	f.produce(0, 3)
+	ringWindowCopyHook = func() {
+		ringWindowCopyHook = nil
+		f.setHeader(8, 2) // n_threads
+	}
+	t.Cleanup(func() { ringWindowCopyHook = nil })
+
+	refresh(t, sc, dir)
+	wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2}, 0, 0)
+
+	// The next refresh reads the rewritten header, which no longer fits.
+	refreshErr(t, sc, dir)
+}
