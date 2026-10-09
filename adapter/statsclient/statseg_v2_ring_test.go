@@ -43,6 +43,7 @@ const (
 
 type fakeRing struct {
 	buf        []byte
+	dirOff     int
 	ringBase   int // offset of the ring buffer's own header
 	dataOff    int // relative to ringBase
 	metaOff    int // relative to ringBase
@@ -84,6 +85,7 @@ func newFakeRingStride(t testing.TB, entrySize, ringSize, nThreads uint32, metaS
 
 	f := &fakeRing{
 		buf:        make([]byte, total),
+		dirOff:     dirOff,
 		ringBase:   ringBase,
 		dataOff:    dataOff,
 		metaOff:    metaOff,
@@ -188,6 +190,12 @@ func (f *fakeRing) dropSchema() {
 		f.putU32(m+16, 0)
 		f.putU32(m+20, 0)
 	}
+}
+
+// renameRing gives the ring's directory entry another name, as a directory
+// re-laid-out under an unchanged epoch would.
+func (f *fakeRing) renameRing(name string) {
+	f.putDirEntry(f.dirOff, fakeRingIndex, fakeTypeRingBuffer, fakeBase+uint64(f.ringBase), name)
 }
 
 // setHeader overwrites one of the ring header's u32 fields, to stand in for a
@@ -759,4 +767,21 @@ func TestRingBufferWindowHeaderRewrittenDuringRefresh(t *testing.T) {
 
 	// The next refresh reads the rewritten header, which no longer fits.
 	refreshErr(t, sc, dir)
+}
+
+// A prepared window whose directory entry no longer names its ring must be
+// reported stale, not handed back with the entries it last delivered.
+func TestRingBufferWindowRenamedEntryIsStale(t *testing.T) {
+	f := newFakeRing(t, 16, 8, 1)
+	sc, dir, s := prepareRing(t, f, 0, false)
+	refresh(t, sc, dir)
+	f.produce(0, 3)
+	refresh(t, sc, dir)
+	wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2}, 0, 0)
+
+	f.renameRing("/fake/other")
+	if err := sc.UpdateDir(dir); err != adapter.ErrStatsDirStale {
+		t.Fatalf("UpdateDir = %v, want %v", err, adapter.ErrStatsDirStale)
+	}
+	wantWindow(t, s.Windows[0], 16, nil, 0, 0)
 }

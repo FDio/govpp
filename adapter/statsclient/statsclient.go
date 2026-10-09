@@ -673,6 +673,11 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 	// place: this runs once per prepared entry per tick, and cloning the name to
 	// compare it would allocate per entry for a value discarded immediately after.
 	dirPtr, dirType, match := sc.StatDirOnIndexMatches(vector, entry.Index, entry.Name)
+	if w, ok := entry.Data.(*adapter.RingBufferWindowStat); ok && (!match || dirType != entry.Type) {
+		// Left as it is, a window would hand its last entries out again.
+		clearRingBufferWindows(w)
+		return ref, false, adapter.ErrStatsDirStale
+	}
 	if !match || entry.Data == nil {
 		return ref, false, nil
 	}
@@ -696,6 +701,16 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return ref, false, fmt.Errorf("updating stat data for entry %s failed: %v", entry.Name, err)
 	}
 	return ref, false, nil
+}
+
+// clearRingBufferWindows empties every window of s without moving its cursor.
+func clearRingBufferWindows(s *adapter.RingBufferWindowStat) {
+	for i := range s.Windows {
+		w := &s.Windows[i]
+		w.Entries = w.Entries[:0]
+		w.Count, w.Lost, w.Pending = 0, 0, 0
+		w.FirstSeq = w.NextSeq
+	}
 }
 
 // updateSymlinkGroups reads each aliased entry once and fans its items out to
