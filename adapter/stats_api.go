@@ -259,9 +259,9 @@ type RingBufferWindow struct {
 // The zero value is valid and self-initialising. The first refresh reads the
 // geometry, allocates the per-thread buffers, and positions the cursor - at the
 // oldest entry the ring still holds, or at the producer's head if SkipBacklog is
-// set - and returns no entries. SkipBacklog only decides where that first
-// refresh starts and is ignored afterwards; MaxEntries is honoured on every
-// refresh.
+// set - and returns no entries. SkipBacklog decides where that first refresh
+// starts, and where a refresh resumes after the producer's sequence went
+// backwards; MaxEntries is honoured on every refresh.
 //
 // An UpdateDir that returns an error delivers nothing and leaves the cursors
 // where they were, so the next successful refresh delivers those entries.
@@ -270,8 +270,8 @@ type RingBufferWindowStat struct {
 	// bounds both the buffer this stat allocates and the work one refresh does.
 	// Zero means the ring size less one, which is the largest window that can
 	// ever be available: the slot the producer writes next is never delivered.
-	// A consumer draining a fast producer wants this small enough to
-	// bound a single read and to loop while Pending is non-zero.
+	// A consumer draining a fast producer wants this small enough to bound a
+	// single read and to loop while Pending is non-zero.
 	//
 	// It is read on every refresh, so raising or lowering it between refreshes
 	// takes effect on the next one; the buffers grow to match and are not shrunk.
@@ -279,7 +279,8 @@ type RingBufferWindowStat struct {
 
 	// SkipBacklog starts the first read at the producer's head rather than at the
 	// oldest entry still in the ring, so a consumer that wants only what happens
-	// from now on does not first have to read and discard a ring of history.
+	// from now on does not first have to read and discard a ring of history. A
+	// resync after the producer's sequence goes backwards starts there too.
 	SkipBacklog bool
 
 	Config  RingBufferConfig

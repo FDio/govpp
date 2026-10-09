@@ -411,6 +411,8 @@ func TestRingBufferWindowResyncsOnSequenceRewind(t *testing.T) {
 
 	f.rewindSequence(0, 2)
 	refresh(t, sc, dir)
+	// SkipBacklog holds for the resync as for the first read.
+	wantWindow(t, s.Windows[0], 16, nil, 0, 0)
 	if s.Windows[0].Lost != 0 {
 		t.Errorf("Lost = %d after a sequence rewind, want 0: nothing was overwritten", s.Windows[0].Lost)
 	}

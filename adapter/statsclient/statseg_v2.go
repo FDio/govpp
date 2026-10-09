@@ -735,6 +735,14 @@ var ringWindowCopyHook func()
 // ringCopyFence is the target of the release RMW that orders a window's copy.
 var ringCopyFence uint32
 
+// ringWindowStart is where a window with no usable cursor starts reading.
+func ringWindowStart(seq uint64, capacity uint32, skipBacklog bool) uint64 {
+	if skipBacklog {
+		return seq
+	}
+	return seq - min(seq, uint64(capacity))
+}
+
 // refreshRingBufferWindow copies, for each producer thread, only the entries
 // appended since the previous refresh - into buffers the stat already owns.
 //
@@ -816,11 +824,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// A geometry change mid-stream reaches here too, SchemaVersion
 			// included, so with SkipBacklog whatever the ring already held is
 			// dropped without appearing in Lost.
-			if s.SkipBacklog {
-				w.NextSeq = seq
-			} else {
-				w.NextSeq = seq - min(seq, uint64(capacity))
-			}
+			w.NextSeq = ringWindowStart(seq, capacity, s.SkipBacklog)
 			w.FirstSeq = w.NextSeq
 			w.Entries = buf[:0]
 			continue
@@ -831,7 +835,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// was reused for a different ring. Re-sync to what is there now and do
 			// not report it as loss - nothing was overwritten, the count simply is
 			// not comparable to the one we held.
-			w.NextSeq = seq - min(seq, uint64(capacity))
+			w.NextSeq = ringWindowStart(seq, capacity, s.SkipBacklog)
 		}
 
 		available := seq - w.NextSeq
