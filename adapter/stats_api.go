@@ -262,6 +262,9 @@ type RingBufferWindow struct {
 // set - and returns no entries. SkipBacklog only decides where that first
 // refresh starts and is ignored afterwards; MaxEntries is honoured on every
 // refresh.
+//
+// An UpdateDir that returns an error delivers nothing and leaves the cursors
+// where they were, so the next successful refresh delivers those entries.
 type RingBufferWindowStat struct {
 	// MaxEntries bounds how many entries one refresh delivers per thread, and so
 	// bounds both the buffer this stat allocates and the work one refresh does.

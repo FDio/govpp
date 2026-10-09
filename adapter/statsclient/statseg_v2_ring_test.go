@@ -785,3 +785,50 @@ func TestRingBufferWindowRenamedEntryIsStale(t *testing.T) {
 	}
 	wantWindow(t, s.Windows[0], 16, nil, 0, 0)
 }
+
+// A refresh UpdateDir rejects as busy must leave the cursor where it was, so the
+// retry after re-preparing delivers what the rejected one copied, and counts
+// what it lost exactly once.
+func TestRingBufferWindowBusyRefreshIsRetried(t *testing.T) {
+	tests := []struct {
+		name       string
+		ringSize   uint32
+		maxEntries uint32
+		before     int // produced before the refresh
+		during     int // produced while it copies
+		seqs       []uint64
+		lost, pend uint64
+	}{
+		{"new entries", 8, 0, 3, 0, []uint64{0, 1, 2}, 0, 0},
+		{"lapped and overrun", 8, 0, 10, 2, []uint64{5, 6, 7, 8, 9, 10, 11}, 5, 0},
+		{"capped by MaxEntries", 16, 2, 5, 0, []uint64{0, 1}, 0, 3},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			f := newFakeRing(t, 16, tc.ringSize, 1)
+			sc, dir, s := prepareRing(t, f, tc.maxEntries, false)
+			refresh(t, sc, dir)
+
+			f.produce(0, tc.before)
+			ringWindowCopyHook = func() {
+				ringWindowCopyHook = nil
+				f.produce(0, tc.during)
+				f.putU64(fakeOffEpoch, 2)
+			}
+			t.Cleanup(func() { ringWindowCopyHook = nil })
+
+			if err := sc.UpdateDir(dir); err != adapter.ErrStatsDataBusy {
+				t.Fatalf("UpdateDir = %v, want %v", err, adapter.ErrStatsDataBusy)
+			}
+			wantWindow(t, s.Windows[0], 16, nil, 0, 0)
+
+			dir, err := sc.PrepareRingBuffer("/fake/records", tc.maxEntries, false)
+			if err != nil {
+				t.Fatalf("PrepareRingBuffer: %v", err)
+			}
+			dir.Entries[0].Data = s
+			refresh(t, sc, dir)
+			wantWindow(t, s.Windows[0], 16, tc.seqs, tc.lost, tc.pend)
+		})
+	}
+}

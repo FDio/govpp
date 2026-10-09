@@ -315,6 +315,7 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	for i := 0; i < len(dir.Entries); i++ {
 		ref, isSymlink, err := sc.updateStatOnIndex(&dir.Entries[i], dirVector)
 		if err != nil {
+			abandonRingBufferWindows(dir.Entries, i)
 			return err
 		}
 		if !isSymlink {
@@ -326,12 +327,33 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 		symlinks[ref.target] = append(symlinks[ref.target], ref)
 	}
 	if err := sc.updateSymlinkGroups(dirVector, symlinks); err != nil {
+		abandonRingBufferWindows(dir.Entries, len(dir.Entries))
 		return err
 	}
 	if !sc.accessEnd(accessEpoch) {
+		abandonRingBufferWindows(dir.Entries, len(dir.Entries))
 		return adapter.ErrStatsDataBusy
 	}
 	return nil
+}
+
+// abandonRingBufferWindows undoes a refresh UpdateDir is about to fail: windows
+// in entries[:refreshed] get their cursors back, so a retry delivers the same
+// entries, and every window is emptied.
+func abandonRingBufferWindows(entries []adapter.StatEntry, refreshed int) {
+	for i := range entries {
+		s, ok := entries[i].Data.(*adapter.RingBufferWindowStat)
+		if !ok {
+			continue
+		}
+		if i < refreshed {
+			for j := range s.Windows {
+				// A refresh leaves FirstSeq-Lost at the cursor it started from.
+				s.Windows[j].NextSeq = s.Windows[j].FirstSeq - s.Windows[j].Lost
+			}
+		}
+		clearRingBufferWindows(s)
+	}
 }
 
 // checks the socket existence and waits for it for the designated
