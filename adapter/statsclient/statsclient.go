@@ -315,6 +315,7 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 	for i := 0; i < len(dir.Entries); i++ {
 		ref, isSymlink, err := sc.updateStatOnIndex(&dir.Entries[i], dirVector)
 		if err != nil {
+			abandonRingBufferWindows(dir.Entries, i)
 			return err
 		}
 		if !isSymlink {
@@ -326,12 +327,33 @@ func (sc *StatsClient) UpdateDir(dir *adapter.StatDir) (err error) {
 		symlinks[ref.target] = append(symlinks[ref.target], ref)
 	}
 	if err := sc.updateSymlinkGroups(dirVector, symlinks); err != nil {
+		abandonRingBufferWindows(dir.Entries, len(dir.Entries))
 		return err
 	}
 	if !sc.accessEnd(accessEpoch) {
+		abandonRingBufferWindows(dir.Entries, len(dir.Entries))
 		return adapter.ErrStatsDataBusy
 	}
 	return nil
+}
+
+// abandonRingBufferWindows undoes a refresh UpdateDir is about to fail: windows
+// in entries[:refreshed] get their cursors back, so a retry delivers the same
+// entries, and every window is emptied.
+func abandonRingBufferWindows(entries []adapter.StatEntry, refreshed int) {
+	for i := range entries {
+		s, ok := entries[i].Data.(*adapter.RingBufferWindowStat)
+		if !ok {
+			continue
+		}
+		if i < refreshed {
+			for j := range s.Windows {
+				// A refresh leaves FirstSeq-Lost at the cursor it started from.
+				s.Windows[j].NextSeq = s.Windows[j].FirstSeq - s.Windows[j].Lost
+			}
+		}
+		clearRingBufferWindows(s)
+	}
 }
 
 // checks the socket existence and waits for it for the designated
@@ -673,6 +695,11 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 	// place: this runs once per prepared entry per tick, and cloning the name to
 	// compare it would allocate per entry for a value discarded immediately after.
 	dirPtr, dirType, match := sc.StatDirOnIndexMatches(vector, entry.Index, entry.Name)
+	if w, ok := entry.Data.(*adapter.RingBufferWindowStat); ok && (!match || dirType != entry.Type) {
+		// Left as it is, a window would hand its last entries out again.
+		clearRingBufferWindows(w)
+		return ref, false, adapter.ErrStatsDirStale
+	}
 	if !match || entry.Data == nil {
 		return ref, false, nil
 	}
@@ -696,6 +723,16 @@ func (sc *StatsClient) updateStatOnIndex(entry *adapter.StatEntry, vector dirVec
 		return ref, false, fmt.Errorf("updating stat data for entry %s failed: %v", entry.Name, err)
 	}
 	return ref, false, nil
+}
+
+// clearRingBufferWindows empties every window of s without moving its cursor.
+func clearRingBufferWindows(s *adapter.RingBufferWindowStat) {
+	for i := range s.Windows {
+		w := &s.Windows[i]
+		w.Entries = w.Entries[:0]
+		w.Count, w.Lost, w.Pending = 0, 0, 0
+		w.FirstSeq = w.NextSeq
+	}
 }
 
 // updateSymlinkGroups reads each aliased entry once and fans its items out to

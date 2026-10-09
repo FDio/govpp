@@ -43,6 +43,7 @@ const (
 
 type fakeRing struct {
 	buf        []byte
+	dirOff     int
 	ringBase   int // offset of the ring buffer's own header
 	dataOff    int // relative to ringBase
 	metaOff    int // relative to ringBase
@@ -84,6 +85,7 @@ func newFakeRingStride(t testing.TB, entrySize, ringSize, nThreads uint32, metaS
 
 	f := &fakeRing{
 		buf:        make([]byte, total),
+		dirOff:     dirOff,
 		ringBase:   ringBase,
 		dataOff:    dataOff,
 		metaOff:    metaOff,
@@ -160,6 +162,15 @@ func (f *fakeRing) produce(thread uint32, n int) {
 	f.putU64(m+8, f.seq[thread])
 }
 
+// writeUncommitted scribbles over the slot at head without publishing anything,
+// as a producer between vlib_stats_ring_reserve_slot and its commit has it.
+func (f *fakeRing) writeUncommitted(thread uint32) {
+	off := f.ringBase + f.dataOff +
+		int(thread)*int(f.ringSize)*int(f.entrySize) +
+		int(f.head[thread])*int(f.entrySize)
+	binary.LittleEndian.PutUint64(f.buf[off:], 0xdead)
+}
+
 // publishHeadAhead advances the published head by one without publishing the
 // sequence that explains it. That is the state a producer is in between its
 // plain store of head and its release store of the sequence, and it is what a
@@ -179,6 +190,12 @@ func (f *fakeRing) dropSchema() {
 		f.putU32(m+16, 0)
 		f.putU32(m+20, 0)
 	}
+}
+
+// renameRing gives the ring's directory entry another name, as a directory
+// re-laid-out under an unchanged epoch would.
+func (f *fakeRing) renameRing(name string) {
+	f.putDirEntry(f.dirOff, fakeRingIndex, fakeTypeRingBuffer, fakeBase+uint64(f.ringBase), name)
 }
 
 // setHeader overwrites one of the ring header's u32 fields, to stand in for a
@@ -346,9 +363,9 @@ func TestRingBufferWindowReportsLostOnLap(t *testing.T) {
 	sc, dir, s := prepareRing(t, f, 0, false)
 	refresh(t, sc, dir)
 
-	f.produce(0, 10) // ring holds 4: sequences 6..9 survive, 0..5 are gone
+	f.produce(0, 10) // a ring of 4 delivers 3: sequences 7..9 survive, 0..6 are gone
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{6, 7, 8, 9}, 6, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{7, 8, 9}, 7, 0)
 
 	// And the reader is re-synced, so the next read is clean.
 	f.produce(0, 2)
@@ -394,6 +411,8 @@ func TestRingBufferWindowResyncsOnSequenceRewind(t *testing.T) {
 
 	f.rewindSequence(0, 2)
 	refresh(t, sc, dir)
+	// SkipBacklog holds for the resync as for the first read.
+	wantWindow(t, s.Windows[0], 16, nil, 0, 0)
 	if s.Windows[0].Lost != 0 {
 		t.Errorf("Lost = %d after a sequence rewind, want 0: nothing was overwritten", s.Windows[0].Lost)
 	}
@@ -671,18 +690,19 @@ func TestRingBufferWindowDropsEntriesOverwrittenDuringCopy(t *testing.T) {
 	sc, dir, s := prepareRing(t, f, 0, false)
 	refresh(t, sc, dir)
 
-	f.produce(0, 8) // fills the ring: sequences 0..7
+	f.produce(0, 7) // fills the window: sequences 0..6
 
 	// Three more entries land while the copy is in flight, overwriting the three
-	// oldest slots it just read.
+	// oldest slots it just read, and a fourth is being written into the next.
 	ringWindowCopyHook = func() {
 		ringWindowCopyHook = nil
 		f.produce(0, 3)
+		f.writeUncommitted(0)
 	}
 	t.Cleanup(func() { ringWindowCopyHook = nil })
 
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{3, 4, 5, 6, 7}, 3, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{3, 4, 5, 6}, 3, 0)
 	if s.Windows[0].FirstSeq != 3 {
 		t.Errorf("FirstSeq = %d, want 3: it must name the first entry actually delivered",
 			s.Windows[0].FirstSeq)
@@ -691,5 +711,126 @@ func TestRingBufferWindowDropsEntriesOverwrittenDuringCopy(t *testing.T) {
 	// The cursor is past the whole window, overwritten entries included, so the
 	// next refresh picks up the three that arrived during the copy.
 	refresh(t, sc, dir)
-	wantWindow(t, s.Windows[0], 16, []uint64{8, 9, 10}, 0, 0)
+	wantWindow(t, s.Windows[0], 16, []uint64{7, 8, 9}, 0, 0)
+}
+
+// While the sequence is S the producer may be writing slot S%RingSize, which
+// still holds entry S-RingSize, so that entry is never delivered.
+func TestRingBufferWindowSkipsSlotUnderWrite(t *testing.T) {
+	t.Run("full ring", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+
+		f.produce(0, 8)
+		f.writeUncommitted(0)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{1, 2, 3, 4, 5, 6, 7}, 1, 0)
+	})
+	t.Run("after a lap", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+		f.produce(0, 8)
+		refresh(t, sc, dir)
+
+		f.produce(0, 20)
+		f.writeUncommitted(0)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{21, 22, 23, 24, 25, 26, 27}, 13, 0)
+	})
+	t.Run("backlog", func(t *testing.T) {
+		f := newFakeRing(t, 16, 8, 1)
+		f.produce(0, 8)
+		f.writeUncommitted(0)
+		sc, dir, s := prepareRing(t, f, 0, false)
+		refresh(t, sc, dir)
+		refresh(t, sc, dir)
+		wantWindow(t, s.Windows[0], 16, []uint64{1, 2, 3, 4, 5, 6, 7}, 0, 0)
+	})
+}
+
+// VPP frees a ring when its entry is removed and the allocator then reuses the
+// header's memory, so a refresh must not trust anything it re-reads from it.
+func TestRingBufferWindowHeaderRewrittenDuringRefresh(t *testing.T) {
+	f := newFakeRing(t, 16, 8, 1)
+	sc, dir, s := prepareRing(t, f, 0, false)
+	refresh(t, sc, dir)
+
+	f.produce(0, 3)
+	ringWindowCopyHook = func() {
+		ringWindowCopyHook = nil
+		f.setHeader(8, 2) // n_threads
+	}
+	t.Cleanup(func() { ringWindowCopyHook = nil })
+
+	refresh(t, sc, dir)
+	wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2}, 0, 0)
+
+	// The next refresh reads the rewritten header, which no longer fits.
+	refreshErr(t, sc, dir)
+}
+
+// A prepared window whose directory entry no longer names its ring must be
+// reported stale, not handed back with the entries it last delivered.
+func TestRingBufferWindowRenamedEntryIsStale(t *testing.T) {
+	f := newFakeRing(t, 16, 8, 1)
+	sc, dir, s := prepareRing(t, f, 0, false)
+	refresh(t, sc, dir)
+	f.produce(0, 3)
+	refresh(t, sc, dir)
+	wantWindow(t, s.Windows[0], 16, []uint64{0, 1, 2}, 0, 0)
+
+	f.renameRing("/fake/other")
+	if err := sc.UpdateDir(dir); err != adapter.ErrStatsDirStale {
+		t.Fatalf("UpdateDir = %v, want %v", err, adapter.ErrStatsDirStale)
+	}
+	wantWindow(t, s.Windows[0], 16, nil, 0, 0)
+}
+
+// A refresh UpdateDir rejects as busy must leave the cursor where it was, so the
+// retry after re-preparing delivers what the rejected one copied, and counts
+// what it lost exactly once.
+func TestRingBufferWindowBusyRefreshIsRetried(t *testing.T) {
+	tests := []struct {
+		name       string
+		ringSize   uint32
+		maxEntries uint32
+		before     int // produced before the refresh
+		during     int // produced while it copies
+		seqs       []uint64
+		lost, pend uint64
+	}{
+		{"new entries", 8, 0, 3, 0, []uint64{0, 1, 2}, 0, 0},
+		{"lapped and overrun", 8, 0, 10, 2, []uint64{5, 6, 7, 8, 9, 10, 11}, 5, 0},
+		{"capped by MaxEntries", 16, 2, 5, 0, []uint64{0, 1}, 0, 3},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			f := newFakeRing(t, 16, tc.ringSize, 1)
+			sc, dir, s := prepareRing(t, f, tc.maxEntries, false)
+			refresh(t, sc, dir)
+
+			f.produce(0, tc.before)
+			ringWindowCopyHook = func() {
+				ringWindowCopyHook = nil
+				f.produce(0, tc.during)
+				f.putU64(fakeOffEpoch, 2)
+			}
+			t.Cleanup(func() { ringWindowCopyHook = nil })
+
+			if err := sc.UpdateDir(dir); err != adapter.ErrStatsDataBusy {
+				t.Fatalf("UpdateDir = %v, want %v", err, adapter.ErrStatsDataBusy)
+			}
+			wantWindow(t, s.Windows[0], 16, nil, 0, 0)
+
+			dir, err := sc.PrepareRingBuffer("/fake/records", tc.maxEntries, false)
+			if err != nil {
+				t.Fatalf("PrepareRingBuffer: %v", err)
+			}
+			dir.Entries[0].Data = s
+			refresh(t, sc, dir)
+			wantWindow(t, s.Windows[0], 16, tc.seqs, tc.lost, tc.pend)
+		})
+	}
 }
