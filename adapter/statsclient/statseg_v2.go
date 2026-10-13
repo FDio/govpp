@@ -562,7 +562,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 
 	threads := make([]adapter.RingBufferThreadMeta, header.NThreads)
 	for i := uint32(0); i < header.NThreads; i++ {
-		meta := ringBufferThreadMetaAt(base, header, stride, i)
+		meta := ringBufferThreadMetaAt(base, &header, stride, i)
 		threads[i] = adapter.RingBufferThreadMeta{
 			Head:          meta.Head,
 			SchemaVersion: meta.SchemaVersion,
@@ -577,7 +577,7 @@ func (ss *statSegmentV2) copyRingBufferData(dirEntry *statSegDirectoryEntryV2) a
 	// has produced into it.
 	data := make([][]byte, header.NThreads)
 	for i := uint32(0); i < header.NThreads; i++ {
-		src := ringBufferThreadData(base, header, i)
+		src := ringBufferThreadData(base, &header, i)
 		threadData := make([]byte, len(src))
 		copy(threadData, src)
 		data[i] = threadData
@@ -633,24 +633,25 @@ func (ss *statSegmentV2) getSymlinkIndexes(dirEntry *statSegDirectoryEntryV2) (i
 }
 
 // ringBufferRegions resolves and bounds-checks the three regions of a ring
-// buffer entry: its header, its per-thread metadata and its data.
+// buffer entry: its header, its per-thread metadata and its data. The header is
+// returned as a copy; VPP may free the ring and reuse its memory at any time.
 //
 // Every read of a ring has to do this, and doing it in one place is not only
 // tidiness: these checks are what stand between a corrupt or racing header and
 // an out-of-bounds read of the mapped segment, so a second copy of them is a
 // second chance to get one of them subtly wrong.
-func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header *ringBufferHeader, stride uintptr, ok bool) {
+func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (base dirVector, header ringBufferHeader, stride uintptr, ok bool) {
 	base = ss.adjust(dirVector(&dirEntry.unionData))
 	if base == nil {
 		debugf("ring buffer data pointer is out of range for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	baseAddr := uintptr(unsafe.Pointer(base))
 	segEnd := uintptr(unsafe.Pointer(&ss.sharedHeader[len(ss.sharedHeader)-1])) + 1
 	if baseAddr >= segEnd {
 		debugf("ring buffer base is outside shared memory for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 	// Every region is sized against the room left in the segment rather than by
 	// forming its end address, because a header claiming absurd geometry makes
@@ -659,16 +660,16 @@ func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (b
 
 	if uint64(unsafe.Sizeof(ringBufferHeader{})) > segSize {
 		debugf("ring buffer header extends beyond shared memory for %s", dirEntry.name)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
-	header = (*ringBufferHeader)(unsafe.Pointer(base))
+	header = *(*ringBufferHeader)(unsafe.Pointer(base))
 
-	stride = ringBufferMetaStride(base, header, segSize)
+	stride = ringBufferMetaStride(base, &header, segSize)
 	if uint64(header.MetadataOffset) > segSize ||
 		uint64(header.NThreads) > (segSize-uint64(header.MetadataOffset))/uint64(stride) {
 		debugf("ring buffer metadata extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
 			dirEntry.name, header.MetadataOffset, header.NThreads, segSize)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	// Both factors are uint32, so the product cannot overflow uint64.
@@ -677,7 +678,7 @@ func (ss *statSegmentV2) ringBufferRegions(dirEntry *statSegDirectoryEntryV2) (b
 		uint64(header.NThreads) > (segSize-uint64(header.DataOffset))/threadDataSize) {
 		debugf("ring buffer data extends beyond shared memory for %s (offset=%d, threads=%d, segSize=%d)",
 			dirEntry.name, header.DataOffset, header.NThreads, segSize)
-		return nil, nil, 0, false
+		return nil, header, 0, false
 	}
 
 	return base, header, stride, true
@@ -731,6 +732,17 @@ func (ss *statSegmentV2) ringBufferSchema(base dirVector, threads []adapter.Ring
 // a test can assert on.
 var ringWindowCopyHook func()
 
+// ringCopyFence is the target of the release RMW that orders a window's copy.
+var ringCopyFence uint32
+
+// ringWindowStart is where a window with no usable cursor starts reading.
+func ringWindowStart(seq uint64, capacity uint32, skipBacklog bool) uint64 {
+	if skipBacklog {
+		return seq
+	}
+	return seq - min(seq, uint64(capacity))
+}
+
 // refreshRingBufferWindow copies, for each producer thread, only the entries
 // appended since the previous refresh - into buffers the stat already owns.
 //
@@ -768,13 +780,16 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		s.Windows = make([]adapter.RingBufferWindow, header.NThreads)
 	}
 
+	// Slot seq%RingSize may be mid-write and holds entry seq-RingSize, so only the
+	// RingSize-1 entries before it are whole.
+	capacity := header.RingSize - 1
 	maxEntries := s.MaxEntries
-	if maxEntries == 0 || maxEntries > header.RingSize {
-		maxEntries = header.RingSize
+	if maxEntries == 0 || maxEntries > capacity {
+		maxEntries = capacity
 	}
 
 	for t := uint32(0); t < header.NThreads; t++ {
-		meta := ringBufferThreadMetaAt(base, header, stride, t)
+		meta := ringBufferThreadMetaAt(base, &header, stride, t)
 		// The sequence is the only field of the pair that carries an ordering
 		// guarantee: a producer writes the entry, advances head with a plain
 		// store, and then publishes the sequence with a release store. So a
@@ -809,11 +824,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// A geometry change mid-stream reaches here too, SchemaVersion
 			// included, so with SkipBacklog whatever the ring already held is
 			// dropped without appearing in Lost.
-			if s.SkipBacklog {
-				w.NextSeq = seq
-			} else {
-				w.NextSeq = seq - min(seq, uint64(header.RingSize))
-			}
+			w.NextSeq = ringWindowStart(seq, capacity, s.SkipBacklog)
 			w.FirstSeq = w.NextSeq
 			w.Entries = buf[:0]
 			continue
@@ -824,15 +835,15 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 			// was reused for a different ring. Re-sync to what is there now and do
 			// not report it as loss - nothing was overwritten, the count simply is
 			// not comparable to the one we held.
-			w.NextSeq = seq - min(seq, uint64(header.RingSize))
+			w.NextSeq = ringWindowStart(seq, capacity, s.SkipBacklog)
 		}
 
 		available := seq - w.NextSeq
-		if available > uint64(header.RingSize) {
-			// Lapped: everything older than the last RingSize entries is gone.
-			w.Lost = available - uint64(header.RingSize)
-			w.NextSeq = seq - uint64(header.RingSize)
-			available = uint64(header.RingSize)
+		if available > uint64(capacity) {
+			// Lapped: everything older than the last capacity entries is gone.
+			w.Lost = available - uint64(capacity)
+			w.NextSeq = seq - uint64(capacity)
+			available = uint64(capacity)
 		}
 
 		deliver := available
@@ -856,7 +867,7 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		// commit.
 		first := uint32(w.NextSeq % uint64(header.RingSize))
 
-		data := ringBufferThreadData(base, header, t)
+		data := ringBufferThreadData(base, &header, t)
 		entry := uintptr(header.EntrySize)
 		n := uint32(deliver)
 
@@ -879,16 +890,18 @@ func (ss *statSegmentV2) refreshRingBufferWindow(dirEntry *statSegDirectoryEntry
 		// Check the copy against the producer, which did not stop while it ran:
 		// the segment's optimistic lock covers directory changes, not ring data,
 		// so a worker is free to overwrite the slots being copied. Anything older
-		// than seqAfter-RingSize was overwritten underneath us, and those are the
-		// oldest entries of the window, so dropping them from the front of the
-		// buffer leaves exactly the ones that are still whole.
+		// than seqAfter-RingSize+1 was or is being overwritten underneath us, and
+		// those are the oldest entries of the window, so dropping them from the
+		// front of the buffer leaves exactly the ones that are still whole.
 		//
 		// Without this a lapped reader delivers entries that are half one record
 		// and half another and reports no loss, which is worse than losing them:
 		// loss is visible and a torn record is not.
 		windowStart := w.NextSeq
-		if seqAfter := atomic.LoadUint64(&meta.Sequence); seqAfter > uint64(header.RingSize) {
-			if oldest := seqAfter - uint64(header.RingSize); oldest > windowStart {
+		// Keeps the copy's plain loads ahead of the sequence load on arm64.
+		atomic.AddUint32(&ringCopyFence, 1)
+		if seqAfter := atomic.LoadUint64(&meta.Sequence); seqAfter >= uint64(header.RingSize) {
+			if oldest := seqAfter - uint64(header.RingSize) + 1; oldest > windowStart {
 				overrun := min(oldest-windowStart, uint64(n))
 				if overrun < uint64(n) {
 					copy(buf, buf[uintptr(overrun)*entry:uintptr(n)*entry])
