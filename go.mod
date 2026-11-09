@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/bennyscetbun/jsongo v1.2.4
-	github.com/docker/cli v29.9.1+incompatible
+	github.com/docker/cli v29.9.3+incompatible
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/ftrvxmtrx/fd v0.0.0-20150925145434-c6d800382fff
 	github.com/gookit/color v1.6.3
@@ -16,7 +16,7 @@ require (
 	github.com/pkg/profile v1.7.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.10
+	github.com/spf13/pflag v1.1.0
 	golang.org/x/text v0.43.0
 	gopkg.in/yaml.v3 v3.0.1
 )
