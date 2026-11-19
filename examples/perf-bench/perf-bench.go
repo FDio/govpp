@@ -44,13 +44,14 @@ func main() {
 	var sync bool
 	var cnt int
 	var sock, prof string
-	var testV2, debugOn bool
+	var testRPC, testV2, debugOn bool
 	flag.BoolVar(&sync, "sync", false, "run synchronous perf test")
 	flag.StringVar(&sock, "api-socket", socketclient.DefaultSocketName, "Path to VPP API socket")
 	flag.String("stats-socket", statsclient.DefaultSocketName, "Path to VPP stats socket")
 	flag.IntVar(&cnt, "count", 0, "count of requests to be sent to VPP")
 	flag.StringVar(&prof, "prof", "", "enable profiling mode [mem, cpu]")
 	flag.BoolVar(&testV2, "v2", false, "Use test function v2")
+	flag.BoolVar(&testRPC, "rpc", false, "Use test function rpc")
 	flag.BoolVar(&debugOn, "debug", false, "Enable debug mode")
 	flag.Parse()
 
@@ -85,7 +86,7 @@ func main() {
 	defer conn.Disconnect()
 
 	// create an API channel
-	ch, err := conn.NewAPIChannelBuffered(cnt, cnt)
+	ch, err := conn.NewAPIChannel()
 	if err != nil {
 		log.Fatalln("Error:", err)
 	}
@@ -101,7 +102,9 @@ func main() {
 	// run the test & measure the time
 	start := time.Now()
 
-	if testV2 {
+	if testRPC {
+		rpcTest(conn, cnt)
+	} else if testV2 {
 		if sync {
 			syncTest2(conn, cnt)
 		} else {
@@ -120,6 +123,46 @@ func main() {
 	fmt.Printf("Requests per second: %.0f\n", float64(cnt)/elapsed.Seconds())
 
 	time.Sleep(time.Second)
+}
+
+func rpcTest(conn api.Connection, cnt int) {
+	fmt.Printf("Running RPC perf test with %d requests...\n", cnt)
+
+	for i := 0; i < cnt; i++ {
+		c := memclnt.NewServiceClient(conn)
+
+		_, err := c.ControlPing(context.Background(), &memclnt.ControlPing{})
+		if err != nil {
+			log.Fatalln("Error in reply:", err)
+		}
+	}
+}
+
+func rpcTestAsync(conn api.Connection, cnt int) {
+	fmt.Printf("Running async RPC perf test with %d requests...\n", cnt)
+
+	ctxChan := make(chan memclnt.RPCService, cnt)
+	var index int
+
+	c := memclnt.NewServiceClient(conn)
+	go func() {
+
+		for i := 0; i < cnt; i++ {
+			ctxChan <- c.ControlPing(context.Background(), &memclnt.ControlPing{})
+		}
+		close(ctxChan)
+		fmt.Printf("Sending asynchronous requests finished\n")
+	}()
+
+	index = 0
+	for ctx := range ctxChan {
+		err := ctx.error
+		if err != nil {
+			log.Fatalln("Error in reply:", err)
+		}
+		index++
+	}
+	fmt.Printf("Sending %d Receiving %d\n", cnt, index)
 }
 
 func syncTest(ch api.Channel, cnt int) {
@@ -160,7 +203,7 @@ func asyncTest(ch api.Channel, cnt int) {
 	fmt.Printf("Running asynchronous perf test with %d requests...\n", cnt)
 
 	ctxChan := make(chan api.RequestCtx, cnt)
-
+	var index int
 	go func() {
 		for i := 0; i < cnt; i++ {
 			ctxChan <- ch.SendRequest(&memclnt.ControlPing{})
@@ -169,18 +212,22 @@ func asyncTest(ch api.Channel, cnt int) {
 		fmt.Printf("Sending asynchronous requests finished\n")
 	}()
 
+	index = 0
 	for ctx := range ctxChan {
 		reply := &memclnt.ControlPingReply{}
 		if err := ctx.ReceiveReply(reply); err != nil {
 			log.Fatalln("Error in reply:", err)
 		}
+		index++
 	}
+	fmt.Printf("Sending %d Receiving %d\n", cnt, index)
 }
 
 func asyncTest2(conn api.Connection, cnt int) {
 	fmt.Printf("Running asynchronous perf test with %d requests...\n", cnt)
 
 	ctxChan := make(chan api.Stream, cnt)
+	var index int
 
 	go func() {
 		for i := 0; i < cnt; i++ {
@@ -197,6 +244,7 @@ func asyncTest2(conn api.Connection, cnt int) {
 		fmt.Printf("Sending asynchronous requests finished\n")
 	}()
 
+	index = 0
 	for ctx := range ctxChan {
 		if msg, err := ctx.RecvMsg(); err != nil {
 			log.Fatalln("Error RecvMsg:", err)
@@ -208,5 +256,7 @@ func asyncTest2(conn api.Connection, cnt int) {
 		if err := ctx.Close(); err != nil {
 			log.Fatalf("Stream.Close error: %v", err)
 		}
+		index++
 	}
+	fmt.Printf("Sending %d Receiving %d\n", cnt, index)
 }
