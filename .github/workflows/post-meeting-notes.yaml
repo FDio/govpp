@@ -20,11 +20,18 @@ on:
 
 permissions:
   contents: read
-  discussions: write
+
+concurrency:
+  group: post-meeting-notes
+  cancel-in-progress: true
 
 jobs:
   post-meeting-notes:
+    name: Post meeting notes
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      discussions: write # Required to publish meeting notes as discussion comments.
     steps:
       - name: Post meeting notes to discussion
         env:
