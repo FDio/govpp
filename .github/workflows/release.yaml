@@ -10,29 +10,38 @@ on:
   workflow_dispatch: # Allows you to run this workflow manually from the Actions tab
 
 permissions:
-  contents: write
-  packages: write
-  issues: write
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   goreleaser:
+    name: GoReleaser
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to create GitHub releases and upload release assets.
+      packages: write # Required to publish container images to GHCR.
+      issues: write # Required by GoReleaser's release workflow.
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: "Setup Go"
-        uses: actions/setup-go@v7
+        uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7
         with:
           go-version: '1.26.1'
+          cache: false
 
       - name: "Download Syft"
-        uses: anchore/sbom-action/download-syft@v0 #v0.15.10
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.15.10
 
       - name: 'Login to GitHub Container Registry'
-        uses: docker/login-action@v4
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4
         with:
           registry: ghcr.io
           username: ${{github.actor}}
@@ -44,7 +53,7 @@ jobs:
 
       - name: "Release Version"
         if: success() && startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v7
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7
         with:
           version: '~> v2'
           args: release --clean
@@ -54,7 +63,7 @@ jobs:
 
       - name: "Release Snapshot"
         if: success() && !startsWith(github.ref, 'refs/tags/v')
-        uses: goreleaser/goreleaser-action@v7
+        uses: goreleaser/goreleaser-action@a4f02ab5355a589de60d917a659ce617ed19b3de # v7
         with:
           version: '~> v2'
           args: release --clean --snapshot
@@ -63,7 +72,7 @@ jobs:
           HOSTNAME: github
 
       - name: "Upload Artifacts"
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         with:
           name: govpp-artifacts
           path: |
